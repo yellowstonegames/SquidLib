@@ -219,9 +219,10 @@ public class Filters {
                 temp = (temp >= 0.5f) ? Math.abs(temp - 1f) % 1f : Math.abs(temp);
                 if(temp < minDiff) {
                     minDiff = temp;
-                    choice = i / 6; // rounds down
+                    choice = i;
                 }
             }
+            choice /= 6;  // rounds down
             return new Color(r, g, b, a).lerp(state[choice * 6], state[choice * 6 + 1], state[choice * 6 + 2],
                     state[choice * 6 + 3], state[choice * 6 + 4]);
         }
@@ -453,12 +454,12 @@ public class Filters {
          */
         public PaletteFilter(float[] r, float[] g, float[] b) {
             colorStore = new Color[Math.min(r.length, Math.min(g.length, b.length))];
-            state = new float[colorStore.length * 3];
+//            state = new float[colorStore.length * 3];
             for (int i = 0; i < colorStore.length; i++) {
                 colorStore[i] = new Color(
-                state[i * 3] = MathUtils.clamp(r[i], 0f, 1f),
-                state[i * 3 + 1] = MathUtils.clamp(g[i], 0f, 1f),
-                state[i * 3 + 2] = MathUtils.clamp(b[i], 0f, 1f),
+                MathUtils.clamp(r[i], 0f, 1f),
+                MathUtils.clamp(g[i], 0f, 1f),
+                MathUtils.clamp(b[i], 0f, 1f),
                         1f);
             }
         }/**
@@ -474,31 +475,29 @@ public class Filters {
          */
         public PaletteFilter(Color[] colors) {
             colorStore = colors;
-            state = new float[colors.length * 3];
-            for (int i = 0; i < colors.length; i++) {
-                state[i * 3] = colors[i].r;
-                state[i * 3 + 1] = colors[i].g;
-                state[i * 3 + 2] = colors[i].b;
-            }
+//            state = new float[colors.length * 3];
+//            for (int i = 0; i < colors.length; i++) {
+//                state[i * 3] = colors[i].r;
+//                state[i * 3 + 1] = colors[i].g;
+//                state[i * 3 + 2] = colors[i].b;
+//            }
         }
 
         @Override
         public Color alter(float r, float g, float b, float a) {
-            float diff = 9999.0f, temp;
+            int diff = 0x7fffffff, temp;
             int choice = 0;
-            r = (int)(r * 0x1.8p5f) * 0x1.555556p-6f;
-            g = (int)(g * 0x1.8p5f) * 0x1.555556p-6f;
-            b = (int)(b * 0x1.8p5f) * 0x1.555556p-6f;
-            for (int i = 0; i < state.length; i += 3) {
-                temp = Math.abs(state[i] - r) + Math.abs(state[i + 1] - g) + Math.abs(state[i + 2] - b);
+            r = SColor.floatGet(r, g, b, a);
+            for (int i = 0; i < colorStore.length; i++) {
+                temp = SColor.difference2(r, colorStore[i]);
                 if(temp < diff) {
                     diff = temp;
                     choice = i;
                 }
             }
             if(a >= 1f)
-                return colorStore[choice / 3];
-            Color ret = colorStore[choice / 3].cpy();
+                return colorStore[choice];
+            Color ret = colorStore[choice].cpy();
             ret.a = a;
             return ret;
         }

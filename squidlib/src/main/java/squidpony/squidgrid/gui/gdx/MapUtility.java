@@ -1093,7 +1093,54 @@ public class MapUtility {
      * @return a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers
      */
     public static int[][] fillLightnessModifiers(int[][] lights, char[][] map) {
-        return fillLightnessModifiers(lights, map, 1.0);
+        int width = map.length;
+        int height = map[0].length;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '├':
+                    case '┤':
+                    case '┴':
+                    case '┬':
+                    case '┌':
+                    case '┐':
+                    case '└':
+                    case '┘':
+                    case '│':
+                    case '─':
+                    case '┼':
+                    case '#':
+                        lights[i][j] = 30;
+                        break;
+                    case '.':
+                        lights[i][j] = 0;
+                        break;
+                    case ':':
+                        lights[i][j] = -15;
+                        break;
+                    case '+':
+                    case '/':
+                        lights[i][j] = -10;
+                        break;
+                    case ',':
+                        lights[i][j] = -40;
+                        break;
+                    case '~':
+                        lights[i][j] = -85;
+                        break;
+                    case '"':
+                        lights[i][j] = -110;
+                        break;
+                    case '^':
+                        lights[i][j] = 40;
+                        break;
+                    default:
+                        lights[i][j] = 0;
+                }
+            }
+        }
+        return lights;
     }
 
     /**

@@ -143,59 +143,68 @@ public class EverythingDemo extends ApplicationAdapter {
         // of them using the filter we specify. Only one SquidColorCenter will be used at any time for foreground, and
         // sometimes another will be used for background.
         colorCenters = new SquidColorCenter[20];
-        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
-        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
-
-        colorCenters[0] = new SquidColorCenter(new Filters.MultiLerpFilter(
-                new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
-                new float[]{0.25f, 0.2f}
-        ));
-        colorCenters[1] = colorCenters[0];
-
-        // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
-
-        colorCenters[2] = new SquidColorCenter(new Filters.MultiLerpFilter(
-                new Color[]{SColor.RED_PIGMENT, SColor.MEDIUM_BLUE, SColor.LIME_GREEN},
-                new float[]{0.2f, 0.25f, 0.25f}
-        ));
-        colorCenters[3] = colorCenters[2];
-
-        // ColorizeFilter here is given a slightly-grayish dark brown to imitate a sepia tone.
-
-        colorCenters[4] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
-        colorCenters[5] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
 
         // HallucinateFilter makes all the colors very saturated and move even when you aren't doing anything.
 
-        colorCenters[6] = new SquidColorCenter(new Filters.HallucinateFilter());
-        colorCenters[7] = colorCenters[6];
-
-        // SaturationFilter here is used to over-saturate the colors slightly. Background is less saturated.
-
-        colorCenters[8] = new SquidColorCenter(new Filters.SaturationFilter(1.35f));
-        colorCenters[9] = new SquidColorCenter(new Filters.SaturationFilter(1.15f));
-
-        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
-
-        colorCenters[10] = new SquidColorCenter(new Filters.SaturationFilter(0.7f));
-        colorCenters[11] = new SquidColorCenter(new Filters.SaturationFilter(0.5f));
+        colorCenters[0] = new SquidColorCenter(new Filters.HallucinateFilter());
+        colorCenters[1] = colorCenters[0];
 
         // WiggleFilter here is used to randomize the colors slightly.
 
-        colorCenters[12] = new SquidColorCenter(new Filters.WiggleFilter());
-        colorCenters[13] = colorCenters[12];
+        colorCenters[2] = new SquidColorCenter(new Filters.WiggleFilter());
+        colorCenters[3] = colorCenters[2];
 
         // PaletteFilter here is used to limit colors to specific sets.
         Filters.PaletteFilter paletteFilter = new Filters.PaletteFilter(SColor.COLOR_WHEEL_PALETTE);
-        colorCenters[14] = new SquidColorCenter(
+        colorCenters[4] = new SquidColorCenter(
                 new Filters.ChainFilter(paletteFilter,
-                        new Filters.SaturationValueFilter(1.02f, 1.2f)));
-        colorCenters[15] = new SquidColorCenter(
+                        new Filters.SaturationValueFilter(1f, 1.25f)));
+        colorCenters[5] = new SquidColorCenter(
                 new Filters.ChainFilter(paletteFilter,
-                        new Filters.SaturationValueFilter(0.9f, 0.9f)));
+                        new Filters.SaturationValueFilter(0.85f, 0.875f)));
+
+        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
+        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
+
+        colorCenters[6] = new SquidColorCenter(new Filters.MultiLerpFilter(
+                new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
+                new float[]{0.25f, 0.2f}
+        ));
+        colorCenters[7] = colorCenters[6];
+
+        // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
+
+        colorCenters[8] = new SquidColorCenter(new Filters.MultiLerpFilter(
+                new Color[]{SColor.CW_RED, SColor.CW_BRIGHT_SAPPHIRE, SColor.CW_RICH_GREEN},
+                new float[]{0.2f, 0.25f, 0.25f}
+        ));
+        colorCenters[9] = colorCenters[8];
+
+        // Indices into colorCenters after this point don't receive small changes to colors from lighting/water ripples.
+
+        // ColorizeFilter here is given a slightly-grayish dark brown to imitate a sepia tone.
+
+        colorCenters[10] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.7f, -0.05f));
+        colorCenters[11] = new SquidColorCenter(new Filters.ColorizeFilter(SColor.CLOVE_BROWN, 0.65f, 0.07f));
+
+        // SaturationFilter here is used to de-saturate the colors slightly. Background is less saturated.
+
+        colorCenters[12] = new SquidColorCenter(new Filters.SaturationFilter(0.7f));
+        colorCenters[13] = new SquidColorCenter(new Filters.SaturationFilter(0.5f));
+
+        // SaturationFilter here is used to over-saturate the colors slightly. Background is less saturated.
+
+        colorCenters[14] = new SquidColorCenter(new Filters.SaturationFilter(1.35f));
+        colorCenters[15] = new SquidColorCenter(new Filters.SaturationFilter(1.15f));
+
+        // No filter here.
 
         colorCenters[16] = DefaultResources.getSCC();
         colorCenters[17] = colorCenters[16];
+
+        // DistinctRedGreenFilter may be able to help people with common forms of red-green colorblindness to
+        // distinguish red and green colors by subtly adjusting hue and brightness in different directions for
+        // primarily-red colors versus primarily-green ones.
 
         colorCenters[18] = new SquidColorCenter(new Filters.DistinctRedGreenFilter());
         colorCenters[19] = colorCenters[18];
@@ -318,7 +327,7 @@ public class EverythingDemo extends ApplicationAdapter {
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
         // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
-        currentCenter = 8;
+        currentCenter = 2;
 
         fgCenter = colorCenters[currentCenter * 2];
         bgCenter = colorCenters[currentCenter * 2 + 1];
@@ -378,7 +387,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // the line after this automatically sets the brightness of backgrounds in display to match their contents, so
         // here we simply fill the contents of display with our dungeon (but we don't set the actual colors yet).
         ArrayTools.insert(decoDungeon, display.getForegroundLayer().contents, 0, 0);
-        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
+        MapUtility.fillLightnessModifiers(display.lightnesses, decoDungeon);
+        //display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
 
         lang = FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 4, 6, new String[]{",", ",", ",", " -"},
                 new String[]{"..."}, 0.25);
@@ -876,11 +886,13 @@ public class EverythingDemo extends ApplicationAdapter {
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being brighter at +75 lightness and 0.0 being rather dark at -105.
                 if (fovmap[ci][cj] > 0.0) {
-                    display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
+                    if(currentCenter >= 5)
+                        display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
                             (int) (-95 +
                                     160 * (fovmap[ci][cj] * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.0004, 10000)))));
-                    //(-110 + display.lightnesses[ci][cj] +
-                    //                18 * fovmap[ci][cj]));// * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.001, 10000)))));
+                    else
+                        display.put(ci, cj,  (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
+                                0);
                     // if we don't see it now, but did earlier, use a very dark background, but lighter than black.
                 } else if (seen.contains(ci, cj)) {
                     display.put(ci, cj, lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]), -140);
@@ -907,9 +919,10 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
-        display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
-
+        if(currentCenter >= 5) // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
+            display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
+        else // this does standard lighting without Simplex noise.
+            MapUtility.fillLightnessModifiers(display.lightnesses, decoDungeon);
         // you done bad. you done real bad.
         if (health <= 0) {
             // still need to display the map, then write over it with a message.

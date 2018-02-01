@@ -11817,6 +11817,79 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
+     * A color distance metric between two colors as packed floats, without performing a square root on the result.
+     * The returned int can be used directly, with a typical difference of 5 or greater meaning there is a perceptible
+     * difference between the two colors, or you can get its square root to have a more typical metric where differences
+     * can be compared to modifications of other differences. If you only care about whether a difference is above or
+     * below some threshold (or which color is closest to another, not exactly how close they are), then you don't need
+     * to get the square root. Does not consider the alpha of the compared colors.
+     * <br>
+     * Uses <a href="https://www.compuphase.com/cmetric.htm">this algorithm</a>.
+     * @param color1 a color as a packed float
+     * @param color2 a color as a packed float
+     * @return the squared difference of the two colors, as an int; you can get the square root of this if you want to
+     */
+    public static int difference2(float color1, float color2)
+    {
+        int bits1 = NumberTools.floatToIntBits(color1), bits2 = NumberTools.floatToIntBits(color2);
+        int rmean = ((bits1 & 0xFF) + (bits2 & 0xFF)) >> 1;
+        int r = (bits1 & 0xFF) - (bits2 & 0xFF);
+        int g = (bits1 >>> 8 & 0xFF) - (bits2 >>> 8 & 0xFF);
+        int b = (bits1 >>> 16 & 0xFF) - (bits2 >>> 16 & 0xFF);
+        return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+    }
+    /**
+     * A color distance metric between two libGDX Colors (or SColors), without performing a square root on the result.
+     * The returned int can be used directly, with a typical difference of 5 or greater meaning there is a perceptible
+     * difference between the two colors, or you can get its square root to have a more typical metric where differences
+     * can be compared to modifications of other differences. If you only care about whether a difference is above or
+     * below some threshold (or which color is closest to another, not exactly how close they are), then you don't need
+     * to get the square root. Does not consider the alpha of the compared colors.
+     * <br>
+     * Uses <a href="https://www.compuphase.com/cmetric.htm">this algorithm</a>.
+     * @param color1 a libGDX Color
+     * @param color2 a libGDX Color
+     * @return the squared difference of the two colors, as an int; you can get the square root of this if you want to
+     */
+    public static int difference2(Color color1, Color color2)
+    {
+        int r1 = (int)(color1.r * 255), r2 = (int)(color2.r * 255);
+        int rmean = (r1 + r2) >> 1;
+        int r = r1 - r2;
+        int g = (int)(color1.g * 255) - (int)(color2.g * 255);
+        int b = (int)(color1.b * 255) - (int)(color2.b * 255);
+        return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+    }
+    /**
+     * A color distance metric between a packed float color and a libGDX Color (or SColor), without performing a square
+     * root on the result. The returned int can be used directly, with a typical difference of 5 or greater meaning
+     * there is a perceptible difference between the two colors, or you can get its square root to have a more typical
+     * metric where differences can be compared to modifications of other differences. If you only care about whether a
+     * difference is above or below some threshold (or which color is closest to another, not exactly how close they
+     * are), then you don't need to get the square root. Does not consider the alpha of the compared colors.
+     * <br>
+     * Uses <a href="https://www.compuphase.com/cmetric.htm">this algorithm</a>. This method produces equivalent output
+     * to {@link #difference2(float, float)} when color2 is converted to a float with {@link #toFloatBits()}; the output
+     * is also equivalent to {@link #difference2(Color, Color)} when color1 is converted to a Color with
+     * {@link Color#abgr8888ToColor(Color, float)} or {@link SColor#colorFromFloat(float)}. It can be useful when you
+     * need to mix Color-based APIs such as {@link SquidColorCenter} with float-based ones such as the static methods
+     * in this class.
+     * @param color1 a packed float color
+     * @param color2 a libGDX Color
+     * @return the squared difference of the two colors, as an int; you can get the square root of this if you want to
+     */
+    public static int difference2(float color1, Color color2)
+    {
+        int bits1 = NumberTools.floatToIntBits(color1);
+        int r1 = (bits1 & 0xFF), r2 = (int)(color2.r * 255);
+        int rmean = (r1 + r2) >> 1;
+        int r = r1 - r2;
+        int g = (bits1 >>> 8 & 0xFF) - (int)(color2.g * 255);
+        int b = (bits1 >>> 16 & 0xFF) - (int)(color2.b * 255);
+        return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+    }
+
+    /**
      * Gets the value (lightness/brightness) of the given encoded color, as a float ranging from 0f to 1f, inclusive.
      * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
      * @return the value (essentially lightness) of the color from 0.0f (black, inclusive) to
