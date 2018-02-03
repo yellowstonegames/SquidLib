@@ -681,163 +681,224 @@ public final class NumberTools {
     }
 
     /**
-     * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 4x and 40x
-     * faster sin() calls in benchmarking, depending on whether HotSpot deoptimizes Math.sin() for its own inscrutable
-     * reasons), and both takes and returns doubles. Takes the same arguments Math.sin() does, so one angle in radians,
-     * which may technically be any double (but this will lose precision on fairly large doubles, such as those that
-     * are larger than about 65536.0). This is closely related to {@link #sway(float)}, but the shape of the output when
-     * graphed is almost identical to sin().  The difference between the result of this method and
-     * {@link Math#sin(double)} should be under 0.001 at all points between -pi and pi, with an average difference of
-     * about 0.0005; not all points have been checked for potentially higher errors, though. Coercion between float and
-     * double takes about as long as this method normally takes to run, so if you have floats you should usually use
-     * methods that take floats (or return floats, if assigning the result to a float), and likewise for doubles.
+     * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 8x and 80x
+     * faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
+     * consider its more-precise and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
+     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
+     * with this method than with MathUtils. Takes the same arguments Math.sin() does, so one angle in radians,
+     * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
+     * larger than {@link Long#MAX_VALUE}, because those doubles themselves will lose precision at that scale). This
+     * is closely related to {@link #sway(double)}, but the shape of the output when graphed is almost identical to
+     * sin(). The difference between the result of this method and {@link Math#sin(double)} should be under 0.0011 at
+     * all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
+     * potentially higher errors, though.
      * <br>
-     * If you call this frequently, consider giving it either all positive numbers, i.e. 0 to PI * 2 instead of -PI to
-     * PI; this can help the performance of this particular approximation by making its one branch easier to predict.
+     * The error for this double version is extremely close to the float version, {@link #sin(float)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
      * <br>
-     * The technique for sine approximation is mostly from
-     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
-     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range,
-     * using code extremely similar to {@link #zigzag(double)}.
-     * @param radians an angle in radians as a double, often from 0 to pi * 2, though not required to be.
-     * @return the sine of the given angle, as a double between -1.0 and 1.0 (probably exclusive on -1.0, but not 1.0)
-     */
-    public static double sin(final double radians)
-    {
-        long sign, s;
-        if(radians < 0.0) {
-            s = Double.doubleToLongBits(radians * 0.3183098861837907 - 2.0);
-            sign = 1L;
-        }
-        else {
-            s = Double.doubleToLongBits(radians * 0.3183098861837907 + 2.0);
-            sign = -1L;
-        }
-        final long m = (s >>> 52 & 0x7FFL) - 0x400L, sm = s << m, sn = -((sm & 0x8000000000000L) >> 51);
-        double n = (Double.longBitsToDouble(((sm ^ sn) & 0xfffffffffffffL) | 0x4010000000000000L) - 4.0);
-        n *= 2.0 - n;
-        return n * (-0.775 - 0.225 * n) * ((sn ^ sign) | 1L);
-    }
-
-    /**
-     * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 4x and 40x
-     * faster sin() calls in benchmarking, depending on whether HotSpot deoptimizes Math.sin() for its own inscrutable
-     * reasons), and both takes and returns floats. Takes the same arguments Math.sin() does, so one angle in radians,
-     * which may technically be any float (but this will lose precision on fairly large floats, such as those that are
-     * larger than about 4096f). This is closely related to {@link #sway(float)}, but the shape of the output when
-     * graphed is almost identical to sin(). The difference between the result of this method and
-     * {@link Math#sin(double)} should be under 0.001 at all points between -pi and pi, with an average difference of
-     * about 0.0005; not all points have been checked for potentially higher errors, though. The error for this float
-     * version is extremely close to the double version, {@link #sin(double)}, so you should choose based on what type
-     * you have as input and/or want to return rather than on quality concerns. Coercion between float and double takes
-     * about as long as this method normally takes to run, so if you have floats you should usually use methods that
-     * take floats (or return floats, if assigning the result to a float), and likewise for doubles.
-     * <br>
-     * If you call this frequently, consider giving it either all positive numbers, i.e. 0 to PI * 2 instead of -PI to
-     * PI; this can help the performance of this particular approximation by making its one branch easier to predict.
+     * Unlike in previous versions of this method, the sign of the input doesn't affect performance here, at least not
+     * by a measurable amount.
      * <br>
      * The technique for sine approximation is mostly from
      * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
-     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range,
-     * using code extremely similar to {@link #zigzag(float)}.
-     * @param radians an angle in radians as a float, often from 0 to pi * 2, though not required to be.
-     * @return the sine of the given angle, as a float between -1f and 1f (probably exclusive on -1f, but not 1f)
-     */
-    public static float sin(final float radians)
-    {
-        int sign, s;
-        if(radians < 0.0f) {
-            s = Float.floatToIntBits(radians * 0.3183098861837907f - 2f);
-            sign = 1;
-        }
-        else {
-            s = Float.floatToIntBits(radians * 0.3183098861837907f + 2f);
-            sign = -1;
-        }
-        final int m = (s >>> 23 & 0xFF) - 0x80, sm = s << m, sn = -((sm & 0x00400000) >> 22);
-        float n = (Float.intBitsToFloat(((sm ^ sn) & 0x007fffff) | 0x40800000) - 4f);
-        n *= 2f - n;
-        return n * (-0.775f - 0.225f * n) * ((sn ^ sign) | 1);
-    }
-
-    /**
-     * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 4x and 40x
-     * faster cos() calls in benchmarking, depending on whether HotSpot deoptimizes Math.cos() for its own inscrutable
-     * reasons), and both takes and returns doubles. Takes the same arguments Math.cos() does, so one angle in radians,
-     * which may technically be any double (but this will lose precision on fairly large doubles, such as those that
-     * are larger than about 65536.0). This is closely related to {@link #sway(float)}, but the shape of the output when
-     * graphed is almost identical to cos(). The difference between the result of this method and
-     * {@link Math#cos(double)} should be under 0.001 at all points between -pi and pi, with an average difference of
-     * about 0.0005; not all points have been checked for potentially higher errors, though.Coercion between float and
-     * double takes about as long as this method normally takes to run, so if you have floats you should usually use
-     * methods that take floats (or return floats, if assigning the result to a float), and likewise for doubles.
-     * <br>
-     * If you call this frequently, consider giving it either all positive numbers, i.e. 0 to PI * 2 instead of -PI to
-     * PI; this can help the performance of this particular approximation by making its one branch easier to predict.
-     * <br>
-     * The technique for cosine approximation is mostly from
-     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
-     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range,
-     * using code extremely similar to {@link #zigzag(double)}.
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
      * @param radians an angle in radians as a double, often from 0 to pi * 2, though not required to be.
-     * @return the cosine of the given angle, as a double between -1.0 and 1.0 (probably exclusive on 1.0, but not -1.0)
+     * @return the sine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
      */
-    public static double cos(final double radians)
+
+    public static double sin(double radians)
     {
-        long sign, s;
-        if(radians < -1.5707963267948966) {
-            s = Double.doubleToLongBits(radians * 0.3183098861837907 - 1.5);
-            sign = 1L;
-        }
-        else {
-            s = Double.doubleToLongBits(radians * 0.3183098861837907 + 2.5);
-            sign = -1L;
-        }
-        final long m = (s >>> 52 & 0x7FFL) - 0x400L, sm = s << m, sn = -((sm & 0x8000000000000L) >> 51);
-        double n = (Double.longBitsToDouble(((sm ^ sn) & 0xfffffffffffffL) | 0x4010000000000000L) - 4.0);
-        n *= 2.0 - n;
-        return n * (-0.775 - 0.225 * n) * ((sn ^ sign) | 1L);
+        radians = radians * 0.6366197723675814;
+        final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
+        radians -= floor;
+        radians *= 2.0 - radians;
+        return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
     }
 
     /**
-     * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 4x and 40x
-     * faster cos() calls in benchmarking, depending on whether HotSpot deoptimizes Math.cos() for its own inscrutable
-     * reasons), and both takes and returns floats. Takes the same arguments Math.cos() does, so one angle in radians,
-     * which may technically be any float (but this will lose precision on fairly large floats, such as those that are
-     * larger than about 4096f). This is closely related to {@link #sway(float)}, but the shape of the output when
-     * graphed is almost identical to cos(). The difference between the result of this method and
-     * {@link Math#cos(double)} should be under 0.001 at all points between -pi and pi, with an average difference of
-     * about 0.0005; not all points have been checked for potentially higher errors, though. The error for this float
-     * version is extremely close to the double version, {@link #cos(double)}, so you should choose based on what type
-     * you have as input and/or want to return rather than on quality concerns. Coercion between float and double takes
-     * about as long as this method normally takes to run, so if you have floats you should usually use methods that
-     * take floats (or return floats, if assigning the result to a float), and likewise for doubles.
+     * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 8x and 80x
+     * faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
+     * consider its more-precise and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
+     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
+     * with this method than with MathUtils. Takes the same arguments Math.cos() does, so one angle in radians,
+     * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
+     * larger than {@link Long#MAX_VALUE}, because those doubles themselves will lose precision at that scale). This
+     * is closely related to {@link #sway(double)}, but the shape of the output when graphed is almost identical to
+     * cos(). The difference between the result of this method and {@link Math#cos(double)} should be under 0.0011 at
+     * all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
+     * potentially higher errors, though.
      * <br>
-     * If you call this frequently, consider giving it either all positive numbers, i.e. 0 to PI * 2 instead of -PI to
-     * PI; this can help the performance of this particular approximation by making its one branch easier to predict.
+     * The error for this double version is extremely close to the float version, {@link #cos(float)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * Unlike in previous versions of this method, the sign of the input doesn't affect performance here, at least not
+     * by a measurable amount.
+     * The technique for cosine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param radians an angle in radians as a double, often from 0 to pi * 2, though not required to be.
+     * @return the cosine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
+     */
+    public static double cos(double radians)
+    {
+        radians = radians * 0.6366197723675814 + 1.0;
+        final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
+        radians -= floor;
+        radians *= 2.0 - radians;
+        return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
+    }
+
+    /**
+     * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 8x and 80x
+     * faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
+     * consider its more-precise and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
+     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
+     * with this method than with MathUtils. Takes the same arguments Math.sin() does, so one angle in radians,
+     * which may technically be any float (but this will lose precision on fairly large floats, such as those that are
+     * larger than {@link Integer#MAX_VALUE}, because those floats themselves will lose precision at that scale). This
+     * is closely related to {@link #sway(float)}, but the shape of the output when graphed is almost identical to
+     * sin(). The difference between the result of this method and {@link Math#sin(double)} should be under 0.0011 at
+     * all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
+     * potentially higher errors, though.
+     * <br>
+     * The error for this float version is extremely close to the double version, {@link #sin(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * Unlike in previous versions of this method, the sign of the input doesn't affect performance here, at least not
+     * by a measurable amount.
+     * <br>
+     * The technique for sine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any float to the valid input range.
+     * @param radians an angle in radians as a float, often from 0 to pi * 2, though not required to be.
+     * @return the sine of the given angle, as a float between -1f and 1f (both inclusive)
+     */
+    public static float sin(float radians)
+    {
+        radians = radians * 0.6366197723675814f;
+        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
+        radians -= floor;
+        radians *= 2f - radians;
+        return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
+    }
+
+    /**
+     * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 8x and 80x
+     * faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
+     * consider its more-precise and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
+     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
+     * with this method than with MathUtils. Takes the same arguments Math.cos() does, so one angle in radians,
+     * which may technically be any float (but this will lose precision on fairly large floats, such as those that are
+     * larger than {@link Integer#MAX_VALUE}, because those floats themselves will lose precision at that scale). This
+     * is closely related to {@link #sway(float)}, but the shape of the output when graphed is almost identical to
+     * cos(). The difference between the result of this method and {@link Math#cos(double)} should be under 0.0011 at
+     * all points between -pi and pi, with an average difference of about 0.0005; not all points have been checked for
+     * potentially higher errors, though.
+     * <br>
+     * The error for this float version is extremely close to the double version, {@link #cos(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * Unlike in previous versions of this method, the sign of the input doesn't affect performance here, at least not
+     * by a measurable amount.
      * <br>
      * The technique for cosine approximation is mostly from
      * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
-     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range,
-     * using code extremely similar to {@link #zigzag(float)}.
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any float to the valid input range.
      * @param radians an angle in radians as a float, often from 0 to pi * 2, though not required to be.
-     * @return the cosine of the given angle, as a float between -1f and 1f (probably exclusive on 1f, but not -1f)
+     * @return the cosine of the given angle, as a float between -1f and 1f (both inclusive)
      */
-    public static float cos(final float radians)
+    public static float cos(float radians)
     {
-        int sign, s;
-        if(radians < -1.5707963267948966f) {
-            s = Float.floatToIntBits(radians * 0.3183098861837907f - 1.5f);
-            sign = 1;
-        }
-        else {
-            s = Float.floatToIntBits(radians * 0.3183098861837907f + 2.5f);
-            sign = -1;
-        }
-        final int m = (s >>> 23 & 0xFF) - 0x80, sm = s << m, sn = -((sm & 0x00400000) >> 22);
-        float n = (Float.intBitsToFloat(((sm ^ sn) & 0x007fffff) | 0x40800000) - 4f);
-        n *= 2f - n;
-        return n * (-0.775f - 0.225f * n) * ((sn ^ sign) | 1);
+        radians = radians * 0.6366197723675814f + 1f;
+        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
+        radians -= floor;
+        radians *= 2f - radians;
+        return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
+    }
+    /**
+     * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 8x and 80x
+     * faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
+     * consider its more-precise and sometimes-faster MathUtils.sinDeg() method. Because this method doesn't rely on a
+     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
+     * with this method than with MathUtils. Takes one angle in degrees,
+     * which may technically be any float (but this will lose precision on fairly large floats, such as those that are
+     * larger than {@link Integer#MAX_VALUE}, because those floats themselves will lose precision at that scale). This
+     * is closely related to {@link #sway(float)}, but the shape of the output when graphed is almost identical to
+     * sin(). The difference between the result of this method and {@link Math#sin(double)} should be under 0.0011 at
+     * all points between -360 and 360, with an average difference of about 0.0005; not all points have been checked for
+     * potentially higher errors, though.
+     * <br>
+     * The error for this float version is extremely close to the double version, {@link #sin(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * Unlike in previous versions of this method, the sign of the input doesn't affect performance here, at least not
+     * by a measurable amount.
+     * <br>
+     * The technique for sine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any float to the valid input range.
+     * @param degrees an angle in degrees as a float, often from 0 to 360, though not required to be.
+     * @return the sine of the given angle, as a float between -1f and 1f (both inclusive)
+     */
+    public static float sinDegrees(float degrees)
+    {
+        degrees = degrees * 0.011111111111111112f;
+        final int floor = (degrees >= 0.0 ? (int) degrees : (int) degrees - 1) & -2;
+        degrees -= floor;
+        degrees *= 2f - degrees;
+        return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
+    }
+
+    /**
+     * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 8x and 80x
+     * faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX, you should
+     * consider its more-precise and sometimes-faster MathUtils.cosDeg() method. Because this method doesn't rely on a
+     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
+     * with this method than with MathUtils. Takes one angle in degrees,
+     * which may technically be any float (but this will lose precision on fairly large floats, such as those that are
+     * larger than {@link Integer#MAX_VALUE}, because those floats themselves will lose precision at that scale). This
+     * is closely related to {@link #sway(float)}, but the shape of the output when graphed is almost identical to
+     * cos(). The difference between the result of this method and {@link Math#cos(double)} should be under 0.0011 at
+     * all points between -360 and 360, with an average difference of about 0.0005; not all points have been checked for
+     * potentially higher errors, though.
+     * <br>
+     * The error for this float version is extremely close to the double version, {@link #cos(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * Unlike in previous versions of this method, the sign of the input doesn't affect performance here, at least not
+     * by a measurable amount.
+     * <br>
+     * The technique for cosine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any float to the valid input range.
+     * @param degrees an angle in degrees as a float, often from 0 to pi * 2, though not required to be.
+     * @return the cosine of the given angle, as a float between -1f and 1f (both inclusive)
+     */
+    public static float cosDegrees(float degrees)
+    {
+        degrees = degrees * 0.011111111111111112f + 1f;
+        final int floor = (degrees >= 0.0 ? (int) degrees : (int) degrees - 1) & -2;
+        degrees -= floor;
+        degrees *= 2f - degrees;
+        return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
 
 }

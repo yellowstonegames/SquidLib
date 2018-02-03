@@ -306,76 +306,58 @@ public class NumberTools {
         return num & ~(num - 1L);
     }
 
-    public static double sin(final double radians)
+    public static double sin(double radians)
     {
-        int sign;
-        if(radians < 0.0) {
-            wda.set(0, radians * 0.3183098861837907 - 2.0);
-            sign = 1;
-        }
-        else {
-            wda.set(0, radians * 0.3183098861837907 + 2.0);
-            sign = -1;
-        }
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, sn = -((sm & 0x80000)>>19);
-        wia.set(1, ((sm ^ sn) & 0xFFFFF) | 0x40100000);
-        wia.set(0, wia.get(0) ^ sn);
-        double n = wda.get(0) - 4.0;
-        n *= 2.0 - n;
-        return n * (-0.775 - 0.225 * n) * ((sn ^ sign) | 1);
-    }
-    public static float sin(final float radians)
-    {
-        int sign;
-        if(radians < 0f) {
-            wfa.set(0, radians * 0.3183098861837907f - 2f);
-            sign = 1;
-        }
-        else {
-            wfa.set(0, radians * 0.3183098861837907f + 2f);
-            sign = -1;
-        }
-        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m, sn = -((sm & 0x00400000)>>22);
-        wia.set(0, ((sm ^ sn) & 0x007fffff) | 0x40100000);
-        float n = wfa.get(0) - 4f;
-        n *= 2f - n;
-        return n * (-0.775f - 0.225f * n) * ((sn ^ sign) | 1);
+        radians = radians * 0.6366197723675814;
+        final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
+        radians -= floor;
+        radians *= 2.0 - radians;
+        return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
     }
 
-    public static double cos(final double radians)
+    public static double cos(double radians)
     {
-        int sign;
-        if(radians < -1.5707963267948966) {
-            wda.set(0, radians * 0.3183098861837907 - 1.5);
-            sign = 1;
-        }
-        else {
-            wda.set(0, radians * 0.3183098861837907 + 2.5);
-            sign = -1;
-        }
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, sn = -((sm & 0x80000)>>19);
-        wia.set(1, ((sm ^ sn) & 0xFFFFF) | 0x40100000);
-        wia.set(0, wia.get(0) ^ sn);
-        double n = wda.get(0) - 4.0;
-        n *= 2.0 - n;
-        return n * (-0.775 - 0.225 * n) * ((sn ^ sign) | 1);
+        radians = radians * 0.6366197723675814 + 1.0;
+        final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
+        radians -= floor;
+        radians *= 2.0 - radians;
+        return radians * (-0.775 - 0.225 * radians) * ((floor & 2L) - 1L);
     }
-    public static float cos(final float radians)
+
+    public static float sin(float radians)
     {
-        int sign;
-        if(radians < -1.5707963267948966f) {
-            wfa.set(0, radians * 0.3183098861837907f - 1.5f);
-            sign = 1;
-        }
-        else {
-            wfa.set(0, radians * 0.3183098861837907f + 2.5f);
-            sign = -1;
-        }
-        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m, sn = -((sm & 0x00400000)>>22);
-        wia.set(0, ((sm ^ sn) & 0x007fffff) | 0x40100000);
-        float n = wfa.get(0) - 4f;
-        n *= 2f - n;
-        return n * (-0.775f - 0.225f * n) * ((sn ^ sign) | 1);
+        radians = radians * 0.6366197723675814f;
+        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
+        radians -= floor;
+        radians *= 2f - radians;
+        return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
+    }
+
+    public static float cos(float radians)
+    {
+        radians = radians * 0.6366197723675814f + 1f;
+        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
+        radians -= floor;
+        radians *= 2f - radians;
+        return radians * (-0.775f - 0.225f * radians) * ((floor & 2) - 1);
+    }
+
+    public static float sinDegrees(float degrees)
+    {
+        degrees = degrees * 0.011111111111111112f;
+        final int floor = (degrees >= 0.0 ? (int) degrees : (int) degrees - 1) & -2;
+        degrees -= floor;
+        degrees *= 2f - degrees;
+        return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
+    }
+
+    public static float cosDegrees(float degrees)
+    {
+        degrees = degrees * 0.011111111111111112f + 1f;
+        final int floor = (degrees >= 0.0 ? (int) degrees : (int) degrees - 1) & -2;
+        degrees -= floor;
+        degrees *= 2f - degrees;
+        return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
 
 }
