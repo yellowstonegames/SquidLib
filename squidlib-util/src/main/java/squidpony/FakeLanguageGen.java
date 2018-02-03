@@ -2210,6 +2210,50 @@ public class FakeLanguageGen implements Serializable {
             DRAGON.vowelSplitters, new int[]{1, 2, 3}, new double[]{5, 11, 1},
             0.1, 0.0, 0.0, 0.22, genericSanityChecks, true).register("Kobold");
 
+    private static FakeLanguageGen insect(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "a", "a",
+                        "e", "e", "e", "e",
+                        "i", "i", "i", "i", "i", "i", "i",
+                        "o", "o", "o",
+                        "u", "u",
+                },
+                new String[]{},
+                new String[]{"t", "k", "g", "sh", "s", "x", "r", "ts",
+                        "tr", "kr", "gr", "shr", "st", "sk",
+                        "tr", "kr", "st", "sk", "tr", "kr", "st", "sk",
+                        "t", "k", "g", "sh", "s", "x", "r", "ts",
+                        "t", "k", "r", "ts", "ts",
+                        "t", "k", "r", "tr", "kr", "t", "k", "r", "tr", "kr", "t", "k", "r", "tr", "kr",
+                        "t", "k", "t", "k", "t", "k", "t", "k", "t", "k", "t", "k",
+                },
+                new String[]{
+                        "rr","rr","rr","rr","rr","rr","rr","rr","rr","rr",
+                        "rt", "rk", "rg", "rsh", "rs", "rx", "rts",
+                        "xt", "xk", "xg", "xr",
+                        "sts", "skr", "str", "sks"
+                },
+                new String[]{
+                        "t", "k", "g", "sh", "s", "x", "r", "ts", "t", "k", "g", "sh", "s", "x", "r", "ts",
+                        "rt", "rk", "rg", "rsh", "rs", "rx", "rts",
+                        "t", "t", "t", "t", "t", "t", "k", "k", "k", "k", "k", "k", "x", "x", "rr", "rr", "rr"
+                },
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{6, 4, 2, 1}, 0.3, 0.1, 0.0, 0.0, null, true);
+    }
+
+    /**
+     * Fantasy/sci-fi language that would typically be fitting for an insect-like species without a close equivalent to
+     * human lips. This language emphasizes hard sounds such as 't' and 'k', uses some sibilants such as 's', 'sh', and
+     * 'x', uses lots of 'r' sounds, includes trill sounds using 'rr' (as in Spanish), and uses primarily 'a' and 'i'
+     * for vowels, with low complexity on vowels. Differs from {@link #ALIEN_E} by not having harder-to-explain click
+     * sounds, and adjusting vowels/sibilants a fair bit.
+     * <br>
+     * Ritars tsarraxgits, krit trir istsak!
+     */
+    public static final FakeLanguageGen INSECT = insect().register("Insect");
+
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
      * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric

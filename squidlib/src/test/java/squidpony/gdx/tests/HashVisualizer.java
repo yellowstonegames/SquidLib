@@ -598,20 +598,27 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     public static float beachNoise(final long seed, final float xin, final float yin)
     {
+        final long floorX = Noise.longFloor(xin), floorY = Noise.longFloor(yin);
         final float
-                x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.75f) * 0.375f,
-                y = yin + NumberTools.swayRandomized(seed + 999999L, xin * 0.75f) * 0.375f;
-        final long floorx = Noise.longFloor(x), floory = Noise.longFloor(y);
-        final float x0y0 = (hashAll(floorx, floory, seed)) * 0x0.ffffffbp-63f,
-                x1y0 = (hashAll(floorx + 1L, floory, seed)) * 0x0.ffffffbp-63f,
-                x0y1 = (hashAll(floorx, floory + 1, seed)) * 0x0.ffffffbp-63f,
-                x1y1 = (hashAll(floorx + 1L, floory + 1L, seed)) * 0x0.ffffffbp-63f;
-        float ax = x - floorx, ay = y - floory;
-        ax *= ax * (3f - 2f * ax);
-        ay *= ay * (3f - 2f * ay);
-//        ax *= ax * ax * (ax * (ax * 6.0 - 15.0) + 10.0);
-//        ay *= ay * ay * (ay * (ay * 6.0 - 15.0) + 10.0);
-        return ((1f - ay) * ((1f - ax) * x0y0 + ax * x1y0) + ay * ((1f - ax) * x0y1 + ax * x1y1));
+                xSway = Noise.cerp(NumberTools.swayRandomized(seed + floorY, xin), NumberTools.swayRandomized(seed + floorY + 1, xin), yin - floorY) * 1.875f,
+                ySway = Noise.cerp(NumberTools.swayRandomized(floorX - seed, yin), NumberTools.swayRandomized(floorX + 1 - seed, yin), xin - floorX) * 1.875f;
+        return (NumberTools.swayRandomized(seed ^ 0x9E3779B97F4A7C15L, ySway + xSway + xin + yin) +
+                NumberTools.swayRandomized(seed + 0x9E3779B97F4A7C15L, xin - yin - ySway - xSway + 0.375f)) * 0.5f;
+
+//        final float
+//                x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.75f) * 0.375f,
+//                y = yin + NumberTools.swayRandomized(seed + 999999L, xin * 0.75f) * 0.375f;
+//        final long floorx = Noise.longFloor(x), floory = Noise.longFloor(y);
+//        final float x0y0 = (hashAll(floorx, floory, seed)) * 0x0.ffffffbp-63f,
+//                x1y0 = (hashAll(floorx + 1L, floory, seed)) * 0x0.ffffffbp-63f,
+//                x0y1 = (hashAll(floorx, floory + 1, seed)) * 0x0.ffffffbp-63f,
+//                x1y1 = (hashAll(floorx + 1L, floory + 1L, seed)) * 0x0.ffffffbp-63f;
+//        float ax = x - floorx, ay = y - floory;
+//        ax *= ax * (3f - 2f * ax);
+//        ay *= ay * (3f - 2f * ay);
+////        ax *= ax * ax * (ax * (ax * 6.0 - 15.0) + 10.0);
+////        ay *= ay * ay * (ay * (ay * 6.0 - 15.0) + 10.0);
+//        return ((1f - ay) * ((1f - ax) * x0y0 + ax * x1y0) + ay * ((1f - ax) * x0y1 + ax * x1y1));
     }
 
     public static float beachNoise(final long seed, final float xin, final float yin, final float zin)

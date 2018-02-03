@@ -336,7 +336,7 @@ public final class NumberTools {
     public static double swayRandomized(long seed, final double value)
     {
         final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
-        final double start = (((seed = (floor + seed) * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
+        final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
         double a = value - floor;
         a *= a * (3.0 - 2.0 * a);
@@ -360,7 +360,7 @@ public final class NumberTools {
     public static float swayRandomized(long seed, final float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
-        final float start = (((seed = (floor + seed) * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
+        final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffbp-63f;
         float a = value - floor;
         a *= a * (3f - 2f * a);

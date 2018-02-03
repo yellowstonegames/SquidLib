@@ -268,6 +268,7 @@ public class LanguageGenTest {
                 FakeLanguageGen.ALIEN_I,
                 FakeLanguageGen.ALIEN_O,
                 FakeLanguageGen.ALIEN_U,
+                FakeLanguageGen.INSECT
         };
         String marked = "What the [?]heck?[?] Check that out will ya? It's probably nothing, but - OH [?]NO, THIS IS BAD!";
         String[] oz = new String[]{
