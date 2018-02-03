@@ -319,22 +319,52 @@ public final class NumberTools {
     }
 
     /**
-     * A mix of the smooth transitions of {@link #sway(double)} with (seeded) random peaks and valleys between -1.0
-     * (inclusive) and 1.0 (exclusive). The pattern this will produces will be completely different if the seed changes,
-     * and it may be suitable for 1D noise.
-     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes
-     * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs.
-     * @return a pseudo-random double between -1.0 (inclusive) and 1.0 (exclusive), smoothly changing with value
+     * A mix of the smooth transitions of {@link #sway(double)} with (seeded) random peaks and valleys between -1.0 and
+     * 1.0 (both exclusive). The pattern this will produces will be completely different if the seed changes, and it is
+     * suitable for 1D noise. Uses a simple method of cubic interpolation between random values, where a random value is
+     * used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than {@link #sway(double)}, which uses quintic (this causes swayRandomized() to produce more
+     * outputs in the mid-range and less at extremes; it is also slightly faster and simpler).
+     * <br>
+     * Performance note: HotSpot seems to be much more able to optimize swayRandomized(long, float) than
+     * swayRandomized(long, double), with the float version almost twice as fast after JIT warms up. On GWT, the
+     * reverse should be expected because floats must be emulated there.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs
+     * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
      */
-    public static double swayRandomized(final long seed, final double value)
+    public static double swayRandomized(long seed, final double value)
     {
-        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m,
-                flip = -((sm & 0x8000000000000L)>>51), floor = Noise.longFloor(value) + seed, sb = (s >> 63) ^ flip;
-        double a = (Double.longBitsToDouble(((sm ^ flip) & 0xfffffffffffffL)
-                | 0x4000000000000000L) - 2.0);
-        final double start = NumberTools.randomSignedDouble(floor), end = NumberTools.randomSignedDouble(floor + 1L);
-        a = a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * (sb | 1L) - sb;
+        final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
+        final double start = (((seed = (floor + seed) * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
+        double a = value - floor;
+        a *= a * (3.0 - 2.0 * a);
         return (1.0 - a) * start + a * end;
+    }
+    /**
+     * A mix of the smooth transitions of {@link #sway(float)} with (seeded) random peaks and valleys between -1f and
+     * 1f (both exclusive). The pattern this will produces will be completely different if the seed changes, and it is
+     * suitable for 1D noise. Uses a simple method of cubic interpolation between random values, where a random value is
+     * used without modification when given an integer for {@code value}. Note that this uses a different type of
+     * interpolation than {@link #sway(float)}, which uses quintic (this causes swayRandomized() to produce more
+     * outputs in the mid-range and less at extremes; it is also slightly faster and simpler).
+     * <br>
+     * Performance note: HotSpot seems to be much more able to optimize swayRandomized(long, float) than
+     * swayRandomized(long, double), with the float version almost twice as fast after JIT warms up. On GWT, the
+     * reverse should be expected because floats must be emulated there.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float swayRandomized(long seed, final float value)
+    {
+        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        final float start = (((seed = (floor + seed) * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffbp-63f;
+        float a = value - floor;
+        a *= a * (3f - 2f * a);
+        return (1f - a) * start + a * end;
     }
 
     /**

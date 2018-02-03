@@ -130,7 +130,7 @@ public class DharmaRNG extends RNG implements Serializable{
      */
     @Override
     public double nextDouble() {
-        double gen = random.nextLong() * DOUBLE_UNIT;
+        double gen = (random.nextLong() & 0x1fffffffffffffL) * DOUBLE_UNIT;
         /*if(Math.abs((produced + gen) - (baseline + fairness)) > 1.5) {
             //do some reseeding here if possible
         }*/

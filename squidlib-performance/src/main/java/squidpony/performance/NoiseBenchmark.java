@@ -31,10 +31,7 @@
 
 package squidpony.performance;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -72,245 +69,94 @@ import java.util.concurrent.TimeUnit;
  * NoiseBenchmark.measureWhirlingAlt2D  avgt    4  1874.060 ±  83.351  ms/op
  * NoiseBenchmark.measureWhirlingAlt3D  avgt    4  2842.153 ± 110.335  ms/op
  */
+@State(Scope.Thread)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Fork(1)
+@Warmup(iterations = 5)
+@Measurement(iterations = 5)
 public class NoiseBenchmark {
 
-    private static double seed = 9000;
-    private static int state = 9999;
+    private short x = 0, y = 0, z = 0, w = 0, u = 0, v = 0;
 
-    public double doPerlin2D()
-    {
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += PerlinNoise.noise(a += 0.0625, a);
-        }
-        return seed;
+    @Benchmark
+    public double measureSwayRandomizedDouble() {
+        return NumberTools.swayRandomized(1024L, ++x * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePerlin2D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doPerlin2D());
-    }
-
-    public double doPerlin3D()
-    {
-
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += PerlinNoise.noise(a += 0.0625, a, a);
-        }
-        return seed;
+    public float measureSwayRandomizedFloat() {
+        return NumberTools.swayRandomized(1024L, ++x * 0.03125f);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePerlin3D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doPerlin3D());
-    }
-
-
-    public double doPerlin4D()
-    {
-
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += PerlinNoise.noise(a += 0.0625, a, a, a);
-        }
-        return seed;
+    public double measurePerlin2D() {
+        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measurePerlin4D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doPerlin4D());
-    }
-
-    public double doMerlin2D()
-    {
-        int a = 0;
-        for (double x = 0.0; x < 64000000.0; x++) {
-            seed += MerlinNoise.noise2D(++a, a, 9000L, 16, 8);
-        }
-        return seed;
+    public double measurePerlin3D() {
+        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMerlin2D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doMerlin2D());
-    }
-
-    public double doMerlin3D()
-    {
-        int a = 0;
-        for (double x = 0.0; x < 64000000.0; x++) {
-            seed += MerlinNoise.noise3D(++a, a, a,9000L, 16, 8);
-        }
-        return seed;
+    public double measurePerlin4D() {
+        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMerlin3D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doMerlin3D());
-    }
-
-    public double doWhirling2D()
-    {
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += WhirlingNoise.noise(a += 0.0625, a);
-        }
-        return seed;
+    public double measureWhirling2D() {
+        return WhirlingNoise.noise(++x * 0.03125, --y * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWhirling2D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doWhirling2D());
-    }
-
-    public double doWhirling3D()
-    {
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += WhirlingNoise.noise(a += 0.0625, a, a);
-        }
-        return seed;
+    public double measureWhirling3D() {
+        return WhirlingNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWhirling3D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doWhirling3D());
-    }
-
-    public double doWhirling4D()
-    {
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += WhirlingNoise.noise(a += 0.0625, a, a, a);
-        }
-        return seed;
+    public double measureWhirling4D() {
+        return WhirlingNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWhirling4D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doWhirling4D());
-    }
-
-
-    public double doWhirlingAlt2D()
-    {
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += WhirlingNoise.noiseAlt(a += 0.0625, a);
-        }
-        return seed;
+    public float measureWhirlingAlt2D() {
+        return WhirlingNoise.noiseAlt(++x * 0.03125, --y * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWhirlingAlt2D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doWhirlingAlt2D());
-    }
-
-    public double doWhirlingAlt3D()
-    {
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += WhirlingNoise.noiseAlt(a += 0.0625, a, a);
-        }
-
-        return seed;
+    public float measureWhirlingAlt3D() {
+        return WhirlingNoise.noiseAlt(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWhirlingAlt3D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doWhirlingAlt3D());
-    }
-
-    public double doSeeded2D()
-    {
-
-        state = 9999;
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += SeededNoise.noise(a += 0.0625, a, ++state);
-        }
-        return seed;
+    public long measureMerlin2D() {
+        return MerlinNoise.noise2D(++x, --y, 1024L, 16, 8);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSeeded2D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doSeeded2D());
-    }
-
-    public double doSeeded3D()
-    {
-        state = 9999;
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += SeededNoise.noise(a += 0.0625, a, a, ++state);
-        }
-        return seed;
+    public long measureMerlin3D() {
+        return MerlinNoise.noise3D(++x, --y, z++, 1024L, 16, 8);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSeeded3D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doSeeded3D());
-    }
-
-    public double doSeeded4D()
-    {
-        state = 9999;
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += SeededNoise.noise(a += 0.0625, a, a, a, ++state);
-        }
-        return seed;
+    public double measureSeeded2D() {
+        return SeededNoise.noise(++x * 0.03125, --y * 0.03125, 1024L);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSeeded4D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doSeeded4D());
-    }
-
-    public double doSeeded6D()
-    {
-        state = 9999;
-        for (double x = 0.0, a = 0.0; x < 64000000.0; x++) {
-            seed += SeededNoise.noise(a += 0.0625, a, a, a, a, a, ++state);
-        }
-        return seed;
+    public double measureSeeded3D() {
+        return SeededNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, 1024L);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSeeded6D() throws InterruptedException {
-        seed = 9000;
-        System.out.println(doSeeded6D());
+    public double measureSeeded4D() {
+        return SeededNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125, 1024L);
+    }
+
+    @Benchmark
+    public double measureSeeded6D() {
+        return SeededNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125, ++u * 0.03125, ++v * 0.03125, 1024L);
     }
 
     /*
@@ -336,8 +182,8 @@ public class NoiseBenchmark {
         Options opt = new OptionsBuilder()
                 .include(NoiseBenchmark.class.getSimpleName())
                 .timeout(TimeValue.seconds(30))
-                .warmupIterations(4)
-                .measurementIterations(4)
+                .warmupIterations(5)
+                .measurementIterations(5)
                 .forks(1)
                 .build();
 

@@ -326,8 +326,8 @@ public class EverythingDemo extends ApplicationAdapter {
         messages.appendWrappingMessage(text);
 
         // The display is almost all set up, so now we can tell it to use the filtered color centers we want.
-        // 8 is unfiltered. You can change this to 0-7 to use different filters, or press 'f' in play.
-        currentCenter = 2;
+        // 8 is unfiltered. You can change this to 0-9 to use different filters, or press 'f' in play.
+        currentCenter = 8;
 
         fgCenter = colorCenters[currentCenter * 2];
         bgCenter = colorCenters[currentCenter * 2 + 1];

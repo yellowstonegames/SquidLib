@@ -1,6 +1,9 @@
 package squidpony.squidmath;
 
 /**
+ * A container class for various interfaces and implementing classes that affect continuous noise, such as that produced
+ * by {@link WhirlingNoise} or {@link SeededNoise}, as well as static utility methods used throughout noise code.
+ * <br>
  * Created by Tommy Ettinger on 3/17/2017.
  */
 public class Noise {
@@ -13,7 +16,7 @@ public class Noise {
      * @return the floor of t, as a long
      */
     public static long longFloor(double t) {
-        return t >= 0 ? (long) t : (long) t - 1;
+        return t >= 0.0 ? (long) t : (long) t - 1L;
     }
     /**
      * Like {@link Math#floor(double)}, but takes a float and returns a long.
@@ -23,7 +26,7 @@ public class Noise {
      * @return the floor of t, as a long
      */
     public static long longFloor(float t) {
-        return t >= 0 ? (long) t : (long) t - 1;
+        return t >= 0f ? (long) t : (long) t - 1L;
     }
     /**
      * Like {@link Math#floor(double)} , but returns an int.
@@ -32,7 +35,7 @@ public class Noise {
      * @return the floor of t, as an int
      */
     public static int fastFloor(double t) {
-        return t >= 0 ? (int) t : (int) t - 1;
+        return t >= 0.0 ? (int) t : (int) t - 1;
     }
     /**
      * Like {@link Math#floor(double)}, but takes a float and returns an int.
@@ -41,7 +44,7 @@ public class Noise {
      * @return the floor of t, as an int
      */
     public static int fastFloor(float t) {
-        return t >= 0 ? (int) t : (int) t - 1;
+        return t >= 0f ? (int) t : (int) t - 1;
     }
     /**
      * Like {@link Math#ceil(double)}, but returns an int.
@@ -50,7 +53,7 @@ public class Noise {
      * @return the ceiling of t, as an int
      */
     public static int fastCeil(double t) {
-        return t >= 0 ? -(int) -t + 1: -(int)-t;
+        return t >= 0.0 ? -(int) -t + 1: -(int)-t;
     }
     /**
      * Like {@link Math#ceil(double)}, but takes a float and returns an int.
@@ -59,7 +62,7 @@ public class Noise {
      * @return the ceiling of t, as an int
      */
     public static int fastCeil(float t) {
-        return t >= 0 ? -(int) -t + 1: -(int)-t;
+        return t >= 0f ? -(int) -t + 1: -(int)-t;
     }
 
     /**

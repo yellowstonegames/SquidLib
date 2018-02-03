@@ -22,9 +22,8 @@ import squidpony.squidmath.*;
 import java.util.Arrays;
 import java.util.Random;
 
-import static squidpony.squidgrid.gui.gdx.SColor.FLOAT_WHITE;
-import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
-import static squidpony.squidgrid.gui.gdx.SColor.floatGetI;
+import static squidpony.squidgrid.gui.gdx.SColor.*;
+import static squidpony.squidmath.Noise.PointHash.*;
 
 /**
  * Demo to help with visualizing hash/noise functions and RNG types. Most of the hashes work simply by treating the x,y
@@ -588,15 +587,97 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     public static double swayRandomized(final long seed, final double value)
     {
-        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m,
+        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), sm = s << ((s >>> 52 & 0x7FFL) - 0x400L),
                 flip = -((sm & 0x8000000000000L)>>51), floor = Noise.longFloor(value) + seed, sb = (s >> 63) ^ flip;
         double a = (Double.longBitsToDouble(((sm ^ flip) & 0xfffffffffffffL)
                 | 0x4000000000000000L) - 2.0);
         final double start = NumberTools.randomSignedDouble(floor), end = NumberTools.randomSignedDouble(floor + 1L);
-        //(a *= a * (3.0 - 2.0 * a))
         a = a * a * (3.0 - 2.0 * a) * (sb | 1L) - sb;
         return (1.0 - a) * start + a * end;
     }
+
+    public static float beachNoise(final long seed, final float xin, final float yin)
+    {
+        final float
+                x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.75f) * 0.375f,
+                y = yin + NumberTools.swayRandomized(seed + 999999L, xin * 0.75f) * 0.375f;
+        final long floorx = Noise.longFloor(x), floory = Noise.longFloor(y);
+        final float x0y0 = (hashAll(floorx, floory, seed)) * 0x0.ffffffbp-63f,
+                x1y0 = (hashAll(floorx + 1L, floory, seed)) * 0x0.ffffffbp-63f,
+                x0y1 = (hashAll(floorx, floory + 1, seed)) * 0x0.ffffffbp-63f,
+                x1y1 = (hashAll(floorx + 1L, floory + 1L, seed)) * 0x0.ffffffbp-63f;
+        float ax = x - floorx, ay = y - floory;
+        ax *= ax * (3f - 2f * ax);
+        ay *= ay * (3f - 2f * ay);
+//        ax *= ax * ax * (ax * (ax * 6.0 - 15.0) + 10.0);
+//        ay *= ay * ay * (ay * (ay * 6.0 - 15.0) + 10.0);
+        return ((1f - ay) * ((1f - ax) * x0y0 + ax * x1y0) + ay * ((1f - ax) * x0y1 + ax * x1y1));
+    }
+
+    public static float beachNoise(final long seed, final float xin, final float yin, final float zin)
+    {
+        final float
+                x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.3125f - zin * 0.78125f) * 0.5f,
+                y = yin + NumberTools.swayRandomized(seed + 999999L, zin * 0.3125f - xin * 0.78125f) * 0.5f,
+                z = zin + NumberTools.swayRandomized(seed + 99999999L, xin * 0.3125f - yin * 0.78125f) * 0.5f;
+        final long floorx = Noise.longFloor(x), floory = Noise.longFloor(y), floorz = Noise.longFloor(z);
+        final float x0y0z0 = (hashAll(floorx, floory, floorz, seed)) * 0x0.ffffffbp-63f,
+                x1y0z0 = (hashAll(floorx + 1L, floory, floorz, seed)) * 0x0.ffffffbp-63f,
+                x0y1z0 = (hashAll(floorx, floory + 1, floorz, seed)) * 0x0.ffffffbp-63f,
+                x1y1z0 = (hashAll(floorx + 1L, floory + 1L, floorz, seed)) * 0x0.ffffffbp-63f,
+                x0y0z1 = (hashAll(floorx, floory, floorz + 1, seed)) * 0x0.ffffffbp-63f,
+                x1y0z1 = (hashAll(floorx + 1L, floory, floorz + 1, seed)) * 0x0.ffffffbp-63f,
+                x0y1z1 = (hashAll(floorx, floory + 1, floorz + 1, seed)) * 0x0.ffffffbp-63f,
+                x1y1z1 = (hashAll(floorx + 1L, floory + 1L, floorz + 1, seed)) * 0x0.ffffffbp-63f;
+        float ax = x - floorx, ay = y - floory, az = z - floorz;
+        ax *= ax * (3f - 2f * ax);
+        ay *= ay * (3f - 2f * ay);
+        az *= az * (3f - 2f * az);
+//        ax *= ax * ax * (ax * (ax * 6.0 - 15.0) + 10.0);
+//        ay *= ay * ay * (ay * (ay * 6.0 - 15.0) + 10.0);
+        return (1f - az) *
+                ((1f - ay) * ((1f - ax) * x0y0z0 + ax * x1y0z0) + ay * ((1f - ax) * x0y1z0 + ax * x1y1z0))
+                + az * ((1f - ay) * ((1f - ax) * x0y0z1 + ax * x1y0z1) + ay * ((1f - ax) * x0y1z1 + ax * x1y1z1));
+    }
+
+
+    public static double swayRandomized2(final long seed, final double value)
+    {
+        final long floor = Noise.longFloor(value);
+        final double start = NumberTools.randomSignedDouble(floor + seed), end = NumberTools.randomSignedDouble(floor + seed +1L);
+        return Noise.cerp(start, end, value - floor);
+    }
+
+    public static float swayRandomized2(final long seed, final float value)
+    {
+        final long floor = Noise.longFloor(value);
+        final float start = NumberTools.randomSignedFloat(floor + seed), end = NumberTools.randomSignedFloat(floor + seed + 1L);
+        return Noise.cerp(start, end, value - floor);
+    }
+
+    public static double swayRandomized2(final long seed, final double xin, final double yin)
+    {
+        final double x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.75) * 0.375,
+                y = yin + NumberTools.swayRandomized(seed + 999999L, xin * 0.75) * 0.375;
+        final long floorX = Noise.longFloor(x), floorY = Noise.longFloor(y);
+        final double x0y0 = Noise.PointHash.hashAll(floorX, floorY, seed) * 0x0.fffffffffffffbp-63,
+                x1y0 = Noise.PointHash.hashAll(floorX + 1, floorY, seed) * 0x0.fffffffffffffbp-63,
+                x0y1 = Noise.PointHash.hashAll(floorX, floorY + 1, seed) * 0x0.fffffffffffffbp-63,
+                x1y1 = Noise.PointHash.hashAll(floorX + 1, floorY + 1, seed) * 0x0.fffffffffffffbp-63;
+        return Noise.cerp(Noise.cerp(x0y0, x1y0, x - floorX), Noise.cerp(x0y1, x1y1, x - floorX), y - floorY);
+    }
+
+
+
+//        final long
+//                sx = Double.doubleToLongBits(x + (x < 0.0 ? -2.0 : 2.0)), mx = sx << ((sx >>> 52 & 0x7FFL) - 0x400L),
+//                flipx = -((mx & 0x8000000000000L)>>51), sbx = (sx >> 63) ^ flipx,
+//                sy = Double.doubleToLongBits(y + (y < 0.0 ? -2.0 : 2.0)), my = sy << ((sy >>> 52 & 0x7FFL) - 0x400L),
+//                flipy = -((my & 0x8000000000000L)>>51), sby = (sy >> 63) ^ flipy;
+//        double ax = (Double.longBitsToDouble(((mx ^ flipx) & 0xfffffffffffffL) | 0x4000000000000000L) - 2.0),
+//        ay = (Double.longBitsToDouble(((my ^ flipy) & 0xfffffffffffffL) | 0x4000000000000000L) - 2.0);
+//        ax = ax * ax * (3.0 - 2.0 * ax) * (sbx | 1L) - sbx;
+//        ay = ay * ay * (3.0 - 2.0 * ay) * (sby | 1L) - sby;
 
 
     public static int prepareSeed(final int seed)
@@ -4001,7 +4082,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(display.colors[511], FLOAT_WHITE);
                         if((ctr & 3) == 0) {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
-                            iBright = (int) (NumberTools.swayRandomized(9001L, ctr * 0.0125) * 240.0);
+                            iBright = (int) (NumberTools.swayRandomized(9001L, ctr * 0.0125f) * 240.0);
                             display.put(511, 255 + iBright, bright);
                             display.put(511, 256 + iBright, bright);
                             display.put(511, 257 + iBright, bright);
@@ -4016,16 +4097,37 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                     break;
                     case 108:
-                        Gdx.graphics.setTitle("Merlin Rivers 2D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                iBright = (int)MerlinNoise.noise2D(x + ctr, y + ctr, 9000L, 5, 32);
-                                iBright &= ~((int)MerlinNoise.noise2D(x + ctr + 5, y + ctr, 9000L, 5, 32) - 0x1C00000);
-                                iBright = (iBright >> 8) >>> 24;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
-                            }
+                        Gdx.graphics.setTitle("swayRandomized2() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int i = 0; i < 511; i++)
+                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
+                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                        if((ctr & 3) == 0) {
+                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
+                            iBright = (int) (swayRandomized(9001L, ctr * 0.0125f) * 240f);
+                            display.put(511, 255 + iBright, bright);
+                            display.put(511, 256 + iBright, bright);
+                            display.put(511, 257 + iBright, bright);
+
+                            display.put(510, 255 + iBright, bright);
+                            display.put(510, 256 + iBright, bright);
+                            display.put(510, 257 + iBright, bright);
+
+                            display.put(509, 255 + iBright, bright);
+                            display.put(509, 256 + iBright, bright);
+                            display.put(509, 257 + iBright, bright);
                         }
                         break;
+
+//                        Gdx.graphics.setTitle("Merlin Rivers 2D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                iBright = (int)MerlinNoise.noise2D(x + ctr, y + ctr, 9000L, 5, 32);
+//                                iBright &= ~((int)MerlinNoise.noise2D(x + ctr + 5, y + ctr, 9000L, 5, 32) - 0x1C00000);
+//                                iBright = (iBright >> 8) >>> 24;
+//                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+//                            }
+//                        }
+//                        break;
                     case 109:
                         Gdx.graphics.setTitle("Merlin Rivers 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -4039,29 +4141,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 110:
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        code = 1000000L - ctr;
-                        extra = 200000L + ctr;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float) (Noise.cerp(NumberTools.swayRandomized(20000L * (y + extra >> 5), (x + extra) * 0.03125),
-                                        NumberTools.swayRandomized(20000L * (y + extra + 32 >> 5), (x + extra) * 0.03125), (y + extra & 31) * 0.03125)
-                                + Noise.cerp(NumberTools.swayRandomized(30000L * (x + code >> 5), (y + code) * 0.03125),
-                                        NumberTools.swayRandomized(30000L * (x + code + 32 >> 5), (y + code) * 0.03125), (x + code & 31) * 0.03125)) * 0.25f + 0.5f;
-
-//                                bright = (float)swayRandomized(12345L,
-//                                        swayRandomized(-123456789L, (y + ctr) * 0.03125) * 7.0 + dBright) * 0.5f + 0.5f;
+                                bright = beachNoise(-999999L, (x + ctr) * 0.0625f, (y + ctr) * 0.0625f) * 0.5f + 0.5f; //0.61803398875
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
                     case 111:
                         Gdx.graphics.setTitle("Experimental Noise 3D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        dBright = swayRandomized(900001L, ctr * 0.0625) * 5.0;
                         for (int x = 0; x < width; x++) {
-                            dBright2 = swayRandomized(900001L, x * 0.0625) * 5.0 + dBright;
                             for (int y = 0; y < height; y++) {
-                                bright = (float)swayRandomized(12345L,
-                                        swayRandomized(-123456789L, y * 0.0625) * 5.0 + dBright2) * 0.5f + 0.5f;
+                                bright = beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f) * 0.5f + 0.5f; //0.61803398875
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

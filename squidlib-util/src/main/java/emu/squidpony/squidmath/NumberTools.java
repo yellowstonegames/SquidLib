@@ -147,18 +147,24 @@ public class NumberTools {
         return a * a * a * (a * (a * 6.0 - 15.0) + 10.0);
     }
 
-    public static double swayRandomized(final long seed, final double value)
+    public static double swayRandomized(long seed, final double value)
     {
-        wda.set(0, value + (value < 0.0 ? -2.0 : 2.0));
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19),
-                sb = (s >> 31) ^ flip;
-        final long floor = Noise.longFloor(value) + seed;
-        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
-        wia.set(0, wia.get(0) ^ flip);
-        double a = wda.get(0) - 2.0;
-        final double start = randomSignedDouble(floor), end = randomSignedDouble(floor + 1L);
-        a = a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * (sb | 1) - sb;
+        final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
+        final double start = (((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
+        double a = value - floor;
+        a *= a * (3.0 - 2.0 * a);
         return (1.0 - a) * start + a * end;
+    }
+
+    public static float swayRandomized(long seed, final float value)
+    {
+        final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
+        final float start = (((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffbp-63f;
+        float a = value - floor;
+        a *= a * (3f - 2f * a);
+        return (1f - a) * start + a * end;
     }
 
     public static int floatToIntBits(final float value) {
