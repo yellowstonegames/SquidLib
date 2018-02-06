@@ -389,7 +389,7 @@ public class ShortSet implements Serializable{
         short[] keyTable = this.keyTable;
         for (int i = 0, n = capacity + stashSize; i < n; i++)
             if (keyTable[i] != EMPTY) return keyTable[i];
-        throw new IllegalStateException("IntSet is empty.");
+        throw new IllegalStateException("ShortSet is empty.");
     }
 
     /** Increases the size of the backing array to accommodate the specified number of additional items. Useful before adding many

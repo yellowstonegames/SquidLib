@@ -520,33 +520,25 @@ public class SparseDemo extends ApplicationAdapter {
         //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
         //display.clear();
 
-        float tm = (System.currentTimeMillis() & 0xffffffL) * 0.001f;
-        for (int i = 0; i < bigWidth; i++) {
-            for (int j = 0; j < bigHeight; j++) {
-                if(visible[i][j] > 0.0) {
-                    // There are a lot of numbers here; they're just chosen for aesthetic reasons. They affect
-                    // the brightness of a cell, using SeededNoise for a flickering torchlight effect that changes
-                    // as the time does, and also depends on the x,y position of the cell being lit. We use
-                    // SColor.lerpFloatColors() to take two floats that encode colors without using an object,
-                    // and mix them according to a third float between 0f and 1f. The two colors are the background
-                    // color of the cell, then very light yellow, while the third number is where the mess is. First it
-                    // gets a number using the visibility of the cell and the SeededNoise result. The higher the
-                    // visibility, the brighter the cell will be, and a small adjustment to that brightness is applied
-                    // with the noise result for the player's x position, y position, and the current time.
-                    // SeededNoise.noise() produces a double between -1.0 and 1.0, so the adjustments this makes to it
-                    // yield a number between 0.75 and 1.25. Multiplying that with the visibility, then multiplying by
-                    // 200 and adding 200 produces a number with a max that varies from 350 to 450 and a minimum of 0
-                    // (when visibility is 0). Since this number will always be between 0f and 512f, but we want a
-                    // number between 0 and 1 to provide the amount for the lighting color to affect the background
-                    // color, we effectively divide by 512 using multiplication by a rarely-seen hexadecimal float
-                    // literal, 0x1p-9f.
-                    display.put(i, j, lineDungeon[i][j], colors[i][j],
-                            SColor.lerpFloatColors(bgColors[i][j], FLOAT_LIGHTING,(200f + (
-                                    200f * (float)(visible[i][j] * (1.0 + 0.25 * SeededNoise.noise(i * 0.3, j * 0.3, tm, 1)))))
-                                    * 0x1p-9f) // as above, "* 0x1p-9f" is roughly equivalent to "/ 512.0"
-                    );
-                } else if(seen.contains(i, j))
-                    display.put(i, j, lineDungeon[i][j], colors[i][j], SColor.lerpFloatColors(bgColors[i][j], GRAY_FLOAT, 0.3f));
+        // The loop here only will draw tiles if they are potentially in the visible part of the map.
+        // It starts at an x,y position equal to the player's position minus half of the shown gridWidth and gridHeight,
+        // minus one extra cell to allow the camera some freedom to move. This position won't go lower than 0. The
+        // rendering in each direction ends when the edge of the map (bigWidth or bigHeight) is reached, or if
+        // gridWidth/gridHeight + 2 cells have been rendered (the + 2 is also for the camera movement).
+        for (int x = Math.max(0, player.x - (gridWidth >> 1) - 1), i = 0; x < bigWidth && i < gridWidth + 2; x++, i++) {
+            for (int y = Math.max(0, player.y - (gridHeight >> 1) - 1), j = 0; y < bigHeight && j < gridHeight + 2; y++, j++) {
+                if(visible[x][y] > 0.0) {
+                    // Here we use a convenience method in SparseLayers that puts a char at a specified position (the
+                    // first three parameters), with a foreground color for that char (fourth parameter), as well as
+                    // placing a background tile made of a one base color (fifth parameter) that is adjusted to bring it
+                    // closer to FLOAT_LIGHTING (sixth parameter) based on how visible the cell is (seventh parameter,
+                    // comes from the FOV calculations) in a way that fairly-quickly changes over time.
+                    // This effect appears to shrink and grow in a circular area around the player, with the lightest
+                    // cells around the player and dimmer ones near the edge of vision. This lighting is "consistent"
+                    // because all cells at the same distance will have the same amount of lighting applied.
+                    display.putWithConsistentLight(x, y, lineDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, (float) visible[x][y]);
+                } else if(seen.contains(x, y))
+                    display.put(x, y, lineDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
             }
         }
         Coord pt;
@@ -651,7 +643,7 @@ public class SparseDemo extends ApplicationAdapter {
         config.height = (gridHeight + bonusHeight) * cellHeight;
         config.vSyncEnabled = false;
         config.foregroundFPS = 0;
-        config.backgroundFPS = 30;
+        config.backgroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);

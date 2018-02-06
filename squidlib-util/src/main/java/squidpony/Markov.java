@@ -51,13 +51,13 @@ public class Markov implements Serializable {
      */
     public void analyze(CharSequence corpus)
     {
-        Arrangement<String> body = new Arrangement<>(corpus.length() / 5);
+        Arrangement<String> body = new Arrangement<>(corpus.length() / 5 + 5);
         body.add(INITIAL);
         body.add(FULL_STOP);
         body.add(EXCLAMATION);
         body.add(QUESTION);
         body.add(ELLIPSIS);
-        ArrayList<IntVLA> working = new ArrayList<>(corpus.length() / 5);
+        ArrayList<IntVLA> working = new ArrayList<>(corpus.length() / 5 + 5);
         working.add(new IntVLA(128));
         int[] links = {0};
         working.add(new IntVLA(links));

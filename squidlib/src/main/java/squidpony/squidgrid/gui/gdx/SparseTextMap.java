@@ -20,7 +20,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.HashCommon;
 import squidpony.squidmath.NumberTools;
 
@@ -57,10 +56,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     private int stashCapacity;
     private int pushIterations;
 
-    private Entries entries1, entries2;
-    private CharValues charValues1, charValues2;
-    private FloatValues floatValues1, floatValues2;
-    private Keys keys1, keys2;
+    private transient Entries entries1, entries2;
+    private transient CharValues charValues1, charValues2;
+    private transient FloatValues floatValues1, floatValues2;
+    private transient Keys keys1, keys2;
 
     /**
      * Creates a new map with an initial capacity of 51 and a load factor of 0.8.
@@ -109,10 +108,20 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * Creates a new map identical to the specified map.
      */
     public SparseTextMap(SparseTextMap map) {
-        this((int) Math.floor(map.capacity * map.loadFactor), map.loadFactor);
+        //this((int) Math.floor(map.capacity * map.loadFactor), map.loadFactor);
+        capacity = map.capacity;
+        loadFactor = map.loadFactor;
+        threshold = map.threshold;
+        mask = map.mask;
+        hashShift = map.hashShift;
+        stashCapacity = map.stashCapacity;
+        pushIterations = map.pushIterations;
         stashSize = map.stashSize;
+        keyTable = new int[map.keyTable.length];
         System.arraycopy(map.keyTable, 0, keyTable, 0, map.keyTable.length);
+        charValueTable = new char[map.charValueTable.length];
         System.arraycopy(map.charValueTable, 0, charValueTable, 0, map.charValueTable.length);
+        floatValueTable = new float[map.floatValueTable.length];
         System.arraycopy(map.floatValueTable, 0, floatValueTable, 0, map.floatValueTable.length);
         size = map.size;
         zeroChar = map.zeroChar;
@@ -157,14 +166,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      */
     public void draw(Batch batch, TextCellFactory textFactory, float screenOffsetX, float screenOffsetY) {
         textFactory.configureShader(batch);
-        float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;
+        final float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
-            n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
-            n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
-            n =    ((n & 0x0000ff00) << 8) | ((n >>> 8) & 0x0000ff00) | (n & 0xff0000ff);
+            n = ((n << 8) | (n >>> 24)) * 0x144CBC89;
             textFactory.draw(batch, entry.charValue, entry.floatValue,
                     (n & 0xFFFF) * widthInc + screenOffsetX, (n >>> 16) * heightInc + screenOffsetY);
         }
@@ -194,10 +200,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
-            n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
-            n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
-            n =    ((n & 0x0000ff00) << 8) | ((n >>> 8) & 0x0000ff00) | (n & 0xff0000ff);
+            n = ((n << 8) | (n >>> 24)) * 0x144CBC89;
+//            n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
+//            n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
+//            n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
+//            n =    ((n & 0x0000ff00) << 8) | ((n >>> 8) & 0x0000ff00) | (n & 0xff0000ff);
             textFactory.draw(batch, replacement, entry.floatValue,
                     (n & 0xFFFF) * widthInc + screenOffsetX, (n >>> 16) * heightInc + screenOffsetY);
         }
@@ -211,8 +218,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @param y the y component to encode; this must be between 0 and 65535, both inclusive
      * @return an encoded form of the x,y pair in the style used elsewhere in this class
      */
-    public static int encodePosition(int x, int y) {
-        return GreasedRegion.interleaveBits(x, y);
+    public static int encodePosition(final int x, final int y) {
+        final int n = (x | y << 16) * 0x9E3779B9;
+        return (n << 24) | (n >>> 8);
+        //return GreasedRegion.interleaveBits(x, y);
     }
 
     /**
@@ -223,7 +232,8 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the x component packed in the parameter
      */
     public static int decodeX(int encoded) {
-        return GreasedRegion.disperseBits(encoded) & 0xFFFF;
+        return ((encoded << 8) | (encoded >>> 24)) * 0x144CBC89 & 0xFFFF;
+        //return GreasedRegion.disperseBits(encoded) & 0xFFFF;
     }
 
     /**
@@ -234,7 +244,8 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the y component packed in the parameter
      */
     public static int decodeY(int encoded) {
-        return GreasedRegion.disperseBits(encoded) >>> 16;
+        return ((encoded << 8) | (encoded >>> 24)) * 0x144CBC89 >>> 16;
+        //return GreasedRegion.disperseBits(encoded) >>> 16;
     }
 
     /**
@@ -266,7 +277,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the int that the x,y pair will be stored at, and used as the single key associated with the colorful char
      */
     public int place(int x, int y, char charValue, float encodedColor) {
-        int code = GreasedRegion.interleaveBits(x, y);
+        int code = encodePosition(x, y);
         put(code, charValue, encodedColor);
         return code;
     }
@@ -994,13 +1005,12 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         public Entry next() {
             if (!hasNext) throw new NoSuchElementException();
             if (!valid) throw new GdxRuntimeException("#iterator() cannot be used nested.");
-            int[] keyTable = map.keyTable;
             if (nextIndex == INDEX_ZERO) {
                 entry.key = 0;
                 entry.charValue = map.zeroChar;
                 entry.floatValue = map.zeroFloat;
             } else {
-                entry.key = keyTable[nextIndex];
+                entry.key = map.keyTable[nextIndex];
                 entry.charValue = map.charValueTable[nextIndex];
                 entry.floatValue = map.floatValueTable[nextIndex];
             }
