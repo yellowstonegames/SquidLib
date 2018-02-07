@@ -293,7 +293,7 @@ public class Noise {
         {
             //state *= 0x352E9CF570932BDDL;
             return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
-                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ x) | 0xA529L)))) >>> 59);
+                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 59);
         }
         /**
          *
@@ -347,6 +347,73 @@ public class Noise {
                     ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
                     ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state >>> 25)) * ((state ^ v) | 0xA529L)) ^ (state >>> 22)) ^
                     (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 59);
+        }
+
+        /**
+         *
+         * @param x
+         * @param y
+         * @param state
+         * @return 6-bit hash of the x,y point with the given state
+         */
+        public static int hash64(final long x, final long y, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 58);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param state
+         * @return 6-bit hash of the x,y,z point with the given state
+         */
+        public static int hash64(final long x, final long y, final long z, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y - z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z - x) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ x - y) | 0xA529L))) >>> 58);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param state
+         * @return 6-bit hash of the x,y,z,w point with the given state
+         */
+        public static int hash64(final long x, final long y, final long z, final long w, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ w) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 58);
+        }
+        /**
+         *
+         * @param x
+         * @param y
+         * @param z
+         * @param w
+         * @param u
+         * @param v
+         * @param state
+         * @return 6-bit hash of the x,y,z,w,u,v point with the given state
+         */
+        public static int hash64(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        {
+            //state *= 0x352E9CF570932BDDL;
+            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ z) ^ (state >>> 25)) * ((state ^ w) | 0xA529L)) ^ (state >>> 22)) ^
+                    ((state = ((state += 0x6C8E9CD570932BD5L ^ u) ^ (state >>> 25)) * ((state ^ v) | 0xA529L)) ^ (state >>> 22)) ^
+                    (((state += 0x6C8E9CD570932BD5L ^ v) ^ (state >>> 25)) * ((state ^ x) | 0xA529L))) >>> 58);
         }
 
     }

@@ -40,14 +40,16 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         River                  = 12,
         Ocean                  = 13;
 
-    private static final int width = 314 * 4, height = 400;
-
+    private static final int width = 1920, height = 1080;
+    //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
 
     private SpriteBatch batch;
     //private SquidPanel display;//, overlay;
-    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
-            .mix(FakeLanguageGen.SIMPLISH, 0.6);
+//    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
+//            .mix(FakeLanguageGen.SIMPLISH, 0.6);
+    private FakeLanguageGen lang = FakeLanguageGen.SIMPLISH
+            .mix(FakeLanguageGen.FANTASY_NAME, 0.7);
     private Pixmap pm;
     private Texture pt;
     private int counter = 0;
@@ -293,8 +295,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
         //path = "out/worlds/Sphere " + date + "/";
-        //path = "out/worlds/Tiling " + date + "/";
-        path = "out/worlds/AltSphere " + date + "/";
+        path = "out/worlds/Tiling " + date + "/";
+        //path = "out/worlds/AltSphere " + date + "/";
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
         pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
@@ -303,8 +305,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         rng = new StatefulRNG(CrossHash.hash64(date));
         seed = rng.getState();
         ///world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
-        //world = new WorldMapGenerator.TilingMap(seed, width, height, new Noise.Scaled4D(WhirlingNoise.instance, 1.25), 0.8);
-        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 0.9);
+        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.625);
+        //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
@@ -563,7 +565,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        csv4.append("};\n\n");
 //        csv.append(csv2).append(csv3).append(csv4);
 //        Gdx.files.local(path + name + ".java").writeString(csv.toString(), false);
-        if(++counter >= 32)
+        if(++counter >= 4)
             Gdx.app.exit();
     }
     @Override
@@ -596,9 +598,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         config.title = "SquidLib Demo: Detailed World Map";
         config.width = width * cellWidth;
         config.height = height * cellHeight;
-        config.foregroundFPS = 60;
+        config.fullscreen = true;
+        config.foregroundFPS = 0;
         //config.fullscreen = true;
-        config.backgroundFPS = 30;
+        config.backgroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
