@@ -51,9 +51,9 @@ import java.util.concurrent.TimeUnit;
  * SquidOM refers to squidpony.squidmath.OrderedMap.
  * SquidOS refers to squidpony.squidmath.OrderedSet.
  * The LinkedHash data structures are in java.util.
- * Benchmarks use the default load factor, except for GdxOS and any benchmark followed by a 2 or 3.
+ * Benchmarks use the default load factor, except for SquidOS and any benchmark followed by a 2 or 3.
  * Benchmarks followed by a 2 use load factor 0.5f, and those followed by a 3 use load factor 0.25f.
- * GdxOS uses load factor 0.75f, the same as GdxOM (it's the default in OrderedMap, not OrderedSet).
+ * SquidOS uses load factor 0.75f, the same as GdxOM (it's the default in OrderedMap, not OrderedSet).
  * <br>
  * SquidLib's collections do well here, except on rather large sizes (after about 8000 items, it isn't as fast relative
  * to LinkedHashMap and LinkedHashSet). Considering their added features, this is a good sign.
@@ -121,7 +121,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @Fork(1)
-@Warmup(iterations = 4)
+@Warmup(iterations = 6)
 @Measurement(iterations = 4)
 public class DataStructureBenchmark {
 
@@ -150,7 +150,27 @@ public class DataStructureBenchmark {
     @Benchmark
     public void insertLinkedHashMap(BenchmarkState state, Blackhole blackhole)
     {
-        LinkedHashMap<Integer, Integer> lhm = new LinkedHashMap<>(state.SIZE);
+        LinkedHashMap<Integer, Integer> lhm = new LinkedHashMap<>(state.SIZE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhm.put(i, i);
+        }
+        blackhole.consume(lhm);
+    }
+
+    @Benchmark
+    public void insertLinkedHashMap2(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashMap<Integer, Integer> lhm = new LinkedHashMap<>(state.SIZE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhm.put(i, i);
+        }
+        blackhole.consume(lhm);
+    }
+
+    @Benchmark
+    public void insertLinkedHashMap3(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashMap<Integer, Integer> lhm = new LinkedHashMap<>(state.SIZE, 0.25f);
         for (int i = 0; i < state.SIZE; i++) {
             lhm.put(i, i);
         }
@@ -220,12 +240,33 @@ public class DataStructureBenchmark {
     @Benchmark
     public void insertLinkedHashSet(BenchmarkState state, Blackhole blackhole)
     {
-        LinkedHashSet<Integer> lhs = new LinkedHashSet<>(state.SIZE);
+        LinkedHashSet<Integer> lhs = new LinkedHashSet<>(state.SIZE, 0.75f);
         for (int i = 0; i < state.SIZE; i++) {
             lhs.add(i);
         }
         blackhole.consume(lhs);
     }
+
+    @Benchmark
+    public void insertLinkedHashSet2(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashSet<Integer> lhs = new LinkedHashSet<>(state.SIZE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhs.add(i);
+        }
+        blackhole.consume(lhs);
+    }
+
+    @Benchmark
+    public void insertLinkedHashSet3(BenchmarkState state, Blackhole blackhole)
+    {
+        LinkedHashSet<Integer> lhs = new LinkedHashSet<>(state.SIZE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            lhs.add(i);
+        }
+        blackhole.consume(lhs);
+    }
+
     @Benchmark
     public void insertSquidOS(BenchmarkState state, Blackhole blackhole)
     {

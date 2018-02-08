@@ -295,8 +295,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //stage = new Stage(view, batch);
         date = DateFormat.getDateInstance().format(new Date());
         //path = "out/worlds/Sphere " + date + "/";
-        path = "out/worlds/Tiling " + date + "/";
-        //path = "out/worlds/AltSphere " + date + "/";
+        //path = "out/worlds/Tiling " + date + "/";
+        path = "out/worlds/AltSphere " + date + "/";
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
         pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
@@ -305,8 +305,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         rng = new StatefulRNG(CrossHash.hash64(date));
         seed = rng.getState();
         ///world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
-        world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.625);
-        //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
+        //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.625);
+        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {

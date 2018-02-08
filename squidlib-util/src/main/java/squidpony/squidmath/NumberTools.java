@@ -241,10 +241,10 @@ public final class NumberTools {
      */
     public static double sway(final double value)
     {
-        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
-        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
-                | 0x4000000000000000L) - 2.0);
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * 2.0 - 1.0;
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        final double a = value - floor;
+        floor = (-(floor & 1L) | 1L);
+        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * (floor << 1) - floor;
     }
 
     /**
@@ -265,9 +265,10 @@ public final class NumberTools {
      */
     public static float sway(final float value)
     {
-        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
-        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        final float a = value - floor;
+        floor = (-(floor & 1) | 1);
+        return a * a * a * (a * (a * 6f - 15f) + 10f) * (floor << 1) - floor;
     }
 
     /**
@@ -289,10 +290,12 @@ public final class NumberTools {
      */
     public static float swayTight(final float value)
     {
-        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
-        return a * a * a * (a * (a * 6f - 15f) + 10f);
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        final float a = value - floor;
+        floor &= 1;
+        return a * a * a * (a * (a * 6f - 15f) + 10f) * (-floor | 1) + floor;
     }
+
     /**
      * Limited-use; takes any double and produces a double in the 0.0 to 1.0 range, with a graph of input to output that
      * looks much like a sine wave, curving to have a flat slope when given an integer input and a steep slope when the
@@ -312,10 +315,10 @@ public final class NumberTools {
      */
     public static double swayTight(final double value)
     {
-        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
-        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
-                | 0x4000000000000000L) - 2.0);
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0);
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        final double a = value - floor;
+        floor &= 1L;
+        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * (-floor | 1L) + floor;
     }
 
     /**
