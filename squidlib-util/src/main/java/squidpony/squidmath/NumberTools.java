@@ -194,15 +194,17 @@ public final class NumberTools {
      * very similar to {@link #bounce(double)}, but unlike bounce() this will maintain a continuous rate regardless of
      * the magnitude of its input. An input of any even number should produce something very close to -1.0, any odd
      * number should produce something very close to 1.0, and any number halfway between two incremental integers (like
-     * 8.5 or -10.5) should produce 0.0 or a very small fraction.
+     * 8.5 or -10.5) should produce 0.0 or a very small fraction. This method is closely related to
+     * {@link #sway(double)}, which will smoothly curve its output to produce more values that are close to -1 or 1.
      * @param value any double
      * @return a double from -1.0 (inclusive) to 1.0 (inclusive)
      */
-    public static double zigzag(final double value)
+    public static double zigzag(double value)
     {
-        final long s = Double.doubleToLongBits(value + (value < 0f ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
-        return (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
-                | 0x4010000000000000L) - 5.0);
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        value -= floor;
+        floor = (-(floor & 1L) | 1L);
+        return value * (floor << 1) - floor;
     }
 
     /**
@@ -212,15 +214,17 @@ public final class NumberTools {
      * very similar to {@link #bounce(float)}, but unlike bounce() this will maintain a continuous rate regardless of
      * the magnitude of its input. An input of any even number should produce something very close to -1f, any odd
      * number should produce something very close to 1f, and any number halfway between two incremental integers (like
-     * 8.5f or -10.5f) should produce 0f or a very small fraction.
+     * 8.5f or -10.5f) should produce 0f or a very small fraction. This method is closely related to
+     * {@link #sway(float)}, which will smoothly curve its output to produce more values that are close to -1 or 1.
      * @param value any float
      * @return a float from -1f (inclusive) to 1f (inclusive)
      */
-    public static float zigzag(final float value)
+    public static float zigzag(float value)
     {
-        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        return (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff)
-                | 0x40800000) - 5f);
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        value -= floor;
+        floor = (-(floor & 1) | 1);
+        return value * (floor << 1) - floor;
     }
 
     /**
@@ -239,12 +243,12 @@ public final class NumberTools {
      * @param value any double other than NaN or infinite values; extremely large values can't work properly
      * @return a double from -1.0 (inclusive) to 1.0 (inclusive)
      */
-    public static double sway(final double value)
+    public static double sway(double value)
     {
         long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
-        final double a = value - floor;
+        value -= floor;
         floor = (-(floor & 1L) | 1L);
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * (floor << 1) - floor;
+        return value * value * value * (value * (value * 6.0 - 15.0) + 10.0) * (floor << 1) - floor;
     }
 
     /**
@@ -263,12 +267,12 @@ public final class NumberTools {
      * @param value any float other than NaN or infinite values; extremely large values can't work properly
      * @return a float from -1f (inclusive) to 1f (inclusive)
      */
-    public static float sway(final float value)
+    public static float sway(float value)
     {
         int floor = (value >= 0f ? (int) value : (int) value - 1);
-        final float a = value - floor;
+        value -= floor;
         floor = (-(floor & 1) | 1);
-        return a * a * a * (a * (a * 6f - 15f) + 10f) * (floor << 1) - floor;
+        return value * value * value * (value * (value * 6f - 15f) + 10f) * (floor << 1) - floor;
     }
 
     /**
@@ -288,12 +292,12 @@ public final class NumberTools {
      * @param value any float other than NaN or infinite values; extremely large values can't work properly
      * @return a float from 0f (inclusive) to 1f (inclusive)
      */
-    public static float swayTight(final float value)
+    public static float swayTight(float value)
     {
         int floor = (value >= 0f ? (int) value : (int) value - 1);
-        final float a = value - floor;
+        value -= floor;
         floor &= 1;
-        return a * a * a * (a * (a * 6f - 15f) + 10f) * (-floor | 1) + floor;
+        return value * value * value * (value * (value * 6f - 15f) + 10f) * (-floor | 1) + floor;
     }
 
     /**
@@ -313,12 +317,12 @@ public final class NumberTools {
      * @param value any double other than NaN or infinite values; extremely large values can't work properly
      * @return a double from 0.0 (inclusive) to 1.0 (inclusive)
      */
-    public static double swayTight(final double value)
+    public static double swayTight(double value)
     {
         long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
-        final double a = value - floor;
+        value -= floor;
         floor &= 1L;
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * (-floor | 1L) + floor;
+        return value * value * value * (value * (value * 6.0 - 15.0) + 10.0) * (-floor | 1L) + floor;
     }
 
     /**
@@ -336,14 +340,14 @@ public final class NumberTools {
      * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs
      * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
      */
-    public static double swayRandomized(long seed, final double value)
+    public static double swayRandomized(long seed, double value)
     {
         final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
         final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
-        double a = value - floor;
-        a *= a * (3.0 - 2.0 * a);
-        return (1.0 - a) * start + a * end;
+        value -= floor;
+        value *= value * (3.0 - 2.0 * value);
+        return (1.0 - value) * start + value * end;
     }
     /**
      * A mix of the smooth transitions of {@link #sway(float)} with (seeded) random peaks and valleys between -1f and
@@ -360,14 +364,14 @@ public final class NumberTools {
      * @param value a float that typically changes slowly, by less than 1.0, with direction changes at integer inputs
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
      */
-    public static float swayRandomized(long seed, final float value)
+    public static float swayRandomized(long seed, float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
         final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffbp-63f;
-        float a = value - floor;
-        a *= a * (3f - 2f * a);
-        return (1f - a) * start + a * end;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        return (1f - value) * start + value * end;
     }
 
     /**

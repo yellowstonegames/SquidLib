@@ -1373,7 +1373,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             n4 = t4 * t4 * dot(grad4f[gi4], x4, y4, z4, w4);
         }
         // Sum up and scale the result to cover the range [-1,1]
-        return 27.0 * (n0 + n1 + n2 + n3 + n4);
+        return 17.0 * (n0 + n1 + n2 + n3 + n4);
     }
 
     /**

@@ -73,7 +73,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 0, rngMode = 26, noiseMode = 107;
+    private int hashMode = 0, rngMode = 26, noiseMode = 12;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -598,12 +598,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     public static float beachNoise(final long seed, final float xin, final float yin)
     {
-        final long floorX = Noise.longFloor(xin), floorY = Noise.longFloor(yin);
-        final float
-                xSway = Noise.cerp(NumberTools.swayRandomized(seed + floorY, xin), NumberTools.swayRandomized(seed + floorY + 1, xin), yin - floorY) * 1.875f,
-                ySway = Noise.cerp(NumberTools.swayRandomized(floorX - seed, yin), NumberTools.swayRandomized(floorX + 1 - seed, yin), xin - floorX) * 1.875f;
-        return (NumberTools.swayRandomized(seed ^ 0x9E3779B97F4A7C15L, ySway + xSway + xin + yin) +
-                NumberTools.swayRandomized(seed + 0x9E3779B97F4A7C15L, xin - yin - ySway - xSway + 0.375f)) * 0.5f;
+        return NumberTools.swayRandomized(seed, (NumberTools.swayRandomized(seed + 0x9E3779B97F4A7C15L, xin + NumberTools.swayRandomized(0xD0E89D2D311E289FL + seed, yin + xin * 0.375f)) + NumberTools.swayRandomized(seed - 0x9E3779B97F4A7C15L, yin + NumberTools.swayRandomized(seed - 0xD0E89D2D311E289FL, xin + yin * 0.375f))) * 2.25f);
+//        final long floorX = Noise.longFloor(xin), floorY = Noise.longFloor(yin);
+//        final float
+//                xSway = Noise.cerp(NumberTools.swayRandomized(seed + floorY, xin), NumberTools.swayRandomized(seed + floorY + 1, xin), yin - floorY) * 1.875f,
+//                ySway = Noise.cerp(NumberTools.swayRandomized(floorX - seed, yin), NumberTools.swayRandomized(floorX + 1 - seed, yin), xin - floorX) * 1.875f;
+//        return (NumberTools.swayRandomized(seed ^ 0x9E3779B97F4A7C15L, ySway + xSway + xin + yin) +
+//                NumberTools.swayRandomized(seed + 0x9E3779B97F4A7C15L, xin - yin - ySway - xSway + 0.375f)) * 0.5f;
 
 //        final float
 //                x = xin + NumberTools.swayRandomized(seed + 9999L, yin * 0.75f) * 0.375f,
@@ -2883,10 +2884,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                     case 12:
                         Gdx.graphics.setTitle("Whirling 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        dBright = 1.5 * NumberTools.swayRandomized(12345L, 0.03125 * ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = ((float)
-                                        WhirlingNoise.noise(x * 0.125, y * 0.125, ctr * 0.0375, ctr * 0.0625 * (0.1f + NumberTools.swayTight(ctr * 0.001f)))
+                                        WhirlingNoise.noise(x * 0.125, y * 0.125, ctr * 0.0375, dBright)
                                 + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 

@@ -42,6 +42,7 @@ import squidpony.squidmath.*;
 import java.util.concurrent.TimeUnit;
 
 import static squidpony.squidmath.NumberTools.swayTight;
+import static squidpony.squidmath.NumberTools.zigzag;
 
 /**
  * Various different noise functions, most variants on Simplex noise. These measurements are per-call, in nanoseconds.
@@ -173,6 +174,40 @@ public class NoiseBenchmark {
         return swayTightBit(f[x++ & 1023]);
     }
 
+    public static double zigzagBit(final double value)
+    {
+        final long s = Double.doubleToLongBits(value + (value < 0f ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+        return (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+                | 0x4010000000000000L) - 5.0);
+    }
+
+    public static float zigzagBit(final float value)
+    {
+        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+        return (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff)
+                | 0x40800000) - 5f);
+    }
+
+    @Benchmark
+    public double measureZigzagDouble() {
+        return zigzag(d[x++ & 1023]);
+    }
+
+    @Benchmark
+    public float measureZigzagFloat() {
+        return zigzag(f[x++ & 1023]);
+    }
+
+    @Benchmark
+    public double measureZigzagBitDouble() {
+        return zigzagBit(d[x++ & 1023]);
+    }
+
+    @Benchmark
+    public float measureZigzagBitFloat() {
+        return zigzagBit(f[x++ & 1023]);
+    }
+
     @Benchmark
     public double measurePerlin2D() {
         return PerlinNoise.noise(++x * 0.03125, --y * 0.03125);
@@ -272,5 +307,13 @@ public class NoiseBenchmark {
                 .build();
 
         new Runner(opt).run();
+    }
+    public static void main2(String[] args){
+        for (float i = -16f; i <= 16f; i+= 0.0625f) {
+            System.out.printf("Float %f : NumberTools %f , Bit %f\n", i, NumberTools.zigzag(i), zigzagBit(i));
+        }
+        for (double i = -16.0; i <= 16.0; i+= 0.0625) {
+            System.out.printf("Double %f : NumberTools %f , Bit %f\n", i, NumberTools.zigzag(i), zigzagBit(i));
+        }
     }
 }

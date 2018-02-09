@@ -92,79 +92,72 @@ public class NumberTools {
         return wda.get(0) - 5.0;
     }
 
-    public static double zigzag(final double value)
+    public static double zigzag(double value)
     {
-        wda.set(0, value + (value < 0.0 ? -2.0 : 2.0));
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
-        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40100000);
-        wia.set(0, wia.get(0) ^ flip);
-        return (wda.get(0) - 5.0);
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        value -= floor;
+        floor = (-(floor & 1L) | 1L);
+        return value * (floor << 1) - floor;
     }
 
-    public static float zigzag(final float value)
+    public static float zigzag(float value)
     {
-        wfa.set(0, value + (value < 0f ? -2f : 2f));
-        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40800000);
-        return wfa.get(0) - 5f;
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        value -= floor;
+        floor = (-(floor & 1) | 1);
+        return value * (floor << 1) - floor;
     }
 
-    public static double sway(final double value)
+    public static double sway(double value)
     {
-        wda.set(0, value + (value < 0.0 ? -2.0 : 2.0));
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
-        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
-        wia.set(0, wia.get(0) ^ flip);
-        final double a = wda.get(0) - 2.0;
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * 2.0 - 1.0;
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        value -= floor;
+        floor = (-(floor & 1L) | 1L);
+        return value * value * value * (value * (value * 6.0 - 15.0) + 10.0) * (floor << 1) - floor;
     }
 
-    public static float sway(final float value)
+    public static float sway(float value)
     {
-        wfa.set(0, value + (value < 0f ? -2f : 2f));
-        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
-        final float a = wfa.get(0) - 2f;
-        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        value -= floor;
+        floor = (-(floor & 1) | 1);
+        return value * value * value * (value * (value * 6f - 15f) + 10f) * (floor << 1) - floor;
     }
 
-    public static float swayTight(final float value)
+    public static float swayTight(float value)
     {
-        wfa.set(0, value + (value < 0f ? -2f : 2f));
-        final int s = wia.get(0), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        wia.set(0, ((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000);
-        final float a = wfa.get(0) - 2f;
-        return a * a * a * (a * (a * 6f - 15f) + 10f);
+        int floor = (value >= 0f ? (int) value : (int) value - 1);
+        value -= floor;
+        floor &= 1;
+        return value * value * value * (value * (value * 6f - 15f) + 10f) * (-floor | 1) + floor;
     }
 
-    public static double swayTight(final double value)
+    public static double swayTight(double value)
     {
-        wda.set(0, value + (value < 0.0 ? -2.0 : 2.0));
-        final int s = wia.get(1), m = (s >>> 20 & 0x7FF) - 0x400, sm = s << m, flip = -((sm & 0x80000)>>19);
-        wia.set(1, ((sm ^ flip) & 0xFFFFF) | 0x40000000);
-        wia.set(0, wia.get(0) ^ flip);
-        final double a = wda.get(0) - 2.0;
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0);
+        long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+        value -= floor;
+        floor &= 1L;
+        return value * value * value * (value * (value * 6.0 - 15.0) + 10.0) * (-floor | 1L) + floor;
     }
 
-    public static double swayRandomized(long seed, final double value)
+    public static double swayRandomized(long seed, double value)
     {
         final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
-        final double start = (((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
+        final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
-        double a = value - floor;
-        a *= a * (3.0 - 2.0 * a);
-        return (1.0 - a) * start + a * end;
+        value -= floor;
+        value *= value * (3.0 - 2.0 * value);
+        return (1.0 - value) * start + value * end;
     }
 
-    public static float swayRandomized(long seed, final float value)
+    public static float swayRandomized(long seed, float value)
     {
-        final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
-        final float start = (((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
+        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffbp-63f;
-        float a = value - floor;
-        a *= a * (3f - 2f * a);
-        return (1f - a) * start + a * end;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        return (1f - value) * start + value * end;
     }
 
     public static int floatToIntBits(final float value) {
