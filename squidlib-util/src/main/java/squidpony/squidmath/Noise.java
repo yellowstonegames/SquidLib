@@ -586,6 +586,16 @@ public class Noise {
                             ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
                             ^ state) & 255;
         }
+        public static int hash256_alt(final long x, final long y, final long z, final long w, final long seed) {
+            long a = 0x632BE59BD9B4E019L;
+            return (int) ((0x9E3779B97F4A7C15L
+                    + (a ^= 0x85157AF5L * seed + x)
+                    + (a ^= 0x85157AF5L * x + y)
+                    + (a ^= 0x85157AF5L * y + z)
+                    + (a ^= 0x85157AF5L * z + w)
+                    + (a ^= 0x85157AF5L * w + seed)) * a >>> 56);
+        }
+
         /**
          *
          * @param x

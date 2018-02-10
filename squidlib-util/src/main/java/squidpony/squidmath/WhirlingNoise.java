@@ -398,73 +398,139 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
 //            {-0.000000000000002f, -0.850650808352042f,  0.525731112119130f },
 //            { 0.324919696232902f, -0.850650808352041f,  0.000000000000002f }
 //    };
-    protected static final float[][] grad4f =
+    protected static final double[] grad4 =
             {
-                    {-0.5875167f, 1.4183908f, 1.4183908f, 1.4183908f},
-                    {-0.5875167f, 1.4183908f, 1.4183908f, -1.4183908f},
-                    {-0.5875167f, 1.4183908f, -1.4183908f, 1.4183908f},
-                    {-0.5875167f, 1.4183908f, -1.4183908f, -1.4183908f},
-                    {-0.5875167f, -1.4183908f, 1.4183908f, 1.4183908f},
-                    {-0.5875167f, -1.4183908f, 1.4183908f, -1.4183908f},
-                    {-0.5875167f, -1.4183908f, -1.4183908f, 1.4183908f},
-                    {-0.5875167f, -1.4183908f, -1.4183908f, -1.4183908f},
-                    {1.4183908f, -0.5875167f, 1.4183908f, 1.4183908f},
-                    {1.4183908f, -0.5875167f, 1.4183908f, -1.4183908f},
-                    {1.4183908f, -0.5875167f, -1.4183908f, 1.4183908f},
-                    {1.4183908f, -0.5875167f, -1.4183908f, -1.4183908f},
-                    {-1.4183908f, -0.5875167f, 1.4183908f, 1.4183908f},
-                    {-1.4183908f, -0.5875167f, 1.4183908f, -1.4183908f},
-                    {-1.4183908f, -0.5875167f, -1.4183908f, 1.4183908f},
-                    {-1.4183908f, -0.5875167f, -1.4183908f, -1.4183908f},
-                    {1.4183908f, 1.4183908f, -0.5875167f, 1.4183908f},
-                    {1.4183908f, 1.4183908f, -0.5875167f, -1.4183908f},
-                    {1.4183908f, -1.4183908f, -0.5875167f, 1.4183908f},
-                    {1.4183908f, -1.4183908f, -0.5875167f, -1.4183908f},
-                    {-1.4183908f, 1.4183908f, -0.5875167f, 1.4183908f},
-                    {-1.4183908f, 1.4183908f, -0.5875167f, -1.4183908f},
-                    {-1.4183908f, -1.4183908f, -0.5875167f, 1.4183908f},
-                    {-1.4183908f, -1.4183908f, -0.5875167f, -1.4183908f},
-                    {1.4183908f, 1.4183908f, 1.4183908f, -0.5875167f},
-                    {1.4183908f, 1.4183908f, -1.4183908f, -0.5875167f},
-                    {1.4183908f, -1.4183908f, 1.4183908f, -0.5875167f},
-                    {1.4183908f, -1.4183908f, -1.4183908f, -0.5875167f},
-                    {-1.4183908f, 1.4183908f, 1.4183908f, -0.5875167f},
-                    {-1.4183908f, 1.4183908f, -1.4183908f, -0.5875167f},
-                    {-1.4183908f, -1.4183908f, 1.4183908f, -0.5875167f},
-                    {-1.4183908f, -1.4183908f, -1.4183908f, -0.5875167f},
-                    {0.5875167f, 1.4183908f, 1.4183908f, 1.4183908f},
-                    {0.5875167f, 1.4183908f, 1.4183908f, -1.4183908f},
-                    {0.5875167f, 1.4183908f, -1.4183908f, 1.4183908f},
-                    {0.5875167f, 1.4183908f, -1.4183908f, -1.4183908f},
-                    {0.5875167f, -1.4183908f, 1.4183908f, 1.4183908f},
-                    {0.5875167f, -1.4183908f, 1.4183908f, -1.4183908f},
-                    {0.5875167f, -1.4183908f, -1.4183908f, 1.4183908f},
-                    {0.5875167f, -1.4183908f, -1.4183908f, -1.4183908f},
-                    {1.4183908f, 0.5875167f, 1.4183908f, 1.4183908f},
-                    {1.4183908f, 0.5875167f, 1.4183908f, -1.4183908f},
-                    {1.4183908f, 0.5875167f, -1.4183908f, 1.4183908f},
-                    {1.4183908f, 0.5875167f, -1.4183908f, -1.4183908f},
-                    {-1.4183908f, 0.5875167f, 1.4183908f, 1.4183908f},
-                    {-1.4183908f, 0.5875167f, 1.4183908f, -1.4183908f},
-                    {-1.4183908f, 0.5875167f, -1.4183908f, 1.4183908f},
-                    {-1.4183908f, 0.5875167f, -1.4183908f, -1.4183908f},
-                    {1.4183908f, 1.4183908f, 0.5875167f, 1.4183908f},
-                    {1.4183908f, 1.4183908f, 0.5875167f, -1.4183908f},
-                    {1.4183908f, -1.4183908f, 0.5875167f, 1.4183908f},
-                    {1.4183908f, -1.4183908f, 0.5875167f, -1.4183908f},
-                    {-1.4183908f, 1.4183908f, 0.5875167f, 1.4183908f},
-                    {-1.4183908f, 1.4183908f, 0.5875167f, -1.4183908f},
-                    {-1.4183908f, -1.4183908f, 0.5875167f, 1.4183908f},
-                    {-1.4183908f, -1.4183908f, 0.5875167f, -1.4183908f},
-                    {1.4183908f, 1.4183908f, 1.4183908f, 0.5875167f},
-                    {1.4183908f, 1.4183908f, -1.4183908f, 0.5875167f},
-                    {1.4183908f, -1.4183908f, 1.4183908f, 0.5875167f},
-                    {1.4183908f, -1.4183908f, -1.4183908f, 0.5875167f},
-                    {-1.4183908f, 1.4183908f, 1.4183908f, 0.5875167f},
-                    {-1.4183908f, 1.4183908f, -1.4183908f, 0.5875167f},
-                    {-1.4183908f, -1.4183908f, 1.4183908f, 0.5875167f},
-                    {-1.4183908f, -1.4183908f, -1.4183908f, 0.5875167f},
+                    -0.5875167, 1.4183908, 1.4183908, 1.4183908,
+                    -0.5875167, 1.4183908, 1.4183908, -1.4183908,
+                    -0.5875167, 1.4183908, -1.4183908, 1.4183908,
+                    -0.5875167, 1.4183908, -1.4183908, -1.4183908,
+                    -0.5875167, -1.4183908, 1.4183908, 1.4183908,
+                    -0.5875167, -1.4183908, 1.4183908, -1.4183908,
+                    -0.5875167, -1.4183908, -1.4183908, 1.4183908,
+                    -0.5875167, -1.4183908, -1.4183908, -1.4183908,
+                    1.4183908, -0.5875167, 1.4183908, 1.4183908,
+                    1.4183908, -0.5875167, 1.4183908, -1.4183908,
+                    1.4183908, -0.5875167, -1.4183908, 1.4183908,
+                    1.4183908, -0.5875167, -1.4183908, -1.4183908,
+                    -1.4183908, -0.5875167, 1.4183908, 1.4183908,
+                    -1.4183908, -0.5875167, 1.4183908, -1.4183908,
+                    -1.4183908, -0.5875167, -1.4183908, 1.4183908,
+                    -1.4183908, -0.5875167, -1.4183908, -1.4183908,
+                    1.4183908, 1.4183908, -0.5875167, 1.4183908,
+                    1.4183908, 1.4183908, -0.5875167, -1.4183908,
+                    1.4183908, -1.4183908, -0.5875167, 1.4183908,
+                    1.4183908, -1.4183908, -0.5875167, -1.4183908,
+                    -1.4183908, 1.4183908, -0.5875167, 1.4183908,
+                    -1.4183908, 1.4183908, -0.5875167, -1.4183908,
+                    -1.4183908, -1.4183908, -0.5875167, 1.4183908,
+                    -1.4183908, -1.4183908, -0.5875167, -1.4183908,
+                    1.4183908, 1.4183908, 1.4183908, -0.5875167,
+                    1.4183908, 1.4183908, -1.4183908, -0.5875167,
+                    1.4183908, -1.4183908, 1.4183908, -0.5875167,
+                    1.4183908, -1.4183908, -1.4183908, -0.5875167,
+                    -1.4183908, 1.4183908, 1.4183908, -0.5875167,
+                    -1.4183908, 1.4183908, -1.4183908, -0.5875167,
+                    -1.4183908, -1.4183908, 1.4183908, -0.5875167,
+                    -1.4183908, -1.4183908, -1.4183908, -0.5875167,
+                    0.5875167, 1.4183908, 1.4183908, 1.4183908,
+                    0.5875167, 1.4183908, 1.4183908, -1.4183908,
+                    0.5875167, 1.4183908, -1.4183908, 1.4183908,
+                    0.5875167, 1.4183908, -1.4183908, -1.4183908,
+                    0.5875167, -1.4183908, 1.4183908, 1.4183908,
+                    0.5875167, -1.4183908, 1.4183908, -1.4183908,
+                    0.5875167, -1.4183908, -1.4183908, 1.4183908,
+                    0.5875167, -1.4183908, -1.4183908, -1.4183908,
+                    1.4183908, 0.5875167, 1.4183908, 1.4183908,
+                    1.4183908, 0.5875167, 1.4183908, -1.4183908,
+                    1.4183908, 0.5875167, -1.4183908, 1.4183908,
+                    1.4183908, 0.5875167, -1.4183908, -1.4183908,
+                    -1.4183908, 0.5875167, 1.4183908, 1.4183908,
+                    -1.4183908, 0.5875167, 1.4183908, -1.4183908,
+                    -1.4183908, 0.5875167, -1.4183908, 1.4183908,
+                    -1.4183908, 0.5875167, -1.4183908, -1.4183908,
+                    1.4183908, 1.4183908, 0.5875167, 1.4183908,
+                    1.4183908, 1.4183908, 0.5875167, -1.4183908,
+                    1.4183908, -1.4183908, 0.5875167, 1.4183908,
+                    1.4183908, -1.4183908, 0.5875167, -1.4183908,
+                    -1.4183908, 1.4183908, 0.5875167, 1.4183908,
+                    -1.4183908, 1.4183908, 0.5875167, -1.4183908,
+                    -1.4183908, -1.4183908, 0.5875167, 1.4183908,
+                    -1.4183908, -1.4183908, 0.5875167, -1.4183908,
+                    1.4183908, 1.4183908, 1.4183908, 0.5875167,
+                    1.4183908, 1.4183908, -1.4183908, 0.5875167,
+                    1.4183908, -1.4183908, 1.4183908, 0.5875167,
+                    1.4183908, -1.4183908, -1.4183908, 0.5875167,
+                    -1.4183908, 1.4183908, 1.4183908, 0.5875167,
+                    -1.4183908, 1.4183908, -1.4183908, 0.5875167,
+                    -1.4183908, -1.4183908, 1.4183908, 0.5875167,
+                    -1.4183908, -1.4183908, -1.4183908, 0.5875167,
             };
+//            {
+//                    {-0.5875167f, 1.4183908f, 1.4183908f, 1.4183908f},
+//                    {-0.5875167f, 1.4183908f, 1.4183908f, -1.4183908f},
+//                    {-0.5875167f, 1.4183908f, -1.4183908f, 1.4183908f},
+//                    {-0.5875167f, 1.4183908f, -1.4183908f, -1.4183908f},
+//                    {-0.5875167f, -1.4183908f, 1.4183908f, 1.4183908f},
+//                    {-0.5875167f, -1.4183908f, 1.4183908f, -1.4183908f},
+//                    {-0.5875167f, -1.4183908f, -1.4183908f, 1.4183908f},
+//                    {-0.5875167f, -1.4183908f, -1.4183908f, -1.4183908f},
+//                    {1.4183908f, -0.5875167f, 1.4183908f, 1.4183908f},
+//                    {1.4183908f, -0.5875167f, 1.4183908f, -1.4183908f},
+//                    {1.4183908f, -0.5875167f, -1.4183908f, 1.4183908f},
+//                    {1.4183908f, -0.5875167f, -1.4183908f, -1.4183908f},
+//                    {-1.4183908f, -0.5875167f, 1.4183908f, 1.4183908f},
+//                    {-1.4183908f, -0.5875167f, 1.4183908f, -1.4183908f},
+//                    {-1.4183908f, -0.5875167f, -1.4183908f, 1.4183908f},
+//                    {-1.4183908f, -0.5875167f, -1.4183908f, -1.4183908f},
+//                    {1.4183908f, 1.4183908f, -0.5875167f, 1.4183908f},
+//                    {1.4183908f, 1.4183908f, -0.5875167f, -1.4183908f},
+//                    {1.4183908f, -1.4183908f, -0.5875167f, 1.4183908f},
+//                    {1.4183908f, -1.4183908f, -0.5875167f, -1.4183908f},
+//                    {-1.4183908f, 1.4183908f, -0.5875167f, 1.4183908f},
+//                    {-1.4183908f, 1.4183908f, -0.5875167f, -1.4183908f},
+//                    {-1.4183908f, -1.4183908f, -0.5875167f, 1.4183908f},
+//                    {-1.4183908f, -1.4183908f, -0.5875167f, -1.4183908f},
+//                    {1.4183908f, 1.4183908f, 1.4183908f, -0.5875167f},
+//                    {1.4183908f, 1.4183908f, -1.4183908f, -0.5875167f},
+//                    {1.4183908f, -1.4183908f, 1.4183908f, -0.5875167f},
+//                    {1.4183908f, -1.4183908f, -1.4183908f, -0.5875167f},
+//                    {-1.4183908f, 1.4183908f, 1.4183908f, -0.5875167f},
+//                    {-1.4183908f, 1.4183908f, -1.4183908f, -0.5875167f},
+//                    {-1.4183908f, -1.4183908f, 1.4183908f, -0.5875167f},
+//                    {-1.4183908f, -1.4183908f, -1.4183908f, -0.5875167f},
+//                    {0.5875167f, 1.4183908f, 1.4183908f, 1.4183908f},
+//                    {0.5875167f, 1.4183908f, 1.4183908f, -1.4183908f},
+//                    {0.5875167f, 1.4183908f, -1.4183908f, 1.4183908f},
+//                    {0.5875167f, 1.4183908f, -1.4183908f, -1.4183908f},
+//                    {0.5875167f, -1.4183908f, 1.4183908f, 1.4183908f},
+//                    {0.5875167f, -1.4183908f, 1.4183908f, -1.4183908f},
+//                    {0.5875167f, -1.4183908f, -1.4183908f, 1.4183908f},
+//                    {0.5875167f, -1.4183908f, -1.4183908f, -1.4183908f},
+//                    {1.4183908f, 0.5875167f, 1.4183908f, 1.4183908f},
+//                    {1.4183908f, 0.5875167f, 1.4183908f, -1.4183908f},
+//                    {1.4183908f, 0.5875167f, -1.4183908f, 1.4183908f},
+//                    {1.4183908f, 0.5875167f, -1.4183908f, -1.4183908f},
+//                    {-1.4183908f, 0.5875167f, 1.4183908f, 1.4183908f},
+//                    {-1.4183908f, 0.5875167f, 1.4183908f, -1.4183908f},
+//                    {-1.4183908f, 0.5875167f, -1.4183908f, 1.4183908f},
+//                    {-1.4183908f, 0.5875167f, -1.4183908f, -1.4183908f},
+//                    {1.4183908f, 1.4183908f, 0.5875167f, 1.4183908f},
+//                    {1.4183908f, 1.4183908f, 0.5875167f, -1.4183908f},
+//                    {1.4183908f, -1.4183908f, 0.5875167f, 1.4183908f},
+//                    {1.4183908f, -1.4183908f, 0.5875167f, -1.4183908f},
+//                    {-1.4183908f, 1.4183908f, 0.5875167f, 1.4183908f},
+//                    {-1.4183908f, 1.4183908f, 0.5875167f, -1.4183908f},
+//                    {-1.4183908f, -1.4183908f, 0.5875167f, 1.4183908f},
+//                    {-1.4183908f, -1.4183908f, 0.5875167f, -1.4183908f},
+//                    {1.4183908f, 1.4183908f, 1.4183908f, 0.5875167f},
+//                    {1.4183908f, 1.4183908f, -1.4183908f, 0.5875167f},
+//                    {1.4183908f, -1.4183908f, 1.4183908f, 0.5875167f},
+//                    {1.4183908f, -1.4183908f, -1.4183908f, 0.5875167f},
+//                    {-1.4183908f, 1.4183908f, 1.4183908f, 0.5875167f},
+//                    {-1.4183908f, 1.4183908f, -1.4183908f, 0.5875167f},
+//                    {-1.4183908f, -1.4183908f, 1.4183908f, 0.5875167f},
+//                    {-1.4183908f, -1.4183908f, -1.4183908f, 0.5875167f},
+//            };
 
 //            {
 //            {0.30521256f, -0.57729936f, 0.74470073f, -0.1378101f},
@@ -1245,11 +1311,30 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     }
 
     /**
+     * Used by {@link #noise(double, double, double, double, long)} to look up the vertices of the 4D triangle analogue.
+     */
+    protected static final int[] SIMPLEX = {0, 1, 3, 7, 0, 1, 7, 3,
+            0, 0, 0, 0, 0, 3, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 1, 3, 7, 0, 0, 3, 1, 7, 0, 0, 0, 0,
+            0, 7, 1, 3, 0, 7, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 1, 7, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 7, 0, 0, 0, 0,
+            1, 7, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            3, 7, 0, 1, 3, 7, 1, 0, 1, 0, 3, 7, 1, 0, 7, 3,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 7, 1,
+            0, 0, 0, 0, 3, 1, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 1, 7, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 1, 3, 7, 0, 3, 1,
+            0, 0, 0, 0, 7, 1, 3, 0, 3, 1, 0, 7, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 7, 1, 0, 3, 0, 0, 0, 0,
+            7, 3, 0, 1, 7, 3, 1, 0};
+
+    /**
      * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be
      * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this
-     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise, plus it has less chance of repetition in
-     * chunks because it uses a pseudo-random function (curiously, {@link ThrustAltRNG#determine(long)}, which has veryf
-     * good distribution and is fast) instead of a number chosen by hash from a single 256-element array.
+     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise.
      * @param x X input
      * @param y Y input
      * @param z Z input
@@ -1257,139 +1342,225 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param seed any int; will be used to completely alter the noise
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(final double x, final double y, final double z, final double w, final long seed)
-    {
-        // The skewing and unskewing factors are hairy again for the 4D case
-
-        // Skew the (x,y,z,w) space to figure out which cell of 24 simplices
-        // we're in
-        double s = (x + y + z + w) * F4; // Factor for 4D skewing
-        int i = fastFloor(x + s);
-        int j = fastFloor(y + s);
-        int k = fastFloor(z + s);
-        int l = fastFloor(w + s);
-        double t = (i + j + k + l) * G4; // Factor for 4D unskewing
-        double X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
-        double Y0 = j - t;
-        double Z0 = k - t;
-        double W0 = l - t;
-        double x0 = x - X0; // The x,y,z,w distances from the cell origin
-        double y0 = y - Y0;
-        double z0 = z - Z0;
-        double w0 = w - W0;
-        // For the 4D case, the simplex is a 4D shape I won't even try to
-        // describe.
-        // To find out which of the 24 possible simplices we're in, we need
-        // to figure out the magnitude ordering of x0, y0, z0 and w0.
-        // The method below is a good way of finding the ordering of x,y,z,w
-        // and
-        // then find the correct traversal order for the simplex we’re in.
-        // First, six pair-wise comparisons are performed between each
-        // possible pair
-        // of the four coordinates, and the results are used to add up binary
-        // bits
-        // for an integer index.
-        int c = (x0 > y0 ? 32 : 0) | (x0 > z0 ? 16 : 0) | (y0 > z0 ? 8 : 0) |
-                (x0 > w0 ? 4 : 0) | (y0 > w0 ? 2 : 0) | (z0 > w0 ? 1 : 0);
-
-        // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some
-        // order.
-        // Many values of c will never occur, since e.g. x>y>z>w makes x<z,
-        // y<w and x<w
-        // impossible. Only the 24 indices which have non-zero entries make
-        // any sense.
-        // We use a thresholding to set the coordinates in turn from the
-        // largest magnitude.
-        // The number 3 in the "simplex" array is at the position of the
-        // largest coordinate.
-
-        // The integer offsets for the second simplex corner
-        int i1 = simplex[c][0] >= 3 ? 1 : 0;
-        int j1 = simplex[c][1] >= 3 ? 1 : 0;
-        int k1 = simplex[c][2] >= 3 ? 1 : 0;
-        int l1 = simplex[c][3] >= 3 ? 1 : 0;
-        // The number 2 in the "simplex" array is at the second largest
-        // coordinate.
-
-        // The integer offsets for the third simplex corner
-        int i2 = simplex[c][0] >= 2 ? 1 : 0;
-        int j2 = simplex[c][1] >= 2 ? 1 : 0;
-        int k2 = simplex[c][2] >= 2 ? 1 : 0;
-        int l2 = simplex[c][3] >= 2 ? 1 : 0;
-        // The number 1 in the "simplex" array is at the second smallest
-        // coordinate.
-
-        // The integer offsets for the fourth simplex corner
-        int i3 = simplex[c][0] >= 1 ? 1 : 0;
-        int j3 = simplex[c][1] >= 1 ? 1 : 0;
-        int k3 = simplex[c][2] >= 1 ? 1 : 0;
-        int l3 = simplex[c][3] >= 1 ? 1 : 0;
-        // The fifth corner has all coordinate offsets = 1, so no need to
-        // look that up.
-        double x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w) coords
-        double y1 = y0 - j1 + G4;
-        double z1 = z0 - k1 + G4;
-        double w1 = w0 - l1 + G4;
-        double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
-        double y2 = y0 - j2 + 2.0 * G4;
-        double z2 = z0 - k2 + 2.0 * G4;
-        double w2 = w0 - l2 + 2.0 * G4;
-        double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
-        double y3 = y0 - j3 + 3.0 * G4;
-        double z3 = z0 - k3 + 3.0 * G4;
-        double w3 = w0 - l3 + 3.0 * G4;
-        double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
-        double y4 = y0 - 1.0 + 4.0 * G4;
-        double z4 = z0 - 1.0 + 4.0 * G4;
-        double w4 = w0 - 1.0 + 4.0 * G4;
-
+    public static double noise(final double x, final double y, final double z, final double w, final long seed) {
+        double n = 0.0;
+        final double s = (x + y + z + w) * F4;
+        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
+        final double[] gradient4DLUT = grad4;
+        final double t = (i + j + k + l) * G4,
+                X0 = i - t,
+                Y0 = j - t,
+                Z0 = k - t,
+                W0 = l - t,
+                x0 = x - X0,
+                y0 = y - Y0,
+                z0 = z - Z0,
+                w0 = w - W0;
+        final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
+        final int i1 = SIMPLEX[c] >>> 2,
+                j1 = SIMPLEX[c | 1] >>> 2,
+                k1 = SIMPLEX[c | 2] >>> 2,
+                l1 = SIMPLEX[c | 3] >>> 2,
+                i2 = SIMPLEX[c] >>> 1 & 1,
+                j2 = SIMPLEX[c | 1] >>> 1 & 1,
+                k2 = SIMPLEX[c | 2] >>> 1 & 1,
+                l2 = SIMPLEX[c | 3] >>> 1 & 1,
+                i3 = SIMPLEX[c] & 1,
+                j3 = SIMPLEX[c | 1] & 1,
+                k3 = SIMPLEX[c | 2] & 1,
+                l3 = SIMPLEX[c | 3] & 1;
+        final double x1 = x0 - i1 + G4,
+                y1 = y0 - j1 + G4,
+                z1 = z0 - k1 + G4,
+                w1 = w0 - l1 + G4,
+                x2 = x0 - i2 + 2 * G4,
+                y2 = y0 - j2 + 2 * G4,
+                z2 = z0 - k2 + 2 * G4,
+                w2 = w0 - l2 + 2 * G4,
+                x3 = x0 - i3 + 3 * G4,
+                y3 = y0 - j3 + 3 * G4,
+                z3 = z0 - k3 + 3 * G4,
+                w3 = w0 - l3 + 3 * G4,
+                x4 = x0 - 1 + 4 * G4,
+                y4 = y0 - 1 + 4 * G4,
+                z4 = z0 - 1 + 4 * G4,
+                w4 = w0 - 1 + 4 * G4;
         final int s0 = (int)(seed & 63), s1 = (int)(seed >>> 6 & 63), s2 = (int)(seed >>> 12 & 63), s3 = (int)(seed >>> 18 & 63);
-        final int gi0 = (perm_x[(i) + s0 & 255] ^ perm_y[(j) + s1 & 255]           ^ perm_z[(k) + s2 & 255]      ^ perm_w[(l) + s3 & 255]) & 63;
-        final int gi1 = (perm_x[(i + i1) + s0 & 255] ^ perm_y[(j + j1) + s1 & 255] ^ perm_z[(k + k1) + s2 & 255] ^ perm_w[(l + l1) + s3 & 255]) & 63;
-        final int gi2 = (perm_x[(i + i2) + s0 & 255] ^ perm_y[(j + j2) + s1 & 255] ^ perm_z[(k + k2) + s2 & 255] ^ perm_w[(l + l2) + s3 & 255]) & 63;
-        final int gi3 = (perm_x[(i + i3) + s0 & 255] ^ perm_y[(j + j3) + s1 & 255] ^ perm_z[(k + k3) + s2 & 255] ^ perm_w[(l + l3) + s3 & 255]) & 63;
-        final int gi4 = (perm_x[(i + 1) + s0 & 255] ^ perm_y[(j + 1) + s1 & 255]   ^ perm_z[(k + 1) + s2  & 255] ^ perm_w[(l + 1) + s3 & 255]) & 63;
-        // Noise contributions from the five corners are n0 to n4
-
-        // Calculate the contribution from the five corners
-        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0, n0;
-        if (t0 < 0) {
-            n0 = 0.0;
-        } else {
+        final int h0 = (perm_x[(i) + s0 & 255] ^ perm_y[(j) + s1 & 255]           ^ perm_z[(k) + s2 & 255]      ^ perm_w[(l) + s3 & 255]) & 252;
+        final int h1 = (perm_x[(i + i1) + s0 & 255] ^ perm_y[(j + j1) + s1 & 255] ^ perm_z[(k + k1) + s2 & 255] ^ perm_w[(l + l1) + s3 & 255]) & 252;
+        final int h2 = (perm_x[(i + i2) + s0 & 255] ^ perm_y[(j + j2) + s1 & 255] ^ perm_z[(k + k2) + s2 & 255] ^ perm_w[(l + l2) + s3 & 255]) & 252;
+        final int h3 = (perm_x[(i + i3) + s0 & 255] ^ perm_y[(j + j3) + s1 & 255] ^ perm_z[(k + k3) + s2 & 255] ^ perm_w[(l + l3) + s3 & 255]) & 252;
+        final int h4 = (perm_x[(i + 1) + s0 & 255] ^ perm_y[(j + 1) + s1 & 255]   ^ perm_z[(k + 1) + s2  & 255] ^ perm_w[(l + 1) + s3 & 255]) & 252;
+//        final int h0 = hash256_alt(i, j, k, l, seed) & 252;
+//        final int h1 = hash256_alt(i + i1, j + j1, k + k1, l + l1, seed) & 252;
+//        final int h2 = hash256_alt(i + i2, j + j2, k + k2, l + l2, seed) & 252;
+//        final int h3 = hash256_alt(i + i3, j + j3, k + k3, l + l3, seed) & 252;
+//        final int h4 = hash256_alt(i + 1, j + 1, k + 1, l + 1, seed) & 252;
+        double t0 = 0.62 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+        if(t0 > 0) {
             t0 *= t0;
-            n0 = t0 * t0 * dot(grad4f[gi0], x0, y0, z0, w0);
+            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
         }
-        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1, n1;
-        if (t1 < 0) {
-            n1 = 0.0;
-        } else {
+        double t1 = 0.62 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+        if (t1 > 0) {
             t1 *= t1;
-            n1 = t1 * t1 * dot(grad4f[gi1], x1, y1, z1, w1);
+            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
         }
-        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2,  n2;
-        if (t2 < 0) {
-            n2 = 0.0;
-        } else {
+        double t2 = 0.62 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+        if (t2 > 0) {
             t2 *= t2;
-            n2 = t2 * t2 * dot(grad4f[gi2], x2, y2, z2, w2);
+            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
         }
-        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3, n3;
-        if (t3 < 0) {
-            n3 = 0.0;
-        } else {
+        double t3 = 0.62 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+        if (t3 > 0) {
             t3 *= t3;
-            n3 = t3 * t3 * dot(grad4f[gi3], x3, y3, z3, w3);
+            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
         }
-        double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4, n4;
-        if (t4 < 0) {
-            n4 = 0.0;
-        } else {
+        double t4 = 0.62 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+        if (t4 > 0) {
             t4 *= t4;
-            n4 = t4 * t4 * dot(grad4f[gi4], x4, y4, z4, w4);
+            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
         }
-        // Sum up and scale the result to cover the range [-1,1]
-        return 17.0 * (n0 + n1 + n2 + n3 + n4);
+        //n *= 14.75;
+        //if(n > 1.0 || n < -1.0) System.out.printf("x: %f, y: %f, z: %f, w: %f, n is %f\n", x, y, z, w, n);
+        //return NumberTools.bounce(5.0 + 41.0 * n);
+        return n * 14.75;//NumberTools.sway(0.5 + 12.75 * n);
     }
+
+
+//    public static double noise(final double x, final double y, final double z, final double w, final long seed)
+//    {
+//        // The skewing and unskewing factors are hairy again for the 4D case
+//
+//        // Skew the (x,y,z,w) space to figure out which cell of 24 simplices
+//        // we're in
+//        double s = (x + y + z + w) * F4; // Factor for 4D skewing
+//        int i = fastFloor(x + s);
+//        int j = fastFloor(y + s);
+//        int k = fastFloor(z + s);
+//        int l = fastFloor(w + s);
+//        double t = (i + j + k + l) * G4; // Factor for 4D unskewing
+//        double X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
+//        double Y0 = j - t;
+//        double Z0 = k - t;
+//        double W0 = l - t;
+//        double x0 = x - X0; // The x,y,z,w distances from the cell origin
+//        double y0 = y - Y0;
+//        double z0 = z - Z0;
+//        double w0 = w - W0;
+//        // For the 4D case, the simplex is a 4D shape I won't even try to
+//        // describe.
+//        // To find out which of the 24 possible simplices we're in, we need
+//        // to figure out the magnitude ordering of x0, y0, z0 and w0.
+//        // The method below is a good way of finding the ordering of x,y,z,w
+//        // and
+//        // then find the correct traversal order for the simplex we’re in.
+//        // First, six pair-wise comparisons are performed between each
+//        // possible pair
+//        // of the four coordinates, and the results are used to add up binary
+//        // bits
+//        // for an integer index.
+//        int c = (x0 > y0 ? 32 : 0) | (x0 > z0 ? 16 : 0) | (y0 > z0 ? 8 : 0) |
+//                (x0 > w0 ? 4 : 0) | (y0 > w0 ? 2 : 0) | (z0 > w0 ? 1 : 0);
+//
+//        // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some
+//        // order.
+//        // Many values of c will never occur, since e.g. x>y>z>w makes x<z,
+//        // y<w and x<w
+//        // impossible. Only the 24 indices which have non-zero entries make
+//        // any sense.
+//        // We use a thresholding to set the coordinates in turn from the
+//        // largest magnitude.
+//        // The number 3 in the "simplex" array is at the position of the
+//        // largest coordinate.
+//
+//        // The integer offsets for the second simplex corner
+//        int i1 = simplex[c][0] >= 3 ? 1 : 0;
+//        int j1 = simplex[c][1] >= 3 ? 1 : 0;
+//        int k1 = simplex[c][2] >= 3 ? 1 : 0;
+//        int l1 = simplex[c][3] >= 3 ? 1 : 0;
+//        // The number 2 in the "simplex" array is at the second largest
+//        // coordinate.
+//
+//        // The integer offsets for the third simplex corner
+//        int i2 = simplex[c][0] >= 2 ? 1 : 0;
+//        int j2 = simplex[c][1] >= 2 ? 1 : 0;
+//        int k2 = simplex[c][2] >= 2 ? 1 : 0;
+//        int l2 = simplex[c][3] >= 2 ? 1 : 0;
+//        // The number 1 in the "simplex" array is at the second smallest
+//        // coordinate.
+//
+//        // The integer offsets for the fourth simplex corner
+//        int i3 = simplex[c][0] >= 1 ? 1 : 0;
+//        int j3 = simplex[c][1] >= 1 ? 1 : 0;
+//        int k3 = simplex[c][2] >= 1 ? 1 : 0;
+//        int l3 = simplex[c][3] >= 1 ? 1 : 0;
+//        // The fifth corner has all coordinate offsets = 1, so no need to
+//        // look that up.
+//        double x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w) coords
+//        double y1 = y0 - j1 + G4;
+//        double z1 = z0 - k1 + G4;
+//        double w1 = w0 - l1 + G4;
+//        double x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
+//        double y2 = y0 - j2 + 2.0 * G4;
+//        double z2 = z0 - k2 + 2.0 * G4;
+//        double w2 = w0 - l2 + 2.0 * G4;
+//        double x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
+//        double y3 = y0 - j3 + 3.0 * G4;
+//        double z3 = z0 - k3 + 3.0 * G4;
+//        double w3 = w0 - l3 + 3.0 * G4;
+//        double x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
+//        double y4 = y0 - 1.0 + 4.0 * G4;
+//        double z4 = z0 - 1.0 + 4.0 * G4;
+//        double w4 = w0 - 1.0 + 4.0 * G4;
+//
+//        final int s0 = (int)(seed & 63), s1 = (int)(seed >>> 6 & 63), s2 = (int)(seed >>> 12 & 63), s3 = (int)(seed >>> 18 & 63);
+//        final int gi0 = (perm_x[(i) + s0 & 255] ^ perm_y[(j) + s1 & 255]           ^ perm_z[(k) + s2 & 255]      ^ perm_w[(l) + s3 & 255]) & 63;
+//        final int gi1 = (perm_x[(i + i1) + s0 & 255] ^ perm_y[(j + j1) + s1 & 255] ^ perm_z[(k + k1) + s2 & 255] ^ perm_w[(l + l1) + s3 & 255]) & 63;
+//        final int gi2 = (perm_x[(i + i2) + s0 & 255] ^ perm_y[(j + j2) + s1 & 255] ^ perm_z[(k + k2) + s2 & 255] ^ perm_w[(l + l2) + s3 & 255]) & 63;
+//        final int gi3 = (perm_x[(i + i3) + s0 & 255] ^ perm_y[(j + j3) + s1 & 255] ^ perm_z[(k + k3) + s2 & 255] ^ perm_w[(l + l3) + s3 & 255]) & 63;
+//        final int gi4 = (perm_x[(i + 1) + s0 & 255] ^ perm_y[(j + 1) + s1 & 255]   ^ perm_z[(k + 1) + s2  & 255] ^ perm_w[(l + 1) + s3 & 255]) & 63;
+//        // Noise contributions from the five corners are n0 to n4
+//
+//        // Calculate the contribution from the five corners
+//        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0, n0;
+//        if (t0 < 0) {
+//            n0 = 0.0;
+//        } else {
+//            t0 *= t0;
+//            n0 = t0 * t0 * dot(grad4f[gi0], x0, y0, z0, w0);
+//        }
+//        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1, n1;
+//        if (t1 < 0) {
+//            n1 = 0.0;
+//        } else {
+//            t1 *= t1;
+//            n1 = t1 * t1 * dot(grad4f[gi1], x1, y1, z1, w1);
+//        }
+//        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2,  n2;
+//        if (t2 < 0) {
+//            n2 = 0.0;
+//        } else {
+//            t2 *= t2;
+//            n2 = t2 * t2 * dot(grad4f[gi2], x2, y2, z2, w2);
+//        }
+//        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3, n3;
+//        if (t3 < 0) {
+//            n3 = 0.0;
+//        } else {
+//            t3 *= t3;
+//            n3 = t3 * t3 * dot(grad4f[gi3], x3, y3, z3, w3);
+//        }
+//        double t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4, n4;
+//        if (t4 < 0) {
+//            n4 = 0.0;
+//        } else {
+//            t4 *= t4;
+//            n4 = t4 * t4 * dot(grad4f[gi4], x4, y4, z4, w4);
+//        }
+//        // Sum up and scale the result to cover the range [-1,1]
+//        return 17.0 * (n0 + n1 + n2 + n3 + n4);
+//    }
 
     /**
      * 2D simplex noise returning a float; extremely similar to {@link #noise(double, double)}, but this may be slightly
