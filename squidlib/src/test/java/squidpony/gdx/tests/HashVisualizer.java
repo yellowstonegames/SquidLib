@@ -73,7 +73,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 0, rngMode = 26, noiseMode = 12;
+    private int hashMode = 0, rngMode = 26, noiseMode = 0;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;

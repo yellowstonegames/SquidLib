@@ -421,10 +421,56 @@ public class Noise {
     /**
      * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
      * a long for state; like {@link PointHash} but optimized for speed rather than quality. This may have some quality
-     * issues, and they may or may not be noticeable for your applications.
+     * issues relating to repetitive patterns over long sections of noise, but these may or may not be noticeable for
+     * your applications. The technique used here is based on <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&rep=rep1&type=pdf">this paper</a>,
+     * with credit to Andrew Kensler, Aaron Knoll and Peter Shirley.
      */
     public static final class HastyPointHash
     {
+        // The 6 permutation tables were created with the code in the commented static block after these definitions.
+        public static final int[]
+                perm_x = {59, 146, 27, 99, 226, 210, 44, 129, 102, 237, 2, 107, 157, 173, 159, 16, 128, 41, 228, 114, 63, 105, 241, 144, 187, 116, 223, 122, 234, 52, 96, 35, 213, 176, 177, 141, 132, 240, 194, 163, 0, 3, 168, 133, 55, 203, 53, 50, 42, 79, 130, 156, 209, 135, 151, 178, 85, 154, 117, 148, 140, 82, 6, 69, 127, 214, 95, 175, 46, 30, 104, 197, 170, 33, 70, 167, 217, 233, 219, 84, 196, 109, 40, 190, 123, 165, 61, 212, 255, 184, 19, 182, 38, 112, 172, 103, 25, 244, 245, 201, 192, 60, 14, 231, 68, 71, 236, 193, 115, 7, 113, 118, 110, 131, 198, 216, 29, 195, 211, 246, 153, 222, 185, 208, 200, 158, 66, 137, 179, 26, 147, 235, 106, 90, 164, 9, 238, 101, 138, 227, 21, 37, 23, 152, 8, 161, 108, 250, 183, 225, 121, 24, 51, 252, 87, 242, 98, 188, 232, 171, 93, 56, 57, 5, 12, 120, 74, 43, 136, 139, 32, 13, 191, 67, 189, 186, 162, 199, 10, 20, 89, 15, 31, 58, 221, 18, 253, 28, 4, 218, 142, 205, 247, 94, 215, 39, 166, 150, 224, 77, 34, 169, 206, 47, 81, 97, 83, 220, 76, 229, 160, 54, 243, 45, 181, 92, 119, 48, 155, 62, 174, 248, 36, 239, 145, 124, 125, 65, 72, 180, 134, 111, 204, 207, 100, 73, 251, 143, 249, 254, 230, 11, 78, 80, 149, 75, 91, 126, 17, 86, 49, 88, 64, 22, 202, 1},
+                perm_y = {189, 111, 17, 214, 57, 208, 191, 225, 241, 152, 145, 71, 2, 141, 183, 218, 66, 178, 34, 161, 198, 47, 200, 180, 134, 239, 162, 18, 155, 216, 192, 173, 219, 9, 51, 124, 95, 122, 217, 135, 31, 50, 179, 237, 32, 39, 209, 112, 96, 92, 68, 79, 228, 193, 234, 90, 164, 137, 196, 184, 185, 114, 226, 67, 249, 163, 85, 26, 125, 28, 251, 45, 61, 220, 213, 139, 70, 201, 243, 22, 142, 246, 102, 229, 10, 107, 4, 240, 194, 35, 230, 86, 223, 20, 12, 233, 23, 77, 119, 176, 147, 182, 21, 195, 91, 118, 247, 33, 100, 99, 29, 188, 172, 144, 136, 131, 40, 13, 38, 150, 224, 205, 8, 252, 253, 190, 46, 143, 53, 231, 153, 94, 177, 88, 55, 105, 121, 16, 25, 207, 138, 5, 63, 82, 202, 58, 170, 41, 78, 167, 64, 60, 14, 103, 42, 154, 19, 80, 72, 37, 83, 129, 187, 244, 215, 242, 81, 15, 151, 186, 59, 101, 168, 175, 89, 248, 232, 212, 204, 199, 108, 73, 98, 210, 44, 1, 76, 48, 49, 250, 106, 203, 113, 43, 221, 146, 245, 148, 115, 165, 181, 84, 93, 3, 206, 65, 123, 158, 6, 126, 238, 109, 130, 227, 140, 120, 74, 171, 110, 222, 87, 156, 132, 97, 159, 197, 255, 56, 27, 62, 157, 75, 211, 254, 127, 169, 236, 235, 149, 52, 36, 24, 0, 11, 160, 133, 174, 30, 104, 69, 128, 116, 117, 54, 166, 7},
+                perm_z = {253, 212, 4, 237, 36, 182, 213, 233, 147, 239, 226, 41, 74, 65, 68, 165, 70, 231, 217, 116, 113, 193, 162, 112, 228, 254, 183, 176, 151, 80, 17, 60, 155, 246, 174, 3, 202, 208, 127, 7, 57, 1, 132, 79, 224, 99, 238, 195, 236, 9, 115, 154, 23, 227, 76, 158, 130, 16, 89, 214, 61, 114, 187, 90, 49, 24, 64, 33, 96, 242, 25, 37, 215, 35, 46, 109, 134, 141, 136, 225, 138, 43, 21, 184, 189, 13, 230, 188, 40, 50, 243, 244, 211, 156, 85, 120, 223, 58, 234, 71, 6, 28, 179, 67, 125, 69, 192, 131, 44, 175, 34, 15, 32, 77, 191, 222, 83, 47, 128, 218, 198, 84, 149, 26, 121, 190, 255, 150, 117, 92, 140, 101, 172, 62, 93, 97, 27, 103, 106, 161, 194, 201, 204, 45, 206, 111, 81, 252, 249, 73, 42, 248, 108, 118, 63, 56, 31, 216, 153, 180, 19, 126, 38, 139, 66, 88, 247, 143, 177, 137, 12, 199, 104, 235, 102, 75, 100, 129, 251, 18, 159, 107, 196, 22, 10, 152, 209, 94, 181, 250, 51, 210, 185, 144, 200, 169, 232, 122, 145, 173, 95, 171, 166, 229, 14, 5, 0, 105, 2, 163, 157, 48, 53, 133, 110, 52, 160, 186, 123, 124, 91, 20, 221, 240, 87, 178, 98, 207, 142, 148, 59, 203, 245, 205, 72, 11, 164, 39, 170, 135, 168, 197, 55, 86, 219, 167, 8, 82, 78, 220, 29, 146, 241, 54, 119, 30},
+                perm_w = {57, 1, 140, 48, 61, 156, 230, 173, 2, 231, 12, 214, 142, 242, 255, 195, 198, 220, 157, 139, 194, 99, 247, 248, 155, 178, 29, 41, 23, 193, 0, 30, 95, 171, 174, 222, 91, 54, 8, 67, 32, 129, 46, 124, 172, 148, 17, 105, 228, 118, 191, 33, 224, 5, 25, 158, 185, 92, 63, 199, 53, 107, 34, 180, 125, 69, 200, 116, 121, 216, 42, 233, 70, 43, 72, 26, 202, 62, 51, 15, 10, 16, 217, 207, 14, 175, 59, 52, 223, 246, 89, 109, 83, 13, 68, 90, 147, 239, 234, 18, 151, 114, 76, 143, 100, 197, 106, 176, 232, 208, 85, 165, 40, 186, 251, 101, 44, 65, 93, 218, 253, 144, 123, 11, 113, 167, 102, 240, 177, 137, 4, 184, 181, 20, 110, 37, 138, 111, 132, 94, 6, 122, 119, 75, 78, 84, 21, 3, 74, 235, 127, 112, 19, 58, 149, 161, 159, 73, 136, 150, 215, 35, 38, 86, 211, 190, 128, 203, 168, 9, 166, 244, 36, 28, 153, 225, 108, 254, 55, 169, 104, 141, 145, 22, 49, 212, 183, 79, 189, 227, 170, 60, 245, 205, 64, 252, 241, 80, 162, 97, 206, 163, 192, 146, 66, 182, 187, 135, 130, 152, 81, 71, 134, 39, 179, 188, 87, 126, 209, 229, 219, 133, 204, 210, 27, 103, 98, 154, 31, 250, 196, 7, 236, 77, 226, 56, 96, 88, 221, 45, 160, 50, 115, 237, 164, 201, 213, 82, 117, 24, 243, 131, 249, 47, 238, 120},
+                perm_u = {132, 148, 19, 244, 162, 163, 194, 37, 4, 250, 198, 154, 170, 137, 6, 60, 123, 73, 138, 41, 145, 92, 61, 82, 251, 175, 57, 207, 153, 50, 113, 105, 106, 242, 253, 94, 128, 9, 164, 143, 234, 80, 160, 252, 136, 239, 232, 150, 89, 167, 100, 131, 127, 178, 31, 188, 217, 5, 27, 33, 119, 152, 83, 195, 72, 88, 223, 176, 110, 111, 134, 233, 200, 190, 130, 86, 102, 69, 202, 240, 63, 13, 70, 229, 93, 24, 241, 22, 191, 99, 245, 139, 85, 254, 53, 45, 46, 182, 185, 26, 76, 197, 104, 67, 174, 20, 108, 184, 68, 171, 172, 90, 29, 107, 32, 79, 59, 126, 211, 112, 157, 201, 215, 237, 51, 84, 23, 135, 12, 28, 155, 124, 42, 43, 74, 173, 140, 114, 78, 18, 34, 1, 142, 180, 243, 193, 2, 161, 25, 212, 181, 218, 115, 39, 177, 71, 17, 186, 249, 225, 226, 122, 117, 214, 8, 129, 44, 7, 98, 216, 40, 116, 0, 103, 96, 30, 209, 47, 236, 11, 247, 58, 151, 52, 81, 141, 147, 169, 255, 16, 219, 75, 192, 208, 87, 56, 230, 231, 14, 97, 64, 54, 10, 222, 238, 205, 66, 120, 183, 133, 206, 109, 213, 144, 121, 158, 55, 235, 125, 3, 221, 118, 189, 165, 166, 62, 49, 146, 196, 77, 224, 203, 38, 156, 228, 48, 204, 35, 36, 210, 149, 227, 168, 199, 179, 246, 91, 248, 21, 65, 95, 101, 187, 220, 159, 15},
+                perm_v = {2, 9, 4, 237, 219, 73, 247, 203, 228, 220, 46, 229, 61, 156, 170, 75, 223, 144, 81, 252, 172, 208, 76, 218, 177, 103, 123, 244, 14, 39, 255, 90, 168, 43, 174, 3, 113, 107, 145, 233, 130, 254, 192, 11, 211, 190, 68, 105, 117, 178, 251, 18, 66, 242, 230, 248, 95, 137, 29, 26, 164, 65, 153, 120, 70, 77, 64, 33, 23, 133, 59, 7, 40, 16, 106, 41, 121, 216, 238, 135, 19, 212, 157, 48, 232, 28, 128, 22, 245, 171, 183, 56, 74, 99, 51, 150, 236, 111, 234, 71, 189, 167, 213, 37, 198, 50, 12, 79, 31, 250, 136, 165, 185, 246, 55, 86, 142, 62, 42, 52, 147, 205, 89, 94, 224, 141, 221, 180, 138, 129, 140, 101, 83, 193, 127, 67, 108, 84, 166, 109, 181, 20, 34, 195, 87, 24, 217, 116, 36, 88, 196, 82, 57, 239, 243, 124, 134, 175, 119, 210, 32, 163, 38, 139, 249, 227, 25, 97, 10, 118, 72, 131, 91, 54, 204, 225, 253, 58, 115, 154, 202, 122, 110, 112, 215, 1, 149, 146, 44, 201, 17, 240, 206, 197, 200, 169, 159, 13, 179, 143, 160, 152, 226, 161, 241, 80, 102, 15, 155, 92, 21, 184, 96, 148, 8, 158, 125, 35, 63, 176, 194, 235, 187, 30, 100, 231, 98, 207, 53, 47, 93, 173, 78, 186, 132, 199, 151, 114, 0, 45, 49, 126, 191, 222, 6, 182, 162, 188, 27, 69, 209, 214, 104, 5, 85, 60};
+
+//    static {
+//        int s = 1;
+//        for(int i = 0; i < 256; i++) {
+//            System.out.print(((s = s * 53 + 3 & 255) ^ s >>> 4) + ", ");
+//        }
+//        System.out.println();
+//        s = 7;
+//        for(int i = 0; i < 256; i++) {
+//            System.out.print(((s = s * 61 + 11 & 255) ^ s >>> 4) + ", ");
+//        }
+//        System.out.println();
+//        s = 31;
+//        for(int i = 0; i < 256; i++) {
+//            System.out.print(((s = s * 29 + 111 & 255) ^ s >>> 4) + ", ");
+//        }
+//        System.out.println();
+//        s = 127;
+//        for(int i = 0; i < 256; i++) {
+//            System.out.print(((s = s * 101 + 31 & 255) ^ s >>> 4) + ", ");
+//        }
+//        System.out.println();
+//        s = 15;
+//        for(int i = 0; i < 256; i++) {
+//            System.out.print(((s = s * 37 + 97 & 255) ^ s >>> 4) + ", ");
+//        }
+//        System.out.println();
+//        s = 63;
+//        for(int i = 0; i < 256; i++) {
+//            System.out.print(((s = s * 109 + 47 & 255) ^ s >>> 4) + ", ");
+//        }
+//
+//    }
+
+
+
         /**
          *
          * @param x
@@ -434,8 +480,8 @@ public class Noise {
          */
         public static long hashAll(final long x, final long y, long state)
         {
-            state ^= x * (0x6C8E9CD570932BD5L + y);
-            return state ^ (y * (0x2545F4914F6CDD1DL + x));
+            return ThrustAltRNG.determine((y + perm_x[(int) (x + state & 255)])
+                    ^ (x + perm_y[(int) (y + (state >>> 8) & 255)]) ^ state);
         }
 
         /**
@@ -448,9 +494,10 @@ public class Noise {
          */
         public static long hashAll(final long x, final long y, final long z, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + z);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            return state ^ (z * (0x2545F4914F6CDD1DL + y));
+            return ThrustAltRNG.determine(
+                    (z + perm_x[(int) (x + state & 255)])
+                    ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                    ^ (y + perm_z[(int) (z + (state >>> 16) & 255)]) ^ state);
         }
 
         /**
@@ -464,10 +511,11 @@ public class Noise {
          */
         public static long hashAll(final long x, final long y, final long z, final long w, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + w);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            return state ^ (w * (0x2545F4914F6CDD1DL + z)); 
+            return ThrustAltRNG.determine(
+                    (w + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)]) ^ state);
         }
 
         /**
@@ -483,12 +531,13 @@ public class Noise {
          */
         public static long hashAll(final long x, final long y, final long z, final long w, final long u, final long v, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + v);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            state ^= w * (0x106689D45497FDB5L + z);
-            state ^= u * (0x6A5D39EAE116586DL + w);
-            return state ^ (v * (0x2545F4914F6CDD1DL + u));
+            return ThrustAltRNG.determine(
+                    (v + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
+                            ^ (w + perm_w[(int) (u + (state >>> 32) & 255)])
+                            ^ (u + perm_w[(int) (v + (state >>> 40) & 255)]) ^ state);
         }
         /**
          *
@@ -499,9 +548,9 @@ public class Noise {
          */
         public static int hash256(final long x, final long y, long state)
         {
-            return (int) (((x + y - state << state & 31) ^ (x + y + state >>> state & 31)) + ((x * 0x6C8E9CD570932BD5L + y) ^ (y * 0x2545F4914F6CDD1DL + x)) >>> 56);
-            //state ^= x * (0x6C8E9CD570932BD5L + y);
-            //return (int) ((state ^ (y * (0x2545F4914F6CDD1DL + x))) >>> 56);
+            return (int) (
+                    (y + perm_x[(int) (x + state & 255)])
+                    ^ (x + perm_y[(int) (y + (state >>> 8) & 255)]) ^ state) & 255;
         }
         /**
          *
@@ -513,9 +562,11 @@ public class Noise {
          */
         public static int hash256(final long x, final long y, final long z, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + z);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            return (int) ((state ^ (z * (0x2545F4914F6CDD1DL + y))) >>> 56);
+            return (int) (
+                    (z + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ state) & 255;
         }
         /**
          *
@@ -528,10 +579,12 @@ public class Noise {
          */
         public static int hash256(final long x, final long y, final long z, final long w, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + w);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            return (int) ((state ^ (w * (0x2545F4914F6CDD1DL + z))) >>> 56);
+            return (int) (
+                    (w + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
+                            ^ state) & 255;
         }
         /**
          *
@@ -546,12 +599,14 @@ public class Noise {
          */
         public static int hash256(final long x, final long y, final long z, final long w, final long u, final long v, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + v);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            state ^= w * (0x106689D45497FDB5L + z);
-            state ^= u * (0x6A5D39EAE116586DL + w);
-            return (int) ((state ^ (v * (0x2545F4914F6CDD1DL + u))) >>> 56);
+            return (int) (
+                    (v + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
+                            ^ (w + perm_w[(int) (u + (state >>> 32) & 255)])
+                            ^ (u + perm_w[(int) (v + (state >>> 40) & 255)])
+                            ^ state) & 255;
         }
         /**
          *
@@ -562,8 +617,9 @@ public class Noise {
          */
         public static int hash32(final long x, final long y, long state)
         {
-            state ^= x * (0x6C8E9CD570932BD5L + y);
-            return (int) ((state ^ (y * (0x2545F4914F6CDD1DL + x))) >>> 59);
+            return (int) (
+                    (y + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)]) ^ state) & 31;
         }
         /**
          *
@@ -575,9 +631,11 @@ public class Noise {
          */
         public static int hash32(final long x, final long y, final long z, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + z);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            return (int) ((state ^ (z * (0x2545F4914F6CDD1DL + y))) >>> 59);
+            return (int) (
+                    (z + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ state) & 31;
         }
         /**
          *
@@ -590,10 +648,12 @@ public class Noise {
          */
         public static int hash32(final long x, final long y, final long z, final long w, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + w);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            return (int) ((state ^ (w * (0x2545F4914F6CDD1DL + z))) >>> 59);
+            return (int) (
+                    (w + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
+                            ^ state) & 31;
         }
         /**
          *
@@ -608,12 +668,14 @@ public class Noise {
          */
         public static int hash32(final long x, final long y, final long z, final long w, final long u, final long v, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + v);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            state ^= w * (0x106689D45497FDB5L + z);
-            state ^= u * (0x6A5D39EAE116586DL + w);
-            return (int) ((state ^ (v * (0x2545F4914F6CDD1DL + u))) >>> 59);
+            return (int) (
+                    (v + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
+                            ^ (w + perm_w[(int) (u + (state >>> 32) & 255)])
+                            ^ (u + perm_w[(int) (v + (state >>> 40) & 255)])
+                            ^ state) & 31;
         }
 
         /**
@@ -625,8 +687,9 @@ public class Noise {
          */
         public static int hash64(final long x, final long y, long state)
         {
-            state ^= x * (0x6C8E9CD570932BD5L + y);
-            return (int) ((state ^ (y * (0x2545F4914F6CDD1DL + x))) >>> 58);
+            return (int) (
+                    (y + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)]) ^ state) & 63;
         }
         /**
          *
@@ -638,9 +701,11 @@ public class Noise {
          */
         public static int hash64(final long x, final long y, final long z, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + z);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            return (int) ((state ^ (z * (0x2545F4914F6CDD1DL + y))) >>> 58);
+            return (int) (
+                    (z + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ state) & 63;
         }
         /**
          *
@@ -653,10 +718,12 @@ public class Noise {
          */
         public static int hash64(final long x, final long y, final long z, final long w, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + w);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            return (int) ((state ^ (w * (0x2545F4914F6CDD1DL + z))) >>> 58);
+            return (int) (
+                    (w + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
+                            ^ state) & 63;
         }
         /**
          *
@@ -671,12 +738,14 @@ public class Noise {
          */
         public static int hash64(final long x, final long y, final long z, final long w, final long u, final long v, long state)
         {
-            state ^= x * (0x369DEA0F31A53F85L + v);
-            state ^= y * (0x6C8E9CD570932BD5L + x);
-            state ^= z * (0x5851F42D4C957F2DL + y);
-            state ^= w * (0x106689D45497FDB5L + z);
-            state ^= u * (0x6A5D39EAE116586DL + w);
-            return (int) ((state ^ (v * (0x2545F4914F6CDD1DL + u))) >>> 58);
+            return (int) (
+                    (v + perm_x[(int) (x + state & 255)])
+                            ^ (x + perm_y[(int) (y + (state >>> 8) & 255)])
+                            ^ (y + perm_z[(int) (z + (state >>> 16) & 255)])
+                            ^ (z + perm_w[(int) (w + (state >>> 24) & 255)])
+                            ^ (w + perm_w[(int) (u + (state >>> 32) & 255)])
+                            ^ (u + perm_w[(int) (v + (state >>> 40) & 255)])
+                            ^ state) & 63;
         }
 
     }

@@ -46,7 +46,7 @@ import static squidpony.squidmath.NumberTools.zigzag;
 
 /**
  * Various different noise functions, most variants on Simplex noise. These measurements are per-call, in nanoseconds.
- * 2D and higher noise methods (Feb 7, 2018):
+ * 2D and higher noise methods, before WhirlingNoise refactor (Feb 7, 2018):
  * Benchmark                            Mode  Cnt    Score   Error  Units
  * NoiseBenchmark.measureMerlin2D       avgt    4   13.131 ± 0.174  ns/op // produces longs, not continuous like Simplex
  * NoiseBenchmark.measureMerlin3D       avgt    4   33.318 ± 0.628  ns/op // produces longs, not continuous like Simplex
@@ -62,6 +62,23 @@ import static squidpony.squidmath.NumberTools.zigzag;
  * NoiseBenchmark.measureWhirling4D     avgt    4  116.715 ± 1.456  ns/op
  * NoiseBenchmark.measureWhirlingAlt2D  avgt    4   41.742 ± 1.181  ns/op // WhirlingAlt returns a float, not a double
  * NoiseBenchmark.measureWhirlingAlt3D  avgt    4   63.035 ± 1.447  ns/op
+ *
+ * 2D and higher noise methods, after WhirlingNoise refactor (Feb 9, 2018):
+ * Benchmark                           Mode  Cnt    Score    Error  Units
+ * NoiseBenchmark.measureMerlin2D      avgt    4   13.047 ±  0.097  ns/op // produces longs, not continuous like Simplex
+ * NoiseBenchmark.measureMerlin3D      avgt    4   33.038 ±  0.362  ns/op // produces longs, not continuous like Simplex
+ * NoiseBenchmark.measurePerlin2D      avgt    4   42.458 ±  1.041  ns/op // PerlinNoise doesn't take a seed
+ * NoiseBenchmark.measurePerlin3D      avgt    4   63.157 ±  3.749  ns/op
+ * NoiseBenchmark.measurePerlin4D      avgt    4  117.386 ± 12.889  ns/op
+ * NoiseBenchmark.measureSeeded2D      avgt    4   43.947 ±  1.036  ns/op // SeededNoise takes a seed
+ * NoiseBenchmark.measureSeeded3D      avgt    4   64.346 ±  1.071  ns/op
+ * NoiseBenchmark.measureSeeded4D      avgt    4  100.341 ±  1.994  ns/op
+ * NoiseBenchmark.measureSeeded6D      avgt    4  191.420 ±  4.424  ns/op
+ * NoiseBenchmark.measureWhirling2D    avgt    4   41.706 ±  0.784  ns/op // WhirlngNoise takes a seed and uses some
+ * NoiseBenchmark.measureWhirling3D    avgt    4   51.797 ±  0.594  ns/op //   unusual gradient vectors, as well as
+ * NoiseBenchmark.measureWhirling4D    avgt    4   96.988 ±  2.970  ns/op //   different point hashes
+ * NoiseBenchmark.measureWhirlingAlt2D avgt    4   42.176 ±  0.880  ns/op // WhirlingAlt returns a float, not a double
+ * NoiseBenchmark.measureWhirlingAlt3D avgt    4   49.488 ±  0.789  ns/op
  *
  * 1D sway methods, some of which are used in or for noise (Feb 7, 2018):
  * NoiseBenchmark.measureSwayBitDouble         avgt    4  14.477 ± 0.514  ns/op // The Bit functions were in SquidLib,
