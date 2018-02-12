@@ -78,18 +78,26 @@ public class MathBenchmark {
 
     private final double[] inputs = new double[65536];
     private final float[] floatInputs = new float[65536];
+    private final double[] arcInputs = new double[65536];
     {
         for (int i = 0; i < 65536; i++) {
             floatInputs[i] = (float) (inputs[i] =
                     //-2.0 + (i * 0.0625)
                     NumberTools.randomDouble(i + 107) * 4096.0
             );
+            arcInputs[i] = NumberTools.randomSignedDouble(i + 421L);
         }
-
+    }
+    public static double asin(double a)
+    {
+        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357)))
+                / (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
     }
 
     private short mathCos = -0x8000;
     private short mathSin = -0x8000;
+    private short mathASin = -0x8000;
+    private short asinChristensen = -0x8000;
     private short cosOld = -0x8000;
     private short sinOld = -0x8000;
     private short sinNick = -0x8000;
@@ -129,6 +137,18 @@ public class MathBenchmark {
     public double measureMathSin()
     {
         return Math.sin(inputs[mathSin++ & 0xFFFF]);
+    }
+
+    @Benchmark
+    public double measureMathASin()
+    {
+        return Math.asin(arcInputs[mathASin++ & 0xFFFF]);
+    }
+
+    @Benchmark
+    public double measureASinApprox()
+    {
+        return asin(arcInputs[asinChristensen++ & 0xFFFF]);
     }
 
 
@@ -461,7 +481,9 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
         MathBenchmark u = new MathBenchmark();
         double cosOldError = 0.0, cosFError = 0.0, cosNickError = 0.0, cosBitError = 0.0, cosBitFError = 0.0, cosGdxError = 0.0,
                 sinOldError = 0.0, sinFError = 0.0,  sinNickError = 0.0, sinBitError = 0.0, sinBitFError = 0.0, sinGdxError = 0.0,
-                precisionError = 0.0, cosDegNickError = 0.0, sinDegNickError = 0.0, cosDegGdxError = 0.0, sinDegGdxError = 0.0;
+                precisionError = 0.0, cosDegNickError = 0.0, sinDegNickError = 0.0, cosDegGdxError = 0.0, sinDegGdxError = 0.0,
+                asinChristensenError = 0.0;
+        ;
         System.out.println("Math.sin()       : " + u.measureMathSin());
         System.out.println("Math.sin()       : " + u.measureMathSin());
         System.out.println("Math.cos()       : " + u.measureMathCos());
@@ -493,7 +515,7 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
             u.sinNickDeg = i;
             u.cosGdxDeg = i;
             u.sinGdxDeg = i;
-            double c = u.measureMathCos(), s = u.measureMathSin(), cd = u.measureMathCosDeg(), sd = u.measureMathSinDeg();
+            double c = u.measureMathCos(), s = u.measureMathSin(), cd = u.measureMathCosDeg(), sd = u.measureMathSinDeg(), as = u.measureMathASin();
             precisionError += Math.abs(c - (float)c);
             cosOldError += Math.abs(u.measureCosApproxOld() - c);
             cosFError += Math.abs(u.measureCosApproxFloat() - c);
@@ -511,6 +533,7 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
             sinDegNickError += Math.abs(u.measureSinApproxDeg() - sd);
             cosDegGdxError += Math.abs(u.measureCosGdxDeg() - cd);
             sinDegGdxError += Math.abs(u.measureSinGdxDeg() - sd);
+            asinChristensenError += Math.abs(u.measureASinApprox() - as);
         }
         //System.out.println("Margin allowed   : " + margin);
         System.out.println("double approx    : " + cosOldError);
@@ -530,5 +553,6 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
         System.out.println("cos Nick deg     : " + cosDegNickError);
         System.out.println("sin GDX deg      : " + sinDegGdxError);
         System.out.println("cos GDX deg      : " + cosDegGdxError);
+        System.out.println("asin approx      : " + asinChristensenError);
     }
 }

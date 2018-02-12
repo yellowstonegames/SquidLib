@@ -38,7 +38,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Beach                  = 10,
         Rocky                  = 11,
         River                  = 12,
-        Ocean                  = 13;
+        Ocean                  = 13,
+        Empty                  = 14;
 
     private static final int width = 1920, height = 1080;
     //private static final int width = 314 * 4, height = 400;
@@ -115,6 +116,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     private static float beach = SColor.floatGetI(255, 235, 180);
 
+    private static float emptyColor = SColor.DB_INK.toFloatBits();
+
     // water colors
     private static float deepColor = SColor.floatGetI(0, 68, 128);
     private static float mediumColor = SColor.floatGetI(0, 89, 159);
@@ -171,17 +174,18 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     ;
 
     protected final static float[] BIOME_TABLE = {
-        //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
-        Ice+0.7f,   Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
-        Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER
-        Ice+0.5f,   Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,           Desert+0.6f,              //DRY
-        Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.6f,            Savanna+0.4f,            //WET
-        Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER
-        Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST
-        Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS
-        Ice+0.3f,   River+0.8f,   River+0.7f,          River+0.6f,               River+0.5f,              River+0.4f,              //RIVERS
-        Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
-    }, BIOME_COLOR_TABLE = new float[54], BIOME_DARK_COLOR_TABLE = new float[54];
+            //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
+            Ice+0.7f,   Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
+            Ice+0.6f,   Tundra+0.9f,  Grassland+0.6f,      Grassland+0.3f,           Desert+0.65f,            Desert+0.7f,             //DRYER
+            Ice+0.5f,   Tundra+0.7f,  Woodland+0.4f,       Woodland+0.6f,            Savanna+0.8f,           Desert+0.6f,              //DRY
+            Ice+0.4f,   Tundra+0.5f,  SeasonalForest+0.3f, SeasonalForest+0.5f,      Savanna+0.6f,            Savanna+0.4f,            //WET
+            Ice+0.2f,   Tundra+0.3f,  BorealForest+0.35f,  TemperateRainforest+0.4f, TropicalRainforest+0.6f, Savanna+0.2f,            //WETTER
+            Ice+0.0f,   BorealForest, BorealForest+0.15f,  TemperateRainforest+0.2f, TropicalRainforest+0.4f, TropicalRainforest+0.2f, //WETTEST
+            Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS
+            Ice+0.3f,   River+0.8f,   River+0.7f,          River+0.6f,               River+0.5f,              River+0.4f,              //RIVERS
+            Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
+            Empty
+    }, BIOME_COLOR_TABLE = new float[55], BIOME_DARK_COLOR_TABLE = new float[55];
 
     static {
         float b, diff;
@@ -193,6 +197,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                     : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
             BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.08f);
         }
+        BIOME_COLOR_TABLE[54] = BIOME_DARK_COLOR_TABLE[54] = emptyColor;
     }
 
     /*
@@ -296,7 +301,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         date = DateFormat.getDateInstance().format(new Date());
         //path = "out/worlds/Sphere " + date + "/";
         //path = "out/worlds/Tiling " + date + "/";
-        path = "out/worlds/AltSphere " + date + "/";
+        //path = "out/worlds/AltSphere " + date + "/";
+        path = "out/worlds/Ellipse  " + date + "/";
+
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
         pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
@@ -306,7 +313,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         seed = rng.getState();
         ///world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.625);
-        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
+        //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
+        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 1.5);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
@@ -403,10 +411,14 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         double[][] heightData = world.heightData;
         int[][] heatCodeData = dbm.heatCodeData;
         int[][] biomeCodeData = dbm.biomeCodeData;
+        pm.setColor(SColor.DB_INK);
+        pm.fill();
         for (int y = 0; y < height; y++) {
             PER_CELL:
             for (int x = 0; x < width; x++) {
                 hc = heightCodeData[x][y];
+                if(hc == 1000)
+                    continue;
                 tc = heatCodeData[x][y];
                 bc = biomeCodeData[x][y];
                 if(tc == 0)

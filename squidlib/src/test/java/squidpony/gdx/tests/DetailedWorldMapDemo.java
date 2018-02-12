@@ -35,9 +35,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Ice                    = 9 ,
         Beach                  = 10,
         Rocky                  = 11,
-        River                  = 12;
+        River                  = 12,
+        Empty                  = 13;
 
-    private static final int width = 314 * 5, height = 500;
+    //private static final int width = 314 * 5, height = 500;
+    private static final int width = 1000, height = 500;
     //private static final int width = 650, height = 650;
 
     private SpriteBatch batch;
@@ -48,7 +50,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private WorldMapGenerator.SphereMapAlt world;
+    private WorldMapGenerator.EllipticalMap world;
     private final double[][] shadingData = new double[width][height];
     private final int[][]
             heatCodeData = new int[width][height],
@@ -127,7 +129,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float darkCoastalColor = SColor.lerpFloatColors(coastalColor, black, 0.15f);
     private static float foamColor = SColor.floatGetI(61,  162, 215);
     private static float darkFoamColor = SColor.lerpFloatColors(foamColor, black, 0.15f);
-
+    private static float emptyColor = SColor.DB_INK.toFloatBits();
     private static float iceWater = SColor.floatGetI(210, 255, 252);
     private static float coldWater = mediumColor;
     private static float riverWater = shallowColor;
@@ -198,7 +200,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS
         Ice+0.3f,   River+0.8f,   River+0.7f,          River+0.6f,               River+0.5f,              River+0.4f,              //RIVERS
         Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
-    }, BIOME_COLOR_TABLE = new float[54], BIOME_DARK_COLOR_TABLE = new float[54];
+        Empty
+    }, BIOME_COLOR_TABLE = new float[55], BIOME_DARK_COLOR_TABLE = new float[55];
 
     static {
         float b, diff;
@@ -210,6 +213,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
             BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.08f);
         }
+        BIOME_COLOR_TABLE[54] = BIOME_DARK_COLOR_TABLE[54] = emptyColor;
     }
 
     protected void makeBiomes() {
@@ -222,6 +226,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             for (int y = 0; y < height; y++) {
 
                 heightCode = heightCodeData[x][y];
+                if(heightCode == 1000) {
+                    biomeUpperCodeData[x][y] = biomeLowerCodeData[x][y] = 54;
+                    shadingData[x][y] = 0.0;
+                    continue;
+                }
                 hot = heatData[x][y];
                 moist = moistureData[x][y];
                 high = heightData[x][y];
@@ -315,7 +324,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 0.8);
+        //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 0.8);
+        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.8);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
@@ -417,6 +427,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             PER_CELL:
             for (int x = 0; x < width; x++) {
                 hc = heightCodeData[x][y];
+                if(hc == 1000)
+                    continue;
                 tc = heatCodeData[x][y];
                 //cloud = (float) cloudNoise2.getNoiseWithSeed(xp = world.xPositions[x][y], yp = world.yPositions[x][y],
                 //        zp = world.zPositions[x][y], counter * 0.04, (int) seed) * 0.06f;
@@ -439,7 +451,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                 [(int) (world.zPositions[x][y] * 233 + counter * 2.3) & 127] * 0.64f);
                 cloudLight = SColor.floatGet(cloudLight, cloudLight, cloudLight, 1f);
                                 */
-
                 if(tc == 0)
                 {
                     switch (hc)
@@ -498,8 +509,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     @Override
     public void render() {
         // standard clear the background routine for libGDX
-        //Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
-        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClearColor(SColor.DB_INK.r, SColor.DB_INK.g, SColor.DB_INK.b, 1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
