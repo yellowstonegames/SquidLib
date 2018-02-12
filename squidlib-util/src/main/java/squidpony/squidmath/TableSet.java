@@ -1003,7 +1003,7 @@ public class TableSet<C, R> implements java.io.Serializable {
                             key[last] = null;
                             return;
                         }
-                        slot = HashCommon.mix(columnHasher.hash(curr)) & mask;
+                        slot = (columnHasher.hash(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1179,7 +1179,7 @@ public class TableSet<C, R> implements java.io.Serializable {
             if (((key[i]) == null))
                 pos = newN;
             else {
-                pos = (HashCommon.mix((key[i]).hashCode())) & mask;
+                pos = (((key[i]).hashCode())) & mask;
                 while (!((newKey[pos]) == null))
                     pos = (pos + 1) & mask;
             }
@@ -1318,7 +1318,7 @@ public class TableSet<C, R> implements java.io.Serializable {
                 pos = n;
                 containsNull = true;
             } else {
-                if (!(key[pos = HashCommon.mix(columnHasher.hash(c)) & mask] == null))
+                if (!(key[pos = (columnHasher.hash(c)) & mask] == null))
                     while (!(key[pos = pos + 1 & mask] == null)) ;
             }
             key[pos] = c;
@@ -1512,7 +1512,7 @@ public class TableSet<C, R> implements java.io.Serializable {
         final C[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(original)) & mask]) == null)
             return add(replacement);
         if (hasher.areEqual(original, curr))
             return alterEntry(pos, replacement);

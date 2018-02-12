@@ -437,7 +437,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
+            if ((curr = key[pos = (hasher.hash(k)) & mask]) != null) {
                 if (hasher.areEqual(curr, k)) {
                     return pos;
                 }
@@ -470,7 +470,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
+            if ((curr = key[pos = (hasher.hash(k)) & mask]) != null) {
                 if (hasher.areEqual(curr, k)) {
                     order.removeIndex(value[pos]);
                     order.insert(at, pos);
@@ -587,7 +587,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                     key[last] = null;
                     return;
                 }
-                slot = HashCommon.mix(hasher.hash(curr))
+                slot = (hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -622,7 +622,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                     return;
                 }
                 v = val[pos];
-                slot = HashCommon.mix(hasher.hash(curr))
+                slot = (hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -645,7 +645,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return null;
         if (hasher.areEqual(k, curr))
             return removeEntry(pos);
@@ -671,7 +671,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (hasher.areEqual(k, curr))
             return removeEntry(pos);
@@ -825,7 +825,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (hasher.areEqual(k, curr)) {
             moveIndexToFirst(pos);
@@ -861,7 +861,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (hasher.areEqual(k, curr)) {
             moveIndexToLast(pos);
@@ -900,7 +900,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+            if (!((curr = key[pos = (hasher.hash(k)) & mask]) == null)) {
                 if (hasher.areEqual(curr, k)) {
                     moveIndexToFirst(pos);
                     return setValue(pos, 0);
@@ -951,7 +951,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+            if (!((curr = key[pos = (hasher.hash(k)) & mask]) == null)) {
                 if (hasher.areEqual(curr, k)) {
                     moveIndexToLast(pos);
                     return setValue(pos, size - 1);
@@ -986,7 +986,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (hasher.areEqual(k, curr))
             return value[pos];
@@ -1005,7 +1005,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (hasher.areEqual(k, curr))
             return value[pos];
@@ -1025,7 +1025,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return false;
         if (hasher.areEqual(k, curr))
             return true;
@@ -1328,7 +1328,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                 return;
             }
             // The starting point.
-            int pos = (HashCommon.mix((from).hashCode()))
+            int pos = (((from).hashCode()))
                     & mask;
             // There's always an unused entry.
             while (!((key[pos]) == null)) {
@@ -1446,7 +1446,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                             fixValues(index);
                             return;
                         }
-                        slot = HashCommon.mix(hasher.hash(curr)) & mask;
+                        slot = (hasher.hash(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1570,7 +1570,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             final K[] key = Arrangement.this.key;
             int pos;
             // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+            if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
                 return false;
             if (hasher.areEqual(k, curr))
                 return value[pos] == v;
@@ -1601,7 +1601,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             final K[] key = Arrangement.this.key;
             int pos;
             // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+            if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
                 return false;
             if (hasher.areEqual(curr, k)) {
                 if (value[pos] == v) {
@@ -2133,24 +2133,28 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final int mask = newN - 1; // Note that this is used by the hashing macro
         final K newKey[] = (K[]) new Object[newN + 1];
         final int[] newValue = new int[newN + 1];
-        int i, pos, sz = order.size, originalFirst = first, originalLast = last;
+        final int sz = order.size;
+        K k;
+        int i, pos;
+        final int[] oi = order.items;
         for (int q = 0; q < sz; q++) {
-            i = order.get(q);
-            if (key[i] == null)
+            i = oi[q];
+            if ((k = key[i]) == null)
                 pos = newN;
             else {
-                pos = HashCommon.mix(hasher.hash(key[i])) & mask;
-                while (!(newKey[pos] == null))
+                pos = (hasher.hash(k)) & mask;
+                while (newKey[pos] != null)
                     pos = (pos + 1) & mask;
             }
-            newKey[pos] = key[i];
+            newKey[pos] = k;
             newValue[pos] = value[i];
-            order.set(q, pos);
-            if(i == originalFirst)
-                first = pos;
-            if(i == originalLast)
-                last = pos;
+            oi[q] = pos;
         }
+        if(sz > 0) {
+            first = oi[0];
+            last = oi[sz - 1];
+        }
+
         n = newN;
         this.mask = mask;
         maxFill = maxFill(n, f);
@@ -2387,7 +2391,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                 pos = n;
                 containsNullKey = true;
             } else {
-                pos = HashCommon.mix(hasher.hash(k))
+                pos = (hasher.hash(k))
                         & mask;
                 while (!(key[pos] == null))
                     pos = (pos + 1) & mask;
@@ -2574,7 +2578,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             final K[] key = this.key;
 
             // The starting point.
-            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
+            if (!((curr = key[rep = (hasher.hash(replacement)) & mask]) == null)) {
                 if (hasher.areEqual(curr, replacement))
                     return v;
                 while (!((curr = key[rep = (rep + 1) & mask]) == null))
@@ -2606,7 +2610,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) != null) {
+            if ((curr = key[rep = (hasher.hash(replacement)) & mask]) != null) {
                 if (hasher.areEqual(curr, replacement))
                     return v;
                 while ((curr = key[rep = (rep + 1) & mask]) != null)
@@ -2642,7 +2646,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(original)) & mask]) == null)
             return add(replacement);
         if (hasher.areEqual(original, curr))
             return alterEntry(pos, replacement);
@@ -2738,7 +2742,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return -1;
         if (hasher.areEqual(k, curr))
             return pos;

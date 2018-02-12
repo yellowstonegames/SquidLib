@@ -439,7 +439,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+            if (!((curr = key[pos = (hasher.hash(k)) & mask]) == null)) {
                 if (hasher.areEqual(curr, k))
                     return false;
                 while (!((curr = key[pos = pos + 1 & mask]) == null))
@@ -477,7 +477,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+            if (!((curr = key[pos = (hasher.hash(k)) & mask]) == null)) {
                 if (hasher.areEqual(curr, k))
                     return curr;
                 while (!((curr = key[pos = pos + 1 & mask]) == null))
@@ -509,7 +509,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
                     key[last] = null;
                     return;
                 }
-                slot = HashCommon.mix(hasher.hash(curr))
+                slot = (hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -546,7 +546,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return false;
         if (hasher.areEqual(k, curr))
             return removeEntry(pos);
@@ -573,7 +573,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return null;
         if (hasher.areEqual(k, curr))
             return curr;
@@ -593,7 +593,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return false;
         if (hasher.areEqual(k, curr))
             return true;
@@ -618,7 +618,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return -1;
         if (hasher.areEqual(k, curr))
             return pos;
@@ -768,7 +768,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
                         key[ last ] = (null);
                         return;
                     }
-                    slot = ( HashCommon.mix(hasher.hash(current)) ) & mask;
+                    slot = ( (hasher.hash(current)) ) & mask;
                     if ( last <= pos ? last >= slot || slot > pos : last >= slot && slot > pos ) break;
                     pos = ( pos + 1 ) & mask;
                 }
@@ -889,20 +889,20 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
         final K key[] = this.key;
-        final int mask = newN - 1; // Note that this is used by the hashing
-        // macro
+        final int mask = newN - 1;
         final K newKey[] = (K[]) new Object[newN + 1];
+        K k;
         int i = -1, pos, sz = size;
         for (int q = 0; q < sz; q++) {
             i = scanNext(i);
-            if (key[i] == null)
+            if ((k = key[i]) == null)
                 pos = newN;
             else {
-                pos = HashCommon.mix(hasher.hash(key[i])) & mask;
+                pos = (hasher.hash(k)) & mask;
                 while (!(newKey[pos] == null))
                     pos = pos + 1 & mask;
             }
-            newKey[pos] = key[i];
+            newKey[pos] = k;
         }
         n = newN;
         this.mask = mask;
@@ -1113,7 +1113,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
                 pos = n;
                 containsNull = true;
             } else {
-                if (!(key[pos = HashCommon.mix(hasher.hash(k)) & mask] == null))
+                if (!(key[pos = (hasher.hash(k)) & mask] == null))
                     while (!(key[pos = pos + 1 & mask] == null)) ;
             }
             key[pos] = k;

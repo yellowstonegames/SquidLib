@@ -74,7 +74,7 @@ public class IntVLA implements Serializable, Cloneable {
 
     public void add (int value) {
         int[] items = this.items;
-        if (size == items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
+        if (size == items.length) items = resize(size << 1 | 8);
         items[size++] = value;
     }
     
@@ -95,7 +95,7 @@ public class IntVLA implements Serializable, Cloneable {
     public void addAll (int[] array, int offset, int length) {
         int[] items = this.items;
         int sizeNeeded = size + length;
-        if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+        if (sizeNeeded > items.length) items = resize(size << 1 | 8);
         System.arraycopy(array, offset, items, size, length);
         size += length;
     }
@@ -103,7 +103,7 @@ public class IntVLA implements Serializable, Cloneable {
     public void addRange (int start, int end) {
         int[] items = this.items;
         int sizeNeeded = size + end - start;
-        if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+        if (sizeNeeded > items.length) items = resize(size << 1 | 8);
         for(int r = start, i = size; r < end; r++, i++)
         {
             items[i] = r;
@@ -114,7 +114,7 @@ public class IntVLA implements Serializable, Cloneable {
     public void addFractionRange (int start, int end, int fraction) {
         int[] items = this.items;
         int sizeNeeded = size + (end - start) / fraction + 2;
-        if (sizeNeeded > items.length) items = resize(Math.max(8, (int)(sizeNeeded * 1.75f)));
+        if (sizeNeeded > items.length) items = resize(size << 1 | 8);
         for(int r = start, i = size; r < end; r = fraction * ((r / fraction) + 1), i++, size++)
         {
             items[i] = r;
@@ -149,7 +149,7 @@ public class IntVLA implements Serializable, Cloneable {
     public void insert (int index, int value) {
         if (index > size) throw new IndexOutOfBoundsException("index can't be > size: " + index + " > " + size);
         int[] items = this.items;
-        if (size == items.length) items = resize(Math.max(8, (int)(size * 1.75f)));
+        if (size == items.length) items = resize(size << 1 | 8);
         System.arraycopy(items, index, items, index + 1, size - index);
         size++;
         items[index] = value;

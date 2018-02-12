@@ -1000,19 +1000,21 @@ public class CrossHash {
     public static final IHasher objectArrayHasher = new ObjectArrayHasher();
 
     private static class DefaultHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 3L;
+        private static final long serialVersionUID = 4L;
 
         DefaultHasher() {
         }
 
         @Override
         public int hash(final Object data) {
-            return data.hashCode();
+            if(data == null) return 0;
+            final int h = data.hashCode() * 0x9E3779B9;
+            return h ^ (h >>> 16);
         }
 
         @Override
-        public boolean areEqual(Object left, Object right) {
-            return Objects.equals(left, right);
+        public boolean areEqual(final Object left, final Object right) {
+            return (left == right) || (left != null && left.equals(right));
         }
     }
 
@@ -1020,12 +1022,12 @@ public class CrossHash {
 
     private static class IdentityHasher implements IHasher, Serializable
     {
-        private static final long serialVersionUID = 3L;
+        private static final long serialVersionUID = 4L;
         IdentityHasher() { }
 
         @Override
         public int hash(Object data) {
-            return System.identityHashCode(data);
+            return HashCommon.mix(System.identityHashCode(data));
         }
 
         @Override

@@ -483,7 +483,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+            if (!((curr = key[pos = (hasher.hash(k)) & mask]) == null)) {
                 if (hasher.areEqual(curr, k))
                     return false;
                 while (!((curr = key[pos = pos + 1 & mask]) == null))
@@ -519,7 +519,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+            if (!((curr = key[pos = (hasher.hash(k)) & mask]) == null)) {
                 if (hasher.areEqual(curr, k))
                     return false;
                 while (!((curr = key[pos = pos + 1 & mask]) == null))
@@ -559,7 +559,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)) {
+            if (!((curr = key[pos = (hasher.hash(k)) & mask]) == null)) {
                 if (hasher.areEqual(curr, k))
                     return curr;
                 while (!((curr = key[pos = pos + 1 & mask]) == null))
@@ -602,7 +602,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                     key[last] = null;
                     return;
                 }
-                slot = HashCommon.mix(hasher.hash(curr))
+                slot = (hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -641,7 +641,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return false;
         if (hasher.areEqual(k, curr))
             return removeEntry(pos);
@@ -790,7 +790,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         } else {
             // The starting point.
             final K key[] = this.key;
-            pos = HashCommon.mix(hasher.hash(k)) & mask;
+            pos = (hasher.hash(k)) & mask;
             while (!(key[pos] == null)) {
                 if (hasher.areEqual(k, key[pos])) {
                     moveIndexToFirst(pos);
@@ -834,7 +834,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         } else {
             // The starting point.
             final K key[] = this.key;
-            pos = HashCommon.mix(hasher.hash(k)) & mask;
+            pos = (hasher.hash(k)) & mask;
             // There's always an unused entry.
             while (!(key[pos] == null)) {
                 if (hasher.areEqual(k, key[pos])) {
@@ -875,7 +875,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return null;
         if (hasher.areEqual(k, curr))
             return curr;
@@ -895,7 +895,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return false;
         if (hasher.areEqual(k, curr))
             return true;
@@ -920,7 +920,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return -1;
         if (hasher.areEqual(k, curr))
             return pos;
@@ -1281,7 +1281,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                             key[last] = null;
                             return;
                         }
-                        slot = HashCommon.mix(hasher.hash(curr)) & mask;
+                        slot = (hasher.hash(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1417,22 +1417,24 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final int mask = newN - 1; // Note that this is used by the hashing
         // macro
         final K newKey[] = (K[]) new Object[newN + 1];
-        int i, pos, sz = order.size, originalFirst = first, originalLast = last;
+        K k;
+        int i, pos, sz = order.size;
+        final int[] oi = order.items;
         for (int q = 0; q < sz; q++) {
-            i = order.get(q);
-            if (key[i] == null)
+            i = oi[q];
+            if ((k = key[i]) == null)
                 pos = newN;
             else {
-                pos = HashCommon.mix(hasher.hash(key[i])) & mask;
+                pos = (hasher.hash(k)) & mask;
                 while (!(newKey[pos] == null))
                     pos = pos + 1 & mask;
             }
-            newKey[pos] = key[i];
-            order.set(q, pos);
-            if (i == originalFirst)
-                first = pos;
-            if (i == originalLast)
-                last = pos;
+            newKey[pos] = k;
+            oi[q] = pos;
+        }
+        if(sz > 0) {
+            first = oi[0];
+            last = oi[sz - 1];
         }
         n = newN;
         this.mask = mask;
@@ -1456,7 +1458,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             if (((key[i]) == null))
                 pos = newN;
             else {
-                pos = (HashCommon.mix((key[i]).hashCode())) & mask;
+                pos = (((key[i]).hashCode())) & mask;
                 while (!((newKey[pos]) == null))
                     pos = (pos + 1) & mask;
             }
@@ -1694,7 +1696,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
                 pos = n;
                 containsNull = true;
             } else {
-                if (!(key[pos = HashCommon.mix(hasher.hash(k)) & mask] == null))
+                if (!(key[pos = (hasher.hash(k)) & mask] == null))
                     while (!(key[pos = pos + 1 & mask] == null)) ;
             }
             key[pos] = k;
@@ -1801,7 +1803,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             final K[] key = this.key;
             shiftKeys(pos);
             // The starting point.
-            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
+            if (!((curr = key[rep = (hasher.hash(replacement)) & mask]) == null)) {
                 if (hasher.areEqual(curr, replacement))
                     return false;
                 while (!((curr = key[rep = rep + 1 & mask]) == null))
@@ -1825,7 +1827,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
+            if (!((curr = key[rep = (hasher.hash(replacement)) & mask]) == null)) {
                 if (hasher.areEqual(curr, replacement))
                     return false;
                 while (!((curr = key[rep = rep + 1 & mask]) == null))
@@ -1854,7 +1856,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(original)) & mask]) == null)
             return add(replacement);
         if (hasher.areEqual(original, curr))
             return alterEntry(pos, replacement);
@@ -1911,7 +1913,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(original)) & mask]) == null)
             return false;
         if (hasher.areEqual(original, curr)) {
             idx = alterEntry(pos);

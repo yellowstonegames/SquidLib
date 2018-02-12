@@ -417,7 +417,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) != null) {
+            if ((curr = key[pos = (hasher.hash(k)) & mask]) != null) {
                 if (hasher.areEqual(curr, k)) {
                     value[pos].add(at);
                     order.insert(at, pos);
@@ -491,7 +491,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                     key[last] = null;
                     return;
                 }
-                slot = HashCommon.mix(hasher.hash(curr))
+                slot = (hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -525,7 +525,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                     return;
                 }
                 v = val[pos];
-                slot = HashCommon.mix(hasher.hash(curr))
+                slot = (hasher.hash(curr))
                         & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
@@ -549,7 +549,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (hasher.areEqual(k, curr))
             return removeEntry(pos);
@@ -575,7 +575,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return defRetValue;
         if (hasher.areEqual(k, curr))
             return removeEntry(pos);
@@ -689,7 +689,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return 0;
         if (hasher.areEqual(k, curr)) {
             container.addAll(value[pos]);
@@ -714,7 +714,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return false;
         if (hasher.areEqual(k, curr))
             return true;
@@ -948,7 +948,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                 return;
             }
             // The starting point.
-            int pos = (HashCommon.mix((from).hashCode()))
+            int pos = (((from).hashCode()))
                     & mask;
             // There's always an unused entry.
             while (!((key[pos]) == null)) {
@@ -1068,7 +1068,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                             fixValues();
                             return;
                         }
-                        slot = HashCommon.mix(hasher.hash(curr)) & mask;
+                        slot = (hasher.hash(curr)) & mask;
                         if (last <= pos
                                 ? last >= slot || slot > pos
                                 : last >= slot && slot > pos)
@@ -1455,18 +1455,19 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final IntVLA[] value = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing macro
         final K newKey[] = (K[]) new Object[newN + 1];
+        K k;
         final IntVLA[] newValue = new IntVLA[newN + 1];
         int i, pos, sz = order.size, originalFirst = first, originalLast = last;
         for (int q = 0; q < sz; q++) {
             i = order.get(q);
-            if (key[i] == null)
+            if ((k = key[i]) == null)
                 pos = newN;
             else {
-                pos = HashCommon.mix(hasher.hash(key[i])) & mask;
+                pos = (hasher.hash(k)) & mask;
                 while (!(newKey[pos] == null))
                     pos = (pos + 1) & mask;
             }
-            newKey[pos] = key[i];
+            newKey[pos] = k;
             newValue[pos] = value[i];
             order.set(q, pos);
             if(i == originalFirst)
@@ -1811,7 +1812,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             final K[] key = this.key;
 
             // The starting point.
-            if (!((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) == null)) {
+            if (!((curr = key[rep = (hasher.hash(replacement)) & mask]) == null)) {
                 if (hasher.areEqual(curr, replacement))
                 {
                     value[rep].addAll(v);
@@ -1851,7 +1852,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
             K curr;
             final K[] key = this.key;
             // The starting point.
-            if ((curr = key[rep = HashCommon.mix(hasher.hash(replacement)) & mask]) != null) {
+            if ((curr = key[rep = (hasher.hash(replacement)) & mask]) != null) {
                 if (hasher.areEqual(curr, replacement))
                 {
                     value[rep].addAll(v);
@@ -1894,7 +1895,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(original)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(original)) & mask]) == null)
             return add(replacement) >= 0;
         if (hasher.areEqual(original, curr))
             return alterEntry(pos, replacement);
@@ -1990,7 +1991,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
         final K[] key = this.key;
         int pos;
         // The starting point.
-        if ((curr = key[pos = HashCommon.mix(hasher.hash(k)) & mask]) == null)
+        if ((curr = key[pos = (hasher.hash(k)) & mask]) == null)
             return -1;
         if (hasher.areEqual(k, curr))
             return pos;
