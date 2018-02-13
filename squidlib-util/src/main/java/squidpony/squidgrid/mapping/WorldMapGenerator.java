@@ -1,7 +1,6 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
 import squidpony.squidmath.Noise.Noise3D;
 import squidpony.squidmath.Noise.Noise4D;
@@ -333,19 +332,19 @@ public abstract class WorldMapGenerator {
     {
         return coded / width;
     }
-    protected int wrapX(final int x)  {
+    public int wrapX(final int x, final int y)  {
         return (x + width) % width;
     }
-    protected int wrapY(final int y)  {
+    public int wrapY(final int x, final int y)  {
         return (y + height) % height;
     }
-    private static final Direction[] reuse = new Direction[6];
-    private void appendDirToShuffle(RNG rng) {
-        rng.randomPortion(Direction.CARDINALS, reuse);
-        reuse[rng.next(2)] = Direction.DIAGONALS[rng.next(2)];
-        reuse[4] = Direction.DIAGONALS[rng.next(2)];
-        reuse[5] = Direction.OUTWARDS[rng.next(3)];
-    }
+//    private static final Direction[] reuse = new Direction[6];
+//    private void appendDirToShuffle(RNG rng) {
+//        rng.randomPortion(Direction.CARDINALS, reuse);
+//        reuse[rng.next(2)] = Direction.DIAGONALS[rng.next(2)];
+//        reuse[4] = Direction.DIAGONALS[rng.next(2)];
+//        reuse[5] = Direction.OUTWARDS[rng.next(3)];
+//    }
 
 //    protected void addRivers()
 //    {
@@ -597,6 +596,54 @@ public abstract class WorldMapGenerator {
 //        rng.setState(rebuildState);
 //    }
 
+    public interface BiomeMapper
+    {
+        /**
+         * Gets the most relevant biome code for a given x,y point on the map. Some mappers can store more than one
+         * biome at a location, but only the one with the highest influence will be returned by this method. Biome codes
+         * are always ints, and are typically between 0 and 60, both inclusive; they are meant to be used as indices
+         * into a table of names or other objects that identify a biome, accessible via {@link #getBiomeNameTable()}.
+         * Although different classes may define biome codes differently, they should all be able to be used as indices
+         * into the String array returned by getBiomeNameTable().
+         * @param x the x-coordinate on the map
+         * @param y the y-coordinate on the map
+         * @return an int that can be used as an index into the array returned by {@link #getBiomeNameTable()}
+         */
+        int getBiomeCode(int x, int y);
+
+        /**
+         * Gets a heat code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
+         * implementations may use more or less detail for heat codes, but 0 is always the coldest code used, and the
+         * highest value this can return for a given implementation refers to the hottest code used.
+         * @param x the x-coordinate on the map
+         * @param y the y-coordinate on the map
+         * @return an int that can be used to categorize how hot an area is, with 0 as coldest
+         */
+        int getHeatCode(int x, int y);
+        /**
+         * Gets a moisture code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
+         * implementations may use more or less detail for moisture codes, but 0 is always the driest code used, and the
+         * highest value this can return for a given implementation refers to the wettest code used. Some
+         * implementations may allow seasonal change in moisture, e.g. monsoon seasons, to be modeled differently from
+         * average precipitation in an area, but the default assumption is that this describes the average amount of
+         * moisture (rain, humidity, and possibly snow/hail or other precipitation) that an area receives annually.
+         * @param x the x-coordinate on the map
+         * @param y the y-coordinate on the map
+         * @return an int that can be used to categorize how much moisture an area tends to receive, with 0 as driest
+         */
+        int getMoistureCode(int x, int y);
+
+        /**
+         * Gets a String array where biome codes can be used as indices to look up a name for the biome they refer to. A
+         * sample table is in {@link SimpleBiomeMapper#biomeTable}; the 61-element array format documented for that
+         * field is encouraged for implementing classes if they use 6 levels of heat and 6 levels of moisture, and track
+         * rivers, coastlines, lakes, and oceans as potentially different types of terrain. Biome codes can be obtained
+         * with {@link #getBiomeCode(int, int)}, or for some implementing classes other methods may provide more
+         * detailed information.
+         * @return a String array that often contains 61 elements, to be used with biome codes as indices.
+         */
+        String[] getBiomeNameTable();
+    }
     /**
      * A way to get biome information for the cells on a map when you only need a single value to describe a biome, such
      * as "Grassland" or "TropicalRainforest".
@@ -605,16 +652,17 @@ public abstract class WorldMapGenerator {
      * {@link #makeBiomes(WorldMapGenerator)} with a WorldMapGenerator that has already produced at least one world map.
      * 3, get biome codes from the {@link #biomeCodeData} field, where a code is an int that can be used as an index
      * into the {@link #biomeTable} static field to get a String name for a biome type, or used with an alternate biome
-     * table of your design. Biome tables in this case are 55-element arrays organized into groups of 6 elements, with
+     * table of your design. Biome tables in this case are 61-element arrays organized into groups of 6 elements, with
      * the last element reserved for empty space where the map doesn't cover (as with some map projections). Each
      * group goes from the coldest temperature first to the warmest temperature last in the group. The first group of 6
      * contains the dryest biomes, the next 6 are medium-dry, the next are slightly-dry, the next slightly-wet, then
      * medium-wet, then wettest. After this first block of dry-to-wet groups, there is a group of 6 for coastlines, a
-     * group of 6 for rivers, and lastly a group for lakes. The last element, with code 54, is by convention the String
-     * "Empty", but normally the code should be enough. This also assigns moisture codes and heat codes from 0 to 5
-     * for each cell, which may be useful to simplify logic that deals with those factors.
+     * group of 6 for rivers, a group of 6 for lakes, a group of 6 for oceans, and then one element for space outside
+     * the map. The last element, with code 60, is by convention the String "Empty", but normally the code should be
+     * enough to tell that a space is off-map. This also assigns moisture codes and heat codes from 0 to 5 for each
+     * cell, which may be useful to simplify logic that deals with those factors.
      */
-    public static class SimpleBiomeMapper
+    public static class SimpleBiomeMapper implements BiomeMapper
     {
         /**
          * The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.
@@ -625,10 +673,38 @@ public abstract class WorldMapGenerator {
          */
         moistureCodeData,
         /**
-         * The biome codes for the analyzed map, from 0 to 54 inclusive. You can use {@link #biomeTable} to look up
+         * The biome codes for the analyzed map, from 0 to 60 inclusive. You can use {@link #biomeTable} to look up
          * String names for biomes, or construct your own table as you see fit (see docs in {@link SimpleBiomeMapper}).
          */
         biomeCodeData;
+
+        @Override
+        public int getBiomeCode(int x, int y) {
+            return biomeCodeData[x][y];
+        }
+
+        @Override
+        public int getHeatCode(int x, int y) {
+            return heatCodeData[x][y];
+        }
+
+        @Override
+        public int getMoistureCode(int x, int y) {
+            return moistureCodeData[x][y];
+        }
+
+        /**
+         * Gets a String array where biome codes can be used as indices to look up a name for the biome they refer to.
+         * This table uses 6 levels of heat and 6 levels of moisture, and tracks rivers, coastlines, lakes, and oceans
+         * as potentially different types of terrain. Biome codes can be obtained with {@link #getBiomeCode(int, int)}.
+         * This method returns a direct reference to {@link #biomeTable}, so modifying the returned array is discouraged
+         * (you should implement {@link BiomeMapper} using this class as a basis if you want to change its size).
+         * @return a direct reference to {@link #biomeTable}, a String array containing names of biomes
+         */
+        @Override
+        public String[] getBiomeNameTable() {
+            return biomeTable;
+        }
 
         public static final double
                 coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
@@ -647,9 +723,10 @@ public abstract class WorldMapGenerator {
 
         /**
          * The default biome table to use with biome codes from {@link #biomeCodeData}. Biomes are assigned based on
-         * heat and moisture for the first 36 of 54 elements (coldest to warmest for each group of 6, with the first
+         * heat and moisture for the first 36 of 61 elements (coldest to warmest for each group of 6, with the first
          * group as the dryest and the last group the wettest), then the next 6 are for coastlines (coldest to warmest),
-         * then rivers (coldest to warmest), then lakes (coldest to warmest).
+         * then rivers (coldest to warmest), then lakes (coldest to warmest), then oceans (coldest to warmest), and
+         * lastly a single "biome" for empty space outside the map (meant for projections that don't fill a rectangle).
          */
         public static final String[] biomeTable = {
                 //COLDEST //COLDER        //COLD            //HOT                  //HOTTER              //HOTTEST
@@ -662,6 +739,7 @@ public abstract class WorldMapGenerator {
                 "Rocky",  "Rocky",        "Beach",          "Beach",               "Beach",              "Beach",              //COASTS
                 "Ice",    "River",        "River",          "River",               "River",              "River",              //RIVERS
                 "Ice",    "River",        "River",          "River",               "River",              "River",              //LAKES
+                "Ocean",  "Ocean",        "Ocean",          "Ocean",               "Ocean",              "Ocean",              //OCEAN
                 "Empty",                                                                                                       //SPACE
         };
 
@@ -698,13 +776,16 @@ public abstract class WorldMapGenerator {
                             fresh = world.freshwaterData[x][y];
                     final int heightCode = world.heightCodeData[x][y];
                     if(heightCode == 1000) {
-                        biomeCodeData[x][y] = 54;
+                        biomeCodeData[x][y] = 60;
                         continue;
                     }
                     int hc, mc;
                     boolean isLake = world.generateRivers && heightCode >= 4 && fresh > 0.65 && fresh + moist * 2.35 > 2.75,//world.partialLakeData.contains(x, y) && heightCode >= 4,
                             isRiver = world.generateRivers && !isLake && heightCode >= 4 && fresh > 0.55 && fresh + moist * 2.2 > 2.15;//world.partialRiverData.contains(x, y) && heightCode >= 4;
-                    if (moist > wetterValueUpper) {
+                    if(heightCode < 4) {
+                        mc = 9;
+                    }
+                    else if (moist > wetterValueUpper) {
                         mc = 5;
                     } else if (moist > wetValueUpper) {
                         mc = 4;
@@ -734,7 +815,8 @@ public abstract class WorldMapGenerator {
 
                     heatCodeData[x][y] = hc;
                     moistureCodeData[x][y] = mc;
-                    biomeCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
+                    biomeCodeData[x][y] = heightCode < 4 ? hc + 54 // 54 == 9 * 6, 9 is used for Ocean groups
+                            : isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
                 }
             }
         }
@@ -749,11 +831,11 @@ public abstract class WorldMapGenerator {
      * extract methods in this class to get various information from it (these are {@link #extractBiomeA(int)},
      * {@link #extractBiomeB(int)}, {@link #extractPartA(int)}, {@link #extractPartB(int)}, and
      * {@link #extractMixAmount(int)}). You can get predefined names for biomes using the extractBiome methods (these
-     * names can be changed in {@link #biomeTable}), or raw indices into some (usually 54-element) collection or array
+     * names can be changed in {@link #biomeTable}), or raw indices into some (usually 61-element) collection or array
      * with the extractPart methods. The extractMixAmount() method gets a float that is the amount by which biome B
      * affects biome A; if this is higher than 0.5, then biome B is the "dominant" biome in the area.
      */
-    public static class DetailedBiomeMapper
+    public static class DetailedBiomeMapper implements BiomeMapper
     {
         /**
          * The heat codes for the analyzed map, from 0 to 5 inclusive, with 0 coldest and 5 hottest.
@@ -772,6 +854,36 @@ public abstract class WorldMapGenerator {
          */
         biomeCodeData;
 
+        @Override
+        public int getBiomeCode(int x, int y) {
+            int code = biomeCodeData[x][y];
+            if(code < 0x2000000) return code & 1023;
+            return (code >>> 10) & 1023;
+        }
+
+        @Override
+        public int getHeatCode(int x, int y) {
+            return heatCodeData[x][y];
+        }
+
+        @Override
+        public int getMoistureCode(int x, int y) {
+            return moistureCodeData[x][y];
+        }
+
+        /**
+         * Gets a String array where biome codes can be used as indices to look up a name for the biome they refer to.
+         * This table uses 6 levels of heat and 6 levels of moisture, and tracks rivers, coastlines, lakes, and oceans
+         * as potentially different types of terrain. Biome codes can be obtained with {@link #getBiomeCode(int, int)}.
+         * This method returns a direct reference to {@link #biomeTable}, so modifying the returned array is discouraged
+         * (you should implement {@link BiomeMapper} using this class as a basis if you want to change its size).
+         * @return a direct reference to {@link #biomeTable}, a String array containing names of biomes
+         */
+        @Override
+        public String[] getBiomeNameTable() {
+            return biomeTable;
+        }
+
         public static final double
                 coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
                 colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1
@@ -789,7 +901,7 @@ public abstract class WorldMapGenerator {
 
         /**
          * The default biome table to use with parts of biome codes from {@link #biomeCodeData}. Biomes are assigned by
-         * heat and moisture for the first 36 of 55 elements (coldest to warmest for each group of 6, with the first
+         * heat and moisture for the first 36 of 61 elements (coldest to warmest for each group of 6, with the first
          * group as the dryest and the last group the wettest), then the next 6 are for coastlines (coldest to warmest),
          * then rivers (coldest to warmest), then lakes (coldest to warmest). The last is reserved for empty space.
          * <br>
@@ -817,10 +929,10 @@ public abstract class WorldMapGenerator {
 
         /**
          * Gets the int stored in part A of the given biome code, which can be used as an index into other collections.
-         * This int should almost always range from 0 to 53 (both inclusive), so collections this is used as an index
-         * for should have a length of at least 54.
+         * This int should almost always range from 0 to 60 (both inclusive), so collections this is used as an index
+         * for should have a length of at least 61.
          * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
-         * @return an int stored in the biome code's part A; almost always between 0 and 53, inclusive.
+         * @return an int stored in the biome code's part A; almost always between 0 and 60, inclusive.
          */
         public int extractPartA(int biomeCode)
         {
@@ -829,21 +941,21 @@ public abstract class WorldMapGenerator {
         /**
          * Gets a String from {@link #biomeTable} that names the appropriate biome in part A of the given biome code.
          * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
-         * @return a String that names the biome in part A of biomeCode, or "Ocean" if none can be found
+         * @return a String that names the biome in part A of biomeCode, or "Empty" if none can be found
          */
         public String extractBiomeA(int biomeCode)
         {
             biomeCode &= 1023;
-            if(biomeCode < 54)
+            if(biomeCode < 60)
                 return biomeTable[biomeCode];
             return "Empty";
         }
         /**
          * Gets the int stored in part B of the given biome code, which can be used as an index into other collections.
-         * This int should almost always range from 0 to 53 (both inclusive), so collections this is used as an index
-         * for should have a length of at least 54.
+         * This int should almost always range from 0 to 60 (both inclusive), so collections this is used as an index
+         * for should have a length of at least 61.
          * @param biomeCode a biome code that was probably received from {@link #biomeCodeData}
-         * @return an int stored in the biome code's part B; almost always between 0 and 53, inclusive.
+         * @return an int stored in the biome code's part B; almost always between 0 and 60, inclusive.
          */
         public int extractPartB(int biomeCode)
         {
@@ -858,7 +970,7 @@ public abstract class WorldMapGenerator {
         public String extractBiomeB(int biomeCode)
         {
             biomeCode = (biomeCode >>> 10) & 1023;
-            if(biomeCode < 54)
+            if(biomeCode < 60)
                 return biomeTable[biomeCode];
             return "Empty";
         }
@@ -915,7 +1027,7 @@ public abstract class WorldMapGenerator {
 
                     heightCode = heightCodeData[x][y];
                     if(heightCode == 1000) {
-                        biomeCodeData[x][y] = 54;
+                        biomeCodeData[x][y] = 61;
                         continue;
                     }
                     hot = heatData[x][y];
@@ -990,7 +1102,7 @@ public abstract class WorldMapGenerator {
 
                     bc |= (hc + mc * 6) << 10;
                     if(heightCode < 4)
-                        biomeCodeData[x][y] = bc | (int)((heightData[x][y] + 1.0) / 1.1) << 20;
+                        biomeCodeData[x][y] = bc | (int)((heightData[x][y] + 1.0) * 0.909091) << 20;
                     else if (isRiver || isLake)
                         biomeCodeData[x][y] = bc | (int)(moist * 358.4 + 665.0) << 20;
                     else
@@ -1429,7 +1541,8 @@ public abstract class WorldMapGenerator {
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
             riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
-        protected int wrapY(final int y)  {
+        @Override
+        public int wrapY(final int x, final int y)  {
             return Math.max(0, Math.min(y, height - 1));
         }
 
@@ -1785,7 +1898,8 @@ public abstract class WorldMapGenerator {
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
             riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
-        protected int wrapY(final int y)  {
+        @Override
+        public int wrapY(final int x, final int y)  {
             return Math.max(0, Math.min(y, height - 1));
         }
 
@@ -2021,6 +2135,7 @@ public abstract class WorldMapGenerator {
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
+        private final int[] edges;
 
 
         /**
@@ -2132,6 +2247,7 @@ public abstract class WorldMapGenerator {
             xPositions = new double[width][height];
             yPositions = new double[width][height];
             zPositions = new double[width][height];
+            edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
             terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
@@ -2139,7 +2255,16 @@ public abstract class WorldMapGenerator {
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
             riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
-        protected int wrapY(final int y)  {
+
+        @Override
+        public int wrapX(final int x, final int y) {
+            if(x < edges[y << 1]) return edges[y >> 1 | 1];
+            else if(x > edges[y << 1 | 1]) return edges[y >> 1];
+            else return x;
+        }
+
+        @Override
+        public int wrapY(final int x, final int y)  {
             return Math.max(0, Math.min(y, height - 1));
         }
 
@@ -2207,14 +2332,27 @@ public abstract class WorldMapGenerator {
 //                qc = NumberTools.cos(qs);
 //                qs = NumberTools.sin(qs);
 
+                boolean inSpace = true;
                 for (int x = 0/*, xt = 0*/; x < width; x++) {
                     th = lon * (x - hw);
 //                    ps = trigTable[xt++] * qc;//NumberTools.sin(p);
 //                    pc = trigTable[xt++] * qc;//NumberTools.cos(p);
                     if(th < -3.141592653589793 || th > 3.141592653589793) {
                         heightCodeData[x][y] = 10000;
+                        if(!inSpace)
+                        {
+                            inSpace = true;
+                        }
                         continue;
-                    }ps = NumberTools.sin(th) * qc;
+                    }
+                    if(inSpace)
+                    {
+                        inSpace = false;
+                        edges[y << 1] = x;
+                    }
+                    edges[y << 1 | 1] = x;
+
+                    ps = NumberTools.sin(th) * qc;
                     pc = NumberTools.cos(th) * qc;
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;

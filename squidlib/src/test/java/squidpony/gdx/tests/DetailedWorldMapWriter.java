@@ -41,7 +41,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Ocean                  = 13,
         Empty                  = 14;
 
-    private static final int width = 1920, height = 1080;
+    //private static final int width = 1920, height = 1080;
+    private static final int width = 1000, height = 500;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
 
@@ -61,34 +62,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
+    private long ttg = 0; // time to generate
     private WorldMapGenerator world;
     private WorldMapGenerator.DetailedBiomeMapper dbm;
-/*    private final double[][] shadingData = new double[width][height];
-    private final int[][]
-            heatCodeData = new int[width][height],
-            moistureCodeData = new int[width][height],
-            biomeUpperCodeData = new int[width][height],
-            biomeLowerCodeData = new int[width][height];
-            */
-    private long ttg = 0; // time to generate
 
-    public static final double
-            coldestValueLower = 0.0,   coldestValueUpper = 0.15, // 0
-            colderValueLower = 0.15,   colderValueUpper = 0.31,  // 1
-            coldValueLower = 0.31,     coldValueUpper = 0.5,     // 2
-            warmValueLower = 0.5,      warmValueUpper = 0.69,     // 3
-            warmerValueLower = 0.69,    warmerValueUpper = 0.85,   // 4
-            warmestValueLower = 0.85,   warmestValueUpper = 1.0,  // 5
-
-            driestValueLower = 0.0,    driestValueUpper  = 0.27, // 0
-            drierValueLower = 0.27,    drierValueUpper   = 0.4,  // 1
-            dryValueLower = 0.4,       dryValueUpper     = 0.6,  // 2
-            wetValueLower = 0.6,       wetValueUpper     = 0.8,  // 3
-            wetterValueLower = 0.8,    wetterValueUpper  = 0.9,  // 4
-            wettestValueLower = 0.9,   wettestValueUpper = 1.0;  // 5
-
-    private static float black = SColor.floatGetI(0, 0, 0),
-            white = SColor.floatGet(0xffffffff);
+    private static float black = SColor.FLOAT_BLACK,
+            white = SColor.FLOAT_WHITE;
     // Biome map colors
 
     private static float ice = SColor.ALICE_BLUE.toFloatBits();
@@ -125,22 +104,6 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private static float coastalColor = SColor.lerpFloatColors(shallowColor, white, 0.3f);
     private static float foamColor = SColor.floatGetI(61,  162, 215);
 
-    // Heat map colors
-//    private static float coldest = SColor.floatGetI(0, 255, 255);
-//    private static float colder = SColor.floatGetI(170, 255, 255);
-//    private static float cold = SColor.floatGetI(0, 229, 133);
-//    private static float warm = SColor.floatGetI(255, 255, 100);
-//    private static float warmer = SColor.floatGetI(255, 100, 0);
-//    private static float warmest = SColor.floatGetI(241, 12, 0);
-//
-//    // Moisture map colors
-//    private static float dryest = SColor.floatGetI(255, 139, 17);
-//    private static float dryer = SColor.floatGetI(245, 245, 23);
-//    private static float dry = SColor.floatGetI(80, 255, 0);
-//    private static float wet = SColor.floatGetI(85, 255, 255);
-//    private static float wetter = SColor.floatGetI(20, 70, 255);
-//    private static float wettest = SColor.floatGetI(0, 0, 100);
-
     private static float[] biomeColors = {
             desert,
             savanna,
@@ -155,23 +118,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             beach,
             rocky,
             foamColor
-    }
-//    , biomeDarkColors = {
-//            darkDesert,
-//            darkSavanna,
-//            darkTropicalRainforest,
-//            darkGrassland,
-//            darkWoodland,
-//            darkSeasonalForest,
-//            darkTemperateRainforest,
-//            darkBorealForest,
-//            darkTundra,
-//            darkIce,
-//            darkBeach,
-//            darkRocky,
-//            darkFoamColor
-//    }
-    ;
+    };
 
     protected final static float[] BIOME_TABLE = {
             //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
@@ -184,12 +131,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             Rocky+0.9f, Rocky+0.6f,   Beach+0.4f,          Beach+0.55f,              Beach+0.75f,             Beach+0.9f,              //COASTS
             Ice+0.3f,   River+0.8f,   River+0.7f,          River+0.6f,               River+0.5f,              River+0.4f,              //RIVERS
             Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
-            Empty
-    }, BIOME_COLOR_TABLE = new float[55], BIOME_DARK_COLOR_TABLE = new float[55];
+            Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
+            Empty                                                                                                                      //SPACE
+    }, BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
 
     static {
         float b, diff;
-        for (int i = 0; i < 54; i++) {
+        for (int i = 0; i < 60; i++) {
             b = BIOME_TABLE[i];
             diff = ((b % 1.0f) - 0.48f) * 0.27f;
             BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
@@ -197,98 +145,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                     : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
             BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.08f);
         }
-        BIOME_COLOR_TABLE[54] = BIOME_DARK_COLOR_TABLE[54] = emptyColor;
+        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
     }
-
-    /*
-    protected void makeBiomes() {
-        final WorldMapGenerator world = this.world;
-        final int[][] heightCodeData = world.heightCodeData;
-        final double[][] heatData = world.heatData, moistureData = world.moistureData, heightData = world.heightData;
-        int hc, mc, heightCode;
-        double hot, moist, high, i_hot = 1.0 / this.world.maxHeat;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-
-                heightCode = heightCodeData[x][y];
-                hot = heatData[x][y];
-                moist = moistureData[x][y];
-                high = heightData[x][y];
-                boolean isLake = heightCode >= 4 && world.partialLakeData.contains(x, y),
-                        isRiver = heightCode >= 4 && world.partialRiverData.contains(x, y);
-                if (moist >= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)) {
-                    mc = 5;
-                } else if (moist >= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)) {
-                    mc = 4;
-                } else if (moist >= (wetValueUpper - (dryValueUpper - dryValueLower) * 0.2)) {
-                    mc = 3;
-                } else if (moist >= (dryValueUpper - (drierValueUpper - drierValueLower) * 0.2)) {
-                    mc = 2;
-                } else if (moist >= (drierValueUpper - (driestValueUpper) * 0.2)) {
-                    mc = 1;
-                } else {
-                    mc = 0;
-                }
-
-                if (hot >= (warmestValueUpper - (warmerValueUpper - warmerValueLower) * 0.2) * i_hot) {
-                    hc = 5;
-                } else if (hot >= (warmerValueUpper - (warmValueUpper - warmValueLower) * 0.2) * i_hot) {
-                    hc = 4;
-                } else if (hot >= (warmValueUpper - (coldValueUpper - coldValueLower) * 0.2) * i_hot) {
-                    hc = 3;
-                } else if (hot >= (coldValueUpper - (colderValueUpper - colderValueLower) * 0.2) * i_hot) {
-                    hc = 2;
-                } else if (hot >= (colderValueUpper - (coldestValueUpper) * 0.2) * i_hot) {
-                    hc = 1;
-                } else {
-                    hc = 0;
-                }
-
-                heatCodeData[x][y] = hc;
-                moistureCodeData[x][y] = mc;
-                biomeUpperCodeData[x][y] = isLake ? hc + 48 : (isRiver ? hc + 42 : ((heightCode == 4) ? hc + 36 : hc + mc * 6));
-
-                if (moist >= (wetterValueUpper + (wettestValueUpper - wettestValueLower) * 0.2)) {
-                    mc = 5;
-                } else if (moist >= (wetValueUpper + (wetterValueUpper - wetterValueLower) * 0.2)) {
-                    mc = 4;
-                } else if (moist >= (dryValueUpper + (wetValueUpper - wetValueLower) * 0.2)) {
-                    mc = 3;
-                } else if (moist >= (drierValueUpper + (dryValueUpper - dryValueLower) * 0.2)) {
-                    mc = 2;
-                } else if (moist >= (driestValueUpper + (drierValueUpper - drierValueLower) * 0.2)) {
-                    mc = 1;
-                } else {
-                    mc = 0;
-                }
-
-                if (hot >= (warmerValueUpper + (warmestValueUpper - warmestValueLower) * 0.2) * i_hot) {
-                    hc = 5;
-                } else if (hot >= (warmValueUpper + (warmerValueUpper - warmerValueLower) * 0.2) * i_hot) {
-                    hc = 4;
-                } else if (hot >= (coldValueUpper + (warmValueUpper - warmValueLower) * 0.2) * i_hot) {
-                    hc = 3;
-                } else if (hot >= (colderValueUpper + (coldValueUpper - coldValueLower) * 0.2) * i_hot) {
-                    hc = 2;
-                } else if (hot >= (coldestValueUpper + (colderValueUpper - colderValueLower) * 0.2) * i_hot) {
-                    hc = 1;
-                } else {
-                    hc = 0;
-                }
-
-                biomeLowerCodeData[x][y] = hc + mc * 6;
-
-                if (isRiver || isLake)
-                    shadingData[x][y] = //((moist - minWet) / (maxWet - minWet)) * 0.45 + 0.15 - 0.14 * ((hot - minHeat) / (maxHeat - minHeat))
-                            (moist * 0.35 + 0.6);
-                else
-                    shadingData[x][y] = //(upperProximityH + upperProximityM - lowerProximityH - lowerProximityM) * 0.1 + 0.2
-                            (heightCode == 4) ? (0.18 - high) / (0.08) :
-                                    NumberTools.bounce((high + moist) * (4.1 + high - hot)) * 0.5 + 0.5; // * (7.5 + moist * 1.9 - hot * 0.9)
-            }
-        }
-    }
-    */
 
     private String date, path;
 
@@ -302,7 +160,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Sphere " + date + "/";
         //path = "out/worlds/Tiling " + date + "/";
         //path = "out/worlds/AltSphere " + date + "/";
-        path = "out/worlds/Ellipse  " + date + "/";
+        path = "out/worlds/Ellipse " + date + "/";
 
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
@@ -314,7 +172,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         ///world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.625);
         //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
-        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 1.5);
+        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 1.2);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
@@ -577,7 +435,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        csv4.append("};\n\n");
 //        csv.append(csv2).append(csv3).append(csv4);
 //        Gdx.files.local(path + name + ".java").writeString(csv.toString(), false);
-        if(++counter >= 4)
+        if(++counter >= 50)
             Gdx.app.exit();
     }
     @Override
@@ -610,7 +468,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         config.title = "SquidLib Demo: Detailed World Map";
         config.width = width * cellWidth;
         config.height = height * cellHeight;
-        config.fullscreen = true;
+        //config.fullscreen = true;
         config.foregroundFPS = 0;
         //config.fullscreen = true;
         config.backgroundFPS = 0;
