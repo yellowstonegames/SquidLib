@@ -259,9 +259,19 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      *
      * @param keyColl the collection of keys of the new OrderedMap.
      * @param valueColl the collection of corresponding values in the new OrderedMap.
-     * @param f the load factor.
      * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
      */
+    public OrderedMap(final Collection<K> keyColl, final Collection<V> valueColl) {
+        this(keyColl, valueColl, DEFAULT_LOAD_FACTOR);
+    }
+        /**
+         * Creates a new OrderedMap using the elements of two parallel arrays.
+         *
+         * @param keyColl the collection of keys of the new OrderedMap.
+         * @param valueColl the collection of corresponding values in the new OrderedMap.
+         * @param f the load factor.
+         * @throws IllegalArgumentException if <code>k</code> and <code>v</code> have different lengths.
+         */
     public OrderedMap(final Collection<K> keyColl, final Collection<V> valueColl, final float f) {
         this(keyColl.size(), f);
         if (keyColl.size() != valueColl.size())

@@ -5,6 +5,8 @@ import squidpony.squidmath.*;
 import squidpony.squidmath.Noise.Noise3D;
 import squidpony.squidmath.Noise.Noise4D;
 
+import java.io.Serializable;
+
 /**
  * Can be used to generate world maps with a wide variety of data, starting with height, temperature and moisture.
  * From there, you can determine biome information in as much detail as your game needs, with a default implementation
@@ -35,7 +37,7 @@ import squidpony.squidmath.Noise.Noise4D;
  * zoom level and progressively enlarging and adding detail to all rivers as zoom increases on specified points.
  */
 @Beta
-public abstract class WorldMapGenerator {
+public abstract class WorldMapGenerator implements Serializable {
     public final int width, height;
     public long seed, cachedState;
     public StatefulRNG rng;
@@ -44,7 +46,7 @@ public abstract class WorldMapGenerator {
     public final GreasedRegion landData
             ;//, riverData, lakeData,
             //partialRiverData, partialLakeData;
-    protected transient GreasedRegion workingData;
+    //protected transient GreasedRegion workingData;
     public final int[][] heightCodeData;
     public double waterModifier = -1.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
@@ -119,7 +121,7 @@ public abstract class WorldMapGenerator {
 //        lakeData = new GreasedRegion(width, height);
 //        partialRiverData = new GreasedRegion(width, height);
 //        partialLakeData = new GreasedRegion(width, height);
-        workingData = new GreasedRegion(width, height);
+//        workingData = new GreasedRegion(width, height);
         heightCodeData = new int[width][height];
     }
 
@@ -2258,8 +2260,10 @@ public abstract class WorldMapGenerator {
 
         @Override
         public int wrapX(final int x, final int y) {
-            if(x < edges[y << 1]) return edges[y >> 1 | 1];
-            else if(x > edges[y << 1 | 1]) return edges[y >> 1];
+            if(x < edges[y << 1])
+                return edges[y << 1 | 1];
+            else if(x > edges[y << 1 | 1])
+                return edges[y << 1];
             else return x;
         }
 
@@ -2339,10 +2343,7 @@ public abstract class WorldMapGenerator {
 //                    pc = trigTable[xt++] * qc;//NumberTools.cos(p);
                     if(th < -3.141592653589793 || th > 3.141592653589793) {
                         heightCodeData[x][y] = 10000;
-                        if(!inSpace)
-                        {
-                            inSpace = true;
-                        }
+                        inSpace = true;
                         continue;
                     }
                     if(inSpace)

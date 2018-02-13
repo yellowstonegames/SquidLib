@@ -1,6 +1,7 @@
 package squidpony.squidmath;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -342,7 +343,7 @@ public class DharmaRNG extends RNG implements Serializable{
      * @return a List of T that has length equal to the smaller of count or data.length
      */
     @Override
-    public <T> List<T> randomPortion(List<T> data, int count) {
+    public <T> List<T> randomPortion(Collection<T> data, int count) {
         return super.randomPortion(data, count);
     }
 

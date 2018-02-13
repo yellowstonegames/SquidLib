@@ -468,9 +468,8 @@ public class MultiSpill {
                     continue;
                 else
                     hasFresh = true;
-                Coord cell = currentFresh.randomItem(rng);//toArray(new Coord[currentFresh.size()])[rng.nextInt(currentFresh.size())];
                 if(rng.nextDouble() < biases.get(i)) {
-
+                    Coord cell = currentFresh.randomItem(rng);
                     spreadPattern.get(i).add(cell);
                     spillMap[cell.x][cell.y] = i;
                     filled++;

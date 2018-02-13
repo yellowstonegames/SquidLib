@@ -648,15 +648,15 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given
-     * List at most once; does this by shuffling a copy of the List and getting a section of it.
+     * Gets a random portion of a Collection and returns it as a new List. Will only use a given position in the given
+     * Collection at most once; does this by shuffling a copy of the Collection and getting a section of it.
      *
-     * @param data  a List of T; will not be modified.
+     * @param data  a Collection of T; will not be modified.
      * @param count the non-negative number of elements to randomly take from data
      * @param <T>   can be any non-primitive type
      * @return a List of T that has length equal to the smaller of count or data.length
      */
-    public <T> List<T> randomPortion(List<T> data, int count) {
+    public <T> List<T> randomPortion(Collection<T> data, int count) {
         return shuffle(data).subList(0, Math.min(count, data.size()));
     }
 

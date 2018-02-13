@@ -474,33 +474,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
     }
 
     /**
-     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given
-     * List at most once; does this by shuffling a copy of the List and getting a section of it.
-     *
-     * @param data  a List of T; will not be modified.
-     * @param count the non-negative number of elements to randomly take from data
-     * @return a List of T that has length equal to the smaller of count or data.length
-     */
-    @Override
-    public <T> List<T> randomPortion(List<T> data, int count) {
-        return super.randomPortion(data, count);
-    }
-
-    /**
-     * Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.
-     * May return an empty array if the parameters are invalid (end is less than/equal to start, or start is negative).
-     *
-     * @param start the start of the range of numbers to potentially use (inclusive)
-     * @param end   the end of the range of numbers to potentially use (exclusive)
-     * @param count the total number of elements to use; will be less if the range is smaller than count
-     * @return an int array that contains at most one of each number in the range
-     */
-    @Override
-    public int[] randomRange(int start, int end, int count) {
-        return super.randomRange(start, end, count);
-    }
-
-    /**
      * Shuffle an array using the Fisher-Yates algorithm.
      * @param array an array of double; WILL be modified
      */

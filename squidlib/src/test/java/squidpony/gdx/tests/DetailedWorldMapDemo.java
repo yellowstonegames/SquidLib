@@ -12,6 +12,7 @@ import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.gui.gdx.SquidPanel;
+import squidpony.squidgrid.mapping.FantasyPoliticalMapper;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.*;
 
@@ -56,9 +57,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private final float[][][] cloudData = new float[128][128][128];
     private long counter = 0;
     private boolean cloudy = false;
+    private float nation = 0f;
     private long ttg = 0; // time to generate
     private WorldMapGenerator.DetailedBiomeMapper dbm;
-
+    private FantasyPoliticalMapper fpm;
+    private char[][] political;
     private static float black = SColor.FLOAT_BLACK,
             white = SColor.FLOAT_WHITE;
     // Biome map colors
@@ -129,7 +132,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
             Empty                                                                                                                      //SPACE
     }, BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
-
+    private static final float[] NATION_COLORS = new float[144];
     static {
         float b, diff;
         for (int i = 0; i < 60; i++) {
@@ -141,6 +144,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.08f);
         }
         BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
+        int time = (int) System.currentTimeMillis();
+        for (int i = 0; i < 144; i++) {
+            NATION_COLORS[i] =  SColor.COLOR_WHEEL_PALETTE_REDUCED[((i + time) * 13 & 0x7FFFFFFF) % 144].toFloatBits();
+        }
     }
 
 //    protected void makeBiomes() {
@@ -256,6 +263,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
         world.generateRivers = false;
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
+        fpm = new FantasyPoliticalMapper();
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -319,6 +327,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.zoomIn(1, zoomX, zoomY);
         dbm.makeBiomes(world);
+        political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
         counter = ThrustAltRNG.determine(seed) >>> 48;
         ttg = System.currentTimeMillis() - startTime;
     }
@@ -331,6 +340,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.zoomOut(1, zoomX, zoomY);
         dbm.makeBiomes(world);
+        political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
         counter = ThrustAltRNG.determine(seed) >>> 48;
         ttg = System.currentTimeMillis() - startTime;
     }
@@ -339,6 +349,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.generate(seed);
         dbm.makeBiomes(world);
+        political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
         counter = ThrustAltRNG.determine(seed) >>> 48;
         ttg = System.currentTimeMillis() - startTime;
     }
@@ -347,9 +358,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         // uncomment next line to generate maps as quickly as possible
         //generate(rng.nextLong());
         int hc, tc;
+        char p;
         int[][] heightCodeData = world.heightCodeData;
         double[][] heightData = world.heightData;
-        double xp, yp, zp;
+        //double xp, yp, zp;
         float cloud = 0f, shown, cloudLight = 1f;
         for (int y = 0; y < height; y++) {
             PER_CELL:
@@ -427,6 +439,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                 BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc));
                         if(cloud > 0.0)
                             shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+                        shown = SColor.lerpFloatColors(shown, NATION_COLORS[political[x][y] & 127], nation);
                         display.put(x, y, shown);
 
                         //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
@@ -442,7 +455,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        ++counter;
+        nation = NumberTools.swayTight(++counter * 0.0125f);
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.
