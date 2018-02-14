@@ -2739,12 +2739,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Whirling 3D Noise, 3 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling 3D Noise, 3 octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            xx = x + ctr;
+                            //xx = x + ctr;
                             for (int y = 0; y < height; y++) {
-                                yy = y + ctr;
-                                bright = basicPrepare(invLayered3D.getNoise(xx * 0.0625, yy * 0.0625, ctr * 0.03125));
+                                //yy = y + ctr;
+                                bright = basicPrepare(layered3D.getNoise(x * 0.125, y * 0.125, ctr * 0.0625));
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

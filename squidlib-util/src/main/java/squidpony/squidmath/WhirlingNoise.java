@@ -398,6 +398,42 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
 //            {-0.000000000000002f, -0.850650808352042f,  0.525731112119130f },
 //            { 0.324919696232902f, -0.850650808352041f,  0.000000000000002f }
 //    };
+    protected static final float[] grad3d =
+            {
+                    -0.448549002408981f,  1.174316525459290f,  0.000000000000001f,
+                     0.000000000000001f,  1.069324374198914f,  0.660878777503967f,
+                     0.448549002408981f,  1.174316525459290f,  0.000000000000001f,
+                     0.000000000000001f,  1.069324374198914f, -0.660878777503967f,
+                    -0.725767493247986f,  0.725767493247986f, -0.725767493247986f,
+                    -1.069324374198914f,  0.660878777503967f,  0.000000000000001f,
+                    -0.725767493247986f,  0.725767493247986f,  0.725767493247986f,
+                     0.725767493247986f,  0.725767493247986f,  0.725767493247986f,
+                     1.069324374198914f,  0.660878777503967f,  0.000000000000000f,
+                     0.725767493247986f,  0.725767493247986f, -0.725767493247986f,
+                    -0.660878777503967f,  0.000000000000003f, -1.069324374198914f,
+                    -1.174316525459290f,  0.000000000000003f, -0.448549002408981f,
+                     0.000000000000000f,  0.448549002408981f, -1.174316525459290f,
+                    -0.660878777503967f,  0.000000000000001f,  1.069324374198914f,
+                     0.000000000000001f,  0.448549002408981f,  1.174316525459290f,
+                    -1.174316525459290f,  0.000000000000001f,  0.448549002408981f,
+                     0.660878777503967f,  0.000000000000001f,  1.069324374198914f,
+                     1.174316525459290f,  0.000000000000001f,  0.448549002408981f,
+                     0.660878777503967f,  0.000000000000001f, -1.069324374198914f,
+                     1.174316525459290f,  0.000000000000001f, -0.448549002408981f,
+                    -0.725767493247986f, -0.725767493247986f, -0.725767493247986f,
+                    -1.069324374198914f, -0.660878777503967f, -0.000000000000001f,
+                    -0.000000000000001f, -0.448549002408981f, -1.174316525459290f,
+                    -0.000000000000001f, -0.448549002408981f,  1.174316525459290f,
+                    -0.725767493247986f, -0.725767493247986f,  0.725767493247986f,
+                     0.725767493247986f, -0.725767493247986f,  0.725767493247986f,
+                     1.069324374198914f, -0.660878777503967f,  0.000000000000001f,
+                     0.725767493247986f, -0.725767493247986f, -0.725767493247986f,
+                    -0.000000000000004f, -1.069324374198914f, -0.660878777503967f,
+                    -0.448549002408981f, -1.174316525459290f, -0.000000000000003f,
+                    -0.000000000000003f, -1.069324374198914f,  0.660878777503967f,
+                     0.448549002408981f, -1.174316525459290f,  0.000000000000003f,
+            };
+
     protected static final double[] grad4 =
             {
                     -0.5875167, 1.4183908, 1.4183908, 1.4183908,
@@ -887,6 +923,29 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
     }
 
+    /**
+     * Computes the hashing for an integer point and its dot product with a double point as one step.
+     * This code is drawn from Jordan Peck's MIT-licensed code, https://github.com/Auburns/FastNoise_Java .
+     * It has some minor changes to deal with the different gradient table here and the long seeds.
+     * @param seed
+     * @param x
+     * @param y
+     * @param z
+     * @param xd
+     * @param yd
+     * @param zd
+     * @return a double between -3.0 and 3.0, I think
+     */
+    private static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
+        seed ^= 1619L * x ^ 31337L * y ^ 6971L * z;
+
+        seed = seed * seed * seed * 60493L;
+        seed ^= (seed >>> 13);
+        final int hash = (int)(seed & 31) * 3;
+        return xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2];
+    }
+
+
     /*
     public static double interpolate(double t, double low, double high)
     {
@@ -1134,7 +1193,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         //xin *= epi;
         //yin *= epi;
         //zin *= epi;
-        double n0, n1, n2, n3; // Noise contributions from the four corners
+        double n = 0.0; // Noise contributions are added here
         // Skew the input space to figure out which simplex cell we're in
         double s = (xin + yin + zin) * F3; // Very nice and simple skew
         // factor for 3D
@@ -1211,18 +1270,16 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in
         // (x,y,z), where
         // c = 1/6.
-        double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z)
-        // coords
+        double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
         double y1 = y0 - j1 + G3;
         double z1 = z0 - k1 + G3;
-        double x2 = x0 - i2 + F3; // Offsets for third corner in
-        // (x,y,z) coords
+        double x2 = x0 - i2 + F3; // Offsets for third corner in (x,y,z) coords
         double y2 = y0 - j2 + F3;
         double z2 = z0 - k2 + F3;
-        double x3 = x0 - 0.5; // Offsets for last corner in
-        // (x,y,z) coords
+        double x3 = x0 - 0.5; // Offsets for last corner in (x,y,z) coords
         double y3 = y0 - 0.5;
         double z3 = z0 - 0.5;
+
         // Work out the hashed gradient indices of the four simplex corners
 
         /*
@@ -1239,11 +1296,13 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
 //        int gi1 = determine32(seed + i + i1 + determine(j + j1 + determine(k + k1)));
 //        int gi2 = determine32(seed + i + i2 + determine(j + j2 + determine(k + k2)));
 //        int gi3 = determine32(seed + i + 1 + determine(j + 1 + determine(k + 1)));
-        final int s0 = (int)(seed & 63), s1 = (int)(seed >>> 6 & 63), s2 = (int)(seed >>> 12 & 63);
-        final int gi0 = (perm_x[(i) + s0 & 255] ^ perm_y[(j) + s1 & 255]           ^ perm_z[(k) + s2 & 255]) & 31;
-        final int gi1 = (perm_x[(i + i1) + s0 & 255] ^ perm_y[(j + j1) + s1 & 255] ^ perm_z[(k + k1) + s2 & 255]) & 31;
-        final int gi2 = (perm_x[(i + i2) + s0 & 255] ^ perm_y[(j + j2) + s1 & 255] ^ perm_z[(k + k2) + s2 & 255]) & 31;
-        final int gi3 = (perm_x[(i + 1) + s0 & 255] ^ perm_y[(j + 1) + s1 & 255]   ^ perm_z[(k + 1) + s2  & 255]) & 31;
+
+
+//        final int s0 = (int)(seed & 63), s1 = (int)(seed >>> 6 & 63), s2 = (int)(seed >>> 12 & 63);
+//        final int gi0 = (perm_x[(i) + s0 & 255] ^ perm_y[(j) + s1 & 255]           ^ perm_z[(k) + s2 & 255]) & 31;
+//        final int gi1 = (perm_x[(i + i1) + s0 & 255] ^ perm_y[(j + j1) + s1 & 255] ^ perm_z[(k + k1) + s2 & 255]) & 31;
+//        final int gi2 = (perm_x[(i + i2) + s0 & 255] ^ perm_y[(j + j2) + s1 & 255] ^ perm_z[(k + k2) + s2 & 255]) & 31;
+//        final int gi3 = (perm_x[(i + 1) + s0 & 255] ^ perm_y[(j + 1) + s1 & 255]   ^ perm_z[(k + 1) + s2  & 255]) & 31;
 
         /*
         int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
@@ -1261,36 +1320,28 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         //int gi0 = (hash >>>= 4) % 12, gi1 = (hash >>>= 4) % 12, gi2 = (hash >>>= 4) % 12, gi3 = (hash >>>= 4) % 12;
         // Calculate the contribution from the four corners
         double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 < 0) {
-            n0 = 0.0;
-        } else {
+        if (t0 > 0) {
             t0 *= t0;
-            n0 = t0 * t0 * dot(grad3f[gi0], x0, y0, z0);
+            n += t0 * t0 * gradCoord3D(seed, i, j, k, x0, y0, z0);//dot(grad3f[gi0], x0, y0, z0);
         }
         double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 < 0) {
-            n1 = 0.0;
-        } else {
+        if (t1 > 0) {
             t1 *= t1;
-            n1 = t1 * t1 * dot(grad3f[gi1], x1, y1, z1);
+            n += t1 * t1 * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);//dot(grad3f[gi1], x1, y1, z1);
         }
         double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 < 0) {
-            n2 = 0.0;
-        } else {
+        if (t2 > 0) {
             t2 *= t2;
-            n2 = t2 * t2 * dot(grad3f[gi2], x2, y2, z2);
+            n += t2 * t2 * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);//dot(grad3f[gi2], x2, y2, z2);
         }
         double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 < 0) {
-            n3 = 0.0;
-        } else {
+        if (t3 > 0) {
             t3 *= t3;
-            n3 = t3 * t3 * dot(grad3f[gi3], x3, y3, z3);
+            n += t3 * t3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);//dot(grad3f[gi3], x3, y3, z3);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to stay just inside [-1,1]
-        return 31.5 * (n0 + n1 + n2 + n3);
+        return 31.5 * n;
 
     }
 

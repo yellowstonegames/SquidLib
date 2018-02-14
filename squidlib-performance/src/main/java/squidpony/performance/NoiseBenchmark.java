@@ -31,6 +31,7 @@
 
 package squidpony.performance;
 
+import squidpony.squidmath.FastNoise;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -80,6 +81,26 @@ import static squidpony.squidmath.NumberTools.zigzag;
  * NoiseBenchmark.measureWhirlingAlt2D avgt    5   42.469 ±  0.569  ns/op // WhirlingAlt returns a float, not a double
  * NoiseBenchmark.measureWhirlingAlt3D avgt    5   49.965 ±  1.281  ns/op
  *
+ * Those same noise methods plus FastNoise (modified to use long seeds) (Feb 13 2018)
+ * Benchmark                            Mode  Cnt    Score   Error  Units
+ * NoiseBenchmark.measureFastNoise2D    avgt    5   31.304 ± 0.359  ns/op
+ * NoiseBenchmark.measureFastNoise3D    avgt    5   61.618 ± 0.361  ns/op
+ * NoiseBenchmark.measureFastNoise4D    avgt    5   99.838 ± 0.950  ns/op
+ * NoiseBenchmark.measureMerlin2D       avgt    5   13.113 ± 0.143  ns/op
+ * NoiseBenchmark.measureMerlin3D       avgt    5   33.292 ± 0.285  ns/op
+ * NoiseBenchmark.measurePerlin2D       avgt    5   41.822 ± 0.414  ns/op
+ * NoiseBenchmark.measurePerlin3D       avgt    5   63.389 ± 0.384  ns/op
+ * NoiseBenchmark.measurePerlin4D       avgt    5  117.056 ± 1.296  ns/op
+ * NoiseBenchmark.measureSeeded2D       avgt    5   44.215 ± 0.473  ns/op
+ * NoiseBenchmark.measureSeeded3D       avgt    5   64.608 ± 0.886  ns/op
+ * NoiseBenchmark.measureSeeded4D       avgt    5  101.122 ± 1.551  ns/op
+ * NoiseBenchmark.measureSeeded6D       avgt    5  192.326 ± 2.835  ns/op
+ * NoiseBenchmark.measureWhirling2D     avgt    5   41.822 ± 0.309  ns/op
+ * NoiseBenchmark.measureWhirling3D     avgt    5   58.869 ± 0.093  ns/op
+ * NoiseBenchmark.measureWhirling4D     avgt    5   86.881 ± 0.627  ns/op
+ * NoiseBenchmark.measureWhirlingAlt2D  avgt    5   42.391 ± 0.313  ns/op
+ * NoiseBenchmark.measureWhirlingAlt3D  avgt    5   50.004 ± 0.456  ns/op
+ *
  * 1D sway methods, some of which are used in or for noise (Feb 10, 2018):
  * Benchmark                                   Mode  Cnt    Score    Error  Units
  * NoiseBenchmark.measureSwayBitDouble         avgt    5   11.289 ±  0.774  ns/op // The Bit functions were in SquidLib,
@@ -108,6 +129,11 @@ public class NoiseBenchmark {
     private short x = 0, y = 0, z = 0, w = 0, u = 0, v = 0;
     private float[] f = new float[1024];
     private double[] d = new double[1024];
+    private FastNoise fast = new FastNoise(12345);
+    {
+        fast.setFractalOctaves(1);
+        fast.setFrequency(1f);
+    }
 
     @Setup(Level.Trial)
     public void setup() {
@@ -297,6 +323,21 @@ public class NoiseBenchmark {
     @Benchmark
     public double measureSeeded6D() {
         return SeededNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125, ++u * 0.03125, ++v * 0.03125, 1024L);
+    }
+
+    @Benchmark
+    public float measureFastNoise2D() {
+        return fast.getSimplex(++x * 0.03125f, --y * 0.03125f);
+    }
+
+    @Benchmark
+    public float measureFastNoise3D() {
+        return fast.getSimplex(++x * 0.03125f, --y * 0.03125f, z++ * 0.03125f);
+    }
+
+    @Benchmark
+    public float measureFastNoise4D() {
+        return fast.getSimplex(++x * 0.03125f, --y * 0.03125f, z++ * 0.03125f, w-- * 0.03125f);
     }
 
     /*
