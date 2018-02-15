@@ -29,7 +29,21 @@
 
 package squidpony.squidmath;
 
-public class FastNoise {
+import java.io.Serializable;
+
+/**
+ * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
+ * FastNoise library, hence the name (these functions are sometimes, but not always, very fast). This implements
+ * Noise2D, Noise3D, and Noise4D, and while 2D and 3D noise are very fast, the 4D noise is unusually slow, and normally
+ * you should use WhirlingNoise for 4D noise (for whatever reason, it's the fastest despite also taking steps to ensure
+ * higher quality). Though it doesn't implement an interface for them, you can also use this to get ridged-multi simplex
+ * noise (the same type as {@link Noise.Ridged2D}) with {@link #ridged2D(float, float, int, int)},
+ * {@link #ridged3D(float, float, float, int, int)}, or any of the overloads that allow specifying alternate lacunarity
+ * and gain.
+ */
+public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, Noise.Noise4D {
+    private static final long serialVersionUID = 1L;
+    public static final FastNoise instance = new FastNoise();
     public static final int VALUE = 0, VALUE_FRACTAL = 1, PERLIN = 2, PERLIN_FRACTAL = 3,
             SIMPLEX = 4, SIMPLEX_FRACTAL = 5, CELLULAR = 6, WHITE_NOISE = 7, CUBIC = 8, CUBIC_FRACTAL = 9;
 
@@ -42,7 +56,7 @@ public class FastNoise {
     public static final int CELL_VALUE = 0, NOISE_LOOKUP = 1, DISTANCE = 2, DISTANCE_2 = 3,
             DISTANCE_2_ADD = 4, DISTANCE_2_SUB = 5, DISTANCE_2_MUL = 6, DISTANCE_2_DIV = 7;
 
-    private long seed = 1337L;
+    private int seed = 1337;
     private float frequency = 0.03125f;
     private int interpolation = HERMITE;
     private int noiseType = SIMPLEX;
@@ -61,10 +75,10 @@ public class FastNoise {
     private float gradientPerturbAmp = 1f / 0.45f;
 
     public FastNoise() {
-        this(1337L);
+        this(1337);
     }
 
-    public FastNoise(long seed) {
+    public FastNoise(int seed) {
         this.seed = seed;
         calculateFractalBounding();
     }
@@ -72,7 +86,7 @@ public class FastNoise {
     /**
      * @return Returns the seed used by this object
      */
-    public long getSeed() {
+    public int getSeed() {
         return seed;
     }
 
@@ -84,7 +98,7 @@ public class FastNoise {
      * If this is not called, defaults to 1337L.
      * @param seed a seed as a long
      */
-    public void setSeed(long seed) {
+    public void setSeed(int seed) {
         this.seed = seed;
     }
 
@@ -107,11 +121,11 @@ public class FastNoise {
     }
 
     /**
-     * Sets the default type of noise returned by {@link #getNoise(float, float)}, using one of the following constants
+     * Sets the default type of noise returned by {@link #getConfiguredNoise(float, float)}, using one of the following constants
      * in this class:
      * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
      * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
-     * {@link #CUBIC} (8), or {@link #CUBIC_FRACTAL} (9). If this isn't called, getNoise() will default to SIMPLEX.
+     * {@link #CUBIC} (8), or {@link #CUBIC_FRACTAL} (9). If this isn't called, getConfiguredNoise() will default to SIMPLEX.
      * @param noiseType an int from 0 to 9 corresponding to a constant from this class for a noise type
      */
     public void setNoiseType(int noiseType) {
@@ -185,7 +199,7 @@ public class FastNoise {
     }
 
     // Noise used to calculate a cell value if cellular return type is NoiseLookup
-    // The lookup value is acquired through getNoise() so ensure you setNoiseType() on the noise lookup, value, gradient or simplex is recommended
+    // The lookup value is acquired through getConfiguredNoise() so ensure you setNoiseType() on the noise lookup, value, gradient or simplex is recommended
     public void setCellularNoiseLookup(FastNoise noise) {
         cellularNoiseLookup = noise;
     }
@@ -196,7 +210,37 @@ public class FastNoise {
         this.gradientPerturbAmp = gradientPerturbAmp / (float) 0.45;
     }
 
-    private static class Float2 {
+    @Override
+    public double getNoise(double x, double y) {
+        return singleSimplex(seed, (float)x, (float)y);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, long seed) {
+        return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y);
+    }
+
+    @Override
+    public double getNoise(double x, double y, double z) {
+        return singleSimplex(seed, (float)x, (float)y, (float)z);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, long seed) {
+        return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y, (float)z);
+    }
+
+    @Override
+    public double getNoise(double x, double y, double z, double w) {
+        return singleSimplex(seed, (float)x, (float)y, (float)z, (float)w);
+    }
+
+    @Override
+    public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
+        return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y, (float)z, (float)w);
+    }
+
+    static class Float2 {
         public final float x, y;
 
         public Float2(float x, float y) {
@@ -205,7 +249,7 @@ public class FastNoise {
         }
     }
 
-    private static class Float3 {
+    static class Float3 {
         public final float x, y, z;
 
         public Float3(float x, float y, float z) {
@@ -215,17 +259,47 @@ public class FastNoise {
         }
     }
 
-    private static final Float2[] GRAD_2D = {
+    static final Float2[] GRAD_2D = {
             new Float2(-1, -1), new Float2(1, -1), new Float2(-1, 1), new Float2(1, 1),
             new Float2(0, -1), new Float2(-1, 0), new Float2(0, 1), new Float2(1, 0),
     };
 
-    private static final Float3[] GRAD_3D = {
-            new Float3(1, 1, 0), new Float3(-1, 1, 0), new Float3(1, -1, 0), new Float3(-1, -1, 0),
-            new Float3(1, 0, 1), new Float3(-1, 0, 1), new Float3(1, 0, -1), new Float3(-1, 0, -1),
-            new Float3(0, 1, 1), new Float3(0, -1, 1), new Float3(0, 1, -1), new Float3(0, -1, -1),
-            new Float3(1, 1, 0), new Float3(0, -1, 1), new Float3(-1, 1, 0), new Float3(0, -1, -1),
+    static final Float3[] GRAD_3D =
+            {
+            new Float3(-0.448549002408981f,  1.174316525459290f,  0.000000000000001f  ),
+            new Float3(0.000000000000001f,  1.069324374198914f,  0.660878777503967f   ),
+            new Float3(0.448549002408981f,  1.174316525459290f,  0.000000000000001f   ),
+            new Float3(0.000000000000001f,  1.069324374198914f, -0.660878777503967f   ),
+            new Float3(-0.725767493247986f,  0.725767493247986f, -0.725767493247986f  ),
+            new Float3(-1.069324374198914f,  0.660878777503967f,  0.000000000000001f  ),
+            new Float3(-0.725767493247986f,  0.725767493247986f,  0.725767493247986f  ),
+            new Float3(0.725767493247986f,  0.725767493247986f,  0.725767493247986f   ),
+            new Float3(1.069324374198914f,  0.660878777503967f,  0.000000000000000f   ),
+            new Float3(0.725767493247986f,  0.725767493247986f, -0.725767493247986f   ),
+            new Float3(-0.660878777503967f,  0.000000000000003f, -1.069324374198914f  ),
+            new Float3(-1.174316525459290f,  0.000000000000003f, -0.448549002408981f  ),
+            new Float3(0.000000000000000f,  0.448549002408981f, -1.174316525459290f   ),
+            new Float3(-0.660878777503967f,  0.000000000000001f,  1.069324374198914f  ),
+            new Float3(0.000000000000001f,  0.448549002408981f,  1.174316525459290f   ),
+            new Float3(-1.174316525459290f,  0.000000000000001f,  0.448549002408981f  ),
+            new Float3(0.660878777503967f,  0.000000000000001f,  1.069324374198914f   ),
+            new Float3(1.174316525459290f,  0.000000000000001f,  0.448549002408981f   ),
+            new Float3(0.660878777503967f,  0.000000000000001f, -1.069324374198914f   ),
+            new Float3(1.174316525459290f,  0.000000000000001f, -0.448549002408981f   ),
+            new Float3(-0.725767493247986f, -0.725767493247986f, -0.725767493247986f  ),
+            new Float3(-1.069324374198914f, -0.660878777503967f, -0.000000000000001f  ),
+            new Float3(-0.000000000000001f, -0.448549002408981f, -1.174316525459290f  ),
+            new Float3(-0.000000000000001f, -0.448549002408981f,  1.174316525459290f  ),
+            new Float3(-0.725767493247986f, -0.725767493247986f,  0.725767493247986f  ),
+            new Float3(0.725767493247986f, -0.725767493247986f,  0.725767493247986f   ),
+            new Float3(1.069324374198914f, -0.660878777503967f,  0.000000000000001f   ),
+            new Float3(0.725767493247986f, -0.725767493247986f, -0.725767493247986f   ),
+            new Float3(-0.000000000000004f, -1.069324374198914f, -0.660878777503967f  ),
+            new Float3(-0.448549002408981f, -1.174316525459290f, -0.000000000000003f  ),
+            new Float3(-0.000000000000003f, -1.069324374198914f,  0.660878777503967f  ),
+            new Float3(0.448549002408981f, -1.174316525459290f,  0.000000000000003f   ),
     };
+
 
     private static final Float2[] CELL_2D =
             {
@@ -341,50 +415,62 @@ public class FastNoise {
     }
 
     // Hashing
-    private final static long X_PRIME = 0x71AB0C6C53AADCF1L;
-    private final static long Y_PRIME = 0x47265BB45FE41363L;
-    private final static long Z_PRIME = 0x55B27E7C171A8F6BL;
-    private final static long W_PRIME = 0x6763FD769F39EC63L;
+    private final static int X_PRIME = 0xB4C4D;
+    private final static int Y_PRIME = 0xEE2C1;
+    private final static int Z_PRIME = 0xA7E07;
+    private final static int W_PRIME = 0x8F19B;
+    //public static int randomize8(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 24;}
+    //public static int randomize6(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 26;}
+    //public static int randomize5(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 27;}
+    //public static int randomize4(final int state) {return Integer.rotateLeft((state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0x277B5), 7) - state >>> 28;}
 
-    private static long hash2D(long seed, int x, int y) {
-        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
+    private static int hash2D(int seed, int x, int y) {
+        return Integer.rotateLeft(((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5), 7) - seed >>> 24;
+//        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
     }
 
-    private static long hash3D(long seed, int x, int y, int z) {
-        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
+    private static int hash3D(int seed, int x, int y, int z) {
+        return Integer.rotateLeft(((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5), 7) - seed >>> 24;
+//        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
     }
 
-    private static long hash4D(long seed, int x, int y, int z, int w) {
-        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
+    private static int hash4D(int seed, int x, int y, int z, int w) {
+        return Integer.rotateLeft(((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5), 7) - seed >>> 24;
+//        return (seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22);
     }
 
-    private static float valCoord2D(long seed, int x, int y) {
-        final long n = seed ^ X_PRIME * x ^ Y_PRIME * y;
+    private static float valCoord2D(int seed, int x, int y) {
+        final int n = seed ^ X_PRIME * x ^ Y_PRIME * y;
         return (n * n * n * 60493) / (float) 2147483648.0;
     }
 
-    private static float valCoord3D(long seed, int x, int y, int z) {
-        final long n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z;
+    private static float valCoord3D(int seed, int x, int y, int z) {
+        final int n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z;
         return (n * n * n * 60493) / (float) 2147483648.0;
     }
 
-    private static float valCoord4D(long seed, int x, int y, int z, int w) {
-        final long n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w;
+    private static float valCoord4D(int seed, int x, int y, int z, int w) {
+        final int n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w;
         return (n * n * n * 60493) / (float) 2147483648.0;
     }
 
-    private static float gradCoord2D(long seed, int x, int y, float xd, float yd) {
-        Float2 g = GRAD_2D[(int) ((seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 7];
+    private static float gradCoord2D(int seed, int x, int y, float xd, float yd) {
+        Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) & 7];
+        //Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) >>> 29];
         return xd * g.x + yd * g.y;
     }
 
-    private static float gradCoord3D(long seed, int x, int y, int z, float xd, float yd, float zd) {
-        Float3 g = GRAD_3D[(int) ((seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 15];
+    private static float gradCoord3D(int seed, int x, int y, int z, float xd, float yd, float zd) {
+//        seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z;
+//        seed = seed * seed * seed * 60493;
+//        Float3 g = GRAD_3D[(seed ^ (seed >>> 13)) & 31];
+        Float3 g = GRAD_3D[((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ seed >>> 13) & 31];
+        //Float3 g = GRAD_3D[((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) >>> 27];
         return xd * g.x + yd * g.y + zd * g.z;
     }
 
-    private static float gradCoord4D(long seed, int x, int y, int z, int w, float xd, float yd, float zd, float wd) {
-        final int hash = (int)((seed = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 31;
+    private static float gradCoord4D(int seed, int x, int y, int z, int w, float xd, float yd, float zd, float wd) {
+        final int hash = ((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) - seed >>> 27;
         float a = yd, b = zd, c = wd;            // X,Y,Z
         switch (hash >> 3) {          // OR, DEPENDING ON HIGH ORDER 2 BITS:
             case 1:
@@ -405,8 +491,16 @@ public class FastNoise {
         }
         return ((hash & 4) == 0 ? -a : a) + ((hash & 2) == 0 ? -b : b) + ((hash & 1) == 0 ? -c : c);
     }
-
-    public float getNoise(float x, float y, float z) {
+    /**
+     * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
+     * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
+     * you can call this method to get the particular variety of noise you specified, in 3D.
+     * @param x
+     * @param y
+     * @param z
+     * @return noise as a float from -1f to 1f
+     */
+    public float getConfiguredNoise(float x, float y, float z) {
         x *= frequency;
         y *= frequency;
         z *= frequency;
@@ -416,40 +510,32 @@ public class FastNoise {
                 return singleValue(seed, x, y, z);
             case VALUE_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singleValueFractalFBM(x, y, z);
                     case BILLOW:
                         return singleValueFractalBillow(x, y, z);
                     case RIDGED_MULTI:
                         return singleValueFractalRidgedMulti(x, y, z);
                     default:
-                        return 0;
+                        return singleValueFractalFBM(x, y, z);
                 }
             case PERLIN:
                 return singlePerlin(seed, x, y, z);
             case PERLIN_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singlePerlinFractalFBM(x, y, z);
                     case BILLOW:
                         return singlePerlinFractalBillow(x, y, z);
                     case RIDGED_MULTI:
                         return singlePerlinFractalRidgedMulti(x, y, z);
                     default:
-                        return 0;
+                        return singlePerlinFractalFBM(x, y, z);
                 }
-            case SIMPLEX:
-                return singleSimplex(seed, x, y, z);
             case SIMPLEX_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singleSimplexFractalFBM(x, y, z);
                     case BILLOW:
                         return singleSimplexFractalBillow(x, y, z);
                     case RIDGED_MULTI:
                         return singleSimplexFractalRidgedMulti(x, y, z);
                     default:
-                        return 0;
+                        return singleSimplexFractalFBM(x, y, z);
                 }
             case CELLULAR:
                 switch (cellularReturnType) {
@@ -466,21 +552,27 @@ public class FastNoise {
                 return singleCubic(seed, x, y, z);
             case CUBIC_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singleCubicFractalFBM(x, y, z);
                     case BILLOW:
                         return singleCubicFractalBillow(x, y, z);
                     case RIDGED_MULTI:
                         return singleCubicFractalRigidMulti(x, y, z);
                     default:
-                        return 0;
+                        return singleCubicFractalFBM(x, y, z);
                 }
             default:
-                return 0;
+                return singleSimplex(seed, x, y, z);
         }
     }
 
-    public float getNoise(float x, float y) {
+    /**
+     * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
+     * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
+     * you can call this method to get the particular variety of noise you specified, in 2D.
+     * @param x
+     * @param y
+     * @return noise as a float from -1f to 1f
+     */
+    public float getConfiguredNoise(float x, float y) {
         x *= frequency;
         y *= frequency;
 
@@ -489,40 +581,32 @@ public class FastNoise {
                 return singleValue(seed, x, y);
             case VALUE_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singleValueFractalFBM(x, y);
                     case BILLOW:
                         return singleValueFractalBillow(x, y);
                     case RIDGED_MULTI:
                         return singleValueFractalRidgedMulti(x, y);
                     default:
-                        return 0;
+                        return singleValueFractalFBM(x, y);
                 }
             case PERLIN:
                 return singlePerlin(seed, x, y);
             case PERLIN_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singlePerlinFractalFBM(x, y);
                     case BILLOW:
                         return singlePerlinFractalBillow(x, y);
                     case RIDGED_MULTI:
                         return singlePerlinFractalRidgedMulti(x, y);
                     default:
-                        return 0;
+                        return singlePerlinFractalFBM(x, y);
                 }
-            case SIMPLEX:
-                return singleSimplex(seed, x, y);
             case SIMPLEX_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singleSimplexFractalFBM(x, y);
                     case BILLOW:
                         return singleSimplexFractalBillow(x, y);
                     case RIDGED_MULTI:
                         return singleSimplexFractalRidgedMulti(x, y);
                     default:
-                        return 0;
+                        return singleSimplexFractalFBM(x, y);
                 }
             case CELLULAR:
                 switch (cellularReturnType) {
@@ -539,17 +623,15 @@ public class FastNoise {
                 return singleCubic(seed, x, y);
             case CUBIC_FRACTAL:
                 switch (fractalType) {
-                    case FBM:
-                        return singleCubicFractalFBM(x, y);
                     case BILLOW:
                         return singleCubicFractalBillow(x, y);
                     case RIDGED_MULTI:
                         return singleCubicFractalRigidMulti(x, y);
                     default:
-                        return 0;
+                        return singleCubicFractalFBM(x, y);
                 }
             default:
-                return 0;
+                return singleSimplex(seed, x, y);
         }
     }
 
@@ -613,7 +695,7 @@ public class FastNoise {
     }
 
     private float singleValueFractalFBM(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = singleValue(seed, x, y, z);
         float amp = 1;
 
@@ -630,7 +712,7 @@ public class FastNoise {
     }
 
     private float singleValueFractalBillow(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singleValue(seed, x, y, z)) * 2 - 1;
         float amp = 1;
 
@@ -647,7 +729,7 @@ public class FastNoise {
     }
 
     private float singleValueFractalRidgedMulti(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = 1 - Math.abs(singleValue(seed, x, y, z));
         float amp = 1;
 
@@ -667,7 +749,7 @@ public class FastNoise {
         return singleValue(seed, x * frequency, y * frequency, z * frequency);
     }
 
-    private float singleValue(long seed, float x, float y, float z) {
+    private float singleValue(int seed, float x, float y, float z) {
         int x0 = fastFloor(x);
         int y0 = fastFloor(y);
         int z0 = fastFloor(z);
@@ -723,7 +805,7 @@ public class FastNoise {
     }
 
     private float singleValueFractalFBM(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = singleValue(seed, x, y);
         float amp = 1;
 
@@ -739,7 +821,7 @@ public class FastNoise {
     }
 
     private float singleValueFractalBillow(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singleValue(seed, x, y)) * 2 - 1;
         float amp = 1;
 
@@ -754,7 +836,7 @@ public class FastNoise {
     }
 
     private float singleValueFractalRidgedMulti(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = 1 - Math.abs(singleValue(seed, x, y));
         float amp = 1;
 
@@ -773,7 +855,7 @@ public class FastNoise {
         return singleValue(seed, x * frequency, y * frequency);
     }
 
-    private float singleValue(long seed, float x, float y) {
+    private float singleValue(int seed, float x, float y) {
         int x0 = fastFloor(x);
         int y0 = fastFloor(y);
         int x1 = x0 + 1;
@@ -821,7 +903,7 @@ public class FastNoise {
     }
 
     private float singlePerlinFractalFBM(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = singlePerlin(seed, x, y, z);
         float amp = 1;
 
@@ -838,7 +920,7 @@ public class FastNoise {
     }
 
     private float singlePerlinFractalBillow(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singlePerlin(seed, x, y, z)) * 2 - 1;
         float amp = 1;
 
@@ -855,7 +937,7 @@ public class FastNoise {
     }
 
     private float singlePerlinFractalRidgedMulti(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = 1 - Math.abs(singlePerlin(seed, x, y, z));
         float amp = 1;
 
@@ -875,7 +957,7 @@ public class FastNoise {
         return singlePerlin(seed, x * frequency, y * frequency, z * frequency);
     }
 
-    private float singlePerlin(long seed, float x, float y, float z) {
+    private float singlePerlin(int seed, float x, float y, float z) {
         int x0 = fastFloor(x);
         int y0 = fastFloor(y);
         int z0 = fastFloor(z);
@@ -938,7 +1020,7 @@ public class FastNoise {
     }
 
     private float singlePerlinFractalFBM(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = singlePerlin(seed, x, y);
         float amp = 1;
 
@@ -954,7 +1036,7 @@ public class FastNoise {
     }
 
     private float singlePerlinFractalBillow(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singlePerlin(seed, x, y)) * 2 - 1;
         float amp = 1;
 
@@ -970,7 +1052,7 @@ public class FastNoise {
     }
 
     private float singlePerlinFractalRidgedMulti(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = 1 - Math.abs(singlePerlin(seed, x, y));
         float amp = 1;
 
@@ -989,7 +1071,7 @@ public class FastNoise {
         return singlePerlin(seed, x * frequency, y * frequency);
     }
 
-    private float singlePerlin(long seed, float x, float y) {
+    private float singlePerlin(int seed, float x, float y) {
         int x0 = fastFloor(x);
         int y0 = fastFloor(y);
         int x1 = x0 + 1;
@@ -1041,8 +1123,133 @@ public class FastNoise {
         }
     }
 
-    private float singleSimplexFractalFBM(float x, float y, float z) {
-        long seed = this.seed;
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
+     * (2) and gain (0.5) in 3D.
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered3D(float x, float y, float z, int seed, int octaves)
+    {
+        x *= 0.03125f;
+        y *= 0.03125f;
+        z *= 0.03125f;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+            z *= 2f;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
+     * (2) and gain (0.5) in 3D.
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered3D(float x, float y, float z, int seed, int octaves, float frequency)
+    {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+
+        float sum = singleSimplex(seed, x, y, z);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+            z *= 2f;
+
+            amp *= 0.5f;
+            sum += singleSimplex(seed + i, x, y, z) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+    /**
+     * Generates layered simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (0.5) in 3D.
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @param frequency
+     * @param lacunarity
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered3D(float x, float y, float z, int seed, int octaves, float frequency, float lacunarity)
+    {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+
+        float sum = singleSimplex(seed, x, y, z);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+
+            amp *= 0.5f;
+            sum += singleSimplex(seed + i, x, y, z) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+
+    /**
+     * Generates layered simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves) in 3D.
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @param frequency
+     * @param lacunarity
+     * @param gain
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered3D(float x, float y, float z, int seed, int octaves, float frequency, float lacunarity, float gain)
+    {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+
         float sum = singleSimplex(seed, x, y, z);
         float amp = 1;
 
@@ -1052,14 +1259,36 @@ public class FastNoise {
             z *= lacunarity;
 
             amp *= gain;
-            sum += singleSimplex(++seed, x, y, z) * amp;
+            sum += singleSimplex(seed + i, x, y, z) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+
+    private float singleSimplexFractalFBM(float x, float y, float z) {
+        int seed = this.seed;
+        float sum = singleSimplex(seed, x, y, z);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+
+            amp *= gain;
+            sum += singleSimplex(seed + i, x, y, z) * amp;
         }
 
         return sum * fractalBounding;
     }
 
     private float singleSimplexFractalBillow(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singleSimplex(seed, x, y, z)) * 2 - 1;
         float amp = 1;
 
@@ -1069,14 +1298,116 @@ public class FastNoise {
             z *= lacunarity;
 
             amp *= gain;
-            sum += (Math.abs(singleSimplex(++seed, x, y, z)) * 2 - 1) * amp;
+            sum += (Math.abs(singleSimplex(seed + i, x, y, z)) * 2 - 1) * amp;
         }
 
         return sum * fractalBounding;
     }
 
-    private float singleSimplexFractalRidgedMulti(float x, float y, float z) {
-        long seed = this.seed;
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
+     * (2) and gain (0.5).
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged3D(float x, float y, float z, int seed, int octaves)
+    {
+        x *= 0.03125f;
+        y *= 0.03125f;
+        z *= 0.03125f;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+            z *= 2f;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
+        }
+        return sum;
+    }
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves, specified frequency, and the default
+     * lacunarity (2) and gain (0.5).
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged3D(float x, float y, float z, int seed, int octaves, float frequency)
+    {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+            z *= 2f;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
+        }
+        return sum;
+    }
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (0.5).
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged3D(float x, float y, float z, int seed, int octaves, float frequency, float lacunarity)
+    {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
+        }
+        return sum;
+    }
+
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).
+     * @param x
+     * @param y
+     * @param z
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged3D(float x, float y, float z, int seed, int octaves, float frequency, float lacunarity, float gain)
+    {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+
         float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
         float amp = 1;
 
@@ -1086,7 +1417,23 @@ public class FastNoise {
             z *= lacunarity;
 
             amp *= gain;
-            sum -= (1 - Math.abs(singleSimplex(++seed, x, y, z))) * amp;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
+        }
+        return sum;
+    }
+
+    private float singleSimplexFractalRidgedMulti(float x, float y, float z) {
+        int seed = this.seed;
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z))) * amp;
         }
 
         return sum;
@@ -1100,7 +1447,7 @@ public class FastNoise {
     private final static float G3 = (1f / 6f);
     private final static float G33 = -0.5f;
 
-    private float singleSimplex(long seed, float x, float y, float z) {
+    private float singleSimplex(int seed, float x, float y, float z) {
         float t = (x + y + z) * F3;
         int i = fastFloor(x + t);
         int j = fastFloor(y + t);
@@ -1175,37 +1522,33 @@ public class FastNoise {
         float y3 = y0 + G33;
         float z3 = z0 + G33;
 
-        float n0, n1, n2, n3;
+        float n = 0;
 
         t = 0.6f - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t < 0) n0 = 0;
-        else {
+        if (t > 0) {
             t *= t;
-            n0 = t * t * gradCoord3D(seed, i, j, k, x0, y0, z0);
+            n += t * t * gradCoord3D(seed, i, j, k, x0, y0, z0);
         }
 
         t = 0.6f - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t < 0) n1 = 0;
-        else {
+        if (t > 0) {
             t *= t;
-            n1 = t * t * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
+            n += t * t * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
         }
 
         t = 0.6f - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t < 0) n2 = 0;
-        else {
+        if (t > 0) {
             t *= t;
-            n2 = t * t * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
+            n += t * t * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
         }
 
         t = 0.6f - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t < 0) n3 = 0;
-        else {
+        if (t > 0)  {
             t *= t;
-            n3 = t * t * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
+            n += t * t * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
         }
 
-        return 32 * (n0 + n1 + n2 + n3);
+        return 31.5f * n;
     }
 
     public float getSimplexFractal(float x, float y) {
@@ -1224,8 +1567,117 @@ public class FastNoise {
         }
     }
 
-    private float singleSimplexFractalFBM(float x, float y) {
-        long seed = this.seed;
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
+     * (2) and gain (0.5) in 2D.
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered2D(float x, float y, int seed, int octaves)
+    {
+        x *= 0.03125f;
+        y *= 0.03125f;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
+     * (2) and gain (0.5) in 2D.
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered2D(float x, float y, int seed, int octaves, float frequency)
+    {
+        x *= frequency;
+        y *= frequency;
+
+        float sum = singleSimplex(seed, x, y);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+
+            amp *= 0.5f;
+            sum += singleSimplex(seed + i, x, y) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+    /**
+     * Generates layered simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (0.5) in D.
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered2D(float x, float y, int seed, int octaves, float frequency, float lacunarity)
+    {
+        x *= frequency;
+        y *= frequency;
+
+        float sum = singleSimplex(seed, x, y);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+
+            amp *= 0.5f;
+            sum += singleSimplex(seed + i, x, y) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+
+    /**
+     * Generates layered simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves) in 2D.
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float layered2D(float x, float y, int seed, int octaves, float frequency, float lacunarity, float gain)
+    {
+        x *= frequency;
+        y *= frequency;
+
         float sum = singleSimplex(seed, x, y);
         float amp = 1;
 
@@ -1234,14 +1686,35 @@ public class FastNoise {
             y *= lacunarity;
 
             amp *= gain;
-            sum += singleSimplex(++seed, x, y) * amp;
+            sum += singleSimplex(seed + i, x, y) * amp;
+        }
+        amp = gain;
+        float ampFractal = 1;
+        for (int i = 1; i < octaves; i++) {
+            ampFractal += amp;
+            amp *= gain;
+        }
+        return sum / ampFractal;
+    }
+
+    private float singleSimplexFractalFBM(float x, float y) {
+        int seed = this.seed;
+        float sum = singleSimplex(seed, x, y);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+
+            amp *= gain;
+            sum += singleSimplex(seed + i, x, y) * amp;
         }
 
         return sum * fractalBounding;
     }
 
     private float singleSimplexFractalBillow(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singleSimplex(seed, x, y)) * 2 - 1;
         float amp = 1;
 
@@ -1256,8 +1729,114 @@ public class FastNoise {
         return sum * fractalBounding;
     }
 
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
+     * (2) and gain (0.5).
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged2D(float x, float y, int seed, int octaves)
+    {
+        x *= 0.03125f;
+        y *= 0.03125f;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
+        }
+        return sum;
+    }
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and default frequency (0.03125), lacunarity
+     * (2) and gain (0.5).
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged2D(float x, float y, int seed, int octaves, float frequency)
+    {
+        x *= frequency;
+        y *= frequency;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= 2f;
+            y *= 2f;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
+        }
+        return sum;
+    }
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (0.5).
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged2D(float x, float y, int seed, int octaves, float frequency, float lacunarity)
+    {
+        x *= frequency;
+        y *= frequency;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+
+            amp *= 0.5f;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
+        }
+        return sum;
+    }
+
+    /**
+     * Generates ridged-multi simplex noise with the given amount of octaves and specified lacunarity (the amount of
+     * frequency change between octaves) and gain (loosely, how much to emphasize lower-frequency octaves).
+     * @param x
+     * @param y
+     * @param seed
+     * @param octaves
+     * @return noise as a float between -1f and 1f
+     */
+    public float ridged2D(float x, float y, int seed, int octaves, float frequency, float lacunarity, float gain)
+    {
+        x *= frequency;
+        y *= frequency;
+
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y))) * amp;
+        }
+        return sum;
+    }
+
     private float singleSimplexFractalRidgedMulti(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = 1 - Math.abs(singleSimplex(seed, x, y));
         float amp = 1;
 
@@ -1279,7 +1858,7 @@ public class FastNoise {
     private final static float F2 = 0.5f;
     private final static float G2 = 0.25f;
 
-    private float singleSimplex(long seed, float x, float y) {
+    private float singleSimplex(int seed, float x, float y) {
         float t = (x + y) * F2;
         int i = fastFloor(x + t);
         int j = fastFloor(y + t);
@@ -1305,30 +1884,27 @@ public class FastNoise {
         float x2 = x0 - 1 + F2;
         float y2 = y0 - 1 + F2;
 
-        float n0, n1, n2;
+        float n = 0f;
 
         t = 0.5f - x0 * x0 - y0 * y0;
-        if (t < 0) n0 = 0;
-        else {
+        if (t >= 0) {
             t *= t;
-            n0 = t * t * gradCoord2D(seed, i, j, x0, y0);
+            n += t * t * gradCoord2D(seed, i, j, x0, y0);
         }
 
         t = 0.5f - x1 * x1 - y1 * y1;
-        if (t < 0) n1 = 0;
-        else {
+        if (t > 0) {
             t *= t;
-            n1 = t * t * gradCoord2D(seed, i + i1, j + j1, x1, y1);
+            n += t * t * gradCoord2D(seed, i + i1, j + j1, x1, y1);
         }
 
         t = 0.5f - x2 * x2 - y2 * y2;
-        if (t < 0) n2 = 0;
-        else {
+        if (t > 0)  {
             t *= t;
-            n2 = t * t * gradCoord2D(seed, i + 1, j + 1, x2, y2);
+            n += t * t * gradCoord2D(seed, i + 1, j + 1, x2, y2);
         }
 
-        return 50 * (n0 + n1 + n2);
+        return 50 * n;
     }
 
     public float getSimplex(float x, float y, float z, float w) {
@@ -1350,7 +1926,7 @@ public class FastNoise {
     private final static float F4 = (float) ((2.23606797 - 1.0) / 4.0);
     private final static float G4 = (float) ((5.0 - 2.23606797) / 20.0);
 
-    private float singleSimplex(long seed, float x, float y, float z, float w) {
+    private float singleSimplex(int seed, float x, float y, float z, float w) {
         float n0, n1, n2, n3, n4;
         float t = (x + y + z + w) * F4;
         int i = fastFloor(x + t);
@@ -1458,7 +2034,7 @@ public class FastNoise {
     }
 
     private float singleCubicFractalFBM(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = singleCubic(seed, x, y, z);
         float amp = 1;
         int i = 0;
@@ -1476,7 +2052,7 @@ public class FastNoise {
     }
 
     private float singleCubicFractalBillow(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singleCubic(seed, x, y, z)) * 2 - 1;
         float amp = 1;
         int i = 0;
@@ -1494,7 +2070,7 @@ public class FastNoise {
     }
 
     private float singleCubicFractalRigidMulti(float x, float y, float z) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = 1 - Math.abs(singleCubic(seed, x, y, z));
         float amp = 1;
         int i = 0;
@@ -1517,7 +2093,7 @@ public class FastNoise {
 
     private final static float CUBIC_3D_BOUNDING = 1 / (float) (1.5 * 1.5 * 1.5);
 
-    private float singleCubic(long seed, float x, float y, float z) {
+    private float singleCubic(int seed, float x, float y, float z) {
         int x1 = fastFloor(x);
         int y1 = fastFloor(y);
         int z1 = fastFloor(z);
@@ -1582,7 +2158,7 @@ public class FastNoise {
     }
 
     private float singleCubicFractalFBM(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = singleCubic(seed, x, y);
         float amp = 1;
         int i = 0;
@@ -1599,7 +2175,7 @@ public class FastNoise {
     }
 
     private float singleCubicFractalBillow(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = Math.abs(singleCubic(seed, x, y)) * 2 - 1;
         float amp = 1;
         int i = 0;
@@ -1616,7 +2192,7 @@ public class FastNoise {
     }
 
     private float singleCubicFractalRigidMulti(float x, float y) {
-        long seed = this.seed;
+        int seed = this.seed;
         float sum = 1 - Math.abs(singleCubic(seed, x, y));
         float amp = 1;
         int i = 0;
@@ -1641,7 +2217,7 @@ public class FastNoise {
 
     private final static float CUBIC_2D_BOUNDING = 1 / (float) (1.5 * 1.5);
 
-    private float singleCubic(long seed, float x, float y) {
+    private float singleCubic(int seed, float x, float y) {
         int x1 = fastFloor(x);
         int y1 = fastFloor(y);
 
@@ -1696,7 +2272,7 @@ public class FastNoise {
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[(int) hash3D(seed, xi, yi, zi) & 255];
+                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -1718,7 +2294,7 @@ public class FastNoise {
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[(int) hash3D(seed, xi, yi, zi) & 255];
+                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -1740,7 +2316,7 @@ public class FastNoise {
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[(int) hash3D(seed, xi, yi, zi) & 255];
+                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -1765,8 +2341,8 @@ public class FastNoise {
                 return valCoord3D(0, xc, yc, zc);
 
             case NOISE_LOOKUP:
-                Float3 vec = CELL_3D[(int) hash3D(seed, xc, yc, zc) & 255];
-                return cellularNoiseLookup.getNoise(xc + vec.x, yc + vec.y, zc + vec.z);
+                Float3 vec = CELL_3D[hash3D(seed, xc, yc, zc)];
+                return cellularNoiseLookup.getConfiguredNoise(xc + vec.x, yc + vec.y, zc + vec.z);
 
             case DISTANCE:
                 return distance - 1;
@@ -1788,7 +2364,7 @@ public class FastNoise {
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[(int) hash3D(seed, xi, yi, zi) & 255];
+                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -1806,7 +2382,7 @@ public class FastNoise {
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[(int) hash3D(seed, xi, yi, zi) & 255];
+                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -1824,7 +2400,7 @@ public class FastNoise {
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
                         for (int zi = zr - 1; zi <= zr + 1; zi++) {
-                            Float3 vec = CELL_3D[(int) hash3D(seed, xi, yi, zi) & 255];
+                            Float3 vec = CELL_3D[hash3D(seed, xi, yi, zi)];
 
                             float vecX = xi - x + vec.x;
                             float vecY = yi - y + vec.y;
@@ -1884,7 +2460,7 @@ public class FastNoise {
             case EUCLIDEAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[(int) hash2D(seed, xi, yi) & 255];
+                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -1902,7 +2478,7 @@ public class FastNoise {
             case MANHATTAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[(int) hash2D(seed, xi, yi) & 255];
+                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -1920,7 +2496,7 @@ public class FastNoise {
             case NATURAL:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[(int) hash2D(seed, xi, yi) & 255];
+                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -1942,8 +2518,8 @@ public class FastNoise {
                 return valCoord2D(0, xc, yc);
 
             case NOISE_LOOKUP:
-                Float2 vec = CELL_2D[(int) hash2D(seed, xc, yc) & 255];
-                return cellularNoiseLookup.getNoise(xc + vec.x, yc + vec.y);
+                Float2 vec = CELL_2D[hash2D(seed, xc, yc)];
+                return cellularNoiseLookup.getConfiguredNoise(xc + vec.x, yc + vec.y);
 
             case DISTANCE:
                 return distance - 1;
@@ -1964,7 +2540,7 @@ public class FastNoise {
             case EUCLIDEAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[(int) hash2D(seed, xi, yi) & 255];
+                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -1979,7 +2555,7 @@ public class FastNoise {
             case MANHATTAN:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[(int) hash2D(seed, xi, yi) & 255];
+                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -1994,7 +2570,7 @@ public class FastNoise {
             case NATURAL:
                 for (int xi = xr - 1; xi <= xr + 1; xi++) {
                     for (int yi = yr - 1; yi <= yr + 1; yi++) {
-                        Float2 vec = CELL_2D[(int) hash2D(seed, xi, yi) & 255];
+                        Float2 vec = CELL_2D[hash2D(seed, xi, yi)];
 
                         float vecX = xi - x + vec.x;
                         float vecY = yi - y + vec.y;
@@ -2029,7 +2605,7 @@ public class FastNoise {
     }
 
     public void GradientPerturbFractal3(float[] v3) {
-        long seed = this.seed;
+        int seed = this.seed;
         float amp = gradientPerturbAmp * fractalBounding;
         float freq = frequency;
 
@@ -2042,7 +2618,7 @@ public class FastNoise {
         }
     }
 
-    private void SingleGradientPerturb3(long seed, float perturbAmp, float frequency, float[] v3) {
+    private void SingleGradientPerturb3(int seed, float perturbAmp, float frequency, float[] v3) {
         float xf = v3[0] * frequency;
         float yf = v3[1] * frequency;
         float zf = v3[2] * frequency;
@@ -2074,15 +2650,15 @@ public class FastNoise {
                 break;
         }
 
-        Float3 vec0 = CELL_3D[(int) hash3D(seed, x0, y0, z0) & 255];
-        Float3 vec1 = CELL_3D[(int) hash3D(seed, x1, y0, z0) & 255];
+        Float3 vec0 = CELL_3D[hash3D(seed, x0, y0, z0)];
+        Float3 vec1 = CELL_3D[hash3D(seed, x1, y0, z0)];
 
         float lx0x = lerp(vec0.x, vec1.x, xs);
         float ly0x = lerp(vec0.y, vec1.y, xs);
         float lz0x = lerp(vec0.z, vec1.z, xs);
 
-        vec0 = CELL_3D[(int) hash3D(seed, x0, y1, z0) & 255];
-        vec1 = CELL_3D[(int) hash3D(seed, x1, y1, z0) & 255];
+        vec0 = CELL_3D[hash3D(seed, x0, y1, z0)];
+        vec1 = CELL_3D[hash3D(seed, x1, y1, z0)];
 
         float lx1x = lerp(vec0.x, vec1.x, xs);
         float ly1x = lerp(vec0.y, vec1.y, xs);
@@ -2092,15 +2668,15 @@ public class FastNoise {
         float ly0y = lerp(ly0x, ly1x, ys);
         float lz0y = lerp(lz0x, lz1x, ys);
 
-        vec0 = CELL_3D[(int) hash3D(seed, x0, y0, z1) & 255];
-        vec1 = CELL_3D[(int) hash3D(seed, x1, y0, z1) & 255];
+        vec0 = CELL_3D[hash3D(seed, x0, y0, z1)];
+        vec1 = CELL_3D[hash3D(seed, x1, y0, z1)];
 
         lx0x = lerp(vec0.x, vec1.x, xs);
         ly0x = lerp(vec0.y, vec1.y, xs);
         lz0x = lerp(vec0.z, vec1.z, xs);
 
-        vec0 = CELL_3D[(int) hash3D(seed, x0, y1, z1) & 255];
-        vec1 = CELL_3D[(int) hash3D(seed, x1, y1, z1) & 255];
+        vec0 = CELL_3D[hash3D(seed, x0, y1, z1)];
+        vec1 = CELL_3D[hash3D(seed, x1, y1, z1)];
 
         lx1x = lerp(vec0.x, vec1.x, xs);
         ly1x = lerp(vec0.y, vec1.y, xs);
@@ -2116,7 +2692,7 @@ public class FastNoise {
     }
 
     public void GradientPerturbFractal2(float[] v2) {
-        long seed = this.seed;
+        int seed = this.seed;
         float amp = gradientPerturbAmp * fractalBounding;
         float freq = frequency;
 
@@ -2129,7 +2705,7 @@ public class FastNoise {
         }
     }
 
-    private void SingleGradientPerturb2(long seed, float perturbAmp, float frequency, float[] v2) {
+    private void SingleGradientPerturb2(int seed, float perturbAmp, float frequency, float[] v2) {
         float xf = v2[0] * frequency;
         float yf = v2[1] * frequency;
 
@@ -2155,14 +2731,14 @@ public class FastNoise {
                 break;
         }
 
-        Float2 vec0 = CELL_2D[(int) hash2D(seed, x0, y0) & 255];
-        Float2 vec1 = CELL_2D[(int) hash2D(seed, x1, y0) & 255];
+        Float2 vec0 = CELL_2D[hash2D(seed, x0, y0)];
+        Float2 vec1 = CELL_2D[hash2D(seed, x1, y0)];
 
         float lx0x = lerp(vec0.x, vec1.x, xs);
         float ly0x = lerp(vec0.y, vec1.y, xs);
 
-        vec0 = CELL_2D[(int) hash2D(seed, x0, y1) & 255];
-        vec1 = CELL_2D[(int) hash2D(seed, x1, y1) & 255];
+        vec0 = CELL_2D[hash2D(seed, x0, y1)];
+        vec1 = CELL_2D[hash2D(seed, x1, y1)];
 
         float lx1x = lerp(vec0.x, vec1.x, xs);
         float ly1x = lerp(vec0.y, vec1.y, xs);

@@ -925,8 +925,8 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
 
     /**
      * Computes the hashing for an integer point and its dot product with a double point as one step.
-     * This code is drawn from Jordan Peck's MIT-licensed code, https://github.com/Auburns/FastNoise_Java .
-     * It has some minor changes to deal with the different gradient table here and the long seeds.
+     * This code is largely drawn from Jordan Peck's MIT-licensed code, https://github.com/Auburns/FastNoise_Java ,
+     * present in SquidLib as {@link FastNoise}.
      * @param seed
      * @param x
      * @param y
@@ -934,14 +934,16 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param xd
      * @param yd
      * @param zd
-     * @return a double between -3.0 and 3.0, I think
+     * @return a double between -1.25 and 1.25, I think
      */
-    private static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
-        seed ^= 1619L * x ^ 31337L * y ^ 6971L * z;
-
-        seed = seed * seed * seed * 60493L;
-        seed ^= (seed >>> 13);
-        final int hash = (int)(seed & 31) * 3;
+    private static double gradCoord3D(int seed, int x, int y, int z, double xd, double yd, double zd) {
+//        seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z;
+//        seed = seed * seed * seed * 60493L;
+//        seed ^= (seed >>> 13);
+//        final int hash = (int)(seed & 31) * 3;
+        final int hash =
+                (((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5)
+                       >>> 27) * 3;
         return xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2];
     }
 
@@ -1190,9 +1192,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(final double xin, final double yin, final double zin, final long seed){
-        //xin *= epi;
-        //yin *= epi;
-        //zin *= epi;
+        final int seed2 = (int) (seed ^ seed >>> 32);
         double n = 0.0; // Noise contributions are added here
         // Skew the input space to figure out which simplex cell we're in
         double s = (xin + yin + zin) * F3; // Very nice and simple skew
@@ -1322,22 +1322,22 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
         if (t0 > 0) {
             t0 *= t0;
-            n += t0 * t0 * gradCoord3D(seed, i, j, k, x0, y0, z0);//dot(grad3f[gi0], x0, y0, z0);
+            n += t0 * t0 * gradCoord3D(seed2, i, j, k, x0, y0, z0);//dot(grad3f[gi0], x0, y0, z0);
         }
         double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
         if (t1 > 0) {
             t1 *= t1;
-            n += t1 * t1 * gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);//dot(grad3f[gi1], x1, y1, z1);
+            n += t1 * t1 * gradCoord3D(seed2, i + i1, j + j1, k + k1, x1, y1, z1);//dot(grad3f[gi1], x1, y1, z1);
         }
         double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
         if (t2 > 0) {
             t2 *= t2;
-            n += t2 * t2 * gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);//dot(grad3f[gi2], x2, y2, z2);
+            n += t2 * t2 * gradCoord3D(seed2, i + i2, j + j2, k + k2, x2, y2, z2);//dot(grad3f[gi2], x2, y2, z2);
         }
         double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
         if (t3 > 0) {
             t3 *= t3;
-            n += t3 * t3 * gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);//dot(grad3f[gi3], x3, y3, z3);
+            n += t3 * t3 * gradCoord3D(seed2, i + 1, j + 1, k + 1, x3, y3, z3);//dot(grad3f[gi3], x3, y3, z3);
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to stay just inside [-1,1]

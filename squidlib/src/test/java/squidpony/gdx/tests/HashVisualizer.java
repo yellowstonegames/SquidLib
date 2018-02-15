@@ -73,7 +73,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private int hashMode = 0, rngMode = 26, noiseMode = 0;
+    private static final int NOISE_LIMIT = 115;
+    private int hashMode = 0, rngMode = 26, noiseMode = 112;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -113,6 +114,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise2D layered2D = new Noise.Layered2D(WhirlingNoise.instance, 3);
     private final Noise.Noise3D layered3D = new Noise.Layered3D(WhirlingNoise.instance, 3);
     private final Noise.Noise4D layered4D = new Noise.Layered4D(WhirlingNoise.instance, 3);
+    private final FastNoise fn = new FastNoise(0xDEADBEEF);
     private final Noise.Noise2D invLayered2D = new Noise.InverseLayered2D(WhirlingNoise.instance, 3);
     private final Noise.Noise3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
     private final Noise.Noise4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
@@ -143,6 +145,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
     private final Noise.Noise2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
+    private final Noise.Layered3D layeredWhirling = new Noise.Layered3D(WhirlingNoise.instance,1);
+    private final Noise.Layered3D layeredSeeded = new Noise.Layered3D(SeededNoise.instance,1);
+    private final FastNoise layeredFN = FastNoise.instance;
+
     private final Noise.Noise1D basic1D = new Noise.Basic1D();
     private final Noise.Noise1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
 
@@ -776,6 +782,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         return NumberTools.swayTight(n * 1.5f + 0.5f);
     }
 
+    public static float prepare(double n, float multiplier)
+    {
+        //return (float)n * 0.5f + 0.5f;
+        return NumberTools.swayTight((float)n * multiplier + 0.5f);
+    }
+
+    public static float prepare(float n, float multiplier)
+    {
+        //return (n * 0.5f) + 0.5f;
+        return NumberTools.swayTight(n * multiplier + 0.5f);
+    }
+
     public static float basicPrepare(double n)
     {
         return (float)n * 0.5f + 0.5f;
@@ -907,7 +925,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 4:
                                 if(key == SquidInput.ENTER) {
                                     noiseMode++;
-                                    noiseMode %= 112;
+                                    noiseMode %= NOISE_LIMIT;
                                 }
                                 switch (noiseMode)
                                 {
@@ -4166,6 +4184,38 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 112:
+                        Gdx.graphics.setTitle("Layered Whirling 3D Noise, 3 octaves, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = prepare(layeredWhirling.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456), 1.5f);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 113:
+                        Gdx.graphics.setTitle("Layered Seeded 3D Noise, 3 octaves, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = prepare(layeredSeeded.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456), 1.5f);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 114:
+                        Gdx.graphics.setTitle("Layered FastNoise 3D Noise, 3 octaves, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        layeredFN.setSeed(123456);
+                        layeredFN.setFractalOctaves(1);
+                        layeredFN.setFractalLacunarity(0.5f);
+                        layeredFN.setFractalGain(2f);
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = prepare(layeredFN.getSimplexFractal(x, y, ctr), 1.5f);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
 
                 }
             }

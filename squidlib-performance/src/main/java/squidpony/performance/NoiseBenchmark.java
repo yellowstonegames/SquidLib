@@ -81,7 +81,27 @@ import static squidpony.squidmath.NumberTools.zigzag;
  * NoiseBenchmark.measureWhirlingAlt2D avgt    5   42.469 ±  0.569  ns/op // WhirlingAlt returns a float, not a double
  * NoiseBenchmark.measureWhirlingAlt3D avgt    5   49.965 ±  1.281  ns/op
  *
- * Those same noise methods plus FastNoise (modified to use long seeds) (Feb 13 2018)
+ * Those same noise methods plus FastNoise (current version, uses int seeds) (Feb 14 2018)
+ * Benchmark                            Mode  Cnt    Score    Error  Units
+ * NoiseBenchmark.measureFastNoise2D    avgt    5   29.752 ±  1.547  ns/op // FastNoise is fast for 2D and 3D
+ * NoiseBenchmark.measureFastNoise3D    avgt    5   50.088 ±  3.320  ns/op // uses WhirlingNoise's good gradients
+ * NoiseBenchmark.measureFastNoise4D    avgt    5   97.205 ±  2.828  ns/op // not as good as WhirlingNoise 4D
+ * NoiseBenchmark.measureMerlin2D       avgt    5   13.199 ±  0.242  ns/op // Merlin isn't like the others; it only
+ * NoiseBenchmark.measureMerlin3D       avgt    5   33.539 ±  1.910  ns/op //   produces about 1 usable bit
+ * NoiseBenchmark.measurePerlin2D       avgt    5   42.041 ±  0.431  ns/op // Perlin isn't seedable, which limits it
+ * NoiseBenchmark.measurePerlin3D       avgt    5   63.872 ±  2.904  ns/op
+ * NoiseBenchmark.measurePerlin4D       avgt    5  118.307 ±  3.781  ns/op
+ * NoiseBenchmark.measureSeeded2D       avgt    5   44.349 ±  0.727  ns/op
+ * NoiseBenchmark.measureSeeded3D       avgt    5   64.938 ±  0.454  ns/op // uses definitely bad gradients
+ * NoiseBenchmark.measureSeeded4D       avgt    5  102.355 ±  5.670  ns/op
+ * NoiseBenchmark.measureSeeded6D       avgt    5  195.494 ± 15.235  ns/op // only 6D noise we have, still has issues
+ * NoiseBenchmark.measureWhirling2D     avgt    5   42.168 ±  1.827  ns/op
+ * NoiseBenchmark.measureWhirling3D     avgt    5   64.308 ±  3.967  ns/op // uses good gradients based on a polyhedron
+ * NoiseBenchmark.measureWhirling4D     avgt    5   86.755 ±  1.286  ns/op // fastest 4D, good polychoronal gradients
+ * NoiseBenchmark.measureWhirlingAlt2D  avgt    5   42.485 ±  0.626  ns/op
+ * NoiseBenchmark.measureWhirlingAlt3D  avgt    5   49.882 ±  0.572  ns/op // similar to non-Alt but returns a float
+ *
+ * Those same noise methods plus FastNoise (earlier version, uses long seeds) (Feb 13 2018)
  * Benchmark                            Mode  Cnt    Score   Error  Units
  * NoiseBenchmark.measureFastNoise2D    avgt    5   31.304 ± 0.359  ns/op
  * NoiseBenchmark.measureFastNoise3D    avgt    5   61.618 ± 0.361  ns/op
