@@ -2274,6 +2274,14 @@ public abstract class WorldMapGenerator implements Serializable {
 
         private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;
 
+        /**
+         * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.
+         * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
+         * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
+         * than {@link Math#asin(double)}.
+         * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
+         * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
+         */
         private static double asin(double a) {
             return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
                     (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
@@ -2310,9 +2318,10 @@ public abstract class WorldMapGenerator implements Serializable {
             double p,
                     ps, pc,
                     qs, qc,
-                    h, temp,
-                    i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),
-                    xPos = startX, yPos, i_uw = usedWidth / (double)width, i_uh = usedHeight / (height+2.0),
+                    h, temp, yPos,
+                    //i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),
+                    //xPos = startX, yPos, i_uw = usedWidth / (double)width,
+                    i_uh = usedHeight / (height+2.0),
                     th, thx, thy, lon, lat, ipi = 1.0 / Math.PI,
                     rx = width * 0.25, irx = 1.0 / rx, hw = width * 0.5,
                     ry = height * 0.5, iry = 1.0 / ry;

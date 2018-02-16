@@ -4605,6 +4605,83 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return me2.remake(this).surface().size() / irregularCount;
     }
 
+    private static int median(int[] working, int start, int amount)
+    {
+        Arrays.sort(working, start, start + amount);
+        if ((amount & 1) == 0) {
+            return working[start + (amount >> 1) - 1] + working[start + (amount >> 1)] >>> 1;
+        } else {
+            return working[start + (amount >> 1)];
+        }
+    }
+
+    /**
+     * Calculates a perceptual hash for this GreasedRegion using a method that is only precise for some sizes of
+     * GreasedRegion; it writes a result to into, and uses working as a temporary buffer. The lengths of into and
+     * working should be related; if into is length 1, then working should be length 64, and though the hash won't be
+     * very detailed, it will work well for images with width and height that are multiples of 8; if into is length 4,
+     * then working should be length 256, and this will work with more detail on images that have width and height that
+     * are multiples of 16. If working is null or is too small, then this won't reuse it and will allocate an
+     * appropriately-sized array for internal use.
+     * <br>
+     * Ported from https://github.com/commonsmachinery/blockhash/blob/master/blockhash.c , which is MIT-licensed.
+     * @param into should be a long array of length 1 or 4; the contents don't matter and this will be where output is written to
+     * @param working should be an int array of length 64 (if into has length 1) or 256 (if into has length 4); may be null if you like garbage collection
+     */
+    public void perceptualHashQuick(long[] into, int[] working)
+    {
+        final int bits = 8 << (Integer.numberOfTrailingZeros(Integer.highestOneBit(into.length)) >> 1);
+        if(working == null || working.length < bits * bits)
+            working = new int[bits * bits];
+        final int blockWidth = width / bits, blockHeight = height / bits, blockWidthSections = blockWidth * ySections;
+        if(blockHeight == 1)
+        {
+            for (int y = 0; y < bits; y++) {
+                for (int x = 0; x < bits; x++) {
+                    int value = 0;
+                    for (int ix = 0; ix < blockWidthSections; ix += ySections) {
+                        value += (data[x * blockWidthSections + ix + (y >> 6)] >>> (y & 63) & 1L);
+                    }
+                    working[x * bits + y] = value;
+                }
+            }
+        }
+        else if(blockHeight < 64 && Integer.bitCount(blockHeight) == 1) {
+            final long yBlockMask = ~(-1L << blockHeight);
+            final int divisorMask = (64 / blockHeight) - 1;
+            long currentMask;
+            int blockY = 0;
+            for (int y = 0; y < bits; y++, blockY += blockHeight) {
+                currentMask = yBlockMask << ((y & divisorMask) << blockHeight);
+                for (int x = 0; x < bits; x++) {
+                    int value = 0;
+                    for (int ix = 0; ix < blockWidthSections; ix += ySections) {
+                        value += Long.bitCount(data[x * blockWidthSections + ix + (blockY >> 6)] & currentMask);
+                    }
+                    working[x * bits + y] = value;
+                }
+            }
+        }
+        final int cellsPerBlock = blockWidth * blockHeight, numBlocks = bits * bits,
+                halfCellCount = cellsPerBlock >>> 1;
+        int bandSize = numBlocks >>> 2;
+        int m, v;
+        int currentInto = 0;
+        long currentIntoPos = 1L;
+        for (int i = 0; i < 4; i++) {
+            m = median(working, i * bandSize, bandSize);
+            for (int j = i * bandSize; j < (i + 1) * bandSize; j++) {
+                v = working[j];
+                if(v > m || (v - m == 0 && m > halfCellCount)) into[currentInto] |= currentIntoPos;
+                if((currentIntoPos <<= 1) == 0)
+                {
+                    ++currentInto;
+                    currentIntoPos = 1L;
+                }
+            }
+        }
+    }
+
     /*
     // This showed a strong x-y correlation because it didn't have a way to use a non-base-2 van der Corput sequence.
     // It also produced very close-together points, unfortunately.
