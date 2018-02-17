@@ -5001,7 +5001,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
     private static int nextPowerOfTwo(int n)
     {
-        int highest = Integer.highestOneBit(n);
+        final int highest = Integer.highestOneBit(n);
         return  (highest == NumberTools.lowestOneBit(n)) ? highest : highest << 1;
     }
 
@@ -5627,7 +5627,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         return width +
                 "," + height +
-                "," + StringKit.join(",",data);
+                "," + StringKit.joinAlt(",",data);
     }
     public static GreasedRegion deserializeFromString(String s)
     {
@@ -5638,7 +5638,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         String[] splits = StringKit.split(s.substring(gap2+1), ",");
         long[] data = new long[splits.length];
         for (int i = 0; i < splits.length; i++) {
-            data[i] = Long.parseLong(splits[i]);
+            data[i] = StringKit.longFromDec(splits[i]);
         }
         return new GreasedRegion(data, w, h);
     }
@@ -5654,6 +5654,36 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public static GreasedRegion of(final int width, final int height, final long... data)
     {
         return new GreasedRegion(data, width, height);
+    }
+
+    public String toCompressedString()
+    {
+        if(height > 0x4000)
+            throw new UnsupportedOperationException("Height is too large to compress, aborting.");
+        StringBuilder sb = new StringBuilder(width * height >> 2);
+        boolean on = false;
+        int span = 0;
+        char adjust = (char) nextPowerOfTwo(Math.max(height, 32));
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(((data[x * ySections + (y >> 6)] & (1L << (y & 63))) == 0) == on)
+                    span++;
+                else
+                {
+                    on = !on;
+                    sb.append((char)(adjust | span));
+                    span = 1;
+                }
+            }
+            if(on)
+            {
+                sb.append((char)(adjust | span));
+            }
+            sb.append('\n');
+            on = false;
+            span = 0;
+        }
+        return sb.toString();
     }
 
     @Override

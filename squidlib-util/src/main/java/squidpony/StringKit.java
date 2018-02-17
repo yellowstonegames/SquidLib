@@ -233,6 +233,21 @@ public class StringKit {
     }
 
     /**
+     * Like {@link #join(CharSequence, long...)}, but this appends an 'L' to each number so they can be read in by Java.
+     * @param delimiter
+     * @param elements
+     * @return
+     */
+    public static String joinAlt(CharSequence delimiter, long... elements) {
+        if (elements == null || elements.length == 0) return "";
+        StringBuilder sb = new StringBuilder(elements.length << 2);
+        sb.append(elements[0]).append('L');
+        for (int i = 1; i < elements.length; i++) {
+            sb.append(delimiter).append(elements[i]).append('L');
+        }
+        return sb.toString();
+    }
+    /**
      * Scans repeatedly in {@code source} for the String {@code search}, not scanning the same char twice except as part
      * of a larger String, and returns the number of instances of search that were found, or 0 if source is null or if
      * search is null or empty.
