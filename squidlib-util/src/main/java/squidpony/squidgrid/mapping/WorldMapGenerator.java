@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.LZSPlus;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
 import squidpony.squidmath.Noise.Noise3D;
@@ -1426,7 +1427,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * portion of each non-equator row, arranging the removal so if the map is n units wide at the equator, the height
      * should be n divided by {@link Math#PI}, and progressively more cells are removed from rows as you move away from
      * the equator (down to empty space or 1 cell left at the poles).
-     * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
+     * <a href="https://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
      */
     public static class SphereMap extends WorldMapGenerator {
         protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
@@ -2112,23 +2113,15 @@ public abstract class WorldMapGenerator implements Serializable {
         }
     }
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that distorts the map as it nears the poles, expanding the
-     * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
-     * this is an alternative implementation to WorldMapGenerator.SphereMap that is meant to avoid certain artifacts
-     * commonly produced by that generator. This generator does not permit a choice of {@link Noise3D}, since it uses a
-     * mix of 3D and 4D noise.
-     * This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch this does.
-     * You might also want to produce an oval map that more-accurately represents the changes in the diameter of a
-     * latitude line on a spherical world; this could be done by using one of the maps this class makes and removing a
-     * portion of each non-equator row, arranging the removal so if the map is n units wide at the equator, the height
-     * should be n divided by {@link Math#PI}, and progressively more cells are removed from rows as you move away from
-     * the equator (down to empty space or 1 cell left at the poles).
-     * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
+     * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto an ellipse that should be
+     * twice as wide as it is tall (although you can stretch it by width and height that don't have that ratio).
+     *
+     * <a href="https://i.imgur.com/BBKrKjI.png" >Example map, showing ellipse shape</a>
      */
     @Beta
     public static class EllipticalMap extends WorldMapGenerator {
         protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
+        protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
@@ -2137,7 +2130,7 @@ public abstract class WorldMapGenerator implements Serializable {
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
-        private final int[] edges;
+        protected final int[] edges;
 
 
         /**
@@ -2272,7 +2265,7 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
-        private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;
+        //private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;
 
         /**
          * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.
@@ -2282,7 +2275,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
          * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
          */
-        private static double asin(double a) {
+        protected static double asin(double a) {
             return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
                     (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
         }
@@ -2525,6 +2518,363 @@ public abstract class WorldMapGenerator implements Serializable {
             }
             */
         }
+    }
+
+    /**
+     * An unusual map generator that imitates an existing map (such as a map of Earth, which it can do by default). It
+     * uses the Mollweide projection (an elliptical map projection, the same as what EllipticalMap uses) for both its
+     * input and output; <a href="https://squidpony.github.io/SquidLib/MimicWorld.png">an example can be seen here</a>,
+     * imitating Earth using a 512x256 world map as a GreasedRegion for input.
+     */
+    public static class MimicMap extends EllipticalMap
+    {
+        public GreasedRegion earth;
+        public GreasedRegion shallow = new GreasedRegion(512, 256);
+        public GreasedRegion coast = new GreasedRegion(512, 256);
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should look like Earth using an elliptical projection
+         * (specifically, a Mollweide projection).
+         * Always makes a 512x256 map.
+         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * If you were using {@link MimicMap#MimicMap(long, Noise3D, double)}, then this would be the
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, WhirlingNoise.instance, 1.0}.
+         */
+        public MimicMap() {
+            this(0x1337BABE1337D00DL
+                    , WhirlingNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
+         * The initial seed is set to the same large long every time, and it's likely that you would set the seed when
+         * you call {@link #generate(long)}. The width and height of the map cannot be changed after the fact.
+         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         */
+        public MimicMap(GreasedRegion toMimic) {
+            this(0x1337BABE1337D00DL, toMimic,  WhirlingNoise.instance,1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
+         * Takes an initial seed and the GreasedRegion containing land positions. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact.
+         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         */
+        public MimicMap(long initialSeed, GreasedRegion toMimic) {
+            this(initialSeed, toMimic, WhirlingNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
+         * Takes an initial seed, the GreasedRegion containing land positions, and a multiplier that affects the level
+         * of detail by increasing or decreasing the number of octaves of noise used. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact.
+         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public MimicMap(long initialSeed, GreasedRegion toMimic, double octaveMultiplier) {
+            this(initialSeed, toMimic, WhirlingNoise.instance, octaveMultiplier);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
+         * Takes an initial seed, the GreasedRegion containing land positions, and parameters for noise generation (a
+         * {@link Noise3D} implementation, which is usually {@link WhirlingNoise#instance}. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call
+         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact. Both WhirlingNoise
+         * and FastNoise make sense to use for {@code noiseGenerator}, and the seed it's constructed with doesn't matter
+         * because this will change the seed several times at different scales of noise (it's fine to use the static
+         * {@link FastNoise#instance} or {@link WhirlingNoise#instance} because they have no changing state between runs
+         * of the program). Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link FastNoise}
+         */
+        public MimicMap(long initialSeed, GreasedRegion toMimic, Noise3D noiseGenerator) {
+            this(initialSeed, toMimic, noiseGenerator, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed, the GreasedRegion containing land positions, parameters for noise generation (a
+         * {@link Noise3D} implementation, which is usually {@link WhirlingNoise#instance}, and a multiplier on how many
+         * octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers producing even more
+         * detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
+         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
+         * cannot be changed after the fact. Both WhirlingNoise and FastNoise make sense to use
+         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance} or
+         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). The
+         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
+         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
+         * is fine and may even be too high for maps that don't require zooming.
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link FastNoise}
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public MimicMap(long initialSeed, GreasedRegion toMimic, Noise3D noiseGenerator, double octaveMultiplier) {
+            super(initialSeed, toMimic.width, toMimic.height, noiseGenerator, octaveMultiplier);
+            earth = toMimic;
+            coast.remake(earth).surface(2);
+            shallow.remake(earth).fringe(3);
+        }
+
+        /**
+         * Constructs a 512x256 elliptical world map that will use land forms with a similar shape to Earth.
+         * @param initialSeed
+         * @param noiseGenerator
+         * @param octaveMultiplier
+         */
+        public MimicMap(long initialSeed, Noise3D noiseGenerator, double octaveMultiplier)
+        {
+            this(initialSeed,
+                    GreasedRegion.deserializeFromString(LZSPlus.decompress("ᖢᠳ\u0088氦悠ぉ䓙㛃疓ᾏ尿䣢✶㒫敹✊盰织\u0CDC淶\u1FD5玿帛悟სᇢ捉䀡㇀׀ԃ̠\u0CE4倽䘾६.ど嗋䇗掊䞯\u0AC6ᖌ猘⎲䯬䃣䱟Ȥᮔ囵⟡㎡ᚲᠫዌђ\u2D26ڐ䍘෴℞吹ᡖ孶擉ྠ䒻㒵၊恝Ψᙤॉᄕ̡ᖕ᪁敨ᖨᝆӋᝳ娻Žዠす\u17DE∰屴啎▋慳 ᝐ⫑卲ฤ〸禷\u0DEB㕀ᕅ祩噛❆寰嫩旭⪾൵◬أ椩ழ䧩Ⱖ䥨ᥞ暯◉⅘咖᰷♙撹㿦暠䂗㠺̒ᚧⱖస岾㭹ኙಒ\u2EF5༪ູᡵ旈簡ఠ㐈恝〺㈈ਮཱུ╅ⱖ㚼嘐琫\u2E42\u0BA0瓷\u2BF2暅㺨ಬᔑ\u2E61\u1AFA◺吮\u31E6埰⛿ⱇ坒Łт喩唒偉ⶳ㒗 ⎊̀ᐮ⩕滹\u2BF3༘ᰰ睹侄\u2D2BⒺ濙洡⧅咫ᤪЯ░ଌ浨槓哬呾Ê䴎柖梑䩊㥤Ꮻ猑嗀挗Ꮹ㐠愢⼐ʫᤔ獩緔ⷰᒺⱛ\u2BF2ⲑ➱\u09D0䯷㽶ឍ㐴敻䭊揚▪ɍ滔氣ြ㶡ᰱ榓哥磀ኲ勆ᴕ总嗀ජ佋⒮宵挈ᙛ瑻⩔伉と崡擇异Ü榉᪪⛓珛盀皅旱㝙♵⊼捝削℄漩⍨牎ᅬⵚ䈬ᒢ䓉㒩㉑坌\u08D1ဤ爅㩈թĨ傠㈾ᓣㅊ曰༱◉十䐢䑩ྣੈӑ⇛ᅅٌ䛄㔼ѱ᥎晘☤埰瞱㓩強૰䑢䉌圧䜹挥⚨ؤұ⢘䫂瀯愨恩朩\u1AB8ᐩྱ㙴㈤䳲ḧ冐仔ඡパ搈⌢斅⊹䩃ģ䎘㩔\u0878犵໐౩䶒㉏䋰ᑦ៩义⠉ᄤ㔵祅䕑䒊䨝㲀䰹縦䖑ऩ侪㨱ଣ稲勅ᒕ䓈盆䜙㦂⼝⾴䃓フ䔸ᕘ杳山༴礷䐹\u2E5A⢡䵋⟕♦促َ\u13FD䘷䎘㫄₊➫为㈥琥ୌɔ瘴Ǳಿ⌘䍻ⱺ睊传〣䟨矗\u0B7A捪圹⒞楙ॆ≝䜷㈝ᕚ\u243B䁣爙䭡䙐犥᠐炎凙澇皱㝬敤ᓔĽվ♛濞\u2D26䑾嚣ᤲ冐ヵ勱穗愛嫞殥沱䝩僫攒ம梃့涔愥䝰卪ᏘᒎᏨ坼\u0EC7ệ䑨⾭ⓕ断冐秝\u0EDB炑\u0C51崣䖭槉⃝\u1AC3䑱㝛\u19DB⪷䂙榄〓撔࿘幐\u0C3A哨歵ᩎ䄩ٛ₵孚⥌ằ㎇⋁強瓇䂨ᕎ斨漖\u2B68ᘱ䔭档崷哧⢑ᴺ⏩唒偱䩋瓰㨾䙛穄䬵‰攮⾤㤸ဴ㥱ᵈ⾮ᕓᝓ⎔\u20C3\u31BB归⍉⛝义㴑绔Ǳ䌳庳◥Ⓢᗻ⊡\u0E5D䒐◔≄ዂ⸮ㇸ㪏╘˷絔䮙ス烰䬱फ粻塐༸ᵉ倠ᱨ̹瘓⾌儩璒ⷵ㳭╩瑷㙰⊖线咆❰悆䡊狋䠋咥㷫Ꮾ绹䙆❨估\u0BD2ⅵ㾋䛨堡㻟౩漽棆\u05C8材⎄≠䉖Ᏸ瀳ჸ✑窿屍ᢪ戬獠ᩇ㱛ͨ㮥\u0089\u0B80ⴹ∔ہؤ㮋㐶摝㘌\u0C00竳\u0C91在瓉\u05CA㩀⎬㯧㱃≈ബ䛔䔢ᒧ禃Ḁ塻懐噳手ቌࠣ懞ⶐ愯ᇎ\u0BE0䑿捡㢫⡩\u08CE弡Ӯ\u0B11㬼ハᏙ☬拎ᚣѵᄔⴶᄫ߃Ṣ紬㲁\u05CE搔ᷤ㲟ӑ⍯䉶૭璡抚ᨤ⑫䜀䑓\u1779䍞䂥౧ༀมᷙ埣㶨┈厭砨䪪率绱⪂䘢意\u0FE6晑剚⍢䥹ᜒ䛪勾↜唿ࡂᦱ䈺\u09D3㊩抋▤㚬ሒղਦ剫ၒ灣▮፮㑜⛼ኲ㤆ଠႤ灃䮂ᴽ⋜᬴椁仪冻೭ៀ樣テ⳹洭㧥㚰广Ԑ瞡哵♥䱤為チ昽ガ৮礞瘌焈帺e⼳ℎ᮱Ꮨ碌淪洊\u2432㎋ࣽᑰẪ⃘䃑Ῑ٘᪡碴⟌瘍㧪\u0C0Dද၊ጀ个䭼㺦ṵ嗹檋そ溁剫℆㏒⊃䅊⠭峏ង刴幦䋜毹ᇱტ㜳䩴₲๎狹ᑪ䈯ಐ䳚恹㡲ᙏ穠∢咏痄й嬓䆵㓚爉㉀帽㫪爓䨮擐沭Ⴈ༢替倱㉁翕䋸ᵉ㑍▬⺨㻱ȁ\u085F籗Ủ၊炄ᎆ\u312Fδஈאד昼愹ପ\u10C6\u05FBˊ䣤ٌů榥⡒䛗Ꮗଛ⤤欽ᤰ⊈Ꮸ⏨ᥒ勅≔᎔⭆帺ᗈ摎剬䂎瓽䔀䂀བྷ⁍ᙴ䬥䉄⋇ᭉ⠵⊣熵奫懪⊸唳ൌ㉢∔⁙ㅌ\u0588儆˅༠焚Ϫ椵䁓㲁䉛䁰嵲ゕᢠ䭚ⵠ۶杌痸仭籅檰㗠ⴹᖱᵰ橴倳\u0C50∎䦀ẫᖬ揸嶕徃㱲僴͑䉓ቖ渌౽檕㒣ᵏ彛Ⴛၟ㓢ᘡҸኵᮉ滽㯼͍ਧⓖ攵ᥠ尿㗠⧴展⡡㝲ᰬᣰ䔭呐篗䵮ຽ༴涙ᔽ⻣㈾ใ竓子柔棠懠⻡䵵啠惭梁䪍ᷕႆⅣ㓚䌽∧略䕲\u242F摥䪈Ἤھḁ㢨㣈ᨉశ䰤愻ᖊ塢₵➖ᜄⳇⰄュ౬䑘淴卽\u1AC6̲㓚ې瑚㚬㊤棆椔粭巓儑冣烒峰嘲癜₂ᬅվ啕ピ䴼ḩ樿ᩓ\u00AD県る⺟ᯍ幄┏敃䄸疦\u1DF4⣜୷⨎旄\u4DB9㠬㒐ડ▋ៃ䋌屈်娦杻எᅿ続㐹町\u0B8C椡嫾㦾峡㎁憈ᜮ␖\u0AF7妈㛁ⷮ徬ᣴ◧瑳\u0560㛞灂唊㴨͠䵒ᵎ惵䃾断姰ⷘᠯ䙬淫㩵ݴ㴾ⅱ㨔希⢫岄ŏ摉掜Η垫穆π墉奪毤ᖪऐ敖墷ॴ䧯寞⁀榧ᶑඬᬮ嵊ȸᖤ䵠庯ਿ浬姮᱖䀱හ\u18F8燱ὔ㕴䵣垏፭\u12B6屜洴皽禴砒粴˲\u18AC᧹ᴔ՝紊姳䡾滄痱崇狉物᪦唫埩珑㯣ᚸ剗姯䌉侙窼◴䆴⟑❿僥缾ؑཝᬒ僝䝾炾巤ᶏ瘃䮁㮧䜷ᡯᵴ崞狹ᚍ\u10CC巗湅ᵼ䟪䷴䫅粲╥଼ٕ㗪⺉⥏㴣喂婼剗\u2B92剻㫇捽▵\u0C75ᢁ玈弭ᠺ焍\u0B4E竽盺ه廜㟘䫠\u2438ᔨ揤➿国溫扜䯴㻽凃摟Ⓒ枴㴇ၮ祡ㆠ䢤㍮ၐ檌ຄ䒇ᦒ枝\u2B68ⲟ孷⭖㱾䁙傛甈ٯ嫣唎ᮩቲ̫⧧璒⌧力ߚ䮸卣妰\u009F∞ړ絅䊓䠖籓簁䆗紓㜏撦㠈尔⎈Ṑ㟩湟㢛ሸ௭祫ᾓ嫭員㬠ᶉ᥈䮼⬁፼∆䕁‶ౘ玉厴口∣ɹ圐⬥圶愛ᜩ༨㭄Ӽ䰣⠿ㅑ⎉ɀ䳄殂≠ϴ\u08C5疄⩜Ĺ䑯ⅽ㉤ᦥ嘃ᦋ⇬ް㨨㠦Ԝ䤴᱈溏䂀值㍮ᡮ㎕\u0E71㼤\u086B䌬\u0863\u08C1夿⩈倥恢ů媉ᑵ㴯ᄃ匉ᜣ䜍圢ڦᏘᨼį妠䝣嵫\u0B49⫢ᇠ丌ㄜԠ⿸♣⩋\u23FD䴙८ѝ㊈ᤨ狡Üޛᗢ桢㈩⣏ዡ槈婁慸Ꭳ❯㵀䝘⑃㬏癃犤Ꮳ㪎㹥凜щ測⠭Ɉٱ䄺㝗ޜɃᔪ庈䟸ℵ䝪䢗獶䓃☶ऒ䛧ᖵᔵ\u08D0ㆳḀண捆䚤⣱愶棙ѕ\u0D98䑦Ѵ㈔ၐ箠椴䖻䵃䅬ᣨ䖬㢩Զ呝㊡䲝⌇祡側㒃儰䰪愫᩠嬼杒䫔㑈⌵⤉Ǖ弴ᝯ䝂挨唃⬆ሦ㥌⏂挷ᕺ拉\u0DFD紨礉氟䯜᪪惝䝼⡐劫䉵ገ\u10C9㓄礻㪗弽䂹⨴炧ẙ槦Ⅎ㊶᠂嬫䡘⓬ĳ県犖僂⒙梳ᣔ扢卑䬠Ү移寝ⰼṔ珜岳䄥ፃ卒ὡာ磑㤍ᆲ梼操㧸ᭁ甩䅮掲ⓢ̰壞✄Ḅ嬸畦抖ᥢ䰱慿⭂⻙Ⓖ擂䔕Ӑᑣ磏î̳ỂႿ⬫ᥙ檴攁䍅ᖁ缀刳̢ͼ䪼㔚戭ᩳ⏢╭㏌ᝨ㿈呰Ꮲ塣⨼瓈̲㳳粴渥⡳䞸猩ֆ㈼Ձ渤汙䌢\u1C4Cⓢⱪ猦㕙↴ヹ䚻宬ڻ䅮熺⍒㊼ᢃ⤛̀㯨᜴䋤ԑֺ䔂擌ܙ儠唰䍔൰崽ぽɈᵀᒨҔ时ⷳ挱ぷ槸ὀ澭Ʉ䩅ሀ⌨摯\u0AF4\u08C0綱哆犲䢀ᘤ㑙晤ᡅ桉㖌捍ὠ泫⳥杳ᓌ慯梃僇ྐ\u0EEDٷⓞᓀޱ㔓箅叁勡喔牾㫠ስ䅜⋾㬓潁⡛ةဉ濧ޜ厠䛔㫨慮݈Ɠ瞶ぎ䤽॓ḧ嵄爁ń囬奢簎⠒倈泤䍫ਬ䡄䞔\u087Aᓒ峆㕊\u0866᧘◪癡㬾⑀痫潂⡧᪀㊣䌆摡㥴䛢溊ᓤᜂᨧ亀䀷ᤪ溭渵昗Č哋㳵↑ⳙᖸ癭犖呪ᓂ灠⎎ᜉ狭佣㣄ह⬲喂५౫ᓂ勩\u1737\u05F8㉳ࡍᒡ\u0DE9ᛂጝᕉ≫ᱵ⋓ᕟ᭪厵磆昁⥴↠狳ᗗᳫ六睵䖟ᩨ汹犮ቱ⟫无勻ក䧌ܺ˶ᒙ\u2D78并助梉\u3101㱶棝â᠌\u2073挤噊䥊慾ᴨ⇅㫉Χ䴙ᗙ㜪ռ\u0884唎䈔ঈ⌁ၴ䕀糥⪰嘵㿠彤̦啚䰹✼で䌹崥止⋳Ⱈ㲫嘭欛歲ᇋ毮ᑂ䦧Ῐ䢡ℑ戺ㆢ人唉囁俰⋮硊䏓丁㸎礿䋘ᶋ纽畠枍㟋㭼∥坓\u1CA5丩㥱⌄\u23F9䤺⢶䝽㚊絶牛ਐ䡤殹╭ᇍ㮲罅欈䊱彁ᎄ\u0E7A⟘ᜱ㻭䣕嘢ㄲ㴿䨰筬\u0A3B撍♓䂴ტ歬ぉઽ㿨㘎䋵䯔͇ᢩ嵶ᬮᓩ巩偡⏈䨀䷪窫磏䤜ち✆᭘ߨ㓳䜟响啄俌䙓吮䶔⠹沼㊓⼉峿\u0893ႸӠԂ梓℃㫉滦ˁ祐䨪勵⚾㗫ⵕ¤嚮懸䬄\u1FB5䍏柱ኺⲋ嚯䭋䊼Ӻᢶ\u08B2⋳┦欺ᩌ\u1C81㾀溚ᇔඅ┥䊷㞅䷻⸉盔\u09D1͘剸狿᠘ᗻᘮಘᯣႪ佻盧掘啋૮㠸甛⊈⠅䦖兙ᅉ⨍湓¼ᘀ癍ौ爧㙛廭沢⦣ૈ⁼灳䋤წⳡ䐪睧ૠ姿\u0EFA疈䴥㋨Ὠ⃡ፚ燳\u2EFC痦⊢嗩\u243E䚜ᷛᘋܫÐ㮩叁⚭㦪ࠢ俇\u1CB5ᅯ⡍函䮂䈞⁝⚄拵盱\u1C4C乧㱽焙帹㏾欣痎⤚\u16FA弐ϓ匀ⶢሬ䛝ਫ▉娴嬑候啯㫡䉝㖀㡌绎倠ⵀ兩㢲悌ᰛ\u1AFD累ኡ怌叹紑䇳䋻ห禌反Ꮣ攥䖈✖⸧ၰ䈟瑻㽻㢢҃䇵˙⪮䖘᩹Ⴇᦀ縦妈ዌ棲悥䐟ᙱ㑀瘱䃇Ń矡䚸寵䕡ඈ⚧Ű䯕ᄠ塵卟㗤活㡧˥䌚≻⡹歖ᵀ帣炨⊠ᷘ曩倣⨆㓀ⳍⅿ扚䅪橐䮆䊈抣㪾䒇瞍Ꮵ⤦Ṟ\u0FF1⠔᱄䞅晸斬ᩊ䡯棹㟘癶䚈樧㺚䶮㙰䭗㧹杂楥⛈汈㹓㡍\u0E5F㾐䱘噱໐抌⧴™સ孱䮵Ҷ䃩ṱ⩠皆ᑉ⧭㡷ᒇ΄Ⴆ⢎&\u2BE1ః≧ぃ̲᳀俾⨆亠东ଯ⠠㈬䈨甠\u0D54⤒ᯘ浟硩㮯㸼劬䉳⡔\u0C04㪫田≹֪叢槰揔檇㕃抒॥䛰汫砨愲\u1CACᔢ殆䲵㎇ፚ廐痝⸨㏡ʋ扚ሑⵋ咙ᯠ䌴咷\u088A㤜\u087Bᙌ్\u0CD4䳰偗ᡈ䘼Ї㡥秠䥇ކ⩦砺䎘Ⲉ偁媀檍چ枹בᮜ楙㝒ͳ䈬១唬吨ⱝ䮁僙剸ⶤɉ⺫౩扆䴓漥煼↮ᴧ㽕ᅥᨪૠ愤䀯⦡ა繛㉁䫼掷⚬ᐾ⸌綕泇㓢㩍ሃ厼\u2437↲\u08CDᢴ犉᭪潉㋝ᢶ矂ỹڳ幮䞸᭔\u1ADB㦩䖊\u0A31䫘偩ⷊ棶㸷ᘎ䔏㱶⫐㘕\u2EFA灐枩䱍\u23FAា囚⦻⾛㛁\u206Aಞ䄌䤠ⲻ䡸ͨ悻晣皹⎵㒈瞭喃㥢㓹ᇔᜂღ懜勯㑐淄ɖ嶶䷄眷䭗⇙的渆汭Ӹⷬ求䓗䜄玅塜媳给兢瑵ᄠ㱄孉竒㏭毡䷶濺ޤط桤敘ᄘ抯伊淖昢\u2B5A硳朗ۆ称䩧掦వ淙祁淮璖煡ᶫ㡄ఁᙉ〰护ୠ狞᷅汫䗉ࠠ㸅⬾洛ௗ䨫潊ዥ咣樳䋄勓痻捺㧭༲\u2FD6嵠䂸ЖᏒ\u1B4D叮㙴嬡ڵ䥣Ì䇡ḓ券䎁悞灨ṹᅠ゜淸泝ᠹ⇑ΰ竁攜握䷠㍴済㢜䏜ᱱമቑ䏬ㅿ✹凃᥀校᪐杓⏆㈰䷚ಔᔓ͑稳犎䶠渕ႃ᳖ᗎẊេ挩ē៷\u3103˭瑎᳁̺硒❓清۵勽⛏䌶ᅯ㲒吚矵㰊¤䁿䍠ৡफ籮䏾戢♺湗㆜Ӯ⡥⠫ᴔ廛₵छ⁙泯湫澍济瓺䄉ᐃᷥ凯暟⺙凕ᵺ᰿噀已௯些玾筀ℌደ䙯Ῐᑎ㺕㏈Ņ皍⦜\u0BD8嶥歏ᆑ̈忚哮娀噎䊒⢩\u2E6A暡䭡ᥰ媲ࡂ䫲羥ᩪ犇竷䌪廖籣傝嫇磪爣涂嘀ᒯ䞓ޅ罪㇠硺\u2BA5籽䓮摴䊹擠㔡批⧈⓹籡偹ᘧ\u19DB冦緊ෛ䭇殔ᔽ䋴ᮏ晸㘺䔴䠕❣桄ˀ倔䊨䖜㢫θ寺碉眂䃭仫㐖瀧ḏ៷ښὋ\u09C6´䏌⌍搯㙆ϰ㿰⬽孡䉆䴣仔\u08E0߲ᆞ皈椘䙫ᝣ甥ѡ㊧握昦瑨⟏掣璯ᄘࠐጣ笾睾篳ⸯ㒿ۢᘇ尳烹㊧呖歓樿妧ᐁㄡह㊛䱊愃我ᴛ⢝⇄みᙶ䌥㙱୰ིࠊ懊\u08D0峓承ŉẹ睤ᰤⶴͥ瓿㹰棈伉⡪ቨ䶂ᖑ烒⡕Ḏᖙ⎼\u086Dཱྀ亾恝㠗\u08CE囕厦ཇ噇䞐掙㡬厄\u23FAア⒘㙋瑾婿砉䈗ᅈఎⱵ䵊\u0A61೫䘹恐䊩ᘈ䚐排ᭀ༧⩅ଃ\u175F䖡᭢ᙝ湄峐䩓呭敁ӗ⡰协ㅡ丣煛\u1FDCዃ喺惇ਭ㠩㸌䘳勸ܓ▢倿㫵⨁窺{\u0AE5ὈŔ⡥䄋с㺎ᢪጽ֢㎚㚊₮Χょኗ㓶ө㑰⒒箠๐⍯尔\u2BE5ᕤ̯䴭∘橡ጐ䄦峊ᔨ反әᭃḸ廪㭚桖婀㏂测搀⧡㏑洡㺚慡㓘ٰ晡Մ☴₇䈤̤㖑怢⣱\u0885儸▀夒倳榯\u2451ᐨ≲\u0096‑䴡⣫偉ᤌ\u20BBफ़懡糣燀Ź獪\u0D5AŰ煀\u08B2倣⃜ど姐潀戢ধ㨦ě࿚㒭䔲䆰房䤫 䜘ඹ媋氢盵䌛䒈྄㗢⢣\u0D81ᄎ旄ੜ䛪傭᱘汞㉀℁Υ淡爰䖅攍Ꮀ寄眡पᦿ瀣ψ\u0EE2ͱⰷ\u18AF甴↝凞\u0EF2cĤⅇ㡵⤘ณ\u0B00㿗\u0B3Aሯ¬⌠⫪☙䭍䌢䣶䂸႖㗡ŀǪՀဠᕓŸ⡃巍捝ङ⥍䌈ଥℬ㈤䈳儁\u0094ᛊ老ᛣ㿔⢉妭⚧ō䇃ᴨၓㅱĮᝂ篙Ϭㅞ\u202A祢䞈\u1DF9祣穥℧典㞖ᥢ䪫⒧⑇䇎毅՞㼱◰㬩兘䔉搿奢ᱠ\u052B◌ṩእચ←㛶䮺〣哚䝚䵤ⳁ嬁ᮤ䘰䈔掶ᄐḁ憣\u0B98ᤎヹ᎔垀昦⏉ᔁӔ䦤⺙ृ庱⒖४㍘㦨\u0BA7唯ਢ䱂⦧慾㚙ㆵ㍽ጴႲᄹք枃㈻ᔵ缉碸\u08D0ހ縩簠媂墜䜖Ụ煩⨳ⰳ㋼夵䢪˕籠稣ൽϒ吉屘禁⫥朿\u0E8B叿ೈ⦑Զ䤡䈭ᆷ唓䏠筃满坛\u244Fޑ䑙ཽ琮䟩゜灺昉ᮮ⣓燥䤩拐\u0B91䬔⏠ℕ弸璕\u09BA砐嶰\u0A78\u0B65浈呥ƌ伤⍘瓤᭼値淝吜ጐ哰樭璾ಓ礊Ⰴង㭆ᒨ烶ϖ珼䒀㖱秃㰪氵òూᒢิ映买䈵\u23F8\u18FC氋篦悴礎⣵⽘ṵᧀ武ᑲ६䚅䌢ẉ➡у䃐⥭\u2073\u206D⽂加傏䠬ጅ后䃙滅Ҵ儣ᢌׄହ㗣欥栻⇄ͼ墖ᾱᗊ\u05CD爯8⳺ខढ‱ࠢ桉̒\u1774濫‣堦岛劦撨\u0DC8僴ᥠ䪟ⷢ䈂\u1316㸺妯哉塎扂乑ƀ浣⑮摋懭݈༦嵫䙂巁怨搘䠰\u0B00䢠⊿牅栲ȃỮἰ㬹嬱䆚ᅀ毛㑠喅挠᎒⣳ॲ厸淤惢呞⩍䨵Ⅻኸ㗗㴩碣ᖴ垹Ὀ監㞩乙ŕ懱♸浠ᖨ孫潜ᣇ֨噀⑇眵䁚Ч䙋䒖㒑㧣䜣㤾ぃ烪循̢\u0A61䬩ㇰ⟤⊈㴅㝕‥ᤇ捘■\u05C8窫悪䁛⫣䦯殄㒠洡㑕䔜哉㐎࿘㻁稠͝ᘨዱৠ滈懤圮⅔µᔂ\u2BE0㬃古扁氶婐ⱬᕅ呣悯\u2E76ኺᆤⷀ䁢敨硙磈Ǫ✛ₜ䩆厵`⒃ቢự祒墲⚻峙Ǒ䦒\u2B79䰇嗳≷ᎊ惝ౄ㑑冢ᡁ᳔╅檰ိ叀箭\u0095㗓◴共ⴀ廤⭙ₔӘஈ\u3101垁䦽ᑱೣϛᮔ挡倧眩ⱱ儒慨۹᎓‰儁䇳▂⒜ૄ⊵夰䒯䃵ᩄᯍ爃禤⩳Iª⃩䎠✅㶷䁷媳步%纥ሺ丶搓Т⻪篦敮枷爌⠩➢ඡ捩㹄Ӛ㰦係峑㼦䚶䁖Ἆ冰૯㫜堢䠮悎\u3103䍀㓉⢋䧣滆§➾⊔䪲આ৴\u2B60秤ښ㑠埄庾穻楌Ġ ")),
+                    noiseGenerator, octaveMultiplier);
+        }
+
+        @Override
+        public int wrapX(final int x, final int y) {
+            if(x < edges[y << 1])
+                return edges[y << 1 | 1];
+            else if(x > edges[y << 1 | 1])
+                return edges[y << 1];
+            else return x;
+        }
+
+        @Override
+        public int wrapY(final int x, final int y)  {
+            return Math.max(0, Math.min(y, height - 1));
+        }
+
+        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                                  double waterMod, double coolMod, long state)
+        {
+            boolean fresh = false;
+            if(cachedState != state || (waterMod *= 1.2) != waterModifier || (coolMod *= 1.375) != coolingModifier)
+            {
+                minHeight = Double.POSITIVE_INFINITY;
+                maxHeight = Double.NEGATIVE_INFINITY;
+                minHeat0 = Double.POSITIVE_INFINITY;
+                maxHeat0 = Double.NEGATIVE_INFINITY;
+                minHeat1 = Double.POSITIVE_INFINITY;
+                maxHeat1 = Double.NEGATIVE_INFINITY;
+                minHeat = Double.POSITIVE_INFINITY;
+                maxHeat = Double.NEGATIVE_INFINITY;
+                minWet0 = Double.POSITIVE_INFINITY;
+                maxWet0 = Double.NEGATIVE_INFINITY;
+                minWet = Double.POSITIVE_INFINITY;
+                maxWet = Double.NEGATIVE_INFINITY;
+                cachedState = state;
+                fresh = true;
+            }
+            rng.setState(state);
+            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
+            int t;
+
+            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
+            coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
+
+            double p,
+                    ps, pc,
+                    qs, qc,
+                    h, temp, yPos,
+                    //i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),
+                    //xPos = startX, yPos, i_uw = usedWidth / (double)width,
+                    i_uh = usedHeight / (height+2.0),
+                    th, thx, thy, lon, lat, ipi = 1.0 / Math.PI,
+                    rx = width * 0.25, irx = 1.0 / rx, hw = width * 0.5,
+                    ry = height * 0.5, iry = 1.0 / ry;
+//            final double[] trigTable = new double[width << 1];
+//            for (int x = 0; x < width; x++, xPos += i_uw) {
+//                p = xPos * i_w;
+//                trigTable[x<<1]   = NumberTools.sin(p);
+//                trigTable[x<<1|1] = NumberTools.cos(p);
+//            }
+            yPos = startY + i_uh;
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+
+                thx = asin((y - ry) * iry);
+                lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? thx : Math.PI * irx * 0.5 / NumberTools.cos(thx);
+                thy = thx * 2.0;
+                lat = asin((thy + NumberTools.sin(thy)) * ipi);
+
+                qc = NumberTools.cos(lat);
+                qs = NumberTools.sin(lat);
+//                qs = -1.5707963267948966 + yPos * i_h;
+//                qc = NumberTools.cos(qs);
+//                qs = NumberTools.sin(qs);
+
+                boolean inSpace = true;
+                for (int x = 0/*, xt = 0*/; x < width; x++) {
+                    th = lon * (x - hw);
+//                    ps = trigTable[xt++] * qc;//NumberTools.sin(p);
+//                    pc = trigTable[xt++] * qc;//NumberTools.cos(p);
+                    if(th < -3.141592653589793 || th > 3.141592653589793) {
+                        heightCodeData[x][y] = 10000;
+                        inSpace = true;
+                        continue;
+                    }
+                    if(inSpace)
+                    {
+                        inSpace = false;
+                        edges[y << 1] = x;
+                    }
+                    edges[y << 1 | 1] = x;
+
+                    ps = NumberTools.sin(th) * qc;
+                    pc = NumberTools.cos(th) * qc;
+                    xPositions[x][y] = pc;
+                    yPositions[x][y] = ps;
+                    zPositions[x][y] = qs;
+                    if(earth.contains(x, y))
+                    {
+                        h = NumberTools.swayTight(terrain4D.getNoiseWithSeed(pc, ps, qs, terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA), seedA)) * 0.85;
+                        if(coast.contains(x, y))
+                            h *= 0.125;
+                        else
+                            h += 0.15;
+                    }
+                    else
+                    {
+                        h = NumberTools.swayTight(terrain4D.getNoiseWithSeed(pc, ps, qs, terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA), seedA)) * -0.9;
+                        if(shallow.contains(x, y))
+                            h *= 0.375;
+                        else
+                            h -= 0.1;
+                    }
+                    h *= waterModifier;
+                    heightData[x][y] = h;
+                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                            , qs, seedB));
+                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                            , seedC));
+                    freshwaterData[x][y] = (ps = Math.min(
+                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
+                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
+                    minHeightActual = Math.min(minHeightActual, h);
+                    maxHeightActual = Math.max(maxHeightActual, h);
+                    if(fresh) {
+                        minHeight = Math.min(minHeight, h);
+                        maxHeight = Math.max(maxHeight, h);
+
+                        minHeat0 = Math.min(minHeat0, p);
+                        maxHeat0 = Math.max(maxHeat0, p);
+
+                        minWet0 = Math.min(minWet0, temp);
+                        maxWet0 = Math.max(maxWet0, temp);
+                    }
+                }
+                minHeightActual = Math.min(minHeightActual, minHeight);
+                maxHeightActual = Math.max(maxHeightActual, maxHeight);
+
+            }
+            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),
+                    heatDiff = 0.8 / (maxHeat0 - minHeat0),
+                    wetDiff = 1.0 / (maxWet0 - minWet0),
+                    hMod,
+                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / (halfHeight);
+            double minHeightActual0 = minHeightActual;
+            double maxHeightActual0 = maxHeightActual;
+            yPos = startY + i_uh;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                temp = Math.pow(Math.abs(yPos - halfHeight) * i_half, 1.5);
+                temp *= (2.4 - temp);
+                temp = 2.2 - temp;
+                for (int x = 0; x < width; x++) {
+                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+                    minHeightActual0 = Math.min(minHeightActual0, h);
+                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    if(heightCodeData[x][y] == 10000) {
+                        heightCodeData[x][y] = 1000;
+                        continue;
+                    }
+                    else
+                        heightCodeData[x][y] = (t = codeHeight(h));
+                    hMod = 1.0;
+                    switch (t) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            h = 0.4;
+                            hMod = 0.2;
+                            break;
+                        case 6:
+                            h = -0.1 * (h - forestLower - 0.08);
+                            break;
+                        case 7:
+                            h *= -0.25;
+                            break;
+                        case 8:
+                            h *= -0.4;
+                            break;
+                        default:
+                            h *= 0.05;
+                    }
+                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);
+                    if (fresh) {
+                        ps = Math.min(ps, h); //minHeat0
+                        pc = Math.max(pc, h); //maxHeat0
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat1 = ps;
+                maxHeat1 = pc;
+            }
+            heatDiff = coolingModifier / (maxHeat1 - minHeat1);
+            qs = Double.POSITIVE_INFINITY;
+            qc = Double.NEGATIVE_INFINITY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
+                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
+                    if (fresh) {
+                        qs = Math.min(qs, h);
+                        qc = Math.max(qc, h);
+                        ps = Math.min(ps, temp);
+                        pc = Math.max(pc, temp);
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat = qs;
+                maxHeat = qc;
+                minWet = ps;
+                maxWet = pc;
+            }
+            landData.refill(heightCodeData, 4, 999);
+        }
+
     }
 
 
