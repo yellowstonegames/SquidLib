@@ -2253,6 +2253,8 @@ public abstract class WorldMapGenerator implements Serializable {
 
         @Override
         public int wrapX(final int x, final int y) {
+            if(y < 0 || y >= edges.length)
+                return x;
             if(x < edges[y << 1])
                 return edges[y << 1 | 1];
             else if(x > edges[y << 1 | 1])
@@ -2305,16 +2307,17 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
+            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.2) + 0.91 : waterMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p,
                     ps, pc,
                     qs, qc,
-                    h, temp, yPos,
+                    h, temp, yPos, xPos,
                     //i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),
-                    //xPos = startX, yPos, i_uw = usedWidth / (double)width,
-                    i_uh = usedHeight / (height+2.0),
+                    //xPos = startX, yPos,
+                    i_uw = usedWidth / (double)width,
+                    i_uh = usedHeight / (double)height,
                     th, thx, thy, lon, lat, ipi = 1.0 / Math.PI,
                     rx = width * 0.25, irx = 1.0 / rx, hw = width * 0.5,
                     ry = height * 0.5, iry = 1.0 / ry;
@@ -2324,10 +2327,10 @@ public abstract class WorldMapGenerator implements Serializable {
 //                trigTable[x<<1]   = NumberTools.sin(p);
 //                trigTable[x<<1|1] = NumberTools.cos(p);
 //            }
-            yPos = startY + i_uh;
+            yPos = startY - ry;
             for (int y = 0; y < height; y++, yPos += i_uh) {
 
-                thx = asin((y - ry) * iry);
+                thx = asin((yPos) * iry);
                 lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? thx : Math.PI * irx * 0.5 / NumberTools.cos(thx);
                 thy = thx * 2.0;
                 lat = asin((thy + NumberTools.sin(thy)) * ipi);
@@ -2339,8 +2342,9 @@ public abstract class WorldMapGenerator implements Serializable {
 //                qs = NumberTools.sin(qs);
 
                 boolean inSpace = true;
-                for (int x = 0/*, xt = 0*/; x < width; x++) {
-                    th = lon * (x - hw);
+                xPos = startX;
+                for (int x = 0/*, xt = 0*/; x < width; x++, xPos += i_uw) {
+                    th = lon * (xPos - hw);
 //                    ps = trigTable[xt++] * qc;//NumberTools.sin(p);
 //                    pc = trigTable[xt++] * qc;//NumberTools.cos(p);
                     if(th < -3.141592653589793 || th > 3.141592653589793) {

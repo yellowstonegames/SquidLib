@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.ArrayTools;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
@@ -40,9 +41,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             Ocean                  = 13,
             Empty                  = 14;
 
-    //private static final int width = 314 * 5, height = 500;
-    private static final int width = 1000, height = 500;
-    //private static final int width = 650, height = 650;
+    //private static final int width = 314 * 3, height = 300;
+    private static final int width = 1024, height = 512;
+    //private static final int width = 400, height = 400;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -255,7 +256,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
-        //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 0.8);
+        //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
         world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.8);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
@@ -327,7 +328,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.zoomIn(1, zoomX, zoomY);
         dbm.makeBiomes(world);
-        political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
+        //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
         counter = ThrustAltRNG.determine(seed) >>> 48;
         ttg = System.currentTimeMillis() - startTime;
     }
@@ -340,7 +341,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.zoomOut(1, zoomX, zoomY);
         dbm.makeBiomes(world);
-        political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
+        //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
         counter = ThrustAltRNG.determine(seed) >>> 48;
         ttg = System.currentTimeMillis() - startTime;
     }
@@ -349,7 +350,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.generate(seed);
         dbm.makeBiomes(world);
-        political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
+        //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
         counter = ThrustAltRNG.determine(seed) >>> 48;
         ttg = System.currentTimeMillis() - startTime;
     }
@@ -357,6 +358,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public void putMap() {
         // uncomment next line to generate maps as quickly as possible
         //generate(rng.nextLong());
+        ArrayTools.fill(display.colors, -0x1.0p125F);
         int hc, tc;
         char p;
         int[][] heightCodeData = world.heightCodeData;
@@ -372,11 +374,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 tc = dbm.heatCodeData[x][y];
                 //cloud = (float) cloudNoise2.getNoiseWithSeed(xp = world.xPositions[x][y], yp = world.yPositions[x][y],
                 //        zp = world.zPositions[x][y], counter * 0.04, (int) seed) * 0.06f;
-                if(cloudy) {
-                    cloud = (float) Math.min(1f, (cloudNoise.getNoiseWithSeed(world.xPositions[x][y], world.yPositions[x][y], world.zPositions[x][y], counter * 0.0125, seed) * (0.75 + world.moistureData[x][y]) - 0.07));
-                    cloudLight = 0.65f + NumberTools.swayTight(cloud * 1.4f + 0.55f) * 0.35f;
-                    cloudLight = SColor.floatGet(cloudLight, cloudLight, cloudLight, 1f);
-                }
+//                if(cloudy) {
+//                    cloud = (float) Math.min(1f, (cloudNoise.getNoiseWithSeed(world.xPositions[x][y], world.yPositions[x][y], world.zPositions[x][y], counter * 0.0125, seed) * (0.75 + world.moistureData[x][y]) - 0.07));
+//                    cloudLight = 0.65f + NumberTools.swayTight(cloud * 1.4f + 0.55f) * 0.35f;
+//                    cloudLight = SColor.floatGet(cloudLight, cloudLight, cloudLight, 1f);
+//                }
                 /*
                 cloud = Math.min(1f,
                         cloudData[(int) (world.xPositions[x][y] * 109 + counter * 1.7) & 127]
@@ -401,15 +403,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         case 3:
                             shown = SColor.lerpFloatColors(shallowColor, ice,
                                     (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0)));
-                            if(cloud > 0.0)
-                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+//                            if(cloud > 0.0)
+//                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
                             display.put(x, y, shown);
                             continue PER_CELL;
                         case 4:
                             shown = SColor.lerpFloatColors(lightIce, ice,
                                     (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1)));
-                            if(cloud > 0.0)
-                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+//                            if(cloud > 0.0)
+//                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
                             display.put(x, y, shown);
                             continue PER_CELL;
                     }
@@ -421,8 +423,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 3:
                         shown = SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0)));
-                        if(cloud > 0.0)
-                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+//                        if(cloud > 0.0)
+//                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
                         display.put(x, y, shown);
                         break;
                     default:
@@ -437,9 +439,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         int bc = dbm.biomeCodeData[x][y];
                         shown = SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
                                 BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc));
-                        if(cloud > 0.0)
-                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                        shown = SColor.lerpFloatColors(shown, NATION_COLORS[political[x][y] & 127], nation);
+//                        if(cloud > 0.0)
+//                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
+                        //shown = SColor.lerpFloatColors(shown, NATION_COLORS[political[x][y] & 127], nation);
                         display.put(x, y, shown);
 
                         //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
