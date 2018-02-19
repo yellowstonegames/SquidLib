@@ -1,8 +1,6 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.FakeLanguageGen;
-import squidpony.Maker;
-import squidpony.Thesaurus;
+import squidpony.*;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
@@ -25,7 +23,7 @@ import java.util.Collection;
 @Beta
 public class FantasyPoliticalMapper implements Serializable {
     private static final long serialVersionUID = 0L;
-
+    
     public static class Faction implements Serializable
     {
         private static final long serialVersionUID = 0L;
@@ -300,252 +298,74 @@ public class FantasyPoliticalMapper implements Serializable {
         }
         return politicalMap;
     }
-//    /**
-//     * Produces a political map for the land stored in the "on" cells of the given GreasedRegion, with the given number
-//     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
-//     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
-//     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
-//     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
-//     * wilderness. This version generates an atlas with the procedural names of all the factions and a
-//     * mapping to the chars used in the output; the atlas will be in the {@link #atlas} member of this object. For every
-//     * Character key in atlas, there will be a String value in atlas that is the name of the nation, and for the same
-//     * key in {@link #spokenLanguages}, there will be a non-empty List of {@link FakeLanguageGen} languages (usually
-//     * one, sometimes two) that should match any names generated for the nation. Ocean and Wilderness get the default
-//     * FakeLanguageGen instances "ELF" and "DEMONIC", in case you need languages for those areas for some reason.
-//     * @param land a GreasedRegion that stores "on" cells for land and "off" cells for anything un-claimable, like ocean
-//     * @param factionCount the number of factions to have claiming land, cannot be negative or more than 255
-//     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
-//     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
-//     */
-//    public char[][] generate(GreasedRegion land, int factionCount, double controlledFraction) {
-//        factionCount &= 255;
-//        width = land.width;
-//        height = land.height;
-//        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
-//        Coord.expandPoolTo(width, height);
-//        GreasedRegion map = land.copy();
-//        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
-//        int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
-//        map.randomScatter(rng, (int) (Math.sqrt(width * height) * 0.1 + 0.999), factionCount);
-//
-//        spreader.initialize(land.toChars());
-//        OrderedMap<Coord, Double> entries = new OrderedMap<>();
-//        entries.put(Coord.get(-1, -1), 0.0);
-//        for (int i = 0; i < factionCount; i++) {
-//            entries.put(map.nth(i), rng.between(0.5, 1.0));
-//        }
-//        spreader.start(entries, controlled, null);
-//        short[][] sm = spreader.spillMap;
-//        politicalMap = new char[width][height];
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : letters[(sm[x][y] - 1) & 255];
+    public char[][] adjustZoom() {
+        if(wmg.zoom <= 0)
+            return politicalMap;
+        char[][] zoomedMap = ArrayTools.fill('~', width, height);
+        GreasedRegion nation = new GreasedRegion(width, height);
+        char c;
+
+        for (int i = 2; i < atlas.size(); i++) {
+            nation.refill(politicalMap, c = atlas.keyAt(i));
+            if(nation.isEmpty()) continue;
+            int stx, sty;
+//            int stx = Math.min(Math.max((wmg.zoomStartX >> wmg.zoom + 1), 0), width),
+//                    sty = Math.min(Math.max((wmg.zoomStartY >> wmg.zoom + 1), 0), height);
+
+            for (int z = 1; z <= wmg.zoom; z++) {
+                stx = Math.min(Math.max(wmg.startCacheX.get(z) - wmg.startCacheX.get(z - 1) << z - 1, 0), width); //wmg.startCacheX.get(z - 1)  // - (width >> 2)
+                sty = Math.min(Math.max(wmg.startCacheY.get(z) - wmg.startCacheY.get(z - 1) << z - 1, 0), height); //wmg.startCacheY.get(z - 1) // - (height >>2)
+//                int stx = Math.min(Math.max((wmg.zoomStartX >> wmg.zoom + 1), 0), width),
+//                        sty = Math.min(Math.max((wmg.zoomStartY >> wmg.zoom + 1), 0), height);
+//                System.out.printf("z: %d, stx: %d, sty: %d, startCacheX: %s, startCacheY: %s, zoomStartX: %d, zoomStartY: %d\n", z, stx, sty, wmg.startCacheX.toString(), wmg.startCacheY.toString(), wmg.zoomStartX, wmg.zoomStartY);
+                nation.zoom(stx, sty).expand8way().expand().fray(0.5);
+            }
+            nation.intoChars(zoomedMap, c);
+        }
+        nation.refill(wmg.heightCodeData, 4, 999).and(new GreasedRegion(zoomedMap, '~')).intoChars(zoomedMap, '%');
+        nation.refill(wmg.heightCodeData, -999, 4).intoChars(zoomedMap, '~');
+//        final int inc = 1 << wmg.zoom;
+//        char currentA, currentB, currentC, currentD;
+//        UnorderedSet<String> blockedA, blockedB, blockedC, blockedD;
+//        String[] names = biomeMapper.getBiomeNameTable();
+//        String thisName;
+//        int xA, yA, xB, /*yB, xC,*/ yC, xD, yD, wrappedX, wrappedY;
+//        for (int x = 0, wx = wmg.startX; x <= width - inc; x += inc, wx++) {
+//            for (int y = 0, wy = wmg.startY; y <= height - inc; y += inc, wy++) {
+//                zoomedMap[x][y] = currentA = politicalMap[xA = wx][yA = wy];
+//                currentB = politicalMap[xB = wmg.wrapX(wx + 1, wy)][yA];
+//                currentC = politicalMap[xA][yC = wmg.wrapY(wx, wy + 1)];
+//                currentD = politicalMap[xD = wmg.wrapX(wx + 1, wy + 1)][yD = wmg.wrapY(wx + 1, wy + 1)];
+//                if (currentA == currentB && currentB == currentC && currentC == currentD) {
+//                    for (int ax = 0; ax < inc; ax++) {
+//                        for (int ay = 0; ay < inc; ay++) {
+//                            zoomedMap[x + ax][y + ay] = (wmg.heightCodeData[wmg.wrapX(x + ax, y + ay)][wmg.wrapY(x + ax, y + ay)] < 4 ? '~' : currentA);
+//                        }
+//                    }
+//                } else {
+//                    blockedA = atlas.get(currentA).blockedBiomes;
+//                    blockedB = atlas.get(currentB).blockedBiomes;
+//                    blockedC = atlas.get(currentC).blockedBiomes;
+//                    blockedD = atlas.get(currentD).blockedBiomes;
+//                    for (int ax = 0; ax < inc; ax++) {
+//                        for (int ay = 0; ay < inc; ay++) {
+//                            thisName = names[biomeMapper.getBiomeCode(wrappedX = wmg.wrapX(x + ax, y + ay), wrappedY = wmg.wrapY(x + ax, y + ay))];
+//                            if (currentA != '~' && currentA != '%' && !blockedA.contains(thisName))
+//                                zoomedMap[x + ax][y + ay] = currentA;
+//                            else if (currentB != '~' && currentB != '%' && !blockedB.contains(thisName))
+//                                zoomedMap[x + ax][y + ay] = currentB;
+//                            else if (currentC != '~' && currentC != '%' && !blockedC.contains(thisName))
+//                                zoomedMap[x + ax][y + ay] = currentC;
+//                            else if (currentD != '~' && currentD != '%' && !blockedD.contains(thisName))
+//                                zoomedMap[x + ax][y + ay] = currentD;
+//                            else
+//                                zoomedMap[x + ax][y + ay] = (wmg.heightCodeData[wrappedX][wrappedY] < 4 ? '~' : '%');
+//                        }
+//                    }
+//                }
 //            }
 //        }
-//
-//        atlas.clear();
-//        briefAtlas.clear();
-//        spokenLanguages.clear();
-//        atlas.put('~', "Ocean");
-//        briefAtlas.put('~', "Ocean");
-//        spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
-//        atlas.put('%', "Wilderness");
-//        briefAtlas.put('%', "Wilderness");
-//        spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
-//
-//        if (factionCount > 0) {
-//            Thesaurus th = new Thesaurus(rng.nextLong());
-//            th.addKnownCategories();
-//            for (int i = 0; i < factionCount && i < 256; i++) {
-//                atlas.put(letters[i], th.makeNationName());
-//                briefAtlas.put(letters[i], th.latestGenerated);
-//                if(th.randomLanguages == null || th.randomLanguages.isEmpty())
-//                    spokenLanguages.put(letters[i], Collections.singletonList(FakeLanguageGen.randomLanguage(rng)));
-//                else
-//                    spokenLanguages.put(letters[i], new ArrayList<>(th.randomLanguages));
-//            }
-//        }
-//        return politicalMap;
-//    }
-//    /**
-//     * Produces a political map for the land stored in the given WorldMapGenerator, with the given number
-//     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
-//     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
-//     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
-//     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
-//     * wilderness. This version uses an existing atlas and does not assign to {@link #spokenLanguages}; it does not
-//     * alter the existingAtlas parameter but uses it to determine what should be in this class' {@link #atlas} field.
-//     * The atlas field will always contain '~' as the first key in its ordering (with value "Ocean" if no value was
-//     * already assigned in existingAtlas to that key), and '%' as the second key (with value "Wilderness" if not already
-//     * assigned); later entries will be taken from existingAtlas (not duplicating '~' or '%', but using the rest).
-//     * @param wmg a WorldMapGenerator that has produced a map; this gets the land parts of the map to assign claims to,
-//     *            including rivers and lakes as part of nations but not oceans
-//     * @param existingAtlas a Map (ideally an OrderedMap) of Character keys to be used in the 2D array, to String values
-//     *                      that are the names of nations; should not have size greater than 255
-//     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
-//     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
-//     */
-//    public char[][] generate(WorldMapGenerator wmg, Map<Character, String> existingAtlas, double controlledFraction) {
-//        return generate(new GreasedRegion(wmg.heightCodeData, 4, 999), existingAtlas, controlledFraction);
-//    }
-//    /**
-//     * Produces a political map for the land stored in the "on" cells of the given GreasedRegion, with the given number
-//     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
-//     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
-//     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
-//     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
-//     * wilderness. This version uses an existing atlas and does not assign to {@link #spokenLanguages}; it does not
-//     * alter the existingAtlas parameter but uses it to determine what should be in this class' {@link #atlas} field.
-//     * The atlas field will always contain '~' as the first key in its ordering (with value "Ocean" if no value was
-//     * already assigned in existingAtlas to that key), and '%' as the second key (with value "Wilderness" if not already
-//     * assigned); later entries will be taken from existingAtlas (not duplicating '~' or '%', but using the rest).
-//     * @param land a GreasedRegion that stores "on" cells for land and "off" cells for anything un-claimable, like ocean
-//     * @param existingAtlas a Map (ideally an OrderedMap) of Character keys to be used in the 2D array, to String values
-//     *                      that are the names of nations; should not have size greater than 255
-//     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
-//     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
-//     */
-//    public char[][] generate(GreasedRegion land, Map<Character, String> existingAtlas, double controlledFraction) {
-//        atlas.clear();
-//        briefAtlas.clear();
-//        atlas.putAll(existingAtlas);
-//        if(atlas.getAndMoveToFirst('%') == null)
-//            atlas.putAndMoveToFirst('%', "Wilderness");
-//        if(atlas.getAndMoveToFirst('~') == null)
-//            atlas.putAndMoveToFirst('~', "Ocean");
-//        int factionCount = atlas.size() - 2;
-//        briefAtlas.putAll(atlas);
-//        width = land.width;
-//        height = land.height;
-//        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
-//        Coord.expandPoolTo(width, height);
-//        GreasedRegion map = land.copy();
-//        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
-//        int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
-//        map.randomScatter(rng, (width + height) / 25, factionCount);
-//
-//        spreader.initialize(land.toChars());
-//        OrderedMap<Coord, Double> entries = new OrderedMap<>();
-//        entries.put(Coord.get(-1, -1), 0.0);
-//        for (int i = 0; i < factionCount; i++) {
-//            entries.put(map.nth(i), rng.between(0.5, 1.0));
-//        }
-//        spreader.start(entries, controlled, null);
-//        short[][] sm = spreader.spillMap;
-//        politicalMap = new char[width][height];
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                politicalMap[x][y] = (sm[x][y] == -1) ? '~' : (sm[x][y] == 0) ? '%' : atlas.keyAt((sm[x][y] + 1));
-//            }
-//        }
-//        return politicalMap;
-//    }
-//    /**
-//     * Produces a political map for the land stored in the given WorldMapGenerator, with the given number
-//     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
-//     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
-//     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
-//     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
-//     * wilderness. This version uses a "recipe for an atlas" instead of a complete atlas; this is an OrderedMap of
-//     * Character keys to FakeLanguageGen values, where each key represents a faction and each value is the language to
-//     * use to generate names for that faction. This does assign to {@link #spokenLanguages}, but it doesn't change the
-//     * actual FakeLanguageGen objects, since they are immutable. It may add some "factions" if not present to represent
-//     * oceans and unclaimed land. The atlas field will always contain '~' as the first key in its ordering (with value
-//     * "Ocean" if no value was already assigned in existingAtlas to that key, or a random nation name in the language
-//     * that was mapped if there is one), and '%' as the second key (with value "Wilderness" if not already assigned, or
-//     * a similar random nation name if there is one); later entries will be taken from existingAtlas (not duplicating
-//     * '~' or '%', but using the rest).
-//     * @param wmg a WorldMapGenerator that has produced a map; this gets the land parts of the map to assign claims to,
-//     *            including rivers and lakes as part of nations but not oceans
-//     * @param atlasLanguages an OrderedMap of Character keys to be used in the 2D array, to FakeLanguageGen objects that
-//     *                       will be used to generate names; should not have size greater than 255
-//     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
-//     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
-//     */
-//    public char[][] generate(WorldMapGenerator wmg, OrderedMap<Character, FakeLanguageGen> atlasLanguages, double controlledFraction) {
-//        return generate(new GreasedRegion(wmg.heightCodeData, 4, 999), atlasLanguages, controlledFraction);
-//    }
-//    /**
-//     * Produces a political map for the land stored in the "on" cells of the given GreasedRegion, with the given number
-//     * of factions trying to take land in the world (essentially, nations). The output is a 2D char array where each
-//     * letter char is tied to a different faction, while '~' is always water, and '%' is always wilderness or unclaimed
-//     * land. The amount of unclaimed land is determined by the controlledFraction parameter, which will be clamped
-//     * between 0.0 and 1.0, with higher numbers resulting in more land owned by factions and lower numbers meaning more
-//     * wilderness. This version uses a "recipe for an atlas" instead of a complete atlas; this is an OrderedMap of
-//     * Character keys to FakeLanguageGen values, where each key represents a faction and each value is the language to
-//     * use to generate names for that faction. This does assign to {@link #spokenLanguages}, but it doesn't change the
-//     * actual FakeLanguageGen objects, since they are immutable. It may add some "factions" if not present to represent
-//     * oceans and unclaimed land. The atlas field will always contain '~' as the first key in its ordering (with value
-//     * "Ocean" if no value was already assigned in existingAtlas to that key, or a random nation name in the language
-//     * that was mapped if there is one), and '%' as the second key (with value "Wilderness" if not already assigned, or
-//     * a similar random nation name if there is one); later entries will be taken from existingAtlas (not duplicating
-//     * '~' or '%', but using the rest).
-//     * @param land a GreasedRegion that stores "on" cells for land and "off" cells for anything un-claimable, like ocean
-//     * @param atlasLanguages an OrderedMap of Character keys to be used in the 2D array, to FakeLanguageGen objects that
-//     *                       will be used to generate names; should not have size greater than 255
-//     * @param controlledFraction between 0.0 and 1.0 inclusive; higher means more land has a letter, lower has more '%'
-//     * @return a 2D char array where letters represent the claiming faction, '~' is water, and '%' is unclaimed
-//     */
-//    public char[][] generate(GreasedRegion land, OrderedMap<Character, FakeLanguageGen> atlasLanguages, double controlledFraction) {
-//        atlas.clear();
-//        briefAtlas.clear();
-//        spokenLanguages.clear();
-//
-//        Thesaurus th = new Thesaurus(rng.nextLong());
-//        th.addKnownCategories();
-//        FakeLanguageGen flg;
-//        if((flg = atlasLanguages.get('~')) == null) {
-//            atlas.put('~', "Ocean");
-//            briefAtlas.put('~', "Ocean");
-//            spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
-//        }
-//        else {
-//            atlas.put('~', th.makeNationName(flg));
-//            briefAtlas.put('~', th.latestGenerated);
-//            spokenLanguages.put('~', Collections.singletonList(flg));
-//        }
-//        if((flg = atlasLanguages.get('%')) == null) {
-//            atlas.put('%', "Wilderness");
-//            briefAtlas.put('%', "Wilderness");
-//            spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
-//        }
-//        else {
-//            atlas.put('%', th.makeNationName(flg));
-//            briefAtlas.put('%', th.latestGenerated);
-//            spokenLanguages.put('%', Collections.singletonList(flg));
-//        }
-//
-//        for (int i = 0; i < atlasLanguages.size() && i < 256; i++) {
-//            Character c = atlasLanguages.keyAt(i);
-//            flg = atlasLanguages.getAt(i);
-//            atlas.put(c, th.makeNationName(flg));
-//            briefAtlas.put(c, th.latestGenerated);
-//            spokenLanguages.put(c, Collections.singletonList(flg));
-//        }
-//        int factionCount = atlas.size() - 2;
-//        width = land.width;
-//        height = land.height;
-//        MultiSpill spreader = new MultiSpill(new short[width][height], Spill.Measurement.MANHATTAN, rng);
-//        Coord.expandPoolTo(width, height);
-//        GreasedRegion map = land.copy();
-//        //Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
-//        int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
-//        map.randomScatter(rng, (width + height) / 25, factionCount);
-//
-//        spreader.initialize(land.toChars());
-//        OrderedMap<Coord, Double> entries = new OrderedMap<>();
-//        entries.put(Coord.get(-1, -1), 0.0);
-//        for (int i = 0; i < factionCount; i++) {
-//            entries.put(map.nth(i), rng.between(0.5, 1.0));
-//        }
-//        spreader.start(entries, controlled, null);
-//        short[][] sm = spreader.spillMap;
-//        politicalMap = new char[width][height];
-//        for (int x = 0; x < width; x++) {
-//            for (int y = 0; y < height; y++) {
-//                politicalMap[x][y] = atlas.keyAt(sm[x][y] + 1);
-//            }
-//        }
-//        return politicalMap;
-//    }
+        return zoomedMap;
+    }
+
 }

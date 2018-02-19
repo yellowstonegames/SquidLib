@@ -54,7 +54,7 @@ public abstract class WorldMapGenerator implements Serializable {
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
-    public int zoom = 0;
+    public int zoom = 0, startX = 0, startY = 0, usedWidth, usedHeight;
     protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
     protected int zoomStartX = 0, zoomStartY = 0;
     public static final double
@@ -110,6 +110,8 @@ public abstract class WorldMapGenerator implements Serializable {
     {
         width = mapWidth;
         height = mapHeight;
+        usedWidth = width;
+        usedHeight = height;
         seed = initialSeed;
         cachedState = ~initialSeed;
         rng = new StatefulRNG(initialSeed);
@@ -175,9 +177,9 @@ public abstract class WorldMapGenerator implements Serializable {
         }
         //System.out.printf("generate, zoomStartX: %d, zoomStartY: %d\n", zoomStartX, zoomStartY);
 
-        regenerate((zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom),
+        regenerate(startX = (zoomStartX >> zoom) - (width >> 1 + zoom), startY = (zoomStartY >> zoom) - (height >> 1 + zoom),
                 //startCacheX.peek(), startCacheY.peek(),
-                (width >> zoom), (height >> zoom), waterMod, coolMod, state);
+                usedWidth = (width >> zoom), usedHeight = (height >> zoom), waterMod, coolMod, state);
     }
 
     /**
@@ -232,9 +234,9 @@ public abstract class WorldMapGenerator implements Serializable {
 //                    0), width - (width >> zoom));
 //            zoomStartY = Math.min(Math.max((zoomStartY >> 1) + (zoomCenterY >> zoom + 1) - (height >> zoom + 2),
 //                    0), height - (height >> zoom));
-            regenerate((zoomStartX >> zoom) - (width >> zoom + 1), (zoomStartY >> zoom) - (height >> zoom + 1),
+            regenerate(startX = (zoomStartX >> zoom) - (width >> zoom + 1), startY = (zoomStartY >> zoom) - (height >> zoom + 1),
                     //startCacheX.peek(), startCacheY.peek(),
-                    width >> zoom, height >> zoom,
+                    usedWidth = width >> zoom,  usedHeight = height >> zoom,
                     waterModifier, coolingModifier, cachedState);
             rng.setState(cachedState);
         }
@@ -297,9 +299,9 @@ public abstract class WorldMapGenerator implements Serializable {
             startCacheY.add(Math.min(Math.max(startCacheY.peek() + (zoomCenterY >> zoom - 1) - (height >> zoom + 1),
                     0), height - (height >> zoom)));
         }
-        regenerate((zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom),
+        regenerate(startX = (zoomStartX >> zoom) - (width >> 1 + zoom), startY = (zoomStartY >> zoom) - (height >> 1 + zoom),
                 //startCacheX.peek(), startCacheY.peek(),
-                width >> zoom, height >> zoom,
+                usedWidth = width >> zoom, usedHeight = height >> zoom,
                 waterModifier, coolingModifier, cachedState);
         rng.setState(cachedState);
     }
@@ -2252,9 +2254,8 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         @Override
-        public int wrapX(final int x, final int y) {
-            if(y < 0 || y >= edges.length)
-                return x;
+        public int wrapX(final int x, int y) {
+            y = Math.max(0, Math.min(y, height - 1));
             if(x < edges[y << 1])
                 return edges[y << 1 | 1];
             else if(x > edges[y << 1 | 1])
@@ -2286,10 +2287,12 @@ public abstract class WorldMapGenerator implements Serializable {
                                   double waterMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(zoom <= 0 || cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
+                minHeightActual = Double.POSITIVE_INFINITY;
+                maxHeightActual = Double.NEGATIVE_INFINITY;
                 minHeat0 = Double.POSITIVE_INFINITY;
                 maxHeat0 = Double.NEGATIVE_INFINITY;
                 minHeat1 = Double.POSITIVE_INFINITY;

@@ -1787,6 +1787,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
+     * Fills this GreasedRegion's data into the given 2D char array, modifying it and returning it, with "on" cells
+     * filled with the char parameter {@code on} and "off" cells left as-is.
+     * @param chars a 2D char array that will be modified; must not be null, nor can it contain null elements
+     * @param on the char to use for "on" cells
+     * @return a 2D char array that represents the "on" cells in this GreasedRegion's data written over chars
+     */
+    public char[][] intoChars(char[][] chars, char on)
+    {
+        for (int x = 0; x < width && x < chars.length; x++) {
+            for (int y = 0; y < height && y < chars[x].length; y++) {
+                if((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0)
+                    chars[x][y] = on;
+            }
+        }
+        return chars;
+    }
+
+    /**
      * Returns this GreasedRegion's data as a 2D char array,  [width][height] in size, with "on" cells filled with the
      * char parameter on and "off" cells with the parameter off.
      * @param on the char to use for "on" cells
@@ -4513,6 +4531,22 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         return this;
+    }
+
+    /**
+     * Like {@link #retract()}, this removes the "on" cells that are 4-way-adjacent to any "off" cell, but unlike that
+     * method it keeps a fraction of those surface cells, quasi-randomly selecting them. This can be thought of as
+     * running {@link #surface()} on a copy of this GreasedRegion, running {@link #quasiRandomRegion(double)} on that
+     * surface with the given fractionKept, taking the original GreasedRegion and removing its whole surface with
+     * {@link #retract()}, then inserting the quasi-randomly-removed surface into this GreasedRegion to replace its
+     * surface with a randomly "damaged" one.
+     * @param fractionKept the fraction between 0.0 and 1.0 of how many cells on the outer surface of this to keep "on"
+     * @return this for chaining
+     */
+    public GreasedRegion fray(double fractionKept)
+    {
+        GreasedRegion cpy = new GreasedRegion(this).retract();
+        return xor(cpy).quasiRandomRegion(1.0 - fractionKept).or(cpy);
     }
 
     /**
