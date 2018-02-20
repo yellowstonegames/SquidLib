@@ -170,7 +170,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n = ((n << 8) | (n >>> 24)) * 0x144CBC89;
+            n ^= n << 26;
+            n ^= n >>> 15;
+            n ^= n << 17;
             textFactory.draw(batch, entry.charValue, entry.floatValue,
                     (n & 0xFFFF) * widthInc + screenOffsetX, (n >>> 16) * heightInc + screenOffsetY);
         }
@@ -200,7 +202,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n = ((n << 8) | (n >>> 24)) * 0x144CBC89;
+            n ^= n << 26;
+            n ^= n >>> 15;
+            n ^= n << 17;
 //            n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
 //            n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
 //            n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
@@ -219,8 +223,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return an encoded form of the x,y pair in the style used elsewhere in this class
      */
     public static int encodePosition(final int x, final int y) {
-        final int n = (x | y << 16) * 0x9E3779B9;
-        return (n << 24) | (n >>> 8);
+        int n = (x | y << 16);
+        n ^= n << 17;
+        n ^= n >>> 15;
+        n ^= n >>> 30;
+        return n ^ n << 26;
         //return GreasedRegion.interleaveBits(x, y);
     }
 
@@ -232,7 +239,8 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the x component packed in the parameter
      */
     public static int decodeX(int encoded) {
-        return ((encoded << 8) | (encoded >>> 24)) * 0x144CBC89 & 0xFFFF;
+        encoded ^= encoded << 26;
+        return (encoded ^ encoded >>> 15) & 0xFFFF;
         //return GreasedRegion.disperseBits(encoded) & 0xFFFF;
     }
 
@@ -244,7 +252,9 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the y component packed in the parameter
      */
     public static int decodeY(int encoded) {
-        return ((encoded << 8) | (encoded >>> 24)) * 0x144CBC89 >>> 16;
+        encoded ^= encoded << 26;
+        encoded ^= encoded >>> 15;
+        return (encoded ^ encoded << 17) >>> 16;
         //return GreasedRegion.disperseBits(encoded) >>> 16;
     }
 

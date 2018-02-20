@@ -52,11 +52,11 @@ public class SparseDemo extends ApplicationAdapter {
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
-    //We're displaying 24 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
-    //gridHeight is 24 because that variable will be used for generating the dungeon (the actual size of the dungeon
+    //We're displaying 25 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
+    //gridHeight is 25 because that variable will be used for generating the dungeon (the actual size of the dungeon
     //will be triple gridWidth and triple gridHeight), and determines how much off the dungeon is visible at any time.
     //The bonusHeight is the number of additional rows that aren't handled like the dungeon rows and are shown in a
-    //separate area; here we use them for translations. The gridWidth is 91, which means we show 91 grid spaces
+    //separate area; here we use them for translations. The gridWidth is 90, which means we show 90 grid spaces
     //across the whole screen, but the actual dungeon is larger. The cellWidth and cellHeight are 10 and 20, which will
     //match the starting dimensions of a cell in pixels, but won't be stuck at that value because we use a "Stretchable"
     //font, and so the cells can change size (they don't need to be scaled by equal amounts, either). While gridWidth
@@ -64,14 +64,14 @@ public class SparseDemo extends ApplicationAdapter {
     //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 91;
+    private static final int gridWidth = 90;
     /** In number of cells */
-    private static final int gridHeight = 24;
+    private static final int gridHeight = 25;
 
     /** In number of cells */
-    private static final int bigWidth = gridWidth * 3;
+    private static final int bigWidth = gridWidth * 2;
     /** In number of cells */
-    private static final int bigHeight = gridHeight * 3;
+    private static final int bigHeight = gridHeight * 2;
 
     /** In number of cells */
     private static final int bonusHeight = 7;
