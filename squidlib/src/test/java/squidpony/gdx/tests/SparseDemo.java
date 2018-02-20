@@ -42,6 +42,12 @@ public class SparseDemo extends ApplicationAdapter {
     private RNG rng;
     private SparseLayers display, languageDisplay;
     private DungeonGenerator dungeonGen;
+    // decoDungeon stores the dungeon map with features like grass and water, if present, as chars like '"' and '~'.
+    // bareDungeon stores the dungeon map with just walls as '#' and anything not a wall as '.'.
+    // Both of the above maps use '#' for walls, and the next two use box-drawing characters instead.
+    // lineDungeon stores the whole map the same as decoDungeon except for walls, which are box-drawing characters here.
+    // prunedDungeon takes lineDungeon and adjusts it so unseen segments of wall (represented by box-drawing characters)
+    //   are removed from rendering; unlike the others, it is frequently changed.
     private char[][] decoDungeon, bareDungeon, lineDungeon, prunedDungeon;
     private float[][] colors, bgColors;
 
@@ -270,7 +276,16 @@ public class SparseDemo extends ApplicationAdapter {
         seen = blockage.not().copy();
         currentlySeen = seen.copy();
         blockage.fringe8way();
+        // prunedDungeon starts with the full lineDungeon, which includes features like water and grass but also stores
+        // all walls as box-drawing characters. The issue with using lineDungeon as-is is that a character like '┬' may
+        // be used because there are walls to the east, west, and south of it, even when the player is to the north of
+        // that cell and so has never seen the southern connecting wall, and would have no reason to know it is there.
+        // By calling LineKit.pruneLines(), we adjust prunedDungeon to hold a variant on lineDungeon that removes any
+        // line segments that haven't ever been visible. This is called again whenever seen changes. 
         prunedDungeon = ArrayTools.copy(lineDungeon);
+        // We call pruneLines with an optional parameter here, LineKit.lightAlt, which will allow prunedDungeon to use
+        // the half-line chars "╴╵╶╷". These chars aren't supported by all fonts, but they are by the one we use here.
+        // The default is to use LineKit.light , which will replace '╴' and '╶' with '─' and '╷' and '╵' with '│'.
         LineKit.pruneLines(lineDungeon, seen, LineKit.lightAlt, prunedDungeon);
 
         //This is used to allow clicks or taps to take the player to the desired area.
@@ -492,6 +507,8 @@ public class SparseDemo extends ApplicationAdapter {
             blockage.refill(visible, 0.0);
             seen.or(currentlySeen.remake(blockage.not()));
             blockage.fringe8way();
+            // By calling LineKit.pruneLines(), we adjust prunedDungeon to hold a variant on lineDungeon that removes any
+            // line segments that haven't ever been visible. This is called again whenever seen changes.
             LineKit.pruneLines(lineDungeon, seen, LineKit.lightAlt, prunedDungeon);
         }
         else
@@ -545,7 +562,8 @@ public class SparseDemo extends ApplicationAdapter {
                     // This effect appears to shrink and grow in a circular area around the player, with the lightest
                     // cells around the player and dimmer ones near the edge of vision. This lighting is "consistent"
                     // because all cells at the same distance will have the same amount of lighting applied.
-                    display.putWithConsistentLight(x, y, prunedDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, (float) visible[x][y]);
+                    // We use prunedDungeon here so segments of walls that the player isn't aware of won't be shown.
+                    display.putWithConsistentLight(x, y, prunedDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, visible[x][y]);
                 } else if(seen.contains(x, y))
                     display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
             }

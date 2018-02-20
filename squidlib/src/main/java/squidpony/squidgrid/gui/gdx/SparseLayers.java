@@ -776,6 +776,20 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         putWithLight(x, y, '\0', 0f, background == null ? 0f :  background.toFloatBits(),
                 lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount);
     }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, without putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a libGDX Color
+     * @param lightColor the color to mix with the background, as a libGDX Color
+     * @param lightAmount a double that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, Color background, Color lightColor, double lightAmount) {
+        putWithLight(x, y, '\0', 0f, background == null ? 0f :  background.toFloatBits(),
+                lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount);
+    }
 
     /**
      * A convenience method that handles blending the background color with a specified light color, by a specific
@@ -790,6 +804,23 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      *                    to between 0 and 1, and negative values can be given to favor background more
      */
     public void putWithLight(int x, int y, char c, Color foreground, Color background, Color lightColor, float lightAmount) {
+        putWithLight(x, y, c, foreground == null ? 0f : foreground.toFloatBits(), background == null ? 0f :  background.toFloatBits(),
+                lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount);
+    }
+
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, while also putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to put in the foreground
+     * @param foreground the color to use for the foreground, as a libGDX Color; if null, this won't place a foreground char
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a libGDX Color
+     * @param lightColor the color to mix with the background, as a libGDX Color
+     * @param lightAmount a double that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, char c, Color foreground, Color background, Color lightColor, double lightAmount) {
         putWithLight(x, y, c, foreground == null ? 0f : foreground.toFloatBits(), background == null ? 0f :  background.toFloatBits(),
                 lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount);
     }
@@ -901,6 +932,24 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param x the x position, in cells
      * @param y the y position, in cells
      * @param c the char to draw; may be {@code '\0'} to draw a solid block
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float color
+     * @param lightColor the color to mix with the background, as a packed float color
+     * @param lightAmount a double that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithConsistentLight(int x, int y, char c, float foreground, float background, float lightColor, double lightAmount) {
+        putWithConsistentLight(x, y, c, foreground, background, lightColor, lightAmount, 0.0015f);
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, without putting a char on the screen; as a whole this affects one x,y position. This will use the same
+     * brightness for all cells given identical lightAmount values when this is called; this differentiates it from
+     * {@link #putWithLight(int, int, float, float, float, Noise.Noise3D)}, which would light "splotches" of map with
+     * brighter or darker color. Instead, if lightAmount is obtained via SquidLib's {@code FOV} class, then all cells
+     * at a short distance from an FOV center will be lit brightly and cells far away will flicker in and out of view.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to draw; may be {@code '\0'} to draw a solid block
      * @param foreground the color to use for the foreground, as a packed float; if 0f, this won't place a foreground char
      * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float color
      * @param lightColor the color to mix with the background, as a packed float color
@@ -908,7 +957,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      *                    to between 0 and 1, and negative values can be given to favor background more
      * @param flickerSpeed a small float multiplier applied to the time in milliseconds; often between 0.0005f and 0.005f
      */
-    public void putWithConsistentLight(int x, int y, char c, float foreground, float background, float lightColor, float lightAmount, float flickerSpeed) {
+    public void putWithConsistentLight(int x, int y, char c, float foreground, float background, float lightColor, double lightAmount, float flickerSpeed) {
         final float time = (System.currentTimeMillis() & 0xffffffL) * flickerSpeed; // if you want to adjust the speed of flicker, change the multiplier
         final long time0 = Noise.longFloor(time);
         final float noise = Noise.querp(NumberTools.randomFloatCurved(time0), NumberTools.randomFloatCurved(time0 + 1L), time - time0);
@@ -1057,6 +1106,32 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
 
     /**
      * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, without putting a char on the screen; as a whole this affects one x,y position. This will use the same
+     * brightness for all cells given identical lightAmount values when this is called; this differentiates it from
+     * {@link #putWithLight(int, int, float, float, float, Noise.Noise3D)}, which would light "splotches" of map with
+     * brighter or darker color. Instead, if lightAmount is obtained via SquidLib's {@code FOV} class, then all cells
+     * at a short distance from an FOV center will be lit brightly and cells far away will flicker in and out of view.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to draw; may be {@code '\0'} to draw a solid block
+     * @param foreground the "base" color to use for the foreground, which will be combined with lightColor, as a libGDX Color
+     * @param background the "base" color to use for the background, which will used without modification
+     * @param lightColor the color to mix with the foreground, as a libGDX Color
+     * @param lightAmount a double that determines how much lightColor should affect foreground by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor foreground more
+     * @param flickerSpeed a small float multiplier applied to the time in milliseconds; often between 0.0005f and 0.005f
+     */
+    public void putWithReverseConsistentLight(int x, int y, char c, Color foreground, Color background, Color lightColor, double lightAmount, float flickerSpeed) {
+        final float time = (System.currentTimeMillis() & 0xffffffL) * flickerSpeed; // if you want to adjust the speed of flicker, change the multiplier
+        final long time0 = Noise.longFloor(time);
+        final float noise = Noise.querp(NumberTools.randomFloatCurved(time0), NumberTools.randomFloatCurved(time0 + 1L), time - time0);
+        lightAmount = Math.max(lightAmount * 0.15f, Math.min(lightAmount - NumberTools.swayTight(noise * 3.141592f) * 0.15f - 0.1f + 0.25f * noise, lightAmount)); // 0.1f * noise for light theme, 0.2f * noise for dark theme
+        putWithReverseLight(x, y, c, foreground == null ? 0f : foreground.toFloatBits(), background == null ? 0f :  background.toFloatBits(),
+                lightColor == null ? 0f : lightColor.toFloatBits(), lightAmount);
+    }
+
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
      * amount, without putting a char on the screen; as a whole this affects one x,y position.
      * @param x the x position, in cells
      * @param y the y position, in cells
@@ -1069,6 +1144,21 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         put(x, y, '\0', 0f,
                 SColor.lerpFloatColors(background, lightColor,
                         MathUtils.clamp(0xAAp-9f + (0xC8p-9f * lightAmount), 0f, 1f)));
+    }
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, without putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
+     * @param lightColor the color to mix with the background, as a packed float
+     * @param lightAmount a double that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, float background, float lightColor, double lightAmount) {
+        put(x, y, '\0', 0f,
+                SColor.lerpFloatColors(background, lightColor,
+                        MathUtils.clamp(0xAAp-9f + (0xC8p-9f * (float) lightAmount), 0f, 1f)));
     }
 
     /**
@@ -1098,12 +1188,47 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param foreground the color to use for the foreground, as a packed float; if 0f, this won't place a foreground char
      * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
      * @param lightColor the color to mix with the background, as a packed float
+     * @param lightAmount a double that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithLight(int x, int y, char c, float foreground, float background, float lightColor, double lightAmount) {
+        put(x, y, c, foreground,
+                SColor.lerpFloatColors(background, lightColor,
+                        MathUtils.clamp(0xAAp-9f + (0xC8p-9f * (float) lightAmount), 0f, 1f)));
+    }
+
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, while also putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to put in the foreground
+     * @param foreground the color to use for the foreground, as a packed float; if 0f, this won't place a foreground char
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
+     * @param lightColor the color to mix with the background, as a packed float
      * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
      *                    to between 0 and 1, and negative values can be given to favor background more
      */
     public void putWithReverseLight(int x, int y, char c, float foreground, float background, float lightColor, float lightAmount) {
         put(x, y, c, SColor.lerpFloatColors(foreground, lightColor,
                 MathUtils.clamp(0x88p-9f + (0xC8p-9f * lightAmount), 0f, 1f)), background);
+    }
+
+    /**
+     * A convenience method that handles blending the background color with a specified light color, by a specific
+     * amount, while also putting a char on the screen; as a whole this affects one x,y position.
+     * @param x the x position, in cells
+     * @param y the y position, in cells
+     * @param c the char to put in the foreground
+     * @param foreground the color to use for the foreground, as a packed float; if 0f, this won't place a foreground char
+     * @param background the "base" color to use for the background, which will be combined with lightColor, as a packed float
+     * @param lightColor the color to mix with the background, as a packed float
+     * @param lightAmount a double that determines how much lightColor should affect background by; not strictly limited
+     *                    to between 0 and 1, and negative values can be given to favor background more
+     */
+    public void putWithReverseLight(int x, int y, char c, float foreground, float background, float lightColor, double lightAmount) {
+        put(x, y, c, SColor.lerpFloatColors(foreground, lightColor,
+                MathUtils.clamp(0x88p-9f + (0xC8p-9f * (float) lightAmount), 0f, 1f)), background);
     }
     /**
      * A convenience method that handles blending the background color with a specified light color, by a specific

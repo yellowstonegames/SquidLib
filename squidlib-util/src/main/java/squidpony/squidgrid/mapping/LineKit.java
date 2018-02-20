@@ -397,13 +397,13 @@ public class LineKit {
                 if(seen.contains(x, y)) 
                 {
                     mask = 15;
-                    if(x == 0 || (!seen.contains(x-1, y)))
+                    if(!seen.contains(x-1, y))
                         mask ^= 1;
-                    if(x == width - 1 || (!seen.contains(x+1, y)))
+                    if(!seen.contains(x+1, y))
                         mask ^= 4;
-                    if(y == 0 || (!seen.contains(x, y-1)))
+                    if(!seen.contains(x, y-1))
                         mask ^= 2;
-                    if(y == height - 1 || (!seen.contains(x, y+1)))
+                    if(!seen.contains(x, y+1))
                         mask ^= 8;
                     switch (map[x][y]) {
                         case '─':
