@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.NaturalLanguageCipher;
 import squidpony.StringKit;
@@ -18,7 +19,10 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.*;
+import squidpony.squidgrid.mapping.LineKit;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +42,7 @@ public class SparseDemo extends ApplicationAdapter {
     private RNG rng;
     private SparseLayers display, languageDisplay;
     private DungeonGenerator dungeonGen;
-    private char[][] decoDungeon, bareDungeon, lineDungeon;
+    private char[][] decoDungeon, bareDungeon, lineDungeon, prunedDungeon;
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
@@ -258,6 +262,7 @@ public class SparseDemo extends ApplicationAdapter {
         display.setPosition(0f, 0f);
         // Uses shadowcasting FOV and reuses the visible array without creating new arrays constantly.
         FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
+        
         // 0.01 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.01 will _not_ be in
         // the blockage Collection, but anything 0.01 or less will be in it. This lets us use blockage to prevent access
         // to cells we can't see from the start of the move.
@@ -265,6 +270,9 @@ public class SparseDemo extends ApplicationAdapter {
         seen = blockage.not().copy();
         currentlySeen = seen.copy();
         blockage.fringe8way();
+        prunedDungeon = ArrayTools.copy(lineDungeon);
+        LineKit.pruneLines(lineDungeon, seen, LineKit.lightAlt, prunedDungeon);
+
         //This is used to allow clicks or taps to take the player to the desired area.
         toCursor = new ArrayList<>(200);
         //When a path is confirmed by clicking, we draw from this List to find which cell is next to move into.
@@ -484,6 +492,7 @@ public class SparseDemo extends ApplicationAdapter {
             blockage.refill(visible, 0.0);
             seen.or(currentlySeen.remake(blockage.not()));
             blockage.fringe8way();
+            LineKit.pruneLines(lineDungeon, seen, LineKit.lightAlt, prunedDungeon);
         }
         else
         {
@@ -536,9 +545,9 @@ public class SparseDemo extends ApplicationAdapter {
                     // This effect appears to shrink and grow in a circular area around the player, with the lightest
                     // cells around the player and dimmer ones near the edge of vision. This lighting is "consistent"
                     // because all cells at the same distance will have the same amount of lighting applied.
-                    display.putWithConsistentLight(x, y, lineDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, (float) visible[x][y]);
+                    display.putWithConsistentLight(x, y, prunedDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, (float) visible[x][y]);
                 } else if(seen.contains(x, y))
-                    display.put(x, y, lineDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
+                    display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
             }
         }
         Coord pt;

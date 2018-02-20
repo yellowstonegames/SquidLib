@@ -1,5 +1,7 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.squidmath.GreasedRegion;
+
 /**
  * Tools for constructing patterns using box-drawing characters.
  * <br>
@@ -349,6 +351,126 @@ public class LineKit {
             v |= ((encoded >>> (i4 + 1) & 7L) | ((encoded >>> i4 & 1L) << 3)) << ((i4 >>> 2 & 12L) | ((~i4 & 12L) << 2));
         }
         return v;
+    }
+
+    /** Adjusts an existing map that uses box-drawing characters so non-visible line segments aren't rendered.
+     * Takes a map that was produced using {@link DungeonUtility#hashesToLines(char[][])} and a GreasedRegion that
+     * stores already-seen cells, and writes an altered version of the 2D char array {@code map} to {@code writeInto},
+     * leaving non-box-drawing chars unchanged. This method modifies writeInto in-place, and also returns it after those
+     * changesare made. The way this works is explained well with an example: if the player is north of a T-junction
+     * wall, '┬', then unless he has already explored the area south of his position, the bottom segment of the wall
+     * isn't visible to him, and so '─' should be rendered instead of '┬'. If a cell has already been seen, it is
+     * considered still visible for the purpose of calculating shown segments (it won't change once you leave an area).
+     * @param map a 2D char array that should have been produced by {@link DungeonUtility#hashesToLines(char[][])}
+     * @param seen a GreasedRegion where "on" cells are visible now or were visible in the past
+     * @param writeInto a 2D char array that must have at least the dimensions of map; will be modified
+     * @return writeInto, after modifications
+     */
+    public static char[][] pruneLines(char[][] map, GreasedRegion seen, char[][] writeInto)
+    {
+        return pruneLines(map, seen, light, writeInto);
+    }
+
+    /** Adjusts an existing map that uses box-drawing characters so non-visible line segments aren't rendered.
+     * Takes a map that was produced using {@link DungeonUtility#hashesToLines(char[][])} a GreasedRegion that stores
+     * already-seen cells, an optional char array that refers to a line drawing style constant in this class (defaults
+     * to {@link #light}, and writes an altered version of the 2D char array {@code map} to {@code writeInto}, leaving
+     * non-box-drawing chars unchanged. This method modifies writeInto in-place, and also returns it after those changes
+     * are made. The way this works is explained well with an example: if the player is north of a T-junction wall, '┬',
+     * then unless he has already explored the area south of his position, the bottom segment of the wall isn't visible
+     * to him, and so '─' should be rendered instead of '┬'. If a cell has already been seen, it is considered still
+     * visible for the purpose of calculating shown segments (it won't change once you leave an area).
+     * @param map a 2D char array that should have been produced by {@link DungeonUtility#hashesToLines(char[][])}
+     * @param seen a GreasedRegion where "on" cells are visible now or were visible in the past
+     * @param symbols a char array that should be {@link #light} or {@link #heavy} unless you know your font supports
+     *                the chars "╴╵╶╷", in which case you can use {@link #lightAlt}, or the heavy-weight versions of 
+     *                those chars, in which case you can use {@link #heavyAlt}
+     * @param writeInto a 2D char array that must have at least the dimensions of map; will be modified
+     * @return writeInto, after modifications
+     */
+    public static char[][] pruneLines(char[][] map, GreasedRegion seen, char[] symbols, char[][] writeInto)
+    {
+        final int width = map.length, height = map[0].length;
+        int mask;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(seen.contains(x, y)) 
+                {
+                    mask = 15;
+                    if(x == 0 || (!seen.contains(x-1, y)))
+                        mask ^= 1;
+                    if(x == width - 1 || (!seen.contains(x+1, y)))
+                        mask ^= 4;
+                    if(y == 0 || (!seen.contains(x, y-1)))
+                        mask ^= 2;
+                    if(y == height - 1 || (!seen.contains(x, y+1)))
+                        mask ^= 8;
+                    switch (map[x][y]) {
+                        case '─':
+                        case '━':
+                            writeInto[x][y] = symbols[5 & mask];
+                            break;
+                        case '│':
+                        case '┃':
+                            writeInto[x][y] = symbols[10 & mask];
+                            break;
+                        case '┘':
+                        case '┛':
+                            writeInto[x][y] = symbols[3 & mask];
+                            break;
+                        case '└':
+                        case '┗':
+                            writeInto[x][y] = symbols[6 & mask];
+                            break;
+                        case '┐':
+                        case '┓':
+                            writeInto[x][y] = symbols[9 & mask];
+                            break;
+                        case '┌':
+                        case '┏':
+                            writeInto[x][y] = symbols[12 & mask];
+                            break;
+                        case '┴':
+                        case '┻':
+                            writeInto[x][y] = symbols[7 & mask];
+                            break;
+                        case '┤':
+                        case '┫':
+                            writeInto[x][y] = symbols[11 & mask];
+                            break;
+                        case '┬':
+                        case '┳':
+                            writeInto[x][y] = symbols[13 & mask];
+                            break;
+                        case '├':
+                        case '┣':
+                            writeInto[x][y] = symbols[14 & mask];
+                            break;
+                        case '┼':
+                        case '╋':
+                            writeInto[x][y] = symbols[15 & mask];
+                            break;
+                        case '╴':
+                        case '╸':
+                            writeInto[x][y] = symbols[1 & mask];
+                            break;
+                        case '╵':
+                        case '╹':
+                            writeInto[x][y] = symbols[2 & mask];
+                            break;
+                        case '╶':
+                        case '╺':
+                            writeInto[x][y] = symbols[4 & mask];
+                            break;
+                        case '╷':
+                        case '╻':
+                            writeInto[x][y] = symbols[8 & mask];
+                            break;
+                    }
+                }
+            }
+        }
+        return writeInto;
     }
 
 //    public static void main(String[] args)
