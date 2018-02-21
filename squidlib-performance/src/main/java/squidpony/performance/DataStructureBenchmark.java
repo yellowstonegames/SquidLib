@@ -213,6 +213,88 @@ import java.util.concurrent.TimeUnit;
  * DataStructureBenchmark.insertSquidOS3                         1  128000  avgt    4   1339524.051 ±  117919.416  ns/op
  * DataStructureBenchmark.insertSquidOS3                         2  128000  avgt    4   1444614.897 ±  111541.667  ns/op
  * </pre>
+ * On a later run with the same benchmarks, and some hashing methods changed for SquidLib (GWT reasons):
+ * <pre>
+ * Benchmark                                     (NEED_TO_ENLARGE)  (SIZE)  Mode  Cnt         Score         Error  Units
+ * DataStructureBenchmark.insertFastUtilFairOM                   0  128000  avgt    5   6705925.304 ±  113654.457  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM                   1  128000  avgt    5  14288300.744 ± 2667712.652  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM                   2  128000  avgt    5  16211577.329 ± 2043830.277  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM2                  0  128000  avgt    5   6541405.827 ±  177699.102  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM2                  1  128000  avgt    5  10767286.263 ± 1283398.192  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM2                  2  128000  avgt    5  12163605.365 ± 1125253.537  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM3                  0  128000  avgt    5   8141896.012 ±  607153.128  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM3                  1  128000  avgt    5  19379382.696 ± 3233350.467  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOM3                  2  128000  avgt    5  21694396.792 ± 3836200.683  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS                   0  128000  avgt    5   4037004.889 ±  153261.470  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS                   1  128000  avgt    5   9230176.805 ±  161981.975  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS                   2  128000  avgt    5  11035649.928 ±  333240.294  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS2                  0  128000  avgt    5   4063432.801 ±  104377.776  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS2                  1  128000  avgt    5   6970981.121 ±  980485.224  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS2                  2  128000  avgt    5   8032550.857 ±  875923.437  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS3                  0  128000  avgt    5   4904090.843 ±  240836.197  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS3                  1  128000  avgt    5  11437529.788 ± 1618202.178  ns/op
+ * DataStructureBenchmark.insertFastUtilFairOS3                  2  128000  avgt    5  12767482.992 ± 1562801.822  ns/op
+ * DataStructureBenchmark.insertFastUtilOM                       0  128000  avgt    5   3381742.545 ±  562157.763  ns/op
+ * DataStructureBenchmark.insertFastUtilOM                       1  128000  avgt    5   8672510.524 ±  412402.460  ns/op
+ * DataStructureBenchmark.insertFastUtilOM                       2  128000  avgt    5  10514389.542 ±  255879.917  ns/op
+ * DataStructureBenchmark.insertFastUtilOM2                      0  128000  avgt    5   3319967.879 ±  175170.060  ns/op
+ * DataStructureBenchmark.insertFastUtilOM2                      1  128000  avgt    5   6611246.488 ±  375186.211  ns/op
+ * DataStructureBenchmark.insertFastUtilOM2                      2  128000  avgt    5   7706566.158 ±  337816.404  ns/op
+ * DataStructureBenchmark.insertFastUtilOM3                      0  128000  avgt    5   4490331.514 ±  101387.113  ns/op
+ * DataStructureBenchmark.insertFastUtilOM3                      1  128000  avgt    5  15289014.287 ± 2283136.589  ns/op
+ * DataStructureBenchmark.insertFastUtilOM3                      2  128000  avgt    5  16713749.416 ±  652725.743  ns/op
+ * DataStructureBenchmark.insertFastUtilOS                       0  128000  avgt    5   2235031.603 ±  106364.262  ns/op
+ * DataStructureBenchmark.insertFastUtilOS                       1  128000  avgt    5   6559982.861 ±  274170.231  ns/op
+ * DataStructureBenchmark.insertFastUtilOS                       2  128000  avgt    5   8152969.317 ±  136974.894  ns/op
+ * DataStructureBenchmark.insertFastUtilOS2                      0  128000  avgt    5   2193276.076 ±   81610.544  ns/op
+ * DataStructureBenchmark.insertFastUtilOS2                      1  128000  avgt    5   4861509.660 ±  134425.696  ns/op
+ * DataStructureBenchmark.insertFastUtilOS2                      2  128000  avgt    5   5934351.176 ± 1018198.547  ns/op
+ * DataStructureBenchmark.insertFastUtilOS3                      0  128000  avgt    5   2652513.131 ±   80060.454  ns/op
+ * DataStructureBenchmark.insertFastUtilOS3                      1  128000  avgt    5   9021731.337 ±  242558.658  ns/op
+ * DataStructureBenchmark.insertFastUtilOS3                      2  128000  avgt    5  10328402.420 ±  278577.562  ns/op
+ * DataStructureBenchmark.insertGdxOM                            0  128000  avgt    5   6186504.163 ±  293769.587  ns/op
+ * DataStructureBenchmark.insertGdxOM                            1  128000  avgt    5   6942276.865 ±  219811.746  ns/op
+ * DataStructureBenchmark.insertGdxOM                            2  128000  avgt    5   8196028.006 ±  345940.764  ns/op
+ * DataStructureBenchmark.insertGdxOM2                           0  128000  avgt    5   6047140.248 ±  156373.166  ns/op
+ * DataStructureBenchmark.insertGdxOM2                           1  128000  avgt    5   6757194.567 ±  221835.100  ns/op
+ * DataStructureBenchmark.insertGdxOM2                           2  128000  avgt    5   7634168.953 ±  279019.126  ns/op
+ * DataStructureBenchmark.insertGdxOS                            0  128000  avgt    5   3581627.966 ±  113462.373  ns/op
+ * DataStructureBenchmark.insertGdxOS                            1  128000  avgt    5   4100811.169 ±  577965.003  ns/op
+ * DataStructureBenchmark.insertGdxOS                            2  128000  avgt    5   4731826.160 ±  314012.861  ns/op
+ * DataStructureBenchmark.insertGdxOS2                           0  128000  avgt    5   3551511.177 ±   57673.991  ns/op
+ * DataStructureBenchmark.insertGdxOS2                           1  128000  avgt    5   4071275.711 ±  631178.680  ns/op
+ * DataStructureBenchmark.insertGdxOS2                           2  128000  avgt    5   4532654.707 ±  103299.524  ns/op
+ * DataStructureBenchmark.insertLinkedHashMap                    0  128000  avgt    5   3102267.313 ±  149022.213  ns/op
+ * DataStructureBenchmark.insertLinkedHashMap                    1  128000  avgt    5   3426531.681 ±   91328.990  ns/op
+ * DataStructureBenchmark.insertLinkedHashMap                    2  128000  avgt    5   3549316.860 ±   91528.100  ns/op
+ * DataStructureBenchmark.insertLinkedHashMap2                   0  128000  avgt    5   2914079.000 ±  109843.816  ns/op
+ * DataStructureBenchmark.insertLinkedHashMap2                   1  128000  avgt    5   3132436.070 ±   75891.115  ns/op
+ * DataStructureBenchmark.insertLinkedHashMap2                   2  128000  avgt    5   3271541.400 ±  103513.846  ns/op
+ * DataStructureBenchmark.insertLinkedHashSet                    0  128000  avgt    5   3227299.188 ±  132045.398  ns/op
+ * DataStructureBenchmark.insertLinkedHashSet                    1  128000  avgt    5   3513571.580 ±  191228.609  ns/op
+ * DataStructureBenchmark.insertLinkedHashSet                    2  128000  avgt    5   3375616.764 ±  133747.990  ns/op
+ * DataStructureBenchmark.insertLinkedHashSet2                   0  128000  avgt    5   2650941.993 ±   43071.600  ns/op
+ * DataStructureBenchmark.insertLinkedHashSet2                   1  128000  avgt    5   2933219.350 ±  126534.857  ns/op
+ * DataStructureBenchmark.insertLinkedHashSet2                   2  128000  avgt    5   2982516.439 ±  142959.329  ns/op
+ * DataStructureBenchmark.insertSquidOM                          0  128000  avgt    5   1539787.840 ±   49715.958  ns/op
+ * DataStructureBenchmark.insertSquidOM                          1  128000  avgt    5   1570655.599 ±  168480.933  ns/op
+ * DataStructureBenchmark.insertSquidOM                          2  128000  avgt    5   1857391.934 ±   18273.192  ns/op
+ * DataStructureBenchmark.insertSquidOM2                         0  128000  avgt    5   1539690.202 ±   39628.541  ns/op
+ * DataStructureBenchmark.insertSquidOM2                         1  128000  avgt    5   1544812.432 ±  106225.938  ns/op
+ * DataStructureBenchmark.insertSquidOM2                         2  128000  avgt    5   1908597.057 ±   64626.306  ns/op
+ * DataStructureBenchmark.insertSquidOM3                         0  128000  avgt    5   1660065.343 ±   68357.075  ns/op
+ * DataStructureBenchmark.insertSquidOM3                         1  128000  avgt    5   1612886.106 ±   73897.829  ns/op
+ * DataStructureBenchmark.insertSquidOM3                         2  128000  avgt    5   1531899.892 ±   77311.983  ns/op
+ * DataStructureBenchmark.insertSquidOS                          0  128000  avgt    5   1049938.293 ±   43853.053  ns/op
+ * DataStructureBenchmark.insertSquidOS                          1  128000  avgt    5   1446225.773 ±   49375.565  ns/op
+ * DataStructureBenchmark.insertSquidOS                          2  128000  avgt    5   1583098.974 ±   46981.194  ns/op
+ * DataStructureBenchmark.insertSquidOS2                         0  128000  avgt    5   1045367.020 ±   20296.955  ns/op
+ * DataStructureBenchmark.insertSquidOS2                         1  128000  avgt    5   1331613.776 ±   40376.117  ns/op
+ * DataStructureBenchmark.insertSquidOS2                         2  128000  avgt    5   1449129.470 ±   48967.631  ns/op
+ * DataStructureBenchmark.insertSquidOS3                         0  128000  avgt    5   1112148.439 ±   56331.458  ns/op
+ * DataStructureBenchmark.insertSquidOS3                         1  128000  avgt    5   1424965.573 ±   84169.386  ns/op
+ * DataStructureBenchmark.insertSquidOS3                         2  128000  avgt    5   1543401.423 ±   30843.084  ns/op
+ * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)

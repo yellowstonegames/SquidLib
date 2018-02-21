@@ -51,22 +51,39 @@ public class HashCommon {
      *
      * @param x an integer.
      * @return a hash value obtained by mixing the bits of {@code x}.
-     * @see #invMix(int)
+     //* @see #invMix(int)
      */
-    static int mix(final int x) {
+    static int mixOriginal(final int x) {
         final int h = x * INT_PHI;
         return h ^ (h >>> 16);
     }
-
     /**
-     * The inverse of {@link #mix(int)}. This method is mainly useful to create unit tests.
+     * Thoroughly mixes the bits of an integer.
+     * <br>
+     * This method mixes the bits of the argument using a basic LCG-like step that uses smaller ints (under 20 bits)
+     * followed by a xorshift on the result; it should work well even on GWT, where overflow can't be relied on without
+     * bitwise operations being used. The previous mix(int) method would lose precision rather than overflowing on GWT,
+     * which could have serious effects on the performance of a hash table (where lost precision means more collisions).
      *
      * @param x an integer.
-     * @return a value that passed through {@link #mix(int)} would give {@code x}.
+     * @return a hash value obtained by mixing the bits of {@code x}.
      */
-    static int invMix(final int x) {
-        return (x ^ x >>> 16) * INV_INT_PHI;
+    static int mix(int x)
+    {
+//        x = ((x *= 0x62BD5) ^ x >>> 13) * ((x & 0xFFFF8) ^ 0xCD7B5);
+//        return ((x << 21) | (x >>> 11)) ^ (((x << 7) | (x >>> 25)) * 0x62BD5);
+        return (x *= 0x62BD5) ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
     }
+
+//    /**
+//     * The inverse of {@link #mix(int)}. This method is mainly useful to create unit tests.
+//     *
+//     * @param x an integer.
+//     * @return a value that passed through {@link #mix(int)} would give {@code x}.
+//     */
+//    static int invMix(final int x) {
+//        return (x ^ x >>> 16) * INV_INT_PHI;
+//    }
 
     /**
      * Quickly mixes the bits of a long integer.

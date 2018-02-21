@@ -18,7 +18,13 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 import squidpony.annotation.GwtIncompatible;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.SortedSet;
 
 /**
  * A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
@@ -153,7 +159,7 @@ public class TableSet<C, R> implements java.io.Serializable {
      * The load factor for a (usually very small) table that is meant to be extremely fast.
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
-
+    
     protected CrossHash.IHasher columnHasher = CrossHash.defaultHasher, rowHasher = CrossHash.defaultHasher;
 
     /**
@@ -495,7 +501,7 @@ public class TableSet<C, R> implements java.io.Serializable {
             final C[] key = this.cols;
             final R[] row = this.rows;
             // The starting point.
-            if ((curr = key[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) != null &&
+            if ((curr = key[pos = determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) != null &&
                     (rurr = row[pos]) != null) {
                 if (columnHasher.areEqual(curr, c) && rowHasher.areEqual(rurr, r))
                     return false;
@@ -535,7 +541,7 @@ public class TableSet<C, R> implements java.io.Serializable {
             final C[] key = this.cols;
             final R[] row = this.rows;
             // The starting point.
-            if ((curr = key[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) != null &&
+            if ((curr = key[pos = determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) != null &&
                     (rurr = row[pos]) != null) {
                 if (columnHasher.areEqual(curr, c) && rowHasher.areEqual(rurr, r))
                     return false;
@@ -581,7 +587,7 @@ public class TableSet<C, R> implements java.io.Serializable {
                     row[last] = null;
                     return;
                 }
-                slot = PintRNG.determine(columnHasher.hash(curr), rowHasher.hash(rurr)) & mask;
+                slot = determine(columnHasher.hash(curr), rowHasher.hash(rurr)) & mask;
                 if (last <= pos ? last >= slot || slot > pos : last >= slot
                         && slot > pos)
                     break;
@@ -623,7 +629,7 @@ public class TableSet<C, R> implements java.io.Serializable {
         final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
+        if ((curr = col[pos = determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
                 || (rurr = row[pos]) == null)
             return false;
         if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
@@ -659,7 +665,7 @@ public class TableSet<C, R> implements java.io.Serializable {
         final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
+        if ((curr = col[pos = determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
                 || (rurr = row[pos]) == null)
             return false;
         if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
@@ -683,7 +689,7 @@ public class TableSet<C, R> implements java.io.Serializable {
         final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
+        if ((curr = col[pos = determine(columnHasher.hash(c), rowHasher.hash(r)) & mask]) == null
                 || (rurr = row[pos]) == null)
             return -1;
         if (columnHasher.areEqual(c, curr) && rowHasher.areEqual(r, rurr))
@@ -1144,7 +1150,7 @@ public class TableSet<C, R> implements java.io.Serializable {
             if (col[i] == null)
                 pos = newN;
             else {
-                pos = PintRNG.determine(columnHasher.hash(col[i]), rowHasher.hash(row[i])) & mask;
+                pos = determine(columnHasher.hash(col[i]), rowHasher.hash(row[i])) & mask;
                 while (!(newCol[pos] == null))
                     pos = pos + 1 & mask;
             }
@@ -1452,7 +1458,7 @@ public class TableSet<C, R> implements java.io.Serializable {
             col[pos] = null;
             row[pos] = null;
             // The starting point.
-            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))
+            if (((curr = col[rep = determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))
                     & mask]) != null) && (rurr = row[rep]) != null) {
                 if (columnHasher.areEqual(curr, creplacement) && rowHasher.areEqual(rurr, rreplacement))
                     return false;
@@ -1481,7 +1487,7 @@ public class TableSet<C, R> implements java.io.Serializable {
             final C[] col = this.cols;
             final R[] row = this.rows;
             // The starting point.
-            if (((curr = col[rep = PintRNG.determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))
+            if (((curr = col[rep = determine(columnHasher.hash(creplacement), rowHasher.hash(rreplacement))
                     & mask]) != null) && (rurr = row[rep]) != null) {
                 if (columnHasher.areEqual(curr, creplacement) && rowHasher.areEqual(rurr, rreplacement))
                     return false;
@@ -1574,7 +1580,7 @@ public class TableSet<C, R> implements java.io.Serializable {
         final R[] row = this.rows;
         int pos;
         // The starting point.
-        if ((curr = col[pos = PintRNG.determine(columnHasher.hash(originalC), rowHasher.hash(originalR)) & mask]) == null
+        if ((curr = col[pos = determine(columnHasher.hash(originalC), rowHasher.hash(originalR)) & mask]) == null
                 || (rurr = row[pos]) == null)
             return false;
         if (columnHasher.areEqual(originalC, curr) && rowHasher.areEqual(originalR, rurr)) {
@@ -1592,5 +1598,9 @@ public class TableSet<C, R> implements java.io.Serializable {
             }
         }
     }
-
+    
+    private static int determine(int left, int right)
+    {
+        return ThrustAlt32RNG.determine(ThrustAlt32RNG.determine(left) ^ right);
+    }
 }

@@ -280,7 +280,7 @@ public class TuringPattern {
      */
     public static void distort(int[][] offsets, int width, int height, Noise.Noise2D noise, int seed)
     {
-        int pointSize = offsets.length, altSeed = PintRNG.determine(seed);
+        int pointSize = offsets.length, altSeed = ThrustAlt32RNG.determine(seed);
         int[] vp;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -308,7 +308,7 @@ public class TuringPattern {
      */
     public static void distort(int[][] offsets, int width, int height, Noise.Noise3D noise, double z, int seed)
     {
-        int pointSize = offsets.length, altSeed = PintRNG.determine(seed);
+        int pointSize = offsets.length, altSeed = ThrustAlt32RNG.determine(seed);
         int[] vp;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {

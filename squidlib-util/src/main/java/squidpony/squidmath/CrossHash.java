@@ -1008,8 +1008,8 @@ public class CrossHash {
         @Override
         public int hash(final Object data) {
             if(data == null) return 0;
-            final int h = data.hashCode() * 0x9E3779B9;
-            return h ^ (h >>> 16);
+            final int x = data.hashCode() * 0x62BD5;
+            return x ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
         }
 
         @Override
@@ -1027,7 +1027,8 @@ public class CrossHash {
 
         @Override
         public int hash(Object data) {
-            return HashCommon.mix(System.identityHashCode(data));
+            final int x = System.identityHashCode(data) * 0x62BD5;
+            return x ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
         }
 
         @Override
