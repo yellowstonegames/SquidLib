@@ -2254,6 +2254,70 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen INSECT = insect().register("Insect");
 
+    private static FakeLanguageGen maori(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "a", "a", "a", "a", "a", "a", "ā", "ā", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "o", "o", "o", "u", "u",
+                        "ae", "ai", "ai", "ai", "ao", "ao", "ao", "ao", "au",
+                        "ae", "ai", "ai", "ai", "ao", "ao", "ao", "ao", "au",
+                        "āe", "āi", "āi", "āi", "āo", "āo", "āo", "āo", "āu", "oi", "oe", "ou",
+                        "ae", "ai", "ai", "ai", "ao", "ao", "ao", "ao", "au",
+                        "ae", "ai", "ai", "ai", "ao", "ao", "ao", "ao", "au",
+                        "āe", "āi", "āi", "āi", "āo", "āo", "āo", "āo", "āu", "oi", "oe", "ou",
+                        "āa", "āoi", "āoe", "āou",
+                        "āa", "āoi", "āoe", "āou",
+                        "ea", "ei", "ei", "ei", "eo", "eo", "eo", "eu", "eae", "eai", "eao", "eā", "eāe", "eāi", "eāo", "eoi", "eoe", "eou",
+                        "ia", "ia", "ie", "io", "io", "iu", "iae", "iai", "iao", "iau", "iā", "iāe", "iāi", "iāo", "iāu", "ioi", "ioe", "iou",
+                        "oa", "oa", "oa", "oa", "oae", "oai", "oao", "oau", "oā", "oā", "oāe", "oāi", "oāo", "oāu",
+                        "oa", "oa", "oa", "oa", "oae", "oai", "oao", "oau", "oā", "oā", "oāe", "oāi", "oāo", "oāu",
+                        "ua", "ue", "ui", "uo", "uae", "uai", "uao", "uau", "uā", "uāe", "uāi", "uāo", "uāu", "uoi", "uoe", "uou",
+                        "aea", "aea", "aei", "aei", "aei", "aeo", "aeo", "aeo", "aeu",
+                        "aia", "aia", "aia", "aia", "aie", "aio", "aio", "aiu",
+                        "aoa", "aoa",
+                        "aua", "aua", "aue", "aue", "aue", "aui", "aui", "auo",
+                        "āea", "āea", "āei", "āei", "āei", "āeo", "āeo", "āeo", "āeu",
+                        "āia", "āia", "āia", "āia", "āie", "āio", "āio", "āiu",
+                        "āoa", "āoa",
+                        "āua", "āua", "āue", "āue", "āue", "āui", "āui", "āuo",
+                },
+                new String[]{},
+                new String[]{"h", "h", "k", "k", "m", "m", "m", "m", "n", "n", "p", "p",
+                        "r", "r", "r", "r", "r", "t", "t", "t", "t", "w", "w", "ng", "wh", "wh", "wh",
+                        "h", "k", "m", "m", "m", "m", "n", "n", "p", "p",
+                        "r", "r", "r", "r", "r", "t", "t", "t", "t", "w", "w", "wh", "wh", "wh"
+                },
+                new String[]{"h", "k", "k", "k", "m", "n", "n", "n", "p", "p", "p", "p", "p",
+                        "r", "r", "r", "t", "t", "t", "w", "ng", "ng", "ng", "ng", "wh", "wh"
+                },
+                new String[]{""},
+                new String[]{},
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 5, 4, 2}, 0.2, 1.0, 0.0, 0.0, genericSanityChecks, true);
+    }
+    /**
+     * Imitation text from an approximation of the Maori language, spoken in New Zealand both today and historically,
+     * and closely related to some other Polynesian languages. This version uses the current standard orthographic
+     * standard of representing a long "a" with the letter "ā" (adding a macron diacritic).
+     * <br>
+     * Māuka whapi enāongupe worute, moa noepo?
+     */
+    public static final FakeLanguageGen MAORI = maori().register("Maori");
+
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
      * nor does it store modifications or mixes of languages. The order these are stored in is related to the numeric
