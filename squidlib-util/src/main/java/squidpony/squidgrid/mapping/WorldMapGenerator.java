@@ -648,6 +648,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * @return a String array that often contains 61 elements, to be used with biome codes as indices.
          */
         String[] getBiomeNameTable();
+        /**
+         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
+         * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
+         * retrieved with {@link #getBiomeCode(int, int)} and used as indices into {@link #getBiomeNameTable()} or a
+         * custom biome table.
+         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
+         */
+        void makeBiomes(WorldMapGenerator world);
     }
     /**
      * A way to get biome information for the cells on a map when you only need a single value to describe a biome, such
@@ -765,6 +773,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * taken from {@link #biomeCodeData} and used as indices into {@link #biomeTable} or a custom biome table.
          * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
          */
+        @Override
         public void makeBiomes(WorldMapGenerator world) {
             if(world == null || world.width <= 0 || world.height <= 0)
                 return;
@@ -1014,6 +1023,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * called biome A and biome B, and the mix amount, for finding how much biome B affects biome A.
          * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
          */
+        @Override
         public void makeBiomes(WorldMapGenerator world) {
             if(world == null || world.width <= 0 || world.height <= 0)
                 return;
