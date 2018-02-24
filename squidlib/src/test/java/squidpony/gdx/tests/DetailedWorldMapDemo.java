@@ -46,7 +46,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             Empty                  = 14;
 
     //private static final int width = 314 * 3, height = 300;
-    private static final int width = 1024, height = 512;
+    //private static final int width = 1024, height = 512;
+    private static final int width = 512, height = 256;
     //private static final int width = 400, height = 400;
 
     private SpriteBatch batch;
@@ -57,7 +58,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private WorldMapGenerator.EllipticalMap world;
+    private WorldMapGenerator.MimicMap world;
+    //private WorldMapGenerator.EllipticalMap world;
     private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
     private long counter = 0;
@@ -260,7 +262,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
-        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.8);
+        //world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.8);
+        world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
