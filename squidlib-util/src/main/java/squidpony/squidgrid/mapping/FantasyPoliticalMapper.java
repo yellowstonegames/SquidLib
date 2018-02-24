@@ -520,21 +520,34 @@ public class FantasyPoliticalMapper implements Serializable {
      */
     public char[][] adjustZoom() {
         if(wmg.zoom <= 0)
-            return zoomedMap;
-        ArrayTools.fill(zoomedMap, '~');
-        GreasedRegion nation = new GreasedRegion(width, height);
+        {
+            return ArrayTools.insert(politicalMap, zoomedMap, 0, 0);
+        }
+        ArrayTools.fill(zoomedMap, ' ');
         char c;
         int stx = Math.min(Math.max((wmg.zoomStartX - (width  >> 1)) / ((2 << wmg.zoom) - 2), 0), width ),
                 sty = Math.min(Math.max((wmg.zoomStartY - (height >> 1)) / ((2 << wmg.zoom) - 2), 0), height);
-        for (int i = 2; i < atlas.size(); i++) {
+        GreasedRegion nation = new GreasedRegion(wmg.landData);
+        GreasedRegion fillable = new GreasedRegion(politicalMap, '~').not();
+        for (int i = 0; i < wmg.zoom; i++) {
+            fillable.zoom(stx, sty);
+        }
+        fillable.flood(nation, width + height);
+        for (int i = 1; i < atlas.size(); i++) {
             nation.refill(politicalMap, c = atlas.keyAt(i));
             if(nation.isEmpty()) continue;
-            for (int z = 1; z <= wmg.zoom; z++) {
+            for (int z = 0; z < wmg.zoom; z++) {
                 nation.zoom(stx, sty).expand8way().expand().fray(0.5);
             }
+            fillable.andNot(nation);
             nation.intoChars(zoomedMap, c);
         }
-        nation.refill(wmg.heightCodeData, 4, 999).and(new GreasedRegion(zoomedMap, '~')).intoChars(zoomedMap, '%');
+        for (int i = 1; i < atlas.size(); i++) {
+            nation.refill(zoomedMap, c = atlas.keyAt(i));
+            if(nation.isEmpty()) continue;
+            nation.flood(fillable, 4 << wmg.zoom).intoChars(zoomedMap, c);
+        }
+        nation.refill(wmg.heightCodeData, 4, 999).and(new GreasedRegion(zoomedMap, ' ')).intoChars(zoomedMap, '%');
         nation.refill(wmg.heightCodeData, -999, 4).intoChars(zoomedMap, '~');
         return zoomedMap;
     }

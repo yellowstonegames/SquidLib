@@ -202,7 +202,7 @@ public class ArrayTools {
      * @param target a 2D char array that will be modified by receiving as much of source as it can hold
      * @param x      the x position in target to receive the items from the first cell in source
      * @param y      the y position in target to receive the items from the first cell in source
-     * @return a modified copy of target with source inserted into it at the given position
+     * @return target, modified, with source inserted into it at the given position
      */
     public static char[][] insert(char[][] source, char[][] target, int x, int y) {
         if (source == null || target == null)
@@ -224,7 +224,7 @@ public class ArrayTools {
      * @param target a 2D double array that will be modified by receiving as much of source as it can hold
      * @param x      the x position in target to receive the items from the first cell in source
      * @param y      the y position in target to receive the items from the first cell in source
-     * @return a modified copy of target with source inserted into it at the given position
+     * @return target, modified, with source inserted into it at the given position
      */
     public static double[][] insert(double[][] source, double[][] target, int x, int y) {
         if (source == null || target == null)
@@ -246,7 +246,7 @@ public class ArrayTools {
      * @param target a 2D int array that will be modified by receiving as much of source as it can hold
      * @param x      the x position in target to receive the items from the first cell in source
      * @param y      the y position in target to receive the items from the first cell in source
-     * @return a modified copy of target with source inserted into it at the given position
+     * @return target, modified, with source inserted into it at the given position
      */
     public static int[][] insert(int[][] source, int[][] target, int x, int y) {
         if (source == null || target == null)
@@ -268,7 +268,7 @@ public class ArrayTools {
      * @param target a 2D boolean array that will be modified by receiving as much of source as it can hold
      * @param x      the x position in target to receive the items from the first cell in source
      * @param y      the y position in target to receive the items from the first cell in source
-     * @return a modified copy of target with source inserted into it at the given position
+     * @return target, modified, with source inserted into it at the given position
      */
     public static boolean[][] insert(boolean[][] source, boolean[][] target, int x, int y) {
         if (source == null || target == null)

@@ -464,7 +464,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        nation = NumberTools.swayTight(++counter * 0.0125f);
+        nation = NumberTools.swayTight(++counter * 0.03125f);
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.
