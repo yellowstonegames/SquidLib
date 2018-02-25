@@ -2654,26 +2654,61 @@ public class Noise {
     public static class Basic1D implements Noise1D
     {
         public static final Basic1D instance = new Basic1D();
+        public double alter1, alter2, alter3, alter4;
+        public long lastSeed;
         public Basic1D()
         {
+            this(1L);
+        }
+        public Basic1D(long seed)
+        {
+            lastSeed = seed;
+            alter1 = (ThrustAltRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+            alter2 = (ThrustAltRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+            alter3 = (ThrustAltRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+            alter4 = (ThrustAltRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
         }
         @Override
         public double getNoise(double x) {
-            final long x0 = longFloor(x);
-            return cerp(NumberTools.randomFloatCurved(x0), NumberTools.randomFloatCurved(x0 + 1L), x - x0);
+
+            return (cubicSway(alter2 + x * alter1) +
+                    cubicSway(alter3 - x * alter2) +
+                    cubicSway(alter4 + x * alter3) +
+                    cubicSway(alter1 - x * alter4)) * 0.25f;
         }
 
         @Override
         public double getNoiseWithSeed(double x, long seed) {
-            x += NumberTools.bounce(seed + x);
-            final long x0 = longFloor(x);
-            return cerp(NumberTools.randomFloatCurved(x0 + seed), NumberTools.randomFloatCurved(x0 + 1L + seed), x - x0);
+            if(lastSeed != seed)
+            {
+                lastSeed = seed;
+                alter1 = (ThrustAltRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+                alter2 = (ThrustAltRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+                alter3 = (ThrustAltRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+                alter4 = (ThrustAltRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+            }
+            return (cubicSway(alter2 + x * alter1) +
+                    cubicSway(alter3 - x * alter2) +
+                    cubicSway(alter4 + x * alter3) +
+                    cubicSway(alter1 - x * alter4)) * 0.25f;
+        }
+        public static double cubicSway(double value)
+        {
+            long floor = (value >= 0.0 ? (long) value : (long) value - 1L);
+            value -= floor;
+            floor = (-(floor & 1L) | 1L);
+            return value * value * (3.0 - 2.0 * value) * (floor << 1) - floor;
         }
 
         public static double noise(double x, long seed) {
-            //x += NumberTools.sway(seed * 0x1.61p-16 * x);
-            final long x0 = longFloor(x);
-            return cerp(NumberTools.randomFloatCurved(x0 + seed), NumberTools.randomFloatCurved(x0 + 1L + seed), x - x0);
+            final double alter1 = (ThrustAltRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter2 = (ThrustAltRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter3 = (ThrustAltRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
+                    alter4 = (ThrustAltRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
+            return (cubicSway(alter2 + x * alter1) +
+                    cubicSway(alter3 - x * alter2) +
+                    cubicSway(alter4 + x * alter3) +
+                    cubicSway(alter1 - x * alter4)) * 0.25f;
         }
     }
 }

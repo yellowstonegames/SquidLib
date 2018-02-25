@@ -24,6 +24,7 @@ import java.util.Random;
 
 import static squidpony.squidgrid.gui.gdx.SColor.*;
 import static squidpony.squidmath.Noise.PointHash.*;
+import static squidpony.squidmath.NumberTools.swayTight;
 
 /**
  * Demo to help with visualizing hash/noise functions and RNG types. Most of the hashes work simply by treating the x,y
@@ -74,7 +75,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 115;
-    private int hashMode = 0, rngMode = 26, noiseMode = 112;
+    private int hashMode = 0, rngMode = 26, noiseMode = 104;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -128,9 +129,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
     private final Noise.Noise6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
 
-    private final Noise.Noise2D ridged2D = new Noise.Ridged2D(SeededNoise.instance, 1, 1.45); // 1.45
-    private final Noise.Noise3D ridged3D = new Noise.Ridged3D(SeededNoise.instance, 1, 1.45); // 1.45
-    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(SeededNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Noise2D ridged2D = new Noise.Ridged2D(WhirlingNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Noise3D ridged3D = new Noise.Ridged3D(WhirlingNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(WhirlingNoise.instance, 1, 1.45); // 1.45
     private final Noise.Noise6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
                                                                                    
     private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
@@ -138,9 +139,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
-    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(SeededNoise.instance, ridged2D, 3, 2);
-    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(SeededNoise.instance, ridged3D, 3, 2);
-    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(SeededNoise.instance, ridged4D, 3, 2);
+    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(WhirlingNoise.instance, ridged2D, 3, 2);
+    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(WhirlingNoise.instance, ridged3D, 3, 2);
+    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(WhirlingNoise.instance, ridged4D, 3, 2);
     private final Noise.Noise6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
     private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
     private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
@@ -680,6 +681,20 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 x1y1 = Noise.PointHash.hashAll(floorX + 1, floorY + 1, seed) * 0x0.fffffffffffffbp-63;
         return Noise.cerp(Noise.cerp(x0y0, x1y0, x - floorX), Noise.cerp(x0y1, x1y1, x - floorX), y - floorY);
     }
+    public static float randomWobbleTight(float value, float alter1, float alter2, float alter3, float alter4)
+    {
+        return (swayTight(1.125f + value * alter1) +
+                swayTight(3.25f + value *  alter2) +
+                swayTight(5.375f + value * alter3) +
+                swayTight(7.5f + value *   alter4)) * 0.25f;
+    }
+    public static float randomWobble(float value, float alter1, float alter2, float alter3, float alter4)
+    {
+        return (NumberTools.sway(alter2 + value * alter1) +
+                NumberTools.sway(alter3 + value * alter2) +
+                NumberTools.sway(alter4 + value * alter3) +
+                NumberTools.sway(alter1 + value * alter4)) * 0.25f;
+    }
 
 
 
@@ -773,25 +788,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     public static float prepare(double n)
     {
         //return (float)n * 0.5f + 0.5f;
-        return NumberTools.swayTight((float)n * 1.5f + 0.5f);
+        return swayTight((float)n * 1.5f + 0.5f);
     }
 
     public static float prepare(float n)
     {
         //return (n * 0.5f) + 0.5f;
-        return NumberTools.swayTight(n * 1.5f + 0.5f);
+        return swayTight(n * 1.5f + 0.5f);
     }
 
     public static float prepare(double n, float multiplier)
     {
         //return (float)n * 0.5f + 0.5f;
-        return NumberTools.swayTight((float)n * multiplier + 0.5f);
+        return swayTight((float)n * multiplier + 0.5f);
     }
 
     public static float prepare(float n, float multiplier)
     {
         //return (n * 0.5f) + 0.5f;
-        return NumberTools.swayTight(n * multiplier + 0.5f);
+        return swayTight(n * multiplier + 0.5f);
     }
 
     public static float basicPrepare(double n)
@@ -3174,7 +3189,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
 
                     case 28:
-                        Gdx.graphics.setTitle("Seeded Ridged 3D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Ridged 3D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3187,7 +3202,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 29:
-                        Gdx.graphics.setTitle("Seeded Ridged 3D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Ridged 3D Noise, two octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(/*Noise.seamless3D(x * 0.0625, y * 0.0625, ctr  * 0.05125,
@@ -3228,7 +3243,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 32:
-                        Gdx.graphics.setTitle("Seeded Turbulent Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Whirling Turbulent Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3251,7 +3266,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Turb6D Seamless at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 34:
-                        Gdx.graphics.setTitle("Seeded Turbulent Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        Gdx.graphics.setTitle("Whirling Turbulent Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3274,7 +3289,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Turb4D Seamless at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 36:
-                        Gdx.graphics.setTitle("Seeded Turbulent 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Turbulent 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -3304,7 +3319,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Turb3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
                         break;
                     case 38:
-                        Gdx.graphics.setTitle("Seeded Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Whirling Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y,
@@ -4044,7 +4059,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                            iBright = (int)(basic1D.getNoiseWithSeed(ctr * 0.015625, 0xBADBEEF0FFAL) * 240);
+                            iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 240);
                             display.put(511, 255 + iBright, bright);
                             display.put(511, 256 + iBright, bright);
                             display.put(511, 257 + iBright, bright);
@@ -4065,7 +4080,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Arrays.fill(display.colors[511], FLOAT_WHITE);
                         if((ctr & 3) == 0)
                         {
-                            iBright = (int)(layered1D.getNoiseWithSeed(ctr * 0.015625, 0xBADBEEF0FFAL) * 240);
+                            iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 240);
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
                             display.put(511, 255 + iBright, bright);
                             display.put(511, 256 + iBright, bright);
@@ -4124,13 +4139,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                     break;
                     case 108:
-                        Gdx.graphics.setTitle("swayRandomized2() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("randomWobbleTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
                         Arrays.fill(display.colors[511], FLOAT_WHITE);
                         if((ctr & 3) == 0) {
+                            s0 = (ThrustAlt32RNG.determine(9001) >>> 8) * 0x1.5p-25f + 0.25f;
+                            s1 = (ThrustAlt32RNG.determine(9002) >>> 8) * 0x1.5p-25f + 0.25f;
+                            c0 = (ThrustAlt32RNG.determine(9003) >>> 8) * 0x1.5p-25f + 0.25f;
+                            c1 = (ThrustAlt32RNG.determine(9004) >>> 8) * 0x1.5p-25f + 0.25f;
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
-                            iBright = (int) (swayRandomized(9001L, ctr * 0.0125f) * 240f);
+                            iBright = (int) (randomWobble(ctr * 0.0125f, s0, s1, c0, c1) * 240f);
                             display.put(511, 255 + iBright, bright);
                             display.put(511, 256 + iBright, bright);
                             display.put(511, 257 + iBright, bright);
@@ -5108,6 +5127,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         config.width = width;
         config.height = height;
         config.foregroundFPS = 0;
+        config.vSyncEnabled = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
