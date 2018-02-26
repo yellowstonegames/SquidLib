@@ -14,12 +14,15 @@ import java.util.ArrayList;
  * A simple Markov chain text generator; call {@link #analyze(CharSequence)} once on a large sample text, then you can
  * call {@link #chain(long)} many times to get odd-sounding "remixes" of the sample text. This is meant to allow easy
  * serialization of the necessary data to call chain(); if you can store the {@link #words} and {@link #processed}
- * arrays in some serialized form, then you can reassign them to the same fields to avoid calling analyze().
+ * arrays in some serialized form, then you can reassign them to the same fields to avoid calling analyze(). One way to
+ * do this conveniently is to use {@link #serializeToString()} after calling analyze() once and to save the resulting
+ * String; then, rather than calling analyze() again on future runs, you would call
+ * {@link #deserializeFromString(String)} to create the MarkovText without needing any repeated analysis.
  * <br>
  * Created by Tommy Ettinger on 1/30/2018.
  */
 @Beta
-public class Markov implements Serializable {
+public class MarkovText implements Serializable {
     private static final long serialVersionUID = 0L;
 
     /**
@@ -29,20 +32,20 @@ public class Markov implements Serializable {
     public String[] words;
     /**
      * Complicated data that mixes probabilities and the indices of words in {@link #words}, generated during the latest
-     * call to {@link #analyze(CharSequence)}. Will be null if analyze() was never called.
+     * call to {@link #analyze(CharSequence)}. This is a jagged 2D array. Will be null if analyze() was never called.
      */
     public int[][] processed;
 
     private static final String INITIAL = "", FULL_STOP = ".", EXCLAMATION = "!", QUESTION = "?", ELLIPSIS = "...";
     private static final Matcher matcher = Pattern.compile("\\.\\.\\.|[\\.!\\?]|[^\\.!\\?\"\\(\\)\\[\\]\\{\\}\\s]+").matcher();
-    public Markov()
+    public MarkovText()
     {
     }
 
     /**
-     * This is the main necessary step before using a Markov; you must call this method at some point before you can
-     * call any other methods. You can serialize this Markov after calling to avoid needing to call this again on later
-     * runs, or even include serialized Markov objects with a game to only need to call this during pre-processing.
+     * This is the main necessary step before using a MarkovText; you must call this method at some point before you can
+     * call any other methods. You can serialize this MarkovText after calling to avoid needing to call this again on later
+     * runs, or even include serialized MarkovText objects with a game to only need to call this during pre-processing.
      * This method analyzes the pairings of words in a (typically large) corpus text, including some punctuation as part
      * of words and some kinds as their own "words." It only uses one preceding word to determine the subsequent word.
      * When it finishes processing, it stores the results in {@link #words} and {@link #processed}, which allows other
@@ -167,13 +170,13 @@ public class Markov implements Serializable {
     }
 
     /**
-     * After calling {@link #analyze(CharSequence)}, you can optionally call this to alter any words in this Markov that
+     * After calling {@link #analyze(CharSequence)}, you can optionally call this to alter any words in this MarkovText that
      * were used as a proper noun (determined by whether they were capitalized in the middle of a sentence), changing
      * them to a ciphered version using the given {@link NaturalLanguageCipher}. Normally you would initialize a
      * NaturalLanguageCipher with a {@link FakeLanguageGen} that matches the style you want for all names in this text,
      * then pass that to this method during pre-processing (not necessarily at runtime, since this method isn't
-     * especially fast if the corpus was large). This method modifies this Markov in-place.
-     * @param translator a NaturalLanguageCipher that will be used to translate proper nouns in this Markov's word array
+     * especially fast if the corpus was large). This method modifies this MarkovText in-place.
+     * @param translator a NaturalLanguageCipher that will be used to translate proper nouns in this MarkovText's word array
      */
     public void changeNames(NaturalLanguageCipher translator)
     {
@@ -216,7 +219,7 @@ public class Markov implements Serializable {
      */
     public String chain(long seed, int maxLength) {
         int before = 0;
-        boolean later = false;
+        boolean later;
         long state;
         StringBuilder sb = new StringBuilder(1000);
         int[] rf;
@@ -231,7 +234,7 @@ public class Markov implements Serializable {
             // This is ThrustAltRNG's algorithm to generate a random long given sequential states
             state = ((state = ((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (state >>> 22));
             // get a random int (using half the bits of our previously-calculated state) that is less than size
-            int column = (int) ((rf.length * (state & 0xFFFFFFFFL)) * 0x1.5555555555555p-34) * 3; // 1/3 of 2^-32
+            int column = (int) ((rf.length * (state & 0xFFFFFFFFL)) / 0x300000000L) * 3; // divide by 2^32, round down to multiple of 3
             // use the other half of the bits of state to get a double, compare to probability and choose either the
             // current column or the alias for that column based on that probability
             before = ((state >>> 33) <= rf[column]) ? rf[column + 1] : rf[column + 2];
@@ -245,7 +248,6 @@ public class Markov implements Serializable {
                 }
                 else
                 {
-                    sb.setLength(sb.length() - 1);
                     if(sb.length() + 3 <= maxLength)
                         sb.append("...");
                     else
@@ -260,5 +262,52 @@ public class Markov implements Serializable {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * Returns a representation of this MarkovText as a String; use {@link #deserializeFromString(String)} to get a
+     * MarkovText back from this String. The {@link #words} and {@link #processed} fields must have been given values by
+     * either direct assignment, calling {@link #analyze(CharSequence)}, or building this MarkovTest with the
+     * aforementioned deserializeToString method. Uses spaces to separate words and a tab to separate the two fields.
+     * @return a String that can be used to store the analyzed words and frequencies in this MarkovText
+     */
+    public String serializeToString()
+    {
+        return StringKit.join(" ", words) + "\t" + Converters.convertArrayInt2D.stringify(processed);
+    }
+
+    /**
+     * Recreates an already-analyzed MarkovText given a String produced by {@link #serializeToString()}.
+     * @param data a String returned by {@link #serializeToString()}
+     * @return a MarkovText that is ready to generate text with {@link #chain(long)}
+     */
+    public static MarkovText deserializeFromString(String data)
+    {
+        int split = data.indexOf('\t');
+        MarkovText markov = new MarkovText();
+        markov.words = StringKit.split(data.substring(0, split), " ");
+        markov.processed = Converters.convertArrayInt2D.restore(data.substring(split + 1));
+        return markov;
+    }
+
+    /**
+     * Copies the String array {@link #words} and the 2D jagged int array {@link #processed} into a new MarkovText.
+     * None of the arrays will be equivalent references, but the Strings (being immutable) will be the same objects in
+     * both MarkovText instances. This is primarily useful with {@link #changeNames(NaturalLanguageCipher)}, which can
+     * produce several variants on names given several initial copies produced with this method.
+     * @return a copy of this MarkovText
+     */
+    public MarkovText copy()
+    {
+        MarkovText other = new MarkovText();
+        other.words = new String[words.length];
+        System.arraycopy(words, 0, other.words, 0, words.length);
+        other.processed = new int[processed.length][];
+        int len;
+        for (int i = 0; i < processed.length; i++) {
+            other.processed[i] = new int[len = processed[i].length];
+            System.arraycopy(processed[i], 0, other.processed[i], 0, len);
+        }
+        return other;
     }
 }

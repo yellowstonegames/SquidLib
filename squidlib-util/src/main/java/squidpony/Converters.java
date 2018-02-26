@@ -513,6 +513,19 @@ public class Converters {
         }
     };
 
+    public static final StringConvert<MarkovText> convertMarkovText = new StringConvert<MarkovText>("MarkovText")
+    {
+        @Override
+        public String stringify(MarkovText item) {
+            return item.serializeToString();
+        }
+
+        @Override
+        public MarkovText restore(String text) {
+            return MarkovText.deserializeFromString(text);
+        }
+    };
+
     public static final StringConvert<ObText> convertObText = new StringConvert<ObText>("ObText") {
         @Override
         public String stringify(ObText item) {

@@ -413,17 +413,17 @@ public class LanguageGenTest {
                 "were the same gray color to be seen everywhere. Once the house had been painted, but the sun " +
                 "blistered the paint and the rains washed it away, and now the house was as dull and gray as " +
                 "everything else.";
-        Markov markov = new Markov();
-        markov.analyze(ozzes);
+        MarkovText markovText = new MarkovText();
+        markovText.analyze(ozzes);
         for (int i = 0; i < 40; i++) {
-            System.out.println(markov.chain(++seed, 100 + (i * 2)));
+            System.out.println(markovText.chain(++seed, 100 + (i * 2)));
         }
         seed = 10040L;
         System.out.println();
         NaturalLanguageCipher cipher = new NaturalLanguageCipher(FakeLanguageGen.JAPANESE_ROMANIZED);
-        markov.changeNames(cipher);
+        markovText.changeNames(cipher);
         for (int i = 0; i < 40; i++) {
-            System.out.println(markov.chain(++seed, 100 + (i * 2)));
+            System.out.println(markovText.chain(++seed, 100 + (i * 2)));
         }
 
     }
