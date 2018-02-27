@@ -2,6 +2,8 @@ package squidpony.examples;
 
 import squidpony.ObText;
 
+import java.util.List;
+
 /**
  * Created by Tommy Ettinger on 10/28/2016.
  */
@@ -34,18 +36,20 @@ public class ObTextTest {
                 "if you may need \"triple quotes\"\n" +
                 "    in the raw string, use a different syntax, [[delim[ ]delim]] , that allows delimiters.\n" +
                 "here, the delimiter is '''different''', just to be different.]different]]\n");
-        System.out.println(ObText.deserializeFromString(ot.toString()).toString());
-        //iterate(ot.iterator());
+        String o = ot.toString();
+        System.out.println(o);
+        System.out.println(ObText.deserializeFromString(o).toString());
+        iterate(ot);
     }
-    public static void iterate(ObText.ItemIterator it)
+    public static void iterate(List<ObText.ObTextEntry> it)
     {
-        while (it.hasNext())
+        for(ObText.ObTextEntry entry : it)
         {
             System.out.print('"');
-            System.out.print(it.next());
+            System.out.print(entry.primary);
             System.out.println("\",");
-            if(it.hasChild())
-                iterate(it.children());
+            if(entry.hasAssociated())
+                iterate(entry.associated);
         }
     }
 
