@@ -43,7 +43,7 @@ public class WaypointPathfinder {
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
-        ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+        OrderedSet<Coord> centers = PoissonDisk.sampleMap(simplified,
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];
@@ -186,7 +186,7 @@ public class WaypointPathfinder {
             }
         }
         else {
-            ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+            OrderedSet<Coord> centers = PoissonDisk.sampleMap(simplified,
                     Math.min(width, height) * 0.4f, this.rng, '#');
             int centerCount = centers.size();
             dm = new DijkstraMap(simplified, DijkstraMap.Measurement.MANHATTAN);
@@ -340,7 +340,7 @@ public class WaypointPathfinder {
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
-        ArrayList<Coord> centers = PoissonDisk.sampleMap(simplified,
+        OrderedSet<Coord> centers = PoissonDisk.sampleMap(simplified,
                 Math.min(width, height) * 0.4f, this.rng, '#');
         int centerCount = centers.size();
         expansionMap = new int[width][height];

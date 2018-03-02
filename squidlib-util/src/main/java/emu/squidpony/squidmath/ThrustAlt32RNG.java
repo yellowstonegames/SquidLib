@@ -87,7 +87,7 @@ public final class ThrustAlt32RNG implements StatefulRandomness, Serializable {
     }
 
     public static int determine(int state) {
-        state = ((state = state * 0x62BD5 | 0) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5) | 0;
+        state = ((state *= 0x62BD5) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5);
         return ((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5);
     }
     
@@ -98,19 +98,19 @@ public final class ThrustAlt32RNG implements StatefulRandomness, Serializable {
      * @return a pseudo-random long determined by state
      */
     public static int randomize(int state) {
-        state = (state ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5) | 0;
+        state = ((state *= 0x62BD5) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5);
         return ((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5);
 
     }
 
     public static float determineFloat(int state) {
-        state = ((state = state * 0x62BD5 | 0) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5) | 0;
+        state = ((state *= 0x62BD5) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5);
         return ((((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5)) & 0xFFFFFF) * 0x1p-24f;
     }
 
     public static int determineBounded(int state, final int bound)
     {
-        state = ((state = state * 0x62BD5 | 0) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5) | 0;
+        state = ((state *= 0x62BD5) ^ state >>> 13) * ((state & 0xFFFF8) ^ 0xCD7B5);
         return (int) ((((((state << 21) | (state >>> 11)) ^ (((state << 7) | (state >>> 25)) * 0x62BD5)) & 0xFFFFFFFFL) * bound) >> 32);
     }
 }

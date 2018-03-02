@@ -384,7 +384,6 @@ public class IntVLA implements Serializable, Cloneable {
             swap(i + random.nextInt(n - i), i);
         }
         return this;
-
     }
 
     public int[] toArray () {

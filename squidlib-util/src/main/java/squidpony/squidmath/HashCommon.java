@@ -60,10 +60,11 @@ public class HashCommon {
     /**
      * Thoroughly mixes the bits of an integer.
      * <br>
-     * This method mixes the bits of the argument using a basic LCG-like step that uses smaller ints (under 20 bits)
-     * followed by a xorshift on the result; it should work well even on GWT, where overflow can't be relied on without
-     * bitwise operations being used. The previous mix(int) method would lose precision rather than overflowing on GWT,
-     * which could have serious effects on the performance of a hash table (where lost precision means more collisions).
+     * This method mixes the bits of the argument using a multiplication by a smaller int (19 bits) followed by XOR with
+     * two different rotations of the earlier product; it should work well even on GWT, where overflow can't be relied
+     * on without bitwise operations being used. The previous mix(int) method would lose precision rather than
+     * overflowing on GWT, which could have serious effects on the performance of a hash table (where lost precision
+     * means more collisions).
      *
      * @param x an integer.
      * @return a hash value obtained by mixing the bits of {@code x}.

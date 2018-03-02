@@ -2,12 +2,7 @@ package squidpony.examples;
 
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.SerpentDeepMapGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.LightRNG;
-import squidpony.squidmath.PoissonDisk;
-import squidpony.squidmath.RNG;
-
-import java.util.ArrayList;
+import squidpony.squidmath.*;
 
 /**
  * A test for the randomized spraying of Coords in the PoissonDisk class.
@@ -26,7 +21,7 @@ public class PoissonDiskTest {
 
         // System.out.println(dg);
 
-        ArrayList<Coord> disks = PoissonDisk.sampleMap(dun, 7f, rng, '#');
+        OrderedSet<Coord> disks = PoissonDisk.sampleMap(dun, 7f, rng, '#');
 
         //char[][] hl = DungeonUtility.hashesToLines(dun);
         for(Coord c : disks)

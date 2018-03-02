@@ -20,7 +20,7 @@ import java.util.HashSet;
  */
 public class PoissonDisk {
     private static final float rootTwo = (float) Math.sqrt(2),
-            pi = (float) Math.PI, pi2 = pi * 2f, halfPi = pi * 0.5f;
+            pi2 = (float) (Math.PI * 2.0);
     
     private static final int defaultPointsPlaced = 10;
     private static final Radius disk = Radius.CIRCLE;
@@ -41,7 +41,7 @@ public class PoissonDisk {
      * @param maxY one more than the highest y that can be assigned; typically an array length
      * @return an ArrayList of Coord that satisfy the minimum distance; the length of the array can vary
      */
-    public static ArrayList<Coord> sampleCircle(Coord center, float radius, float minimumDistance,
+    public static OrderedSet<Coord> sampleCircle(Coord center, float radius, float minimumDistance,
                                                 int maxX, int maxY)
     {
         return sampleCircle(center, radius, minimumDistance, maxX, maxY, defaultPointsPlaced, new StatefulRNG());
@@ -62,7 +62,7 @@ public class PoissonDisk {
      * @param rng an RNG to use for all random sampling.
      * @return an ArrayList of Coord that satisfy the minimum distance; the length of the array can vary
      */
-    public static ArrayList<Coord> sampleCircle(Coord center, float radius, float minimumDistance,
+    public static OrderedSet<Coord> sampleCircle(Coord center, float radius, float minimumDistance,
                                                 int maxX, int maxY, int pointsPerIteration, RNG rng)
     {
         int radius2 = Math.round(radius);
@@ -82,7 +82,7 @@ public class PoissonDisk {
      * @param maxY one more than the highest y that can be assigned; typically an array length
      * @return an ArrayList of Coord that satisfy the minimum distance; the length of the array can vary
      */
-    public static ArrayList<Coord> sampleRectangle(Coord minPosition, Coord maxPosition, float minimumDistance,
+    public static OrderedSet<Coord> sampleRectangle(Coord minPosition, Coord maxPosition, float minimumDistance,
                                                    int maxX, int maxY)
     {
         return sampleRectangle(minPosition, maxPosition, minimumDistance, maxX, maxY, defaultPointsPlaced, new StatefulRNG());
@@ -103,13 +103,13 @@ public class PoissonDisk {
      * @param rng an RNG to use for all random sampling.
      * @return an ArrayList of Coord that satisfy the minimum distance; the length of the array can vary
      */
-    public static ArrayList<Coord> sampleRectangle(Coord minPosition, Coord maxPosition, float minimumDistance,
+    public static OrderedSet<Coord> sampleRectangle(Coord minPosition, Coord maxPosition, float minimumDistance,
                                                    int maxX, int maxY, int pointsPerIteration, RNG rng)
     {
         return sample(minPosition, maxPosition, 0f, minimumDistance, maxX, maxY, pointsPerIteration, rng);
     }
 
-    private static ArrayList<Coord> sample(Coord minPosition, Coord maxPosition, float rejectionDistance,
+    private static OrderedSet<Coord> sample(Coord minPosition, Coord maxPosition, float rejectionDistance,
                                            float minimumDistance, int maxX, int maxY, int pointsPerIteration, RNG rng)
     {
 
@@ -158,8 +158,7 @@ public class PoissonDisk {
                 //get random point around
                 float d = rng.nextFloat();
                 float radius = minimumDistance + minimumDistance * d;
-                d = rng.nextFloat();
-                float angle = pi2 * d;
+                float angle = pi2 * rng.nextFloat();
 
                 float newX = radius * NumberTools.sin(angle);
                 float newY = radius * NumberTools.cos(angle);
@@ -197,18 +196,17 @@ public class PoissonDisk {
                 activePoints.remove(listIndex);
             }
         }
-        activePoints = new ArrayList<>(points);
-        return activePoints;
+        return points;
     }
 
-    public static ArrayList<Coord> sampleMap(char[][] map,
-                                             float minimumDistance, RNG rng, Character... blocking)
+    public static OrderedSet<Coord> sampleMap(char[][] map,
+                                              float minimumDistance, RNG rng, Character... blocking)
     {
         return sampleMap(Coord.get(1, 1), Coord.get(map.length - 2, map[0].length - 2),
                 map, minimumDistance, rng, blocking);
     }
 
-    public static ArrayList<Coord> sampleMap(Coord minPosition, Coord maxPosition, char[][] map,
+    public static OrderedSet<Coord> sampleMap(Coord minPosition, Coord maxPosition, char[][] map,
                                              float minimumDistance, RNG rng, Character... blocking) {
         int width = map.length;
         int height = map[0].length;
@@ -230,7 +228,7 @@ public class PoissonDisk {
 
         Coord p = randomUnblockedTile(minPosition, maxPosition, map, rng, blocked);
         if (p == null)
-            return activePoints;
+            return points;
         Coord index = p.subtract(minPosition).divide(cellSize);
 
         grid[index.x][index.y] = p;
@@ -258,7 +256,7 @@ public class PoissonDisk {
                 float newY = radius * NumberTools.cos(angle);
                 Coord q = point.translateCapped(Math.round(newX), Math.round(newY), width, height);
                 int frustration = 0;
-                while(blocked.contains(map[q.x][q.y]) && frustration < 8)
+                while(restricted && blocked.contains(map[q.x][q.y]) && frustration < 8)
                 {
                     d = rng.nextFloat();
                     angle = pi2 * d;
@@ -286,7 +284,7 @@ public class PoissonDisk {
                     if (!tooClose) {
                         found = true;
                         activePoints.add(q);
-                        if(!blocked.contains(map[q.x][q.y]))
+                        if(!restricted || !blocked.contains(map[q.x][q.y]))
                             points.add(q);
                         grid[qIndex.x][qIndex.y] = q;
                     }
@@ -297,8 +295,7 @@ public class PoissonDisk {
             if (!found)
                 activePoints.remove(listIndex);
         }
-        activePoints = new ArrayList<>(points);
-        return activePoints;
+        return points;
     }
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has any value not in blocking.

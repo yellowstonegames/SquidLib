@@ -196,12 +196,14 @@ public class DefaultResources implements LifecycleListener {
             + "\n"
             + "void main() {\n"
             + "	vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
-            + " float dist = max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5;\n"
-            + " float d = u_smoothing * 1.75;\n"
+            //+ " float dist = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (2.75 * u_smoothing);\n"
+            //+ " float d = u_smoothing * 1.75;\n" 
             //+ " float d = fwidth(dist);\n"
-            + " float alpha = smoothstep(-d, d, dist);\n"
+            //+ " float alpha = clamp(dist + 0.5, 0.0, 1.0);\n"
+            //+ " float alpha = smoothstep(-d, d, dist);\n"
             //+ " if(alpha == 0) { discard; }\n"
-            + "	gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
+            //+ "	gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
+            + " gl_FragColor = vec4(v_color.rgb, clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (2.25 * u_smoothing) + 0.5, 0.0, 1.0) * v_color.a);\n"
             + "}\n";
     /**
      * An alternate shader based on {@link DefaultResources#fragmentShader}, but this draws outlines around characters.

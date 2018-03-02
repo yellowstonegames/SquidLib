@@ -75,12 +75,11 @@ public class MixedGenerator implements IDungeonGenerator {
     protected int totalPoints;
 
     /**
-     * Mainly for internal use; this can be used with {@link #MixedGenerator(int, int, RNG)} to get its room positions.
-     * This was the default for generating a List of Coord if no other collection of Coord was supplied to the
-     * constructor, but it has been swapped out for {@link #cleanPoints(int, int, RNG)}, which produces a cleaner layout
-     * of rooms with less overlap. If you want the exact old behavior while only supplying a width and height as ints as
-     * well as an RNG, construct a MixedGenerator with
-     * {@code new MixedGenerator(width, height, rng, basicPoints(width, height, rng))}.
+     * Mainly for internal use; this is used by {@link #MixedGenerator(int, int, RNG)} to get its room positions.
+     * This is (and was) the default for generating a List of Coord if no other collection of Coord was supplied to the
+     * constructor. For some time this was not the default, and {@link #cleanPoints(int, int, RNG)} was used instead.
+     * Both are still options, but this technique seems to keep corridors shorter and makes connections between rooms
+     * more relevant to the current area.
      * <br>
      * <a href="https://gist.githubusercontent.com/tommyettinger/be0ed51858cb492bc7e8cda43a04def1/raw/dae9d8e4f45dd3a3577bdd5f58b419ea5f9ed570/PoissonDungeon.txt">Preview map.</a>
      * @param width dungeon width in cells
@@ -89,22 +88,24 @@ public class MixedGenerator implements IDungeonGenerator {
      * @return evenly spaced Coord points in a list made by PoissonDisk, trimmed down so they aren't all used
      * @see PoissonDisk used to make the list
      */
-    public static List<Coord> basicPoints(int width, int height, RNG rng)
+    public static OrderedSet<Coord> basicPoints(int width, int height, RNG rng)
     {
         return PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
                 8.5f * (width + height) / 120f, width, height, 35, rng);
     }
     /**
-     * Mainly for internal use; this is used by {@link #MixedGenerator(int, int, RNG)} to get its room positions.
-     * It produces a cleaner layout of rooms that should have less overlap between rooms and corridors; a good approach
-     * is to favor {@link #putWalledBoxRoomCarvers(int)} and {@link #putWalledRoundRoomCarvers(int)} more than you might
-     * otherwise consider in place of caves, since caves may be larger than you would expect here. The exact technique
-     * used here is to get points from a Halton-like sequence, formed using {@link VanDerCorputQRNG} to get a van der
-     * Corput sequence, for the x axis and a scrambled van der Corput sequence for the y axis. MixedGenerator will
-     * connect these points in pairs. The current method is much better at avoiding "clumps" of closely-positioned rooms
-     * in the center of the map.
+     * Mainly for internal use; this was used by {@link #MixedGenerator(int, int, RNG)} to get its room positions, and
+     * you can choose to use it with {@code new MixedGenerator(width, height, rng, cleanPoints(width, height, rng))}.
+     * It produces a fairly rigid layout of rooms that should have less overlap between rooms and corridors; the
+     * downside to this is that corridors can become extremely long. The exact technique used here is to get points from
+     * a Halton-like sequence, formed using {@link VanDerCorputQRNG} to get a van der Corput sequence, for the x axis
+     * and a scrambled van der Corput sequence for the y axis. MixedGenerator will connect these points in pairs. The
+     * current method is much better at avoiding "clumps" of closely-positioned rooms in the center of the map.
      * <br>
      * <a href="https://gist.githubusercontent.com/tommyettinger/2745e6fc16fc2acebe2fc959fb4e4c2e/raw/77e1f4dbc844d8892c1a686754535c02cadaa270/TenDungeons.txt">Preview maps, with and without box drawing characters.</a>
+     * Note that one of the dungeons in that gist was produced as a fallback by {@link DungeonGenerator} with no
+     * arguments (using DEFAULT_DUNGEON as the dungeon style), because the map this method produced in one case had too
+     * few floor cells to be used.
      * @param width dungeon width in cells
      * @param height dungeon height in cells
      * @param rng rng to use

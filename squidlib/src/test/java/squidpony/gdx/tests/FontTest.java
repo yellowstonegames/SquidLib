@@ -53,7 +53,7 @@ public class FontTest extends ApplicationAdapter {
     private SquidPanel[] displays;
     private TextPanel<Color> text;
     private ArrayList<TextPanel<Color>> texts;
-    private int index = 5;
+    private int index = 0;
     private static final int ZOOM = 1;
     @Override
     public void create() {
@@ -61,7 +61,7 @@ public class FontTest extends ApplicationAdapter {
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
         widths =  new int[]{90, 90, 90, 90, 90, 70, 100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
-        heights = new int[]{17, 17, 17, 17, 17, 29, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
+        heights = new int[]{20, 20, 20, 20, 17, 29, 20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabItalicFont().width(ZOOM * 14).height(28).initBySize(),
@@ -91,7 +91,7 @@ public class FontTest extends ApplicationAdapter {
         };
         viewports = new Viewport[]{
                 new StretchViewport(factories[0].width() * widths[0], factories[0].height() * heights[0]),
-                new StretchViewport(factories[1].width() * widths[2], factories[1].height() * heights[1]),
+                new StretchViewport(factories[1].width() * widths[1], factories[1].height() * heights[1]),
                 new StretchViewport(factories[2].width() * widths[2], factories[2].height() * heights[2]),
                 new StretchViewport(factories[3].width() * widths[3], factories[3].height() * heights[3]),
                 new StretchViewport(factories[4].width() * widths[4], factories[4].height() * heights[4]),
@@ -115,7 +115,7 @@ public class FontTest extends ApplicationAdapter {
         };
         displays = new SquidPanel[]{
                 new SquidPanel(widths[0], heights[0], factories[0]).setTextSize(factories[0].width() + 0.5f * ZOOM, factories[0].height() + 1f * ZOOM),
-                new SquidPanel(widths[2], heights[1], factories[1]).setTextSize(factories[1].width() + 1f * ZOOM, factories[1].height() + 2f * ZOOM),
+                new SquidPanel(widths[1], heights[1], factories[1]).setTextSize(factories[1].width() + 0.5f * ZOOM, factories[1].height() + 1f * ZOOM),
                 new SquidPanel(widths[2], heights[2], factories[2]).setTextSize(factories[2].width() + 2f * ZOOM, factories[2].height() + 4f * ZOOM),
                 new SquidPanel(widths[3], heights[3], factories[3]).setTextSize(factories[3].width() + 1f * ZOOM, factories[3].height() + 3f * ZOOM),
                 new SquidPanel(widths[4], heights[4], factories[4]).setTextSize(factories[4].width() + 0.5f * ZOOM, factories[4].height() + 1f * ZOOM),

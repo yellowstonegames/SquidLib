@@ -2,10 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.squidmath.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A variant on {@link MixedGenerator} that creates bi-radially symmetric maps (basically a yin-yang shape). Useful for
@@ -16,7 +13,7 @@ import java.util.Set;
  */
 public class SymmetryDungeonGenerator extends MixedGenerator {
 
-    public static OrderedMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, List<Coord> sequence)
+    public static OrderedMap<Coord, List<Coord>> removeSomeOverlap(int width, int height, Collection<Coord> sequence)
     {
         List<Coord> s2 = new ArrayList<>(sequence.size());
         for(Coord c : sequence)
@@ -89,6 +86,23 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
 
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This version of the constructor uses a List of Coord points from some other source to determine the path to add
+     * rooms or caves to and then connect. You call the different carver-adding methods to affect what the
+     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
+     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     *
+     * @param width    the width of the final map in cells
+     * @param height   the height of the final map in cells
+     * @param rng      an RNG object to use for random choices; this make a lot of random choices.
+     * @param sequence a List of Coord to connect in order; index 0 is the start, index size() - 1 is the end.
+     * @see SerpentMapGenerator a class that uses this technique
+     */
+    public SymmetryDungeonGenerator(int width, int height, RNG rng, OrderedSet<Coord> sequence) {
+        this(width, height, rng, setToMap(sequence), 1f);
+    }
+
+    /**
+     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
      * This version of the constructor uses a LinkedHashMap with Coord keys and Coord array values to determine a
      * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
      * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
@@ -129,6 +143,17 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
         OrderedMap<Coord, List<Coord>> conns = new OrderedMap<>(sequence.size() - 1);
         for (int i = 0; i < sequence.size() - 1; i++) {
             Coord c1 = sequence.get(i), c2 = sequence.get(i+1);
+            List<Coord> cs = new ArrayList<>(1);
+            cs.add(c2);
+            conns.put(c1, cs);
+        }
+        return conns;
+    }
+    protected static OrderedMap<Coord, List<Coord>> setToMap(OrderedSet<Coord> sequence)
+    {
+        OrderedMap<Coord, List<Coord>> conns = new OrderedMap<>(sequence.size() - 1);
+        for (int i = 0; i < sequence.size() - 1; i++) {
+            Coord c1 = sequence.getAt(i), c2 = sequence.getAt(i+1);
             List<Coord> cs = new ArrayList<>(1);
             cs.add(c2);
             conns.put(c1, cs);

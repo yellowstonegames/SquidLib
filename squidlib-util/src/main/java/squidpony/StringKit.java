@@ -342,43 +342,6 @@ public class StringKit {
         if(beginIndex > endIndex) return "";
         return source.substring(beginIndex, endIndex);
     }
-    public static final Pattern whitespacePattern = Pattern.compile("\\s+"),
-            nonSpacePattern = Pattern.compile("\\S+");
-    private static final Matcher matcher = new Matcher(whitespacePattern);
-    public static int indexOf(CharSequence text, Pattern regex, int beginIndex)
-    {
-        matcher.setPattern(regex);
-        matcher.setTarget(text);
-        matcher.setPosition(beginIndex);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
-    public static int indexOf(CharSequence text, String regex, int beginIndex)
-    {
-        matcher.setPattern(Pattern.compile(regex));
-        matcher.setTarget(text);
-        matcher.setPosition(beginIndex);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
-    public static int indexOf(CharSequence text, Pattern regex)
-    {
-        matcher.setPattern(regex);
-        matcher.setTarget(text);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
-    public static int indexOf(CharSequence text, String regex)
-    {
-        matcher.setPattern(Pattern.compile(regex));
-        matcher.setTarget(text);
-        if(!matcher.find())
-            return -1;
-        return matcher.start();
-    }
 
     /**
      * Like {@link String#split(String)} but doesn't use any regex for splitting (delimiter is a literal String).
@@ -413,7 +376,7 @@ public class StringKit {
     private static final char[] keyBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".toCharArray(),
             valBase64 = new char[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                     62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 64, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
-                    0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51};
+                    0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0};
 
     public static String hex(long number) {
         String h = Long.toHexString(number);
@@ -1141,17 +1104,17 @@ public class StringKit {
      */
     public static long b64DecodeLong(char[] data, int offset) {
         return (data == null || data.length < 11 + offset) ? 0L :
-                (((long)data[offset]) << 60)
-                        | ((0x3fL & data[offset + 1]) << 54)
-                        | ((0x3fL & data[offset + 2]) << 48)
-                        | ((0x3fL & data[offset + 3]) << 42)
-                        | ((0x3fL & data[offset + 4]) << 36)
-                        | ((0x3fL & data[offset + 5]) << 30)
-                        | ((0x3fL & data[offset + 6]) << 24)
-                        | ((0x3fL & data[offset + 7]) << 18)
-                        | ((0x3fL & data[offset + 8]) << 12)
-                        | ((0x3fL & data[offset + 9]) << 6)
-                        | (0x3fL & data[offset + 10]);
+                (((long)valBase64[data[offset] & 0x7F]) << 60)
+                        | ((0x3fL & valBase64[data[offset + 1 ] & 0x7F]) << 54)
+                        | ((0x3fL & valBase64[data[offset + 2 ] & 0x7F]) << 48)
+                        | ((0x3fL & valBase64[data[offset + 3 ] & 0x7F]) << 42)
+                        | ((0x3fL & valBase64[data[offset + 4 ] & 0x7F]) << 36)
+                        | ((0x3fL & valBase64[data[offset + 5 ] & 0x7F]) << 30)
+                        | ((0x3fL & valBase64[data[offset + 6 ] & 0x7F]) << 24)
+                        | ((0x3fL & valBase64[data[offset + 7 ] & 0x7F]) << 18)
+                        | ((0x3fL & valBase64[data[offset + 8 ] & 0x7F]) << 12)
+                        | ((0x3fL & valBase64[data[offset + 9 ] & 0x7F]) << 6)
+                        | (0x3fL  & valBase64[data[offset + 10] & 0x7F]);
     }
 
     /**
@@ -1162,17 +1125,17 @@ public class StringKit {
      */
     public static double b64DecodeDouble(char[] data, int offset) {
         return (data == null || data.length < 11 + offset) ? 0.0 :
-                NumberTools.longBitsToDouble((((long) data[offset]) << 60)
-                        | ((0x3fL & data[offset + 1]) << 54)
-                        | ((0x3fL & data[offset + 2]) << 48)
-                        | ((0x3fL & data[offset + 3]) << 42)
-                        | ((0x3fL & data[offset + 4]) << 36)
-                        | ((0x3fL & data[offset + 5]) << 30)
-                        | ((0x3fL & data[offset + 6]) << 24)
-                        | ((0x3fL & data[offset + 7]) << 18)
-                        | ((0x3fL & data[offset + 8]) << 12)
-                        | ((0x3fL & data[offset + 9]) << 6)
-                        | (0x3fL & data[offset + 10]));
+                NumberTools.longBitsToDouble((((long) valBase64[data[offset] & 0x7F]) << 60)
+                        | ((0x3fL & valBase64[data[offset + 1 ] & 0x7F]) << 54)
+                        | ((0x3fL & valBase64[data[offset + 2 ] & 0x7F]) << 48)
+                        | ((0x3fL & valBase64[data[offset + 3 ] & 0x7F]) << 42)
+                        | ((0x3fL & valBase64[data[offset + 4 ] & 0x7F]) << 36)
+                        | ((0x3fL & valBase64[data[offset + 5 ] & 0x7F]) << 30)
+                        | ((0x3fL & valBase64[data[offset + 6 ] & 0x7F]) << 24)
+                        | ((0x3fL & valBase64[data[offset + 7 ] & 0x7F]) << 18)
+                        | ((0x3fL & valBase64[data[offset + 8 ] & 0x7F]) << 12)
+                        | ((0x3fL & valBase64[data[offset + 9 ] & 0x7F]) << 6)
+                        | (0x3fL  & valBase64[data[offset + 10] & 0x7F]));
     }
 
     /**
@@ -1183,12 +1146,12 @@ public class StringKit {
      */
     public static int b64DecodeInt(char[] data, int offset) {
         return (data == null || data.length < 6 + offset) ? 0 :
-                ((data[offset]) << 30)
-                        | ((0x3f & data[offset + 1]) << 24)
-                        | ((0x3f & data[offset + 2]) << 18)
-                        | ((0x3f & data[offset + 3]) << 12)
-                        | ((0x3f & data[offset + 4]) << 6)
-                        | (0x3f & data[offset + 5]);
+                ((valBase64[data[offset] & 0x7F]) << 30)
+                        | ((valBase64[data[offset + 1] & 0x7F]) << 24)
+                        | ((valBase64[data[offset + 2] & 0x7F]) << 18)
+                        | ((valBase64[data[offset + 3] & 0x7F]) << 12)
+                        | ((valBase64[data[offset + 4] & 0x7F]) << 6)
+                        | (valBase64[data[offset + 5] & 0x7F]);
     }
 
     /**
@@ -1199,12 +1162,12 @@ public class StringKit {
      */
     public static float b64DecodeFloat(char[] data, int offset) {
         return (data == null || data.length < 6 + offset) ? 0f :
-                NumberTools.intBitsToFloat(((data[offset]) << 30)
-                        | ((0x3f & data[offset + 1]) << 24)
-                        | ((0x3f & data[offset + 2]) << 18)
-                        | ((0x3f & data[offset + 3]) << 12)
-                        | ((0x3f & data[offset + 4]) << 6)
-                        | (0x3f & data[offset + 5]));
+                NumberTools.intBitsToFloat(((valBase64[data[offset] & 0x7F]) << 30)
+                        | ((valBase64[data[offset + 1] & 0x7F]) << 24)
+                        | ((valBase64[data[offset + 2] & 0x7F]) << 18)
+                        | ((valBase64[data[offset + 3] & 0x7F]) << 12)
+                        | ((valBase64[data[offset + 4] & 0x7F]) << 6)
+                        | ( valBase64[data[offset + 5] & 0x7F]));
     }
 
     /**
@@ -1215,9 +1178,9 @@ public class StringKit {
      */
     public static short b64DecodeShort(char[] data, int offset) {
         return (short) ((data == null || data.length < 3 + offset) ? 0 :
-                ((data[offset]) << 12)
-                        | ((0x3f & data[offset + 1]) << 6)
-                        | (0x3f & data[offset + 2]));
+                ((valBase64[data[offset] & 0x7F]) << 12)
+                        | ((valBase64[data[offset + 1] & 0x7F]) << 6)
+                        | ( valBase64[data[offset + 2] & 0x7F]));
     }
     /**
      * Decodes 3 characters from data starting from offset to get a char encoded as base-64.
@@ -1227,9 +1190,9 @@ public class StringKit {
      */
     public static char b64DecodeChar(char[] data, int offset) {
         return (char) ((data == null || data.length < 3 + offset) ? 0 :
-                ((data[offset]) << 12)
-                        | ((0x3f & data[offset + 1]) << 6)
-                        | (0x3f & data[offset + 2]));
+                ((valBase64[data[offset] & 0x7F]) << 12)
+                        | ((valBase64[data[offset + 1] & 0x7F]) << 6)
+                        | ( valBase64[data[offset + 2] & 0x7F]));
     }
 
     /**
@@ -1240,8 +1203,8 @@ public class StringKit {
      */
     public static byte b64DecodeByte(char[] data, int offset) {
         return (byte) ((data == null || data.length < 2 + offset) ? 0 :
-                ((data[offset]) << 6)
-                        | (0x3f & data[offset + 1]));
+                ((valBase64[data[offset] & 0x7F]) << 6)
+                        | (valBase64[data[offset + 1] & 0x7F]));
     }
 
     public static String hexHash(boolean... array) {
@@ -1540,6 +1503,43 @@ public class StringKit {
         }
         String t = text.toString();
         return t.replace(before, after);
+    }
+    public static final Pattern whitespacePattern = Pattern.compile("\\s+"),
+            nonSpacePattern = Pattern.compile("\\S+");
+    private static final Matcher matcher = new Matcher(whitespacePattern);
+    public static int indexOf(CharSequence text, Pattern regex, int beginIndex)
+    {
+        matcher.setPattern(regex);
+        matcher.setTarget(text);
+        matcher.setPosition(beginIndex);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, String regex, int beginIndex)
+    {
+        matcher.setPattern(Pattern.compile(regex));
+        matcher.setTarget(text);
+        matcher.setPosition(beginIndex);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, Pattern regex)
+    {
+        matcher.setPattern(regex);
+        matcher.setTarget(text);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
+    }
+    public static int indexOf(CharSequence text, String regex)
+    {
+        matcher.setPattern(Pattern.compile(regex));
+        matcher.setTarget(text);
+        if(!matcher.find())
+            return -1;
+        return matcher.start();
     }
 
 }

@@ -755,7 +755,7 @@ public class DungeonGenerator implements IDungeonGenerator {
         }
 
         if(islandSpacing > 1 && targetWater > 0) {
-            ArrayList<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^', '<', '>');
+            OrderedSet<Coord> islands = PoissonDisk.sampleMap(map, 1f * islandSpacing, rng, '#', '.', '"', '+', '/', '^', '<', '>');
             for (Coord c : islands) {
                 map[c.x][c.y] = '.';
                 if (map[c.x - 1][c.y] != '#' && map[c.x - 1][c.y] != '<' && map[c.x - 1][c.y] != '>')
