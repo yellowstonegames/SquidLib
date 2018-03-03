@@ -72,6 +72,7 @@ Current Features:
 -   Several fonts provided as resources, some narrow, some square, for unicode line drawing to work out-of-the-box
   -   Multiple fonts use a distance field effect, allowing them to be scaled and stretched smoothly
   -   The distance field fonts are difficult to make yourself, so lots are provided in the assets folder or zip file
+    -    Less-common but higher-quality MSDF fonts are distributed as well, though there aren't as many
   -   GDXMarkup allows text to be written with tags to specify color, bold and/or italic formatting (the last two use special fonts)
 -   Multiple grids of different configurations can be used simultaneously in the same display
 -   Multiple grids of different configurations can be overlaid allowing for transparency effects
@@ -272,8 +273,8 @@ Current Features:
       stable version, or 1.9.8 if you use the snapshot (1.9.8 includes important fixes to bugs from 1.9.7).
     - Some ways of setting up a project won't include assets, so if you use the DefaultResources class in the display
       module (recommended for several things, like distance field fonts), you need to get the assets you want separately.
-      They're in the assets/ folder of this GitHub repo, or you can get all the assets in a .zip file from SquidLib's
-      main folder, [assets.zip](https://github.com/SquidPony/SquidLib/raw/master/assets.zip). If you get the .zip, then
+      They're in the assets/ folder of this GitHub repo, or you can get all the assets in a .zip file from SquidSetup's
+      [SNAPSHOT release](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-SNAPSHOT). If you get the .zip, then
       after extracting the files you can delete any assets you don't use, or move them out of the distributed part of your code.
   - [This commit on June 19, 2016](https://github.com/SquidPony/SquidLib/commit/22c770b37b3635c6beacadda6ef71e07c9a55a8e)
     changed usages of LinkedHashMap and LinkedHashSet to OrderedMap and OrderedSet in the squidpony.squidmath package.

@@ -159,12 +159,12 @@ public class SparseDemo extends ApplicationAdapter {
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableSlabFont());
+                DefaultResources.getCrispLeanFont());
 
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.font.tweakWidth(cellWidth * 1.05f).tweakHeight(cellHeight * 1.1f).initBySize();
+        display.font.tweakWidth(cellWidth * 1.075f).tweakHeight(cellHeight * 1.1f).initBySize();
 
         languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can

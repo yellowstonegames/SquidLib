@@ -231,7 +231,7 @@ public class TextCellFactory implements Disposable {
             //lineTweak = lineHeight * 0.0625f;
         }
         lineHeight = bmpFont.getLineHeight();
-        descent = (msdf && bmpFont.getAscent() > 0 ? -bmpFont.getDescent(): bmpFont.getDescent());
+        descent = bmpFont.getDescent();//(msdf && bmpFont.getAscent() > 0 ? -bmpFont.getDescent(): bmpFont.getDescent());
         style = new Label.LabelStyle(bmpFont, null);
         BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
         dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);

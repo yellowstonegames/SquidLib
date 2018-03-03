@@ -203,7 +203,7 @@ public class DefaultResources implements LifecycleListener {
             //+ " float alpha = smoothstep(-d, d, dist);\n"
             //+ " if(alpha == 0) { discard; }\n"
             //+ "	gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
-            + " gl_FragColor = vec4(v_color.rgb, clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (2.25 * u_smoothing) + 0.5, 0.0, 1.0) * v_color.a);\n"
+            + " gl_FragColor = vec4(v_color.rgb, clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (3.5 * u_smoothing) + 0.5, 0.0, 1.0) * v_color.a);\n"
             + "}\n";
     /**
      * An alternate shader based on {@link DefaultResources#fragmentShader}, but this draws outlines around characters.
@@ -1231,18 +1231,17 @@ public class DefaultResources implements LifecycleListener {
 
     /**
      * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
-     * and a slab-serif geometric style, that should scale cleanly to even very large sizes. Caches the result for later
-     * calls. The font used is Iosevka with Slab style, an open-source (SIL Open Font License) typeface by Belleve Invis
-     * (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
-     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also the
-     * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
-     * normal Signed Distance Field technique, which should allow sharper edges. As an aside, Luc Devroye (a
-     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
-     * deserves an award."</a>
+     * and a slab-serif geometric style, that should scale cleanly to even very large sizes (using an MSDF technique).
+     * Caches the result for later calls. The font used is Iosevka with Slab style, an open-source (SIL Open Font
+     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
+     * thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin,
+     * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
+     * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
+     * sharper edges and precise corners instead of rounded tips on strokes. As an aside, Luc Devroye (a true typography
+     * expert) called Iosevka
+     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a>
      * <br>
-     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
-     * <br>
-     * Preview: <a href="http://i.imgur.com/Ogdb1mx.png">Image link</a>
+     * Preview: <a href="https://i.imgur.com/YlzFEVX.png">Image link</a>
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
@@ -1252,7 +1251,7 @@ public class DefaultResources implements LifecycleListener {
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-msdf.png</li>
      * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab.ttf
+     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Slab.ttf using MSDF
      */
     public static TextCellFactory getCrispSlabFont()
     {
@@ -1271,26 +1270,23 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
-     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
-     * <br>
      * Returns a TextCellFactory already configured to use a highly-legible oblique (similar to italic) fixed-width font
-     * with good Unicode support and a slab-serif geometric style, that should scale cleanly to even very large sizes.
-     * Caches the result for later calls. The font used is Iosevka with Slab style, an open-source (SIL Open Font
-     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
-     * thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin,
-     * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
-     * Field technique as opposed to the normal Signed Distance Field technique, which should allow sharper edges. As an
-     * aside, Luc Devroye (a true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A
-     * tour de force that deserves an award."</a>
+     * with good Unicode support and a slab-serif geometric style, that should scale cleanly to even very large sizes
+     * (using an MSDF technique). Caches the result for later calls. The font used is Iosevka with Oblique Slab style,
+     * an open-source (SIL Open Font License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and
+     * it uses several customizations thanks to Iosevka's special build process. It supports a lot of glyphs, including
+     * quite a bit of extended Latin, Greek, and Cyrillic, but also the necessary box drawing characters. This uses the
+     * Multi-channel Signed Distance Field (MSDF) technique as opposed to the normal Signed Distance Field technique,
+     * which gives the rendered font sharper edges and precise corners instead of rounded tips on strokes. As an aside,
+     * Luc Devroye (a true typography expert) called Iosevka
+     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a>
      * <br>
-     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
-     * <br>
-     * Preview: none yet
+     * Preview: <a href="https://i.imgur.com/njA1ae1.png">Image link</a>
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
+     * Needs files:
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Oblique-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Oblique-msdf.png</li>
@@ -1314,26 +1310,23 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
-     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
-     * <br>
      * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
-     * and a sans-serif geometric style, that should scale cleanly to even very large sizes. Caches the result for later
-     * calls. The font used is Iosevka, an open-source (SIL Open Font License) typeface by Belleve Invis
-     * (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
-     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also the
-     * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
-     * normal Signed Distance Field technique, which should allow sharper edges. As an aside, Luc Devroye (a
-     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
-     * deserves an award."</a>
+     * and a sans-serif geometric style, that should scale cleanly to even very large sizes (using an MSDF technique).
+     * Caches the result for later calls. The font used is Iosevka, an open-source (SIL Open Font
+     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
+     * thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin,
+     * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
+     * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
+     * sharper edges and precise corners instead of rounded tips on strokes. As an aside, Luc Devroye (a true typography
+     * expert) called Iosevka
+     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a>
      * <br>
-     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
-     * <br>
-     * Preview: none yet
+     * Preview: <a href="https://i.imgur.com/42rMRz5.png">Image link</a>
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
+     * Needs files:
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-msdf.png</li>
@@ -1357,26 +1350,23 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
-     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
-     * <br>
      * Returns a TextCellFactory already configured to use a highly-legible oblique (similar to italic) fixed-width font
-     * with good Unicode support and a sans-serif geometric style, that should scale cleanly to even very large sizes.
-     * Caches the result for later calls. The font used is Iosevka, an open-source (SIL Open Font
-     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
-     * thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin,
-     * Greek, and Cyrillic, but also the necessary box drawing characters. This uses the Multi-channel Signed Distance
-     * Field technique as opposed to the normal Signed Distance Field technique, which should allow sharper edges. As an
-     * aside, Luc Devroye (a true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A
-     * tour de force that deserves an award."</a>
+     * with good Unicode support and a sans-serif geometric style, that should scale cleanly to even very large sizes
+     * (using an MSDF technique). Caches the result for later calls. The font used is Iosevka with Oblique style,
+     * an open-source (SIL Open Font License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and
+     * it uses several customizations thanks to Iosevka's special build process. It supports a lot of glyphs, including
+     * quite a bit of extended Latin, Greek, and Cyrillic, but also the necessary box drawing characters. This uses the
+     * Multi-channel Signed Distance Field (MSDF) technique as opposed to the normal Signed Distance Field technique,
+     * which gives the rendered font sharper edges and precise corners instead of rounded tips on strokes. As an aside,
+     * Luc Devroye (a true typography expert) called Iosevka
+     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a>
      * <br>
-     * NOTE: This currently has an error on the dingbat heart character, where a small chunk is missing from the center.
-     * <br>
-     * Preview: none yet
+     * Preview: <a href="https://i.imgur.com/EfGBgdM.png">Image link</a>
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
+     * Needs files:
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Oblique-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Oblique-msdf.png</li>

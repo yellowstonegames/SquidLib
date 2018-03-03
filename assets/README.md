@@ -6,7 +6,7 @@ existing project, without getting the default resources put into place by SquidS
 if you use a non-Java JVM language with its own build tool, like Scala's `sbt` or Clojure's `lein`).
 
 This folder has the default resources that SquidLib previously shipped with, and now uses as test resources. This
-means the tests and demos in SquidLib still run, but users don't need 1.7 MB of resources if they intend to use
+means the tests and demos in SquidLib still run, but users don't need 22 MB of resources if they intend to use
 their own. You only need the files from this folder your game uses; if a file is missing that you use, it is a
 run-time error, usually very early on (when the first screen using a font is displayed, for instance).
 
