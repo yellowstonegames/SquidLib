@@ -367,6 +367,101 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         push(key, charValue, floatValue, index1, key1, index2, key2, index3, key3);
     }
 
+    /**
+     * If and only if key is already present, this changes the float associated with it while leaving the char the same.
+     * @param key the encoded key as produced by {@link #encodePosition(int, int)}
+     * @param floatValue
+     */
+    public void updateFloat(int key, float floatValue)
+    {
+        if (key == 0 && hasZeroValue) {
+            //zeroChar = charValue;
+            zeroFloat = floatValue;
+            return;
+        }
+
+        int[] keyTable = this.keyTable;
+
+        // Check for existing keys.
+        int index1 = key & mask;
+        int key1 = keyTable[index1];
+        if (key == key1) {
+            //charValueTable[index1] = charValue;
+            floatValueTable[index1] = floatValue;
+            return;
+        }
+
+        int index2 = hash2(key);
+        int key2 = keyTable[index2];
+        if (key == key2) {
+            //charValueTable[index2] = charValue;
+            floatValueTable[index2] = floatValue;
+            return;
+        }
+
+        int index3 = hash3(key);
+        int key3 = keyTable[index3];
+        if (key == key3) {
+            //charValueTable[index3] = charValue;
+            floatValueTable[index3] = floatValue;
+            return;
+        }
+
+        // Update key in the stash.
+        for (int i = capacity, n = i + stashSize; i < n; i++) {
+            if (key == keyTable[i]) {
+                //charValueTable[i] = charValue;
+                floatValueTable[i] = floatValue;
+                return;
+            }
+        }
+    }
+
+    public void updateChar(int key, char charValue)
+    {
+        if (key == 0 && hasZeroValue) {
+            zeroChar = charValue;
+            //zeroFloat = floatValue;
+            return;
+        }
+
+        int[] keyTable = this.keyTable;
+
+        // Check for existing keys.
+        int index1 = key & mask;
+        int key1 = keyTable[index1];
+        if (key == key1) {
+            charValueTable[index1] = charValue;
+            //floatValueTable[index1] = floatValue;
+            return;
+        }
+
+        int index2 = hash2(key);
+        int key2 = keyTable[index2];
+        if (key == key2) {
+            charValueTable[index2] = charValue;
+            //floatValueTable[index2] = floatValue;
+            return;
+        }
+
+        int index3 = hash3(key);
+        int key3 = keyTable[index3];
+        if (key == key3) {
+            charValueTable[index3] = charValue;
+            //floatValueTable[index3] = floatValue;
+            return;
+        }
+
+        // Update key in the stash.
+        for (int i = capacity, n = i + stashSize; i < n; i++) {
+            if (key == keyTable[i]) {
+                charValueTable[i] = charValue;
+                //floatValueTable[i] = floatValue;
+                return;
+            }
+        }
+    }
+
     public void putAll(SparseTextMap map) {
         for (Entry entry : map.entries())
             put(entry.key, entry.charValue, entry.floatValue);
@@ -513,9 +608,20 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         stashSize++;
         size++;
     }
+    /**
+     * @param x the x-component of the position to look up 
+     * @param y the y-component of the position to look up
+     * @param defaultValue Returned if the key was not associated with a value.
+     * @return the char associated with the given position, or defaultValue if no char is associated
+     */
+    public char getChar(int x, int y, char defaultValue) {
+        return getChar(encodePosition(x, y), defaultValue);
+    }
 
     /**
+     * @param key the encoded key as produced by {@link #encodePosition(int, int)}
      * @param defaultValue Returned if the key was not associated with a value.
+     * @return the char associated with the given key, or defaultValue if no char is associated
      */
     public char getChar(int key, char defaultValue) {
         if (key == 0) {
@@ -541,7 +647,19 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     }
 
     /**
+     * @param x the x-component of the position to look up 
+     * @param y the y-component of the position to look up
      * @param defaultValue Returned if the key was not associated with a value.
+     * @return the float associated with the given position, or defaultValue if no float is associated
+     */
+    public float getFloat(int x, int y, float defaultValue) {
+        return getFloat(encodePosition(x, y), defaultValue);
+    }
+
+    /**
+     * @param key the encoded key as produced by {@link #encodePosition(int, int)}
+     * @param defaultValue Returned if the key was not associated with a value.
+     * @return the float associated with the given key, or defaultValue if no float is associated
      */
     public float getFloat(int key, float defaultValue) {
         if (key == 0) {

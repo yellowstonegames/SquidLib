@@ -523,6 +523,7 @@ public class SparseDemo extends ApplicationAdapter {
             display.addAction(new PanelEffect.PulseEffect(display, 1f, currentlySeen, player, 3
                     , new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}
                     ));
+            display.tint(0f, player.x + xmod, player.y + ymod, 0, SColor.CRIMSON.toFloatBits(), 0.8f, null);
             //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6));
         }
         // removes the first line displayed of the Art of War text or its translation.
