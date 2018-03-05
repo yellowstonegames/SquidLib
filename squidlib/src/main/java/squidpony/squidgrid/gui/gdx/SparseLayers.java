@@ -1669,24 +1669,48 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param direction the direction for the glyph to bump towards
      * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.12f
      */
-    public void bump(final TextCellFactory.Glyph glyph, Direction direction, float duration)
+    public void bump(final TextCellFactory.Glyph glyph, Direction direction, float duration) {
+        bump(0f, glyph, direction, duration, null);
+    }
+    /**
+     * Start a bumping animation in the given direction after delay seconds, that will last duration seconds; runs
+     * postRunnable after the duration completes if postRunnable is non-null.
+     * 
+     * @param delay how long to wait in seconds before starting the effect
+     * @param glyph
+     *              A {@link TextCellFactory.Glyph}, probably produced by
+     *              {@link #glyph(char, float, int, int)} or {@link #glyphFromGrid(int, int)}
+     * @param direction the direction for the glyph to bump towards
+     * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.12f
+     * @param postRunnable a Runnable to execute after the bump completes; may be null to do nothing.
+     */
+    public void bump(final float delay, final TextCellFactory.Glyph glyph, Direction direction, float duration, final /* @Nullable */ Runnable postRunnable)
     {
         final float x = glyph.getX(),
                 y = glyph.getY();
         duration = Math.max(0.015f, duration);
         animationCount++;
-        glyph.addAction(Actions.sequence(
-                Actions.moveToAligned(x + direction.deltaX * 0.35f * font.actualCellWidth,
-                        y - direction.deltaY * 0.35f * font.actualCellHeight,
-                        Align.bottomLeft, duration * 0.35F),
-                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F),
-                Actions.delay(duration, Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        --animationCount;
-                    }
-                }))));
-
+        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        int index = 0;
+        final Action[] sequence = new Action[nbActions];
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = Actions.moveToAligned(x + direction.deltaX * 0.35f * font.actualCellWidth,
+                y - direction.deltaY * 0.35f * font.actualCellHeight,
+                Align.bottomLeft, duration * 0.35F);
+        sequence[index++] = Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F);
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                --animationCount;
+            }
+        }));
+        glyph.addAction(Actions.sequence(sequence));
     }
 
     /**
@@ -1712,12 +1736,41 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public void slide(TextCellFactory.Glyph glyph, final int startX, final int startY, final int newX,
                       final int newY, float duration, /* @Nullable */ Runnable postRunnable) {
+        slide(0f, glyph, startX, startY, newX, newY, duration, postRunnable);
+    }
+
+    /**
+     * Slides {@code glyph} from {@code (xstartX,startY)} to {@code (newx, newy)} after waiting {@code delay} seconds.
+     * Takes a number of seconds equal to duration to complete (starting after the delay). This also allows
+     * a Runnable to be given as {@code postRunnable} to be run after the
+     * slide completes, or null to not run anything after the slide.
+     *
+     * @param delay how long to wait in seconds before starting the effect
+     * @param glyph
+     *            A {@link TextCellFactory.Glyph}, probably produced by
+     *            {@link #glyph(char, float, int, int)} or {@link #glyphFromGrid(int, int)}
+     * @param startX
+     *            Where to start the slide, horizontally.
+     * @param startY
+     *            Where to start the slide, vertically.
+     * @param newX
+     *            Where to end the slide, horizontally.
+     * @param newY
+     *            Where to end the slide, vertically.
+     * @param duration
+     *            The animation's duration.
+     * @param postRunnable a Runnable to execute after the slide completes; may be null to do nothing.
+     */
+    public void slide(float delay, TextCellFactory.Glyph glyph, final int startX, final int startY, final int newX,
+                      final int newY, float duration, /* @Nullable */ Runnable postRunnable) {
         glyph.setPosition(worldX(startX), worldY(startY));
         duration = Math.max(0.015f, duration);
         animationCount++;
-        final int nbActions = 2 + (postRunnable == null ? 0 : 1);
+        final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         int index = 0;
         final Action[] sequence = new Action[nbActions];
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
         final float nextX = worldX(newX);
         final float nextY = worldY(newY);
         sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
@@ -1745,32 +1798,69 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param duration in seconds, as a float
      */
     public void wiggle(final TextCellFactory.Glyph glyph, float duration) {
+        wiggle(0f, glyph, duration, null);
+    }
 
+    /**
+     * Starts a wiggling animation for the object at the given location, after waiting delay seconds, for the given
+     * duration in seconds; runs postRunnable afterwards if it is non-null.
+     *
+     * @param delay how long to wait in seconds before starting the effect
+     * @param glyph
+     *            A {@link TextCellFactory.Glyph}, probably produced by
+     *            {@link #glyph(char, float, int, int)} or {@link #glyphFromGrid(int, int)}
+     * @param duration in seconds, as a float
+     * @param postRunnable a Runnable to execute after the wiggle completes; may be null to do nothing.
+     */
+    public void wiggle(final float delay, final TextCellFactory.Glyph glyph, float duration,
+            /* @Nullable */ Runnable postRunnable) {
         final float x = glyph.getX(), y = glyph.getY(),
                 cellWidth = font.actualCellWidth, cellHeight = font.actualCellHeight;
         duration = Math.max(0.015f, duration);
         animationCount++;
+        final int nbActions = 6 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
         final StatefulRNG gRandom = DefaultResources.getGuiRandom();
-        glyph.addAction(Actions.sequence(
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
-                        Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
-                        Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
-                        Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
-                        y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f,
-                        Align.bottomLeft, duration * 0.2F),
-                Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F),
-                Actions.delay(duration, Actions.run(new Runnable() {
-                    @Override
-                    public void run() {
-                        --animationCount;
-                    }
-                }))));
+        sequence[index++] = Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f, Align.bottomLeft, duration * 0.2F);
+        sequence[index++] = Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f, Align.bottomLeft, duration * 0.2F);
+        sequence[index++] = Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f, Align.bottomLeft, duration * 0.2F);
+        sequence[index++] = Actions.moveToAligned(x + (gRandom.nextFloat() - 0.5F) * cellWidth * 0.4f,
+                y + (gRandom.nextFloat() - 0.5F) * cellHeight * 0.4f, Align.bottomLeft, duration * 0.2F);
+        sequence[index++] = Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F);
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                --animationCount;
+            }
+        }));
+        glyph.addAction(Actions.sequence(sequence));
+    }
+    /**
+     * Tints the background at position x,y so it becomes the given encodedColor, then after the tint is complete it 
+     * returns the cell to its original color, taking duration seconds.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the tint this applies, then apply the tint when you call act(), then quickly overwrite
+     * the tint in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
+     * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
+     * @param duration how long the total "round-trip" transition should take in seconds
+     */
+    public void tint(final int x, final int y, final float encodedColor, float duration) {
+        tint(0f, x, y, encodedColor, duration, null);
     }
     /**
      * Tints the background at position x,y so it becomes the given encodedColor, waiting for {@code delay} (in seconds)
@@ -1788,7 +1878,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param duration how long the total "round-trip" transition should take in seconds
      * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
-    public void tint(float delay, final int x, final int y, final float encodedColor, float duration, Runnable postRunnable) {
+    public void tint(final float delay, final int x, final int y, final float encodedColor, float duration,
+            /* @Nullable */ Runnable postRunnable) {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         duration = Math.max(0.015f, duration);
@@ -1828,6 +1919,29 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
+     * Tints the foreground in the given layer at position x,y so it becomes the given encodedColor, then after the tint
+     * is complete it returns the cell to its original color, taking duration seconds.
+     * <br>
+     * Unlike the similar {@link SquidPanel#tint(float, int, int, Color, float, Runnable)} method, this should appear
+     * correct regardless of the font being used. SquidPanel's version can have issues with some fonts where the Label
+     * produced by calling this on text (not on a full block, as SquidPanel uses for backgrounds) can be incorrectly
+     * aligned vertically because of different layout between {@link TextCellFactory} and Label. SparseLayers always
+     * uses TextCellFactory, so there's no sections of code that can conflict during layout.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the tint this applies, then apply the tint when you call act(), then quickly overwrite
+     * the tint in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
+     * @param layer which layer to affect; if you haven't specified a layer when placing text, then this should be 0
+     * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
+     * @param duration how long the total "round-trip" transition should take in seconds
+     */
+    public void tint(final int x, final int y, final int layer, final float encodedColor, float duration) {
+        tint(0f, x, y, layer, encodedColor, duration, null);
+    }
+    /**
      * Tints the foreground in the given layer at position x,y so it becomes the given encodedColor, waiting for
      * {@code delay} (in seconds) before performing it, then after the tint is complete it returns the cell to its
      * original color, taking duration seconds. Additionally, enqueue {@code postRunnable} for running after the created
@@ -1851,7 +1965,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param duration how long the total "round-trip" transition should take in seconds
      * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
      */
-    public void tint(float delay, final int x, final int y, final int layer, final float encodedColor, float duration, Runnable postRunnable) {
+    public void tint(final float delay, final int x, final int y, final int layer, final float encodedColor, float duration,
+            /* @Nullable */ Runnable postRunnable) {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight || layer < 0 || layer >= layers.size())
             return;
         final SparseTextMap l = layers.get(layer);
@@ -1888,10 +2003,74 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                 --animationCount;
             }
         }));
-
         addAction(Actions.sequence(sequence));
     }
-
+    /**
+     * Tints the given glyph (which may or may not be part of the {@link #glyphs} list this holds) so it becomes the
+     * given encodedColor, then after the tint is complete it returns the cell to its original color, taking duration
+     * seconds.
+     * <br>
+     * This is not a method on {@link TextCellFactory.Glyph} because it increments the {@link #animationCount} variable
+     * while the tint animation is running, and decrements it when it finishes the animation (it also resets the glyph
+     * to its pre-tint color at this time).
+     * @param glyph the {@link TextCellFactory.Glyph} to tint
+     * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
+     * @param duration how long the total "round-trip" transition should take in seconds
+     */
+    public void tint(final TextCellFactory.Glyph glyph, final float encodedColor, float duration) {
+        tint(0f, glyph, encodedColor, duration, null);
+    }
+    /**
+     * Tints the given glyph (which may or may not be part of the {@link #glyphs} list this holds) so it becomes the
+     * given encodedColor, waiting for {@code delay} (in seconds) before performing it, then after the tint is complete
+     * it returns the cell to its original color, taking duration seconds. Additionally, enqueue {@code postRunnable}
+     * for running after the created action ends.
+     * <br>
+     * This is not a method on {@link TextCellFactory.Glyph} because it increments the {@link #animationCount} variable
+     * while the tint animation is running, and decrements it when it finishes the animation (it also resets the glyph
+     * to its pre-tint color at this time).
+     * @param delay how long to wait in seconds before starting the effect
+     * @param glyph the {@link TextCellFactory.Glyph} to tint
+     * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
+     * @param duration how long the total "round-trip" transition should take in seconds
+     * @param postRunnable a Runnable to execute after the tint completes; may be null to do nothing.
+     */
+    public void tint(float delay, final TextCellFactory.Glyph glyph, final float encodedColor, float duration,
+            /* @Nullable */ Runnable postRunnable) {
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final float ac = glyph.color;
+        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = new TemporalAction(duration * 0.3f) {
+            @Override
+            protected void update(float percent) {
+                glyph.color = SColor.lerpFloatColors(ac, encodedColor, percent);
+            }
+        };
+        sequence[index++] = new TemporalAction(duration * 0.7f) {
+            @Override
+            protected void update(float percent) {
+                glyph.color = SColor.lerpFloatColors(encodedColor, ac, percent);
+            }
+        };
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                glyph.color = ac;
+                --animationCount;
+            }
+        }));
+        addAction(Actions.sequence(sequence));
+    }
     /**
      * Create a new Glyph at (startX, startY) using the char shown with the given startColor, and immediately starts
      * changing color to endColor, changing position so it ends on the cell (endX, endY), taking duration seconds to
@@ -1911,25 +2090,59 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public void summon(int startX, int startY, int endX, int endY, char shown,
                        final float startColor, final float endColor, float duration)
     {
+        summon(0f, startX, startY, endX, endY, shown, startColor, endColor, duration, null);
+    }
+    /**
+     * Create a new Glyph at (startX, startY) using the char shown with the given startColor, and after delay seconds,
+     * starts changing color to endColor, changing position so it ends on the cell (endX, endY), taking duration seconds
+     * to complete before running postRunnable (if it is non-null) and finally removing the Glyph.
+     * <br>
+     * Unlike {@link SquidPanel#summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)},
+     * this does not rotate the Glyph it produces.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param startX the starting x position in cells
+     * @param startY the starting y position in cells
+     * @param endX the ending x position in cells
+     * @param endY the ending y position in cells
+     * @param shown the char to show (the same char throughout the effect)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param duration the duration in seconds for the effect
+     * @param postRunnable a Runnable to execute after the summon completes; may be null to do nothing.
+     */
+    public void summon(float delay, int startX, int startY, int endX, int endY, char shown,
+                       final float startColor, final float endColor, float duration,
+            /* @Nullable */ Runnable postRunnable)
+    {
         duration = Math.max(0.015f, duration);
         animationCount++;
+        final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        int index = 0;
+        final Action[] sequence = new Action[nbActions];
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
         final TextCellFactory.Glyph glyph = glyph(shown, startColor, startX, startY);
-        glyph.addAction(Actions.sequence(
-                Actions.parallel(
-                        new TemporalAction(duration) {
-                            @Override
-                            protected void update(float percent) {
-                                glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.95f);
-                            }
-                        },
-                        Actions.moveTo(worldX(endX), worldY(endY), duration)),
-                Actions.run(new Runnable() {
+        sequence[index++] = Actions.parallel(
+                new TemporalAction(duration) {
                     @Override
-                    public void run() {
-                        --animationCount;
-                        glyphs.remove(glyph);
+                    protected void update(float percent) {
+                        glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.95f);
                     }
-                })));
+                },
+                Actions.moveTo(worldX(endX), worldY(endY), duration));
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                --animationCount;
+                glyphs.remove(glyph);
+            }
+        });
+        glyph.addAction(Actions.sequence(sequence));
     }
 
     /**
@@ -1951,26 +2164,62 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public void summon(float startX, float startY, float endX, float endY, char shown,
                        final float startColor, final float endColor, float duration)
     {
+        summon(0f, startX, startY, endX, endY, shown, startColor, endColor, duration, null);
+    }
+    /**
+     * Create a new Glyph at (startX, startY) in world coordinates (often pixels on the screen) using the char shown
+     * with the given startColor, and after delay seconds, starts changing color to endColor, changing position so it
+     * ends at the world coordinates (endX, endY), taking duration seconds to complete before running postRunnable (if
+     * it is non-null) and finally removing the Glyph.
+     * <br>
+     * Unlike {@link SquidPanel#summon(float, int, int, int, int, char, Color, Color, boolean, float, float, float)},
+     * this does not rotate the Glyph it produces.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param startX the starting x position in world coordinates
+     * @param startY the starting y position in world coordinates
+     * @param endX the ending x position in world coordinates
+     * @param endY the ending y position in world coordinates
+     * @param shown the char to show (the same char throughout the effect)
+     * @param startColor the starting Color
+     * @param endColor the Color to transition to
+     * @param duration the duration in seconds for the effect
+     * @param postRunnable a Runnable to execute after the summon completes; may be null to do nothing.
+     */
+    public void summon(float delay, float startX, float startY, float endX, float endY, char shown,
+                       final float startColor, final float endColor, float duration,
+            /* @Nullable */ Runnable postRunnable)
+    {
         duration = Math.max(0.015f, duration);
         animationCount++;
+        final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        int index = 0;
+        final Action[] sequence = new Action[nbActions];
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
         final TextCellFactory.Glyph glyph = glyph(shown, startColor, gridX(startX), gridY(startY));
-        glyph.addAction(Actions.sequence(
-                Actions.parallel(
-                        new TemporalAction(duration) {
-                            @Override
-                            protected void update(float percent) {
-                                glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.9f);
-                            }
-                        },
-                        Actions.moveTo(endX, endY, duration)),
-                Actions.run(new Runnable() {
+        sequence[index++] = Actions.parallel(
+                new TemporalAction(duration) {
                     @Override
-                    public void run() {
-                        --animationCount;
-                        glyphs.remove(glyph);
+                    protected void update(float percent) {
+                        glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.95f);
                     }
-                })));
+                },
+                Actions.moveTo(endX, endY, duration));
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                --animationCount;
+                glyphs.remove(glyph);
+            }
+        });
+        glyph.addAction(Actions.sequence(sequence));
     }
+
 
     /**
      * Convenience method to produce an explosion, splash, or burst effect. Calls
@@ -1983,8 +2232,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * <br>
      * Unlike {@link SquidPanel#burst(float, int, int, int, boolean, char, Color, Color, boolean, float, float)}, this
      * does not rotate the individual Glyphs it produces.
-     * @param x the starting, center, x-position to create all Actors at
-     * @param y the starting, center, y-position to create all Actors at
+     * @param x the starting, center, x-position in cells to create all Actors at
+     * @param y the starting, center, y-position in cells to create all Actors at
      * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
      * @param measurement a Radius enum that determines if 4 (DIAMOND, OCTAHEDRON) or 8 (anything else) Glyphs are
      *                    created, and the shape they will take
@@ -1994,35 +2243,71 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param duration how long, in seconds, the effect should last
      */
     public void burst(int x, int y, int distance, Radius measurement, char shown,
-                      float startColor, float endColor, float duration)
+                      float startColor, float endColor, float duration) {
+        burst(0f, x, y, distance, measurement, shown, startColor, endColor, duration, null);
+    }
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(float, int, int, int, int, char, float, float, float, Runnable)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Glyphs that change color and position.
+     * The distance is how many cells away to move the created Actors away from (x,y). The measurement determines
+     * whether this produces Glyphs in 4 (cardinal) directions for DIAMOND or OCTAHEDRON, or 8 (cardinal and diagonal)
+     * directions for any other enum value for Radius; CIRCLE and SPHERE will position the 8 glyphs in a circle, while
+     * SQUARE and CUBE will position their 8 glyphs in a square. This takes a delay in seconds that can be used to make
+     * the effect wait to start for some amount of time, and a Runnable that will be run once after the burst's full
+     * duration completes (not once per summoned Glyph).
+     * <br>
+     * Unlike {@link SquidPanel#burst(float, int, int, int, boolean, char, Color, Color, boolean, float, float)}, this
+     * does not rotate the individual Glyphs it produces.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param x the starting, center, x-position in cells to create all Actors at
+     * @param y the starting, center, y-position in cells to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param measurement a Radius enum that determines if 4 (DIAMOND, OCTAHEDRON) or 8 (anything else) Glyphs are
+     *                    created, and the shape they will take
+     * @param shown the char to use for Glyphs; should definitely be visible
+     * @param startColor the encoded color to start the effect with
+     * @param endColor the encoded color to end the effect on
+     * @param duration how long, in seconds, the effect should last
+     * @param postRunnable a Runnable to execute after the burst completes; may be null to do nothing,
+     *                     and will only be run once for the whole burst effect.
+     */
+    public void burst(float delay, int x, int y, int distance, Radius measurement, char shown,
+                      float startColor, float endColor, float duration, /* @Nullable */ Runnable postRunnable)
     {
         Direction d;
         switch (measurement)
         {
             case SQUARE:
             case CUBE:
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < 7; i++) {
                     d = Direction.CLOCKWISE[i];
-                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
-                            shown, startColor, endColor, duration);
+                    summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            shown, startColor, endColor, duration, null);
                 }
+                d = Direction.CLOCKWISE[7];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        shown, startColor, endColor, duration, postRunnable);
                 break;
             case CIRCLE:
             case SPHERE:
                 float xf = worldX(x), yf = worldY(y);
                 for (int i = 0; i < 4; i++) {
                     d = Direction.DIAGONALS[i];
-                    summon(xf, yf, xf - d.deltaX * font.actualCellWidth * distance * 0.7071067811865475f, // the constant is 1.0 / Math.sqrt(2.0)
+                    summon(delay, xf, yf, xf - d.deltaX * font.actualCellWidth * distance * 0.7071067811865475f, // the constant is 1.0 / Math.sqrt(2.0)
                             yf + d.deltaY * font.actualCellHeight * distance * 0.7071067811865475f,
-                            shown, startColor, endColor, duration);
+                            shown, startColor, endColor, duration, null);
                 }
                 // break intentionally absent
             default:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 3; i++) {
                     d = Direction.CARDINALS_CLOCKWISE[i];
-                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
-                            shown, startColor, endColor, duration);
+                    summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            shown, startColor, endColor, duration, null);
                 }
+                d = Direction.CARDINALS_CLOCKWISE[3];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        shown, startColor, endColor, duration, postRunnable);
                 break;
         }
     }
@@ -2037,8 +2322,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * <br>
      * Unlike {@link SquidPanel#burst(float, int, int, int, boolean, char, Color, Color, boolean, float, float)}, this
      * does not rotate the individual Glyphs it produces.
-     * @param x the starting, center, x-position to create all Actors at
-     * @param y the starting, center, y-position to create all Actors at
+     * @param x the starting, center, x-position in cells to create all Actors at
+     * @param y the starting, center, y-position in cells to create all Actors at
      * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
      * @param measurement a Radius enum that determines if 4 (DIAMOND, OCTAHEDRON) or 8 (anything else) Glyphs are
      *                    created, and the shape they will take
@@ -2048,7 +2333,37 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param duration how long, in seconds, the effect should last
      */
     public void burst(int x, int y, int distance, Radius measurement, CharSequence choices,
-                      float startColor, float endColor, float duration)
+                      float startColor, float endColor, float duration) {
+        burst(0f, x, y, distance, measurement, choices, startColor, endColor, duration, null);
+    }
+    /**
+     * Convenience method to produce an explosion, splash, or burst effect. Calls
+     * {@link #summon(int, int, int, int, char, float, float, float)} repeatedly with
+     * different parameters. As with summon(), this creates temporary Glyphs that change color and position.
+     * The distance is how many cells away to move the created Actors away from (x,y). The measurement determines
+     * whether this produces Glyphs in 4 (cardinal) directions for DIAMOND or OCTAHEDRON, or 8 (cardinal and diagonal)
+     * directions for any other enum value for Radius; CIRCLE and SPHERE will position the 8 glyphs in a circle, while
+     * SQUARE and CUBE will position their 8 glyphs in a square. This takes a delay in seconds that can be used to make
+     * the effect wait to start for some amount of time, and a Runnable that will be run once after the burst's full
+     * duration completes (not once per summoned Glyph).
+     * <br>
+     * Unlike {@link SquidPanel#burst(float, int, int, int, boolean, char, Color, Color, boolean, float, float)}, this
+     * does not rotate the individual Glyphs it produces.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param x the starting, center, x-position in cells to create all Actors at
+     * @param y the starting, center, y-position in cells to create all Actors at
+     * @param distance how far away, in cells, to move each actor from the center (Chebyshev distance, forming a square)
+     * @param measurement a Radius enum that determines if 4 (DIAMOND, OCTAHEDRON) or 8 (anything else) Glyphs are
+     *                    created, and the shape they will take
+     * @param choices a String or other CharSequence containing the chars this can randomly choose
+     * @param startColor the encoded color to start the effect with
+     * @param endColor the encoded color to end the effect on
+     * @param duration how long, in seconds, the effect should last
+     * @param postRunnable a Runnable to execute after the burst completes; may be null to do nothing,
+     *                     and will only be run once for the whole burst effect.
+     */
+    public void burst(float delay, int x, int y, int distance, Radius measurement, CharSequence choices,
+                      float startColor, float endColor, float duration, /* @Nullable */ Runnable postRunnable)
     {
         Direction d;
         final int len = choices.length();
@@ -2057,28 +2372,36 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         {
             case SQUARE:
             case CUBE:
-                for (int i = 0; i < 8; i++) {
+                for (int i = 0; i < 7; i++) {
                     d = Direction.CLOCKWISE[i];
-                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
-                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration);
+                    summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration, null);
                 }
+                d = Direction.CLOCKWISE[7];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration, postRunnable);
+
                 break;
             case CIRCLE:
             case SPHERE:
                 float xf = worldX(x), yf = worldY(y);
                 for (int i = 0; i < 4; i++) {
                     d = Direction.DIAGONALS[i];
-                    summon(xf, yf, xf - d.deltaX * font.actualCellWidth * distance * 0.7071067811865475f,
+                    summon(delay, xf, yf, xf - d.deltaX * font.actualCellWidth * distance * 0.7071067811865475f,
                             yf + d.deltaY * font.actualCellHeight * distance * 0.7071067811865475f,
-                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration);
+                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration, null);
                 }
                 // break intentionally absent
             default:
-                for (int i = 0; i < 4; i++) {
+                for (int i = 0; i < 3; i++) {
                     d = Direction.CARDINALS_CLOCKWISE[i];
-                    summon(x, y, x - d.deltaX * distance, y + d.deltaY * distance,
-                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration);
+                    summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                            choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration, null);
                 }
+                d = Direction.CARDINALS_CLOCKWISE[3];
+                summon(delay, x, y, x - d.deltaX * distance, y + d.deltaY * distance,
+                        choices.charAt(rng.nextIntHasty(len)), startColor, endColor, duration, postRunnable);
+
                 break;
         }
     }
