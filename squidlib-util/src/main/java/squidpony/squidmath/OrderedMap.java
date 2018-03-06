@@ -112,11 +112,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * The index of the last entry in iteration order. It is valid iff {@link #size} is nonzero; otherwise, it contains -1.
      */
     protected int last = -1;
-    /*
-     * For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>. The first entry contains predecessor -1, and the
-     * last entry contains successor -1.
+    /**
+     * An IntVLA (variable-length int sequence) that stores the positions in the key array of specific keys, with the
+     * positions in insertion order. The order can be changed with {@link #reorder(int...)} and other methods.
      */
-    //protected long[] link;
     protected IntVLA order;
     /**
      * The current table size.

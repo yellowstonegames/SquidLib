@@ -99,7 +99,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
     /**
      * The default load factor of a hash table.
      */
-    public static final float DEFAULT_LOAD_FACTOR = .375f; // .1875f; // .75f;
+    public static final float DEFAULT_LOAD_FACTOR = .75f; // .1875f; // .75f;
     /**
      * The load factor for a (usually small) table that is meant to be particularly fast.
      */
@@ -802,7 +802,6 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
             while( i-- != 0 && hasNext() ) next();
             return n - i - 1;
         }
-
     }
 
     public Iterator<K> iterator() {

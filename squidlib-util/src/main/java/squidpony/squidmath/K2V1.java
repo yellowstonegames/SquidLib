@@ -15,8 +15,8 @@ import java.util.SortedSet;
  * Created by Tommy Ettinger on 10/27/2016.
  */
 public class K2V1<A, B, Q> {
-    K2<A, B> keys;
-    ArrayList<Q> values;
+    public K2<A, B> keys;
+    public ArrayList<Q> values;
 
     /**
      * Constructs an empty K2V1 with the default parameters: 32 expected indices and a load factor of 0.5f.
@@ -491,7 +491,8 @@ public class K2V1<A, B, Q> {
 
     /**
      * Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set). It retains the
-     * current ordering.
+     * current ordering. This Set is shared with this collection; it is not a copy, and changes to the returned Set will
+     * affect this data structure.
      * @return the A keys as a SortedSet
      */
     public SortedSet<A> getSetA()
@@ -501,7 +502,8 @@ public class K2V1<A, B, Q> {
 
     /**
      * Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set). It retains the
-     * current ordering.
+     * current ordering. This Set is shared with this collection; it is not a copy, and changes to the returned Set will
+     * affect this data structure.
      * @return the B keys as a SortedSet
      */
     public SortedSet<B> getSetB()
@@ -510,11 +512,42 @@ public class K2V1<A, B, Q> {
     }
 
     /**
-     * Gets the Q values as a freshly-copied ArrayList of Q; unlike {@link #getSetA()} or {@link #getSetB()}, this does
-     * not cache the value list. It retains the current ordering.
-     * @return the Q values as an ArrayList
+     * Returns a separate (shallow) copy of the set of A keys as an {@link OrderedSet}.
+     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one. This can be useful if you
+     * were going to copy the set produced by {@link #getSetA()} anyway.
+     * @return the A keys as an OrderedSet
+     */
+    public OrderedSet<A> getOrderedSetA() {
+        return keys.getOrderedSetA();
+    }
+    
+    /**
+     * Returns a separate (shallow) copy of the set of B keys as an {@link OrderedSet}.
+     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one. This can be useful if you
+     * were going to copy the set produced by {@link #getSetB()} anyway.
+     * @return the B keys as an OrderedSet
+     */
+    public OrderedSet<B> getOrderedSetB() {
+        return keys.getOrderedSetB();
+    }
+
+    /**
+     * Gets the Q values as a shared reference to the ArrayList of Q this uses; like {@link #getSetA()} and
+     * {@link #getSetB()}, changes made to the returned list will also change this data structure.
+     * It retains the current ordering.
+     * @return the Q values as an ArrayList, shared with this K2V1
      */
     public ArrayList<Q> getListQ()
+    {
+        return values;
+    }
+
+    /**
+     * Gets the Q values as a freshly-copied ArrayList of Q; unlike {@link #getSetA()} or {@link #getSetB()}, this does
+     * not cache the value list. It retains the current ordering.
+     * @return the Q values as an ArrayList, copied from this K2V1's internal list
+     */
+    public ArrayList<Q> getArrayListQ()
     {
         return new ArrayList<>(values);
     }

@@ -36,7 +36,7 @@ public class IconsTest extends ApplicationAdapter{
     SpriteBatch batch;
     ArrayList<Color> colors;
     double[][] resMap;
-    float ctr = 0;
+    long ctr = 0L, lastUpdate = 0L;
     TextureAtlas atlas;
     OrderedMap<Coord, AnimatedEntity> things;
     Array<TextureAtlas.AtlasRegion> regions;
@@ -62,7 +62,7 @@ public class IconsTest extends ApplicationAdapter{
         colors = DefaultResources.getSCC().zigzagGradient(Color.DARK_GRAY, Color.LIGHT_GRAY, 200);
         colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.LIGHT_GRAY, Color.DARK_GRAY, 200));
         */
-        colors = DefaultResources.getSCC().rainbow(100);
+        colors = DefaultResources.getSCC().rainbow(64);
         layers.setLightingColor(Color.WHITE);
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
         //OrganicMapGenerator org = new OrganicMapGenerator(gridWidth, gridHeight, rng);
@@ -79,7 +79,7 @@ public class IconsTest extends ApplicationAdapter{
         AnimatedEntity ent;
         for (int i = 0; i < points.length; i++) {
             ent = layers.animateActor(points[i].x, points[i].y, regions.get(rng.nextInt(totalRegions)),
-                    colors.get(i));
+                    colors.get(i & 63));
             things.put(points[i], ent);
             ent.actor.setUserObject(i);
         }
@@ -105,7 +105,7 @@ public class IconsTest extends ApplicationAdapter{
         for (int i = 0; i < things.size(); i++) {
             pt = things.keyAt(i);
             ent = layers.animateActor(pt.x, pt.y, regions.get(rng.nextInt(totalRegions)),
-                    colors.get(i));
+                    colors.get(i & 63));
             things.put(pt, ent);
             ent.actor.setUserObject(i);
         }
@@ -121,42 +121,40 @@ public class IconsTest extends ApplicationAdapter{
         super.render();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        ctr += Gdx.graphics.getDeltaTime();
-        if(ctr > 0.05) {
-            Coord pt;
+        ctr = System.currentTimeMillis();
+        if(ctr > 125 + lastUpdate) {
+            lastUpdate = ctr;
             AnimatedEntity ent;
             Integer uo;
             for (int i = 0; i < things.size(); i++) {
                 ent = things.getAt(i);
-                if(ent == null || ent.actor == null)
+                if (ent == null || ent.actor == null)
                     continue;
-                uo =  ((Integer) (ent.actor.getUserObject()) + 1) % colors.size();
+                uo = ((Integer) (ent.actor.getUserObject()) + 1) & 63;
                 ent.actor.setUserObject(uo);
                 ent.actor.setColor(colors.get(uo));
             }
-        }
 
-        if(!layers.hasActiveAnimations() && ctr > 0.4) {
-            ctr -= 0.4;
-            Direction[] dirs = new Direction[4];
-            Coord alter, pt;
-            AnimatedEntity ent;
-            for (int i = 0; i < things.size(); i++) {
-                pt = things.keyAt(i);
-                rng.shuffle(Direction.CARDINALS, dirs);
-                for (int di = 0; di < 4; di++) {
-                    alter = pt.translate(dirs[di]);
-                    if (map[alter.x][alter.y] == '.' && !things.containsKey(alter)) {
-                        ent = things.getAt(i);
-                        layers.slide(ent, alter.x, alter.y);
-                        things.alter(pt, alter);
-                        break;
+            if (!layers.hasActiveAnimations()) {
+                Direction[] dirs = new Direction[4];
+                Coord alter, pt;
+                for (int i = 0; i < things.size(); i++) {
+                    pt = things.keyAt(i);
+                    rng.shuffle(Direction.CARDINALS, dirs);
+                    for (int di = 0; di < 4; di++) {
+                        alter = pt.translate(dirs[di]);
+                        if (map[alter.x][alter.y] == '.' && !things.containsKey(alter)) {
+                            ent = things.getAt(i);
+                            layers.slide(ent, alter.x, alter.y);
+                            things.alter(pt, alter);
+                            break;
+                        }
                     }
                 }
+
             }
 
         }
-
         layers.put(0, 0, displayedMap, fgColors, bgColors);
         stage.draw();
         batch.begin();
@@ -166,6 +164,7 @@ public class IconsTest extends ApplicationAdapter{
             layers.drawActor(batch, 1f, things.getAt(i));
         }
         batch.end();
+        Gdx.graphics.setTitle("Icon Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
 
     }
 
@@ -174,6 +173,8 @@ public class IconsTest extends ApplicationAdapter{
         config.title = "SquidLib Test: Icons";
         config.width = 60 * 24;
         config.height = 40 * 24;
+        config.vSyncEnabled = false;
+        config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);

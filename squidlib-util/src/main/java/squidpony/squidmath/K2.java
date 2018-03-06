@@ -18,8 +18,8 @@ import java.util.SortedSet;
 @Beta
 public class K2<A, B>
 {
-    Arrangement<A> keysA;
-    Arrangement<B> keysB;
+    public Arrangement<A> keysA;
+    public Arrangement<B> keysB;
 
     /**
      * Constructs an empty K2.
@@ -441,14 +441,16 @@ public class K2<A, B>
     }
 
     /**
-     * Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set).
+     * Gets and caches the A keys as a Collection that implements SortedSet (and so also implements Set). This Set is
+     * shared with this collection; it is not a copy.
      * @return the A keys as a SortedSet
      */
     public SortedSet<A> getSetA() {
         return keysA.keySet();
     }
     /**
-     * Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set).
+     * Gets and caches the B keys as a Collection that implements SortedSet (and so also implements Set). This Set is
+     * shared with this collection; it is not a copy.
      * @return the B keys as a SortedSet
      */
     public SortedSet<B> getSetB() {
@@ -456,7 +458,9 @@ public class K2<A, B>
     }
 
     /**
-     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one.
+     * Returns a separate (shallow) copy of the set of A keys as an {@link OrderedSet}.
+     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one. This can be useful if you
+     * were going to copy the set produced by {@link #getSetA()} anyway.
      * @return the A keys as an OrderedSet
      */
     public OrderedSet<A> getOrderedSetA() {
@@ -464,7 +468,9 @@ public class K2<A, B>
     }
 
     /**
-     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one.
+     * Returns a separate (shallow) copy of the set of B keys as an {@link OrderedSet}.
+     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one. This can be useful if you
+     * were going to copy the set produced by {@link #getSetB()} anyway.
      * @return the B keys as an OrderedSet
      */
     public OrderedSet<B> getOrderedSetB() {

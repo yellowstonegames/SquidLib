@@ -108,11 +108,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * The index of the last entry in iteration order. It is valid iff {@link #size} is nonzero; otherwise, it contains -1.
      */
     protected int last = -1;
-    /*
-     * For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>. The first entry contains predecessor -1, and the
-     * last entry contains successor -1.
+    /**
+     * An IntVLA (variable-length int sequence) that stores the positions in the key array of specific keys, with the
+     * positions in insertion order. The order can be changed with {@link #reorder(int...)} and other methods.
      */
-    //protected long[] link;
     protected IntVLA order;
     /**
      * The current table size.
@@ -138,7 +137,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     /**
      * The default load factor of a hash table.
      */
-    public static final float DEFAULT_LOAD_FACTOR = .375f; // .1875f; // .75f;
+    public static final float DEFAULT_LOAD_FACTOR = .75f; // .1875f; // .75f;
     /**
      * The load factor for a (usually small) table that is meant to be particularly fast.
      */
