@@ -6,6 +6,7 @@ import squidpony.squidmath.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 import static squidpony.Maker.makeList;
@@ -649,6 +650,8 @@ public class Thesaurus implements Serializable{
             makeList("rockets", "grenades", "missiles", "bombs", "warheads", "explosives", "flamethrowers"),
             "rifle`nouns`",
             makeList("pistols", "rifles", "handguns", "firearms", "longarms", "shotguns"),
+            "scifi`adj`",
+            makeList("plasma", "warp", "tachyonic", "phase", "gravitational", "photonic", "nanoscale", "laser", "quantum", "genetic"),
             "tech`adj`",
             makeList("cyber", "digital", "electronic", "techno", "hacker", "crypto", "turbo", "mechanical", "servo"),
             "sole`adj`",
@@ -679,14 +682,30 @@ public class Thesaurus implements Serializable{
             makeList("brilliant", "smart", "genius", "wise", "clever", "cunning", "mindful", "aware"),
             "smart`noun`",
             makeList("genius", "wisdom", "cunning", "awareness", "mindfulness", "acumen", "smarts", "knowledge"),
+            "stupid`adj`",
+            makeList("stupid", "dumb", "idiotic", "foolish", "reckless", "careless", "sloppy", "dull", "moronic", "complacent"),
+            "stupid`noun`",
+            makeList("stupidity", "idiocy", "foolishness", "recklessness", "carelessness", "sloppiness", "complacency"),
             "bandit`noun`",
             makeList("thief", "raider", "bandit", "rogue", "brigand", "highwayman", "pirate"),
             "bandit`nouns`",
             makeList("thieves", "raiders", "bandits", "rogues", "brigands", "highwaymen", "pirates"),
+            "soldier`noun`",
+            makeList("soldier", "warrior", "fighter", "mercenary", "trooper", "combatant"),
+            "soldier`nouns`",
+            makeList("soldiers", "warriors", "fighters", "mercenaries", "troops", "combatants"),
             "guard`noun`",
-            makeList("protector", "guardian", "warden", "defender", "guard", "shield", "sentinel", "watchman", "knight"),
+            makeList("protector", "guardian", "warden", "defender", "guard", "shield", "sentinel", "watchman", "knight", "paladin", "templar"),
             "guard`nouns`",
-            makeList("protectors", "guardians", "wardens", "defenders", "guards", "shields", "sentinels", "watchmen", "knights"),
+            makeList("protectors", "guardians", "wardens", "defenders", "guards", "shields", "sentinels", "watchmen", "knights", "paladins", "templars"),
+            "hunter`noun`",
+            makeList("hunter", "poacher", "trapper", "warden", "stalker", "tracker"),
+            "explorer`noun`",
+            makeList("explorer", "pathfinder", "seeker", "questant", "wanderer", "nomad"),
+            "hunter`nouns`",
+            makeList("hunters", "poachers", "trappers", "wardens", "stalkers", "trackers"),
+            "explorer`nouns`",
+            makeList("explorers", "pathfinders", "seekers", "questants", "wanderers", "nomads"),
             "rage`noun`",
             makeList("rage", "fury", "anger", "wrath", "frenzy", "vengeance"),
             "ominous`adj`",
@@ -696,7 +715,7 @@ public class Thesaurus implements Serializable{
             "impossible`adj`",
             makeList("impossible", "forbidden", "incomprehensible", "ineffable", "unearthly", "abominable", "unspeakable", "indescribable"),
             "gaze`noun`",
-            makeList("eye", "gaze", "stare", "observation", "purveyance"),
+            makeList("eye", "gaze", "stare", "observation", "purveyance", "watch"),
             "pain`noun`",
             makeList("pain", "agony", "misery", "excruciation", "torture"),
             "god`noun`",
@@ -705,14 +724,21 @@ public class Thesaurus implements Serializable{
             makeList("goddess", "deity", "ruler", "queen", "mother", "lady", "ladyship"),
             "hero`noun`",
             makeList("hero", "champion", "savior", "crusader", "knight"),
-            "heroes`noun`",
+            "heroes`nouns`",
             makeList("heroes", "champions", "saviors", "crusaders", "knights"),
             "heroine`noun`",
             makeList("heroine", "champion", "savior", "crusader", "knight", "maiden"),
-            "heroines`noun`",
-            makeList("heroines", "champions", "saviors", "crusaders", "knights", "maidens")
+            "heroines`nouns`",
+            makeList("heroines", "champions", "saviors", "crusaders", "knights", "maidens"),
+            "popular`adj`",
+            makeList("beloved", "adored", "revered", "worshipped"),
+            "unpopular`adj`",
+            makeList("reviled", "despised", "hated", "loathed")
             );
-
+    public static final OrderedMap<String, ArrayList<String>>
+            adjective = new OrderedMap<>(categories),
+            noun = new OrderedMap<>(categories),
+            nouns = new OrderedMap<>(categories);
     public static final OrderedMap<CharSequence, FakeLanguageGen> languages = new OrderedMap<CharSequence, FakeLanguageGen>(
             100, Hashers.caseInsensitiveStringHasher
     ).putPairs(
@@ -886,5 +912,22 @@ public class Thesaurus implements Serializable{
                 .addReplacement("rhythm", "riddim")
                 .addReplacement("get", "git")
                 .addReplacement("good", "gud");
+        Iterator<String> it = adjective.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`adj`"))
+                it.remove();
+        }
+        it = noun.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`noun`"))
+                it.remove();
+        }
+        it = nouns.keySet().iterator();
+        while (it.hasNext()){
+            if(!it.next().contains("`nouns`"))
+                it.remove();
+        }
+
+
     }
 }

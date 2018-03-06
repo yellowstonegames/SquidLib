@@ -1944,7 +1944,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
 
     public OrderedSet<K> keysAsOrderedSet()
     {
-        OrderedSet<K> os = new OrderedSet<K>(size, f, hasher);
+        OrderedSet<K> os = new OrderedSet<>(size, f, hasher);
         for (int i = 0; i < size; i++) {
             os.add(keyAt(i));
         }
