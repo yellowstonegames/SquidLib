@@ -166,7 +166,7 @@ public class Playground {
 
         Mnemonic mn = new Mnemonic();
         String text;
-        ThrustAlt32RNG rng = new ThrustAlt32RNG(0L);
+        ThrustAlt32RNG rng = new ThrustAlt32RNG();
         for (int i = 0; i <= 50; i++) {
             int r = rng.nextInt();
             System.out.println(r + ": " + (text = mn.toWordMnemonic(r, true)) + " decodes to " + mn.fromWordMnemonic(text));

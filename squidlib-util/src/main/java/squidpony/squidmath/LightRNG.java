@@ -264,9 +264,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
 
     public static long determine(long state)
     {
-        state = (((state *= 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return state ^ (state >>> 31);
+        return ((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31);
     }
     public static long determine(final int a, final int b)
     {

@@ -4,6 +4,8 @@ import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
+import static squidpony.squidmath.LightRNG.determine;
+
 /**
  * Really strange noise functions that typically produce curving black and white shapes when rendered.
  * This technique uses no floating-point math, surprisingly, which helps its performance a little.
@@ -155,8 +157,8 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
     public static long noise2D(long x, long y, long state, int resolution, int bits) {
         long xb = (x >> resolution) + state, yb = (y >> resolution) - state,
                 xr = (x & ~(-1L << resolution)), yr = (y & ~(-1L << resolution)),
-                x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
-                y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
+                x0 = determine(xb), x1 = determine(xb + 1),
+                y0 = determine(yb), y1 = determine(yb + 1),
                 x0y0 = (x0 * y0 ^ x0 - y0) >>> resolution, x1y0 = (x1 * y0 ^ x1 - y0) >>> resolution,
                 x0y1 = (x0 * y1 ^ x0 - y1) >>> resolution, x1y1 = (x1 * y1 ^ x1 - y1) >>> resolution;
 
@@ -189,9 +191,9 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
     public static long noise3D(long x, long y, long z, long state, int resolution, int bits) {
         long xb = (x >> resolution) + state, yb = (y >> resolution) - state, zb = (z >> resolution) + (0x9E3779B97F4A7C15L ^ state),
                 xr = x & ~(-1L << resolution), yr = y & ~(-1L << resolution), zr = z & ~(-1L << resolution),
-                x0 = ThrustAltRNG.determine(xb), x1 = ThrustAltRNG.determine(xb + 1),
-                y0 = ThrustAltRNG.determine(yb), y1 = ThrustAltRNG.determine(yb + 1),
-                z0 = ThrustAltRNG.determine(zb), z1 = ThrustAltRNG.determine(zb + 1),
+                x0 = determine(xb), x1 = determine(xb + 1),
+                y0 = determine(yb), y1 = determine(yb + 1),
+                z0 = determine(zb), z1 = determine(zb + 1),
                 x0y0z0 = (x0 * y0 * z0 ^ x0 - y0 + (z0 - x0 << 32 | y0 - z0 >>> 32)) >>> resolution, x1y0z0 = (x1 * y0 * z0 ^ x1 - y0 + (z0 - x1 << 32 | y0 - z0 >>> 32)) >>> resolution,
                 x0y1z0 = (x0 * y1 * z0 ^ x0 - y1 + (z0 - x0 << 32 | y1 - z0 >>> 32)) >>> resolution, x1y1z0 = (x1 * y1 * z0 ^ x1 - y1 + (z0 - x1 << 32 | y1 - z0 >>> 32)) >>> resolution,
                 x0y0z1 = (x0 * y0 * z1 ^ x0 - y0 + (z1 - x0 << 32 | y0 - z1 >>> 32)) >>> resolution, x1y0z1 = (x1 * y0 * z1 ^ x1 - y0 + (z1 - x1 << 32 | y0 - z1 >>> 32)) >>> resolution,
