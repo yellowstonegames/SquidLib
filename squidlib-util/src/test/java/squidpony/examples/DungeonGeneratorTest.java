@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import squidpony.ArrayTools;
+import squidpony.squidai.WaypointPathfinder;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -122,7 +123,7 @@ public class DungeonGeneratorTest {
         serpent.putRoundRoomCarvers(3);
         serpent.putCaveCarvers(3);
         char[][] map = serpent.generate();
-        dungeonGenerator.generate(map);
+        dungeonGenerator.generate(ArrayTools.copy(map));
 
         char[][] sdungeon = DungeonUtility.closeDoors(dungeonGenerator.getDungeon());
         sdungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
@@ -130,6 +131,18 @@ public class DungeonGeneratorTest {
 
         dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
                 DungeonUtility.hashesToLines(sdungeon)));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+        System.out.println("SerpentMapGenerator with chokepoint detection\n");
+
+        dungeonGenerator.clearEffects();
+        dungeonGenerator.generate(map);
+        OrderedSet<Coord> chokepoints = new WaypointPathfinder(map, Radius.DIAMOND, rng).getWaypoints();
+        for(Coord c : chokepoints) {
+            map[c.x][c.y] = '*';
+        }
+        dungeonGenerator.setDungeon(DungeonUtility.doubleWidth(
+                DungeonUtility.hashesToLines(map)));
         System.out.println(dungeonGenerator);
 
         System.out.println("------------------------------------------------------------");
@@ -296,9 +309,9 @@ public class DungeonGeneratorTest {
         System.out.println("FlowingCaveGenerator\n");
         rng.setState(2252637788195L);
         FlowingCaveGenerator flow = new FlowingCaveGenerator(width, height, TilesetType.DEFAULT_DUNGEON, rng);
+        dungeonGenerator.clearEffects();
         dungeonGenerator.addWater(10);
         dungeonGenerator.addGrass(12);
-        dungeonGenerator.clearEffects();
         dungeon = dungeonGenerator.generate(flow.generate(TilesetType.DEFAULT_DUNGEON));
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';

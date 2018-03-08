@@ -485,7 +485,7 @@ public class WaypointPathfinder {
 
     public OrderedSet<Coord> getWaypoints()
     {
-        return new OrderedSet<>(waypoints.keySet());
+        return waypoints.keysAsOrderedSet();
     }
 
     private static class Edge implements Comparable<Edge>

@@ -47,7 +47,6 @@ import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
@@ -55,7 +54,7 @@ import squidpony.squidmath.StatefulRNG;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import static squidpony.squidai.DijkstraMap.Measurement.*;
+import static squidpony.squidai.DijkstraMap.Measurement.CHEBYSHEV;
 
 /**
  * Times:
@@ -131,7 +130,7 @@ public class DijkstraBenchmark {
     public static class BenchmarkState {
         public int DIMENSION = 128;
         public DungeonGenerator dungeonGen = new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
-        public SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
+        //public SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
         public char[][] map;
         public double[][] astarMap;
         public GreasedRegion floors;
@@ -147,8 +146,10 @@ public class DijkstraBenchmark {
         public GraphPath<Coord> dgp;
         @Setup(Level.Trial)
         public void setup() {
-            serpent.putWalledBoxRoomCarvers(1);
-            map = dungeonGen.generate(serpent.generate());
+            Coord.expandPoolTo(DIMENSION, DIMENSION);
+            //serpent.putWalledBoxRoomCarvers(1);
+            //map = dungeonGen.generate(serpent.generate());
+            map = dungeonGen.generate();
             floors = new GreasedRegion(map, '.');
             floorCount = floors.size();
             System.out.println("Floors: " + floorCount);
@@ -507,7 +508,7 @@ public class DijkstraBenchmark {
                 r = state.nearbyMap[x][y];
                 state.dgp.clear();
                 if(state.astar.searchNodePath(r, Coord.get(x, y), state.gg.heu, state.dgp))
-                    scanned+= state.dgp.getCount();
+                    scanned += state.dgp.getCount();
             }
         }
         return scanned;
