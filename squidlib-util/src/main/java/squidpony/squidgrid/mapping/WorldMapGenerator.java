@@ -2678,7 +2678,7 @@ public abstract class WorldMapGenerator implements Serializable {
                                   double waterMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(cachedState != state || (waterMod *= 1.2) != waterModifier || (coolMod *= 1.375) != coolingModifier)
+            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -2764,7 +2764,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     {
                         h = NumberTools.swayTight(terrain4D.getNoiseWithSeed(pc, ps, qs, terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA), seedA)) * 0.85;
                         if(coast.contains(x, y))
-                            h *= 0.125;
+                            h += 0.05;
                         else
                             h += 0.15;
                     }
