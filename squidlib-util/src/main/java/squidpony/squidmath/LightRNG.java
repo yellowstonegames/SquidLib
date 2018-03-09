@@ -57,18 +57,50 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
 
     /** Creates a new generator seeded using Math.random. */
     public LightRNG() {
-        this((long) Math.floor(Math.random() * Long.MAX_VALUE));
+        this((long) ((Math.random() - 0.5) * 0x10000000000000L)
+                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
     }
 
     public LightRNG( final long seed ) {
         setSeed(seed);
     }
 
+    /**
+     * Gets a pseudo-random int with at most the specified count of bits; for example, if bits is 3 this can return any
+     * int between 0 and 2 to the 3 (that is, 8), exclusive on the upper end. That would mean 7 could be returned, but
+     * no higher ints, and 0 could be returned, but no lower ints.
+     * 
+     * The algorithm used here changed on March 8, 2018 when LightRNG was remade the default generator in SquidLib.
+     * The older method is available as {@link #compatibleNext(int)}, but its use is discouraged; it's slightly slower 
+     * for no good reason.
+     * @param bits the number of bits to be returned; if 0 or less, or if 32 or greater, can return any 32-bit int
+     * @return a pseudo-random int that uses at most the specified amount of bits
+     */
     @Override
     public final int next( int bits ) {
-        return (int)( nextLong() & ( 1L << bits ) - 1 );
+        long z = state += 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        return (int)(z ^ (z >>> 31)) >>> (32 - bits);
     }
-
+    /**
+     * Gets a pseudo-random int with at most the specified count of bits; for example, if bits is 3 this can return any
+     * int between 0 and 2 to the 3 (that is, 8), exclusive on the upper end. That would mean 7 could be returned, but
+     * no higher ints, and 0 could be returned, but no lower ints.
+     *
+     * The algorithm used here is the older version of {@link #next(int)} before some things changed on March 8 2018.
+     * Using this method is discouraged unless you need to reproduce values exactly; it's slightly slower for no good
+     * reason. Calling {@code next(32)} and {@code compatibleNext(32)} should have identical results, but other values
+     * for bits will probably be different.
+     * @param bits the number of bits to be returned; if 0 or less, or if 32 or greater, can return any 32-bit int
+     * @return a pseudo-random int that uses at most the specified amount of bits
+     */
+    public final int compatibleNext( int bits ) {
+        long z = state += 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        return (int)( (z ^ (z >>> 31)) & ( 1L << bits ) - 1 );
+    }
     /**
      * Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.
      * @return any long, all 64 bits are random
@@ -98,36 +130,72 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @return any int, all 32 bits are random
      */
     public int nextInt() {
-        return (int)nextLong();
+        long z = state += 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        return (int) (z ^ (z >>> 31)); 
     }
 
     /**
+     * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
+     * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
+     * Uses an aggressively optimized technique that has some bias, but mostly for values of
+     * bound over 1 billion. This method uses the same technique as {@link RNG#nextIntHasty(int)},
+     * and like that method will always advance state exactly once (equivalent to one call to
+     * {@link #nextLong()}).
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     *
+     * @param bound the outer bound (exclusive), can be negative or positive
+     * @return the found number
+     */
+    public int nextInt( final int bound ) {
+        long z = state += 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        return (int) ((bound * ((z ^ (z >>> 31)) & 0x7FFFFFFFL)) >> 31);
+    }
+
+    /**
+     * Like {@link #compatibleNext(int)}, but for compatibility with {@link #nextInt(int)}.
      * Exclusive on the upper bound.  The lower bound is 0.
      * @param bound the upper bound; should be positive
      * @return a random int less than n and at least equal to 0
      */
-    public int nextInt( final int bound ) {
-        if ( bound <= 0 ) return 0;
+    public int compatibleNextInt( final int bound ) {
+        if (bound <= 0) return 0;
         int threshold = (0x7fffffff - bound + 1) % bound;
-        for (;;) {
-            int bits = (int)(nextLong() & 0x7fffffff);
+        for (; ; ) {
+            int bits = (int) (nextLong() & 0x7fffffff);
             if (bits >= threshold)
                 return bits % bound;
         }
     }
     /**
-     * Inclusive lower, exclusive upper.
+     * Inclusive lower, exclusive upper. Although you should usually use a higher value for upper than for lower, you
+     * can use a lower "upper" than "lower" and this will still work, producing an int between the two bounds.
      * @param lower the lower bound, inclusive, can be positive or negative
-     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
-     * @return a random int at least equal to lower and less than upper
+     * @param upper the upper bound, exclusive, can be positive or negative, usually should be greater than lower
+     * @return a random int between lower (inclusive) and upper (exclusive)
      */
     public int nextInt( final int lower, final int upper ) {
-        if ( upper - lower <= 0 ) throw new IllegalArgumentException("Upper bound must be greater than lower bound");
         return lower + nextInt(upper - lower);
     }
 
     /**
-     * Exclusive on the upper bound. The lower bound is 0.
+     * Inclusive lower, exclusive upper.
+     * @param lower the lower bound, inclusive, can be positive or negative
+     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
+     * @return a random int between lower (inclusive) and upper (exclusive)
+     */
+    public int compatibleNextInt( final int lower, final int upper ) {
+        if ( upper - lower <= 0 ) throw new IllegalArgumentException("Upper bound must be greater than lower bound");
+        return lower + compatibleNextInt(upper - lower);
+    }
+
+    /**
+     * Exclusive on the upper bound. The lower bound is 0. Unlike {@link #nextInt(int)}, this may sometimes advance the
+     * state more than once, depending on what numbers are produced internally and the bound.
      * @param bound the upper bound; should be positive
      * @return a random long less than n
      */
@@ -156,7 +224,10 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @return a random double at least equal to 0.0 and less than 1.0
      */
     public double nextDouble() {
-        return ( nextLong() & DOUBLE_MASK ) * NORM_53;
+        long z = state += 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        return ((z ^ (z >>> 31)) & 0x1fffffffffffffL) * 0x1p-53;
     }
 
     /**
@@ -174,7 +245,11 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @return a random float at least equal to 0.0 and less than 1.0
      */
     public float nextFloat() {
-        return ( nextLong() & FLOAT_MASK ) * NORM_24;
+        long z = state += 0x9E3779B97F4A7C15L;
+        z = (z ^ (z >>> 30)) * 0xBF58476D1CE4E5B9L;
+        z = (z ^ (z >>> 27)) * 0x94D049BB133111EBL;
+        return ((z ^ (z >>> 31)) & 0xffffffL) * 0x1p-24f;
+
     }
 
     /**
@@ -192,7 +267,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @param bytes a byte array that will have its contents overwritten with random bytes.
      */
     public void nextBytes( final byte[] bytes ) {
-        int i = bytes.length, n = 0;
+        int i = bytes.length, n;
         while( i != 0 ) {
             n = Math.min( i, 8 );
             for ( long bits = nextLong(); n-- != 0; bits >>>= 8 ) bytes[ --i ] = (byte)bits;
@@ -280,4 +355,32 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
         state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
         return (int)((bound * ((state ^ (state >>> 31)) & 0x7FFFFFFFL)) >> 31);
     }
+
+    /**
+     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+     * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},
+     * where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
+     * {@code 0x6C8E9CF570932BD5L} within this method, so using a small increment won't be much different from using a
+     * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
+     * only 2 to the 30 possible floats between 0 and 1.
+     * @param state a variable that should be different every time you want a different random result;
+     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
+     *              generate numbers in reverse order
+     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
+     */
+    public static float determineFloat(long state) { return (((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31) & 0xFFFFFF) * 0x1p-24f; }
+
+    /**
+     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+     * will return the same float. This is expected to be called with a changing variable, e.g.
+     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't really matter. This
+     * multiplies state by {@code 0x6C8E9CF570932BD5L} within this method, so using a small increment won't be much
+     * different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or
+     * decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
+     * @param state a variable that should be different every time you want a different random result;
+     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
+     *              generate numbers in reverse order
+     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}
+     */
+    public static double determineDouble(long state) { return (((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31) & 0x1FFFFFFFFFFFFFL) * 0x1p-53; }
 }
