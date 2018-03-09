@@ -1104,25 +1104,25 @@ public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         final long
                 xx0 = longFloor(x),
                 yy0 = longFloor(y),
-                ry0 = ThrustAltRNG.determine(yy0 + seed), ry1 = ThrustAltRNG.determine(yy0 + 1 + seed);
+                ry0 = LightRNG.determine(yy0 + seed), ry1 = LightRNG.determine(yy0 + 1 + seed);
         final float
                 dx = carp2(x - xx0), dy = carp2(y - yy0),
-                rx0y0 = ThrustAltRNG.determineFloat(xx0 + ry0),
-                rx0y1 = ThrustAltRNG.determineFloat(xx0 + ry1),
-                rx1y0 = ThrustAltRNG.determineFloat(xx0 + 1 + ry0),
-                rx1y1 = ThrustAltRNG.determineFloat(xx0 + 1 + ry1);
+                rx0y0 = LightRNG.determineFloat(xx0 + ry0),
+                rx0y1 = LightRNG.determineFloat(xx0 + ry1),
+                rx1y0 = LightRNG.determineFloat(xx0 + 1 + ry0),
+                rx1y1 = LightRNG.determineFloat(xx0 + 1 + ry1);
         return Noise.lerp(Noise.lerp(rx0y0, rx1y0, dx), Noise.lerp(rx0y1, rx1y1, dx), dy) * 2f - 1f;
     }
     public static float noiseAlt(final float x, final float y, final long seed) {
         final long
                 xx0 = longFloor(x), yy0 = longFloor(y),
-                ry0 = ThrustAltRNG.determine(yy0 + seed), ry1 = ThrustAltRNG.determine(yy0 + 1 + seed);
+                ry0 = LightRNG.determine(yy0 + seed), ry1 = LightRNG.determine(yy0 + 1 + seed);
         final float
                 dx = carp2(x - xx0), dy = carp2(y - yy0),
-                rx0y0 = ThrustAltRNG.determineFloat(xx0 + ry0),
-                rx0y1 = ThrustAltRNG.determineFloat(xx0 + ry1),
-                rx1y0 = ThrustAltRNG.determineFloat(xx0 + 1 + ry0),
-                rx1y1 = ThrustAltRNG.determineFloat(xx0 + 1 + ry1);
+                rx0y0 = LightRNG.determineFloat(xx0 + ry0),
+                rx0y1 = LightRNG.determineFloat(xx0 + ry1),
+                rx1y0 = LightRNG.determineFloat(xx0 + 1 + ry0),
+                rx1y1 = LightRNG.determineFloat(xx0 + 1 + ry1);
         return Noise.cerp(Noise.cerp(rx0y0, rx1y0, dx), Noise.cerp(rx0y1, rx1y1, dx), dy) * 2f - 1f;
     }
 

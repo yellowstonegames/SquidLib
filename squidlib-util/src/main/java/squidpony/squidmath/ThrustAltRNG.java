@@ -21,14 +21,13 @@ import java.io.Serializable;
  * PermutedRNG), changing the seed even slightly generally produces completely different results, which applies
  * primarily to determine() but also the first number generated in a series of nextLong() calls.
  * <br>
- * As an aside, this generator has probably been adjusted more by me than any other generator in the library, and if
- * quality is only somewhat more important than speed, this should be ideal, though it isn't the fastest and doesn't
- * have the highest quality. For some purposes, ThrustRNG will be better because it is faster. For others, XoRoRNG or
- * IsaacRNG may be better because they may have more-provably-good quality. Note than XoRoRNG fails binary rank tests,
- * which may be important for some usage, while LightRNG and ThrustAltRNG don't. ThrustAltRNG actually does better than
- * LightRNG on gjrand's tests despite LightRNG using significantly more operations (LightRNG has "P = 0.305" on gjrand
- * with 100GB tested and fails 2 of 13 tests with grade 1 failures, while ThrustAltRNG fails none). IsaacRNG is also
- * substantially slower than most other generators, though it offers better promise of security.
+ * As an aside, this generator has probably been adjusted more by me than any other generator in the library, and it
+ * only recently was discovered that it can't produce all longs (it is not equidistributed). This is enough to discount
+ * its use in some (mainly scientific) scenarios, although it passes all major testing suites (TestU01's BigCrush,
+ * PractRand over the full 32TB of tests, and gjrand to some degree, at least better than most). LightRNG is back to
+ * being the default generator after ThrustAltRNG was used extensively for some time, since LightRNG is known to be
+ * high-quality (at the very least, high enough), is fairly fast (possibly faster than ThrustAltRNG on some benchmarks),
+ * and is known to produce all longs over the course of its period.
  * <br>
  * This generator has changed since its introduction; the initial version used both the current and subsequent states
  * during each calculation, while this version only uses the current state (which it updates as it reads it). This makes
@@ -36,7 +35,9 @@ import java.io.Serializable;
  * well, while it seems to have no performance impact on the normal {@link #nextLong()} and {@link #next(int)} methods.
  * Quality is very high, actually better than the first version according to gjrand (the earlier one had a P-value of
  * 0.904, while this has 0.981), but this goes even further on PractRand tests than the previous one (passing 4TB after
- * almost a day of testing), while the earlier version was showing signs of imminent failure around 2TB.
+ * almost a day of testing), while the earlier version was showing signs of imminent failure around 2TB. This high
+ * tested quality doesn't notice that this can't produce some longs, however, since no generators test 2 to the 67 bytes
+ * of data to verify them fully.
  * <br>
  * Created by Tommy Ettinger on 10/18/2017.
  */

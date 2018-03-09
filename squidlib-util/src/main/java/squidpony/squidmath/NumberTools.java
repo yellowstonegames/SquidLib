@@ -343,8 +343,10 @@ public final class NumberTools {
     public static double swayRandomized(long seed, double value)
     {
         final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
-        final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
+        final double start = ((seed = ((seed = ((seed += floor * 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                * 0x0.fffffffffffffbp-63,
+                end = ((seed = ((seed = ((seed += floor * 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                        * 0x0.fffffffffffffbp-63;
         value -= floor;
         value *= value * (3.0 - 2.0 * value);
         return (1.0 - value) * start + value * end;
@@ -367,8 +369,10 @@ public final class NumberTools {
     public static float swayRandomized(long seed, float value)
     {
         final long floor = value >= 0f ? (long) value : (long) value - 1L;
-        final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffp-63f,
-                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.ffffffbp-63f;
+        final float start = ((seed = ((seed = ((seed += floor * 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                * 0x0.ffffffp-63f,
+                end = ((seed = ((seed = ((seed += floor * 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                        * 0x0.ffffffbp-63f;
         value -= floor;
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
@@ -452,7 +456,7 @@ public final class NumberTools {
 
     /**
      * Generates a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive) using the given long seed, passing
-     * it once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm.
+     * it once through the (high-quality and very fast) {@link LightRNG} algorithm.
      * <br>
      * Consider calling this with {@code NumberTools.randomDouble(++seed)} for an optimal period of 2 to the 64 when
      * repeatedly called, but {@code NumberTools.randomDouble(seed += ODD_LONG)} will also work just fine if ODD_LONG is
@@ -462,12 +466,13 @@ public final class NumberTools {
      */
     public static double randomDouble(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+        return (((seed = ((seed = ((seed *= 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
 
     /**
      * Generates a pseudo-random double between -1.0 (inclusive) and 1.0 (exclusive) using the given long seed, passing
-     * it once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm.
+     * it once through the (high-quality and very fast) {@link LightRNG} algorithm.
      * <br>
      * Consider calling this with {@code NumberTools.randomSignedDouble(++seed)} for an optimal period of 2 to the 64
      * when repeatedly called, but {@code NumberTools.randomSignedDouble(seed += ODD_LONG)} will also work just fine if
@@ -477,11 +482,12 @@ public final class NumberTools {
      */
     public static double randomSignedDouble(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) >> 10) * 0x1p-53;
+        return (((seed = ((seed = ((seed *= 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                >> 10) * 0x1p-53;
     }
     /**
      * Generates a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given long seed, passing it
-     * once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm.
+     * once through the (high-quality and very fast) {@link LightRNG} algorithm.
      * <br>
      * Consider calling this with {@code NumberTools.randomFloat(++seed)} for an optimal period of 2 to the 64 when
      * repeatedly called, but {@code NumberTools.randomFloat(seed += ODD_LONG)} will also work just fine if ODD_LONG is
@@ -491,11 +497,12 @@ public final class NumberTools {
      */
     public static float randomFloat(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0xFFFFFF) * 0x1p-24f;
+        return (((seed = ((seed = ((seed *= 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                & 0xFFFFFF) * 0x1p-24f;
     }
     /**
      * Generates a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given long seed, passing
-     * it once through the (high-quality and very fast) {@link ThrustAltRNG} algorithm. This can be useful as a
+     * it once through the (high-quality and very fast) {@link LightRNG} algorithm. This can be useful as a
      * multiplier that has approximately equal likelihood of changing or leaving the sign of its multiplicand, and won't
      * make the result larger (more significant) but will usually make it closer to 0.
      * <br>
@@ -507,13 +514,14 @@ public final class NumberTools {
      */
     public static float randomSignedFloat(long seed)
     {
-        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) >> 39) * 0x1p-24f;
+        return (((seed = ((seed = ((seed *= 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31)
+                >> 39) * 0x1p-24f;
     }
 
     /**
      * Generates a pseudo-random double between -1.0 (exclusive) and 1.0 (exclusive) with a distribution that has a
      * strong central bias (around 0.0). Uses the given long seed, passing it once through the (high-quality and very
-     * fast) {@link ThrustAltRNG} algorithm. This produces a pseudo-random long, which this simply passes to
+     * fast) {@link LightRNG} algorithm. This produces a pseudo-random long, which this simply passes to
      * {@link #formCurvedFloat(long)}, since it is already well-suited to generating a curved distribution.
      * <br>
      * Consider calling this with {@code NumberTools.randomFloatCurved(++seed)} for an optimal period of 2 to the 64
@@ -524,7 +532,7 @@ public final class NumberTools {
      */
     public static float randomFloatCurved(long seed)
     {
-        return formCurvedFloat(((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)));
+        return formCurvedFloat((seed = ((seed = ((seed *= 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ seed >>> 27) * 0x94D049BB133111EBL) ^ seed >>> 31);
     }
 
     /**

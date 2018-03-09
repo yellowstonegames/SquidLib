@@ -12,8 +12,8 @@ import java.io.Serializable;
  * generation time in use, and O(n) time to construct a WeightedTable instance), this may be useful to consider if you
  * don't need all the features of ProbabilityTable or if you want deeper control over the random aspects of it.
  * <br>
- * Internally, this uses ThrustAltRNG's algorithm as found in {@link ThrustAltRNG#determineBounded(long, int)} and
- * {@link ThrustAltRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
+ * Internally, this uses LightRNG's algorithm as found in {@link LightRNG#determineBounded(long, int)} and
+ * {@link LightRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
  * and the other used to determine the chosen column, which is bounded to an arbitrary positive int. It does thsi with
  * just one randomized 64-bit value, allowing the state given to {@link #random(long)} to be just one long.
  * <br>
@@ -128,7 +128,7 @@ public class WeightedTable implements Serializable {
     public int random(long state)
     {
         // This is ThrustAltRNG's algorithm to generate a random long given sequential states
-        state = ((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22));
+        state = ((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31);
         // get a random int (using half the bits of our previously-calculated state) that is less than size
         int column = (int)((size * (state & 0xFFFFFFFFL)) >> 32);
         // use the other half of the bits of state to get a double, compare to probability and choose either the

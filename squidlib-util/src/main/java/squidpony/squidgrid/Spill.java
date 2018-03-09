@@ -84,7 +84,7 @@ public class Spill implements Serializable {
      */
     public StatefulRNG rng;
     /**
-     * The StatefulRandomness, usually a ThrustAltRNG, that this uses. Can have its state read and set.
+     * The StatefulRandomness, usually a LightRNG, that this uses. Can have its state read and set.
      */
     public StatefulRandomness sr;
 

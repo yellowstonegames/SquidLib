@@ -38,12 +38,12 @@ public class DeckRNG extends StatefulRNG implements Serializable {
      */
     public DeckRNG(final long seed) {
         lastShuffledState = seed;
-        random = new ThrustAltRNG(seed);
+        random = new LightRNG(seed);
         step = 0;
     }
 
     /**
-     * String-seeded constructor uses the hash of the String as a seed for ThrustAltRNG, which is of high quality, but low
+     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but low
      * period (which rarely matters for games), and has good speed and tiny state size.
      *
      * @param seedString a String to use as a seed; will be hashed in a uniform way across platforms.
@@ -484,10 +484,10 @@ public class DeckRNG extends StatefulRNG implements Serializable {
         System.arraycopy(baseDeck, 0, array, 0, n);
         for (int i = 0; i < n; i++)
         {
-            int r = i + ThrustAltRNG.determineBounded(lastShuffledState + (i << 1), n - i);
+            int r = i + LightRNG.determineBounded(lastShuffledState + (i << 1), n - i);
             double t = array[r];
             array[r] = array[i];
-            array[i] = ThrustAltRNG.determineDouble(lastShuffledState + (i << 1) + 1) * 0.0625 + t;
+            array[i] = LightRNG.determineDouble(lastShuffledState + (i << 1) + 1) * 0.0625 + t;
         }
     }
 

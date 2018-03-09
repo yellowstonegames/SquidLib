@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import static squidpony.squidmath.ThrustAltRNG.determine;
+import static squidpony.squidmath.LightRNG.determine;
 
 /**
  * A noise generator for 1D, 2D, 3D, 4D, or 6D noise that should look "glitchy", with waves of changing values moving

@@ -18,30 +18,36 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * an RNG with all sorts of RandomnessSource implementations, and choosing them
  * is usually not a big concern because the default works very well.
  * <br>
- * But if you do want advice on what RandomnessSource to use... {@link ThrustAltRNG}
+ * But if you do want advice on what RandomnessSource to use... {@link LightRNG}
  * is the default, and is very fast, but relative to many of the others it has a
  * significantly shorter period (the amount of random  numbers it will go through
  * before repeating the sequence), at {@code pow(2, 64)} as opposed to
  * {@link XoRoRNG}'s {@code pow(2, 128) - 1}, . {@link LapRNG} is about twice as
  * fast as LightRNG, but that's all it's good at; it fails quality tests almost
  * all around, though it can fool a human observer, and has a period that's only
- * barely better than LightRNG at {@code pow(2, 65)}. ThrustAltRNG also allows the
+ * barely better than LightRNG at {@code pow(2, 65)}. LightRNG also allows the
  * current RNG state to be retrieved and altered with {@code getState()} and
  * {@code setState()}, and the subclass of RNG, {@link StatefulRNG}, usually uses
- * ThrustAltRNG to handle random number generation when the state may need to be
- * saved and reloaded. For most cases, you should decide between ThrustAltRNG, LightRNG,
- * XoRoRNG, and LapRNG based on your priorities. ThrustAltRNG is the best if you want
- * high speed, very good quality of randomness, and expect to either generate less than
- * 18446744073709551616 numbers or don't care if patterns appear after you generate
+ * LightRNG to handle random number generation when the state may need to be
+ * saved and reloaded. {@link ThrustAltRNG} provides similar qualities to LightRNG,
+ * and can be faster, but can't produce all possible 64-bit values (possibly some 32-bit
+ * values as well); it was the default at one point so you may want to keep compatibility
+ * with some versions by specifying ThrustAltRNG (before ThrustAltRNG was the default, the
+ * current default of LightRNG was used). For most cases, you should decide between
+ * ThrustAltRNG, LightRNG, XoRoRNG, and LapRNG based on your priorities. LightRNG is the
+ * best if you want high speed, very good quality of randomness, and expect to either generate
+ * less than 18446744073709551616 numbers or don't care if patterns appear after you generate
  * that many numbers, or if you need an RNG that can skip backwards or jump forwards
- * without incurring speed penalties. LightRNG provides similar qualities to ThrustAltRNG,
- * but isn't as fast; it was the default before so you may want to keep compatibility with
- * earlier versions by specifying LightRNG. XoRoRNG is best if you want good speed and
+ * without incurring speed penalties. XoRoRNG is best if you want good speed and
  * quality but need to generate more than 18446744073709551616 numbers, though less
  * than 340282366920938463463374607431768211456 numbers. LapRNG is best if you only
  * care about getting random numbers quickly, and don't expect their quality to be
  * scrutinized; it can generate 36893488147419103232 numbers before the entire cycle
- * repeats, but patterns can easily appear before that.
+ * repeats, but patterns can easily appear before that. {@link JabRNG} may be a good option
+ * as an alternative to LapRNG in the no-quality-guarantees department; it's slightly slower
+ * than LapRNG but faster than ThrustAltRNG, actually can pass a fair amount of quality
+ * tests, and can't produce a slim majority of all possible 64-bit values. Its period is
+ * half that of ThrustAltRNG and LightRNG, at 2 to the 63.
  * <br>
  * There are many more RandomnessSource implementations! If XoRoRNG's large
  * period is not enough, then we also supply {@link LongPeriodRNG}, which has a
@@ -92,46 +98,46 @@ public class RNG implements Serializable {
 
 
     /**
-     * Default constructor; uses {@link ThrustAltRNG}, which is of high quality, but low period (which rarely matters
+     * Default constructor; uses {@link LightRNG}, which is of high quality, but low period (which rarely matters
      * for games), and has excellent speed, tiny state size, and natively generates 64-bit numbers.
      * <br>
-     * Previous versions of SquidLib used different implementations, including {@link MersenneTwister} and for a long
-     * time {@link LightRNG}. You can still use one of these by instantiating one of those classes and passing it to
+     * Previous versions of SquidLib used different implementations, including {@link MersenneTwister} and for some
+     * time {@link ThrustAltRNG}. You can still use one of these by instantiating one of those classes and passing it to
      * {@link #RNG(RandomnessSource)}, which may be the best way to ensure the same results across versions.
      */
     public RNG() {
-        this(new ThrustAltRNG());
+        this(new LightRNG());
     }
 
     /**
-     * Default constructor; uses {@link ThrustAltRNG}, which is of high quality, but low period (which rarely matters
+     * Default constructor; uses {@link LightRNG}, which is of high quality, but low period (which rarely matters
      * for games), and has excellent speed, tiny state size, and natively generates 64-bit numbers. The seed can be
      * any long, including 0.
      * @param seed any long
      */
     public RNG(long seed) {
-        this(new ThrustAltRNG(seed));
+        this(new LightRNG(seed));
     }
 
     /**
      * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
-     * seed for {@link ThrustAltRNG}, which is of high quality, but low period (which rarely matters for games), and has
+     * seed for {@link LightRNG}, which is of high quality, but low period (which rarely matters for games), and has
      * excellent speed, tiny state size, and natively generates 64-bit numbers.
      */
     public RNG(CharSequence seedString) {
-        this(new ThrustAltRNG(CrossHash.hash(seedString)));
+        this(new LightRNG(CrossHash.hash64(seedString)));
     }
 
     /**
      * Uses the provided source of randomness for all calculations. This constructor should be used if an alternate
-     * RandomnessSource other than ThrustAltRNG is desirable, such as to keep compatibility with earlier SquidLib
+     * RandomnessSource other than LightRNG is desirable, such as to keep compatibility with earlier SquidLib
      * versions that defaulted to LightRNG.
      * <br>
      * If the parameter is null, this is equivalent to using {@link #RNG()} as the constructor.
      * @param random the source of pseudo-randomness, such as a LightRNG or LongPeriodRNG object
      */
     public RNG(RandomnessSource random) {
-        this.random = (random == null) ? new ThrustAltRNG() : random;
+        this.random = (random == null) ? new LightRNG() : random;
     }
 
     /**
@@ -146,10 +152,10 @@ public class RNG implements Serializable {
 
         /**
          * Creates a new random number generator. This constructor uses
-         * a ThrustAltRNG with a random seed.
+         * a LightRNG with a random seed.
          */
         public CustomRandom() {
-            randomnessSource = new ThrustAltRNG();
+            randomnessSource = new LightRNG();
         }
 
         /**
@@ -780,7 +786,7 @@ public class RNG implements Serializable {
     /**
      * Get a random bit of state, interpreted as true or false with approximately equal likelihood.
      * This may have better behavior than {@code rng.next(1)}, depending on the RandomnessSource implementation; the
-     * default ThrustAltRNG will behave fine, as will ThrustRNG and LightRNG (these all use similar algorithms), but the
+     * default LightRNG will behave fine, as will ThrustRNG and ThrustAltRNG (these all use similar algorithms), but the
      * normally-high-quality XoRoRNG will produce very predictable output with {@code rng.next(1)} and very good output
      * with {@code rng.nextBoolean()}. This is a known and considered flaw of Xoroshiro128+, the algorithm used by
      * XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-
@@ -1155,6 +1161,54 @@ public class RNG implements Serializable {
 
         return output;
     }
+
+
+    /**
+     * Gets a random double between 0.0 inclusive and 1.0 inclusive.
+     *
+     * @return a double between 0.0 (inclusive) and 1.0 (inclusive)
+     */
+    public double nextDoubleInclusive()
+    {
+        return (random.nextLong() & 0x1fffffffffffffL) * 0x1.0000000000001p-53;
+    }
+
+    /**
+     * This returns a random double between 0.0 (inclusive) and outer (inclusive). The value for outer can be positive
+     * or negative. Because of how math on doubles works, there are at most 2 to the 53 values this can return for any
+     * given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.
+     *
+     * @param outer the outer inclusive bound as a double; can be negative or positive
+     * @return a double between 0.0 (inclusive) and outer (inclusive)
+     */
+    public double nextDoubleInclusive(final double outer) {
+        return (random.nextLong() & 0x1fffffffffffffL) * 0x1.0000000000001p-53 * outer;
+    }
+
+    /**
+     * Gets a random float between 0.0f inclusive and 1.0f inclusive.
+     *
+     * @return a float between 0f (inclusive) and 1f (inclusive)
+     */
+    public float nextFloatInclusive() {
+        return (random.nextLong() & 0xFFFFFF) * 0x1.000002p-24f;
+    }
+
+    /**
+     * This returns a random float between 0.0f (inclusive) and outer (inclusive). The value for outer can be positive
+     * or negative. Because of how math on floats works, there are at most 2 to the 24 values this can return for any
+     * given outer bound, and very large values for outer will not necessarily produce all numbers you might expect.
+     *
+     * @param outer the outer inclusive bound as a float; can be negative or positive
+     * @return a float between 0f (inclusive) and outer (inclusive)
+     */
+    public float nextFloatInclusive(final float outer) {
+        return (random.nextLong() & 0xFFFFFF) * 0x1.000002p-24f * outer;
+    }
+
+
+
+
 
     /**
      * Gets a random Coord that has x between 0 (inclusive) and width (exclusive) and y between 0 (inclusive)

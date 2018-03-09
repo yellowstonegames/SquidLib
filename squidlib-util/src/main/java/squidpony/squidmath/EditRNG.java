@@ -43,8 +43,8 @@ import java.io.Serializable;
  * <br>
  * You can get and set the state this uses internally, and this is stored as a 64-bit long.
  * <br>
- * The choice of RandomnessSource doesn't really matter since this will always use a ThrustAltRNG internally.
- * ThrustAltRNG is the current best StatefulRandomness implementation, with excellent performance characteristics and
+ * The choice of RandomnessSource doesn't really matter since this will always use a LightRNG internally.
+ * LightRNG is the current best StatefulRandomness implementation, with excellent performance characteristics and
  * few flaws, and though its relatively low period may sometimes be a detriment, all StatefulRandomness implementations
  * will have the same or lower period.
  * <br>

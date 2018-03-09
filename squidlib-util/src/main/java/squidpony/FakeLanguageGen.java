@@ -4532,7 +4532,7 @@ public class FakeLanguageGen implements Serializable {
         /**
          * Builds a SentenceForm with all fields specified; each value is referenced directly except for {@code rng},
          * which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).
-         * Note that the StatefulRandomness used by this class' rng field will always be ThrustAltRNG, even if the given
+         * Note that the StatefulRandomness used by this class' rng field will always be LightRNG, even if the given
          * rng parameter used a different StatefulRandomness implementation.
          * @param language A FakeLanguageGen to use to generate words
          * @param rng a StatefulRNG that will not be directly referenced; the state will be copied into a new StatefulRNG

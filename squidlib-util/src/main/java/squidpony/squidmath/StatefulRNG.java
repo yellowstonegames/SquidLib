@@ -15,18 +15,18 @@ public class StatefulRNG extends RNG {
     }
 
     public StatefulRNG(RandomnessSource random) {
-        super((random instanceof StatefulRandomness) ? random : new ThrustAltRNG(random.nextLong()));
+        super((random instanceof StatefulRandomness) ? random : new LightRNG(random.nextLong()));
     }
 
     /**
-     * Seeded constructor uses ThrustAltRNG, which is of high quality, but low period (which rarely matters for games),
+     * Seeded constructor uses LightRNG, which is of high quality, but low period (which rarely matters for games),
      * and has good speed and tiny state size.
      */
     public StatefulRNG(long seed) {
-        this(new ThrustAltRNG(seed));
+        this(new LightRNG(seed));
     }
     /**
-     * String-seeded constructor uses the hash of the String as a seed for ThrustAltRNG, which is of high quality, but
+     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but
      * low period (which rarely matters for games), and has good speed and tiny state size.
      *
      * Note: This constructor changed behavior on April 22, 2017, and again on December 23, 2017. The first was when it
@@ -38,13 +38,13 @@ public class StatefulRNG extends RNG {
      * matter in a constructor. It uses a better hashing algorithm because CrossHash no longer has the older, worse one.
      */
     public StatefulRNG(CharSequence seedString) {
-        this(new ThrustAltRNG(CrossHash.hash64(seedString)));
+        this(new LightRNG(CrossHash.hash64(seedString)));
     }
 
     @Override
     public void setRandomness(RandomnessSource random) {
-        super.setRandomness(random == null ? new ThrustAltRNG() :
-                (random instanceof StatefulRandomness) ? random : new ThrustAltRNG(random.nextLong()));
+        super.setRandomness(random == null ? new LightRNG() :
+                (random instanceof StatefulRandomness) ? random : new LightRNG(random.nextLong()));
     }
 
     /**

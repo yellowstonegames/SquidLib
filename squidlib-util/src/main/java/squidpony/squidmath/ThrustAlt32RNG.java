@@ -107,7 +107,7 @@ public final class ThrustAlt32RNG implements StatefulRandomness, Serializable {
     }
 
     /**
-     * Advances or rolls back the ThrustAltRNG's state without actually generating each number. Skips forward
+     * Advances or rolls back the ThrustAlt32RNG's state without actually generating each number. Skips forward
      * or backward a number of steps specified by advance, where a step is equal to one call to nextInt(),
      * and returns the random number produced at that step (you can get the state with {@link #getState()}).
      *
