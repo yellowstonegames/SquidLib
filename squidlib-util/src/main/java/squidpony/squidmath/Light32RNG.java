@@ -197,26 +197,40 @@ public class Light32RNG implements StatefulRandomness, RandomnessSource, Seriali
      */
     public static int determine(int state)
     {
-        state = ((state *= 0x9E3779B9) ^ (state >>> 16)) * 0x85EBCA6B;
-        state = (state ^ (state >>> 13)) * 0xC2B2AE35;
-        return state ^ (state >>> 16);
+        return (state = ((state = ((state *= 0x9E3779B9) ^ (state >>> 16)) * 0x85EBCA6B) ^ (state >>> 13)) * 0xC2B2AE35) ^ (state >>> 16);
     }
     /**
      * Gets a pseudo-random int between 0 and the given bound, using the given state as a basis, as an int; the state
      * should change with each call. This can be done easily with {@code determineBounded(++state, bound)} or
      * {@code determineBounded(state += 12345, bound)}, where 12345 can be any odd number (it should stay the same
-     * across calls that should have random-seeming results). The bound should be between -32768 and 32767 (both
-     * inclusive); more significant bounds won't usually work well. Uses the same algorithm as Light32RNG, but does not
-     * change the increment on its own (it leaves that to the user).
+     * across calls that should have random-seeming results). The bound can be any int, but more significant bounds
+     * won't usually work very well. Uses the same algorithm as Light32RNG, but does not change the increment on its own
+     * (it leaves that to the user). This does use math on long values, but not very much; if you know that bound is
+     * fairly small (small enough to fit in a short) you can use {@link #determineSmallBounded(int, int)} to avoid
+     * operations on longs entirely.
      * @param state should be changed with each call; {@code determineBounded(++state, bound)} will work fine
-     * @param bound the outer exclusive limit on the random number; should be between -32768 and 32767 (both inclusive)
+     * @param bound the outer exclusive limit on the random number; can be any int
      * @return a pseudo-random int, between 0 (inclusive) and bound (exclusive)
      */
     public static int determineBounded(int state, int bound)
     {
-        state = ((state *= 0x9E3779B9) ^ (state >>> 16)) * 0x85EBCA6B;
-        state = (state ^ (state >>> 13)) * 0xC2B2AE35;
-        return ((bound * ((state ^ (state >>> 16)) & 0x7FFF)) >> 15);
+        return (int)((bound * (((state = ((state = ((state *= 0x9E3779B9) ^ (state >>> 16)) * 0x85EBCA6B) ^ (state >>> 13)) * 0xC2B2AE35) ^ (state >>> 16)) & 0x7FFFFFFFL)) >> 31);
+    }
+    /**
+     * Gets a pseudo-random int between 0 and the given bound, using the given state as a basis, as an int; the state
+     * should change with each call. This can be done easily with {@code determineSmallBounded(++state, bound)} or
+     * {@code determineSmallBounded(state += 12345, bound)}, where 12345 can be any odd number (it should stay the same
+     * across calls that should have random-seeming results). The bound should be between -32768 and 32767 (both
+     * inclusive); more significant bounds won't usually work well. Uses the same algorithm as Light32RNG, but does not
+     * change the increment on its own (it leaves that to the user). This does not use any math on long values, which
+     * means this generator should be faster on 32-bit platforms but may behave incorrectly on GWT.
+     * @param state should be changed with each call; {@code determineSmallBounded(++state, bound)} will work fine
+     * @param bound the outer exclusive limit on the random number; should be between -32768 and 32767 (both inclusive)
+     * @return a pseudo-random int, between 0 (inclusive) and bound (exclusive)
+     */
+    public static int determineSmallBounded(int state, int bound)
+    {
+        return ((bound * (((((state = ((state *= 0x9E3779B9) ^ (state >>> 16)) * 0x85EBCA6B) ^ (state >>> 13)) * 0xC2B2AE35) >>> 17) & 0x7FFF)) >> 15);
     }
 
 }

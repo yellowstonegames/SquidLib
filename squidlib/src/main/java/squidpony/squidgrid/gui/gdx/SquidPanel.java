@@ -805,7 +805,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     }
 
     @Override
-    public void draw (Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha) {
         textFactory.configureShader(batch);
         int inc = onlyRenderEven ? 2 : 1, widthInc = inc * cellWidth, heightInc = inc * cellHeight;
         float screenX = xOffset - (gridOffsetX <= 0 ? 0 : cellWidth) + getX(),
@@ -1237,7 +1237,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      * @param y
      * @return
      */
-    public Actor cellToActor(int x, int y)
+    public TextCellFactory.Glyph cellToActor(int x, int y)
     {
         return cellToActor(x, y, false);
     }
@@ -1251,23 +1251,45 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      * @param doubleWidth
      * @return A fresh {@link Actor}, that has just been added to {@code this}.
      */
-    public Actor cellToActor(int x, int y, boolean doubleWidth)
+    public TextCellFactory.Glyph cellToActor(int x, int y, boolean doubleWidth)
     {
     	return createActor(x, y, contents[x][y], colors[x][y], doubleWidth);
     }
 
-    protected /* @Nullable */ Actor createActor(int x, int y, char name, Color color, boolean doubleWidth) {
-        final Actor a = textFactory.makeActor(name, scc.filter(color));
-        a.setName(String.valueOf(name));
-        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+    /**
+     * Used internally to go between grid positions and world positions.
+     * @param gridX x on the grid
+     * @return x in the world
+     */
+    public float worldX(int gridX, boolean doubleWidth)
+    {
+        return getX() + (gridX << (doubleWidth ? 1 : 0)) * textFactory.actualCellWidth;
+    }
+    /**
+     * Used internally to go between grid positions and world positions.
+     * @param gridY y on the grid
+     * @return y in the world
+     */
+    public float worldY(int gridY)
+    {
+        return getY() + (gridHeight - gridY) * textFactory.actualCellHeight;
+    }
+
+
+    protected /* @Nullable */ TextCellFactory.Glyph createActor(int x, int y, char name, Color color, boolean doubleWidth) {
+        //final Actor a = textFactory.makeActor(name, scc.filter(color));
+        final TextCellFactory.Glyph a = textFactory.glyph(name, scc.filter(color), worldX(x, doubleWidth), worldY(y));
+        //a.setName(String.valueOf(name));
+        //a.setPosition(adjustX(x, doubleWidth), adjustY(y));
         autoActors.add(a);
         return a;
     }
 
-    protected /* @Nullable */ Actor createActor(int x, int y, char name, float encodedColor, boolean doubleWidth) {
-        final Actor a = textFactory.makeActor(name, encodedColor);
-        a.setName(String.valueOf(name));
-        a.setPosition(adjustX(x, doubleWidth), adjustY(y));
+    protected /* @Nullable */ TextCellFactory.Glyph createActor(int x, int y, char name, float encodedColor, boolean doubleWidth) {
+        //final Actor a = textFactory.makeActor(name, encodedColor);
+        final TextCellFactory.Glyph a = textFactory.glyph(name, encodedColor, worldX(x, doubleWidth), worldY(y));
+        //a.setName(String.valueOf(name));
+        //a.setPosition(adjustX(x, doubleWidth), adjustY(y));
         autoActors.add(a);
         return a;
     }
@@ -1275,7 +1297,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     public float adjustX(float x, boolean doubleWidth)
     {
         if(doubleWidth)
-            return (x - gridOffsetX) * 2 * cellWidth + getX();
+            return x * 2 * cellWidth + getX(); // may need (x - gridOffsetX) instead of x
         else
             return (x) * cellWidth + getX();
     }
@@ -1300,6 +1322,9 @@ public class SquidPanel extends Group implements IPackedColorPanel {
     */
     public void recallActor(Actor a, boolean restoreSym)
     {
+        recallActor(a, restoreSym, Math.round((a.getX() - getX()) / cellWidth) + gridOffsetX,
+            gridHeight - (int)(a.getY() / cellHeight) - 1 + gridOffsetY);
+        /*
         animationCount--;
         int x = Math.round((a.getX() - getX()) / cellWidth) + gridOffsetX,
                 y = gridHeight - (int)(a.getY() / cellHeight) - 1 + gridOffsetY;
@@ -1317,6 +1342,7 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         }
         removeActor(a);
         autoActors.remove(a);
+        */
     }
 
     public void recallActor(Actor a, boolean restoreSym, int nextX, int nextY)
@@ -1338,21 +1364,43 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         autoActors.remove(a);
     }
 
-    public void recallActor(AnimatedEntity ae)
+    public void recallActor(TextCellFactory.Glyph a, boolean restoreSym, int nextX, int nextY)
     {
-        if(ae.doubleWidth)
-            ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth)) + gridOffsetX;
-        else
-            ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth) + gridOffsetY;
-        ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1 + gridOffsetY;
+        animationCount--;
+        if(a == null) return; // if something has already removed the Glyph, we still reduce animationCount but do nothing more
         if(onlyRenderEven)
         {
             // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
-            ae.gridX &= -2;
-            ae.gridY &= -2;
+            nextX &= -2;
+            nextY &= -2;
         }
-        ae.animating = false;
-        animationCount--;
+        if(restoreSym && nextX >= 0 && nextY >= 0 && nextX < contents.length && nextY < contents[nextX].length)
+        {
+            contents[nextX][nextY] = a.shown;
+        }
+        removeActor(a);
+        autoActors.remove(a);
+    }
+
+    public void recallActor(AnimatedEntity ae)
+    {
+        recallActor(ae, ae.doubleWidth
+                ? Math.round((ae.actor.getX() - getX()) / (2 * cellWidth)) + gridOffsetX 
+                : Math.round((ae.actor.getX() - getX()) / cellWidth) + gridOffsetY,
+                gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1 + gridOffsetY);
+//        if(ae.doubleWidth)
+//            ae.gridX = Math.round((ae.actor.getX() - getX()) / (2 * cellWidth)) + gridOffsetX;
+//        else
+//            ae.gridX = Math.round((ae.actor.getX() - getX()) / cellWidth) + gridOffsetY;
+//        ae.gridY = gridHeight - (int)((ae.actor.getY() - getY()) / cellHeight) - 1 + gridOffsetY;
+//        if(onlyRenderEven)
+//        {
+//            // this just sets the least significant bit to 0, making any odd numbers even (decrementing)
+//            ae.gridX &= -2;
+//            ae.gridY &= -2;
+//        }
+//        ae.animating = false;
+//        animationCount--;
     }
     public void recallActor(AnimatedEntity ae, int nextX, int nextY)
     {
@@ -1582,8 +1630,8 @@ public class SquidPanel extends Group implements IPackedColorPanel {
                       final int newY, float duration, /* @Nullable */ Runnable postRunnable) {
         if(name != null && name.isEmpty())
             return;
-        final Actor a = createActor(x, y, name == null ? contents[x][y] : name.charAt(0),
-                color == null ? SColor.colorFromFloat(tmpColor, colors[x][y]) : color, false);
+        final TextCellFactory.Glyph a = createActor(x, y, name == null ? contents[x][y] : name.charAt(0),
+                color == null ? colors[x][y] : color.toFloatBits(), false);
         if (a == null)
             return;
 
@@ -1780,21 +1828,19 @@ public class SquidPanel extends Group implements IPackedColorPanel {
      */
 
     public void tint(float delay, final int x, final int y, Color color, float duration, Runnable postRunnable) {
-        final Actor a = cellToActor(x, y);
-        if(a == null)
-            return;
+        final TextCellFactory.Glyph a = cellToActor(x, y);
+        if(a == null) return;
         duration = clampDuration(duration);
         animationCount++;
 
-        Color ac = scc.filter(a.getColor());
-
+        float ac = a.getPackedColor(), c = color.toFloatBits();
         final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
         int index = 0;
         if (0 < delay)
             sequence[index++] = Actions.delay(delay);
-        sequence[index++] = Actions.color(color, duration * 0.3f);
-        sequence[index++] = Actions.color(ac, duration * 0.7f);
+        sequence[index++] = PackedColorAction.color(c, duration * 0.3f);
+        sequence[index++] = PackedColorAction.color(ac, duration * 0.7f);
         if(postRunnable != null)
         {
             sequence[index++] = Actions.run(postRunnable);

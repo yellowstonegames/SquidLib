@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
-import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
@@ -973,6 +972,33 @@ public class TextCellFactory implements Disposable {
         {
             colorFromFloat(bmpFont.getColor(), encodedColor);
             mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+        }
+    }
+
+    /**
+     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * determining the world-space coordinates for the upper-left corner.
+     *
+     * @param batch the LibGDX Batch to do the drawing
+     * @param c the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param color the LibGDX Color (or SquidLib SColor) to use, as an object
+     * @param x x of the upper-left corner of the region of text in world coordinates.
+     * @param y y of the upper-left corner of the region of text in world coordinates.
+     */
+    public void draw(Batch batch, char c, Color color, float x, float y) {
+        if (!initialized) {
+            throw new IllegalStateException("This factory has not yet been initialized!");
+        }
+        if (c == 0) {
+            float orig = batch.getPackedColor();
+            batch.setColor(color);
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.setColor(orig);
+        } else
+        {
+            bmpFont.getColor().set(color);
+            mut.setCharAt(0, swap.getOrDefault(c, c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -2017,27 +2043,37 @@ public class TextCellFactory implements Disposable {
     public class Glyph extends Actor
     {
         public char shown;
-        public float color;
 
         public Glyph() {
             this('@', SColor.SAFETY_ORANGE.toFloatBits(), 0f, 0f);
         }
         public Glyph(char shown, Color color, float x, float y)
         {
-            this(shown, color.toFloatBits(), x, y);
+            super();
+            this.shown = shown;
+            super.getColor().set(color);
+            setPosition(x, y);
         }
         public Glyph(char shown, float color, float x, float y) {
             super();
             this.shown = shown;
-            this.color = color;
+            Color.abgr8888ToColor(super.getColor(), color);
             setPosition(x, y);
+        }
+
+        public float getPackedColor() {
+            return getColor().toFloatBits();
+        }
+
+        public void setPackedColor(float color) {
+            Color.abgr8888ToColor(super.getColor(), color);
         }
 
         @Override
         public String toString() {
             return "Glyph{'" +
                     + shown +
-                    "' with RGBA color 0x" + StringKit.hex(Integer.reverseBytes(NumberTools.floatToIntBits(color))) +
+                    "' with color " + getColor() +
                     ", position (" + getX() +
                     "," + getY() +
                     ")}";
@@ -2055,7 +2091,7 @@ public class TextCellFactory implements Disposable {
          */
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            TextCellFactory.this.draw(batch, shown, color, getX(), getY() + 1);
+            TextCellFactory.this.draw(batch, shown, getColor(), getX(), getY() + 1);
         }
     }
 }

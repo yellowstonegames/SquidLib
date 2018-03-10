@@ -107,7 +107,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableSlabFont());
+                DefaultResources.getStretchableSlabFont().setSmoothingMultiplier(1.625f));
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
@@ -400,6 +400,8 @@ public class BasicDemo2 extends ApplicationAdapter {
         } else {
             display.bump(playerMobile, 1, Direction.getRoughDirection(xmod, ymod), 0.25f);
             display.getForegroundLayer().summon(0.35f, playerPosition.x, playerPosition.y, playerPosition.x, playerPosition.y - 1, '?', SColor.CW_BRIGHT_INDIGO, SColor.ELECTRIC_PURPLE.cpy().sub(0, 0, 0, 1), false, 0f, 0f, 0.8f);
+            display.getBackgroundLayer().tint(playerPosition.x, playerPosition.y, SColor.PURPLE, 0.3f);
+            display.getForegroundLayer().tint(newX, newY, SColor.OVERDYED_RED_BROWN, 0.4f);
             //display.getForegroundLayer().burst(0.1f, playerPosition.x, playerPosition.y, 2, true, '?', SColor.CW_BRIGHT_INDIGO, SColor.ELECTRIC_PURPLE.cpy().sub(0,0,0,1),  false, -1f, 0.8f);
         }
         // removes the first line displayed of the Art of War text or its translation.
@@ -502,6 +504,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         stage.getRoot().draw(batch, 1f);
         display.drawActor(batch, 1f, playerMobile); // this line is different from Stage.draw()
         batch.end();
+        Gdx.graphics.setTitle("Basic SquidLib Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
     }
 
     @Override
@@ -516,6 +519,9 @@ public class BasicDemo2 extends ApplicationAdapter {
         config.title = "SquidLib GDX Basic Demo";
         config.width = gridWidth * cellWidth;
         config.height = (gridHeight + bonusHeight) * cellHeight;
+        config.vSyncEnabled = false;
+        config.foregroundFPS = 0;
+        config.backgroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);

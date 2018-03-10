@@ -1634,7 +1634,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public void recallToGrid(TextCellFactory.Glyph glyph)
     {
-        layers.get(0).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
+        layers.get(0).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.getPackedColor());
         glyphs.remove(glyph);
     }
 
@@ -1646,7 +1646,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public void recallToGrid(TextCellFactory.Glyph glyph, int layer)
     {
         layer = mapping.get(layer, 0);
-        layers.get(layer).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.color);
+        layers.get(layer).place(gridX(glyph.getY()), gridY(glyph.getY()), glyph.shown, glyph.getPackedColor());
         glyphs.remove(glyph);
     }
 
@@ -2039,7 +2039,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             /* @Nullable */ Runnable postRunnable) {
         duration = Math.max(0.015f, duration);
         animationCount++;
-        final float ac = glyph.color;
+        final float ac = glyph.getPackedColor();
         final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
         int index = 0;
@@ -2048,13 +2048,13 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         sequence[index++] = new TemporalAction(duration * 0.3f) {
             @Override
             protected void update(float percent) {
-                glyph.color = SColor.lerpFloatColors(ac, encodedColor, percent);
+                glyph.setPackedColor(SColor.lerpFloatColors(ac, encodedColor, percent));
             }
         };
         sequence[index++] = new TemporalAction(duration * 0.7f) {
             @Override
             protected void update(float percent) {
-                glyph.color = SColor.lerpFloatColors(encodedColor, ac, percent);
+                glyph.setPackedColor(SColor.lerpFloatColors(encodedColor, ac, percent));
             }
         };
         if(postRunnable != null)
@@ -2065,7 +2065,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
             @Override
             public void run() {
-                glyph.color = ac;
+                glyph.setPackedColor(ac);
                 --animationCount;
             }
         }));
@@ -2126,7 +2126,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                 new TemporalAction(duration) {
                     @Override
                     protected void update(float percent) {
-                        glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.95f);
+                        glyph.setPackedColor(SColor.lerpFloatColors(startColor, endColor, percent * 0.95f));
                     }
                 },
                 Actions.moveTo(worldX(endX), worldY(endY), duration));
@@ -2201,7 +2201,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                 new TemporalAction(duration) {
                     @Override
                     protected void update(float percent) {
-                        glyph.color = SColor.lerpFloatColors(startColor, endColor, percent * 0.95f);
+                        glyph.setPackedColor(SColor.lerpFloatColors(startColor, endColor, percent * 0.95f));
                     }
                 },
                 Actions.moveTo(endX, endY, duration));

@@ -1,7 +1,5 @@
 package squidpony.squidmath;
 
-import java.util.Arrays;
-
 /**
  * This is a port of the public domain Isaac (cryptographic) random number generator to Java, by Bob Jenkins.
  * It is a RandomnessSource here, so it should generally be used to make an RNG, which has more features.
@@ -69,10 +67,10 @@ public class Isaac32RNG implements RandomnessSource {
             char[] chars = seed.toCharArray();
             int slen = chars.length, i = 0;
             for (; i < 256 && i < slen; i++) {
-                results[i] = CrossHash.Wisp.hash(chars, i, slen);
+                results[i] = CrossHash.hash(chars, i, slen);
             }
             for (; i < 256; i++) {
-                results[i] = CrossHash.Wisp.hash(results);
+                results[i] = CrossHash.hash(results);
             }
             init(true);
         }
@@ -362,33 +360,7 @@ public class Isaac32RNG implements RandomnessSource {
     public RandomnessSource copy() {
         return new Isaac32RNG(results);
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Isaac32RNG isaac32RNG = (Isaac32RNG) o;
-
-        if (count != isaac32RNG.count) return false;
-        if (a != isaac32RNG.a) return false;
-        if (b != isaac32RNG.b) return false;
-        if (c != isaac32RNG.c) return false;
-        if (!Arrays.equals(results, isaac32RNG.results)) return false;
-        return Arrays.equals(mem, isaac32RNG.mem);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = count;
-        result = 31 * result + CrossHash.Wisp.hash(results);
-        result = 31 * result + CrossHash.Wisp.hash(mem);
-        result = 31 * result + a;
-        result = 31 * result + b;
-        result = 31 * result + c;
-        return result;
-    }
-
+    
     @Override
     public String toString()
     {
