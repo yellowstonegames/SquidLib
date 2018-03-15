@@ -9,7 +9,8 @@ import java.util.List;
  */
 public class ObTextTest {
     public static void main(String[] args){
-        ObText ot = new ObText("hello world\n" +
+        ObText ot = new ObText(
+                "hello world\n" +
                 "'how are you today?' [just great thanks]\n" +
                 "hooray!\n" +
                 "\n" +

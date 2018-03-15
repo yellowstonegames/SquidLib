@@ -1,13 +1,16 @@
 package squidpony;
 
-import regexodus.*;
+import regexodus.Matcher;
+import regexodus.Pattern;
+import regexodus.REFlags;
 import squidpony.annotation.Beta;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.IntVLA;
+import squidpony.squidmath.*;
 
 import java.io.Reader;
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static squidpony.ArrayTools.letters;
 
@@ -64,25 +67,26 @@ import static squidpony.ArrayTools.letters;
  * here, the delimiter is '''different''', just to be different.]different]]
  * </pre>
  * <br>
- * Inspired strongly by STOB, http://stobml.org/ , but no code is shared and the format is
- * slightly different. The main differences are that ObText supports nested block comments
- * using the syntax {@code /[delimiter/contents/delimiter]/} where delimiter may be empty
- * but must match on both sides, and contents is the body of the comment. ObText uses Python-
- * like "heredoc" syntax for raw strings surrounded by triple-apostrophes '''like so''' with
- * optional initial and final newlines in the raw string ignored. An alternate raw string
- * syntax is present that allows delimiters, using the syntax
- * {@code [[delimiter[contents]delimiter]]}, where again delimiter may be empty and contents
- * is the body of the raw string. We use square brackets in place of STOB's curly braces to
- * mark children associated with a string.
+ * Inspired strongly by STOB, https://github.com/igagis/stob-java and https://github.com/igagis/stob , but
+ * no code is shared and the format is slightly different. The main differences are:
+ * <ul>
+ * <li>We use square brackets in place of STOB's curly braces to mark children associated with a string.<li>
+ * <li>ObText supports nested block comments using the syntax {@code /[delimiter/contents/delimiter]/} where
+ * delimiter may be empty but must match on both sides, and contents is the body of the comment.</li>
+ * <li>ObText uses Python-like "heredoc" syntax for raw strings surrounded by triple-apostrophes '''like so'''
+ * with optional initial and final newlines in the raw string ignored. An alternate raw string
+ * syntax is present that allows delimiters, using the syntax {@code [[delimiter[contents]delimiter]]}, where 
+ * again delimiter may be empty and contents is the body of the raw string.</li>
+ * <ul>
  */
 @Beta
-public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializable{
-    private static final long serialVersionUID = 5L;
+public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializable{
+    private static final long serialVersionUID = 6L;
     public static class ObTextEntry implements Serializable
     {
         private static final long serialVersionUID = 5L;
         public String primary;
-        public List<ObTextEntry> associated;
+        public ArrayList<ObTextEntry> associated;
         public ObTextEntry()
         {
         }
@@ -123,6 +127,18 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
             if(associated == null || associated.isEmpty() || (got = associated.get(0)) == null)
                 return null;
             return got.primary;
+        }
+        public ArrayList<String> allAssociatedStrings()
+        {
+            ObTextEntry got;
+            if(associated == null || associated.isEmpty() || (got = associated.get(0)) == null)
+                return new ArrayList<>(1);
+            int sz = got.associated.size();
+            ArrayList<String> strings = new ArrayList<>(sz);
+            for (int i = 0; i < sz; i++) {
+                strings.add(got.associated.get(i).primary);
+            }
+            return strings;
         }
         public ObTextEntry firstAssociatedEntry()
         {
@@ -191,7 +207,7 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
     protected static final Matcher bare = illegalBareWord.matcher(), raw = needsRaw.matcher(),
             reallyBare = reallyIllegalBareWord.matcher();
 
-    protected final ArrayList<ObTextEntry> entries = new ArrayList<ObTextEntry>(64);
+    //protected final ArrayList<ObTextEntry> entries = new ArrayList<ObTextEntry>(64);
 //    protected final IntVLA neighbors = new IntVLA(64);
 //    private final IntVLA nesting = new IntVLA(16);
 //    protected int length = 0;
@@ -214,7 +230,7 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
     {
         m.setTarget(text);
         ObTextEntry current = null;
-        List<ObTextEntry> ls = entries;
+        List<ObTextEntry> ls = this;
         IntVLA nesting = new IntVLA(4);
         nesting.add(-1);
         int t = -1, depth = 0;
@@ -235,7 +251,7 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
                 if(nesting.size <= 1) throw new UnsupportedOperationException("Associated item sequences in ObText can't end more times than they start.");
                 nesting.pop();
                 depth--;
-                ls = entries;
+                ls = this;
                 for (int i = 1; i < nesting.size; i++) {
                     ls = ls.get(nesting.get(i)).associated;
                 }
@@ -245,69 +261,6 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
         return this;
     }
 
-    @Override
-    public void clear() {
-        entries.clear();
-    }
-
-    @Override
-    public int size() {
-        return entries.size();
-    }
-
-    /**
-     * Gets the nth entry in this ObText's top-level list at the given index.
-     * @param index the index to look up
-     * @return the element at the specified position in this list
-     * @throws IndexOutOfBoundsException if index is negative or is greater than or equal to {@link #size()}
-     */
-    @Override
-    public ObTextEntry get(int index) {
-        return entries.get(index);
-    }
-    /**
-     * Appends the specified element to the end of this ObText's top level.
-     * <p>
-     * <p>Lists that support this operation may place limitations on what
-     * elements may be added to this list.  In particular, some
-     * lists will refuse to add null elements, and others will impose
-     * restrictions on the type of elements that may be added.  List
-     * classes should clearly specify in their documentation any restrictions
-     * on what elements may be added.
-     * <p>
-     * <p>This implementation calls {@code add(size(), e)}.
-     * <p>
-     * <p>Note that this implementation throws an
-     * {@code UnsupportedOperationException} unless
-     * {@link #add(int, Object) add(int, E)} is overridden.
-     *
-     * @param entry element to be appended to this list
-     * @return {@code true} (as specified by {@link Collection#add})
-     * @throws UnsupportedOperationException if the {@code add} operation
-     *                                       is not supported by this list
-     * @throws ClassCastException            if the class of the specified element
-     *                                       prevents it from being added to this list
-     * @throws NullPointerException          if the specified element is null and this
-     *                                       list does not permit null elements
-     * @throws IllegalArgumentException      if some property of this element
-     *                                       prevents it from being added to this list
-     */
-    @Override
-    public boolean add(ObTextEntry entry) {
-        return entries.add(entry);
-    }
-
-    /**
-     * Inserts the specified element at the specified position in this ObText's top level.
-     * Shifts the element currently at that position (if any) and any subsequent
-     * elements to the right (adds one to their indices).
-     * @param index index at which the specified element is to be inserted 
-     * @param element element to be inserted
-     */
-    @Override
-    public void add(int index, ObTextEntry element) {
-        entries.add(index, element);
-    }
     /**
      * Inserts the given String element at the specified position in this ObText's top level.
      * Shifts the element currently at that position (if any) and any subsequent
@@ -316,7 +269,7 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
      * @param text String element to be inserted, without any associated entries
      */
     public void add(int index, String text) {
-        entries.add(index, new ObTextEntry(text));
+        super.add(index, new ObTextEntry(text));
     }
 
     /**
@@ -325,51 +278,15 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
      * @return {@code true} (this always modifies the ObText)
      */
     public boolean add(String text) {
-        return entries.add(new ObTextEntry(text));
-    }
-
-    /**
-     * Sets the entry at the given index into the top-level list of entries to be equal to element.
-     * @param index the index to change
-     * @param element the new element to place at the given index
-     * @return the element previously at the specified position
-     */
-    @Override
-    public ObTextEntry set(int index, ObTextEntry element) {
-        return entries.set(index, element);
-    }
-
-    /**
-     * Removes the first occurrence of the specified element from this list, if it is present.
-     * If this list does not contain the element, it is unchanged. More formally, removes the
-     * element with the lowest index i such that (o==null ? get(i)==null : o.equals(get(i)))
-     * (if such an element exists). Returns true if this list contained the specified element
-     * (or equivalently, if this list changed as a result of the call).
-     * @param index element to be removed from this list, if present
-     * @return true if this list contained the specified element
-     */
-    @Override
-    public ObTextEntry remove(int index) {
-        return entries.remove(index);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        ObText that = (ObText) o;
-
-        return entries.equals(that.entries);
+        return super.add(new ObTextEntry(text));
     }
     
     public long hash64()
     {
         long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
-        final int len = entries.size();
+        final int len = size();
         for (int i = 0; i < len; i++) {
-            result += (a ^= 0x8329C6EB9E6AD3E3L * entries.get(i).hash64());
+            result += (a ^= 0x8329C6EB9E6AD3E3L * get(i).hash64());
         }
         return result * (a | 1L) ^ (result >>> 27 | result << 37);
 
@@ -480,7 +397,7 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
     public String serializeToString()
     {
         StringBuilder sb = new StringBuilder(100);
-        iterate(sb, entries);
+        iterate(sb, this);
         return sb.toString();
     }
 
@@ -514,6 +431,135 @@ public class ObText extends AbstractList<ObText.ObTextEntry> implements Serializ
                 sb.append("]\n");
             }
         }
+    }
+
+    /**
+     * Gets all Strings from the top level of this ObText, not including any associated values, and puts them in
+     * an {@link ArrayList} of String. The returned lisy will retain the same order the Strings were entered in, and
+     * unlike {@link #keySet()} or {@link #keyOrderedSet()}, duplicate keys will all be preserved. Changes to the
+     * returned List won't be reflected in this ObText.
+     * @return all top-level Strings (without associated values) as an ArrayList of String
+     */
+    public ArrayList<String> keyList()
+    {
+        final int sz = size();
+        ArrayList<String> keys = new ArrayList<>(sz);
+        for (int i = 0; i < sz; i++) {
+            keys.add(get(i).primary);
+        }
+        return keys;
+    }
+
+    /**
+     * Gets all unique Strings from the top level of this ObText, not including any associated values, and puts them in
+     * an {@link OrderedSet} of String. The returned set will retain the same order the Strings were entered in, and you
+     * can use OrderedSet methods like {@link OrderedSet#getAt(int)} to look up keys by index. Changes to the returned
+     * Set won't be reflected in this ObText.
+     * @return all unique top-level Strings (without associated values) as an OrderedSet of String keys
+     */
+    public OrderedSet<String> keyOrderedSet()
+    {
+        final int sz = size();
+        OrderedSet<String> keys = new OrderedSet<>(sz, CrossHash.stringHasher);
+        for (int i = 0; i < sz; i++) {
+            keys.add(get(i).primary);
+        }
+        return keys;
+    }
+
+    /**
+     * Gets all unique Strings from the top level of this ObText, not including any associated values, and puts them in
+     * an {@link UnorderedSet} of String. Although the returned set won't be insertion-ordered or necessarily retain the
+     * same order the Strings were entered in, the order will be the same on different JVMs, including GWT, because the
+     * hashing algorithm is set to one that behaves the same across JVM versions. Changes to the returned Set won't be
+     * reflected in this ObText.
+     * @return all unique top-level Strings (without associated values) as an UnorderedSet of String keys
+     */
+    public UnorderedSet<String> keySet()
+    {
+        final int sz = size();
+        UnorderedSet<String> keys = new UnorderedSet<>(sz, CrossHash.stringHasher);
+        for (int i = 0; i < sz; i++) {
+            keys.add(get(i).primary);
+        }
+        return keys;
+    }
+    /**
+     * Gets all unique Strings from the top level of this ObText as keys in an {@link OrderedMap}, with the first String
+     * associated with each key as its value (or null if nothing is associated with a key String). The returned map will
+     * retain the same order the keys were entered in, and you can use OrderedMap methods like
+     * {@link OrderedMap#keyAt(int)} to look up keys by index or {@link OrderedMap#getAt(int)} to look up value String
+     * by index. Changes to the returned Map won't be reflected in this ObText.
+     * @return an OrderedMap of unique String keys associated with the first associated String for each key (or null)
+     */
+    public OrderedMap<String, String> basicOrderedMap()
+    {
+        final int sz = size();
+        OrderedMap<String, String> keys = new OrderedMap<>(sz, CrossHash.stringHasher);
+        ObTextEntry got;
+        for (int i = 0; i < sz; i++) {
+            got = get(i);
+            keys.put(got.primary, got.firstAssociatedString());
+        }
+        return keys;
+    }
+    /**
+     * Gets all unique Strings from the top level of this ObText as keys in an {@link UnorderedMap}, with the first
+     * String associated with each key as its value (or null if nothing is associated with a key String). Although the
+     * returned map won't be insertion-ordered or necessarily retain the same order the Strings were entered in, the
+     * order will be the same on different JVMs, including GWT, because the hashing algorithm is set to one that behaves
+     * the same across JVM versions. Changes to the returned Map won't be reflected in this ObText.
+     * @return an UnorderedMap of unique String keys associated with the first associated String for each key (or null)
+     */
+    public UnorderedMap<String, String> basicMap()
+    {
+        final int sz = size();
+        UnorderedMap<String, String> keys = new UnorderedMap<>(sz, CrossHash.stringHasher);
+        ObTextEntry got;
+        for (int i = 0; i < sz; i++) {
+            got = get(i);
+            keys.put(got.primary, got.firstAssociatedString());
+        }
+        return keys;
+    }
+
+    /**
+     * Gets all unique Strings from the top level of this ObText as keys in an {@link OrderedMap}, with any Strings
+     * associated with those keys as their values (in a possibly-empty ArrayList of String for each value).
+     * The returned map will retain the same order the keys were entered in, and you can use OrderedMap methods like
+     * {@link OrderedMap#keyAt(int)} to look up keys by index or {@link OrderedMap#getAt(int)} to look up the ArrayList
+     * of value Strings by index. Changes to the returned Map won't be reflected in this ObText.
+     * @return an OrderedMap of unique String keys associated with ArrayList values containing associated Strings
+     */
+    public OrderedMap<String, ArrayList<String>> shallowOrderedMap()
+    {
+        final int sz = size();
+        OrderedMap<String, ArrayList<String>> keys = new OrderedMap<>(sz, CrossHash.stringHasher);
+        ObTextEntry got;
+        for (int i = 0; i < sz; i++) {
+            got = get(i);
+            keys.put(got.primary, got.allAssociatedStrings());
+        }
+        return keys;
+    }
+    /**
+     * Gets all unique Strings from the top level of this ObText as keys in an {@link UnorderedMap}, with any Strings
+     * associated with those keys as their values (in a possibly-empty ArrayList of String for each value).
+     * Although the returned map won't be insertion-ordered or necessarily retain the same order the Strings were
+     * entered in, the order will be the same on different JVMs, including GWT, because the hashing algorithm is set to
+     * one that behaves the same across JVM versions. Changes to the returned Map won't be reflected in this ObText.
+     * @return an UnorderedMap of unique String keys associated with ArrayList values containing associated Strings
+     */
+    public UnorderedMap<String, ArrayList<String>> shallowMap()
+    {
+        final int sz = size();
+        UnorderedMap<String, ArrayList<String>> keys = new UnorderedMap<>(sz, CrossHash.stringHasher);
+        ObTextEntry got;
+        for (int i = 0; i < sz; i++) {
+            got = get(i);
+            keys.put(got.primary, got.allAssociatedStrings());
+        }
+        return keys;
     }
 
     /**
