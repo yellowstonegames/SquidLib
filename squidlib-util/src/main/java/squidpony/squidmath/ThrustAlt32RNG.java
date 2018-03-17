@@ -7,14 +7,18 @@ import java.io.Serializable;
 /**
  * A variant on {@link ThrustAltRNG} that uses only 32-bit math when producing 32-bit numbers. This generator does as
  * well as you could hope for on statistical tests, considering it can only generate 2 to the 32 ints before repeating
- * the cycle. On <a href="http://pracrand.sourceforge.net/">PractRand</a>, this completes testing on 16GB of generated
- * ints (the amount of space all possible ints would use) without finding any failures. Some big-name number generators
- * sometimes fail PractRand tests at only 256 MB, so this is pretty good. Like ThrustRNG and LightRNG, this changes its
- * state with a steady fixed increment, and does cipher-like adjustments to the current state to randomize it, although
- * the changes here are necessarily more involved than those in ThrustAltRNG because there are less bits of state to use
- * to randomize output. The period on ThrustAlt32RNG is 2 to the 32. Unlike some generators (like
- * PermutedRNG), changing the seed even slightly generally produces completely different results, which applies
- * primarily to determine() but also the first number generated in a series of nextInt() calls.
+ * the cycle. You may want to consider {@link Zag32RNG} if roughly 4 billion numbers could be produced by your game or
+ * application (if you just generated random ints, you could exhaust that amount in seconds). On
+ * <a href="http://pracrand.sourceforge.net/">PractRand</a>, this completes testing on 16GB of generated ints (the
+ * amount of space all possible ints would use) without finding any failures. Some big-name number generators sometimes
+ * fail PractRand tests at only 256 MB, so this should be pretty good, except that this generator isn't capable of
+ * producing all ints, and is only capable of producing a tiny fraction of all possible longs (less than 2 to the 32
+ * possible longs can be generated). Like ThrustRNG and LightRNG, this changes its state with a steady fixed increment,
+ * and does cipher-like adjustments to the current state to randomize it, although the changes here are necessarily more
+ * involved than those in ThrustAltRNG because there are less bits of state to use to randomize output. The period on
+ * ThrustAlt32RNG is 2 to the 32. Unlike some generators (like PermutedRNG), changing the seed even slightly generally
+ * produces completely different results, which applies primarily to determine() but also the first number generated in
+ * a series of nextInt() calls.
  * <br>
  * This generator is meant to function the same on GWT as on desktop, server, or Android JREs, and unlike
  * {@link Light32RNG} or {@link PintRNG}, the implementation of ints on GWT is accounted for here. On GWT, ints are
@@ -24,7 +28,9 @@ import java.io.Serializable;
  * 32 bit (signed) numbers times 21 bit (effectively unsigned) numbers. This class is also super-sourced on GWT with an
  * alternate implementation that replaces {@code foo += bar} with the normally-pointless {@code foo = foo + bar | 0}; on
  * GWR this enforces overflow wrapping to the int range, and similar bitwise code is used elsewhere in the super-sourced
- * version. This should be enough to ensure consistent behavior across platforms.
+ * version. This should be enough to ensure consistent behavior across platforms. The same techniques are used by
+ * {@link Zag32RNG}, which is slightly slower but has a much larger period and similarly maintains high quality over the
+ * tested span of that period.
  * <br>
  * Created by Tommy Ettinger on 2/13/2017.
  */

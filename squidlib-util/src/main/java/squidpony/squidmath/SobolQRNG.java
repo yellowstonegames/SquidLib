@@ -571,7 +571,7 @@ public class SobolQRNG implements RandomnessSource {
      */
     @Override
     public int next(int bits) {
-        return (int) (nextIntVector()[0] & (1L << bits) - 1);
+        return nextIntVector()[0] >>> (32 - bits);
     }
 
     /**
@@ -629,10 +629,8 @@ public class SobolQRNG implements RandomnessSource {
 
     @Override
     public int hashCode() {
-        int result = dimension;
-        result = 31 * result + count;
-        result = 31 * result + CrossHash.Lightning.hash(direction);
-        result = 31 * result + CrossHash.Lightning.hash(x);
-        return result;
+        int result = 31 * dimension + count | 0; // bitwise OR with 0 is a GWT thing
+        result = 31 * result + CrossHash.hash(direction) | 0;
+        return  31 * result + CrossHash.hash(x) | 0;
     }
 }

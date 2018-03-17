@@ -22,20 +22,24 @@ import java.io.Serializable;
  * {@code getState()} and {@code setState()}. For most cases, you should decide between LightRNG, XoRoRNG, and other
  * RandomnessSource implementations based on your needs for period length and state manipulation (LightRNG is also used
  * internally by almost all StatefulRNG objects). You might want significantly less predictable random results, which
- * {@link IsaacRNG} and {@link Isaac32RNG} can provide, along with a large period. You may want a very long period of
- * random numbers, which would suggest {@link LongPeriodRNG} as a good choice. You may want better performance on
- * 32-bit machines, which would mean {@link PintRNG} (for generating only ints via {@link PintRNG#next(int)}, since
- * its {@link PintRNG#nextLong()} method is very slow) or {@link FlapRNG} (for generating ints and longs at very good
- * speed using mainly int math). You shouldn't rely on 32-bit RandomnessSources on GWT, though, because 32-bit overflow
- * behaves differently there than desktop or Android, and results will change. {@link LapRNG} is the fastest generator
- * we have, but has a poor period for its state size, and much worse quality than this generator.
+ * {@link IsaacRNG} can provide, along with a large period. You may want a very long period of random numbers, which
+ * would suggest {@link LongPeriodRNG} as a good choice or {@link MersenneTwister} as a potential alternative. You may
+ * want better performance on 32-bit machines or on GWT, where {@link Zag32RNG} is currently the best choice almost all
+ * of the time, and {@link ThrustAlt32RNG} can be better only when distribution and period can be disregarded in order
+ * to improve speed somewhat. These all can generate pseudo-random numbers in a handful of nanoseconds (with the key
+ * exception of 64-bit generators being used on GWT, where they may take more than 100 nanoseconds per number), so
+ * unless you need a LOT of random numbers in a hurry, they'll probably all be fine on performance. You may want to
+ * decide on the special features of a generator, indicated by implementing {@link StatefulRandomness} if their state
+ * can be read and written to, and/or {@link SkippingRandomness} if sections in the generator's sequence can be skipped
+ * in long forward or backward leaps.
  * <br>
- * Original version at http://xoroshiro.di.unimi.it/xoroshiro128plus.c
+ * <a href="http://xoroshiro.di.unimi.it/xoroshiro128plus.c">Original version here.</a>
+ * <br>
  * Written in 2016 by David Blackman and Sebastiano Vigna (vigna@acm.org)
  *
  * @author Sebastiano Vigna
  * @author David Blackman
- * @author Tommy Ettinger
+ * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)
  */
 public final class XoRoRNG implements RandomnessSource, Serializable {
 
@@ -49,19 +53,35 @@ public final class XoRoRNG implements RandomnessSource, Serializable {
     private long state0, state1;
 
     /**
-     * Creates a new generator seeded using Math.random.
+     * Creates a new generator seeded using four calls to Math.random().
      */
     public XoRoRNG() {
-        this((long) (Math.random() * Long.MAX_VALUE));
+        this((long) ((Math.random() - 0.5) * 0x10000000000000L)
+                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),
+                (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
     }
-
+    /**
+     * Constructs this XoRoRNG by dispersing the bits of seed using {@link #setSeed(long)} across the two parts of state
+     * this has.
+     * @param seed a long that won't be used exactly, but will affect both components of state
+     */
     public XoRoRNG(final long seed) {
         setSeed(seed);
+    }
+    /**
+     * Constructs this XoRoRNG by calling {@link #setSeed(long, long)} on the arguments as given; see that method for 
+     * the specific details (stateA and stateB are kept as-is unless they are both 0).
+     * @param stateA the number to use as the first part of the state; this will be 1 instead if both seeds are 0
+     * @param stateB the number to use as the second part of the state
+     */
+    public XoRoRNG(final long stateA, final long stateB) {
+        setSeed(stateA, stateB);
     }
 
     @Override
     public final int next(int bits) {
-        return (int) (nextLong() & (1L << bits) - 1);
+        return (int)nextLong() >>> (32 - bits);
     }
 
     @Override
@@ -184,9 +204,46 @@ public final class XoRoRNG implements RandomnessSource, Serializable {
         state1 = z ^ (z >>> 31);
     }
 
+    /**
+     * Sets the seed of this generator using two longs, using them without changes unless both are 0 (then it makes the
+     * state variable corresponding to stateA 1 instead).
+     * @param stateA the number to use as the first part of the state; this will be 1 instead if both seeds are 0
+     * @param stateB the number to use as the second part of the state
+     */
+    public void setSeed(final long stateA, final long stateB) {
+
+        state0 = stateA;
+        state1 = stateB;
+        if((stateA | stateB) == 0L)
+            state0 = 1L;
+    }
+
+    /**
+     * Gets the first component of this generator's two-part state, as a long. This can be 0 on its own, but will never
+     * be 0 at the same time as the other component of state, {@link #getStateB()}. You can set the state with two exact
+     * values using {@link #setSeed(long, long)}, but the alternative overload {@link #setSeed(long)} won't use the
+     * state without changing it (it needs to cover 128 bits with a 64-bit value).
+     * @return the first component of this generator's state
+     */
+    public long getStateA()
+    {
+        return state0;
+    }
+    /**
+     * Gets the second component of this generator's two-part state, as a long. This can be 0 on its own, but will never
+     * be 0 at the same time as the other component of state, {@link #getStateA()}. You can set the state with two exact
+     * values using {@link #setSeed(long, long)}, but the alternative overload {@link #setSeed(long)} won't use the
+     * state without changing it (it needs to cover 128 bits with a 64-bit value).
+     * @return the second component of this generator's state
+     */
+    public long getStateB()
+    {
+        return state1;
+    }
+
     @Override
     public String toString() {
-        return "XoRoRNG with state hash 0x" + StringKit.hexHash(state0, state1) + 'L';
+        return "XoRoRNG with stateA 0x" + StringKit.hex(state0) + "L and stateB 0x" + StringKit.hex(state1) + 'L';
     }
 
     @Override
@@ -202,8 +259,6 @@ public final class XoRoRNG implements RandomnessSource, Serializable {
 
     @Override
     public int hashCode() {
-        int result = (int) (state0 ^ (state0 >>> 32));
-        result = 31 * result + (int) (state1 ^ (state1 >>> 32));
-        return result;
+        return (int) (31L * (state0 ^ (state0 >>> 32)) + (state1 ^ (state1 >>> 32)));
     }
 }

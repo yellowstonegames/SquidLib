@@ -29,19 +29,36 @@ public class XorRNG implements RandomnessSource {
     private long state0, state1;
 
     /**
-     * Creates a new generator seeded using Math.random.
+     * Creates a new generator seeded using four calls to Math.random().
      */
     public XorRNG() {
-        this((long) (Math.random() * Long.MAX_VALUE));
+        this((long) ((Math.random() - 0.5) * 0x10000000000000L)
+                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),
+                (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));
     }
 
+    /**
+     * Constructs this XorRNG by dispersing the bits of seed using a unary hash across the two parts of state this has.
+     * @param seed a long that won't be used exactly, but will affect both components of state
+     */
     public XorRNG(final long seed) {
         setSeed(seed);
     }
 
+    /**
+     * Constructs this XorRNG by calling {@link #setSeed(long, long)} on the arguments as given; see that method for the
+     * specific details (stateA and stateB are kept as-is unless they are both 0).
+     * @param stateA the number to use as the first part of the state; this will be 1 instead if both seeds are 0
+     * @param stateB the number to use as the second part of the state
+     */
+    public XorRNG(final long stateA, final long stateB) {
+        setSeed(stateA, stateB);
+    }
+
     @Override
-    public int next(int bits) {
-        return (int) (nextLong() & (1L << bits) - 1);
+    public final int next(int bits) {
+        return (int)nextLong() >>> (32 - bits);
     }
 
     @Override
@@ -122,9 +139,46 @@ public class XorRNG implements RandomnessSource {
         state0 = avalanche(state1);
     }
 
+    /**
+     * Sets the seed of this generator using two longs, using them without changes unless both are 0 (then it makes the
+     * state variable corresponding to stateA 1 instead).
+     * @param stateA the number to use as the first part of the state; this will be 1 instead if both seeds are 0
+     * @param stateB the number to use as the second part of the state
+     */
+    public void setSeed(final long stateA, final long stateB) {
+
+        state0 = stateA;
+        state1 = stateB;
+        if((stateA | stateB) == 0L)
+            state0 = 1L;
+    }
+
+    /**
+     * Gets the first component of this generator's two-part state, as a long. This can be 0 on its own, but will never
+     * be 0 at the same time as the other component of state, {@link #getStateB()}. You can set the state with two exact
+     * values using {@link #setSeed(long, long)}, but the alternative overload {@link #setSeed(long)} won't use the
+     * state without changing it (it needs to cover 128 bits with a 64-bit value).
+     * @return the first component of this generator's state
+     */
+    public long getStateA()
+    {
+        return state0;
+    }
+    /**
+     * Gets the second component of this generator's two-part state, as a long. This can be 0 on its own, but will never
+     * be 0 at the same time as the other component of state, {@link #getStateA()}. You can set the state with two exact
+     * values using {@link #setSeed(long, long)}, but the alternative overload {@link #setSeed(long)} won't use the
+     * state without changing it (it needs to cover 128 bits with a 64-bit value).
+     * @return the second component of this generator's state
+     */
+    public long getStateB()
+    {
+        return state1;
+    }
+
     @Override
     public String toString() {
-        return "XorRNG with state hash 0x" + StringKit.hexHash(state0, state1) + 'L';
+        return "XorRNG with stateA 0x" + StringKit.hex(state0) + "L and stateB 0x" + StringKit.hex(state1) + 'L';
     }
 
     /**

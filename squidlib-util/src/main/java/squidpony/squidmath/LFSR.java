@@ -51,7 +51,7 @@ public class LFSR implements StatefulRandomness, Serializable {
 
     @Override
     public final int next(int bits) {
-        return (int) (nextLong() & (1L << bits) - 1);
+        return (int)nextLong() >>> (32 - bits);
     }
 
     @Override
