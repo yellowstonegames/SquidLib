@@ -116,7 +116,7 @@ public class PintRNG implements RandomnessSource, StatefulRandomness, Serializab
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public PintRNG copy() {
         return new PintRNG(state);
     }
 

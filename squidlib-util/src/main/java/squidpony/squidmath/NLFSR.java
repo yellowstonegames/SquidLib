@@ -99,7 +99,7 @@ public class NLFSR implements StatefulRandomness, Serializable {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public NLFSR copy() {
         return new NLFSR(state);
     }
 

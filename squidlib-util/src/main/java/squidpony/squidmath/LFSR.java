@@ -67,7 +67,7 @@ public class LFSR implements StatefulRandomness, Serializable {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public LFSR copy() {
         return new LFSR(state);
     }
 

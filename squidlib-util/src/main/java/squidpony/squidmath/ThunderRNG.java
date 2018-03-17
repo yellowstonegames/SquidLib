@@ -217,7 +217,7 @@ public class ThunderRNG implements RandomnessSource, Serializable {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public ThunderRNG copy() {
         return new ThunderRNG(state, jumble);
     }
 

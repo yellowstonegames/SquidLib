@@ -75,7 +75,7 @@ public class ChaosRNG implements RandomnessSource{
      * @return a new, unrelated ChaosRNG as a RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public ChaosRNG copy() {
         return new ChaosRNG();
     }
 

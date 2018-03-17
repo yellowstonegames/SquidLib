@@ -329,7 +329,7 @@ public class IsaacRNG implements RandomnessSource {
      * @return another RandomnessSource with the same implementation but no guarantees as to generation
      */
     @Override
-    public final RandomnessSource copy() {
+    public final IsaacRNG copy() {
         return new IsaacRNG(results);
     }
 

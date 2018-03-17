@@ -6,8 +6,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * An RNG that has a drastically longer period than the other generators in SquidLib, other than IsaacRNG, without
- * sacrificing speed or HTML target compatibility. If you don't already know what the period of an RNG is, this probably
+ * An RNG that has a drastically longer period than the other generators in SquidLib, other than {@link IsaacRNG},
+ * without sacrificing speed or GWT support. If you don't already know what the period of an RNG is, this probably
  * isn't needed for your purposes, or many purposes in games at all. It is primarily meant for applications that need to
  * generate massive amounts of random numbers, more than pow(2, 64) (18,446,744,073,709,551,616), without repeating
  * the sequence of generated numbers. An RNG's period refers to the number of numbers it generates given a single
@@ -246,7 +246,7 @@ public final class LongPeriodRNG implements RandomnessSource, Serializable {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public LongPeriodRNG copy() {
         LongPeriodRNG next = new LongPeriodRNG();
         System.arraycopy(state, 0, next.state, 0, 16);
         next.choice = choice;

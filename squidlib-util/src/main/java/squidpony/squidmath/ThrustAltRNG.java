@@ -132,7 +132,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public ThrustAltRNG copy() {
         return new ThrustAltRNG(state);
     }
     @Override

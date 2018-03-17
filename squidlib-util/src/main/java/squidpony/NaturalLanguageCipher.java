@@ -101,7 +101,7 @@ public class NaturalLanguageCipher implements Serializable{
          * @return a copy of this RandomnessSource
          */
         @Override
-        public RandomnessSource copy() {
+        public SemiRandom copy() {
             return new SemiRandom(state);
         }
     }

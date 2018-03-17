@@ -73,9 +73,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 115;
-    private int hashMode = 0, rngMode = 26, noiseMode = 104;
+    private int hashMode = 0, rngMode = 46, noiseMode = 104;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -100,8 +100,9 @@ public class HashVisualizer extends ApplicationAdapter {
     private XoRoRNG xoRo = new XoRoRNG();
     private XorRNG xor = new XorRNG();
     private VortexRNG vortex = new VortexRNG();
-    private ThrustRNG thrust = new ThrustRNG(123456789L);
+    private ThrustRNG thrust = new ThrustRNG();
     private ThrustAltRNG ta = new ThrustAltRNG();
+    private Zag32RNG zag = new Zag32RNG();
 
 
     private final int[] coordinates = new int[2];
@@ -415,7 +416,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
          * @return a copy of this RandomnessSource
          */
         @Override
-        public RandomnessSource copy() {
+        public MicroRandom copy() {
             MicroRandom mr = new MicroRandom(1L);
             mr.state0 = state0;
             mr.state1 = state1;
@@ -1134,7 +1135,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             case 5:
                                 mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
-                                rngMode %= 48;
+                                rngMode %= 50;
                                 break;
                             case 0:
                                 hashMode++;
@@ -4726,6 +4727,27 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         Gdx.graphics.setTitle("Vortex gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
+                    case 48:
+                        zag.setState(System.nanoTime());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = zag.nextInt() | 255;
+                                display.put(x, y, floatGet(iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Zag32RNG using higher bits at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+                    case 49:
+                        zag.setState(System.nanoTime());
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                iBright = zag.next(8);
+                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                            }
+                        }
+                        Gdx.graphics.setTitle("Zag32RNG using next(8) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        break;
+
                 }
             }
             break;

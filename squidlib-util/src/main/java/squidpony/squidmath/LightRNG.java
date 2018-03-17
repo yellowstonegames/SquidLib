@@ -121,7 +121,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public LightRNG copy() {
         return new LightRNG(state);
     }
 

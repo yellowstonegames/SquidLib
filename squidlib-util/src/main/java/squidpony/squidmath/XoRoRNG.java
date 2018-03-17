@@ -37,7 +37,7 @@ import java.io.Serializable;
  * @author David Blackman
  * @author Tommy Ettinger
  */
-public class XoRoRNG implements RandomnessSource, Serializable {
+public final class XoRoRNG implements RandomnessSource, Serializable {
 
 	private static final long DOUBLE_MASK = (1L << 53) - 1;
     private static final double NORM_53 = 1. / (1L << 53);
@@ -88,7 +88,7 @@ public class XoRoRNG implements RandomnessSource, Serializable {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public XoRoRNG copy() {
         XoRoRNG next = new XoRoRNG(state0);
         next.state0 = state0;
         next.state1 = state1;

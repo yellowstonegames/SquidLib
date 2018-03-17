@@ -135,7 +135,7 @@ public class XorRNG implements RandomnessSource {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public XorRNG copy() {
         XorRNG next = new XorRNG(state0);
         next.state0 = state0;
         next.state1 = state1;

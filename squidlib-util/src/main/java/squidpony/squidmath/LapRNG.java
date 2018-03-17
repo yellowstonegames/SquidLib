@@ -157,7 +157,7 @@ public class LapRNG implements RandomnessSource, Serializable {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public LapRNG copy() {
         return new LapRNG(state0, state1);
     }
 

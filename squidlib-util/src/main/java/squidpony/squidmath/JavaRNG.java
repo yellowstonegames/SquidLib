@@ -35,7 +35,7 @@ public class JavaRNG implements RandomnessSource, Serializable
     public long nextLong() { return random.nextLong(); }
 
     @Override
-    public RandomnessSource copy() { return new JavaRNG(random); }
+    public JavaRNG copy() { return new JavaRNG(random); }
 
     public int nextInt() { return random.nextInt(); }
 

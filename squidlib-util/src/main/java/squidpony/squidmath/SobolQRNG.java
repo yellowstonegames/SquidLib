@@ -604,7 +604,7 @@ public class SobolQRNG implements RandomnessSource {
      * @return a copy of this RandomnessSource
      */
     @Override
-    public RandomnessSource copy() {
+    public SobolQRNG copy() {
         SobolQRNG next = new SobolQRNG(dimension);
         next.count = count;
         next.skipTo(count);

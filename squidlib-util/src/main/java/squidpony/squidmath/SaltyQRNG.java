@@ -161,7 +161,7 @@ public class SaltyQRNG implements StatefulRandomness {
     }
 
     @Override
-    public RandomnessSource copy() {
+    public SaltyQRNG copy() {
         return new SaltyQRNG(salt, current);
     }
 }
