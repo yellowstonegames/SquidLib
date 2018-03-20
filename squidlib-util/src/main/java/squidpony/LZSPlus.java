@@ -26,10 +26,6 @@ SOFTWARE.
  */
 package squidpony;
 
-//import com.badlogic.gdx.utils.Array;
-//import com.badlogic.gdx.utils.ObjectIntMap;
-//import com.badlogic.gdx.utils.ObjectSet;
-
 import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.UnorderedSet;
 
@@ -44,7 +40,11 @@ import java.util.Objects;
  * very unusual, with the LZ-String encoding part derived from
  * <a href="https://github.com/rufushuang/lz-string4java">rufushuang's lz-string4java</a> (which is a port of
  * <a href="https://github.com/pieroxy/lz-string">pieroxy's lz-string</a>), while the encryption-like part (which is not
- * very strong) was added in SquidLib.
+ * very strong) was added in SquidLib. The unusual part is how instead of relying on a HashMap of String keys to boxed
+ * Integer values as BlazingChain did, this uses an UnorderedSet of char arrays, using a custom IHasher to consider some
+ * of the array a key to hash and some only to read in as a value (producing an int like the Integer from before). This
+ * allows quite a bit of RAM to be conserved on larger texts. This version includes the fixes present in version 1.4.4.2
+ * of BlazingChain, which allow decompression for very large texts to work.
  * <br>
  * Created by Tommy Ettinger on 7/13/2017.
  */
@@ -472,7 +472,7 @@ public final class LZSPlus {
                 return "";
             }
 
-            bits = 0;
+            int cc = 0;
             maxpower = numBits;
             power = 0;
             while (power != maxpower) {
@@ -482,10 +482,10 @@ public final class LZSPlus {
                     position = 16384;
                     val = (char) (comp[index++] - 32);
                 }
-                bits |= (resb > 0 ? 1 : 0) << power++;
+                cc |= (resb > 0 ? 1 : 0) << power++;
             }
-            int cc;
-            switch (cc = bits) {
+            
+            switch (cc) {
                 case 0:
                     bits = 0;
                     maxpower = 8;
