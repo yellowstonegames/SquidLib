@@ -360,7 +360,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
      * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},
      * where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
-     * {@code 0x6C8E9CF570932BD5L} within this method, so using a small increment won't be much different from using a
+     * {@code 0x9E3779B97F4A7C15L} within this method, so using a small increment won't be much different from using a
      * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
      * only 2 to the 30 possible floats between 0 and 1.
      * @param state a variable that should be different every time you want a different random result;
@@ -374,7 +374,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
      * will return the same float. This is expected to be called with a changing variable, e.g.
      * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't really matter. This
-     * multiplies state by {@code 0x6C8E9CF570932BD5L} within this method, so using a small increment won't be much
+     * multiplies state by {@code 0x9E3779B97F4A7C15L} within this method, so using a small increment won't be much
      * different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or
      * decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
      * @param state a variable that should be different every time you want a different random result;
