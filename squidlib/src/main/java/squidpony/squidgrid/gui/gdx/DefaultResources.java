@@ -68,7 +68,7 @@ public class DefaultResources implements LifecycleListener {
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
             msdfDejaVu = null, msdfDejaVuItalic = null;
-    private TextFamily familyLean = null, familySlab = null, familyGo = null;
+    private TextFamily familyLean = null, familySlab = null, familyGo = null, familyLeanMSDF = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -1591,7 +1591,52 @@ public class DefaultResources implements LifecycleListener {
             return instance.familyGo.copy();
         return null;
     }
+    /**
+     * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a
+     * sans-serif geometric style, that should scale cleanly to many sizes (using an MSDF technique) and supports 4
+     * styles (regular, bold, italic, and bold italic). Caches the result for later calls. The font used is Iosevka, an
+     * open-source (SIL Open Font License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it 
+     * uses several customizations thanks to Iosevka's special build process, applied to the 4 styles. It supports a lot
+     * of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also circled letters and digits and
+     * the necessary box drawing characters (which line up even for italic text). The high glyph count means the texture
+     * that holds all four faces of the font is larger than normal, at 4096x4096; this may be too large for some devices
+     * to load correctly (mostly older phones or tablets). A cell width of 11 and cell height of 20 is ideal (or some
+     * approximate multiple of that aspect ratio); this allows the font to resize fairly well to larger sizes using
+     * Viewports.  This uses the Multi-channel Signed Distance Field (MSDF) technique as opposed to the normal Signed
+     * Distance Field technique, which gives the rendered font sharper edges and precise corners instead of rounded tips
+     * on strokes. As an aside, Luc Devroye (a true typography expert) called Iosevka
+     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a>
+     * <br>
+     * Preview: <a href="https://i.imgur.com/dMVzpEi.png">image link</a>, with bold at the bottom.
+     * <br>
+     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Family-msdf.png</li>
+     * </ul>
+     * @return the TextFamily object that can represent many sizes of the font Iosevka.ttf with 4 styles and an MSDF effect
+     */
 
+    public static TextFamily getCrispLeanFamily()
+    {
+        initialize();
+        if(instance.familyLeanMSDF == null)
+        {
+            try {
+                instance.familyLeanMSDF = new TextFamily();
+                instance.familyLeanMSDF.fontMultiDistanceField("Iosevka-Family-msdf.fnt", "Iosevka-Family-msdf.png");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.familyLeanMSDF != null)
+            return instance.familyLeanMSDF.copy();
+        return null;
+
+    }
 
     /**
      * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.

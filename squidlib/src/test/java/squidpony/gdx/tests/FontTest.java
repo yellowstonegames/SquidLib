@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
-import squidpony.squidgrid.gui.gdx.TextPanel;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.LineKit;
 import squidpony.squidmath.ThrustAltRNG;
 
@@ -60,13 +57,14 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 120, 120, 120, 90,  70,  100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
-        heights = new int[]{22,  22,  22,  22,  17,  29,  20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
+        widths =  new int[]{120, 120, 120, 160, 90,  70,  100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
+        heights = new int[]{22,  22,  22,  29,  17,  29,  20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabItalicFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispLeanFont().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getCrispLeanItalicFont().width(ZOOM * 14).height(28).initBySize(),
+                DefaultResources.getCrispLeanFamily().width(14).height(28).initBySize(),
+                //DefaultResources.getCrispLeanItalicFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispDejaVuFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getStretchableHeavySquareFont().width(ZOOM * 24).height(24).initBySize(),
 
