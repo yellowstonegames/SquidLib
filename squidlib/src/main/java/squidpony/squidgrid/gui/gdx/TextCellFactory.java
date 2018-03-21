@@ -430,11 +430,11 @@ public class TextCellFactory implements Disposable {
         if (Gdx.files.internal(texturePath).exists()) {
             Gdx.app.debug("font", "Using internal font texture at " + texturePath);
             tex = new Texture(Gdx.files.internal(texturePath), true);
-            tex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
+            tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else if (Gdx.files.classpath(texturePath).exists()) {
             Gdx.app.debug("font", "Using classpath font texture at " + texturePath);
             tex = new Texture(Gdx.files.classpath(texturePath), true);
-            tex.setFilter(Texture.TextureFilter.MipMapLinearLinear, Texture.TextureFilter.Linear);
+            tex.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         } else {
             bmpFont = DefaultResources.getIncludedFont();
             Gdx.app.error("TextCellFactory", "Could not find font file: " + texturePath + ", using defaults");

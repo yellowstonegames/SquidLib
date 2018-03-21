@@ -68,7 +68,8 @@ public class DefaultResources implements LifecycleListener {
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
             msdfDejaVu = null, msdfDejaVuItalic = null;
-    private TextFamily familyLean = null, familySlab = null, familyGo = null, familyLeanMSDF = null;
+    private TextFamily familyLean = null, familySlab = null, familyGo = null,
+            familyLeanMSDF = null, familySlabMSDF = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -195,7 +196,7 @@ public class DefaultResources implements LifecycleListener {
             + "varying vec2 v_texCoords;\n"
             + "\n"
             + "void main() {\n"
-            + "	vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
+            + "	 vec3 sdf;\n"
             //+ " float dist = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (2.75 * u_smoothing);\n"
             //+ " float d = u_smoothing * 1.75;\n" 
             //+ " float d = fwidth(dist);\n"
@@ -203,7 +204,17 @@ public class DefaultResources implements LifecycleListener {
             //+ " float alpha = smoothstep(-d, d, dist);\n"
             //+ " if(alpha == 0) { discard; }\n"
             //+ "	gl_FragColor = vec4(v_color.rgb, alpha * v_color.a);\n"
-            + " gl_FragColor = vec4(v_color.rgb, clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (3.5 * u_smoothing) + 0.5, 0.0, 1.0) * v_color.a);\n"
+            + "	 vec4 box = vec4(v_texCoords-0.0000625, v_texCoords+0.0000625);\n"
+            + "  sdf = texture2D(u_texture, box.xy).rgb;\n"
+            + "	 float asum = clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (6.0 * u_smoothing) + 0.5, 0.0, 0.5);\n"
+        + "  sdf = texture2D(u_texture, box.zw).rgb;\n"
+        + "  asum = asum + clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (6.0 * u_smoothing) + 0.5, 0.0, 0.5); +\n"
+        + "  sdf = texture2D(u_texture, box.xw).rgb;\n"
+        + "  asum = asum + clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (6.0 * u_smoothing) + 0.5, 0.0, 0.5); +\n"
+        + "  sdf = texture2D(u_texture, box.zy).rgb;\n"
+        + "  asum = asum + clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (6.0 * u_smoothing) + 0.5, 0.0, 0.5); +\n"
+            + "  sdf = texture2D(u_texture, v_texCoords).rgb;\n"
+            + "  gl_FragColor = vec4(v_color.rgb, clamp(((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.625) / (3.0 * u_smoothing) + 0.625 + asum) / 3.0, 0.0, 1.0) * v_color.a);\n"
             + "}\n";
     /**
      * An alternate shader based on {@link DefaultResources#fragmentShader}, but this draws outlines around characters.
@@ -1605,7 +1616,9 @@ public class DefaultResources implements LifecycleListener {
      * Viewports.  This uses the Multi-channel Signed Distance Field (MSDF) technique as opposed to the normal Signed
      * Distance Field technique, which gives the rendered font sharper edges and precise corners instead of rounded tips
      * on strokes. As an aside, Luc Devroye (a true typography expert) called Iosevka
-     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a>
+     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a> You may want to
+     * try using both this version of Iosevka without serifs and the other version SquidLib has with an MSDF effect, 
+     * {@link #getCrispSlabFamily()}.
      * <br>
      * Preview: <a href="https://i.imgur.com/dMVzpEi.png">image link</a>, with bold at the bottom.
      * <br>
@@ -1619,7 +1632,6 @@ public class DefaultResources implements LifecycleListener {
      * </ul>
      * @return the TextFamily object that can represent many sizes of the font Iosevka.ttf with 4 styles and an MSDF effect
      */
-
     public static TextFamily getCrispLeanFamily()
     {
         initialize();
@@ -1634,6 +1646,54 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.familyLeanMSDF != null)
             return instance.familyLeanMSDF.copy();
+        return null;
+
+    }
+
+    /**
+     * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a
+     * slab-serif geometric style, that should scale cleanly to many sizes (using an MSDF technique) and supports 4
+     * styles (regular, bold, italic, and bold italic). Caches the result for later calls. The font used is Iosevka with
+     * slab style, an open-source (SIL Open Font License) typeface by Belleve Invis (see
+     * https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
+     * process, applied to the 4 styles. It supports a lot of glyphs, including quite a bit of extended Latin, Greek,
+     * and Cyrillic, but also circled letters and digits and the necessary box drawing characters (which line up even 
+     * for italic text). The high glyph count means the texture that holds all four faces of the font is larger than
+     * normal, at 4096x4096; this may be too large for some devices to load correctly (mostly older phones or tablets).
+     * A cell width of 11 and cell height of 20 is ideal (or some approximate multiple of that aspect ratio); this
+     * allows the font to resize fairly well to larger sizes using Viewports.  This uses the Multi-channel Signed
+     * Distance Field (MSDF) technique as opposed to the normal Signed  Distance Field technique, which gives the
+     * rendered font sharper edges and precise corners instead of rounded tips on strokes. As an aside, Luc Devroye (a
+     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
+     * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
+     * version SquidLib has with an MSDF effect, {@link #getCrispLeanFamily()}.
+     * <br>
+     * Preview: <a href="https://i.imgur.com/wRNlpL5.png">image link</a>, with bold at the bottom.
+     * <br>
+     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Slab-Family-msdf.png</li>
+     * </ul>
+     * @return the TextFamily object that can represent many sizes of the font Iosevka-Slab.ttf with 4 styles and an MSDF effect
+     */
+    public static TextFamily getCrispSlabFamily()
+    {
+        initialize();
+        if(instance.familySlabMSDF == null)
+        {
+            try {
+                instance.familySlabMSDF = new TextFamily();
+                instance.familySlabMSDF.fontMultiDistanceField("Iosevka-Slab-Family-msdf.fnt", "Iosevka-Slab-Family-msdf.png");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.familySlabMSDF != null)
+            return instance.familySlabMSDF.copy();
         return null;
 
     }

@@ -119,6 +119,20 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	List<IColoredString<T>> wrap(int width);
 
 	/**
+	 * @param width
+	 *            A positive integer
+	 * @param buf 
+	 *            A List of IColoredString with the same T type as this; will have the wrapped contents appended to it.
+	 *            Cannot be null, and if it has existing contents, they will be left as-is.
+	 * @return {@code buf} containing {@code this} split in pieces that would fit in a display with
+	 *         {@code width} columns (if all words in {@code this} are smaller
+	 *         or equal in length to {@code width}, otherwise wrapping will fail
+	 *         for these words).
+	 */
+	
+	List<IColoredString<T>> wrap(int width, List<IColoredString<T>> buf);
+
+	/**
 	 * This method does NOT guarantee that the result's length is {@code width}.
 	 * It is impossible to do correct justifying if {@code this}'s length is
 	 * greater than {@code width} or if {@code this} has no space character.
@@ -412,7 +426,9 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		}
 
 		@Override
-		public List<IColoredString<T>> wrap(int width) {
+		public List<IColoredString<T>> wrap(int width)
+		{
+			// the one special case that wouldn't involve buf
 			if (width <= 0) {
 				/* Really, you should not rely on this behavior */
 				System.err.println("Cannot wrap string in empty display");
@@ -420,15 +436,26 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				result.add(this);
 				return result;
 			}
+			// delegate to the buf-appending overload
+			return wrap(width, new ArrayList<IColoredString<T>>());
+		}
 
-			final List<IColoredString<T>> result = new ArrayList<>();
+		@Override
+		public List<IColoredString<T>> wrap(int width, List<IColoredString<T>> buf) {
+			if (width <= 0) {
+				/* Really, you should not rely on this behavior */
+				System.err.println("Cannot wrap string in empty display");
+				final List<IColoredString<T>> result = new LinkedList<>();
+				result.add(this);
+				return result;
+			}
 			if (isEmpty()) {
 				/*
 				 * Catch this case early on, as empty lines are eaten below (see
 				 * code after the while). Checking emptiness is cheap anyway.
 				 */
-				result.add(this);
-				return result;
+				buf.add(this);
+				return buf;
 			}
 
 			IColoredString<T> current = create();
@@ -470,7 +497,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 						/* Need to wrap */
 						/* Flush content so far */
 						if (!current.isEmpty())
-							result.add(current);
+							buf.add(current);
 						/*
 						 * else: line was prepared, but did not contain anything
 						 */
@@ -486,7 +513,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 							 * new line immediately.
 							 */
 							/* Add */
-							result.add(new Impl<>(chunk, color));
+							buf.add(new Impl<>(chunk, color));
 							/* Prepare for next rolls */
 							current = create();
 							/* Reinit size */
@@ -498,10 +525,10 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 
 			if (!current.isEmpty()) {
 				/* Flush rest */
-				result.add(current);
+				buf.add(current);
 			}
 
-			return result;
+			return buf;
 		}
 
 		@Override

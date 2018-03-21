@@ -8,10 +8,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.ArrayTools;
-import squidpony.FakeLanguageGen;
-import squidpony.NaturalLanguageCipher;
-import squidpony.StringKit;
+import squidpony.*;
+import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
@@ -89,12 +87,12 @@ public class SparseDemo extends ApplicationAdapter {
     // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
     // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
     private final String artOfWar =
-            "Sun Tzu said: In the practical art of war, the best thing of all is to take the " +
-                    "enemy's country whole and intact; to shatter and destroy it is not so good. So, " +
+            "[@ 0.8 0.06329113 0.30980393][/]Sun Tzu[/] said: In the practical art of war, the best thing of all is " +
+                    "to take the enemy's country whole and intact; to shatter and destroy it is not so good. So, " +
                     "too, it is better to recapture an army entire than to destroy it, to capture " +
                     "a regiment, a detachment or a company entire than to destroy them. Hence to fight " +
                     "and conquer in all your battles is not supreme excellence; supreme excellence " +
-                    "consists in breaking the enemy's resistance without fighting.";
+                    "consists in breaking the enemy's resistance without fighting.[]";
     // A translation dictionary for going back and forth between English and an imaginary language that this generates
     // words for, using some of the rules that the English language tends to follow to determine if two words should
     // share a common base word (such as "read" and "reader" needing similar translations). This is given randomly
@@ -106,7 +104,7 @@ public class SparseDemo extends ApplicationAdapter {
     // this is initialized with the word-wrapped contents of artOfWar, then has translations of that text to imaginary
     // languages appended after the plain-English version. The contents have the first item removed with each step, and
     // have new translations added whenever the line count is too low.
-    private ArrayList<String> lang;
+    private ArrayList<IColoredString<Color>> lang;
     private double[][] resistance;
     private double[][] visible;
     // GreasedRegion is a hard-to-explain class, but it's an incredibly useful one for map generation and many other
@@ -143,6 +141,10 @@ public class SparseDemo extends ApplicationAdapter {
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
+        // if the seed is identical between two runs, any random factors will also be identical (until user input may
+        // cause the usage of an RNG to change). You can randomize the dungeon and several other initial settings by
+        // just removing the String seed, making the line "rng = new RNG();" . Keeping the seed as a default allows
+        // changes to be more easily reproducible, and using a fixed seed is strongly recommended for tests. 
         rng = new RNG("SquidLib!");
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
@@ -155,11 +157,15 @@ public class SparseDemo extends ApplicationAdapter {
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
         stage = new Stage(mainViewport, batch);
         languageStage = new Stage(languageViewport, batch);
-        // the font will try to load Iosevka Slab as an embedded bitmap font with a distance field effect.
-        // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
+        // the font will try to load Iosevka Slab as an embedded bitmap font with a MSDF effect (multi scale distance
+        // field, a way to allow a bitmap font to stretch while still keeping sharp corners and round curves).
+        // the MSDF effect is handled internally by a shader in SquidLib, and will switch to a different shader if a SDF
+        // effect is used (SDF is called "Stretchable" in DefaultResources, where MSDF is called "Crisp").
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
+        // it also includes 4 text faces (regular, bold, oblique, and bold oblique) so methods in GDXMarkup can make
+        // italic or bold text without switching fonts (they can color sections of text too).
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getCrispLeanFont());
+                DefaultResources.getCrispSlabFamily());
 
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
@@ -319,10 +325,18 @@ public class SparseDemo extends ApplicationAdapter {
         //places the player as an '@' at his position in orange.
         pg = display.glyph('@', SColor.SAFETY_ORANGE.toFloatBits(), player.x, player.y);
 
+        // here we build up a List of IColoredString values formed by formatting the artOfWar text (this colors the
+        // whole thing dark gray and puts the name at the start in italic/oblique face) and wrapping it to fit within
+        // the width we want, filling up lang with the results.
         lang = new ArrayList<>(16);
-        StringKit.wrap(lang, artOfWar, gridWidth - 2);
+        GDXMarkup.instance.colorString(artOfWar).wrap(gridWidth - 2, lang);
+        // here we choose a random language from all the hand-made FakeLanguageGen text generators, and make a
+        // NaturalLanguageCipher out of it. This Cipher takes words it finds in artOfWar and translates them to the
+        // fictional language it selected.
         translator = new NaturalLanguageCipher(rng.getRandomElement(FakeLanguageGen.registered));
-        StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
+        // this is just like the call above except we work on the translated artOfWar text instead of the original.
+        GDXMarkup.instance.colorString(translator.cipher(artOfWar)).wrap(gridWidth - 2, lang);
+        // now we change the language again and tell the NaturalLanguageCipher, translator, what we chose.
         translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
 
         // this is a big one.
@@ -532,7 +546,8 @@ public class SparseDemo extends ApplicationAdapter {
         // lines using a randomly selected fake language to translate the same Art of War text.
         while (lang.size() < bonusHeight - 1)
         {
-            StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
+            // refills lang with wrapped lines from the translated artOfWar text
+            GDXMarkup.instance.colorString(translator.cipher(artOfWar)).wrap(gridWidth - 2, lang);
             translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
         }
     }
@@ -578,7 +593,7 @@ public class SparseDemo extends ApplicationAdapter {
         languageDisplay.clear(0);
         languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);
         for (int i = 0; i < 6; i++) {
-            languageDisplay.put(1, i, lang.get(i), SColor.DB_LEAD);
+            languageDisplay.put(1, i, lang.get(i));
         }
     }
     @Override
