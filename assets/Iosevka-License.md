@@ -1,15 +1,47 @@
 The font is licensed under SIL OFL Version 1.1.
 This covers the files in this distribution, when present:
-* Iosevka-distance.png
-* Iosevka-Slab-distance.png
-* Iosevka-Light-distance.png
-* Iosevka-Slab-Light-distance.png
-* Iosevka-Slab-msdf.png
-* Iosevka-distance.fnt
-* Iosevka-Slab-distance.fnt
-* Iosevka-Light-distance.fnt
-* Iosevka-Slab-Light-distance.fnt
-* Iosevka-Slab-msdf.fnt
+ * Iosevka-Bold-msdf.png
+ * Iosevka-BoldOblique-msdf.png
+ * Iosevka-distance.png
+ * Iosevka-Family-distance.png
+ * Iosevka-Family-msdf.png
+ * Iosevka-Light-distance.png
+ * Iosevka-msdf.png
+ * Iosevka-Oblique-msdf.png
+ * Iosevka-Slab-Bold-msdf.png
+ * Iosevka-Slab-BoldOblique-msdf.png
+ * Iosevka-Slab-distance.png
+ * Iosevka-Slab-Family-distance.png
+ * Iosevka-Slab-Family-msdf.png
+ * Iosevka-Slab-Light-distance.png
+ * Iosevka-Slab-msdf.png
+ * Iosevka-Slab-Oblique-msdf.png
+ * Iosevka-Slab-Thin-distance.png
+ * Iosevka-Wide-distance.png
+ * Iosevka-Wide-Light-distance.png
+ * Iosevka-Wide-Slab-distance.png
+ * Iosevka-Wide-Slab-Light-distance.png
+ * Iosevka-Bold-msdf.fnt
+ * Iosevka-BoldOblique-msdf.fnt
+ * Iosevka-distance.fnt
+ * Iosevka-Family-distance.fnt
+ * Iosevka-Family-msdf.fnt
+ * Iosevka-Light-distance.fnt
+ * Iosevka-msdf.fnt
+ * Iosevka-Oblique-msdf.fnt
+ * Iosevka-Slab-Bold-msdf.fnt
+ * Iosevka-Slab-BoldOblique-msdf.fnt
+ * Iosevka-Slab-distance.fnt
+ * Iosevka-Slab-Family-distance.fnt
+ * Iosevka-Slab-Family-msdf.fnt
+ * Iosevka-Slab-Light-distance.fnt
+ * Iosevka-Slab-msdf.fnt
+ * Iosevka-Slab-Oblique-msdf.fnt
+ * Iosevka-Slab-Thin-distance.fnt
+ * Iosevka-Wide-distance.fnt
+ * Iosevka-Wide-Light-distance.fnt
+ * Iosevka-Wide-Slab-distance.fnt
+ * Iosevka-Wide-Slab-Light-distance.fnt
 
 The support code is licensed under Berkeley Software Distribution license.
 The support code is not included in this distribution. It was used to prepare the aforementioned files.

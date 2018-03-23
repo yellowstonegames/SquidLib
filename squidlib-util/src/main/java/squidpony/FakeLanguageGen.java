@@ -2309,6 +2309,57 @@ public class FakeLanguageGen implements Serializable {
                 new String[]{},
                 new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 5, 4, 2}, 0.2, 1.0, 0.0, 0.0, genericSanityChecks, true);
     }
+
+    private static FakeLanguageGen spanish(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "i", "i", "i", "o", "o", "o", "e", "e", "e", "e", "e", "u", "u"},
+                new String[]{"a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e",
+                        "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
+                        "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
+                        "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
+                        "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
+                        "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
+                        "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
+                        "ai", "ai", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
+                        "ai", "ai", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
+                        "ai", "ai", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
+                        "ái", "aí", "ía", "iá", "íe", "ié", "ío", "íu", "oí", "uí", "ué", "uá",
+                        "á", "é", "í", "ó", "ú", "á", "é", "í", "ó",},
+                new String[]{"b", "c", "ch", "d", "f", "g", "gu", "h", "j", "l", "m", "n", "p", "qu", "r", "s", "t", "v", "z",
+                        "b", "s", "z", "r", "n", "h", "j", "j", "s", "c", "r",
+                        "b", "s", "z", "r", "n", "h", "j", "s", "c", "r",
+                        "b", "s", "r", "n", "h", "j", "s", "c", "r",
+                        "n", "s", "l", "c", "n", "s", "l", "c",
+                        "br", "gr", "fr"
+                },
+                new String[]{"ñ", "rr", "ll", "ñ", "rr", "ll", "mb", "nd", "ng", "nqu", "rqu", "zqu", "zc", "rd", "rb", "rt", "rt", "rc", "sm", "sd"},
+                new String[]{
+                        },
+                new String[]{"on", "ez", "es", "es", "es", "es", "es",
+                        "ador", "edor", "ando", "endo", "indo",
+                        "ar", "as", "amos", "an", "oy", "ay",
+                        "er", "es", "emos", "en", "e",
+                        "ir", "es", "imos", "en", "io",
+                        "o", "a", "o", "a", "o", "a", "o", "a", "os", "as", "os", "as", "os", "as"
+                },
+                new String[]{}, new int[]{1, 2, 3, 4}, new double[]{4, 5, 3, 1}, 0.1, 1.0, 0.0, 0.3, genericSanityChecks, true)
+                .addModifiers(
+                        new Modifier("([aeouáéóú])i$", "$1y"),
+                        new Modifier("([qgQG])ua", "$1ue"),
+                        new Modifier("([qgQG])uá", "$1ué"),
+                        new Modifier("([qgQG])u[ouy]", "$1ui"),
+                        new Modifier("([qgQG])u[óú]", "$1uí"));
+    }
+
+    /**
+     * Imitation text from an approximation of Spanish (not using the variations spoken in Spain, but closer to Latin
+     * American forms of Spanish). This isn't as close as possible, but it abides by most of the orthographic rules that
+     * Spanish uses. It uses the acute accent on the vowels á, é, í, ó, and ú, as well as the consonant ñ.
+     * <br>
+     * Jamos daí oñuezqui, luarbezquisdas canga ombiurta irri hoño resda!
+     */
+    public static final FakeLanguageGen SPANISH = spanish().register("Spanish");
+
     /**
      * Imitation text from an approximation of the Maori language, spoken in New Zealand both today and historically,
      * and closely related to some other Polynesian languages. This version uses the current standard orthographic
