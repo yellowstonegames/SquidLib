@@ -2935,6 +2935,19 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
+     * Generate a word from this FakeLanguageGen using the specified long seed to use for a shared StatefulRNG.
+     * If seed is the same, a FakeLanguageGen should produce the same word every time with this method.
+     *
+     * @param seed       the seed, as a long, to use for the randomized string building
+     * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @return a word in the fake language as a String
+     */
+    public String word(long seed, boolean capitalize) {
+        srng.setState(seed);
+        return word(srng, capitalize);
+    }
+
+    /**
      * Generate a word from this FakeLanguageGen using the specified RNG.
      *
      * @param rng        the RNG to use for the randomized string building
@@ -3039,21 +3052,59 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
-     * Generate a word from this FakeLanguageGen using the specified RNG.
+     * Generate a word from this FakeLanguageGen with an approximate number of syllables using the specified long seed 
+     * to use for a shared StatefulRNG.
+     * If seed and the other parameters are the same, a FakeLanguageGen should produce the same word every time with
+     * this method.
+     *
+     * @param seed       the seed, as a long, to use for the randomized string building
+     * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @param approxSyllables the approximate number of syllables to produce in the word; there may be more syllables
+     * @return a word in the fake language as a String
+     */
+    public String word(long seed, boolean capitalize, int approxSyllables) {
+        srng.setState(seed);
+        return word(srng, capitalize, approxSyllables);
+    }
+
+    /**
+     * Generate a word from this FakeLanguageGen using the specified RNG with an approximate number of syllables.
      *
      * @param rng        the RNG to use for the randomized string building
      * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @param approxSyllables the approximate number of syllables to produce in the word; there may be more syllables
      * @return a word in the fake language as a String
      */
     public String word(RNG rng, boolean capitalize, int approxSyllables) {
         return word(rng, capitalize, approxSyllables, null);
     }
+    /**
+     * Generate a word from this FakeLanguageGen with an approximate number of syllables using the specified long seed 
+     * to use for a shared StatefulRNG. This takes an array of {@link Pattern} objects (from RegExodus, not
+     * java.util.regex) that should match invalid outputs, such as words that shouldn't be generated in some context due
+     * to vulgarity or cultural matters. If seed and the other parameters are the same, a FakeLanguageGen should produce
+     * the same word every time with this method.
+     *
+     * @param seed       the seed, as a long, to use for the randomized string building
+     * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @param approxSyllables the approximate number of syllables to produce in the word; there may be more syllables
+     * @param additionalChecks an array of RegExodus Pattern objects that match invalid words (these may be additional vulgarity checks, for example)
+     * @return a word in the fake language as a String
+     */
+    public String word(long seed, boolean capitalize, int approxSyllables, Pattern[] additionalChecks) {
+        srng.setState(seed);
+        return word(srng, capitalize, approxSyllables, additionalChecks);
+    }
 
     /**
-     * Generate a word from this FakeLanguageGen using the specified RNG.
+     * Generate a word from this FakeLanguageGen using the specified RNG with an approximate number of syllables.
+     * This takes an array of {@link Pattern} objects (from RegExodus, not java.util.regex) that should match invalid
+     * outputs, such as words that shouldn't be generated in some context due to vulgarity or cultural matters.
      *
      * @param rng        the RNG to use for the randomized string building
      * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @param approxSyllables the approximate number of syllables to produce in the word; there may be more syllables
+     * @param additionalChecks an array of RegExodus Pattern objects that match invalid words (these may be additional vulgarity checks, for example)
      * @return a word in the fake language as a String
      */
     public String word(RNG rng, boolean capitalize, int approxSyllables, Pattern[] additionalChecks) {
@@ -3157,10 +3208,14 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
-     * Generate a word from this FakeLanguageGen using the specified RNG.
+     * Generate a word from this FakeLanguageGen using the specified StatefulRNG with an approximate number of
+     * syllables, potentially setting the state of rng mid-way through the word to another seed from {@code reseeds}
+     * more than once if the word is long enough. This overload is less likely to be used very often.
      *
-     * @param rng        the RNG to use for the randomized string building
+     * @param rng        the StatefulRNG to use for the randomized string building
      * @param capitalize true if the word should start with a capital letter, false otherwise
+     * @param approxSyllables the approximate number of syllables to produce in the word; there may be more syllables
+     * @param reseeds an array or varargs of additional long seeds to seed {@code rng} with mid-generation 
      * @return a word in the fake language as a String
      */
     public String word(StatefulRNG rng, boolean capitalize, int approxSyllables, long... reseeds) {
@@ -3266,11 +3321,13 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
-     * Generate a sentence from this FakeLanguageGen, using and changing the current seed.
+     * Generate a sentence from this FakeLanguageGen, using and changing the current seed, with the length in words
+     * between minWords and maxWords, both inclusive. This can use commas and semicolons between words, and can end a
+     * sentence with ".", "!", "?", or "...".
      *
      * @param minWords an int for the minimum number of words in a sentence; should be at least 1
      * @param maxWords an int for the maximum number of words in a sentence; should be at least equal to minWords
-     * @return a sentence in the gibberish language as a String
+     * @return a sentence in the fake language as a String
      */
     public String sentence(int minWords, int maxWords) {
         return sentence(srng, minWords, maxWords, new String[]{",", ",", ",", ";"},
@@ -3278,11 +3335,29 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
-     * Generate a sentence from this FakeLanguageGen, using and changing the current seed.
+     * Generate a sentence from this FakeLanguageGen, using the given seed as a long, with the length in words between
+     * minWords and maxWords, both inclusive. This can use commas and semicolons between words, and can end a
+     * sentence with ".", "!", "?", or "...".
      *
+     * @param seed     the seed, as a long, for the randomized string building
      * @param minWords an int for the minimum number of words in a sentence; should be at least 1
      * @param maxWords an int for the maximum number of words in a sentence; should be at least equal to minWords
-     * @return a sentence in the gibberish language as a String
+     * @return a sentence in the fake language as a String
+     */
+    public String sentence(long seed, int minWords, int maxWords) {
+        srng.setState(seed);
+        return sentence(srng, minWords, maxWords);
+    }
+
+    /**
+     * Generate a sentence from this FakeLanguageGen, using the given RNG, with the length in words between minWords and
+     * maxWords, both inclusive. This can use commas and semicolons between words, and can end a
+     * sentence with ".", "!", "?", or "...".
+     * 
+     * @param rng      the RNG to use for the randomized string building
+     * @param minWords an int for the minimum number of words in a sentence; should be at least 1
+     * @param maxWords an int for the maximum number of words in a sentence; should be at least equal to minWords
+     * @return a sentence in the fake language as a String
      */
     public String sentence(RNG rng, int minWords, int maxWords) {
         return sentence(rng, minWords, maxWords, new String[]{",", ",", ",", ";"},
@@ -3290,7 +3365,10 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
-     * Generate a sentence from this FakeLanguageGen, using and changing the current seed.
+     * Generate a sentence from this FakeLanguageGen, using and changing the current seed. The sentence's length in
+     * words will be between minWords and maxWords, both inclusive. It will put one of the punctuation Strings from
+     * {@code midPunctuation} between two words (before the space) at a frequency of {@code midPunctuationFrequency}
+     * (between 0 and 1), and will end the sentence with one String chosen from {@code endPunctuation}.
      *
      * @param minWords                an int for the minimum number of words in a sentence; should be at least 1
      * @param maxWords                an int for the maximum number of words in a sentence; should be at least equal to minWords
@@ -3300,15 +3378,40 @@ public class FakeLanguageGen implements Serializable {
      *                                the very end of a sentence
      * @param midPunctuationFrequency a double between 0.0 and 1.0 that determines how often Strings from
      *                                midPunctuation should be inserted before spaces
-     * @return a sentence in the gibberish language as a String
+     * @return a sentence in the fake language as a String
      */
     public String sentence(int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
                            double midPunctuationFrequency) {
         return sentence(srng, minWords, maxWords, midPunctuation, endPunctuation, midPunctuationFrequency);
     }
+    /**
+     * Generate a sentence from this FakeLanguageGen, using the given seed as a long. The sentence's length in
+     * words will be between minWords and maxWords, both inclusive. It will put one of the punctuation Strings from
+     * {@code midPunctuation} between two words (before the space) at a frequency of {@code midPunctuationFrequency}
+     * (between 0 and 1), and will end the sentence with one String chosen from {@code endPunctuation}.
+     *
+     * @param seed                    the seed, as a long, for the randomized string building
+     * @param minWords                an int for the minimum number of words in a sentence; should be at least 1
+     * @param maxWords                an int for the maximum number of words in a sentence; should be at least equal to minWords
+     * @param midPunctuation          a String array where each element is a comma, semicolon, or the like that goes before a
+     *                                space in the middle of a sentence
+     * @param endPunctuation          a String array where each element is a period, question mark, or the like that goes at
+     *                                the very end of a sentence
+     * @param midPunctuationFrequency a double between 0.0 and 1.0 that determines how often Strings from
+     *                                midPunctuation should be inserted before spaces
+     * @return a sentence in the fake language as a String
+     */
+    public String sentence(long seed, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
+                           double midPunctuationFrequency) {
+        srng.setState(seed);
+        return sentence(srng, minWords, maxWords, midPunctuation, endPunctuation, midPunctuationFrequency);
+    }
 
     /**
-     * Generate a sentence from this FakeLanguageGen using the specific RNG.
+     * Generate a sentence from this FakeLanguageGen using the specific RNG. The sentence's length in
+     * words will be between minWords and maxWords, both inclusive. It will put one of the punctuation Strings from
+     * {@code midPunctuation} between two words (before the space) at a frequency of {@code midPunctuationFrequency}
+     * (between 0 and 1), and will end the sentence with one String chosen from {@code endPunctuation}.
      *
      * @param rng                     the RNG to use for the randomized string building
      * @param minWords                an int for the minimum number of words in a sentence; should be at least 1
@@ -3319,7 +3422,7 @@ public class FakeLanguageGen implements Serializable {
      *                                the very end of a sentence
      * @param midPunctuationFrequency a double between 0.0 and 1.0 that determines how often Strings from
      *                                midPunctuation should be inserted before spaces
-     * @return a sentence in the gibberish language as a String
+     * @return a sentence in the fake language as a String
      */
     public String sentence(RNG rng, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
                            double midPunctuationFrequency) {
@@ -3352,7 +3455,11 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
-     * Generate a sentence from this FakeLanguageGen that fits in the given length limit..
+     * Generate a sentence from this FakeLanguageGen that fits in the given length limit. The sentence's length in
+     * words will be between minWords and maxWords, both inclusive, unless it would exceed maxChars, in which case it is
+     * truncated. It will put one of the punctuation Strings from {@code midPunctuation} between two words (before the
+     * space) at a frequency of {@code midPunctuationFrequency} (between 0 and 1), and will end the sentence with one
+     * String chosen from {@code endPunctuation}.
      *
      * @param minWords                an int for the minimum number of words in a sentence; should be at least 1
      * @param maxWords                an int for the maximum number of words in a sentence; should be at least equal to minWords
@@ -3363,7 +3470,7 @@ public class FakeLanguageGen implements Serializable {
      * @param midPunctuationFrequency a double between 0.0 and 1.0 that determines how often Strings from
      *                                midPunctuation should be inserted before spaces
      * @param maxChars                the longest string length this can produce; should be at least {@code 6 * minWords}
-     * @return a sentence in the gibberish language as a String
+     * @return a sentence in the fake language as a String
      */
     public String sentence(int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
                            double midPunctuationFrequency, int maxChars) {
@@ -3371,7 +3478,36 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
-     * Generate a sentence from this FakeLanguageGen using the specific RNG that fits in the given length limit.
+     * Generate a sentence from this FakeLanguageGen that fits in the given length limit, using the given seed as a
+     * long. The sentence's length in words will be between minWords and maxWords, both inclusive, unless it would
+     * exceed maxChars, in which case it is truncated. It will put one of the punctuation Strings from
+     * {@code midPunctuation} between two words (before the space) at a frequency of {@code midPunctuationFrequency}
+     * (between 0 and 1), and will end the sentence with one String chosen from {@code endPunctuation}.
+     *
+     * @param seed                    the seed, as a long, for the randomized string building
+     * @param minWords                an int for the minimum number of words in a sentence; should be at least 1
+     * @param maxWords                an int for the maximum number of words in a sentence; should be at least equal to minWords
+     * @param midPunctuation          a String array where each element is a comma, semicolon, or the like that goes before a
+     *                                space in the middle of a sentence
+     * @param endPunctuation          a String array where each element is a period, question mark, or the like that goes at
+     *                                the very end of a sentence
+     * @param midPunctuationFrequency a double between 0.0 and 1.0 that determines how often Strings from
+     *                                midPunctuation should be inserted before spaces
+     * @param maxChars                the longest string length this can produce; should be at least {@code 6 * minWords}
+     * @return a sentence in the fake language as a String
+     */
+    public String sentence(long seed, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
+                           double midPunctuationFrequency, int maxChars) {
+        srng.setState(seed);
+        return sentence(srng, minWords, maxWords, midPunctuation, endPunctuation, midPunctuationFrequency, maxChars);
+    }
+
+    /**
+     * Generate a sentence from this FakeLanguageGen using the given RNG that fits in the given length limit. The
+     * sentence's length in words will be between minWords and maxWords, both inclusive, unless it would exceed
+     * maxChars, in which case it is truncated. It will put one of the punctuation Strings from {@code midPunctuation}
+     * between two words (before the space) at a frequency of {@code midPunctuationFrequency} (between 0 and 1), and
+     * will end the sentence with one String chosen from {@code endPunctuation}.
      *
      * @param rng                     the RNG to use for the randomized string building
      * @param minWords                an int for the minimum number of words in a sentence; should be at least 1
@@ -3383,7 +3519,7 @@ public class FakeLanguageGen implements Serializable {
      * @param midPunctuationFrequency a double between 0.0 and 1.0 that determines how often Strings from
      *                                midPunctuation should be inserted before spaces
      * @param maxChars                the longest string length this can produce; should be at least {@code 6 * minWords}
-     * @return a sentence in the gibberish language as a String
+     * @return a sentence in the fake language as a String
      */
     public String sentence(RNG rng, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
                            double midPunctuationFrequency, int maxChars) {
@@ -3644,6 +3780,14 @@ public class FakeLanguageGen implements Serializable {
         return ret;
     }
 
+    /**
+     * Makes a new FakeLanguageGen that mixes this object with {@code other}, mingling the consonants and vowels they
+     * use as well as any word suffixes or other traits, and favoring the qualities in {@code other} by
+     * {@code otherInfluence}, which will value both languages evenly if it is 0.5 . 
+     * @param other another FakeLanguageGen to mix along with this one into a new language
+     * @param otherInfluence how much other should affect the pair, with 0.5 being equal and 1.0 being only other used
+     * @return a new FakeLanguageGen with traits from both languages
+     */
     public FakeLanguageGen mix(FakeLanguageGen other, double otherInfluence) {
         otherInfluence = Math.max(0.0, Math.min(otherInfluence, 1.0));
         double myInfluence = 1.0 - otherInfluence;
@@ -3800,6 +3944,15 @@ public class FakeLanguageGen implements Serializable {
         return ((FakeLanguageGen) pairs[0]).mix(readDouble(pairs[1]), (FakeLanguageGen) pairs[2], readDouble(pairs[3]), pairs2);
     }
 
+    /**
+     * Produces a new FakeLanguageGen like this one but with extra vowels and/or consonants possible, adding from a wide
+     * selection of accented vowels (if vowelInfluence is above 0.0) and/or consonants (if consonantInfluence is above
+     * 0.0). This may produce a gibberish-looking language with no rhyme or reason to the accents, and generally
+     * consonantInfluence should be very low if it is above 0 at all.
+     * @param vowelInfluence between 0.0 and 1.0; if 0.0 will not affect vowels at all
+     * @param consonantInfluence between 0.0 and 1.0; if 0.0 will not affect consonants at all
+     * @return a new FakeLanguageGen with modifications to add accented vowels and/or consonants
+     */
     public FakeLanguageGen addAccents(double vowelInfluence, double consonantInfluence) {
         vowelInfluence = Math.max(0.0, Math.min(vowelInfluence, 1.0));
         consonantInfluence = Math.max(0.0, Math.min(consonantInfluence, 1.0));
@@ -3827,6 +3980,13 @@ public class FakeLanguageGen implements Serializable {
         return next;
     }
 
+    /**
+     * Useful for cases with limited fonts, this produces a new FakeLanguageGen like this one but with all accented
+     * characters removed (including almost all non-ASCII Latin-alphabet characters, but only some Greek and Cyrillic
+     * characters). This will replace letters like "A with a ring" with just "A". Some of the letters chosen as
+     * replacements aren't exact matches.
+     * @return a new FakeLanguageGen like this one but without accented letters
+     */
     public FakeLanguageGen removeAccents() {
 
         String[] ov = copyStrings(openingVowels),
@@ -3900,10 +4060,22 @@ public class FakeLanguageGen implements Serializable {
         return next;
     }
 
+    /**
+     * Convenience method that just calls {@link Modifier#Modifier(String, String)}.
+     * @param pattern a String that will be interpreted as a regex pattern using {@link Pattern}
+     * @param replacement a String that will be interpreted as a replacement string for pattern; can include "$1" and the like if pattern has groups
+     * @return a Modifier that can be applied to a FakeLanguagGen
+     */
     public static Modifier modifier(String pattern, String replacement) {
         return new Modifier(pattern, replacement);
     }
-
+    /**
+     * Convenience method that just calls {@link Modifier#Modifier(String, String, double)}.
+     * @param pattern a String that will be interpreted as a regex pattern using {@link Pattern}
+     * @param replacement a String that will be interpreted as a replacement string for pattern; can include "$1" and the like if pattern has groups
+     * @param chance the chance, as a double between 0 and 1, that the Modifier will take effect
+     * @return a Modifier that can be applied to a FakeLanguagGen
+     */
     public static Modifier modifier(String pattern, String replacement, double chance) {
         return new Modifier(pattern, replacement, chance);
     }
