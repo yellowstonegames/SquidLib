@@ -554,11 +554,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         return oldValue;
     }
     public V putAt(final K k, final V v, final int idx) {
-        if(idx <= 0)
-            return putAndMoveToFirst(k, v);
-        else if(idx >= size)
-            return putAndMoveToLast(k, v);
-
+//        if(idx <= 0)
+//            return putAndMoveToFirst(k, v);
+//        else if(idx >= size)
+//            return putAndMoveToLast(k, v);
         final int pos = insertAt(k, v, idx);
         if (pos < 0)
             return defRetValue;
@@ -1007,9 +1006,9 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * Swaps the given indices in the ordering, if they are both valid int indices. Returns true if the ordering
      * changed as a result of this call, or false if it stayed the same (which can be because left or right referred to
      * an out-of-bounds index, or because left and right are equal (so swapping would do nothing)).
-     * @param left an index of an item in this OrderedSet, at least 0 and less than {@link #size()}
-     * @param right an index of an item in this OrderedSet, at least 0 and less than {@link #size()}
-     * @return true if this OrderedSet changed in ordering as a result of this call, or false otherwise
+     * @param left an index of an item in this OrderedMap, at least 0 and less than {@link #size()}
+     * @param right an index of an item in this OrderedMap, at least 0 and less than {@link #size()}
+     * @return true if this OrderedMap changed in ordering as a result of this call, or false otherwise
      */
     public boolean swapIndices(final int left, final int right)
     {

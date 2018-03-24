@@ -503,10 +503,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     public boolean addAt(final K k, final int idx) {
-        if (idx <= 0)
-            return addAndMoveToFirst(k);
-        else if (idx >= size)
-            return addAndMoveToLast(k);
+//        if (idx <= 0)
+//            return addAndMoveToFirst(k);
+//        else if (idx >= size)
+//            return addAndMoveToLast(k);
 
         int pos;
         if (k == null) {

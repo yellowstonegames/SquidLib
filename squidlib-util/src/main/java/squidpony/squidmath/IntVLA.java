@@ -201,6 +201,12 @@ public class IntVLA implements Serializable, Cloneable {
         return false;
     }
 
+    /**
+     * Tries to find the first occurrence of {@code value} in this IntVLA, and returns the index that value appears at
+     * if it is present, or -1 if it is not present.
+     * @param value a value to search for in this
+     * @return the first index of value, if found, or -1 otherwise
+     */
     public int indexOf (int value) {
         int[] items = this.items;
         for (int i = 0, n = size; i < n; i++)
@@ -271,26 +277,32 @@ public class IntVLA implements Serializable, Cloneable {
     }
 
 
-    /** Moves the item at the specified index to the first index and returns it. */
-    public int moveToFirst (int index) {
-        if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
+    /** Moves the specified value to the first index and returns its previous index. If value is not present, this
+     * returns -1.
+     * @param value an int value that should already be in this IntVLA
+     * @return the previous index of value, or -1 if it was not present
+     */
+    public int moveToFirst (int value) {
         int[] items = this.items;
-        int value = items[index];
-        if(index == 0) return value;
+        int index = indexOf(value);
+        if(index <= 0) return index;
         System.arraycopy(items, 0, items, 1, index);
         items[0] = value;
-        return value;
+        return index;
     }
 
-    /** Moves the item at the specified index to the last index and returns it. */
-    public int moveToLast (int index) {
-        if (index >= size) throw new IndexOutOfBoundsException("index can't be >= size: " + index + " >= " + size);
+    /** Moves the specified value to the last index and returns its previous index. If value is not present, this
+     * returns -1.
+     * @param value an int value that should already be in this IntVLA
+     * @return the previous index of value, or -1 if it was not present
+     */
+    public int moveToLast (int value) {
         int[] items = this.items;
-        int value = items[index];
-        if(index == size - 1) return value;
+        int index = indexOf(value);
+        if(index == size - 1 || index == -1) return index;
         System.arraycopy(items, index + 1, items, index, size - index - 1);
         items[size - 1] = value;
-        return value;
+        return index;
     }
 
     /** Removes and returns the last item. */
