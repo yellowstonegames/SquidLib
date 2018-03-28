@@ -4,6 +4,7 @@ import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
@@ -39,7 +40,7 @@ public class ConeAOE implements AOE, Serializable {
         fov = new FOV(FOV.RIPPLE_LOOSE);
         this.origin = origin;
         radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
-        angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
+        angle = (Math.toDegrees(NumberTools.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
 //        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
         this.span = span;
@@ -157,7 +158,7 @@ public class ConeAOE implements AOE, Serializable {
     public void setEndCenter(Coord endCenter) {
 //        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
         if (AreaUtils.verifyLimit(reach.limit, origin, endCenter)) {
-            angle = (Math.toDegrees(Math.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            angle = (Math.toDegrees(NumberTools.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            startAngle = Math.abs((angle - span / 2.0) % 360.0);
 //            endAngle = Math.abs((angle + span / 2.0) % 360.0);
         }
@@ -190,7 +191,7 @@ public class ConeAOE implements AOE, Serializable {
     public boolean mayContainTarget(Collection<Coord> targets) {
         for (Coord p : targets) {
             if (radiusType.radius(origin.x, origin.y, p.x, p.y) <= radius) {
-                double d = (angle - Math.toDegrees(Math.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0;
+                double d = (angle - Math.toDegrees(NumberTools.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0;
                 if(d > 180)
                     d = 360 - d;
                 if(d < span / 2.0)
@@ -231,7 +232,7 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = 0; i < exs.length; i++) {
             t = exs[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
-            tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
@@ -253,7 +254,7 @@ public class ConeAOE implements AOE, Serializable {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = ts[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
-            tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
@@ -362,7 +363,7 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
-            tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
@@ -383,7 +384,7 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = 0; i < pts.length; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = pts[i];
-            tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
@@ -423,7 +424,7 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = pts.length; i < totalTargets; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = lts[i - pts.length];
-            tAngle = (Math.toDegrees(Math.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
@@ -544,11 +545,11 @@ public class ConeAOE implements AOE, Serializable {
         for (int x = 1; x < dungeon.length - 1; x += radius) {
             BY_POINT:
             for (int y = 1; y < dungeon[x].length - 1; y += radius) {
-                ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
+                ang = NumberTools.atan2(y - origin.y, x - origin.x); // between -pi and pi
 
                 for(Coord ex : requiredExclusions) {
                     if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
-                        tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
+                        tmpAngle = Math.abs(ang - NumberTools.atan2(ex.y - origin.y, ex.x - origin.x));
                         if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                         if(tmpAngle < allowed)
                             continue BY_POINT;
@@ -557,7 +558,7 @@ public class ConeAOE implements AOE, Serializable {
                 ctr = 0;
                 for(Coord tgt : targets) {
                     if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
-                        tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
+                        tmpAngle = Math.abs(ang - NumberTools.atan2(tgt.y - origin.y, tgt.x - origin.x));
                         if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                         if(tmpAngle < allowed)
                             ctr++;
@@ -581,10 +582,10 @@ public class ConeAOE implements AOE, Serializable {
                             if(tested[x][y])
                                 continue;
                             tested[x][y] = true;
-                            ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
+                            ang = NumberTools.atan2(y - origin.y, x - origin.x); // between -pi and pi
                             for(Coord ex : requiredExclusions) {
                                 if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
-                                    tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
+                                    tmpAngle = Math.abs(ang - NumberTools.atan2(ex.y - origin.y, ex.x - origin.x));
                                     if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                                     if(tmpAngle < allowed)
                                         continue BY_POINT;
@@ -594,7 +595,7 @@ public class ConeAOE implements AOE, Serializable {
                             ctr = 0;
                             for(Coord tgt : targets) {
                                 if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
-                                    tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
+                                    tmpAngle = Math.abs(ang - NumberTools.atan2(tgt.y - origin.y, tgt.x - origin.x));
                                     if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                                     if(tmpAngle < allowed)
                                         ctr++;

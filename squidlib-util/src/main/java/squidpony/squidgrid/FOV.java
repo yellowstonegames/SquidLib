@@ -582,7 +582,7 @@ public class FOV implements Serializable {
                         || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {//+1 to cover starting tile
                     continue;
                 }
-                double newAngle = Math.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
+                double newAngle = NumberTools.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
 				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) > span / 2.0)
 					continue;
 
@@ -734,7 +734,7 @@ public class FOV implements Serializable {
                 } else if (end > leftSlope) {
                     break;
                 }
-                double newAngle = (Math.atan2(currentY - starty, currentX - startx) + Math.PI * 8.0) % (Math.PI * 2),
+                double newAngle = (NumberTools.atan2(currentY - starty, currentX - startx) + Math.PI * 8.0) % (Math.PI * 2),
                         rem = (angle - newAngle + Math.PI * 2) % (Math.PI * 2), irem = (newAngle - angle + Math.PI * 2) % (Math.PI * 2);
 				if (Math.abs(rem) > span * 0.5 && Math.abs(irem) > span * 0.5)
 					continue;

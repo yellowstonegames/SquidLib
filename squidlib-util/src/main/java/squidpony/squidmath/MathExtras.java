@@ -173,9 +173,8 @@ public final class MathExtras
      * @param max The maximum permitted value.
      * @return {@code value} if it is between the specified limits, {@code min} if the value
      * is too low, or {@code max} if the value is too high.
-     * @since 1.2
      */
-    public static int restrictRange(int value, int min, int max)
+    public static int clamp(int value, int min, int max)
     {
         return Math.min(Math.max(value, min), max);
     }
@@ -189,9 +188,8 @@ public final class MathExtras
      * @param max The maximum permitted value.
      * @return {@code value} if it is between the specified limits, {@code min} if the value
      * is too low, or {@code max} if the value is too high.
-     * @since 1.2
      */
-    public static long restrictRange(long value, long min, long max)
+    public static long clamp(long value, long min, long max)
     {
         return Math.min(Math.max(value, min), max);
     }
@@ -205,9 +203,22 @@ public final class MathExtras
      * @param max The maximum permitted value.
      * @return {@code value} if it is between the specified limits, {@code min} if the value
      * is too low, or {@code max} if the value is too high.
-     * @since 1.2
      */
-    public static double restrictRange(double value, double min, double max)
+    public static double clamp(double value, double min, double max)
+    {
+        return Math.min(Math.max(value, min), max);
+    }
+
+    /**
+     * If the specified value is not greater than or equal to the specified minimum and
+     * less than or equal to the specified maximum, adjust it so that it is.
+     * @param value The value to check.
+     * @param min The minimum permitted value.
+     * @param max The maximum permitted value.
+     * @return {@code value} if it is between the specified limits, {@code min} if the value
+     * is too low, or {@code max} if the value is too high.
+     */
+    public static float clamp(float value, float min, float max)
     {
         return Math.min(Math.max(value, min), max);
     }
@@ -221,7 +232,6 @@ public final class MathExtras
      * @param a The first value.
      * @param b The second value.
      * @return The greatest common divisor.
-     * @since 1.2
      */
     public static long greatestCommonDivisor(long a, long b)
     {

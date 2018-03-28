@@ -323,7 +323,7 @@ public enum Radius {
         if(radiusLength < 1) {
             return center;
         }
-        double theta = Math.atan2(middle.y - center.y, middle.x - center.x),
+        double theta = NumberTools.atan2(middle.y - center.y, middle.x - center.x),
                 cosTheta = NumberTools.cos(theta), sinTheta = NumberTools.sin(theta);
 
         Coord end = Coord.get(middle.x, middle.y);

@@ -1292,7 +1292,7 @@ public class CoordPacker {
                     y = hilbertY[idx];
                     if(x >= width || y >= height)
                         continue;
-                    double newAngle = Math.atan2(y - centerY, x - centerX) + Math.PI * 2;
+                    double newAngle = NumberTools.atan2(y - centerY, x - centerX) + Math.PI * 2;
                     if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle + Math.PI * 8, Math.PI * 2)) > span2 / 2.0)
                         unpacked[x][y] = 0.0;
                     else
@@ -1474,7 +1474,7 @@ public class CoordPacker {
                         y = hilbertY[idx];
                         if(x >= width || y >= height)
                             continue;
-                        double newAngle = Math.atan2(y - centerY, x - centerX) + Math.PI * 2;
+                        double newAngle = NumberTools.atan2(y - centerY, x - centerX) + Math.PI * 2;
                         if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle + Math.PI * 8, Math.PI * 2)) > span2 / 2.0)
                             unpacked[x][y] = 0.0;
                         else

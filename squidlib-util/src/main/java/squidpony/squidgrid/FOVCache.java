@@ -3,6 +3,7 @@ package squidpony.squidgrid;
 import squidpony.annotation.GwtIncompatible;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.ShortVLA;
 
@@ -377,19 +378,19 @@ public class FOVCache extends FOV {
                 tmp = distance(i, j);
                 inverse_tmp = (short)(maxRadius + 1 - tmp / 2);
 
-                atan2Cache[maxRadius + i][maxRadius + j] = Math.atan2(j, i);
+                atan2Cache[maxRadius + i][maxRadius + j] = NumberTools.atan2(j, i);
                 if(atan2Cache[maxRadius + i][maxRadius + j] < 0)
                     atan2Cache[maxRadius + i][maxRadius + j] += PI2;
                 if(tmp > 0) {
-                    atan2Cache[maxRadius - i][maxRadius + j] = Math.atan2(j, -i);
+                    atan2Cache[maxRadius - i][maxRadius + j] = NumberTools.atan2(j, -i);
                     if(atan2Cache[maxRadius - i][maxRadius + j] < 0)
                         atan2Cache[maxRadius - i][maxRadius + j] += PI2;
 
-                    atan2Cache[maxRadius + i][maxRadius - j] = Math.atan2(-j, i);
+                    atan2Cache[maxRadius + i][maxRadius - j] = NumberTools.atan2(-j, i);
                     if(atan2Cache[maxRadius + i][maxRadius - j] < 0)
                         atan2Cache[maxRadius + i][maxRadius - j] += PI2;
 
-                    atan2Cache[maxRadius - i][maxRadius - j] = Math.atan2(-j, -i);
+                    atan2Cache[maxRadius - i][maxRadius - j] = NumberTools.atan2(-j, -i);
                     if(atan2Cache[maxRadius - i][maxRadius - j] < 0)
                         atan2Cache[maxRadius - i][maxRadius - j] += PI2;
 
@@ -423,15 +424,15 @@ public class FOVCache extends FOV {
             }
         }
         directionAngles = new double[3][3];
-        directionAngles[0][0] = Math.atan2(1,1);
-        directionAngles[0][1] = Math.atan2(0,1);
-        directionAngles[0][2] = Math.atan2(-1,1) + PI2;
-        directionAngles[1][0] = Math.atan2(1,0);
+        directionAngles[0][0] = NumberTools.atan2(1,1);
+        directionAngles[0][1] = NumberTools.atan2(0,1);
+        directionAngles[0][2] = NumberTools.atan2(-1,1) + PI2;
+        directionAngles[1][0] = NumberTools.atan2(1,0);
         directionAngles[1][1] = 0;
-        directionAngles[1][2] = Math.atan2(-1,0) + PI2;
-        directionAngles[2][0] = Math.atan2(1,-1);
-        directionAngles[2][1] = Math.atan2(0,-1);
-        directionAngles[2][2] = Math.atan2(-1,-1) + PI2;
+        directionAngles[1][2] = NumberTools.atan2(-1,0) + PI2;
+        directionAngles[2][0] = NumberTools.atan2(1,-1);
+        directionAngles[2][1] = NumberTools.atan2(0,-1);
+        directionAngles[2][2] = NumberTools.atan2(-1,-1) + PI2;
     }
 
     /**
@@ -1659,7 +1660,7 @@ public class FOVCache extends FOV {
         if(startX == endX && startY == endY)
             return path.toArray(new Coord[0]);
 
-        double angle = Math.atan2(endY - startY, endX - startX);
+        double angle = NumberTools.atan2(endY - startY, endX - startX);
         double x2 = Math.sin(angle) * 0.5, y2 = Math.cos(angle) * 0.5;
         boolean[][] mask = new boolean[width][height];
         for (int d = 2; d <= max; d++) {

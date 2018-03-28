@@ -1,6 +1,7 @@
 package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.NumberTools;
 
 /**
  * Represents the eight grid directions and the deltaX, deltaY values associated
@@ -69,8 +70,7 @@ public enum Direction {
             return NONE;
         }
 
-        double angle = Math.atan2(y, x);
-        double degree = Math.toDegrees(angle);
+        double degree = Math.toDegrees(NumberTools.atan2(y, x));
         degree += 450;//rotate to all positive and 0 is up
         degree %= 360;//normalize
         if (degree < 22.5) {

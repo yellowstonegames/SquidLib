@@ -4,6 +4,7 @@ import squidpony.ArrayTools;
 import squidpony.GwtCompatibility;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.NumberTools;
 
 /**
  * Use FOV instead, probably with type SHADOW; this has the same results as shadowcasting FOV but is slower, currently.
@@ -312,7 +313,7 @@ public class BevelFOV extends FOV {
                 } else if (end > leftSlope) {
                     break;
                 }
-                double newAngle = Math.atan2(currentY - starty, currentX - startx) + Math.PI * 2;
+                double newAngle = NumberTools.atan2(currentY - starty, currentX - startx) + Math.PI * 2;
                 if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) > span / 2.0)
                     continue;
 

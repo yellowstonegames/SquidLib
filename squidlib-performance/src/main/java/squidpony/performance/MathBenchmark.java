@@ -117,6 +117,14 @@ public class MathBenchmark {
     private short cosGdxDeg = -0x8000;
     private short sinGdxDeg = -0x8000;
     private short baseline = -0x8000;
+    private short mathAtan2X = -0x4000;
+    private short mathAtan2Y = -0x8000;
+    private short atan2ApproxX = -0x4000;
+    private short atan2ApproxY = -0x8000;
+    private short atan2ApproxXF = -0x4000;
+    private short atan2ApproxYF = -0x8000;
+    private short atan2GdxX = -0x4000;
+    private short atan2GdxY = -0x8000;
 
 
     @Benchmark
@@ -418,13 +426,13 @@ public class MathBenchmark {
         return n * (-0.775f - 0.225f * n) * ((sn ^ sign) | 1);
     }
     @Benchmark
-    public double measureSinGdx()
+    public float measureSinGdx()
     {
         return MathUtils.sin(floatInputs[sinGdx++ & 0xFFFF]);
     }
 
     @Benchmark
-    public double measureCosGdx() {
+    public float measureCosGdx() {
         return MathUtils.cos(floatInputs[cosGdx++ & 0xFFFF]);
     }
 
@@ -451,14 +459,37 @@ public class MathBenchmark {
     }
 
     @Benchmark
-    public double measureSinGdxDeg()
+    public float measureSinGdxDeg()
     {
         return MathUtils.sinDeg(floatInputs[sinGdxDeg++ & 0xFFFF]);
     }
 
     @Benchmark
-    public double measureCosGdxDeg() {
+    public float measureCosGdxDeg() {
         return MathUtils.cosDeg(floatInputs[cosGdxDeg++ & 0xFFFF]);
+    }
+    @Benchmark
+    public double measureMathAtan2()
+    {
+        return Math.atan2(inputs[mathAtan2Y++ & 0xFFFF], inputs[mathAtan2X++ & 0xFFFF]);
+    }
+
+    @Benchmark
+    public double measureApproxAtan2()
+    {
+        return NumberTools.atan2(inputs[atan2ApproxY++ & 0xFFFF], inputs[atan2ApproxX++ & 0xFFFF]);
+    }
+
+    @Benchmark
+    public float measureApproxAtan2Float()
+    {
+        return NumberTools.atan2(floatInputs[atan2ApproxYF++ & 0xFFFF], floatInputs[atan2ApproxXF++ & 0xFFFF]);
+    }
+
+    @Benchmark
+    public float measureGdxAtan2()
+    {
+        return MathUtils.atan2(floatInputs[atan2GdxY++ & 0xFFFF], floatInputs[atan2GdxX++ & 0xFFFF]);
     }
 
     /*

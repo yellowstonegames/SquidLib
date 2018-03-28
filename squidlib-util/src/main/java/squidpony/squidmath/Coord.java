@@ -72,8 +72,7 @@ public class Coord implements Serializable {
 	public static double degrees(final Coord from, final Coord to) {
 		final int x = to.x - from.x;
 		final int y = to.y - from.y;
-		double angle = Math.atan2(y, x);
-		double degree = Math.toDegrees(angle);
+		double degree = Math.toDegrees(NumberTools.atan2(y, x));
 		degree += 450;// rotate to all positive and 0 is up
 		degree %= 360;// normalize
 		return degree;
