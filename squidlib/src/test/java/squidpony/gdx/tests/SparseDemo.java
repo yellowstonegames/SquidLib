@@ -508,7 +508,7 @@ public class SparseDemo extends ApplicationAdapter {
      * @param xmod
      * @param ymod
      */
-    private void move(int xmod, int ymod) {
+    private void move(final int xmod, final int ymod) {
         int newX = player.x + xmod, newY = player.y + ymod;
         if (newX >= 0 && newY >= 0 && newX < bigWidth && newY < bigHeight
                 && bareDungeon[newX][newY] != '#')
@@ -537,7 +537,18 @@ public class SparseDemo extends ApplicationAdapter {
             display.addAction(new PanelEffect.PulseEffect(display, 1f, currentlySeen, player, 3
                     , new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}
                     ));
-            display.tint(player.x + xmod, player.y + ymod, 0, SColor.CRIMSON.toFloatBits(), 0.8f);
+            // recolor() will change the color of a cell over time from what it is currently to a target color, which is
+            // DB_BLOOD here from a DawnBringer palette. We give it a Runnable to run after the effect finishes, which
+            // permanently sets the color of the cell you bumped into to the color of your bloody nose. Without such a 
+            // Runnable, the cell would get drawn over with its normal wall color.
+            display.recolor(0f, player.x + xmod, player.y + ymod, 0, SColor.DB_BLOOD.toFloatBits(), 0.4f, new Runnable() {
+                int x = player.x + xmod;
+                int y = player.y + ymod;
+                @Override
+                public void run() {
+                    colors[x][y] = SColor.DB_BLOOD.toFloatBits();
+                }
+            });
             //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6));
         }
         // removes the first line displayed of the Art of War text or its translation.
@@ -676,8 +687,7 @@ public class SparseDemo extends ApplicationAdapter {
         languageStage.getViewport().update(width, height, false);
         languageStage.getViewport().setScreenBounds(0, 0, width, (int)languageDisplay.getHeight());
         stage.getViewport().update(width, height, false);
-        stage.getViewport().setScreenBounds(0, (int)languageDisplay.getHeight(),
-                width, height - (int)languageDisplay.getHeight());
+        stage.getViewport().setScreenBounds(0, (int)languageDisplay.getHeight(), width, height - (int)languageDisplay.getHeight());
 	}
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();

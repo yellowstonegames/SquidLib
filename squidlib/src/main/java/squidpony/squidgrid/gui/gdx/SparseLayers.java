@@ -1856,6 +1856,22 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * the tint in the next frame. That visually appears as nothing happening other than a delay.
      * @param x the x-coordinate of the cell to tint
      * @param y the y-coordinate of the cell to tint
+     * @param color what to transition the cell's color towards, and then transition back from, as a Color object
+     * @param duration how long the total "round-trip" transition should take in seconds
+     */
+    public void tint(final int x, final int y, final Color color, float duration) {
+        tint(0f, x, y, color.toFloatBits(), duration, null);
+    }
+    /**
+     * Tints the background at position x,y so it becomes the given encodedColor, then after the tint is complete it 
+     * returns the cell to its original color, taking duration seconds.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the tint this applies, then apply the tint when you call act(), then quickly overwrite
+     * the tint in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
      * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
      * @param duration how long the total "round-trip" transition should take in seconds
      */
@@ -1922,11 +1938,31 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * Tints the foreground in the given layer at position x,y so it becomes the given encodedColor, then after the tint
      * is complete it returns the cell to its original color, taking duration seconds.
      * <br>
-     * Unlike the similar {@link SquidPanel#tint(float, int, int, Color, float, Runnable)} method, this should appear
-     * correct regardless of the font being used. SquidPanel's version can have issues with some fonts where the Label
-     * produced by calling this on text (not on a full block, as SquidPanel uses for backgrounds) can be incorrectly
-     * aligned vertically because of different layout between {@link TextCellFactory} and Label. SparseLayers always
-     * uses TextCellFactory, so there's no sections of code that can conflict during layout.
+     * The {@link SquidPanel#tint(float, int, int, Color, float, Runnable)} method has been reworked to use the same
+     * technique this class uses for rendering text, and the two classes should have similar appearance (if not the
+     * same) when rendering the same text. SparseLayers tends to be faster, especially when not all of the map is shown.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the tint this applies, then apply the tint when you call act(), then quickly overwrite
+     * the tint in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to tint
+     * @param y the y-coordinate of the cell to tint
+     * @param layer which layer to affect; if you haven't specified a layer when placing text, then this should be 0
+     * @param color what to transition the cell's color towards, and then transition back from, as a Color object
+     * @param duration how long the total "round-trip" transition should take in seconds
+     */
+    public void tint(final int x, final int y, final int layer, final Color color, float duration) {
+        tint(0f, x, y, layer, color.toFloatBits(), duration, null);
+    }
+
+    /**
+     * Tints the foreground in the given layer at position x,y so it becomes the given encodedColor, then after the tint
+     * is complete it returns the cell to its original color, taking duration seconds.
+     * <br>
+     * The {@link SquidPanel#tint(float, int, int, Color, float, Runnable)} method has been reworked to use the same
+     * technique this class uses for rendering text, and the two classes should have similar appearance (if not the
+     * same) when rendering the same text. SparseLayers tends to be faster, especially when not all of the map is shown.
      * <br>
      * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
      * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
@@ -1947,11 +1983,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * original color, taking duration seconds. Additionally, enqueue {@code postRunnable} for running after the created
      * action ends.
      * <br>
-     * Unlike the similar {@link SquidPanel#tint(float, int, int, Color, float, Runnable)} method, this should appear
-     * correct regardless of the font being used. SquidPanel's version can have issues with some fonts where the Label
-     * produced by calling this on text (not on a full block, as SquidPanel uses for backgrounds) can be incorrectly
-     * aligned vertically because of different layout between {@link TextCellFactory} and Label. SparseLayers always
-     * uses TextCellFactory, so there's no sections of code that can conflict during layout.
+     * The {@link SquidPanel#tint(float, int, int, Color, float, Runnable)} method has been reworked to use the same
+     * technique this class uses for rendering text, and the two classes should have similar appearance (if not the
+     * same) when rendering the same text. SparseLayers tends to be faster, especially when not all of the map is shown.
      * <br>
      * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
      * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
@@ -2404,6 +2438,221 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
 
                 break;
         }
+    }
+
+    /**
+     * Changes the background at position x,y so it becomes the given color, taking duration seconds. The
+     * background will keep the changed color after the effect, unless drawn over.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param color what to gradually change the cell's color to, as a Color object
+     * @param duration how long the total transition should take in seconds
+     */
+    public void recolor(final int x, final int y, final Color color, float duration) {
+        recolor(0f, x, y, color.toFloatBits(), duration, null);
+    }
+
+    /**
+     * Changes the background at position x,y so it becomes the given encodedColor, taking duration seconds. The
+     * background will keep the changed color after the effect, unless drawn over.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param encodedColor what to gradually change the cell's color to, as a packed float
+     * @param duration how long the total transition should take in seconds
+     */
+    public void recolor(final int x, final int y, final float encodedColor, float duration) {
+        recolor(0f, x, y, encodedColor, duration, null);
+    }
+
+    /**
+     * Changes the background at position x,y so it becomes the given encodedColor, waiting for {@code delay} (in
+     * seconds) before performing it, taking duration seconds. The background will keep the changed color after
+     * the effect, unless drawn over.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param encodedColor what to gradually change the cell's color to, as a packed float
+     * @param duration how long the total transition should take in seconds
+     */
+    public void recolor(final float delay, final int x, final int y, final float encodedColor, float duration) {
+        recolor(delay, x, y, encodedColor, duration, null);
+    }
+    /**
+     * Changes the background at position x,y so it becomes the given encodedColor, waiting for {@code delay} (in
+     * seconds) before performing it, taking duration seconds. The background will keep the changed color after the
+     * effect, unless drawn over. Additionally, enqueue {@code postRunnable} for running after the created action ends.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param encodedColor what to gradually change the cell's color to, as a packed float
+     * @param duration how long the total transition should take in seconds
+     * @param postRunnable a Runnable to execute after the recolor completes; may be null to do nothing.
+     */
+    public void recolor(final float delay, final int x, final int y, final float encodedColor, float duration,
+            /* @Nullable */ Runnable postRunnable) {
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
+            return;
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final float ac = backgrounds[x][y];
+        final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = new TemporalAction(duration) {
+            @Override
+            protected void update(float percent) {
+                backgrounds[x][y] = SColor.lerpFloatColors(ac, encodedColor, percent);
+            }
+        };
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                backgrounds[x][y] = encodedColor;
+                --animationCount;
+            }
+        }));
+
+        addAction(Actions.sequence(sequence));
+    }
+
+
+
+
+    /**
+     * Changes the foreground in the given layer at position x,y so it becomes the given color, taking duration
+     * seconds. The foreground color will keep the changed color after the effect, unless drawn over.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param layer which layer to affect; if you haven't specified a layer when placing text, then this should be 0
+     * @param color what to gradually change the cell's color to, as a Color object
+     * @param duration how long the total transition should take in seconds
+     */
+    public void recolor(final int x, final int y, final int layer, final Color color, float duration) {
+        recolor(0f, x, y, layer, color.toFloatBits(), duration, null);
+    }
+    /**
+     * Changes the foreground in the given layer at position x,y so it becomes the given encodedColor, taking duration
+     * seconds. The foreground color will keep the changed color after the effect, unless drawn over.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param layer which layer to affect; if you haven't specified a layer when placing text, then this should be 0
+     * @param encodedColor what to gradually change the cell's color to, as a packed float
+     * @param duration how long the total transition should take in seconds
+     */
+    public void recolor(final int x, final int y, final int layer, final float encodedColor, float duration) {
+        recolor(0f, x, y, layer, encodedColor, duration, null);
+    }
+
+
+    /**
+     * Changes the foreground in the given layer at position x,y so it becomes the given encodedColor, waiting for
+     * {@code delay} (in seconds) before performing it, taking duration seconds. The foreground color will keep the 
+     * changed color after the effect, unless drawn over.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param layer which layer to affect; if you haven't specified a layer when placing text, then this should be 0
+     * @param encodedColor what to gradually change the cell's color to, as a packed float
+     * @param duration how long the total transition should take in seconds
+     */
+    public void recolor(final float delay, final int x, final int y, final int layer, final float encodedColor, float duration) {
+        recolor(delay, x, y, layer, encodedColor, duration, null);
+    }
+
+
+    /**
+     * Changes the foreground in the given layer at position x,y so it becomes the given encodedColor, waiting for
+     * {@code delay} (in seconds) before performing it, taking duration seconds. The foreground color will keep the 
+     * changed color after the effect, unless drawn over. Additionally, enqueue {@code postRunnable} for running after
+     * the created action ends.
+     * <br>
+     * This will only behave correctly if you call {@link Stage#act()} before you call {@link Stage#draw()}, but after
+     * any changes to the contents of this SparseLayers. If you change the contents, then draw, and then act, that will
+     * draw the contents without the recolor this applies, then apply the recolor when you call act(), then quickly
+     * overwrite the recolor in the next frame. That visually appears as nothing happening other than a delay.
+     * @param delay how long to wait in seconds before starting the effect
+     * @param x the x-coordinate of the cell to recolor
+     * @param y the y-coordinate of the cell to recolor
+     * @param layer which layer to affect; if you haven't specified a layer when placing text, then this should be 0
+     * @param encodedColor what to gradually change the cell's color to, as a packed float
+     * @param duration how long the total transition should take in seconds
+     * @param postRunnable a Runnable to execute after the recolor completes; may be null to do nothing.
+     */
+    public void recolor(final float delay, final int x, final int y, final int layer, final float encodedColor, float duration,
+            /* @Nullable */ Runnable postRunnable) {
+        if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight || layer < 0 || layer >= layers.size())
+            return;
+        final SparseTextMap l = layers.get(layer);
+        duration = Math.max(0.015f, duration);
+        animationCount++;
+        final int pos = SparseTextMap.encodePosition(x, y);
+        final float ac = l.getFloat(pos, 0f);
+        final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final Action[] sequence = new Action[nbActions];
+        int index = 0;
+        if (0 < delay)
+            sequence[index++] = Actions.delay(delay);
+        sequence[index++] = new TemporalAction(duration) {
+            @Override
+            protected void update(float percent) {
+                l.updateFloat(pos, SColor.lerpFloatColors(ac, encodedColor, percent));
+            }
+        };
+        if(postRunnable != null)
+        {
+            sequence[index++] = Actions.run(postRunnable);
+        }
+        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
+        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
+            @Override
+            public void run() {
+                l.updateFloat(pos, encodedColor);
+                --animationCount;
+            }
+        }));
+        addAction(Actions.sequence(sequence));
     }
 
     /**
