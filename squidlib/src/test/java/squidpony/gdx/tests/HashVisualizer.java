@@ -13,10 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.gui.gdx.ColorNoise;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
@@ -78,7 +75,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private int hashMode = 0, rngMode = 46, noiseMode = 111;
 
     private SpriteBatch batch;
-    private SquidPanel display;//, overlay;
+    private SparseLayers display;//, overlay;
     private static final int width = 512, height = 512;
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
@@ -884,7 +881,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     @Override
     public void create() {
         batch = new SpriteBatch();
-        display = new SquidPanel(width, height, cellWidth, cellHeight);
+        display = new SparseLayers(width, height, cellWidth, cellHeight, new TextCellFactory().includedFont());
 //        IFilter<Color> filter0 = new Filters.PaletteFilter(
 //                new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
 //                new float[]{0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,},
@@ -916,7 +913,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         Noise.seamless3D(seamless[2], -9999, 1, SeededNoise.instance);
         */
 
-        ArrayTools.fill(display.colors, -0x1.fffffep126f); // white as a float
+        ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
         ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
                 .insert(250, 249).insert(251, 249)
                 .insert(125, 125).insert(125, 126).insert(124, 125)
@@ -1149,7 +1146,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 hashMode++;
                                 hashMode %= 28;
                             default:
-                                ArrayTools.fill(display.colors, -0x1.fffffep126f); // white as a float
+                                ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
                                 ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
                                         .insert(250, 249).insert(251, 249)
                                         .insert(125, 125).insert(125, 126).insert(124, 125)
@@ -4055,8 +4052,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 104:
                         Gdx.graphics.setTitle("Basic 1D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
-                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
+                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
                         if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
@@ -4077,8 +4074,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 105:
                         Gdx.graphics.setTitle("Basic 1D Noise, five inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
-                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
+                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
                         if((ctr & 3) == 0)
                         {
                             iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 240);
@@ -4099,8 +4096,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 106:
                         Gdx.graphics.setTitle("NumberTools.sin() approximation at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
-                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
+                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
                     {
                         bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
@@ -4121,8 +4118,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 107:
                         Gdx.graphics.setTitle("NumberTools.swayRandomized() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
-                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
+                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
                         if((ctr & 3) == 0) {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
                             iBright = (int) (NumberTools.swayRandomized(9001L, ctr * 0.0125f) * 240.0);
@@ -4142,8 +4139,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 108:
                         Gdx.graphics.setTitle("randomWobbleTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.colors[i+1], 0, display.colors[i], 0, 512);
-                        Arrays.fill(display.colors[511], FLOAT_WHITE);
+                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
+                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
                         if((ctr & 3) == 0) {
                             s0 = (ThrustAlt32RNG.determine(9001) >>> 8) * 0x1.5p-25f + 0.25f;
                             s1 = (ThrustAlt32RNG.determine(9002) >>> 8) * 0x1.5p-25f + 0.25f;
@@ -5111,7 +5108,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             default: // artistic, just one
             {
                 Gdx.graphics.setTitle("Conway's Game Of Life at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                ca.current.intoChars(display.contents, ' ', '\0');
+                display.clear();
+                for(Coord c : ca.current)
+                {
+                    display.put(c.x, c.y, FLOAT_WHITE);
+                }
                 ca.runGameOfLife();
             }
         }
