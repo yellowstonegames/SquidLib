@@ -232,14 +232,9 @@ public class MimicFill {
      * for certain kinds of output. The iterations parameter should usually be between 3 and 5, with higher values
      * taking longer but fitting more closely; values over 5 are barely different from 5 here. This also takes an RNG,
      * and because it queries it very frequently, a fast RNG is ideal; the default RandomnessSource used by RNG
-     * (LightRNG) is fine if you aren't generating many very-large results, but if you are, then passing a
-     * {@link squidpony.squidmath.XoRoRNG} as the RandomnessSource parameter to RNG may give better results regarding
-     * quality since its period (how many random numbers it can generate before repeating a cycle) is much larger, and
-     * its speed is essentially a tie with LightRNG. For some reason, {@link squidpony.squidmath.ThunderRNG} doesn't
-     * perform as well here as it sometimes does, and because the period of its less-significant bits is lower than its
-     * full period, it may show patterns sooner than XoRoRNG. While {@link squidpony.squidmath.LongPeriodRNG} is
-     * probably fast enough to not have problems (and its period is massive), slower, more "secure" generators like
-     * {@link squidpony.squidmath.IsaacRNG} are probably not a good choice here.
+     * ({@link LightRNG}) is fine, and in most cases {@link squidpony.squidmath.ThrustAltRNG} will be reasonably good
+     * for quality while probably being slightly faster. On GWT, {@link squidpony.squidmath.Zag32RNG} is a good choice
+     * due to how few operations on {@code long} values it needs to do, and GWT has a hard time with longs.
      * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
      * @param size the side length of the square boolean array to generate
      * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
@@ -346,14 +341,9 @@ public class MimicFill {
      * for certain kinds of output. The iterations parameter should usually be between 3 and 5, with higher values
      * taking longer but fitting more closely; values over 5 are barely different from 5 here. This also takes an RNG,
      * and because it queries it very frequently, a fast RNG is ideal; the default RandomnessSource used by RNG
-     * (LightRNG) is fine if you aren't generating many very-large results, but if you are, then passing a
-     * {@link squidpony.squidmath.XoRoRNG} as the RandomnessSource parameter to RNG may give better results regarding
-     * quality since its period (how many random numbers it can generate before repeating a cycle) is much larger, and
-     * its speed is essentially a tie with LightRNG. For some reason, {@link squidpony.squidmath.ThunderRNG} doesn't
-     * perform as well here as it sometimes does, and because the period of its less-significant bits is lower than its
-     * full period, it may show patterns sooner than XoRoRNG. While {@link squidpony.squidmath.LongPeriodRNG} is
-     * probably fast enough to not have problems (and its period is massive), slower, more "secure" generators like
-     * {@link squidpony.squidmath.IsaacRNG} are probably not a good choice here.
+     * ({@link LightRNG}) is fine, and in most cases {@link squidpony.squidmath.ThrustAltRNG} will be reasonably good
+     * for quality while probably being slightly faster. On GWT, {@link squidpony.squidmath.Zag32RNG} is a good choice
+     * due to how few operations on {@code long} values it needs to do, and GWT has a hard time with longs.
      * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
      * @param size the side length of the square boolean array to generate
      * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
