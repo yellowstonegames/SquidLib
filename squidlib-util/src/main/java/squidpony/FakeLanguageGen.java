@@ -26,28 +26,29 @@ public class FakeLanguageGen implements Serializable {
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
     public static final StatefulRNG srng = new StatefulRNG();
-    private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(32);
+    private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64);
     protected String summary = null;
     /**
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
-     * and Cyrillic; for use when a String will be interpreted as a regex ({@link FakeLanguageGen.Alteration}).
+     * and Cyrillic; for use when a String will be interpreted as a regex (as in {@link FakeLanguageGen.Alteration}).
      */
     public static final String anyVowel = "[àáâãäåæāăąǻǽaèéêëēĕėęěeìíîïĩīĭįıiòóôõöøōŏőœǿoùúûüũūŭůűųuýÿŷỳyαοειυаеёийоуъыэюя]",
     /**
      * A pattern String that will match one or more of any vowels FakeLanguageGen can produce out-of-the-box, including
-     * Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex
-     * ({@link FakeLanguageGen.Alteration}).
+     * Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex (as in 
+     * {@link FakeLanguageGen.Alteration}).
      */
     anyVowelCluster = anyVowel + '+',
     /**
      * A pattern String that will match any consonant FakeLanguageGen can produce out-of-the-box, including Latin,
-     * Greek, and Cyrillic; for use when a String will be interpreted as a regex ({@link FakeLanguageGen.Alteration}).
+     * Greek, and Cyrillic; for use when a String will be interpreted as a regex (as in
+     * {@link FakeLanguageGen.Alteration}).
      */
     anyConsonant = "[bcçćĉċčdþðďđfgĝğġģhĥħjĵȷkķlĺļľŀłmnñńņňŋpqrŕŗřsśŝşšștţťțvwŵẁẃẅxyýÿŷỳzźżžṛṝḷḹḍṭṅṇṣṃḥρσζτκχνθμπψβλγφξςбвгдклпрстфхцжмнзчшщ]",
     /**
      * A pattern String that will match one or more of any consonants FakeLanguageGen can produce out-of-the-box,
-     * including Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex
-     * ({@link FakeLanguageGen.Alteration}).
+     * including Latin, Greek, and Cyrillic; for use when a String will be interpreted as a regex (as in
+     * {@link FakeLanguageGen.Alteration}).
      */
     anyConsonantCluster = anyConsonant + '+';
     protected static final Pattern repeats = Pattern.compile("(.)\\1+"),
@@ -2310,6 +2311,15 @@ public class FakeLanguageGen implements Serializable {
                 new String[]{}, new int[]{1, 2, 3, 4}, new double[]{5, 5, 4, 2}, 0.2, 1.0, 0.0, 0.0, genericSanityChecks, true);
     }
 
+    /**
+     * Imitation text from an approximation of the Maori language, spoken in New Zealand both today and historically,
+     * and closely related to some other Polynesian languages. This version uses the current standard orthographic
+     * standard of representing a long "a" with the letter "ā" (adding a macron diacritic).
+     * <br>
+     * Māuka whapi enāongupe worute, moa noepo?
+     */
+    public static final FakeLanguageGen MAORI = maori().register("Maori");
+
     private static FakeLanguageGen spanish(){
         return new FakeLanguageGen(
                 new String[]{"a", "a", "a", "a", "a", "i", "i", "i", "o", "o", "o", "e", "e", "e", "e", "e", "u", "u"},
@@ -2359,15 +2369,6 @@ public class FakeLanguageGen implements Serializable {
      * Jamos daí oñuezqui, luarbezquisdas canga ombiurta irri hoño resda!
      */
     public static final FakeLanguageGen SPANISH = spanish().register("Spanish");
-
-    /**
-     * Imitation text from an approximation of the Maori language, spoken in New Zealand both today and historically,
-     * and closely related to some other Polynesian languages. This version uses the current standard orthographic
-     * standard of representing a long "a" with the letter "ā" (adding a macron diacritic).
-     * <br>
-     * Māuka whapi enāongupe worute, moa noepo?
-     */
-    public static final FakeLanguageGen MAORI = maori().register("Maori");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
