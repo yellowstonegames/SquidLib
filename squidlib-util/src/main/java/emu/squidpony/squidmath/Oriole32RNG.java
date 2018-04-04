@@ -16,15 +16,15 @@ import java.io.Serializable;
 /**
  * A modification of Blackman and Vigna's xoroshiro128+ generator using two 32-bit ints of state instead of two 64-bit
  * longs and also incorporating a large-increment counter (Weyl sequence) that is added to the rotated xoroshiro output;
- * this is the fastest generator on GWT I have found that also passes the full 32TB battery of PractRand's
- * statistical tests while still producing all ints over its period. ThrustAlt32RNG is faster and also passes tests, but
- * cannot produce all outputs, and its period is too small for heavy usage. In statistical testing, xoroshiro always
+ * this is tied with {@link Lathe32RNG} for the fastest generator on GWT I have found that also passes the full 32TB
+ * battery of PractRand's statistical tests. ThrustAlt32RNG is faster in some browsers and also passes tests, but
+ * cannot produce all outputs, and its period is too small for serious usage. In statistical testing, xoroshiro always
  * fails some binary matrix rank tests, but smaller-state versions fail other tests as well. The changes Oriole makes
  * apply only to the output of xoroshiro, not its well-tested state transition for the "xoroshiro state" part of this
  * generator, and these changes eliminate all statistical failures on 32TB of tested data, avoiding the failures the
- * small-state variant of xoroshiro suffers on BCFN, DC6, and FPF. It avoids multiplication, like xoroshiro and much of
- * the xorshift family of generators, and any arithmetic it performs is safe for GWT. Oriole takes advantage of
- * xoroshiro's issues being mostly confined to its  output's lower bits by rotating the output of xoroshiro (the weaker
+ * small-state variant of xoroshiro suffers on BinaryRank, BCFN, DC6, and FPF. It avoids multiplication, like xoroshiro
+ * and much of the xorshift family of generators, and any arithmetic it performs is safe for GWT. Oriole takes advantage
+ * of xoroshiro's flaws being mostly confined to its output's lower bits by rotating the output of xoroshiro (the weaker
  * 32-bit-state version) and adding a "Weyl sequence," essentially a large-increment counter that overflows and wraps
  * frequently, to the output. Although the upper bits of xoroshiro are not free of artifacts either, they are harder to
  * find issues with (see
@@ -45,6 +45,7 @@ import java.io.Serializable;
  * @author Sebastiano Vigna
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's or Sarong's issues and don't bother Vigna or Blackman, it's probably a mistake in SquidLib's implementation)
+ * @see Lathe32RNG A related generator that implements StatefulRandomness and has very similar speed
  */
 public final class Oriole32RNG implements RandomnessSource, Serializable {
 
@@ -215,9 +216,8 @@ public final class Oriole32RNG implements RandomnessSource, Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Oriole32RNG oriole32RNG = (Oriole32RNG) o;
-
-        if (stateA != oriole32RNG.stateA) return false;
-        return stateB == oriole32RNG.stateB;
+        
+        return stateA == oriole32RNG.stateA && stateB == oriole32RNG.stateB && stateC == oriole32RNG.stateC;
     }
 
     @Override
