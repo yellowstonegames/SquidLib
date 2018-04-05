@@ -19,19 +19,18 @@ public interface Rectangle extends Zone {
 	 * @return The bottom left coordinate of the room.
 	 */
 	Coord getBottomLeft();
-
-	@Override
 	/**
 	 * @return The room's width (from {@link #getBottomLeft()). It is greater or
 	 *         equal than 0.
 	 */
+	@Override
 	int getWidth();
 
-	@Override
 	/**
 	 * @return The room's height (from {@link #getBottomLeft()). It is greater
 	 *         or equal than 0.
 	 */
+	@Override
 	int getHeight();
 
 	/**

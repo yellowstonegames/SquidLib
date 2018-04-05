@@ -9,6 +9,10 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
 
 /**
  * A wrapper class for working with random number generators in a more friendly way.
+ * Implements {@link IRNG}, which covers most of the API surface, but RNG implements
+ * a decent amount of additional methods. You should consider if your code needs
+ * these additional methods, and if not you should use IRNG as the type for when you
+ * need some random number generator.
  * <p>
  * Includes methods for getting values between two numbers and for getting
  * random elements from a collection or array. There are methods to shuffle
@@ -60,20 +64,20 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * math instead of the more common 64-bit math, but using a 32-bit int on desktop and
  * Android won't act the same as that same 32-bit int on GWT. Since GWT is stuck with
  * JavaScript's implementation of ints with doubles, overflow (which is needed for an
- * RNG) doesn't work at all with ints, but does with GWT's implementation of longs.
- * 32-bit math generators were a major part of SquidLib's development at one point
- * before the discrepancies between desktop and GWT were discovered; they include
- * {@link Light32RNG} (same algorithm as LightRNG, shrunk down to use ints),
- * {@link Isaac32RNG} (32-bit variant on IsaacRNG), {@link PintRNG} (based on
- * PermutedRNG, using PCG-Random), and {@link FlapRNG} (like Lap, only good for
- * speed). Now, any code that targets non-GWT platforms is free to use them, though
- * they are often slower when they need to generate longs (which is often), but they
- * should not be used in code that targets GWT.
+ * RNG) doesn't work with ints as expected, but does with GWT's implementation of longs.
+ * If targeting GWT, {@link Lathe32RNG} is significantly faster at producing int values
+ * than any long-based generator, and will produce the same results on GWT as on desktop
+ * or Android (not all 32-bit generators do this). {@link ThrustAlt32RNG},
+ * {@link Zag32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators that
+ * were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,
+ * but should not be used on GWT: {@link PintRNG}, {@link Light32RNG}, {@link Isaac32RNG},
+ * and {@link FlapRNG}. All other generators use longs, and so will be
+ * slower than the recommended Lathe32RNG on GWT, but much faster on 64-bit JREs.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  * @author smelC
  */
-public class RNG implements Serializable {
+public class RNG implements Serializable, IRNG {
 
     /**
      * A very small multiplier used to reduce random numbers to from the {@code [0.0,9007199254740991.0)} range to the
@@ -223,9 +227,12 @@ public class RNG implements Serializable {
 
     /**
      * Returns a value between min (inclusive) and max (exclusive).
-     * <p>
-     * The inclusive and exclusive behavior is to match the behavior of the
-     * similar method that deals with floating point values.
+     * <br>
+     * The inclusive and exclusive behavior is to match the behavior of the similar
+     * method that deals with floating point values.
+     * <br>
+     * If {@code min} and {@code max} happen to be the same, {@code min} is returned
+     * (breaking the exclusive behavior, but it's convenient to do so).
      *
      * @param min the minimum bound on the return value (inclusive)
      * @param max the maximum bound on the return value (exclusive)
@@ -579,6 +586,8 @@ public class RNG implements Serializable {
      * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
      * @param elements a Collection of T; will not be modified
      * @param <T>      can be any non-primitive type.
+     * @param buf a buffer as an ArrayList that will be filled with the shuffled contents of elements;
+     *            if null or non-empty, a new ArrayList will be allocated and returned
      * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
      */
     public <T> ArrayList<T> shuffle(Collection<T> elements, /*@Nullable*/ ArrayList<T> buf) {
@@ -883,10 +892,11 @@ public class RNG implements Serializable {
     }
 
     /**
-     * Get up to 32 bits (inclusive) of random state from the RandomnessSource.
+     * Get up to 32 bits (inclusive) of random output; the int this produces
+     * will not require more than {@code bits} bits to represent.
      *
-     * @param bits 1 to 32
-     * @return a random number that fits in the specified number of bits.
+     * @param bits an int between 1 and 32, both inclusive
+     * @return a random number that fits in the specified number of bits
      */
     public int next(int bits) {
         return random.next(bits);

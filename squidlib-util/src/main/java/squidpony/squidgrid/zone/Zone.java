@@ -318,7 +318,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			assert shifted.size() == sz;
 			return new ListZone(shifted);
 		}
-
+		
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public Collection<Coord> getInternalBorder() {
@@ -329,7 +329,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 		/* Convenience implementation, feel free to override. */
 		public Collection<Coord> getExternalBorder() {
 			final int sz = size();
-			final List<Coord> result = new ArrayList<Coord>();
+			final List<Coord> result = new ArrayList<Coord>(sz);
 			final List<Coord> internalBorder = sz <= 1 ? getAll() : DungeonUtility.border(getAll(), null);
 			final int ibsz = internalBorder.size();
 			for (int i = 0; i < ibsz; i++) {
