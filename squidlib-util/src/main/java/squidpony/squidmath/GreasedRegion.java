@@ -31,14 +31,14 @@ import java.util.*;
  * one of the two GreasedRegions), and andNot() (which can be considered the "subtract another region from me" method).
  * There are 8-way (Chebyshev distance) variants on all of the spatial methods, and methods without "8way" in the name
  * are either 4-way (Manhattan distance) or not affected by distance measurement. Once you have a GreasedRegion, you may
- * want to get a single random point from it (use {@link #singleRandom(RNG)}), get several random points from it (use
- * {@link #randomPortion(RNG, int)} for random sampling or {@link #randomSeparated(double, RNG)} for points that have
+ * want to get a single random point from it (use {@link #singleRandom(IRNG)}), get several random points from it (use
+ * {@link #randomPortion(IRNG, int)} for random sampling or {@link #randomSeparated(double, IRNG)} for points that have
  * some distance between each other), or get all points from it (use {@link #asCoords()}. You may also want to produce
  * some 2D data from one or more GreasedRegions, such as with {@link #sum(GreasedRegion...)} or {@link #toChars()}. The
  * most effective techniques regarding GreasedRegion involve multiple methods, like getting a few random points from an
- * existing GreasedRegion representing floor tiles in a dungeon with {@link #randomPortion(RNG, int)}, then inserting
+ * existing GreasedRegion representing floor tiles in a dungeon with {@link #randomPortion(IRNG, int)}, then inserting
  * those into a new GreasedRegion with {@link #insertSeveral(Coord...)}, and then finding a random expansion of those
- * initial points with {@link #spill(GreasedRegion, int, RNG)}, giving the original GreasedRegion of floor tiles as the
+ * initial points with {@link #spill(GreasedRegion, int, IRNG)}, giving the original GreasedRegion of floor tiles as the
  * first argument. This could be used to position puddles of water or patches of mold in a dungeon level, while still
  * keeping the starting points and finished points within the boundaries of valid (floor) cells.
  * <br>
@@ -777,7 +777,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
      * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when
      * you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustAltRNG do
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG is excellent but Lathe32RNG is faster on GWT (only there) 
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
@@ -802,7 +802,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * (without extra allocations) if this.width == width and this.height == height, and typically assigning
      * approximately half of the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more
      * efficient than an RNG when you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG, XoRoRNG, and ThrustAltRNG do
+     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG is excellent but Lathe32RNG is faster on GWT (only there) 
      * @param width the width of the desired GreasedRegion
      * @param height the height of the desired GreasedRegion
      * @return this for chaining
@@ -836,25 +836,58 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
      * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when
      * you're making a lot of calls on it, so you may prefer {@link #GreasedRegion(RandomnessSource, int, int)}.
-     * @param random an RNG that this will use to generate its contents
+     * @param random an IRNG, such as an RNG, that this will use to generate its contents
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
-    public GreasedRegion(final RNG random, final int width, final int height)
+    public GreasedRegion(final IRNG random, final int width, final int height)
     {
-        this(random.getRandomness(), width, height);
+        this.width = width;
+        this.height = height;
+        ySections = (height + 63) >> 6;
+        yEndMask = -1L >>> (64 - (height & 63));
+        data = new long[width * ySections];
+        for (int i = 0; i < width * ySections; i++) {
+            data[i] = random.nextLong();
+        }
+        if(ySections > 0 && yEndMask != -1) {
+            for (int a = ySections - 1; a < data.length; a += ySections) {
+                data[a] &= yEndMask;
+            }
+        }
     }
     /**
      * Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
      * (without extra allocations) if this.width == width and this.height == height, and typically assigning
      * approximately half of the cells in this to "on" and the rest to off.
-     * @param random an RNG that should have a good nextLong() method; the default (LightRNG internally) should be fine
+     * @param random an IRNG that should have a good nextLong() method; an RNG constructed with the default RandomnessSource will be fine
      * @param width the width of the desired GreasedRegion
      * @param height the height of the desired GreasedRegion
      * @return this for chaining
      */
-    public GreasedRegion refill(final RNG random, final int width, final int height) {
-        return refill(random.getRandomness(), width, height);
+    public GreasedRegion refill(final IRNG random, final int width, final int height) {
+        if (random != null){
+            if(this.width == width && this.height == height) {
+                for (int i = 0; i < width * ySections; i++) {
+                    data[i] = random.nextLong();
+                }
+            } else {
+                this.width = (width <= 0) ? 0 : width;
+                this.height = (height <= 0) ? 0 : height;
+                ySections = (this.height + 63) >> 6;
+                yEndMask = -1L >>> (64 - (this.height & 63));
+                data = new long[this.width * ySections];
+                for (int i = 0; i < this.width * ySections; i++) {
+                    data[i] = random.nextLong();
+                }
+            }
+            if(ySections > 0 && yEndMask != -1) {
+                for (int a = ySections - 1; a < data.length; a += ySections) {
+                    data[a] &= yEndMask;
+                }
+            }
+        }
+        return this;
     }
 
     /**
@@ -863,7 +896,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * internal RandomnessSource, per 64 cells of this GreasedRegion (if height is not a multiple of 64, round up to get
      * the number of calls this makes). As such, this sacrifices the precision of the fraction to obtain significantly
      * better speed than generating one random number per cell, although the precision is probably good enough (fraction
-     * is effectively rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0).
+     * is effectively rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). Note that this
+     * doesn't take any IRNG, since it uses {@link RNG#approximateBits(int)}, so it needs an RNG.
      * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
      * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
      * @param width the maximum width for the GreasedRegion
@@ -893,7 +927,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * 64 cells of this GreasedRegion (if height is not a multiple of 64, round up to get the number of calls this
      * makes). As such, this sacrifices the precision of the fraction to obtain significantly better speed than
      * generating one random number per cell, although the precision is probably good enough (fraction is effectively
-     * rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0).
+     * rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). Note that this doesn't take
+     * any IRNG, since it uses {@link RNG#approximateBits(int)}, so it needs an RNG.
      * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
      * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
      * @param width the maximum width for the GreasedRegion
@@ -2722,7 +2757,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
      * that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
-     * which makes the bottom row slightly random).
+     * which makes the bottom row slightly random). Note that this doesn't take any IRNG, since it uses
+     * {@link RNG#approximateBits(int)}, so it needs an RNG.
      * @param random the RNG used for a random factor
      * @return this for chaining
      */
@@ -3509,7 +3545,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
     }
-    public GreasedRegion spill(GreasedRegion bounds, int volume, RNG rng)
+    public GreasedRegion spill(GreasedRegion bounds, int volume, IRNG rng)
     {
         if(width < 2 || ySections <= 0 || bounds == null || bounds.width < 2 || bounds.ySections <= 0)
             return this;
@@ -4147,11 +4183,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     }
 
-    public Coord[] randomSeparated(double fraction, RNG rng)
+    public Coord[] randomSeparated(double fraction, IRNG rng)
     {
         return randomSeparated(fraction, rng, -1);
     }
-    public Coord[] randomSeparated(double fraction, RNG rng, int limit)
+    public Coord[] randomSeparated(double fraction, IRNG rng, int limit)
     {
         if(fraction < 0)
             return new Coord[0];
@@ -4557,7 +4593,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param minimumDistance the minimum distance between "on" cells in the result
      * @return this for chaining
      */
-    public GreasedRegion randomScatter(RNG rng, int minimumDistance) {
+    public GreasedRegion randomScatter(IRNG rng, int minimumDistance) {
         return randomScatter(rng, minimumDistance, -1);
     }
     /**
@@ -4571,7 +4607,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param limit the maximum count of "on" cells to keep
      * @return this for chaining
      */
-    public GreasedRegion randomScatter(RNG rng, int minimumDistance, int limit) {
+    public GreasedRegion randomScatter(IRNG rng, int minimumDistance, int limit) {
         int ic = 0;
         for (; ic < width * ySections; ic++) {
             if(Long.bitCount(data[ic]) > 0)
@@ -4943,7 +4979,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return -1;
     }
 
-    public Coord singleRandom(RNG rng)
+    public Coord singleRandom(IRNG rng)
     {
         int ct = 0, tmp;
         int[] counts = new int[width * ySections];
@@ -4971,7 +5007,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return Coord.get(-1, -1);
     }
 
-    public int singleRandomTight(RNG rng)
+    public int singleRandomTight(IRNG rng)
     {
         int ct = 0, tmp;
         int[] counts = new int[width * ySections];
@@ -5230,7 +5266,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
 
-    public Coord[] randomPortion(RNG rng, int size)
+    public Coord[] randomPortion(IRNG rng, int size)
     {
         int ct = 0, idx = 0, run = 0;
         for (int i = 0; i < width * ySections; i++) {
@@ -5264,7 +5300,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return points;
     }
 
-    public GreasedRegion randomRegion(RNG rng, int size)
+    public GreasedRegion randomRegion(IRNG rng, int size)
     {
         int ct = 0, idx = 0, run = 0;
         for (int i = 0; i < width * ySections; i++) {

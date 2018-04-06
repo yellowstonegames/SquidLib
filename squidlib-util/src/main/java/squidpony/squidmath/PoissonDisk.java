@@ -59,11 +59,11 @@ public class PoissonDisk {
      * @param maxX one more than the highest x that can be assigned; typically an array length
      * @param maxY one more than the highest y that can be assigned; typically an array length
      * @param pointsPerIteration with small radii, this can be around 5; with larger ones, 30 is reasonable
-     * @param rng an RNG to use for all random sampling.
+     * @param rng an IRNG to use for all random sampling.
      * @return an ArrayList of Coord that satisfy the minimum distance; the length of the array can vary
      */
     public static OrderedSet<Coord> sampleCircle(Coord center, float radius, float minimumDistance,
-                                                int maxX, int maxY, int pointsPerIteration, RNG rng)
+                                                int maxX, int maxY, int pointsPerIteration, IRNG rng)
     {
         int radius2 = Math.round(radius);
         return sample(center.translate(-radius2, -radius2), center.translate(radius2, radius2), radius, minimumDistance, maxX, maxY, pointsPerIteration, rng);
@@ -100,17 +100,17 @@ public class PoissonDisk {
      * @param maxX one more than the highest x that can be assigned; typically an array length
      * @param maxY one more than the highest y that can be assigned; typically an array length
      * @param pointsPerIteration with small areas, this can be around 5; with larger ones, 30 is reasonable
-     * @param rng an RNG to use for all random sampling.
+     * @param rng an IRNG to use for all random sampling.
      * @return an ArrayList of Coord that satisfy the minimum distance; the length of the array can vary
      */
     public static OrderedSet<Coord> sampleRectangle(Coord minPosition, Coord maxPosition, float minimumDistance,
-                                                   int maxX, int maxY, int pointsPerIteration, RNG rng)
+                                                   int maxX, int maxY, int pointsPerIteration, IRNG rng)
     {
         return sample(minPosition, maxPosition, 0f, minimumDistance, maxX, maxY, pointsPerIteration, rng);
     }
 
     private static OrderedSet<Coord> sample(Coord minPosition, Coord maxPosition, float rejectionDistance,
-                                           float minimumDistance, int maxX, int maxY, int pointsPerIteration, RNG rng)
+                                           float minimumDistance, int maxX, int maxY, int pointsPerIteration, IRNG rng)
     {
 
         Coord center = minPosition.average(maxPosition);
@@ -200,14 +200,14 @@ public class PoissonDisk {
     }
 
     public static OrderedSet<Coord> sampleMap(char[][] map,
-                                              float minimumDistance, RNG rng, Character... blocking)
+                                              float minimumDistance, IRNG rng, Character... blocking)
     {
         return sampleMap(Coord.get(1, 1), Coord.get(map.length - 2, map[0].length - 2),
                 map, minimumDistance, rng, blocking);
     }
 
     public static OrderedSet<Coord> sampleMap(Coord minPosition, Coord maxPosition, char[][] map,
-                                             float minimumDistance, RNG rng, Character... blocking) {
+                                             float minimumDistance, IRNG rng, Character... blocking) {
         int width = map.length;
         int height = map[0].length;
         HashSet<Character> blocked = new HashSet<>();
@@ -299,15 +299,15 @@ public class PoissonDisk {
     }
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has any value not in blocking.
-     * Uses the given RNG for pseudo-random number generation.
+     * Uses the given IRNG for pseudo-random number generation.
      * @param minPosition the Coord with the lowest x and lowest y to be used as a corner for the bounding box
      * @param maxPosition the Coord with the highest x and highest y to be used as a corner for the bounding box
      * @param map a dungeon map or something, x then y
-     * @param rng a RNG to generate random choices
+     * @param rng a IRNG to generate random choices
      * @param blocked a Set of Characters that block a tile from being chosen
      * @return a Coord that corresponds to a map element equal to tile, or null if tile cannot be found or if map is too small.
      */
-    public static Coord randomUnblockedTile(Coord minPosition, Coord maxPosition, char[][] map, RNG rng, HashSet<Character> blocked)
+    public static Coord randomUnblockedTile(Coord minPosition, Coord maxPosition, char[][] map, IRNG rng, HashSet<Character> blocked)
     {
         int width = map.length;
         int height = map[0].length;

@@ -12,7 +12,7 @@ import java.util.List;
 public class OrganicMapGenerator implements IDungeonGenerator {
     public char[][] map;
     public int[][] environment;
-    public RNG rng;
+    public IRNG rng;
     protected int width, height;
     public double noiseMin, noiseMax;
     public OrganicMapGenerator()
@@ -23,11 +23,11 @@ public class OrganicMapGenerator implements IDungeonGenerator {
     {
         this(0.55, 0.65, width, height, new RNG());
     }
-    public OrganicMapGenerator(int width, int height, RNG rng)
+    public OrganicMapGenerator(int width, int height, IRNG rng)
     {
         this(0.55, 0.65, width, height, rng);
     }
-    public OrganicMapGenerator(double noiseMin, double noiseMax, int width, int height, RNG rng)
+    public OrganicMapGenerator(double noiseMin, double noiseMax, int width, int height, IRNG rng)
     {
         CoordPacker.init();
         this.rng = rng;

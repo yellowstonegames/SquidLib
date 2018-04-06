@@ -23,10 +23,10 @@ import java.util.List;
 public class SerpentMapGenerator implements IDungeonGenerator {
     private MixedGenerator mix;
     private int[] columns, rows;
-    private RNG random;
+    private IRNG random;
 
     /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
@@ -34,15 +34,15 @@ public class SerpentMapGenerator implements IDungeonGenerator {
      *
      * @param width  the width of the final map in cells
      * @param height the height of the final map in cells
-     * @param rng    an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng    an IRNG object to use for random choices; this make a lot of random choices.
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng) {
+    public SerpentMapGenerator(int width, int height, IRNG rng) {
         this(width, height, rng, false);
     }
 
     /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
@@ -50,11 +50,11 @@ public class SerpentMapGenerator implements IDungeonGenerator {
      *
      * @param width       the width of the final map in cells
      * @param height      the height of the final map in cells
-     * @param rng         an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng         an IRNG object to use for random choices; this make a lot of random choices.
      * @param symmetrical true if this should generate a bi-radially symmetric map, false for a typical map
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng, boolean symmetrical) {
+    public SerpentMapGenerator(int width, int height, IRNG rng, boolean symmetrical) {
         if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
         CoordPacker.init();
@@ -105,7 +105,7 @@ public class SerpentMapGenerator implements IDungeonGenerator {
     }
 
     /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
@@ -113,16 +113,16 @@ public class SerpentMapGenerator implements IDungeonGenerator {
      *
      * @param width           the width of the final map in cells
      * @param height          the height of the final map in cells
-     * @param rng             an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng             an IRNG object to use for random choices; this make a lot of random choices.
      * @param branchingChance the chance from 0.0 to 1.0 that each room will branch at least once
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance) {
+    public SerpentMapGenerator(int width, int height, IRNG rng, double branchingChance) {
         this(width, height, rng, branchingChance, false);
     }
 
     /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
      * The intended purpose is to carve a long path that loops through the whole dungeon, while hopefully maximizing
      * the amount of rooms the player encounters. You call the different carver-adding methods to affect what the
      * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
@@ -130,12 +130,12 @@ public class SerpentMapGenerator implements IDungeonGenerator {
      *
      * @param width           the width of the final map in cells
      * @param height          the height of the final map in cells
-     * @param rng             an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng             an IRNG object to use for random choices; this make a lot of random choices.
      * @param branchingChance the chance from 0.0 to 1.0 that each room will branch at least once
      * @param symmetrical     true if this should generate a bi-radially symmetric map, false for a typical map
      * @see MixedGenerator
      */
-    public SerpentMapGenerator(int width, int height, RNG rng, double branchingChance, boolean symmetrical) {
+    public SerpentMapGenerator(int width, int height, IRNG rng, double branchingChance, boolean symmetrical) {
         if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
         CoordPacker.init();
@@ -323,7 +323,7 @@ public class SerpentMapGenerator implements IDungeonGenerator {
         return mix.getDungeon();
     }
 
-    public static ArrayList<Coord> pointPath(int width, int height, RNG rng) {
+    public static ArrayList<Coord> pointPath(int width, int height, IRNG rng) {
         if (width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
         CoordPacker.init();

@@ -26,7 +26,7 @@ public class DungeonUtility {
         this.rng = rng;
     }
 
-    public DungeonUtility(RNG rng) {
+    public DungeonUtility(IRNG rng) {
         this.rng = new StatefulRNG(rng.nextLong());
     }
 
@@ -1305,7 +1305,7 @@ public class DungeonUtility {
      * @return A random cell in {@code map} whose symbol is in
      * {@code acceptable}. Or {@code null} if not found.
      */
-    public static /* @Nullable */Coord getRandomCell(RNG rng, char[][] map, Set<Character> acceptable,
+    public static /* @Nullable */Coord getRandomCell(IRNG rng, char[][] map, Set<Character> acceptable,
                                                      int frustration) {
         if (frustration < 0)
             throw new IllegalStateException("Frustration should not be negative");
@@ -1464,7 +1464,7 @@ public class DungeonUtility {
 
     /**
      * Ensures a path exists in a rough ring around the map by first creating the path (using
-     * SerpentMapGenerator.pointPath with the given RNG), then finding chars in blocking that are on that path and
+     * SerpentMapGenerator.pointPath with the given IRNG), then finding chars in blocking that are on that path and
      * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will
      * always be on the path.
      *
@@ -1475,7 +1475,7 @@ public class DungeonUtility {
      *                    they are in the way
      * @return the ArrayList of Coord points that are on the carved path, including existing non-blocking cells; will be empty if any parameters are invalid
      */
-    public static ArrayList<Coord> ensurePath(char[][] map, RNG rng, char replacement, char... blocking) {
+    public static ArrayList<Coord> ensurePath(char[][] map, IRNG rng, char replacement, char... blocking) {
         if (map == null || map.length <= 0 || blocking == null || blocking.length <= 0)
             return new ArrayList<Coord>(0);
         int width = map.length, height = map[0].length;

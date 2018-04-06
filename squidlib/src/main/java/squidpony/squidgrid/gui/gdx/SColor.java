@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.Colors;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.ArrayTools;
 import squidpony.StringKit;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.GapShuffler;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 
@@ -10824,7 +10821,7 @@ public class SColor extends Color implements Serializable {
      * This may be useful for tinting things that should be color-coded differently from each other. To get a random
      * order for these colors while still guaranteeing that no color will be drawn twice in the first 56 choices, you
      * can use {@code OrderedSet<SColor> palette = new OrderedSet<SColor>(SColor.VARIED_PALETTE).shuffle(rng);} (where
-     * rng is any non-null RNG) and then get sequential colors from that set with
+     * rng is any non-null IRNG) and then get sequential colors from that set with
      * {@code int i = 0; SColor color = palette.getAt(i);} , incrementing i before calling getAt again and possibly
      * wrapping with {@code i %= 56;} .
      * This includes 56 colors, organized in groups of 4 from dark to light in each group:
@@ -10955,11 +10952,11 @@ public class SColor extends Color implements Serializable {
      * The grayscale colors go from high brightness to low brightness as well, the reverse of COLOR_WHEEL_PALETTE.
      * <br>
      * You can use some of the utility methods in this class to get colors from this with a good distribution, including
-     * {@link #randomColorWheel(RNG, int, int)}, {@link #indexedColorWheel(int, int, int)}, and the overloads of those
+     * {@link #randomColorWheel(IRNG, int, int)}, {@link #indexedColorWheel(int, int, int)}, and the overloads of those
      * methods with less parameters. If those methods fit your needs, you don't need to read the next section.
      * <br>
      * This is organized the way it is to allow efficient random color fetching when you know what brightness and
-     * saturation you want. Example code for this given an {@link RNG} called {@code rng}, with brightness and
+     * saturation you want. Example code for this given an {@link IRNG} called {@code rng}, with brightness and
      * saturation as ints called {@code bright} and {@code sat} between 0 and 2 inclusive, would be:
      * {@code SColor.COLOR_WHEEL_PALETTE_REDUCED[rng.next(4) * 9 + 3 * bright + sat]}. That code won't ever get a
      * grayscale color, but should have an equal chance of choosing any of the 16 hues, with the given saturation and
@@ -11182,13 +11179,13 @@ public class SColor extends Color implements Serializable {
     /**
      * Gets a random color from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, with the specified brightness (0 is
      * darkest, 1 is middle-bright, 2 is brightest) and saturation (0 is grayest, 1 is mid-saturation, 2 is fully
-     * saturated), using the specified RNG.
+     * saturated), using the specified IRNG.
      * @param rng used to choose the hue
      * @param bright the brightness to use, from 0 (dark) to 2 (bright)
      * @param sat the saturation to use, from 0 (grayish) to 2 (boldly colored)
      * @return a randomly selected SColor from {@link #COLOR_WHEEL_PALETTE_REDUCED}
      */
-    public static SColor randomColorWheel(RNG rng, int bright, int sat)
+    public static SColor randomColorWheel(IRNG rng, int bright, int sat)
     {
         bright = 2 - bright;
         bright &= 0x3;
@@ -11199,14 +11196,14 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Gets a random color from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, using the specified RNG to determine
+     * Gets a random color from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, using the specified IRNG to determine
      * saturation, brightness, and hue.
      * @param rng used to choose everything
      * @return a randomly selected SColor from {@link #COLOR_WHEEL_PALETTE_REDUCED}
      */
-    public static SColor randomColorWheel(RNG rng)
+    public static SColor randomColorWheel(IRNG rng)
     {
-        return COLOR_WHEEL_PALETTE_REDUCED[rng.nextIntHasty(144)];
+        return COLOR_WHEEL_PALETTE_REDUCED[rng.nextInt(144)];
     }
     /**
      * Gets a color by a shuffled index from the palette {@link #COLOR_WHEEL_PALETTE_REDUCED}, with the specified
@@ -11297,7 +11294,7 @@ public class SColor extends Color implements Serializable {
      * @param rng the source of randomness for shuffles in the returned sequence; often a {@link squidpony.squidmath.LongPeriodRNG}
      * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
      */
-    public static GapShuffler<SColor> randomColorSequence(RNG rng)
+    public static GapShuffler<SColor> randomColorSequence(IRNG rng)
     {
         return new GapShuffler<>(COLOR_WHEEL_PALETTE, rng);
     }
@@ -11313,7 +11310,7 @@ public class SColor extends Color implements Serializable {
      * @param sat the saturation to use, from 0 (grayest) to 2 (boldest)
      * @return a GapShuffler over the SColor values in COLOR_WHEEL_PALETTE
      */
-    public static GapShuffler<SColor> randomColorSequence(RNG rng, int bright, int sat)
+    public static GapShuffler<SColor> randomColorSequence(IRNG rng, int bright, int sat)
     {
         return new GapShuffler<>(COLOR_WHEEL_PALETTES[((2 - bright) * 3 + sat) % 9], rng);
     }
@@ -11368,7 +11365,7 @@ public class SColor extends Color implements Serializable {
      * @param rng the source of randomness for shuffles in the returned sequence; often a {@link squidpony.squidmath.LongPeriodRNG}
      * @return a GapShuffler that goes through the Integers betweeen 0 and 15, both inclusive
      */
-    public static GapShuffler<Integer> randomHueSequence(RNG rng)
+    public static GapShuffler<Integer> randomHueSequence(IRNG rng)
     {
         return new GapShuffler<Integer>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, rng);
     }
@@ -12236,8 +12233,8 @@ public class SColor extends Color implements Serializable {
 
     /**
      * Gets a variation on this SColor as a packed float that can have its hue, saturation, and value changed to
-     * specified degrees using a random number generator. Takes an RNG object (if the colors don't have a specific need
-     * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an RNG), as well as
+     * specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a specific need
+     * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an IRNG), as well as
      * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
      * can be used as a packed or encoded color with methods like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
@@ -12253,21 +12250,21 @@ public class SColor extends Color implements Serializable {
      * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely
      * to be at the truncated max or min amount.
      *
-     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
      * @param hue        0f to 1f, the span of hue change that can be applied to the new float color
      * @param saturation 0f to 1f, the span of saturation change that can be applied to the new float color
      * @param value      0f to 1f, the span of value/brightness change that can be applied to the new float color
      * @return a float encoding a color with the given properties
      */
-    public float toRandomizedFloat(RNG random, float hue, float saturation, float value) {
+    public float toRandomizedFloat(IRNG random, float hue, float saturation, float value) {
         return toRandomizedFloat(this, random, hue, saturation, value, 0f);
     }
 
     /**
      * Gets a variation on the Color basis as a packed float that can have its hue, saturation, and value changed to
-     * specified degrees using a random number generator. Takes an RNG object (if the colors don't have a specific need
-     * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an RNG; if they do,
-     * consider setting the state of that RNG with {@link squidpony.squidmath.StatefulRNG#setState(long)}), as well as
+     * specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a specific need
+     * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an IRNG; if they do,
+     * consider setting the state of that IRNG with {@link squidpony.squidmath.StatefulRNG#setState(long)}), as well as
      * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
      * can be used as a packed or encoded color with methods like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
@@ -12284,19 +12281,19 @@ public class SColor extends Color implements Serializable {
      * to be at the truncated max or min amount.
      *
      * @param basis      a Color or SColor to use as the starting point; will not be modified itself
-     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
      * @param hue        0f to 1f, the span of hue change that can be applied to the new float color
      * @param saturation 0f to 1f, the span of saturation change that can be applied to the new float color
      * @param value      0f to 1f, the span of value/brightness change that can be applied to the new float color
      * @return a float encoding a color with the given properties
      */
-    public static float toRandomizedFloat(Color basis, RNG random, float hue, float saturation, float value) {
+    public static float toRandomizedFloat(Color basis, IRNG random, float hue, float saturation, float value) {
         return toRandomizedFloat(basis, random, hue, saturation, value, 0f);
     }
     /**
      * Gets a variation on this SColor as a packed float that can have its hue, saturation, value, and opacity changed
-     * to specified degrees using a random number generator. Takes an RNG object (if the colors don't have a specific
-     * need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an RNG), as well
+     * to specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a specific
+     * need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an IRNG), as well
      * as floats representing the amounts of change that can be applied to hue, saturation, value, and opacity. Returns
      * a float that can be used as a packed or encoded color with methods like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
@@ -12312,21 +12309,21 @@ public class SColor extends Color implements Serializable {
      * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely
      * to be at the truncated max or min amount.
      *
-     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
      * @param hue        0f to 2f, the span of hue change that can be applied to the new float color
      * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color
      * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color
      * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color
      * @return a float encoding a variation of this SColor with changes up to the given properties
      */
-    public float toRandomizedFloat(RNG random, float hue, float saturation, float value, float opacity) {
+    public float toRandomizedFloat(IRNG random, float hue, float saturation, float value, float opacity) {
         return toRandomizedFloat(this, random, hue, saturation, value, opacity);
     }
     /**
      * Gets a variation on the Color basis as a packed float that can have its hue, saturation, value, and opacity
-     * changed to specified degrees using a random number generator. Takes an RNG object (if the colors don't have a
+     * changed to specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a
      * specific need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an
-     * RNG), as well as floats representing the amounts of change that can be applied to hue, saturation, value, and
+     * IRNG), as well as floats representing the amounts of change that can be applied to hue, saturation, value, and
      * opacity. Returns a float that can be used as a packed or encoded color with methods like
      * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or
      * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,
@@ -12342,14 +12339,14 @@ public class SColor extends Color implements Serializable {
      * to be at the truncated max or min amount.
      *
      * @param basis      a Color or SColor to use as the starting point; will not be modified itself
-     * @param random     an RNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
+     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}
      * @param hue        0f to 2f, the span of hue change that can be applied to the new float color
      * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color
      * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color
      * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color
      * @return a float encoding a variation of this SColor with changes up to the given properties
      */
-    public static float toRandomizedFloat(Color basis, RNG random, float hue, float saturation, float value, float opacity) {
+    public static float toRandomizedFloat(Color basis, IRNG random, float hue, float saturation, float value, float opacity) {
         final float h, s, r = basis.r, g = basis.g, b = basis.b;
         final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
         final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value

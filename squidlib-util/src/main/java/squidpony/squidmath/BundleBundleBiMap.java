@@ -117,21 +117,21 @@ public class BundleBundleBiMap<E1, E2>
     public boolean containsIndex(int index) { return index >= 0 && index < bm.size(); }
 
     /**
-     * Gets a random E1 from this BundleBiMap's individual elements1 using the given RNG.
+     * Gets a random E1 from this BundleBiMap's individual elements1 using the given IRNG.
      * @param random generates a random index to get an E1 with
      * @return a randomly chosen E1, or null if this is empty
      */
-    public E1 randomElement1(RNG random)
+    public E1 randomElement1(IRNG random)
     {
         return elements1.randomKey(random);
     }
 
     /**
-     * Gets a random E2 from this BundleBiMap using the given RNG.
+     * Gets a random E2 from this BundleBiMap using the given IRNG.
      * @param random generates a random index to get a E2 with
      * @return a randomly chosen E2, or null if this is empty
      */
-    public E2 randomElement2(RNG random)
+    public E2 randomElement2(IRNG random)
     {
         return elements2.randomKey(random);
     }
@@ -582,8 +582,8 @@ public class BundleBundleBiMap<E1, E2>
     /**
      * Reorders this BundleBiMap using {@code ordering}, which has the same length as this object's {@link #size()}
      * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no
-     * change to the current ordering), {@link RNG#randomOrdering(int)} (which gives a random ordering, and if
-     * applied immediately would be the same as calling {@link #shuffle(RNG)}), or made in some other way. If you
+     * change to the current ordering), {@link IRNG#randomOrdering(int)} (which gives a random ordering, and if
+     * applied immediately would be the same as calling {@link #shuffle(IRNG)}), or made in some other way. If you
      * already have an ordering and want to make a different ordering that can undo the change, you can use
      * {@link ArrayTools#invertOrdering(int[])} called on the original ordering. The effects of this method, if called
      * with an ordering that has repeat occurrences of an int or contains ints that are larger than its size should
@@ -608,10 +608,10 @@ public class BundleBundleBiMap<E1, E2>
     /**
      * Generates a random ordering with rng and applies the same ordering to all kinds of keys this has; they will
      * maintain their current association to other keys but their ordering/indices will change.
-     * @param rng an RNG to produce the random ordering this will use
+     * @param rng an IRNG to produce the random ordering this will use
      * @return this for chaining
      */
-    public BundleBundleBiMap<E1, E2> shuffle(RNG rng)
+    public BundleBundleBiMap<E1, E2> shuffle(IRNG rng)
     {
         return reorder(rng.randomOrdering(bm.size()));
     }

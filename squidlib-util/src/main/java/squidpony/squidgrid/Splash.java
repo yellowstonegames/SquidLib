@@ -2,7 +2,7 @@ package squidpony.squidgrid;
 
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.IRNG;
 
 import java.util.*;
 
@@ -69,7 +69,7 @@ public class Splash {
 	 * @param start
 	 *            Where the spill should start. It should be passable, otherwise
 	 *            an empty list gets returned. Consider using
-	 *            {@link DungeonUtility#getRandomCell(RNG, char[][], Set, int)}
+	 *            {@link DungeonUtility#getRandomCell(IRNG, char[][], Set, int)}
 	 *            to find it.
 	 * @param volume
 	 *            The number of cells to spill on.
@@ -91,7 +91,7 @@ public class Splash {
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public List<Coord> spill(RNG rng, char[][] level, Coord start, int volume, int drunks) {
+	public List<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {
 		if (!DungeonUtility.inLevel(level, start) || !passable(level[start.x][start.y]))
 			return Collections.emptyList();
 
@@ -148,7 +148,7 @@ public class Splash {
 	 * @param drunks
 	 *            The number of drunken walkers to consider
 	 */
-	protected void inebriate(RNG rng, List<Coord> zone, List<Coord> border, int drunks) {
+	protected void inebriate(IRNG rng, List<Coord> zone, List<Coord> border, int drunks) {
 		if (drunks == 0)
 			return;
 
@@ -176,7 +176,7 @@ public class Splash {
 	 * @param border
 	 *            {@code result}'s border.
 	 */
-	private void inebriate0(RNG rng, List<Coord> zone, List<Coord> border, int nb) {
+	private void inebriate0(IRNG rng, List<Coord> zone, List<Coord> border, int nb) {
 		assert !border.isEmpty();
 		assert !zone.isEmpty();
 
@@ -204,7 +204,7 @@ public class Splash {
 	 * @param start
 	 *            Where the spill should start. It should be passable, otherwise
 	 *            an empty list gets returned. Consider using
-	 *            {@link DungeonUtility#getRandomCell(RNG, char[][], Set, int)}
+	 *            {@link DungeonUtility#getRandomCell(IRNG, char[][], Set, int)}
 	 *            to find it.
 	 * @param volume
 	 *            The number of cells to spill on.
@@ -229,7 +229,7 @@ public class Splash {
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public static List<Coord> spill(RNG rng, char[][] level, Coord start, int volume, Set<Character> impassable, int drunks)
+	public static List<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, Set<Character> impassable, int drunks)
 	{
 		Set<Character> blocked;
 		if(impassable == null)

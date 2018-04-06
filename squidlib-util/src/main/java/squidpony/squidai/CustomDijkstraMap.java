@@ -6,10 +6,7 @@ import squidpony.squidgrid.Adjacency;
 import squidpony.squidgrid.Adjacency.BasicAdjacency;
 import squidpony.squidgrid.Adjacency.RotationAdjacency;
 import squidpony.squidgrid.Radius;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.IntDoubleOrderedMap;
-import squidpony.squidmath.IntVLA;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.io.Serializable;
 
@@ -104,7 +101,7 @@ public class CustomDijkstraMap implements Serializable {
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
-    public RNG rng;
+    public IRNG rng;
     private int frustration = 0;
 
     private int[] reuse = new int[9];
@@ -128,7 +125,7 @@ public class CustomDijkstraMap implements Serializable {
      * it is ever used in this class. If you use this constructor, you must call an initialize() method before using
      * any other methods in the class.
      */
-    public CustomDijkstraMap(RNG random) {
+    public CustomDijkstraMap(IRNG random) {
         rng = random;
         path = new IntVLA();
     }
@@ -178,7 +175,7 @@ public class CustomDijkstraMap implements Serializable {
      * @param level
      * @param rng   The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
      */
-    public CustomDijkstraMap(final char[][] level, RNG rng) {
+    public CustomDijkstraMap(final char[][] level, IRNG rng) {
         this(level, new BasicAdjacency(level.length, level[0].length, Measurement.MANHATTAN), rng);
     }
 
@@ -215,13 +212,13 @@ public class CustomDijkstraMap implements Serializable {
      * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
-     * map that can be used here. Also takes a distance measurement and an RNG that ensures
-     * predictable path choices given otherwise identical inputs and circumstances.
+     * map that can be used here. Also takes a distance measurement and an IRNG that can be seeded
+     * to ensure predictable path choices given otherwise identical inputs and circumstances.
      *
      * @param level
-     * @param rng   The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
+     * @param rng   The IRNG, such as an RNG, to use for certain decisions; only affects find* methods like findPath, not scan.
      */
-    public CustomDijkstraMap(final char[][] level, Adjacency adjacency, RNG rng) {
+    public CustomDijkstraMap(final char[][] level, Adjacency adjacency, IRNG rng) {
         this.rng = rng;
         path = new IntVLA();
         this.adjacency = adjacency;
@@ -1820,7 +1817,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos];
             rng.randomOrdering(adjacency.maxAdjacent, reuse);
-            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
+            int choice = rng.nextInt(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
                 pt = toNeighbors[reuse[d]][currentPos];
@@ -2142,7 +2139,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos];
             rng.randomOrdering(adjacency.maxAdjacent, reuse);
-            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
+            int choice = rng.nextInt(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
                 pt = toNeighbors[reuse[d]][currentPos];
@@ -2264,7 +2261,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos];
             rng.randomOrdering(adjacency.maxAdjacent, reuse);
-            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
+            int choice = rng.nextInt(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
                 pt = toNeighbors[reuse[d]][currentPos];
@@ -2766,7 +2763,7 @@ public class CustomDijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos];
             rng.randomOrdering(adjacency.maxAdjacent, reuse);
-            int choice = rng.nextIntHasty(adjacency.maxAdjacent);
+            int choice = rng.nextInt(adjacency.maxAdjacent);
 
             for (int d = 0; d < adjacency.maxAdjacent; d++) {
                 pt = toNeighbors[reuse[d]][currentPos];

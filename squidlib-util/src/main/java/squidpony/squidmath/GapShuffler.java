@@ -18,7 +18,7 @@ import java.util.Iterator;
  */
 public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
     private static final long serialVersionUID = 1277543974688106290L;
-    public RNG rng;
+    public IRNG rng;
     private ArrayList<T> elements;
     private int size, index;
     private int[][] indexSections;
@@ -97,15 +97,15 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      * always have a large amount of "gap" in order between one appearance and the next. It helps to keep the appearance
      * of a gap if every item in elements is unique, but that is not necessary and does not affect how this works. The
      * rng parameter is copied so externally using it won't change the order this produces its values; the rng field is
-     * used whenever the iterator needs to re-shuffle the internal ordering of elements. I suggest that the RNG should
+     * used whenever the iterator needs to re-shuffle the internal ordering of elements. I suggest that the IRNG should
      * use LongPeriodRNG as its RandomnessSource, since it is in general a good choice for shuffling, but since this
      * class mostly delegates its unique-shuffling code to PermutationGenerator and looks up at most 20 elements'
      * permutation at once (allowing it to use a single random long to generate the permutation), there probably won't
      * be problems if you use any other RandomnessSource.
      * @param elements a Collection of T that will not be modified
-     * @param rng an RNG that can be pre-seeded; will be copied and not used directly
+     * @param rng an IRNG that can be pre-seeded; will be copied and not used directly
      */
-    public GapShuffler(Collection<T> elements, RNG rng)
+    public GapShuffler(Collection<T> elements, IRNG rng)
     {
         this.rng = rng.copy();
         this.elements = rng.shuffle(elements);
@@ -191,15 +191,15 @@ public class GapShuffler<T> implements Iterator<T>, Iterable<T>, Serializable {
      * always have a large amount of "gap" in order between one appearance and the next. It helps to keep the appearance
      * of a gap if every item in elements is unique, but that is not necessary and does not affect how this works. The
      * rng parameter is copied so externally using it won't change the order this produces its values; the rng field is
-     * used whenever the iterator needs to re-shuffle the internal ordering of elements. I suggest that the RNG should
+     * used whenever the iterator needs to re-shuffle the internal ordering of elements. I suggest that the IRNG should
      * use LongPeriodRNG as its RandomnessSource, since it is in general a good choice for shuffling, but since this
      * class mostly delegates its unique-shuffling code to PermutationGenerator and looks up at most 20 elements'
      * permutation at once (allowing it to use a single random long to generate the permutation), there probably won't
      * be problems if you use any other RandomnessSource.
      * @param elements a Collection of T that will not be modified
-     * @param rng an RNG that can be pre-seeded; will be copied and not used directly
+     * @param rng an IRNG that can be pre-seeded; will be copied and not used directly
      */
-    public GapShuffler(T[] elements, RNG rng)
+    public GapShuffler(T[] elements, IRNG rng)
     {
         this.rng = rng.copy();
         this.elements = Maker.makeList(rng.shuffle(elements));

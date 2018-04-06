@@ -1,7 +1,7 @@
 package squidpony;
 
 import squidpony.panel.IColoredString;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.IRNG;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,7 +119,7 @@ public interface IColorCenter<T> {
 	 *            (exclusive). Larger values mean more opacity; 0 is clear.
 	 * @return A random color, except for the alpha component.
 	 */
-	T getRandom(RNG rng, int opacity);
+	T getRandom(IRNG rng, int opacity);
 
 	/**
 	 * @param c a concrete color
@@ -406,7 +406,7 @@ public interface IColorCenter<T> {
 		}
 
 		@Override
-		public T getRandom(RNG rng, int opacity) {
+		public T getRandom(IRNG rng, int opacity) {
 			return get(rng.nextInt(256), rng.nextInt(256), rng.nextInt(256), opacity);
 		}
 

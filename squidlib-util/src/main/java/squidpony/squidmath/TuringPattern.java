@@ -73,7 +73,7 @@ public class TuringPattern {
      * @param rng the random number generator responsible for producing random double values
      * @return a 1D double array that represents a 2D array with random contents; should be given to other methods
      */
-    public static double[] initialize(int width, int height, RNG rng) {
+    public static double[] initialize(int width, int height, IRNG rng) {
         return initializeInto(new double[width * height], rng);
     }
     /**
@@ -83,7 +83,7 @@ public class TuringPattern {
      * @param rng the random number generator responsible for producing random double values
      * @return a 1D double array that represents a 2D array with random contents; should be given to other methods
      */
-    public static double[] initializeInto(double[] substance, RNG rng){
+    public static double[] initializeInto(double[] substance, IRNG rng){
         if(substance == null || rng == null) return null;
         for (int i = 0; i < substance.length; i++) {
             substance[i] = rng.nextDouble(2.0) - 1.0;

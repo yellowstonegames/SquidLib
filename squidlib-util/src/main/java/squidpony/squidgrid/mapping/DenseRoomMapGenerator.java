@@ -3,6 +3,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.ArrayTools;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
 /**
@@ -19,7 +20,7 @@ import squidpony.squidmath.RNG;
 public class DenseRoomMapGenerator implements IDungeonGenerator {
     public char[][] map;
     public int[][] environment;
-    public RNG rng;
+    public IRNG rng;
     protected int width, height;
     public DenseRoomMapGenerator()
     {
@@ -29,7 +30,7 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
     {
         this(width, height, new RNG());
     }
-    public DenseRoomMapGenerator(int width, int height, RNG rng)
+    public DenseRoomMapGenerator(int width, int height, IRNG rng)
     {
         this.rng = rng;
         this.width = Math.max(3, width);

@@ -17,6 +17,7 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import java.util.List;
 public class BasicDemo extends ApplicationAdapter {
     SpriteBatch batch;
 
-    private RNG rng;
+    private IRNG rng;
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;

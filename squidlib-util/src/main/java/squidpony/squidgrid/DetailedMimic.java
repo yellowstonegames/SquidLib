@@ -11,10 +11,7 @@ The software is provided "as is", without warranty of any kind, express or impli
 package squidpony.squidgrid;
 
 import squidpony.ArrayTools;
-import squidpony.squidmath.IntDoubleOrderedMap;
-import squidpony.squidmath.IntVLA;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 /**
  * Similar to MimicFill, this class can be used to imitate the style of an existing piece of data, but this works on
@@ -66,9 +63,9 @@ public class DetailedMimic {
      * data that represents RGBA8888 colors, which can be obtained from libGDX Colors or SColors in the display module.
      * @param diff an implementation of the AestheticDifference interface, such as {@link AestheticDifference#rgba8888};
      *             may be null, but that forces all calls to processing methods to treat discrete as true
-     * @param rng an RNG to generate random factors; may be seeded to produce reliable output
+     * @param rng an IRNG, such as an RNG, to generate random factors; may be seeded to produce reliable output
      */
-    public DetailedMimic(AestheticDifference diff, RNG rng)
+    public DetailedMimic(AestheticDifference diff, IRNG rng)
     {
         random = rng;
         difference = diff;
@@ -155,7 +152,7 @@ public class DetailedMimic {
                     Math.max(1, detailLevel), discrete || (difference == null), targetWidth, targetHeight);
     }
 
-    public RNG random;
+    public IRNG random;
     public AestheticDifference difference;
     private int[][] analyzed;
 
@@ -323,7 +320,7 @@ public class DetailedMimic {
         int[] shuffle = new int[OW * OH];
         for (int i = 0; i < shuffle.length; i++)
         {
-            int j = random.nextIntHasty(i + 1);
+            int j = random.nextInt(i + 1);
             if (j != i) shuffle[i] = shuffle[j];
             shuffle[j] = i;
         }
@@ -385,7 +382,7 @@ public class DetailedMimic {
                 }
             }
 
-            for (int m = 0; m < M; m++) candidates[neighborsNumber + m] = random.nextIntHasty(SW * SH);
+            for (int m = 0; m < M; m++) candidates[neighborsNumber + m] = random.nextInt(SW * SH);
 
             double max = -1E+10;
             int argmax = -1;

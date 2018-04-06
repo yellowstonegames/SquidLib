@@ -33,7 +33,7 @@ public class SerpentDeepMapGenerator {
      * @param width the width of the final map in cells
      * @param height the height of the final map in cells
      * @param depth the number of levels deep to create
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng an IRNG object to use for random choices; this make a lot of random choices.
      * @see MixedGenerator
      */
     public SerpentDeepMapGenerator(int width, int height, int depth, RNG rng) {
@@ -41,7 +41,7 @@ public class SerpentDeepMapGenerator {
     }
     /**
      * This prepares a map generator that will generate a map with the given width, height and depth, using the given
-     * RNG, and will branch out to other nearby rooms that (probably) do not have staircases between layers.
+     * IRNG, and will branch out to other nearby rooms that (probably) do not have staircases between layers.
      * The intended purpose is to carve a long path that loops through the whole dungeon's 3D space, while
      * hopefully maximizing the amount of rooms the player encounters. You call the different carver-adding methods to
      * affect what the dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(),
@@ -50,7 +50,7 @@ public class SerpentDeepMapGenerator {
      * @param width the width of the final map in cells
      * @param height the height of the final map in cells
      * @param depth the number of levels deep to create
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng an IRNG object to use for random choices; this make a lot of random choices.
      * @param branchingChance the odds from 0.0 to 1.0 that a branch will be created near each necessary room.
      * @see MixedGenerator
      */

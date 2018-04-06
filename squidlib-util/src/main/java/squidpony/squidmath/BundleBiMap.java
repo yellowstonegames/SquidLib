@@ -120,21 +120,21 @@ public class BundleBiMap<E, S>
     }
 
     /**
-     * Gets a random E from this BundleBiMap's individual elements using the given RNG.
+     * Gets a random E from this BundleBiMap's individual elements using the given IRNG.
      * @param random generates a random index to get an E with
      * @return a randomly chosen E, or null if this is empty
      */
-    public E randomElement(RNG random)
+    public E randomElement(IRNG random)
     {
         return elements.randomKey(random);
     }
 
     /**
-     * Gets a random S from this BundleBiMap using the given RNG.
+     * Gets a random S from this BundleBiMap using the given IRNG.
      * @param random generates a random index to get a S with
      * @return a randomly chosen S, or null if this is empty
      */
-    public S randomSingle(RNG random)
+    public S randomSingle(IRNG random)
     {
         return bm.randomB(random);
     }
@@ -560,8 +560,8 @@ public class BundleBiMap<E, S>
     /**
      * Reorders this BundleBiMap using {@code ordering}, which has the same length as this object's {@link #size()}
      * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no
-     * change to the current ordering), {@link RNG#randomOrdering(int)} (which gives a random ordering, and if
-     * applied immediately would be the same as calling {@link #shuffle(RNG)}), or made in some other way. If you
+     * change to the current ordering), {@link IRNG#randomOrdering(int)} (which gives a random ordering, and if
+     * applied immediately would be the same as calling {@link #shuffle(IRNG)}), or made in some other way. If you
      * already have an ordering and want to make a different ordering that can undo the change, you can use
      * {@link ArrayTools#invertOrdering(int[])} called on the original ordering. The effects of this method, if called
      * with an ordering that has repeat occurrences of an int or contains ints that are larger than its size should
@@ -586,10 +586,10 @@ public class BundleBiMap<E, S>
     /**
      * Generates a random ordering with rng and applies the same ordering to all kinds of keys this has; they will
      * maintain their current association to other keys but their ordering/indices will change.
-     * @param rng an RNG to produce the random ordering this will use
+     * @param rng an IRNG to produce the random ordering this will use
      * @return this for chaining
      */
-    public BundleBiMap<E, S> shuffle(RNG rng)
+    public BundleBiMap<E, S> shuffle(IRNG rng)
     {
         return reorder(rng.randomOrdering(bm.size()));
     }

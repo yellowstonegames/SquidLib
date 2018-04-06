@@ -2594,7 +2594,7 @@ public class FakeLanguageGen implements Serializable {
     }
 
     private static String[] processParts(OrderedMap<String, String> parts, Set<String> missingSounds,
-                                         Set<String> forbidden, RNG rng, double repeatSingleChance,
+                                         Set<String> forbidden, IRNG rng, double repeatSingleChance,
                                          int preferredLimit) {
         int l, sz = parts.size();
         List<String> working = new ArrayList<>(sz * 24);
@@ -2747,7 +2747,7 @@ public class FakeLanguageGen implements Serializable {
     };
 */
 
-    public static FakeLanguageGen randomLanguage(RNG rng) {
+    public static FakeLanguageGen randomLanguage(IRNG rng) {
         return randomLanguage(rng.nextLong());
     }
 
@@ -2955,7 +2955,7 @@ public class FakeLanguageGen implements Serializable {
      * @param capitalize true if the word should start with a capital letter, false otherwise
      * @return a word in the fake language as a String
      */
-    public String word(RNG rng, boolean capitalize) {
+    public String word(IRNG rng, boolean capitalize) {
         while (true) {
             StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12);
             double syllableChance = rng.nextDouble(totalSyllableFrequency);
@@ -3076,7 +3076,7 @@ public class FakeLanguageGen implements Serializable {
      * @param approxSyllables the approximate number of syllables to produce in the word; there may be more syllables
      * @return a word in the fake language as a String
      */
-    public String word(RNG rng, boolean capitalize, int approxSyllables) {
+    public String word(IRNG rng, boolean capitalize, int approxSyllables) {
         return word(rng, capitalize, approxSyllables, null);
     }
     /**
@@ -3108,7 +3108,7 @@ public class FakeLanguageGen implements Serializable {
      * @param additionalChecks an array of RegExodus Pattern objects that match invalid words (these may be additional vulgarity checks, for example)
      * @return a word in the fake language as a String
      */
-    public String word(RNG rng, boolean capitalize, int approxSyllables, Pattern[] additionalChecks) {
+    public String word(IRNG rng, boolean capitalize, int approxSyllables, Pattern[] additionalChecks) {
         if (approxSyllables <= 0) {
             StringBuilder sb = new StringBuilder(rng.getRandomElement(openingVowels));
             for (Modifier mod : modifiers) {
@@ -3360,7 +3360,7 @@ public class FakeLanguageGen implements Serializable {
      * @param maxWords an int for the maximum number of words in a sentence; should be at least equal to minWords
      * @return a sentence in the fake language as a String
      */
-    public String sentence(RNG rng, int minWords, int maxWords) {
+    public String sentence(IRNG rng, int minWords, int maxWords) {
         return sentence(rng, minWords, maxWords, new String[]{",", ",", ",", ";"},
                 new String[]{".", ".", ".", "!", "?", "..."}, 0.2);
     }
@@ -3425,7 +3425,7 @@ public class FakeLanguageGen implements Serializable {
      *                                midPunctuation should be inserted before spaces
      * @return a sentence in the fake language as a String
      */
-    public String sentence(RNG rng, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
+    public String sentence(IRNG rng, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
                            double midPunctuationFrequency) {
         if (minWords < 1)
             minWords = 1;
@@ -3522,7 +3522,7 @@ public class FakeLanguageGen implements Serializable {
      * @param maxChars                the longest string length this can produce; should be at least {@code 6 * minWords}
      * @return a sentence in the fake language as a String
      */
-    public String sentence(RNG rng, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
+    public String sentence(IRNG rng, int minWords, int maxWords, String[] midPunctuation, String[] endPunctuation,
                            double midPunctuationFrequency, int maxChars) {
         if(maxChars < 0)
             return sentence(rng, minWords, maxWords, midPunctuation, endPunctuation, midPunctuationFrequency);
@@ -3589,7 +3589,7 @@ public class FakeLanguageGen implements Serializable {
         return sb.toString();
     }
 
-    protected String[] merge1000(RNG rng, String[] me, String[] other, double otherInfluence) {
+    protected String[] merge1000(IRNG rng, String[] me, String[] other, double otherInfluence) {
         if (other.length <= 0 && me.length <= 0)
             return new String[]{};
         String[] ret = new String[1000];
@@ -3617,7 +3617,7 @@ public class FakeLanguageGen implements Serializable {
     }
 
 
-    protected String[] accentVowels(RNG rng, String[] me, double influence) {
+    protected String[] accentVowels(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
         int idx = 0;
@@ -3645,7 +3645,7 @@ public class FakeLanguageGen implements Serializable {
         return ret;
     }
 
-    protected String[] accentConsonants(RNG rng, String[] me, double influence) {
+    protected String[] accentConsonants(IRNG rng, String[] me, double influence) {
         String[] ret = new String[1000];
         int otherCount = (int) (1000 * influence);
         int idx = 0;
@@ -3690,7 +3690,7 @@ public class FakeLanguageGen implements Serializable {
         return ret;
     }
 
-    protected String[] accentBoth(RNG rng, String[] me, double vowelInfluence, double consonantInfluence) {
+    protected String[] accentBoth(IRNG rng, String[] me, double vowelInfluence, double consonantInfluence) {
         String[] ret = new String[1000];
         int idx = 0;
         Matcher matcher;
@@ -4263,7 +4263,7 @@ public class FakeLanguageGen implements Serializable {
             alterations = (alts == null) ? new Alteration[0] : alts;
         }
 
-        public StringBuilder modify(RNG rng, StringBuilder sb) {
+        public StringBuilder modify(IRNG rng, StringBuilder sb) {
             Matcher m;
             Replacer.StringBuilderBuffer tb, working = Replacer.wrap(sb);
             StringBuilder tmp;

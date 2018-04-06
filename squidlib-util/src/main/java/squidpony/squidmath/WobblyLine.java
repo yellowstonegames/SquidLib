@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * A drunkard's-walk-like algorithm for line drawing "wobbly" paths.
- * The line() methods here use an RNG (and will make their own if they don't take one as a parameter) to make a choice
+ * The line() methods here use an IRNG (and will make their own if they don't take one as a parameter) to make a choice
  * between orthogonal directions to travel in. Because they can go around the target instead of straight to it, they
  * also need a width and height for the map so they don't wander over the edge. You can also pass a weight to one of the
  * line() methods, which affects how straight the wobbly path will be (1.0 being just about perfectly straight, 0.5
@@ -48,7 +48,7 @@ public class WobblyLine {
      * @return List of Coord, including (startX, startY) and (endX, endY) and all points walked between
      */
     public static List<Coord> line(int startX, int startY, int endX, int endY,
-                                   int width, int height, double weight, RNG rng) {
+                                   int width, int height, double weight, IRNG rng) {
         List<Coord> pts = new ArrayList<>();
         Coord start = Coord.get(startX, startY);
         Direction dir;
@@ -76,7 +76,7 @@ public class WobblyLine {
      * @return a Direction, either UP, DOWN, LEFT, or RIGHT if we should move, or NONE if we have reached our target
      */
     private static Direction stepWobbly(int currentX, int currentY, int targetX, int targetY, double weight,
-                                        int width, int height, RNG rng)
+                                        int width, int height, IRNG rng)
     {
         int dx = targetX - currentX;
         int dy = targetY - currentY;

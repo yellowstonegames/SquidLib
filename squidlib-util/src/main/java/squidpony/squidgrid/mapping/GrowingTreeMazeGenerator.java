@@ -4,6 +4,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 @Beta
 public class GrowingTreeMazeGenerator {
 
-    private RNG rng;
+    private IRNG rng;
     private int width, height;
 
     public GrowingTreeMazeGenerator(int width, int height) {
@@ -26,7 +27,7 @@ public class GrowingTreeMazeGenerator {
         this.height = height;
         rng = new RNG();
     }
-    public GrowingTreeMazeGenerator(int width, int height, RNG rng) {
+    public GrowingTreeMazeGenerator(int width, int height, IRNG rng) {
         this.width = width;
         this.height = height;
         this.rng = rng;

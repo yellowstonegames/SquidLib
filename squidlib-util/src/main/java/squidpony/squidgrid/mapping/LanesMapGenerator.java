@@ -27,7 +27,7 @@ import java.util.List;
 public class LanesMapGenerator implements IDungeonGenerator {
     protected SymmetryDungeonGenerator mix;
     protected int[] columns, rows;
-    protected RNG random;
+    protected IRNG random;
     protected int lanes;
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
@@ -42,7 +42,7 @@ public class LanesMapGenerator implements IDungeonGenerator {
      * @param lanes between 1 and 3; the number of wide paths to generate going from upper left to lower right.
      * @see MixedGenerator
      */
-    public LanesMapGenerator(int width, int height, RNG rng, int lanes)
+    public LanesMapGenerator(int width, int height, IRNG rng, int lanes)
     {
         if(width <= 8 || height <= 8)
             throw new IllegalArgumentException("width and height must be greater than 8");

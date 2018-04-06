@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
 /**
@@ -8,7 +9,7 @@ import squidpony.squidmath.RNG;
  * Created by Tommy Ettinger on 3/30/2016.
  */
 public class PacMazeGenerator {
-    public RNG rng;
+    public IRNG rng;
     public int width, height;
     private boolean[][] map;
     private int[][] env;
@@ -24,7 +25,7 @@ public class PacMazeGenerator {
         rng = new RNG();
     }
 
-    public PacMazeGenerator(int width, int height, RNG rng) {
+    public PacMazeGenerator(int width, int height, IRNG rng) {
         this.height = height;
         this.width = width;
         this.rng = rng;

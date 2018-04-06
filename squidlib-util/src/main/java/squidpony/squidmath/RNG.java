@@ -221,6 +221,7 @@ public class RNG implements Serializable, IRNG {
      * @param max the maximum bound on the return value (exclusive)
      * @return the found value
      */
+    @Override
     public double between(double min, double max) {
         return min + (max - min) * nextDouble();
     }
@@ -238,6 +239,7 @@ public class RNG implements Serializable, IRNG {
      * @param max the maximum bound on the return value (exclusive)
      * @return the found value
      */
+    @Override
     public int between(int min, int max) {
         return nextInt(max - min) + min;
     }
@@ -252,6 +254,7 @@ public class RNG implements Serializable, IRNG {
      * @param max the maximum bound on the return value (exclusive)
      * @return the found value
      */
+    @Override
     public long between(long min, long max) {
         return nextLong(max - min) + min;
     }
@@ -288,6 +291,7 @@ public class RNG implements Serializable, IRNG {
      * @param array the array to get an element from
      * @return the randomly selected element
      */
+    @Override
     public <T> T getRandomElement(T[] array) {
         if (array.length < 1) {
             return null;
@@ -303,6 +307,7 @@ public class RNG implements Serializable, IRNG {
      * @param list the list to get an element from
      * @return the randomly selected element
      */
+    @Override
     public <T> T getRandomElement(List<T> list) {
         if (list.isEmpty()) {
             return null;
@@ -353,6 +358,7 @@ public class RNG implements Serializable, IRNG {
      * @param coll the Collection to get an element from; remember, Map does not implement Collection
      * @return the randomly selected element
      */
+    @Override
     public <T> T getRandomElement(Collection<T> coll) {
         int n;
         if ((n = coll.size()) <= 0) {
@@ -516,6 +522,7 @@ public class RNG implements Serializable, IRNG {
      * @param <T>      can be any non-primitive type.
      * @return a shuffled copy of elements
      */
+    @Override
     public <T> T[] shuffle(final T[] elements) {
         final int size = elements.length;
         final T[] array = Arrays.copyOf(elements, size);
@@ -535,6 +542,7 @@ public class RNG implements Serializable, IRNG {
      * @param <T>      can be any non-primitive type.
      * @return elements after shuffling it in-place
      */
+    @Override
     public <T> T[] shuffleInPlace(T[] elements) {
         final int size = elements.length;
         for (int i = size; i > 1; i--) {
@@ -558,6 +566,7 @@ public class RNG implements Serializable, IRNG {
      *                 randomPortion method of this class to fill the smaller dest. MUST NOT be the same array as elements!
      * @return {@code dest} after modifications
      */
+    @Override
     public <T> T[] shuffle(T[] elements, T[] dest) {
         if (dest.length != elements.length)
             return randomPortion(elements, dest);
@@ -574,6 +583,7 @@ public class RNG implements Serializable, IRNG {
      * @param <T>      can be any non-primitive type.
      * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
      */
+    @Override
     public <T> ArrayList<T> shuffle(Collection<T> elements) {
         return shuffle(elements, null);
     }
@@ -590,6 +600,7 @@ public class RNG implements Serializable, IRNG {
      *            if null or non-empty, a new ArrayList will be allocated and returned
      * @return a shuffled ArrayList containing the whole of elements in pseudo-random order.
      */
+    @Override
     public <T> ArrayList<T> shuffle(Collection<T> elements, /*@Nullable*/ ArrayList<T> buf) {
         final ArrayList<T> al;
         if (buf == null || !buf.isEmpty())
@@ -615,6 +626,7 @@ public class RNG implements Serializable, IRNG {
      * @param <T>      can be any non-primitive type.
      * @return elements after shuffling it in-place
      */
+    @Override
     public <T> List<T> shuffleInPlace(List<T> elements) {
         final int n = elements.size();
         for (int i = n; i > 1; i--) {
@@ -631,6 +643,7 @@ public class RNG implements Serializable, IRNG {
      * @param length the size of the ordering to produce
      * @return a random ordering containing all ints from 0 to length (exclusive)
      */
+    @Override
     public int[] randomOrdering(int length) {
         if (length <= 0)
             return new int[0];
@@ -646,6 +659,7 @@ public class RNG implements Serializable, IRNG {
      * @param dest   the destination array; will be modified
      * @return dest, filled with a random ordering containing all ints from 0 to length (exclusive)
      */
+    @Override
     public int[] randomOrdering(int length, int[] dest) {
         if (dest == null) return null;
 
@@ -753,6 +767,7 @@ public class RNG implements Serializable, IRNG {
      *
      * @return a double between 0.0 (inclusive) and 0.9999999999999999 (inclusive)
      */
+    @Override
     public double nextDouble() {
         return (random.nextLong() & 0x1fffffffffffffL) * 0x1p-53;
         //this is here for a record of another possibility; it can't generate quite a lot of possible values though
@@ -767,6 +782,7 @@ public class RNG implements Serializable, IRNG {
      * @param outer the outer exclusive bound as a double; can be negative or positive
      * @return a double between 0.0 (inclusive) and outer (exclusive)
      */
+    @Override
     public double nextDouble(final double outer) {
         return (random.nextLong() & 0x1fffffffffffffL) * 0x1p-53 * outer;
     }
@@ -777,6 +793,7 @@ public class RNG implements Serializable, IRNG {
      *
      * @return a float between 0f (inclusive) and 0.99999994f (inclusive)
      */
+    @Override
     public float nextFloat() {
         return random.next(24) * 0x1p-24f;
     }
@@ -788,6 +805,7 @@ public class RNG implements Serializable, IRNG {
      * @param outer the outer exclusive bound as a float; can be negative or positive
      * @return a float between 0f (inclusive) and outer (exclusive)
      */
+    @Override
     public float nextFloat(final float outer) {
         return random.next(24) * 0x1p-24f * outer;
     }
@@ -802,6 +820,7 @@ public class RNG implements Serializable, IRNG {
      * significant bit, where this method only checks the most-significant bit.
      * @return a random boolean.
      */
+    @Override
     public boolean nextBoolean() {
         return nextLong() < 0L;
     }
@@ -811,6 +830,7 @@ public class RNG implements Serializable, IRNG {
      *
      * @return a 64-bit random long.
      */
+    @Override
     public long nextLong() {
         return random.nextLong();
     }
@@ -822,6 +842,7 @@ public class RNG implements Serializable, IRNG {
      * @param bound the upper bound (exclusive)
      * @return the found number
      */
+    @Override
     public long nextLong(final long bound) {
         if (bound <= 0) return 0;
         long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
@@ -834,19 +855,31 @@ public class RNG implements Serializable, IRNG {
 
     /**
      * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
-     * negative.
+     * negative. Always makes one call to the {@link RandomnessSource#next(int)} method of the RandomnessSource that
+     * would be returned by {@link #getRandomness()}, even if bound is 0 or negative, to avoid branching and also to
+     * ensure consistent advancement rates for the RandomnessSource (this can be important if you use a
+     * {@link SkippingRandomness} and want to go back before a result was produced).
+     * <br>
+     * This method changed a fair amount on April 5, 2018 to better support RandomnessSource implementations with a
+     * slower nextLong() method, such as {@link Lathe32RNG}, and to avoid branching/irregular state advancement/modulus
+     * operations. It is now almost identical to {@link #nextIntHasty(int)}, but won't return negative results if bound
+     * is negative (matching its previous behavior). This may have statistical issues (small ones) if bound is very
+     * large (the estimate is still at least a bound of a billion or more before issues are observable).
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
      * @param bound the upper bound (exclusive)
      * @return the found number
      */
+    @Override
     public int nextInt(final int bound) {
-        if (bound <= 0) return 0;
-        int threshold = (0x7fffffff - bound + 1) % bound;
-        for (; ; ) {
-            int bits = random.next(31);
-            if (bits >= threshold)
-                return bits % bound;
-        }
+        return (int) ((bound * ((long)random.next(31))) >>> 31) & ~(bound >> 31);
+//        int threshold = (0x7fffffff - bound + 1) % bound;
+//        for (; ; ) {
+//            int bits = random.next(31);
+//            if (bits >= threshold)
+//                return bits % bound;
+//        }
     }
 
     /**
@@ -887,6 +920,7 @@ public class RNG implements Serializable, IRNG {
      *
      * @return a 32-bit random int.
      */
+    @Override
     public int nextInt() {
         return random.next(32);
     }
@@ -898,6 +932,7 @@ public class RNG implements Serializable, IRNG {
      * @param bits an int between 1 and 32, both inclusive
      * @return a random number that fits in the specified number of bits
      */
+    @Override
     public int next(int bits) {
         return random.next(bits);
     }
@@ -916,6 +951,7 @@ public class RNG implements Serializable, IRNG {
      *
      * @return a copy of this RNG
      */
+    @Override
     public RNG copy() {
         return new RNG(random.copy());
     }

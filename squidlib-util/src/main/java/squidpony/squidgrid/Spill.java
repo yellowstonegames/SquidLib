@@ -94,7 +94,7 @@ public class Spill implements Serializable {
      * initialize() method before using this class.
      */
     public Spill() {
-        sr = new ThrustAltRNG();
+        sr = new LightRNG();
         rng = new StatefulRNG(sr);
 
         fresh = new OrderedSet<>();
@@ -106,8 +106,8 @@ public class Spill implements Serializable {
      *
      * If you use this constructor, you must call an  initialize() method before using this class.
      */
-    public Spill(RNG random) {
-        sr = new ThrustAltRNG(random.nextLong());
+    public Spill(IRNG random) {
+        sr = new LightRNG(random.nextLong());
         rng = new StatefulRNG(sr);
 
         fresh = new OrderedSet<>();
@@ -115,7 +115,7 @@ public class Spill implements Serializable {
 
     /**
      * Construct a Spill without a level to actually scan. This constructor allows you to specify a StatefulRandomness
-     * such as ThrustAltRNG, which will be referenced in this class (if the state of random changes because this
+     * such as Lathe32RNG, which will be referenced in this class (if the state of random changes because this
      * object needed a random number, the state change will be reflected in the code that passed random to here).
      *
      * If you use this constructor, you must call an  initialize() method before using this class.
@@ -132,7 +132,7 @@ public class Spill implements Serializable {
      * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls
      */
     public Spill(final boolean[][] level) {
-        sr = new ThrustAltRNG();
+        sr = new LightRNG();
         rng = new StatefulRNG(sr);
 
         initialize(level);
@@ -143,7 +143,7 @@ public class Spill implements Serializable {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final boolean[][] level, Measurement measurement) {
-        sr = new ThrustAltRNG();
+        sr = new LightRNG();
         rng = new StatefulRNG(sr);
 
         this.measurement = measurement;
@@ -160,7 +160,7 @@ public class Spill implements Serializable {
      * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
      */
     public Spill(final char[][] level) {
-        sr = new ThrustAltRNG();
+        sr = new LightRNG();
         rng = new StatefulRNG(sr);
 
         initialize(level);
@@ -175,7 +175,7 @@ public class Spill implements Serializable {
      * @param alternateWall the char that will be interpreted as a wall in {@code level}
      */
     public Spill(final char[][] level, char alternateWall) {
-        sr = new ThrustAltRNG();
+        sr = new LightRNG();
         rng = new StatefulRNG(sr);
 
         initialize(level, alternateWall);
@@ -191,7 +191,7 @@ public class Spill implements Serializable {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement) {
-        sr = new ThrustAltRNG();
+        sr = new LightRNG();
         rng = new StatefulRNG(sr);
         this.measurement = measurement;
 
@@ -211,7 +211,7 @@ public class Spill implements Serializable {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement, RNG random) {
-        sr = new ThrustAltRNG(random.nextLong());
+        sr = new LightRNG(random.nextLong());
         rng = new StatefulRNG(sr);
         this.measurement = measurement;
 

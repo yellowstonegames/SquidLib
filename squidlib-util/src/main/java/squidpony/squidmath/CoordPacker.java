@@ -1936,7 +1936,7 @@ public class CoordPacker {
      * @param rng the RNG to use to incorporate a random factor to the generation
      * @return a Coord[] corresponding to a fraction of the "on" cells in packed.
      */
-    public static Coord[] randomSeparated(short[] packed, int separation, RNG rng)
+    public static Coord[] randomSeparated(short[] packed, int separation, IRNG rng)
     {
         if(separation <= 1)
             return allPacked(packed);
@@ -3376,7 +3376,7 @@ public class CoordPacker {
         int boundSize = count(bounds);
         ShortVLA vla = new ShortVLA(256);
         ShortSet ss = new ShortSet(boundSize), edge = new ShortSet(boundSize), quickBounds = new ShortSet(boundSize);
-        boolean on = false, justAdded;
+        boolean on = false;
         int idx = 0;
         short x, y, dist;
         for(int p = 0; p < bounds.length; p++, on = !on) {
@@ -4750,7 +4750,7 @@ public class CoordPacker {
      * @return a Coord[], ordered by distance along the Hilbert Curve, corresponding to a random section of "on" cells
      * in packed that has a random length approximately equal to the count of all "on" cells in packed times fraction.
      */
-    public static Coord[] randomSample(short[] packed, double fraction, RNG rng)
+    public static Coord[] randomSample(short[] packed, double fraction, IRNG rng)
     {
         int counted = count(packed);
         ShortVLA vla = new ShortVLA((int)(counted * fraction) + 1);
@@ -4781,7 +4781,7 @@ public class CoordPacker {
      * @param rng the random number generator used to decide random factors
      * @return a Coord corresponding to a random "on" cell in packed, or the Coord (-1, -1) if packed is empty
      */
-    public static Coord singleRandom(short[] packed, RNG rng)
+    public static Coord singleRandom(short[] packed, IRNG rng)
     {
         int counted = count(packed);
         if(counted == 0)

@@ -1738,11 +1738,11 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
     }
 
     /**
-     * Gets a random key from this MultiArrangement in constant time, using the given RNG to generate a random number.
+     * Gets a random key from this MultiArrangement in constant time, using the given IRNG to generate a random number.
      * @param rng used to generate a random index for a key
      * @return a random key from this MultiArrangement, or null if this is empty
      */
-    public K randomKey(RNG rng)
+    public K randomKey(IRNG rng)
     {
         if(rng == null)
             return null;
@@ -1750,11 +1750,11 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
     }
 
     /**
-     * Randomly alters the iteration order for this MultiArrangement using the given RNG to shuffle.
+     * Randomly alters the iteration order for this MultiArrangement using the given IRNG to shuffle.
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public MultiArrangement<K> shuffle(RNG rng)
+    public MultiArrangement<K> shuffle(IRNG rng)
     {
         if(order.size < 2)
             return this;

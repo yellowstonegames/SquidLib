@@ -1390,8 +1390,8 @@ public class TableSet<C, R> implements java.io.Serializable {
      * @param rng used to generate a random index for a value
      * @return a random value from this OrderedSet
      */
-    public C randomColumn(RNG rng) {
-        return columnAt(rng.nextIntHasty(order.size));
+    public C randomColumn(IRNG rng) {
+        return columnAt(rng.nextInt(order.size));
     }
 
     /**
@@ -1400,8 +1400,8 @@ public class TableSet<C, R> implements java.io.Serializable {
      * @param rng used to generate a random index for a value
      * @return a random value from this OrderedSet
      */
-    public R randomRow(RNG rng) {
-        return rowAt(rng.nextIntHasty(order.size));
+    public R randomRow(IRNG rng) {
+        return rowAt(rng.nextInt(order.size));
     }
 
     /**
@@ -1410,7 +1410,7 @@ public class TableSet<C, R> implements java.io.Serializable {
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public TableSet<C, R> shuffle(RNG rng) {
+    public TableSet<C, R> shuffle(IRNG rng) {
         if (size < 2 || rng == null)
             return this;
         order.shuffle(rng);

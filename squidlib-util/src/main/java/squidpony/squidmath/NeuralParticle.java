@@ -29,11 +29,11 @@ import java.util.List;
 public class NeuralParticle implements Serializable{
     private static final long serialVersionUID = -3742942580678517149L;
 
-    private final RNG rng;
+    private final IRNG rng;
     private final int maxDistance, minDistance, width, height;
     private final LinkedList<Coord> distribution = new LinkedList<>();
 
-    public NeuralParticle(int width, int height, int maxDistance, RNG rng) {
+    public NeuralParticle(int width, int height, int maxDistance, IRNG rng) {
         this.rng = rng;
         this.maxDistance = maxDistance;
         this.width = width;

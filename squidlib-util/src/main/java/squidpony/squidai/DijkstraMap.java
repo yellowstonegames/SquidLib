@@ -208,7 +208,7 @@ public class DijkstraMap implements Serializable {
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
-    public RNG rng;
+    public IRNG rng;
     private int frustration = 0;
     public Coord[][] targetMap;
 
@@ -1133,8 +1133,8 @@ public class DijkstraMap implements Serializable {
         Coord start2 = start;
         int xShift = width / 6, yShift = height / 6;
         while (physicalMap[start.x][start.y] >= WALL && frustration < 50) {
-            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextIntHasty(1 + xShift * 2) - xShift), width - 2),
-                    Math.min(Math.max(1, start.y + rng.nextIntHasty(1 + yShift * 2) - yShift), height - 2));
+            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
+                    Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
         }
         gradientMap[start2.x][start2.y] = 0.0;
         int adjX, adjY, cen, cenX, cenY;
@@ -1223,7 +1223,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d < measurement.directionCount() + 1; d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1276,8 +1276,8 @@ public class DijkstraMap implements Serializable {
         Coord start2 = start;
         int xShift = width / 6, yShift = height / 6;
         while (physicalMap[start.x][start.y] >= WALL && frustration < 50) {
-            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextIntHasty(1 + xShift * 2) - xShift), width - 2),
-                    Math.min(Math.max(1, start.y + rng.nextIntHasty(1 + yShift * 2) - yShift), height - 2));
+            start2 = Coord.get(Math.min(Math.max(1, start.x + rng.nextInt(1 + xShift * 2) - xShift), width - 2),
+                    Math.min(Math.max(1, start.y + rng.nextInt(1 + yShift * 2) - yShift), height - 2));
         }
         gradientMap[start2.x][start2.y] = 0.0;
         int adjX, adjY, cen, cenX, cenY;
@@ -1782,7 +1782,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -1946,7 +1946,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2164,7 +2164,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2342,7 +2342,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2452,7 +2452,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2593,7 +2593,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2737,7 +2737,7 @@ public class DijkstraMap implements Serializable {
 
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2860,7 +2860,7 @@ public class DijkstraMap implements Serializable {
 
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -2928,7 +2928,7 @@ public class DijkstraMap implements Serializable {
             }
             double best = gradientMap[currentPos.x][currentPos.y];
             appendDirToShuffle(rng);
-            int choice = 0;//rng2.nextIntHasty(measurement.directionCount() + 1);
+            int choice = 0;
 
             for (int d = 0; d <= measurement.directionCount(); d++) {
                 Coord pt = Coord.get(currentPos.x + dirs[d].deltaX, currentPos.y + dirs[d].deltaY);
@@ -3038,13 +3038,13 @@ public class DijkstraMap implements Serializable {
         this.blockingRequirement = blockingRequirement > 2 ? 2 : blockingRequirement < 0 ? 0 : blockingRequirement;
     }
 
-    private void appendDirToShuffle(RNG rng) {
+    private void appendDirToShuffle(IRNG rng) {
         final Direction[] src = measurement == Measurement.MANHATTAN
                 ? Direction.CARDINALS : Direction.OUTWARDS;
         final int n = measurement.directionCount();
         System.arraycopy(src, 0, dirs, 0, n);
         for (int i = n - 1; i > 0; i--) {
-            final int r = rng.nextIntHasty(i+1);
+            final int r = rng.nextInt(i+1);
             Direction t = dirs[r];
             dirs[r] = dirs[i];
             dirs[i] = t;

@@ -3,6 +3,8 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.RNG;
 
 import java.util.Arrays;
@@ -28,7 +30,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     private class ClassicRogueRoom {
 
         private int x, y, width, height, cellx, celly;
-        private final List<ClassicRogueRoom> connections = new LinkedList<>();
+        private final OrderedSet<ClassicRogueRoom> connections = new OrderedSet<>(4);
 
         ClassicRogueRoom(int x, int y, int width, int height, int cellx, int celly) {
             this.x = x;
@@ -63,7 +65,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         }
     }
 
-    private RNG rng;
+    private IRNG rng;
 
     private int horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight,
             minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight;
@@ -108,7 +110,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
      * @param maxRoomHeight The maximum height a room can be
      */
     public ClassicRogueMapGenerator(int horizontalRooms, int verticalRooms, int dungeonWidth, int dungeonHeight,
-                                    int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, RNG rng)
+                                    int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight, IRNG rng)
     {
         this.rng = rng;
         this.horizontalRooms = horizontalRooms;

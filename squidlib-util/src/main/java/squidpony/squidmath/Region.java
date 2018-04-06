@@ -189,7 +189,7 @@ public class Region extends AbstractList<Coord> implements Serializable{
      * @param rng the source of random numbers used to get a random Coord from this Region
      * @return a random Coord in this Region, or null if this is empty
      */
-    public Coord getRandomCoord(RNG rng)
+    public Coord getRandomCoord(IRNG rng)
     {
         if(CoordPacker.isEmpty(raw))
             return null;
@@ -214,7 +214,7 @@ public class Region extends AbstractList<Coord> implements Serializable{
      * @param rng the source of random numbers used to randomize Coords used, removing any noticeable pattern
      * @return a new Region made of the separated Coords
      */
-    public Region randomSeparated(int separation, RNG rng)
+    public Region randomSeparated(int separation, IRNG rng)
     {
         return new Region(CoordPacker.randomSeparated(raw, separation, rng));
     }

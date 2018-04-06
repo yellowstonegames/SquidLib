@@ -2486,11 +2486,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         return oldValue;
     }
     /**
-     * Gets a random value from this Arrangement in constant time, using the given RNG to generate a random number.
+     * Gets a random value from this Arrangement in constant time, using the given IRNG to generate a random number.
      * @param rng used to generate a random index for a value
      * @return a random value from this Arrangement, or -1 if this is empty
      */
-    public int randomValue(RNG rng)
+    public int randomValue(IRNG rng)
     {
         if(rng == null)
             return defRetValue;
@@ -2498,11 +2498,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Gets a random key from this Arrangement in constant time, using the given RNG to generate a random number.
+     * Gets a random key from this Arrangement in constant time, using the given IRNG to generate a random number.
      * @param rng used to generate a random index for a key
      * @return a random key from this Arrangement, or null if this is empty
      */
-    public K randomKey(RNG rng)
+    public K randomKey(IRNG rng)
     {
         if(rng == null)
             return null;
@@ -2510,21 +2510,21 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Gets a random entry from this Arrangement in constant time, using the given RNG to generate a random number.
+     * Gets a random entry from this Arrangement in constant time, using the given IRNG to generate a random number.
      * @param rng used to generate a random index for a entry
      * @return a random key-value entry from this Arrangement
      */
-    public Entry<K, Integer> randomEntry(RNG rng)
+    public Entry<K, Integer> randomEntry(IRNG rng)
     {
         return new MapEntry(order.getRandomElement(rng));
     }
 
     /**
-     * Randomly alters the iteration order for this Arrangement using the given RNG to shuffle.
+     * Randomly alters the iteration order for this Arrangement using the given IRNG to shuffle.
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public Arrangement<K> shuffle(RNG rng)
+    public Arrangement<K> shuffle(IRNG rng)
     {
         if(size < 2)
             return this;

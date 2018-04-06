@@ -90,7 +90,7 @@ public class MultiSpill {
      * @param random an RNG that will be converted to a StatefulRNG if it is not one already
      */
     public MultiSpill(RNG random) {
-        rng = new StatefulRNG(random.getRandomness());
+        rng = new StatefulRNG(random.nextLong());
 
         fresh = new ArrayList<>();
     }
@@ -119,14 +119,15 @@ public class MultiSpill {
     /**
      * Used to construct a Spill from the output of another, specifying a distance calculation and RNG.
      * <br>
-     * This constructor allows you to specify an RNG, but only the RandomnessSource of that RNG will be used. If
-     * the RandomnessSource does not also implement StatefulRandomness, then it will be used to generate a seed for
-     * a LightRNG and that will be used instead.
+     * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses will
+     * not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will be
+     * used to seed this class' RNG).
+     *
      * @param level a short[][] that should have been the spillMap of another MultiSpill
      * @param measurement a Spill.Measurement that should usually be MANHATTAN
      */
-    public MultiSpill(final short[][] level, Measurement measurement, RNG random) {
-        rng = new StatefulRNG(random.getRandomness());
+    public MultiSpill(final short[][] level, Measurement measurement, IRNG random) {
+        rng = new StatefulRNG(random.nextLong());
 
         this.measurement = measurement;
 
@@ -182,15 +183,15 @@ public class MultiSpill {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
      * <br>
-     * This constructor allows you to specify an RNG, but only the RandomnessSource of that RNG will be used. If
-     * the RandomnessSource does not also implement StatefulRandomness, then it will be used to generate a seed for
-     * a LightRNG and that will be used instead.
+     * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses will
+     * not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will be
+     * used to seed this class' RNG).
      * @param level a char[][] that should use '#' for walls and '.' for floors
      * @param measurement a Spill.Measurement that should usually be MANHATTAN
      * @param random an RNG that will be converted to a StatefulRNG if it is not one already
      */
-    public MultiSpill(final char[][] level, Measurement measurement, RNG random) {
-        rng = new StatefulRNG(random.getRandomness());
+    public MultiSpill(final char[][] level, Measurement measurement, IRNG random) {
+        rng = new StatefulRNG(random.nextLong());
         this.measurement = measurement;
 
         initialize(level);

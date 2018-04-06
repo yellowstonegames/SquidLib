@@ -209,34 +209,34 @@ public class K2V1<A, B, Q> {
     }
 
     /**
-     * Gets a random A from this K2V1 using the given RNG.
+     * Gets a random A from this K2V1 using the given IRNG.
      * @param random generates a random index to get an A with
      * @return a randomly chosen A, or null if this is empty
      */
-    public A randomA(RNG random)
+    public A randomA(IRNG random)
     {
         return keys.randomA(random);
     }
 
     /**
-     * Gets a random B from this K2V1 using the given RNG.
+     * Gets a random B from this K2V1 using the given IRNG.
      * @param random generates a random index to get a B with
      * @return a randomly chosen B, or null if this is empty
      */
-    public B randomB(RNG random)
+    public B randomB(IRNG random)
     {
         return keys.randomB(random);
     }
 
     /**
-     * Gets a random Q from this K2V1 using the given RNG.
+     * Gets a random Q from this K2V1 using the given IRNG.
      * @param random generates a random index to get a Q with
      * @return a randomly chosen Q, or null if this is empty
      */
-    public Q randomQ(RNG random) {
+    public Q randomQ(IRNG random) {
         if(random == null || values.isEmpty())
             return null;
-        return values.get(random.nextIntHasty(values.size()));
+        return values.get(random.nextInt(values.size()));
     }
 
     /**
@@ -429,8 +429,8 @@ public class K2V1<A, B, Q> {
     /**
      * Reorders this K2V1 using {@code ordering}, which have the same length as this K2V1's {@link #size()}
      * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no
-     * change to the current ordering), {@link RNG#randomOrdering(int)} (which gives a random ordering, and if
-     * applied immediately would be the same as calling {@link #shuffle(RNG)}), or made in some other way. If you
+     * change to the current ordering), {@link IRNG#randomOrdering(int)} (which gives a random ordering, and if
+     * applied immediately would be the same as calling {@link #shuffle(IRNG)}), or made in some other way. If you
      * already have an ordering and want to make a different ordering that can undo the change, you can use
      * {@link ArrayTools#invertOrdering(int[])} called on the original ordering.
      * @param ordering an int array or vararg that should contain each int from 0 to {@link #size()} (or less)
@@ -446,10 +446,10 @@ public class K2V1<A, B, Q> {
     /**
      * Generates a random ordering with rng and applies the same ordering to all keys and values this has; they will
      * maintain their current association to other keys and values but their ordering/indices will change.
-     * @param rng an RNG to produce the random ordering this will use
+     * @param rng an IRNG to produce the random ordering this will use
      * @return this for chaining
      */
-    public K2V1<A, B, Q> shuffle(RNG rng)
+    public K2V1<A, B, Q> shuffle(IRNG rng)
     {
         int[] ordering = rng.randomOrdering(keys.keysA.size);
         keys.reorder(ordering);

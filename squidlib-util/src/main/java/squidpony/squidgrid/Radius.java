@@ -119,7 +119,7 @@ public enum Radius {
         return radius(dx, dy, 0);
     }
 
-    public Coord onUnitShape(double distance, RNG rng) {
+    public Coord onUnitShape(double distance, IRNG rng) {
         int x = 0, y = 0;
         switch (this) {
             case SQUARE:
@@ -162,7 +162,7 @@ public enum Radius {
         return Coord.get(x, y);
     }
 
-    public Coord3D onUnitShape3D(double distance, RNG rng) {
+    public Coord3D onUnitShape3D(double distance, IRNG rng) {
         int x = 0, y = 0, z = 0;
         switch (this) {
             case SQUARE:

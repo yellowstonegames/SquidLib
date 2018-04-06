@@ -1,12 +1,14 @@
 package squidpony.squidmath;
 
+import java.io.Serializable;
+
 /**
  * A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  * set or retrieved using setState() or getState().
  * Created by Tommy Ettinger on 9/15/2015.
  * @author Tommy Ettinger
  */
-public class StatefulRNG extends RNG {
+public class StatefulRNG extends RNG implements Serializable, IRNG {
 
 	private static final long serialVersionUID = -2456306898212937163L;
 

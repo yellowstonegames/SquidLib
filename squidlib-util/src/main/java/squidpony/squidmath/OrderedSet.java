@@ -42,7 +42,7 @@ import java.util.*;
  * in the set does not change the iteration order). Note that this order has
  * nothing in common with the natural order of the keys. The order is kept by
  * means of an array list, represented <i>via</i> an IntVLA parallel to the
- * table that can be modified with methods like {@link #shuffle(RNG)}.
+ * table that can be modified with methods like {@link #shuffle(IRNG)}.
  * </p>
  * <p>
  * This class implements the interface of a sorted set, so to allow easy access
@@ -63,9 +63,9 @@ import java.util.*;
  * can be used like that but with values associated as well (where OrderedSet uses contains(), OrderedMap uses
  * containsKey()). You can also set the item at a position with {@link #addAt(Object, int)}, or alter an item while
  * keeping index the same with {@link #alter(Object, Object)}. Reordering works here too, both with completely random
- * orders from {@link #shuffle(RNG)} or with a previously-generated ordering from {@link #reorder(int...)} (you can
+ * orders from {@link #shuffle(IRNG)} or with a previously-generated ordering from {@link #reorder(int...)} (you can
  * produce such an ordering for a given size and reuse it across multiple Ordered data structures with
- * {@link RNG#randomOrdering(int)}).
+ * {@link IRNG#randomOrdering(int)}).
  * </p>
  * <p>
  * You can pass an {@link CrossHash.IHasher} instance such as {@link CrossHash#generalHasher} as an extra parameter to
@@ -1742,22 +1742,22 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     }
 
     /**
-     * Gets a random value from this OrderedSet in constant time, using the given RNG to generate a random number.
+     * Gets a random value from this OrderedSet in constant time, using the given IRNG to generate a random number.
      *
      * @param rng used to generate a random index for a value
      * @return a random value from this OrderedSet
      */
-    public K randomItem(RNG rng) {
+    public K randomItem(IRNG rng) {
         return getAt(rng.nextInt(order.size));
     }
 
     /**
-     * Randomly alters the iteration order for this OrderedSet using the given RNG to shuffle.
+     * Randomly alters the iteration order for this OrderedSet using the given IRNG to shuffle.
      *
      * @param rng used to generate a random ordering
      * @return this for chaining
      */
-    public OrderedSet<K> shuffle(RNG rng) {
+    public OrderedSet<K> shuffle(IRNG rng) {
         if (size < 2 || rng == null)
             return this;
         order.shuffle(rng);

@@ -378,17 +378,17 @@ public class IntVLA implements Serializable, Cloneable {
         if (size > newSize) size = newSize;
     }
 
-    public int getRandomElement(RNG random)
+    public int getRandomElement(IRNG random)
     {
         return items[random.nextInt(items.length)];
     }
 
     /**
-     * Shuffles this IntVLA in place using the given RNG.
-     * @param random an RNG used to generate the shuffled order
+     * Shuffles this IntVLA in place using the given IRNG.
+     * @param random an IRNG, such as an RNG, used to generate the shuffled order
      * @return this object, modified, after shuffling
      */
-    public IntVLA shuffle(RNG random)
+    public IntVLA shuffle(IRNG random)
     {
         int n = size;
         for (int i = 0; i < n; i++)

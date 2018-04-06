@@ -63,7 +63,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      * @param rng    an RNG object to use for random choices; this make a lot of random choices.
      * @see PoissonDisk used to ensure spacing for the points.
      */
-    public SymmetryDungeonGenerator(int width, int height, RNG rng) {
+    public SymmetryDungeonGenerator(int width, int height, IRNG rng) {
         this(width, height, rng, basicPoints(width, height, rng));
     }
 
@@ -76,11 +76,11 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      *
      * @param width    the width of the final map in cells
      * @param height   the height of the final map in cells
-     * @param rng      an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng      an IRNG, such as an RNG, to use for random choices; this make a lot of random choices.
      * @param sequence a List of Coord to connect in order; index 0 is the start, index size() - 1 is the end.
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public SymmetryDungeonGenerator(int width, int height, RNG rng, List<Coord> sequence) {
+    public SymmetryDungeonGenerator(int width, int height, IRNG rng, List<Coord> sequence) {
         this(width, height, rng, listToMap(sequence), 1f);
     }
 
@@ -93,11 +93,11 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      *
      * @param width    the width of the final map in cells
      * @param height   the height of the final map in cells
-     * @param rng      an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng      an IRNG, such as an RNG, to use for random choices; this make a lot of random choices.
      * @param sequence a List of Coord to connect in order; index 0 is the start, index size() - 1 is the end.
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public SymmetryDungeonGenerator(int width, int height, RNG rng, OrderedSet<Coord> sequence) {
+    public SymmetryDungeonGenerator(int width, int height, IRNG rng, OrderedSet<Coord> sequence) {
         this(width, height, rng, setToMap(sequence), 1f);
     }
 
@@ -115,7 +115,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public SymmetryDungeonGenerator(int width, int height, RNG rng, OrderedMap<Coord, List<Coord>> connections) {
+    public SymmetryDungeonGenerator(int width, int height, IRNG rng, OrderedMap<Coord, List<Coord>> connections) {
         this(width, height, rng, connections, 0.8f);
     }
 
@@ -134,7 +134,7 @@ public class SymmetryDungeonGenerator extends MixedGenerator {
      * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public SymmetryDungeonGenerator(int width, int height, RNG rng, OrderedMap<Coord, List<Coord>> connections, float roomSizeMultiplier) {
+    public SymmetryDungeonGenerator(int width, int height, IRNG rng, OrderedMap<Coord, List<Coord>> connections, float roomSizeMultiplier) {
         super(width, height, rng, crossConnect(width, height, connections), roomSizeMultiplier);
     }
 

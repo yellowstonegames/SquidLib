@@ -1,6 +1,7 @@
 package squidpony.squidgrid.mapping.styled;
 
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.Random;
@@ -13,9 +14,9 @@ import java.util.Random;
 public class DungeonBoneGen {
 
     /**
-     * The current {@link RNG}, a random number generator that can be seeded initially.
+     * The current {@link IRNG}, a random number generator that can be seeded initially, and is usually an {@link RNG}.
      */
-    public RNG rng;
+    public IRNG rng;
     private int[][] c_color, h_color, v_color;
     private int wide = 20;
     private int high = 20;
@@ -36,7 +37,7 @@ public class DungeonBoneGen {
      * Gets the current RNG.
      * @return
      */
-    public RNG getRng() {
+    public IRNG getRng() {
         return rng;
     }
 
@@ -123,7 +124,7 @@ public class DungeonBoneGen {
      *
      * @param random A squidpony.squidmath.RNG to be used during the dungeon generation.
      */
-    public DungeonBoneGen(RNG random) {
+    public DungeonBoneGen(IRNG random) {
         rng = random;
         c_color = new int[1][1];
 		h_color = new int[1][1];

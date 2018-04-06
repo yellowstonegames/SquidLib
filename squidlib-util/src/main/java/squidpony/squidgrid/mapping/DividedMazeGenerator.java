@@ -1,12 +1,11 @@
 package squidpony.squidgrid.mapping;
 
+import squidpony.Maker;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Recursively divided maze. Creates only walls and passages.
@@ -31,7 +30,7 @@ public class DividedMazeGenerator {
 
     private int width, height;
     private boolean[][] map;
-    private RNG rng;
+    private IRNG rng;
 
     /**
      * Sets up the generator to make mazes the given width and height. The mazes
@@ -54,7 +53,7 @@ public class DividedMazeGenerator {
      * @param height in cells
      * @param rng the random number generator to use
      */
-    public DividedMazeGenerator(int width, int height, RNG rng) {
+    public DividedMazeGenerator(int width, int height, IRNG rng) {
         this.width = width;
         this.height = height;
         this.rng = rng;
@@ -80,7 +79,7 @@ public class DividedMazeGenerator {
     }
 
     private void process() {
-        LinkedList<DividedMazeRoom> stack = new LinkedList<>();
+        ArrayDeque<DividedMazeRoom> stack = new ArrayDeque<>();
         stack.offer(new DividedMazeRoom(1, 1, width - 2, height - 2));
         while (!stack.isEmpty()) {
             DividedMazeRoom room = stack.removeFirst();
@@ -144,7 +143,7 @@ public class DividedMazeGenerator {
                 }
             }
 
-            List<Direction> dirs = Arrays.asList(Direction.CARDINALS);
+            ArrayList<Direction> dirs = Maker.makeList(Direction.CARDINALS);
             dirs.remove(rng.getRandomElement(dirs));
 
             for (Direction dir : dirs) {

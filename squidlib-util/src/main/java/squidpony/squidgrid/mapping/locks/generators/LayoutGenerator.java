@@ -6,8 +6,8 @@ import squidpony.squidgrid.mapping.locks.Condition.SwitchState;
 import squidpony.squidgrid.mapping.locks.constraints.ILayoutConstraints;
 import squidpony.squidgrid.mapping.locks.util.GenerationFailureException;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.IntVLA;
-import squidpony.squidmath.RNG;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class LayoutGenerator implements ILayoutGenerator {
     
     public static final int MAX_RETRIES = 20;
 
-    protected RNG random;
+    protected IRNG random;
     protected RoomLayout dungeon;
     protected ILayoutConstraints constraints;
     
@@ -32,7 +32,7 @@ public class LayoutGenerator implements ILayoutGenerator {
      * @param constraints   the constraints to place on generation
      * @see ILayoutConstraints
      */
-    public LayoutGenerator(RNG rng,
+    public LayoutGenerator(IRNG rng,
                            ILayoutConstraints constraints) {
         this.random = rng;
         assert constraints != null;
@@ -220,7 +220,7 @@ public class LayoutGenerator implements ILayoutGenerator {
             
             // Find an existing room with a free edge:
             Room parentRoom = null;
-            if (!doLock && random.nextIntHasty(10) > 0)
+            if (!doLock && random.nextInt(10) > 0)
                 parentRoom = chooseRoomWithFreeEdge(levels.getRooms(keyLevel),
                         keyLevel);
             if (parentRoom == null) {
@@ -377,7 +377,7 @@ public class LayoutGenerator implements ILayoutGenerator {
             Room nextRoom = dungeon.get(neighborId);
             if (room.getChildren().contains(nextRoom)) {
                 if (room.getEdge(neighborId).getSymbol() == Symbol.NOTHING &&
-                        random.nextIntHasty(4) != 0) {
+                        random.nextInt(4) != 0) {
                     dungeon.link(room, nextRoom, state.toSymbol());
                     addPrecond(nextRoom, new Condition(state.toSymbol()));
                     anyLocks = true;

@@ -2,7 +2,8 @@ package squidpony.squidgrid;
 
 import squidpony.ArrayTools;
 import squidpony.squidmath.Coord;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.LightRNG;
 
 /**
  * A class that imitates patterns in an existing 2D boolean array and uses it to generate a new boolean array with a
@@ -243,7 +244,7 @@ public class MimicFill {
      * @param random an RNG to use for the random components of this technique
      * @return a new 2D boolean array, width = size, height = size, mimicking the visual style of sample
      */
-    public static boolean[][] fill(boolean[][] sample, int size, double temperature, int iterations, RNG random)
+    public static boolean[][] fill(boolean[][] sample, int size, double temperature, int iterations, IRNG random)
     {
         boolean[][] field = new boolean[size][size];
         double[] weights = new double[1 << (N * N)];
@@ -285,7 +286,7 @@ public class MimicFill {
         }*/
         for (int k = 0; k < iterations * size * size; k++)
         {
-            int x = random.nextIntHasty(size), y = random.nextIntHasty(size);
+            int x = random.nextInt(size), y = random.nextInt(size);
 
             double q = 1;
             for (int sy = y - N + 1; sy <= y + N - 1; sy++)
@@ -331,7 +332,7 @@ public class MimicFill {
      * {@link #sampleToMap(boolean[], int, int, char, char)} to get a 2D char array or producing a GreasedRegion with it
      * using {@link squidpony.squidmath.GreasedRegion#GreasedRegion(boolean[], int, int)}. Both the width and height
      * used to interpret the 1D array as a 2D array should be equal to the size parameter passed here. The main reason
-     * you would prefer this method over {@link #fill(boolean[][], int, double, int, RNG)} is that this overload is
+     * you would prefer this method over {@link #fill(boolean[][], int, double, int, IRNG)} is that this overload is
      * somewhat faster due to slightly less-frequent RNG calls and a lot less nested array reading and writing.
      * <br>
      * Takes a 2D boolean array as a "sample" (often one of the constants in this class), a size parameter for the
@@ -352,7 +353,7 @@ public class MimicFill {
      * @param random an RNG to use for the random components of this technique
      * @return a new 1D boolean array, length = size * size, mimicking the visual style of sample when used as 2D data
      */
-    public static boolean[] fillSolo(boolean[][] sample, int size, double temperature, int iterations, RNG random)
+    public static boolean[] fillSolo(boolean[][] sample, int size, double temperature, int iterations, IRNG random)
     {
         int fieldLen = size*size;
         boolean[] field = new boolean[fieldLen];
@@ -384,7 +385,7 @@ public class MimicFill {
         }
         for (int k = 0; k < iterations * fieldLen; k++)
         {
-            final int r = random.nextIntHasty(fieldLen);
+            final int r = random.nextInt(fieldLen);
             final int x = r % size, y = r / size;
 
 

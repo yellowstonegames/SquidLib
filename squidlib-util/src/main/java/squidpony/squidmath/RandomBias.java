@@ -35,7 +35,7 @@ import java.util.Map;
  */
 public class RandomBias implements Serializable {
     private OrderedMap<String, Double> biases;
-    public RNG rng;
+    public IRNG rng;
     public int distribution = EXP_TRI;
 
     /**
@@ -97,16 +97,16 @@ public class RandomBias implements Serializable {
         biases = new OrderedMap<>(32);
         rng = new RNG();
     }
-    public RandomBias(RNG rng)
+    public RandomBias(IRNG rng)
     {
         this.rng = rng;
         biases = new OrderedMap<>(32);
     }
-    public RandomBias(RNG rng, Map<String, Double> mapping)
+    public RandomBias(IRNG rng, Map<String, Double> mapping)
     {
         this(rng, mapping, EXP_TRI);
     }
-    public RandomBias(RNG rng, Map<String, Double> mapping, int distribution) {
+    public RandomBias(IRNG rng, Map<String, Double> mapping, int distribution) {
         this.rng = rng;
         this.distribution = distribution;
         if (mapping == null) {

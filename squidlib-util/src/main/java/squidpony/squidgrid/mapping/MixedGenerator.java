@@ -66,7 +66,7 @@ public class MixedGenerator implements IDungeonGenerator {
     protected EnumMap<CarverType, Integer> carvers;
     protected int width, height;
     protected float roomWidth, roomHeight;
-    public RNG rng;
+    public IRNG rng;
     protected char[][] dungeon;
     protected boolean generated = false;
     protected int[][] environment;
@@ -75,9 +75,9 @@ public class MixedGenerator implements IDungeonGenerator {
     protected int totalPoints;
 
     /**
-     * Mainly for internal use; this is used by {@link #MixedGenerator(int, int, RNG)} to get its room positions.
+     * Mainly for internal use; this is used by {@link #MixedGenerator(int, int, IRNG)} to get its room positions.
      * This is (and was) the default for generating a List of Coord if no other collection of Coord was supplied to the
-     * constructor. For some time this was not the default, and {@link #cleanPoints(int, int, RNG)} was used instead.
+     * constructor. For some time this was not the default, and {@link #cleanPoints(int, int, IRNG)} was used instead.
      * Both are still options, but this technique seems to keep corridors shorter and makes connections between rooms
      * more relevant to the current area.
      * <br>
@@ -88,13 +88,13 @@ public class MixedGenerator implements IDungeonGenerator {
      * @return evenly spaced Coord points in a list made by PoissonDisk, trimmed down so they aren't all used
      * @see PoissonDisk used to make the list
      */
-    public static OrderedSet<Coord> basicPoints(int width, int height, RNG rng)
+    public static OrderedSet<Coord> basicPoints(int width, int height, IRNG rng)
     {
         return PoissonDisk.sampleRectangle(Coord.get(2, 2), Coord.get(width - 3, height - 3),
                 8.5f * (width + height) / 120f, width, height, 35, rng);
     }
     /**
-     * Mainly for internal use; this was used by {@link #MixedGenerator(int, int, RNG)} to get its room positions, and
+     * Mainly for internal use; this was used by {@link #MixedGenerator(int, int, IRNG)} to get its room positions, and
      * you can choose to use it with {@code new MixedGenerator(width, height, rng, cleanPoints(width, height, rng))}.
      * It produces a fairly rigid layout of rooms that should have less overlap between rooms and corridors; the
      * downside to this is that corridors can become extremely long. The exact technique used here is to get points from
@@ -112,7 +112,7 @@ public class MixedGenerator implements IDungeonGenerator {
      * @return erratically-positioned but generally separated Coord points to pass to a MixedGenerator constructor
      * @see VanDerCorputQRNG used to get separated positions
      */
-    public static List<Coord> cleanPoints(int width, int height, RNG rng)
+    public static List<Coord> cleanPoints(int width, int height, IRNG rng)
     {
         width -= 2;
         height -= 2;
@@ -141,7 +141,7 @@ public class MixedGenerator implements IDungeonGenerator {
      * @param rng an RNG object to use for random choices; this make a lot of random choices.
      * @see PoissonDisk used to ensure spacing for the points.
      */
-    public MixedGenerator(int width, int height, RNG rng) {
+    public MixedGenerator(int width, int height, IRNG rng) {
         this(width, height, rng, cleanPoints(width, height, rng));
     }
 
@@ -157,7 +157,7 @@ public class MixedGenerator implements IDungeonGenerator {
      * @param sequence a List of Coord to connect in order; index 0 is the start, index size() - 1 is the end.
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, List<Coord> sequence) {
+    public MixedGenerator(int width, int height, IRNG rng, List<Coord> sequence) {
         this.width = width;
         this.height = height;
         this.roomWidth = width / 64.0f;
@@ -185,7 +185,7 @@ public class MixedGenerator implements IDungeonGenerator {
         carvers = new EnumMap<>(CarverType.class);
     }
     /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
      * This version of the constructor uses a Map with Coord keys and Coord array values to determine a
      * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
      * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
@@ -193,16 +193,16 @@ public class MixedGenerator implements IDungeonGenerator {
      * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
      * @param width the width of the final map in cells
      * @param height the height of the final map in cells
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng an IRNG object to use for random choices; this make a lot of random choices.
      * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, Map<Coord, List<Coord>> connections)
+    public MixedGenerator(int width, int height, IRNG rng, Map<Coord, List<Coord>> connections)
     {
         this(width, height, rng, connections, 0.8f);
     }
     /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
      * This version of the constructor uses a Map with Coord keys and Coord array values to determine a
      * branching path for the dungeon to take; each key will connect once to each of the Coords in its value, and you
      * usually don't want to connect in both directions. You call the different carver-adding methods to affect what the
@@ -210,12 +210,12 @@ public class MixedGenerator implements IDungeonGenerator {
      * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
      * @param width the width of the final map in cells
      * @param height the height of the final map in cells
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng an IRNG object to use for random choices; this make a lot of random choices.
      * @param connections a Map of Coord keys to arrays of Coord to connect to next; shouldn't connect both ways
      * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, Map<Coord, List<Coord>> connections,
+    public MixedGenerator(int width, int height, IRNG rng, Map<Coord, List<Coord>> connections,
                           float roomSizeMultiplier) {
         this.width = width;
         this.height = height;
@@ -251,7 +251,7 @@ public class MixedGenerator implements IDungeonGenerator {
     }
 
     /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
+     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
      * This version of the constructor uses an {@link squidpony.squidgrid.mapping.locks.IRoomLayout} to set up rooms,
      * almost always produced by {@link squidpony.squidgrid.mapping.locks.generators.LayoutGenerator}. This method does
      * alter the individual Room objects inside layout, making the center of each room match where that center is placed
@@ -263,12 +263,12 @@ public class MixedGenerator implements IDungeonGenerator {
      * is usually needed for {@link SectionDungeonGenerator} to correctly place doors and various other features.
      * @param width the width of the final map in cells
      * @param height the height of the final map in cells
-     * @param rng an RNG object to use for random choices; this make a lot of random choices.
+     * @param rng an IRNG object to use for random choices; this make a lot of random choices.
      * @param layout an IRoomLayout that will almost always be produced by LayoutGenerator; the rooms will be altered
      * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
      * @see SerpentMapGenerator a class that uses this technique
      */
-    public MixedGenerator(int width, int height, RNG rng, IRoomLayout layout,
+    public MixedGenerator(int width, int height, IRNG rng, IRoomLayout layout,
                           float roomSizeMultiplier) {
         this.width = width;
         this.height = height;

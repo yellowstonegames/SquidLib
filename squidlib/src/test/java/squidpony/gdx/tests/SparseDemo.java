@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.*;
+import squidpony.ArrayTools;
+import squidpony.FakeLanguageGen;
+import squidpony.NaturalLanguageCipher;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.DijkstraMap;
 import squidpony.squidgrid.Direction;
@@ -20,6 +22,7 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.LineKit;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
@@ -37,7 +40,7 @@ import java.util.List;
 public class SparseDemo extends ApplicationAdapter {
     SpriteBatch batch;
 
-    private RNG rng;
+    private IRNG rng;
     private SparseLayers display, languageDisplay;
     private DungeonGenerator dungeonGen;
     // decoDungeon stores the dungeon map with features like grass and water, if present, as chars like '"' and '~'.

@@ -30,7 +30,7 @@ public class MimicWFC {
     private int[] stack;
     private int stacksize;
 
-    public RNG random;
+    public IRNG random;
     private int FMX, FMY, totalOptions;
     private boolean periodic;
 
@@ -346,6 +346,23 @@ public class MimicWFC {
 
         clear();
         random = new RNG(seed);
+
+        for (int l = 0; l < limit || limit == 0; l++)
+        {
+            Boolean result = observe();
+            if (result != null) return result;
+            propagate();
+        }
+
+        return true;
+    }
+
+    public boolean run(IRNG rng, int limit)
+    {
+        if (wave == null) init();
+
+        clear();
+        random = rng;
 
         for (int l = 0; l < limit || limit == 0; l++)
         {

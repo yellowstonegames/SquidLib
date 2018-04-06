@@ -1,6 +1,7 @@
 package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.RNG;
 
@@ -79,7 +80,7 @@ public class SoundMap
     /**
      * The RNG used to decide which one of multiple equally-short paths to take.
      */
-    public RNG rng;
+    public IRNG rng;
 
     private boolean initialized = false;
     /**
@@ -97,7 +98,7 @@ public class SoundMap
      * Construct a SoundMap without a level to actually scan. This constructor allows you to specify an RNG before it is
      * used. If you use this constructor, you must call an initialize() method before using this class.
      */
-    public SoundMap(RNG random) {
+    public SoundMap(IRNG random) {
         rng = random;
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();

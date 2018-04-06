@@ -38,7 +38,7 @@ public class Thesaurus implements Serializable{
      * Constructs a new Thesaurus, seeding its RNG (used to shuffle word order) with the next long from the given RNG.
      * @param rng an RNG that will only be used to get one long (for seeding this class' RNG)
      */
-    public Thesaurus(RNG rng)
+    public Thesaurus(IRNG rng)
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
         this.rng = new StatefulRNG(rng.nextLong());
