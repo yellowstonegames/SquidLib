@@ -25,7 +25,7 @@ import java.io.Serializable;
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)
  */
-public class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializable {
+public final class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializable {
     private static final long serialVersionUID = 1L;
 
     private int stateA, stateB;
@@ -71,7 +71,7 @@ public class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializa
      * @return a random number that fits in the specified number of bits
      */
     @Override
-    public int next(int bits) {
+    public final int next(int bits) {
         final int s0 = stateA;
         int s1 = stateB;
         final int result = s0 + s1;
@@ -87,7 +87,7 @@ public class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializa
      * @return a 32-bit random int.
      */
     @Override
-    public int nextInt() {
+    public final int nextInt() {
         final int s0 = stateA;
         int s1 = stateB;
         final int result = s0 + s1;
@@ -103,7 +103,7 @@ public class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializa
      * @return a 64-bit random long.
      */
     @Override
-    public long nextLong() {
+    public final long nextLong() {
         final int s0 = stateA;
         int s1 = stateB;
         final int high = s0 + s1;
@@ -125,7 +125,7 @@ public class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializa
      * @return a random boolean.
      */
     @Override
-    public boolean nextBoolean() {
+    public final boolean nextBoolean() {
         final int s0 = stateA;
         int s1 = stateB;
         final int result = s0 + s1;
@@ -146,7 +146,7 @@ public class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializa
      * @return a double between 0.0 (inclusive) and 0.9999999999999999 (inclusive)
      */
     @Override
-    public double nextDouble() {
+    public final double nextDouble() {
         final int s0 = stateA;
         int s1 = stateB;
         final int high = s0 + s1;
@@ -174,7 +174,7 @@ public class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializa
      * @return a float between 0f (inclusive) and 0.99999994f (inclusive)
      */
     @Override
-    public float nextFloat() {
+    public final float nextFloat() {
         final int s0 = stateA;
         int s1 = stateB;
         final int result = s0 + s1;

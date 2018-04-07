@@ -336,6 +336,20 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureZag32IntR        avgt    4   5.342 ± 0.105  ns/op
  * RNGBenchmark.measureZag32R           avgt    4   8.668 ± 0.234  ns/op
  * </pre>
+ * Revising a few numbers after marking GWTRNG's class and metods as final:
+ * <br>
+ * <pre>
+ * Benchmark                        Mode  Cnt  Score   Error  Units
+ * RNGBenchmark.measureGWTRNG       avgt    4  5.678 ± 0.294  ns/op // pretty much identical
+ * RNGBenchmark.measureGWTRNGInt    avgt    4  3.842 ± 0.060  ns/op
+ * RNGBenchmark.measureLathe32      avgt    4  5.678 ± 0.278  ns/op // pretty much identical
+ * RNGBenchmark.measureLathe32Int   avgt    4  3.853 ± 0.105  ns/op
+ * RNGBenchmark.measureLathe32IntR  avgt    4  4.176 ± 0.076  ns/op
+ * RNGBenchmark.measureLathe32R     avgt    4  6.417 ± 0.437  ns/op
+ * </pre>
+ * <br>
+ * Marking these small methods as final seems to make a substantial difference. The lines that have the comment "pretty
+ * much identical" were not identical before, and without the GWTRNG class and methods marked final, GWTRNG was slower.
  */
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
