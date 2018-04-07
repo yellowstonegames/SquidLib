@@ -41,10 +41,14 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.squidmath.*;
 
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Benchmark results, going back to the beginning. Most recent results are at the bottom.
+ * <br>
+ * <pre>
  * Benchmark                         Mode  Cnt            Score            Error  Units
  * RNGBenchmark.measureLight         avgt    3   1275059037.000 ±   61737532.875  ns/op
  * RNGBenchmark.measureLightInt      avgt    3   1278703443.000 ±   66201423.790  ns/op
@@ -264,1008 +268,457 @@ import java.util.concurrent.TimeUnit;
  * RNGBenchmark.measureXoRoInt        avgt    5  1550.647 ± 52.001  ms/op
  * RNGBenchmark.measureXoRoIntR       avgt    5  1642.572 ± 39.190  ms/op
  * RNGBenchmark.measureXoRoR          avgt    5  1480.749 ± 63.941  ms/op
+ * </pre>
+ * <br>
+ * Updated measurements to use JMH's recommendations.
+ * Now, measurements are in nanoseconds per call, instead of milliseconds per billion calls.
+ * <br>
+ * <pre>
+ * Benchmark                            Mode  Cnt   Score   Error  Units
+ * RNGBenchmark.measureFlap             avgt    4   3.711 ± 0.090  ns/op
+ * RNGBenchmark.measureFlapInt          avgt    4   3.315 ± 0.386  ns/op
+ * RNGBenchmark.measureFlapIntR         avgt    4   3.783 ± 0.047  ns/op
+ * RNGBenchmark.measureFlapR            avgt    4   4.623 ± 0.763  ns/op
+ * RNGBenchmark.measureGWTRNG           avgt    4   5.991 ± 0.137  ns/op
+ * RNGBenchmark.measureGWTRNGInt        avgt    4   4.089 ± 0.164  ns/op
+ * RNGBenchmark.measureJDK              avgt    4  24.362 ± 0.097  ns/op
+ * RNGBenchmark.measureJDKInt           avgt    4  12.246 ± 0.305  ns/op
+ * RNGBenchmark.measureLap              avgt    4   3.336 ± 0.091  ns/op
+ * RNGBenchmark.measureLapInt           avgt    4   3.445 ± 0.077  ns/op
+ * RNGBenchmark.measureLapIntR          avgt    4   4.000 ± 0.042  ns/op
+ * RNGBenchmark.measureLapR             avgt    4   3.795 ± 0.594  ns/op
+ * RNGBenchmark.measureLathe32          avgt    4   5.658 ± 0.106  ns/op
+ * RNGBenchmark.measureLathe32Int       avgt    4   3.858 ± 0.145  ns/op
+ * RNGBenchmark.measureLathe32IntR      avgt    4   4.155 ± 0.121  ns/op
+ * RNGBenchmark.measureLathe32R         avgt    4   6.396 ± 0.053  ns/op
+ * RNGBenchmark.measureLight            avgt    4   3.865 ± 0.165  ns/op
+ * RNGBenchmark.measureLight32          avgt    4   6.181 ± 0.181  ns/op
+ * RNGBenchmark.measureLight32Int       avgt    4   3.720 ± 0.071  ns/op
+ * RNGBenchmark.measureLight32IntR      avgt    4   4.187 ± 0.072  ns/op
+ * RNGBenchmark.measureLight32R         avgt    4   7.183 ± 0.204  ns/op
+ * RNGBenchmark.measureLightInt         avgt    4   3.859 ± 0.227  ns/op
+ * RNGBenchmark.measureLightIntR        avgt    4   4.440 ± 0.344  ns/op
+ * RNGBenchmark.measureLightR           avgt    4   4.397 ± 0.148  ns/op
+ * RNGBenchmark.measureLongPeriod       avgt    4   4.916 ± 0.095  ns/op
+ * RNGBenchmark.measureLongPeriodInt    avgt    4   5.023 ± 0.248  ns/op
+ * RNGBenchmark.measureLongPeriodIntR   avgt    4   5.845 ± 0.102  ns/op
+ * RNGBenchmark.measureLongPeriodR      avgt    4   5.527 ± 0.271  ns/op
+ * RNGBenchmark.measureMathUtils        avgt    4   4.102 ± 0.128  ns/op
+ * RNGBenchmark.measureMathUtilsInt     avgt    4   4.050 ± 0.133  ns/op
+ * RNGBenchmark.measureOriole32         avgt    4   6.615 ± 0.429  ns/op
+ * RNGBenchmark.measureOriole32Int      avgt    4   4.352 ± 0.065  ns/op
+ * RNGBenchmark.measureOriole32IntR     avgt    4   4.944 ± 0.065  ns/op
+ * RNGBenchmark.measureOriole32R        avgt    4   7.170 ± 0.057  ns/op
+ * RNGBenchmark.measureThreadLocal      avgt    4   4.101 ± 1.138  ns/op
+ * RNGBenchmark.measureThreadLocalInt   avgt    4   3.853 ± 0.205  ns/op
+ * RNGBenchmark.measureThrust           avgt    4   3.351 ± 0.301  ns/op
+ * RNGBenchmark.measureThrustAlt        avgt    4   3.518 ± 0.164  ns/op
+ * RNGBenchmark.measureThrustAlt32      avgt    4   6.086 ± 0.299  ns/op
+ * RNGBenchmark.measureThrustAlt32Int   avgt    4   3.888 ± 0.073  ns/op
+ * RNGBenchmark.measureThrustAlt32IntR  avgt    4   4.366 ± 0.285  ns/op
+ * RNGBenchmark.measureThrustAlt32R     avgt    4   7.078 ± 0.140  ns/op
+ * RNGBenchmark.measureThrustAltInt     avgt    4   3.490 ± 0.049  ns/op
+ * RNGBenchmark.measureThrustAltIntR    avgt    4   3.902 ± 0.216  ns/op
+ * RNGBenchmark.measureThrustAltR       avgt    4   5.162 ± 0.254  ns/op
+ * RNGBenchmark.measureThrustInt        avgt    4   3.488 ± 0.049  ns/op
+ * RNGBenchmark.measureThrustIntR       avgt    4   3.895 ± 0.070  ns/op
+ * RNGBenchmark.measureThrustR          avgt    4   3.887 ± 0.088  ns/op
+ * RNGBenchmark.measureVortex           avgt    4   3.723 ± 0.242  ns/op
+ * RNGBenchmark.measureVortexInt        avgt    4   3.927 ± 0.375  ns/op
+ * RNGBenchmark.measureVortexIntR       avgt    4   4.261 ± 0.951  ns/op
+ * RNGBenchmark.measureVortexR          avgt    4   4.050 ± 0.305  ns/op
+ * RNGBenchmark.measureXoRo             avgt    4   3.735 ± 0.312  ns/op
+ * RNGBenchmark.measureXoRoInt          avgt    4   3.765 ± 0.203  ns/op
+ * RNGBenchmark.measureXoRoIntR         avgt    4   4.104 ± 0.293  ns/op
+ * RNGBenchmark.measureXoRoR            avgt    4   4.178 ± 0.228  ns/op
+ * RNGBenchmark.measureZag32            avgt    4   7.819 ± 0.447  ns/op
+ * RNGBenchmark.measureZag32Int         avgt    4   5.635 ± 0.149  ns/op
+ * RNGBenchmark.measureZag32IntR        avgt    4   5.342 ± 0.105  ns/op
+ * RNGBenchmark.measureZag32R           avgt    4   8.668 ± 0.234  ns/op
+ * </pre>
  */
+@State(Scope.Thread)
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Fork(1)
+@Warmup(iterations = 5)
+@Measurement(iterations = 5)
 public class RNGBenchmark {
+    
+    private XoRoRNG XoRo = new XoRoRNG(9999L);
+    private RNG XoRoR = new RNG(XoRo);
+    @Benchmark
+    public long measureXoRo()
+    {
+        return XoRo.nextLong();
+    }
 
-    private static long seed = 9000;
-    private static int iseed = 9000;
+    @Benchmark
+    public int measureXoRoInt()
+    {
+        return XoRo.next(32);
+    }
+    @Benchmark
+    public long measureXoRoR()
+    {
+        return XoRoR.nextLong();
+    }
 
-//    public long doPint()
-//    {
-//        PintRNG rng = new PintRNG(seed);
+    @Benchmark
+    public int measureXoRoIntR()
+    {
+        return XoRoR.nextInt();
+    }
+    
+    private LongPeriodRNG LongPeriod = new LongPeriodRNG(9999L);
+    private RNG LongPeriodR = new RNG(LongPeriod);
+    @Benchmark
+    public long measureLongPeriod()
+    {
+        return LongPeriod.nextLong();
+    }
+    @Benchmark
+    public int measureLongPeriodInt()
+    {
+        return LongPeriod.next(32);
+    }
+    @Benchmark
+    public long measureLongPeriodR()
+    {
+        return LongPeriodR.nextLong();
+    }
+    @Benchmark
+    public int measureLongPeriodIntR()
+    {
+        return LongPeriodR.nextInt();
+    }
+
+
+    private LightRNG Light = new LightRNG(9999L);
+    private RNG LightR = new RNG(Light);
+    @Benchmark
+    public long measureLight()
+    {
+        return Light.nextLong();
+    }
+    @Benchmark
+    public int measureLightInt()
+    {
+        return Light.next(32);
+    }
+    @Benchmark
+    public long measureLightR()
+    {
+        return LightR.nextLong();
+    }
+    @Benchmark
+    public int measureLightIntR()
+    {
+        return LightR.nextInt();
+    }
+    
+    private FlapRNG Flap = new FlapRNG(9999L);
+    private RNG FlapR = new RNG(Flap);
+    @Benchmark
+    public long measureFlap()
+    {
+        return Flap.nextLong();
+    }
+    @Benchmark
+    public int measureFlapInt()
+    {
+        return Flap.next(32);
+    }
+    @Benchmark
+    public long measureFlapR()
+    {
+        return FlapR.nextLong();
+    }
+    @Benchmark
+    public int measureFlapIntR()
+    {
+        return FlapR.nextInt();
+    }
+
+    private LapRNG Lap = new LapRNG(9999L);
+    private RNG LapR = new RNG(Lap);
+    @Benchmark
+    public long measureLap()
+    {
+        return Lap.nextLong();
+    }
+    @Benchmark
+    public int measureLapInt()
+    {
+        return Lap.next(32);
+    }
+    @Benchmark
+    public long measureLapR()
+    {
+        return LapR.nextLong();
+    }
+    @Benchmark
+    public int measureLapIntR()
+    {
+        return LapR.nextInt();
+    }
+
+
+    private ThrustRNG Thrust = new ThrustRNG(9999L);
+    private RNG ThrustR = new RNG(Thrust);
+    @Benchmark
+    public long measureThrust()
+    {
+        return Thrust.nextLong();
+    }
+    @Benchmark
+    public int measureThrustInt()
+    {
+        return Thrust.next(32);
+    }
+    @Benchmark
+    public long measureThrustR()
+    {
+        return ThrustR.nextLong();
+    }
+    @Benchmark
+    public int measureThrustIntR()
+    {
+        return ThrustR.nextInt();
+    }
+
+    private ThrustAltRNG ThrustAlt = new ThrustAltRNG(9999L);
+    private RNG ThrustAltR = new RNG(ThrustAlt);
+    @Benchmark
+    public long measureThrustAlt()
+    {
+        return ThrustAlt.nextLong();
+    }
+    @Benchmark
+    public int measureThrustAltInt()
+    {
+        return ThrustAlt.next(32);
+    }
+    @Benchmark
+    public long measureThrustAltR()
+    {
+        return ThrustAltR.nextLong();
+    }
+    @Benchmark
+    public int measureThrustAltIntR()
+    {
+        return ThrustAltR.nextInt();
+    }
+
+
+    private VortexRNG Vortex = new VortexRNG(9999L);
+    private RNG VortexR = new RNG(Vortex);
+    @Benchmark
+    public long measureVortex()
+    {
+        return Vortex.nextLong();
+    }
+    @Benchmark
+    public int measureVortexInt()
+    {
+        return Vortex.next(32);
+    }
+    @Benchmark
+    public long measureVortexR()
+    {
+        return VortexR.nextLong();
+    }
+    @Benchmark
+    public int measureVortexIntR()
+    {
+        return VortexR.nextInt();
+    }
+
+
+
+    //    private Thrust32RNG Thrust32 = new Thrust32RNG(9999);
+//    private RNG Thrust32R = new RNG(Thrust32);
 //
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
+//    @Benchmark
+//    public long measureThrust32()
+//    {
+//        return Thrust32.nextLong();
 //    }
 //
 //    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePint() throws InterruptedException {
-//        seed = 9000;
-//        doPint();
-//    }
-//
-//    public long doPintInt()
+//    public long measureThrust32Int()
 //    {
-//        PintRNG rng = new PintRNG(iseed);
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.nextInt();
-//        }
-//        return iseed;
+//        return Thrust32.next(32);
+//    }
+//    @Benchmark
+//    public long measureThrust32R()
+//    {
+//        return Thrust32R.nextLong();
 //    }
 //
 //    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePintInt() throws InterruptedException {
-//        iseed = 9000;
-//        doPintInt();
-//    }
-//    public long doPintR()
+//    public long measureThrust32IntR()
 //    {
-//        RNG rng = new RNG(new PintRNG(seed));
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
+//        return Thrust32R.nextInt();
 //    }
 //
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePintR() throws InterruptedException {
-//        seed = 9000;
-//        doPintR();
-//    }
 //
-//    public long doPintIntR()
-//    {
-//        RNG rng = new RNG(new PintRNG(iseed));
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.nextInt();
-//        }
-//        return iseed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePintIntR() throws InterruptedException {
-//        iseed = 9000;
-//        doPintIntR();
-//    }
-
-    public long doThunder()
+    private ThrustAlt32RNG ThrustAlt32 = new ThrustAlt32RNG(9999);
+    private RNG ThrustAlt32R = new RNG(ThrustAlt32);
+    @Benchmark
+    public long measureThrustAlt32()
     {
-        ThunderRNG rng = new ThunderRNG(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return ThrustAlt32.nextLong();
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureThunder() throws InterruptedException {
-        seed = 9000;
-        doThunder();
-    }
-
-    public long doThunderInt()
+    @Benchmark
+    public int measureThrustAlt32Int()
     {
-        ThunderRNG rng = new ThunderRNG(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return ThrustAlt32.next(32);
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureThunderInt() throws InterruptedException {
-        iseed = 9000;
-        doThunderInt();
-    }
-    public long doThunderR()
+    @Benchmark
+    public long measureThrustAlt32R() { return ThrustAlt32R.nextLong(); }
+    @Benchmark
+    public int measureThrustAlt32IntR()
     {
-        RNG rng = new RNG(new ThunderRNG(seed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return ThrustAlt32R.nextInt();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureThunderR() throws InterruptedException {
-        seed = 9000;
-        doThunderR();
-    }
-
-    public long doThunderIntR()
+    private Light32RNG Light32 = new Light32RNG(9999);
+    private RNG Light32R = new RNG(Light32);
+    @Benchmark
+    public long measureLight32()
     {
-        RNG rng = new RNG(new ThunderRNG(iseed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return Light32.nextLong();
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureThunderIntR() throws InterruptedException {
-        iseed = 9000;
-        doThunderIntR();
-    }
-
-    public long doXoRo()
+    @Benchmark
+    public int measureLight32Int()
     {
-        XoRoRNG rng = new XoRoRNG(seed);
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return Light32.next(32);
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXoRo() throws InterruptedException {
-        seed = 9000;
-        doXoRo();
-    }
-
-    public long doXoRoInt()
+    @Benchmark
+    public long measureLight32R()
     {
-        XoRoRNG rng = new XoRoRNG(iseed);
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return Light32R.nextLong();
     }
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXoRoInt() throws InterruptedException {
-        iseed = 9000;
-        doXoRoInt();
-    }
-
-    public long doXoRoR()
+    @Benchmark
+    public int measureLight32IntR()
     {
-        RNG rng = new RNG(new XoRoRNG(seed));
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return Light32R.nextInt();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXoRoR() throws InterruptedException {
-        seed = 9000;
-        doXoRoR();
-    }
-
-    public long doXoRoIntR()
+    private Zag32RNG Zag32 = new Zag32RNG(9999L);
+    private RNG Zag32R = new RNG(Zag32);
+    @Benchmark
+    public long measureZag32()
     {
-        RNG rng = new RNG(new XoRoRNG(iseed));
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return Zag32.nextLong();
     }
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXoRoIntR() throws InterruptedException {
-        iseed = 9000;
-        doXoRoIntR();
-    }
-
-    public long doLight()
+    @Benchmark
+    public int measureZag32Int()
     {
-        LightRNG rng = new LightRNG(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return Zag32.next(32);
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureLight() throws InterruptedException {
-        seed = 9000;
-        doLight();
-    }
-
-    public long doLightInt()
+    @Benchmark
+    public long measureZag32R()
     {
-        LightRNG rng = new LightRNG(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return Zag32R.nextLong();
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureLightInt() throws InterruptedException {
-        iseed = 9000;
-        doLightInt();
-    }
-    public long doLightR()
+    @Benchmark
+    public int measureZag32IntR()
     {
-        RNG rng = new RNG(new LightRNG(seed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return Zag32R.nextInt();
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureLightR() throws InterruptedException {
-        seed = 9000;
-        doLightR();
-    }
-
-    public long doLightIntR()
+    
+    private Oriole32RNG Oriole32 = new Oriole32RNG(9999, 999, 99);
+    private RNG Oriole32R = new RNG(Oriole32);
+    @Benchmark
+    public long measureOriole32()
     {
-        RNG rng = new RNG(new LightRNG(iseed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return Oriole32.nextLong();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureLightIntR() throws InterruptedException {
-        iseed = 9000;
-        doLightIntR();
-    }
-
-    public long doThrust()
+    @Benchmark
+    public int measureOriole32Int()
     {
-        ThrustRNG rng = new ThrustRNG(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return Oriole32.next(32);
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void a__measureThrust() throws InterruptedException {
-        seed = 9000;
-        doThrust();
-    }
-
-    public long doThrustInt()
+    @Benchmark
+    public long measureOriole32R()
     {
-        ThrustRNG rng = new ThrustRNG(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.next(32);
-        }
-        return iseed;
+        return Oriole32R.nextLong();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void a__measureThrustInt() throws InterruptedException {
-        iseed = 9000;
-        doThrustInt();
-    }
-
-    public long doThrustR()
+    @Benchmark
+    public int measureOriole32IntR()
     {
-        RNG rng = new RNG(new ThrustRNG(seed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return Oriole32R.nextInt();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void a__measureThrustR() throws InterruptedException {
-        seed = 9000;
-        doThrustR();
-    }
-
-    public long doThrustIntR()
+    private Lathe32RNG Lathe32 = new Lathe32RNG(9999, 999);
+    private RNG Lathe32R = new RNG(Lathe32);
+    @Benchmark
+    public long measureLathe32() { return Lathe32.nextLong(); }
+    @Benchmark
+    public int measureLathe32Int() { return Lathe32.next(32); }
+    @Benchmark
+    public long measureLathe32R() { return Lathe32R.nextLong(); }
+    @Benchmark
+    public int measureLathe32IntR()
     {
-        RNG rng = new RNG(new ThrustRNG(iseed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return Lathe32R.nextInt();
     }
+    
+    private GWTRNG gwtrng = new GWTRNG(9999, 99);
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void a__measureThrustIntR() throws InterruptedException {
-        iseed = 9000;
-        doThrustIntR();
-    }
-
-//    public long doPermuted()
-//    {
-//        PermutedRNG rng = new PermutedRNG(seed);
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePermuted() throws InterruptedException {
-//        seed = 9000;
-//        doPermuted();
-//    }
-//
-//    public long doPermutedInt()
-//    {
-//        PermutedRNG rng = new PermutedRNG(iseed);
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.nextInt();
-//        }
-//        return iseed;
-//    }
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePermutedInt() throws InterruptedException {
-//        iseed = 9000;
-//        doPermutedInt();
-//    }
-//
-//    public long doPermutedR()
-//    {
-//        RNG rng = new RNG(new PermutedRNG(seed));
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePermutedR() throws InterruptedException {
-//        seed = 9000;
-//        doPermutedR();
-//    }
-//
-//    public long doPermutedIntR()
-//    {
-//        RNG rng = new RNG(new PermutedRNG(iseed));
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.nextInt();
-//        }
-//        return iseed;
-//    }
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measurePermutedIntR() throws InterruptedException {
-//        iseed = 9000;
-//        doPermutedIntR();
-//    }
-//
-//
-//    public long doLFSR()
-//    {
-//        LFSR rng = new LFSR(seed);
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureLFSR() throws InterruptedException {
-//        seed = 9000;
-//        doLFSR();
-//    }
-//
-//    public long doLFSRInt()
-//    {
-//        LFSR rng = new LFSR(iseed);
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.nextInt();
-//        }
-//        return iseed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureLFSRInt() throws InterruptedException {
-//        iseed = 9000;
-//        doLFSRInt();
-//    }
-//    public long doLFSRR()
-//    {
-//        RNG rng = new RNG(new LFSR(seed));
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureLFSRR() throws InterruptedException {
-//        seed = 9000;
-//        doLFSRR();
-//    }
-//
-//    public long doLFSRIntR()
-//    {
-//        RNG rng = new RNG(new LFSR(iseed));
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.nextInt();
-//        }
-//        return iseed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureLFSRIntR() throws InterruptedException {
-//        iseed = 9000;
-//        doLFSRIntR();
-//    }
-//
-//
-//    public long doFlap()
-//    {
-//        FlapRNG rng = new FlapRNG(seed);
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureFlap() throws InterruptedException {
-//        seed = 9000;
-//        doFlap();
-//    }
-//
-//    public long doFlapInt()
-//    {
-//        FlapRNG rng = new FlapRNG(iseed);
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.next(32);
-//        }
-//        return iseed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureFlapInt() throws InterruptedException {
-//        iseed = 9000;
-//        doFlapInt();
-//    }
-//
-//    public long doFlapR()
-//    {
-//        RNG rng = new RNG(new FlapRNG(seed));
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            seed += rng.nextLong();
-//        }
-//        return seed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureFlapR() throws InterruptedException {
-//        seed = 9000;
-//        doFlapR();
-//    }
-//
-//    public long doFlapIntR()
-//    {
-//        RNG rng = new RNG(new FlapRNG(iseed));
-//
-//        for (int i = 0; i < 1000000000; i++) {
-//            iseed += rng.nextInt();
-//        }
-//        return iseed;
-//    }
-//
-//    @Benchmark
-//    @BenchmarkMode(Mode.AverageTime)
-//    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-//    public void measureFlapIntR() throws InterruptedException {
-//        iseed = 9000;
-//        doFlapIntR();
-//    }
-
-    public long doGDX()
+    @Benchmark
+    public long measureGWTRNG() { return gwtrng.nextLong(); }
+    @Benchmark
+    public int measureGWTRNGInt()
     {
-        RandomXS128 rng = new RandomXS128(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return gwtrng.nextInt();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void measureGDX() throws InterruptedException {
-        seed = 9000;
-        doGDX();
-    }
-
-    public long doGDXInt()
+    private Random JDK = new Random(9999L);
+    @Benchmark
+    public long measureJDK()
     {
-        RandomXS128 rng = new RandomXS128(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return JDK.nextLong();
     }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void measureGDXInt() throws InterruptedException {
-        iseed = 9000;
-        doGDXInt();
-    }
-
-    public long doMathUtils()
+    @Benchmark
+    public int measureJDKInt()
     {
-        Random rng = MathUtils.random;
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
+        return JDK.nextInt();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void measureMathUtils() throws InterruptedException {
-        seed = 9000;
-        doMathUtils();
-    }
-
-    public long doMathUtilsInt()
+    private Random mathUtils = MathUtils.random;
+    @Benchmark
+    public long measureMathUtils()
     {
-        Random rng = MathUtils.random;
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
+        return mathUtils.nextLong();
+    }
+    @Benchmark
+    public int measureMathUtilsInt()
+    {
+        return mathUtils.nextInt();
     }
 
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-    public void measureMathUtilsInt() throws InterruptedException {
-        iseed = 9000;
-        doMathUtilsInt();
+    private ThreadLocalRandom tlr = ThreadLocalRandom.current();
+    @Benchmark
+    public long measureThreadLocal()
+    {
+        return tlr.nextLong();
     }
-
-
+    @Benchmark
+    public int measureThreadLocalInt()
+    {
+        return tlr.nextInt();
+    }
+    
+    
     /*
-    public long doXor()
-    {
-        XorRNG rng = new XorRNG(seed);
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXor() throws InterruptedException {
-        seed = 9000;
-        doXor();
-    }
-
-    public long doXorInt()
-    {
-        XorRNG rng = new XorRNG(iseed);
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXorInt() throws InterruptedException {
-        iseed = 9000;
-        doXorInt();
-    }
-
-    public long doXorR()
-    {
-        RNG rng = new RNG(new XorRNG(seed));
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXorR() throws InterruptedException {
-        seed = 9000;
-        doXorR();
-    }
-
-    public long doXorIntR()
-    {
-        RNG rng = new RNG(new XorRNG(iseed));
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureXorIntR() throws InterruptedException {
-        iseed = 9000;
-        doXorIntR();
-    }
-
-    public long doChaosR()
-    {
-        RNG rng = new RNG(new ChaosRNG());
-        //rng.setSeed(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureChaosR() throws InterruptedException {
-        seed = 9000;
-        doChaosR();
-    }
-
-    public long doChaosRInt()
-    {
-        RNG rng = new RNG(new ChaosRNG());
-        //rng.setSeed(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureChaosRInt() throws InterruptedException {
-        iseed = 9000;
-        doChaosRInt();
-    }
-    public long doThreadLocalRandom()
-    {
-        ThreadLocalRandom rng = ThreadLocalRandom.current();
-        //rng.setSeed(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThreadLocalRandom() throws InterruptedException {
-        seed = 9000;
-        doThreadLocalRandom();
-    }
-
-    public long doThreadLocalRandomInt()
-    {
-        ThreadLocalRandom rng = ThreadLocalRandom.current();
-        //rng.setSeed(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureThreadLocalRandomInt() throws InterruptedException {
-        iseed = 9000;
-        doThreadLocalRandomInt();
-    }
-    public long doRandom()
-    {
-        Random rng = new Random(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureRandom() throws InterruptedException {
-        seed = 9000;
-        doRandom();
-    }
-
-    public long doRandomInt()
-    {
-        Random rng = new Random(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    //@Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureRandomInt() throws InterruptedException {
-        iseed = 9000;
-        doRandomInt();
-    }
-
-
-    /*
-    public long doIsaac()
-    {
-        IsaacRNG rng = new IsaacRNG(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureIsaac() throws InterruptedException {
-        seed = 9000;
-        doIsaac();
-    }
-
-    public long doIsaacInt()
-    {
-        IsaacRNG rng = new IsaacRNG(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.next(32);
-        }
-        return iseed;
-    }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureIsaacInt() throws InterruptedException {
-        iseed = 9000;
-        doIsaacInt();
-    }
-    public long doIsaacR()
-    {
-        RNG rng = new RNG(new IsaacRNG(seed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureIsaacR() throws InterruptedException {
-        seed = 9000;
-        doIsaacR();
-    }
-
-    public long doIsaacIntR()
-    {
-        RNG rng = new RNG(new IsaacRNG(iseed));
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-    */
-
-/*
-    public long doSecureRandom()
-    {
-        SecureRandom rng = new SecureRandom();
-        //rng.setSeed(seed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureSecureRandom() throws InterruptedException {
-        seed = 9000;
-        doSecureRandom();
-    }
-
-    public long doSecureRandomInt()
-    {
-        SecureRandom rng = new SecureRandom();
-        //rng.setSeed(iseed);
-
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-
-    @Benchmark @BenchmarkMode(Mode.AverageTime) @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    @Warmup(iterations = 5) @Measurement(iterations = 5) @Fork(1)
-
-    public void measureSecureRandomInt() throws InterruptedException {
-        iseed = 9000;
-        doSecureRandomInt();
-    }
-*/
-
-
-    public long doMT()
-    {
-        RNG rng = new RNG(new MersenneTwister(seed));
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMT() throws InterruptedException {
-        seed = 9000;
-        doMT();
-    }
-
-    public long doMTInt()
-    {
-        RNG rng = new RNG(new MersenneTwister(iseed));
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMTInt() throws InterruptedException {
-        iseed = 9000;
-        doMTInt();
-    }
-
-    public long doMTR()
-    {
-        RNG rng = new RNG(new MersenneTwister(seed));
-        for (int i = 0; i < 1000000000; i++) {
-            seed += rng.nextLong();
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMTR() throws InterruptedException {
-        seed = 9000;
-        doMTR();
-    }
-
-    public long doMTIntR()
-    {
-        RNG rng = new RNG(new MersenneTwister(iseed));
-        for (int i = 0; i < 1000000000; i++) {
-            iseed += rng.nextInt();
-        }
-        return iseed;
-    }
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMTIntR() throws InterruptedException {
-        iseed = 9000;
-        doMTIntR();
-    }
-
-    /*
-     * ============================== HOW TO RUN THIS TEST: ====================================
-     *
-     * You are expected to see the different run modes for the same benchmark.
-     * Note the units are different, scores are consistent with each other.
-     *
-     * You can run this test:
-     *
-     * a) Via the command line from the squidlib-performance module's root folder:
-     *    $ mvn clean install
-     *    $ java -jar target/benchmarks.jar RNGBenchmark -wi 3 -i 3 -f 1
-     *
-     *    (we requested 5 warmup/measurement iterations, single fork)
-     *
-     * b) Via the Java API:
-     *    (see the JMH homepage for possible caveats when running from IDE:
-     *      http://openjdk.java.net/projects/code-tools/jmh/)
+mvn clean install
+java -jar target/benchmarks.jar RNGBenchmark -wi 4 -i 4 -f 1 -gc true
      */
-
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(RNGBenchmark.class.getSimpleName())
@@ -1277,6 +730,4 @@ public class RNGBenchmark {
 
         new Runner(opt).run();
     }
-
-
 }
