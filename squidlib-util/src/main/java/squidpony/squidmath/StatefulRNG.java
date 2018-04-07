@@ -83,5 +83,13 @@ public class StatefulRNG extends RNG implements Serializable, IRNG {
     public String toString() {
         return "StatefulRNG{" + Long.toHexString(((StatefulRandomness)random).getState()) + "}";
     }
+    /**
+     * Returns this StatefulRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.
+     * @return a {@link Serializable} view of this StatefulRNG; always {@code this}
+     */
+    @Override
+    public Serializable toSerializable() {
+        return this;
+    }
 
 }

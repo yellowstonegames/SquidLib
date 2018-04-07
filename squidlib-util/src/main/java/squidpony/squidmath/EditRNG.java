@@ -427,6 +427,14 @@ public class EditRNG extends StatefulRNG implements Serializable{
     public int nextIntHasty(int bound) {
         return (int)(nextDouble() * bound);
     }
+    /**
+     * Returns this EditRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.
+     * @return a {@link Serializable} view of this EditRNG; always {@code this}
+     */
+    @Override
+    public Serializable toSerializable() {
+        return this;
+    }
 
 
 }

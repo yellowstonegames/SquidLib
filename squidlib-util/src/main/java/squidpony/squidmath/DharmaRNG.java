@@ -395,4 +395,13 @@ public class DharmaRNG extends RNG implements Serializable{
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+    /**
+     * Returns this DharmaRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.
+     * @return a {@link Serializable} view of this DharmaRNG; always {@code this}
+     */
+    @Override
+    public Serializable toSerializable() {
+        return this;
+    }
+
 }

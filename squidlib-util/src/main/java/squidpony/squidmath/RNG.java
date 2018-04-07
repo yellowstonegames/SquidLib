@@ -552,18 +552,16 @@ public class RNG implements Serializable, IRNG {
     }
 
     /**
-     * Shuffle an array using the Fisher-Yates algorithm. DO NOT give the same array for both elements and
-     * dest, since the prior contents of dest are rearranged before elements is used, and if they refer to the same
-     * array, then you can end up with bizarre bugs where one previously-unique item shows up dozens of times. If
-     * possible, create a new array with the same length as elements and pass it in as dest; the returned value can be
-     * assigned to whatever you want and will have the same items as the newly-formed array.
+     * Shuffle an array using the Fisher-Yates algorithm. If possible, create a new array or reuse an existing array
+     * with the same length as elements and pass it in as dest; the dest array will contain the shuffled contents of
+     * elements and will also be returned as-is.
      * <br>
      * <a href="https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle">Wikipedia has more on this algorithm</a>.
      *
      * @param elements an array of T; will not be modified
      * @param <T>      can be any non-primitive type.
      * @param dest     Where to put the shuffle. If it does not have the same length as {@code elements}, this will use the
-     *                 randomPortion method of this class to fill the smaller dest. MUST NOT be the same array as elements!
+     *                 randomPortion method of this class to fill the smaller dest.
      * @return {@code dest} after modifications
      */
     @Override
@@ -1380,4 +1378,12 @@ public class RNG implements Serializable, IRNG {
         return dest;
     }
 
+    /**
+     * Returns this RNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.
+     * @return a {@link Serializable} view of this RNG; always {@code this}
+     */
+    @Override
+    public Serializable toSerializable() {
+        return this;
+    }
 }

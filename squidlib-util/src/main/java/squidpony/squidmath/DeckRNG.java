@@ -545,4 +545,14 @@ public class DeckRNG extends StatefulRNG implements Serializable {
     public void setStep(int step) {
         this.step = step;
     }
+
+    /**
+     * Returns this DeckRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.
+     * @return a {@link Serializable} view of this DeckRNG; always {@code this}
+     */
+    @Override
+    public Serializable toSerializable() {
+        return this;
+    }
+
 }
