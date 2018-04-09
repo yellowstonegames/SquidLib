@@ -48,7 +48,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 1024, height = 512;
     //private static final int width = 512, height = 256;
     //private static final int width = 400, height = 400;
-    private static final int width = 400, height = 400;
+    private static final int width = 300, height = 300;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -336,7 +336,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.zoomIn(1, zoomX, zoomY);
         dbm.makeBiomes(world);
-        political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
+        //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
         counter = 0L;
         ttg = System.currentTimeMillis() - startTime;
@@ -350,7 +350,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.zoomOut(1, zoomX, zoomY);
         dbm.makeBiomes(world);
-        political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
+        //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
         counter = 0L;
         ttg = System.currentTimeMillis() - startTime;
@@ -359,9 +359,21 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     {
         long startTime = System.currentTimeMillis();
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
+        world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
         world.generate(seed);
         dbm.makeBiomes(world);
-        political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
+        //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
+//        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
+        counter = 0L;
+        ttg = System.currentTimeMillis() - startTime;
+    }
+    public void rotate()
+    {
+        long startTime = System.currentTimeMillis();
+        world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
+        world.generate(world.waterModifier, world.coolingModifier, seed);
+        dbm.makeBiomes(world);
+        //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
         counter = 0L;
         ttg = System.currentTimeMillis() - startTime;
@@ -467,6 +479,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(SColor.DB_INK.r, SColor.DB_INK.g, SColor.DB_INK.b, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        rotate();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         ++counter;//nation = NumberTools.swayTight(++counter * 0.0125f);

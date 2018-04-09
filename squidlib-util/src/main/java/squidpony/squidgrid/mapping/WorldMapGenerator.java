@@ -2914,7 +2914,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         public void setCenterLongitude(double centerLongitude) {
-            this.centerLongitude = MathExtras.clamp(centerLongitude, -Math.PI, Math.PI);
+            this.centerLongitude = centerLongitude;
         }
 
         /**
@@ -3046,7 +3046,7 @@ public abstract class WorldMapGenerator implements Serializable {
                                   double waterMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(zoom <= 0 || cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
