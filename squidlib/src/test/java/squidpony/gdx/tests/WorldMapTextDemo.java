@@ -179,7 +179,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getStretchableSlabFont());
+        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispSlabFont());
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
         stage = new Stage(view, batch);
         seed = 0xDEBACL;

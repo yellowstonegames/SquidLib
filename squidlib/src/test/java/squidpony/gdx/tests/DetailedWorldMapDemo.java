@@ -17,7 +17,6 @@ import squidpony.squidgrid.gui.gdx.SquidPanel;
 import squidpony.squidgrid.mapping.FantasyPoliticalMapper;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.Noise;
-import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.WhirlingNoise;
 
@@ -47,8 +46,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     //private static final int width = 314 * 3, height = 300;
     //private static final int width = 1024, height = 512;
-    private static final int width = 512, height = 256;
+    //private static final int width = 512, height = 256;
     //private static final int width = 400, height = 400;
+    private static final int width = 400, height = 400;
 
     private SpriteBatch batch;
     private SquidPanel display;//, overlay;
@@ -58,7 +58,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private WorldMapGenerator.MimicMap world;
+    private WorldMapGenerator.SpaceViewMap world;
+    //private WorldMapGenerator.MimicMap world;
     //private WorldMapGenerator.EllipticalMap world;
     private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
@@ -259,13 +260,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         display = new SquidPanel(width, height, cellWidth, cellHeight);
         view = new StretchViewport(width*cellWidth, height*cellHeight);
         stage = new Stage(view, batch);
-        seed = 0xDEBACL;
+        seed = 0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.8);
-        world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
+        //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WhirlingNoise.instance, 0.8);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
-        cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
+        //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
         world.generateRivers = false;
@@ -451,7 +453,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                 BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc));
 //                        if(cloud > 0.0)
 //                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                        shown = SColor.lerpFloatColors(shown, NATION_COLORS[political[x][y] & 127], nation);
+                        //shown = SColor.lerpFloatColors(shown, NATION_COLORS[political[x][y] & 127], nation);
                         display.put(x, y, shown);
 
                         //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
@@ -467,7 +469,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
-        nation = NumberTools.swayTight(++counter * 0.0125f);
+        ++counter;//nation = NumberTools.swayTight(++counter * 0.0125f);
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.

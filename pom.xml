@@ -158,6 +158,9 @@
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
+                    <excludes>
+                        <exclude>**/emu/*.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
