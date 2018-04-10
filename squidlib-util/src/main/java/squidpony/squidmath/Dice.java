@@ -25,7 +25,7 @@ public class Dice implements Serializable {
     private static final long serialVersionUID = -488902743486431146L;
 
     private static final Matcher mat = Pattern.compile("\\s*(?:(?:(-?\\d+)?\\s*(?:([:><])\\s*(\\d+))?\\s*(?:([d:!])\\s*(\\d+))?)|([+/*-]))\\s*").matcher();
-    private RNG rng;
+    private IRNG rng;
     private transient IntVLA temp = new IntVLA(20);
     /**
      * Creates a new dice roller that uses a random RNG seed for an RNG that it owns.
@@ -35,12 +35,12 @@ public class Dice implements Serializable {
     }
 
     /**
-     * Creates a new dice roller that uses the given RNG, which can be seeded before it's given here. The RNG will be
-     * shared, not copied, so requesting a random number from the same RNG in another place may change the value of the
-     * next die roll this makes, and dice rolls this makes will change the state of the shared RNG.
-     * @param rng an RNG that can be seeded; will be shared (dice rolls will change the RNG state outside here)
+     * Creates a new dice roller that uses the given IRNG, which can be seeded before it's given here. The IRNG will be
+     * shared, not copied, so requesting a random number from the same IRNG in another place may change the value of the
+     * next die roll this makes, and dice rolls this makes will change the state of the shared IRNG.
+     * @param rng an IRNG, such as {@link RNG} or {@link GWTRNG}; will be shared (dice rolls will change the IRNG state outside here)
      */
-    public Dice(RNG rng)
+    public Dice(IRNG rng)
     {
         this.rng = rng;
     }
@@ -69,7 +69,7 @@ public class Dice implements Serializable {
      *
      * @param rng the source of randomness
      */
-    public void setRandom(RNG rng) {
+    public void setRandom(IRNG rng) {
         this.rng = rng;
     }
 
@@ -227,13 +227,13 @@ public class Dice implements Serializable {
      * Emulate a dice roll and return the sum.
      *
      * @param n number of dice to sum
-     * @param sides number of sides on the rollDice
-     * @return sum of rollDice
+     * @param sides positive integer; number of sides on the rolled dice
+     * @return sum of rolled dice
      */
     public int rollDice(int n, int sides) {
         int ret = 0;
         for (int i = 0; i < n; i++) {
-            ret += rng.nextIntHasty(sides) + 1;
+            ret += rng.nextInt(sides) + 1;
         }
         return ret;
     }
@@ -249,7 +249,7 @@ public class Dice implements Serializable {
         int ret = 0, curr;
         if(sides <= 1) return n; // avoid infinite loop, act like they can't explode
         for (int i = 0; i < n;) {
-            ret += (curr = rng.nextIntHasty(sides) + 1);
+            ret += (curr = rng.nextInt(sides) + 1);
             if(curr != sides) i++;
         }
         return ret;
@@ -260,15 +260,27 @@ public class Dice implements Serializable {
      * number of sides.
      *
      * @param n number of dice used
-     * @param sides number of sides on each die
+     * @param sides positive integer; number of sides on each die
      * @return list of results
      */
     public IntVLA independentRolls(int n, int sides) {
         IntVLA ret = new IntVLA(n);
         for (int i = 0; i < n; i++) {
-            ret.add(rng.nextIntHasty(sides) + 1);
+            ret.add(rng.nextInt(sides) + 1);
         }
         return ret;
+    }
+
+    /**
+     * Replicate the behavior of {@link RNG#nextIntHasty(int)} using the more broadly-implemented {@link IRNG#next(int)}
+     * method, that is, this produces a pseudo-random int between 0 (inclusive) and bound (exclusive), where bound may
+     * be positive or negative.
+     * @param bound an outer exclusive bound, positive or negative; should be under a billion or so
+     * @return an int between 0 (inclusive) and bound (exclusive)
+     */
+    protected int nextIntHasty(int bound)
+    {
+        return (int) ((bound * (long)rng.next(31)) >>> 31);
     }
 
     /**
@@ -370,11 +382,11 @@ public class Dice implements Serializable {
                     // dice roll or other range. This can be negative, easily, if the random upper bound is negative
                     {
                         if ("d".equals(mode)) {
-                            ret = a + rng.nextIntHasty(rollDice(w, b) + 1 - a);
+                            ret = a + nextIntHasty(rollDice(w, b) + 1 - a);
                         } else if ("!".equals(mode)) {
-                            ret = a + rng.nextIntHasty(rollExplodingDice(w, b) + 1 - a);
+                            ret = a + nextIntHasty(rollExplodingDice(w, b) + 1 - a);
                         } else if (":".equals(mode)) {
-                            ret = a + rng.nextIntHasty(w + rng.nextIntHasty(b + 1 - w) + 1 - a);
+                            ret = a + nextIntHasty(w + nextIntHasty(b + 1 - w) + 1 - a);
                         }
                     }
                 } else if ("d".equals(mode)) {
@@ -382,11 +394,11 @@ public class Dice implements Serializable {
                 } else if ("!".equals(mode)) {
                     ret = rollExplodingDice(a, b);
                 } else if (":".equals(mode)) {
-                    ret = a + rng.nextIntHasty(b + 1 - a);
+                    ret = a + nextIntHasty(b + 1 - a);
                 }
             } else if (num1 != null) {
                 if (":".equals(wmode)) {
-                    ret = a + rng.nextIntHasty(w + 1 - a);
+                    ret = a + nextIntHasty(w + 1 - a);
                 } else {
                     ret = a;
                 }
@@ -400,7 +412,7 @@ public class Dice implements Serializable {
                             ret = rollExplodingDice(1, b);
                             break;
                         case ":":
-                            ret = rng.nextIntHasty(b + 1);
+                            ret = nextIntHasty(b + 1);
                             break;
                     }
                 }

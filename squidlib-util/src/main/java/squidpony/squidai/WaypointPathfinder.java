@@ -20,26 +20,25 @@ public class WaypointPathfinder {
     private int width;
     private int height;
     private DijkstraMap dm;
-    private char[][] map;
     private int[][] expansionMap;
-    public RNG rng;
+    public StatefulRNG rng;
     private OrderedMap<Coord, OrderedMap<Coord, Edge>> waypoints;
 
     /**
      * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
      * Will use the given Radius enum to determine how to handle DijkstraMap measurement in future pathfinding.
-     * Uses rng for all random choices, or a new unseeded RNG if the parameter is null.
+     * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if
+     * the parameter is null.
      * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
      * @param measurement a Radius that should correspond to how you want path distance calculated.
-     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      */
     public WaypointPathfinder(char[][] map, Radius measurement, RNG rng)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
         else
-            this.rng = rng;
-        this.map = map;
+            this.rng = new StatefulRNG(rng.nextLong());
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
@@ -104,36 +103,9 @@ public class WaypointPathfinder {
                 }
             }
         }
-
-        /*
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if(expansionMap[x][y] <= 0)
-                    System.out.print('#');
-                else
-                    System.out.print((char)(expansionMap[x][y] + 64));
-            }
-            System.out.println();
-        }
-
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if(expansionMap[x][y] <= 0)
-                    System.out.print('#');
-                else if(chokes.contains(Coord.get(x, y)))
-                    System.out.print('@');
-                else if(centers.contains(Coord.get(x, y)))
-                    System.out.print('*');
-                else
-                    System.out.print('.');
-            }
-            System.out.println();
-        }
-*/
-
+        
         dm = new DijkstraMap(map, DijkstraMap.findMeasurement(measurement));
 
-        int e = 0;
         for(Map.Entry<Coord, OrderedMap<Coord, Edge>> n : waypoints.entrySet())
         {
             chokes.remove(n.getKey());
@@ -153,10 +125,11 @@ public class WaypointPathfinder {
     /**
      * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
      * Will use the given Radius enum to determine how to handle DijkstraMap measurement in future pathfinding.
-     * Uses rng for all random choices, or a new unseeded RNG if the parameter is null.
+     * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if
+     * the parameter is null.
      * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
      * @param measurement a Radius that should correspond to how you want path distance calculated.
-     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      * @param thickCorridors true if most chokepoints on the map are 2 cells wide instead of 1
      */
     public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, boolean thickCorridors)
@@ -164,8 +137,7 @@ public class WaypointPathfinder {
         if(rng == null)
             this.rng = new StatefulRNG();
         else
-            this.rng = rng;
-        this.map = map;
+            this.rng = new StatefulRNG(rng.nextLong());
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
@@ -271,13 +243,14 @@ public class WaypointPathfinder {
      * analysis of chokepoints and acts as a more brute-force solution when maps may be unpredictable. The lack of an
      * analysis step may mean this could have drastically less of a penalty to startup time than the other constructors,
      * and with the right fraction parameter (29 seems ideal), may perform better as well. Will use the given Radius
-     * enum to determine how to handle DijkstraMap measurement in future pathfinding. Uses rng for all random choices,
-     * or a new unseeded RNG if the parameter is null.
+     * enum to determine how to handle DijkstraMap measurement in future pathfinding.
+     * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if
+     * the parameter is null.
      * <br>
      * Remember, a fraction value of 29 works well!
      * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs.
      * @param measurement a Radius that should correspond to how you want path distance calculated.
-     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      * @param fraction the fractional denominator of passable cells to assign as waypoints; use 29 if you aren't sure
      */
     public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, int fraction)
@@ -285,8 +258,7 @@ public class WaypointPathfinder {
         if(rng == null)
             this.rng = new StatefulRNG();
         else
-            this.rng = rng;
-        this.map = map;
+            this.rng = new StatefulRNG(rng.nextLong());
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);
@@ -325,18 +297,18 @@ public class WaypointPathfinder {
      * Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
      * Will use the given DijkstraMap for pathfinding after construction (and during some initial calculations).
      * The dijkstra parameter will be mutated by this class, so it should not be reused elsewhere.
-     * Uses rng for all random choices, or a new unseeded RNG if the parameter is null.
+     * Uses a new RNG for all random choices, which will be seeded with {@code rng.nextLong()}, or unseeded if
+     * the parameter is null.
      * @param map a char[][] that stores a "complete" dungeon map, with any chars as features that pathfinding needs
      * @param dijkstra a DijkstraMap that will be used to find paths; may have costs but they will not be used
-     * @param rng an RNG object or null (which will make this use a new RNG); will be used for all random choices
+     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      */
     public WaypointPathfinder(char[][] map, DijkstraMap dijkstra, RNG rng)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
         else
-            this.rng = rng;
-        this.map = map;
+            this.rng = new StatefulRNG(rng.nextLong());
         width = map.length;
         height = map[0].length;
         char[][] simplified = DungeonUtility.simplifyDungeon(map);

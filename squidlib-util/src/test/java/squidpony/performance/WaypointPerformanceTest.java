@@ -76,7 +76,7 @@ final class WaypointPerformanceTest extends AbstractPerformanceTest {
                     s = Coord.get(x, y);
 					// this should ensure no blatant correlation between R and W
 					utility.rng.setState((x << 22) | (y << 16) | (x * y));
-					((StatefulRNG) pathfinder.rng).setState((x << 20) | (y << 14) | (x * y));
+					pathfinder.rng.setState((x << 20) | (y << 14) | (x * y));
 					r = utility.randomFloor(map);
 					path = pathfinder.getKnownPath(s, r);
                 }

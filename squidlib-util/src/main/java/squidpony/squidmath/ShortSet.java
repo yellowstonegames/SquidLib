@@ -480,6 +480,28 @@ public class ShortSet implements Serializable{
         return buffer.toString();
     }
 
+    /**
+     * Gets a random short from this ShortSet, using the given {@link IRNG} to generate random values.
+     * If this ShortSet is empty, throws an UnsupportedOperationException. This method operates in linear time, unlike
+     * the random item retrieval methods in {@link OrderedSet} and {@link OrderedMap}, which take constant time.
+     * @param rng an {@link IRNG}, such as {@link RNG} or {@link GWTRNG}
+     * @return a random short from this ShortSet
+     */
+    public short random(IRNG rng)
+    {
+        if (size <= 0) {
+            throw new UnsupportedOperationException("ShortSet cannot be empty when getting a random element");
+        }
+        int n = rng.nextInt(size);
+        short s = 0;
+        ShortSet.ShortSetIterator ssi = iterator();
+        while (n-- >= 0 && ssi.hasNext)
+            s = ssi.next();
+        ssi.reset();
+        return s;
+
+    }
+
     private static int nextPowerOfTwo(int n)
     {
         int highest = Integer.highestOneBit(n);

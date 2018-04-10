@@ -30,7 +30,7 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public final ArrayList<ProbabilityTable<T>> extraTable;
     public final IntVLA weights;
-    public RNG rng;
+    public IRNG rng;
     protected int total, normalTotal;
 
     /**
@@ -46,7 +46,7 @@ public class ProbabilityTable<T> implements Serializable {
      *
      * @param rng the source of randomness
      */
-    public ProbabilityTable(RNG rng) {
+    public ProbabilityTable(IRNG rng) {
         this.rng = rng;
         table = new Arrangement<>(64, 0.75f);
         extraTable = new ArrayList<>(16);
@@ -356,7 +356,7 @@ public class ProbabilityTable<T> implements Serializable {
      * Gets the RNG this uses.
      * @return the RNG used by this class, which is often (but not always) a StatefulRNG
      */
-    public RNG getRandom()
+    public IRNG getRandom()
     {
         return rng;
     }

@@ -21,11 +21,11 @@ public class SerpentDeepMapGenerator {
     private int[] columns, rows;
     private int width, height, depth;
     private ArrayList<OrderedSet<Coord>> linksUp,linksDown;
-    private RNG random;
+    private IRNG random;
 
     /**
      * This prepares a map generator that will generate a map with the given width, height and depth, using the given
-     * RNG. The intended purpose is to carve a long path that loops through the whole dungeon's 3D space, while
+     * IRNG. The intended purpose is to carve a long path that loops through the whole dungeon's 3D space, while
      * hopefully maximizing the amount of rooms the player encounters. You call the different carver-adding methods to
      * affect what the dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(),
      * defaulting to only caves if none are called. You call generate() after adding carvers, which returns a char[][][]
@@ -36,7 +36,7 @@ public class SerpentDeepMapGenerator {
      * @param rng an IRNG object to use for random choices; this make a lot of random choices.
      * @see MixedGenerator
      */
-    public SerpentDeepMapGenerator(int width, int height, int depth, RNG rng) {
+    public SerpentDeepMapGenerator(int width, int height, int depth, IRNG rng) {
         this(width, height, depth, rng, 0.3);
     }
     /**
@@ -54,7 +54,7 @@ public class SerpentDeepMapGenerator {
      * @param branchingChance the odds from 0.0 to 1.0 that a branch will be created near each necessary room.
      * @see MixedGenerator
      */
-    public SerpentDeepMapGenerator(int width, int height, int depth, RNG rng, double branchingChance)
+    public SerpentDeepMapGenerator(int width, int height, int depth, IRNG rng, double branchingChance)
     {
         if(width <= 2 || height <= 2)
             throw new IllegalArgumentException("width and height must be greater than 2");
