@@ -3105,7 +3105,9 @@ public abstract class WorldMapGenerator implements Serializable {
                     th = asin(rho); // c
                     ps = NumberTools.sin(th);
                     lat = asin((iyPos * ps) / rho);
-                    lon = (centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th)) + (3.0 * Math.PI)) % (Math.PI * 2.0) - Math.PI; 
+                    // need Math.atan2(), not NumberTools.atan2(), since approximate isn't good enough here
+                    // approximate seems fine for everything else here though.
+                    lon = (centerLongitude + Math.atan2(ixPos * ps, rho * NumberTools.cos(th)) + (3.0 * Math.PI)) % (Math.PI * 2.0) - Math.PI; 
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);

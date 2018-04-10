@@ -46,7 +46,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     //private static final int width = 1920, height = 1080;
     //private static final int width = 1000, height = 500;
     //private static final int width = 512, height = 256;
-    private static final int width = 512, height = 512;
+    private static final int width = 800, height = 800;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -108,9 +108,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private static float emptyColor = SColor.DB_INK.toFloatBits();
 
     // water colors
-    private static float deepColor = SColor.floatGetI(0, 68, 128);
+    private static float deepColor = SColor.floatGetI(0, 42, 88);
     private static float mediumColor = SColor.floatGetI(0, 89, 159);
-    private static float shallowColor = SColor.floatGetI(0, 123, 167);
+    private static float shallowColor = SColor.floatGetI(0, 73, 137);
     private static float coastalColor = SColor.lerpFloatColors(shallowColor, white, 0.3f);
     private static float foamColor = SColor.floatGetI(61,  162, 215);
 
@@ -174,8 +174,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Tiling " + date + "/";
         //path = "out/worlds/AltSphere " + date + "/";
         //path = "out/worlds/Ellipse " + date + "/";
-        path = "out/worlds/Mimic " + date + "/";
+        //path = "out/worlds/Mimic " + date + "/";
         //path = "out/worlds/Dump " + date + "/";
+        path = "out/worlds/SpaceView " + date + "/";
 
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
@@ -474,7 +475,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        csv.append(csv2).append(csv3).append(csv4);
 //        Gdx.files.local(path + name + ".java").writeString(csv.toString(), false);
         //if(counter >= 1000000 || jaccard >= 0.4)
-        if(counter >= 50)
+        if(counter >= 20)
                 Gdx.app.exit();
     }
     @Override

@@ -102,9 +102,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private static float emptyColor = SColor.DB_INK.toFloatBits();
 
     // water colors
-    private static float deepColor = SColor.floatGetI(0, 68, 128);
+    private static float deepColor = SColor.floatGetI(0, 42, 88);
     private static float mediumColor = SColor.floatGetI(0, 89, 159);
-    private static float shallowColor = SColor.floatGetI(0, 123, 167);
+    private static float shallowColor = SColor.floatGetI(0, 73, 137);
     private static float coastalColor = SColor.lerpFloatColors(shallowColor, white, 0.3f);
     private static float foamColor = SColor.floatGetI(61,  162, 215);
 
