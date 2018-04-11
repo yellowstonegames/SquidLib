@@ -23,6 +23,9 @@ import static squidpony.squidmath.CoordPacker.*;
  */
 public class CoordPackerTest {
 
+    static {
+        CoordPacker.init();
+    }
     public static short[] dataCross = unionPacked(rectangle(25, 2, 14, 60), rectangle(2, 25, 60, 14));
     public static short[] dataCross2 = unionPacked(rectangle(24, 2, 16, 60), rectangle(2, 24, 60, 16));
     public static StatefulRNG srng = new StatefulRNG(0x1337BEEF);

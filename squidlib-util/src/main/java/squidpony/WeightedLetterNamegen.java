@@ -3,7 +3,8 @@ package squidpony;
 import regexodus.Category;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.ProbabilityTable;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.StatefulRandomness;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -273,7 +274,7 @@ public class WeightedLetterNamegen {
     private static final char[] vowels = {'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
     private static final int LAST_LETTER_CANDIDATES_MAX = 52;
 
-    private RNG rng;
+    private StatefulRNG rng;
     private String[] names;
     private int consonantLimit;
     private ArrayList<Integer> sizes;
@@ -299,7 +300,7 @@ public class WeightedLetterNamegen {
      * @param consonantLimit the maximum allowed consonants in a row
      */
     public WeightedLetterNamegen(String[] names, int consonantLimit) {
-        this(names, consonantLimit, new RNG());
+        this(names, consonantLimit, new StatefulRNG());
     }
 
     /**
@@ -311,7 +312,7 @@ public class WeightedLetterNamegen {
      * @param consonantLimit the maximum allowed consonants in a row
      * @param rng            the source of randomness to be used
      */
-    public WeightedLetterNamegen(String[] names, int consonantLimit, RNG rng) {
+    public WeightedLetterNamegen(String[] names, int consonantLimit, StatefulRNG rng) {
         this.names = names;
         this.consonantLimit = consonantLimit;
         this.rng = rng;
@@ -355,7 +356,7 @@ public class WeightedLetterNamegen {
                 }
                 ProbabilityTable<Character> wlg = wl.get(letter);
                 if (wlg == null) {
-                    wlg = new ProbabilityTable<>(rng);
+                    wlg = new ProbabilityTable<>((StatefulRandomness) rng.getRandomness());
                     wl.put(letter, wlg);
                 }
                 wlg.add(nextLetter, 1);
@@ -366,7 +367,7 @@ public class WeightedLetterNamegen {
 
                     wlg = wl.get(letter);
                     if (wlg == null) {
-                        wlg = new ProbabilityTable<>(rng);
+                        wlg = new ProbabilityTable<>((StatefulRandomness) rng.getRandomness());
                         wl.put(letter, wlg);
                     }
                     wlg.add(nextLetter, 1);

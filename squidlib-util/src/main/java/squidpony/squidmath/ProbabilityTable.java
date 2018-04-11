@@ -30,14 +30,14 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public final ArrayList<ProbabilityTable<T>> extraTable;
     public final IntVLA weights;
-    public IRNG rng;
+    public StatefulRandomness rng;
     protected int total, normalTotal;
 
     /**
      * Creates a new probability table with a random seed.
      */
     public ProbabilityTable() {
-        this(new StatefulRNG());
+        this(new LightRNG());
     }
 
     /**
@@ -46,7 +46,7 @@ public class ProbabilityTable<T> implements Serializable {
      *
      * @param rng the source of randomness
      */
-    public ProbabilityTable(IRNG rng) {
+    public ProbabilityTable(StatefulRandomness rng) {
         this.rng = rng;
         table = new Arrangement<>(64, 0.75f);
         extraTable = new ArrayList<>(16);
@@ -61,7 +61,7 @@ public class ProbabilityTable<T> implements Serializable {
      * @param seed the RNG seed as a long
      */
     public ProbabilityTable(long seed) {
-        this.rng = new StatefulRNG(seed);
+        this.rng = new LightRNG(seed);
         table = new Arrangement<>(64, 0.75f);
         extraTable = new ArrayList<>(16);
         weights = new IntVLA(64);
@@ -89,7 +89,7 @@ public class ProbabilityTable<T> implements Serializable {
         if (table.isEmpty()) {
             return null;
         }
-        int index = rng.nextInt(total), sz = table.size();
+        int index = (int) ((total * ((long)rng.next(31))) >>> 31), sz = table.size();
         for (int i = 0; i < sz; i++) {
             index -= weights.get(i);
             if (index < 0)
@@ -346,17 +346,17 @@ public class ProbabilityTable<T> implements Serializable {
      * this method again when the StatefulRNG has its state set.
      * @param random an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass
      */
-    public void setRandom(RNG random)
+    public void setRandom(StatefulRNG random)
     {
-        if(random != null)
-            rng = random;
+        if(random != null && random.getRandomness() instanceof StatefulRandomness)
+            rng = (StatefulRandomness) random.getRandomness();
     }
 
     /**
-     * Gets the RNG this uses.
-     * @return the RNG used by this class, which is often (but not always) a StatefulRNG
+     * Gets the random number generator (a StatefulRandomness) this uses.
+     * @return the StatefulRandomness used by this class, which is often (but not always) a LightRNG
      */
-    public IRNG getRandom()
+    public StatefulRandomness getRandom()
     {
         return rng;
     }

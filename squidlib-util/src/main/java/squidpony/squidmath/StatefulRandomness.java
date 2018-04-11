@@ -17,4 +17,14 @@ public interface StatefulRandomness extends RandomnessSource {
      * @param state a 64-bit long. You should avoid passing 0, even though some implementations can handle that.
      */
     void setState(long state);
+
+    /**
+     * Produces a copy of this StatefulRandomness that, if next() and/or nextLong() are called on this object and the
+     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
+     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
+     *
+     * @return a copy of this StatefulRandomness
+     */
+    @Override
+    StatefulRandomness copy();
 }

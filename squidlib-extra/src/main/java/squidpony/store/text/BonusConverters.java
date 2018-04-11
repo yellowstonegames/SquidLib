@@ -41,6 +41,25 @@ public class BonusConverters {
             }
         }
     };
+    public static final StringConvert<StatefulRandomness> convertStatefulRandomness = new StringConvert<StatefulRandomness>("StatefulRandomness") {
+        @Override
+        public String stringify(StatefulRandomness item) {
+            return StringKit.hex(item.getState()) + ':' + (item.getClass().getSimpleName());
+        }
+
+        @Override
+        public StatefulRandomness restore(String text) {
+            long state = StringKit.longFromHex(text);
+            try {
+                StatefulRandomness sr = (StatefulRandomness) ClassReflection.newInstance(ClassReflection.forName(text.substring(text.indexOf(':') + 1)));
+                sr.setState(state);
+                return sr;
+            }catch (Exception re)
+            {
+                return new LightRNG(state);
+            }
+        }
+    };
 
     public static final StringConvert<RNG> convertRNG = new StringConvert<RNG>("RNG") {
         @Override
@@ -69,7 +88,7 @@ public class BonusConverters {
             @Override
             public String stringify(ProbabilityTable<K> item) {
                 StringBuilder sb = new StringBuilder(256);
-                appendQuoted(sb, convertRNG.stringify(item.getRandom()));
+                appendQuoted(sb, convertStatefulRandomness.stringify(item.getRandom()));
                 sb.append(' ');
                 appendQuoted(sb, convertIntVLA.stringify(item.weights));
                 sb.append(' ');
@@ -86,7 +105,7 @@ public class BonusConverters {
                 ObText.ContentMatcher m = makeMatcher(text);
                 if(!m.find() || !m.hasMatch())
                     return null;
-                ProbabilityTable<K> pt = new ProbabilityTable<>(convertRNG.restore(m.getMatch()));
+                ProbabilityTable<K> pt = new ProbabilityTable<>(convertStatefulRandomness.restore(m.getMatch()));
                 if(!m.find() || !m.hasMatch())
                     return pt;
                 pt.weights.addAll(convertIntVLA.restore(m.getMatch()));
