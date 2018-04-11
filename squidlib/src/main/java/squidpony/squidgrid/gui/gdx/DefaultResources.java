@@ -67,7 +67,7 @@ public class DefaultResources implements LifecycleListener {
             distanceSlab = null, distanceSlabLight = null, distanceWideSlab = null,  distanceWideSlabLight = null,
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
-            msdfDejaVu = null, msdfDejaVuItalic = null;
+            msdfDejaVu = null;
     private TextFamily familyLean = null, familySlab = null, familyGo = null,
             familyLeanMSDF = null, familySlabMSDF = null;
     private TextureAtlas iconAtlas = null;
@@ -1404,26 +1404,29 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
-     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
-     * <br>
-     * Returns a TextCellFactory already configured to use a fixed-width sans-serif font with good Unicode support,
+     * Returns a TextCellFactory already configured to use a fixed-width sans-serif font with excellent Unicode support,
      * that should scale cleanly to even very large sizes. Caches the result for later calls. The font used is DejaVu
      * Sans Mono, an open-source (SIL Open Font License) typeface that is widely used by Linux distros and other groups.
      * It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also the
      * necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as opposed to the
-     * normal Signed Distance Field technique, which should allow sharper edges.
+     * normal Signed Distance Field technique, which should allow sharper edges. It has been updated so it is laid out
+     * mostly-correctly now; some glyphs may be a little wide, such as {@code @}, but the line height, baseline, and the
+     * width for most glyphs seem correct. You may need to tweak the size more for width than for height (recommended to
+     * have box drawing characters line up is, after giving an initially-sized TextCellFactory to a class like
+     * SquidLayers, SparseLayers, or SquidPanel, to call {@link TextCellFactory#tweakWidth(float)} with 1.125f times the
+     * original width and {@link TextCellFactory#tweakHeight(float)} with 1.075f times the original height).
      * <br>
-     * Preview: none yet
+     * Preview: <a href="https://i.imgur.com/SCwhduv.png">Image link</a>
      * <br>
      * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
      * multi-channel distance field font technique this uses can work.
      * <br>
-     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
+     * Needs files:
      * <ul>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.fnt</li>
      *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-msdf.png</li>
      * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono.ttf
+     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono.ttf with an MSDF effect
      */
     public static TextCellFactory getCrispDejaVuFont()
     {
@@ -1432,7 +1435,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.msdfDejaVu = new TextCellFactory()
-                        .fontMultiDistanceField(crispDejaVu, crispDejaVuTexture);
+                        .fontMultiDistanceField(crispDejaVu, crispDejaVuTexture).setSmoothingMultiplier(1f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1441,48 +1444,48 @@ public class DefaultResources implements LifecycleListener {
             return instance.msdfDejaVu.copy();
         return null;
     }
-    /**
-     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
-     * <br>
-     * Returns a TextCellFactory already configured to use a fixed-width sans-serif oblique (similar to italic) font
-     * with good Unicode support, that should scale cleanly to even very large sizes. Caches the result for later calls.
-     * The font used is DejaVu Sans Mono, an open-source (SIL Open Font License) typeface that is widely used by Linux
-     * distros and other groups. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic,
-     * but also the necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as
-     * opposed to the normal Signed Distance Field technique, which should allow sharper edges.
-     * <br>
-     * NOTE: This currently has some errors on a few Greek lower-case letters with accents, where a large blob appears
-     * above and overlapping with the accents. Un-accented Greek letters should be fine.
-     * <br>
-     * Preview: none yet
-     * <br>
-     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * multi-channel distance field font technique this uses can work.
-     * <br>
-     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
-     * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.png</li>
-     * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono-Oblique.ttf
-     */
-
-    public static TextCellFactory getCrispDejaVuItalicFont()
-    {
-        initialize();
-        if(instance.msdfDejaVuItalic == null)
-        {
-            try {
-                instance.msdfDejaVuItalic = new TextCellFactory()
-                        .fontMultiDistanceField(crispDejaVuItalic, crispDejaVuItalicTexture);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if(instance.msdfDejaVuItalic != null)
-            return instance.msdfDejaVuItalic.copy();
-        return null;
-    }
+//    /**
+//     * DO NOT USE YET; this will not be laid-out correctly by TextCellFactory without future changes.
+//     * <br>
+//     * Returns a TextCellFactory already configured to use a fixed-width sans-serif oblique (similar to italic) font
+//     * with good Unicode support, that should scale cleanly to even very large sizes. Caches the result for later calls.
+//     * The font used is DejaVu Sans Mono, an open-source (SIL Open Font License) typeface that is widely used by Linux
+//     * distros and other groups. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic,
+//     * but also the necessary box drawing characters. This uses the Multi-channel Signed Distance Field technique as
+//     * opposed to the normal Signed Distance Field technique, which should allow sharper edges.
+//     * <br>
+//     * NOTE: This currently has some errors on a few Greek lower-case letters with accents, where a large blob appears
+//     * above and overlapping with the accents. Un-accented Greek letters should be fine.
+//     * <br>
+//     * Preview: none yet
+//     * <br>
+//     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+//     * multi-channel distance field font technique this uses can work.
+//     * <br>
+//     * Needs files (THESE ARE NOT YET AVAILABLE AT THESE LINKS BECAUSE THEY ARE NOT READY):
+//     * <ul>
+//     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.fnt</li>
+//     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/DejaVuSansMono-Oblique-msdf.png</li>
+//     * </ul>
+//     * @return the TextCellFactory object that can represent many sizes of the font DejaVuSansMono-Oblique.ttf
+//     */
+//
+//    public static TextCellFactory getCrispDejaVuItalicFont()
+//    {
+//        initialize();
+//        if(instance.msdfDejaVuItalic == null)
+//        {
+//            try {
+//                instance.msdfDejaVuItalic = new TextCellFactory()
+//                        .fontMultiDistanceField(crispDejaVuItalic, crispDejaVuItalicTexture);
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        if(instance.msdfDejaVuItalic != null)
+//            return instance.msdfDejaVuItalic.copy();
+//        return null;
+//    }
     /**
      * Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a
      * slab-serif geometric style, that should scale cleanly to many sizes and supports 4 styles (regular, bold, italic,
@@ -1890,6 +1893,10 @@ public class DefaultResources implements LifecycleListener {
             distanceCode.dispose();
             distanceCode = null;
         }
+        if(distanceCodeJP != null) {
+            distanceCodeJP.dispose();
+            distanceCodeJP = null;
+        }
         if(distanceDejaVu != null) {
             distanceDejaVu.dispose();
             distanceDejaVu = null;
@@ -1910,6 +1917,22 @@ public class DefaultResources implements LifecycleListener {
             distanceSlabLight.dispose();
             distanceSlabLight = null;
         }
+        if(distanceWide != null) {
+            distanceWide.dispose();
+            distanceWide = null;
+        }
+        if(distanceWideSlab != null) {
+            distanceWideSlab.dispose();
+            distanceWideSlab = null;
+        }
+        if(distanceWideLight != null) {
+            distanceWideLight.dispose();
+            distanceWideLight = null;
+        }
+        if(distanceWideSlabLight != null) {
+            distanceWideSlabLight.dispose();
+            distanceWideSlabLight = null;
+        }
         if(distanceClean != null) {
             distanceClean.dispose();
             distanceClean = null;
@@ -1921,6 +1944,10 @@ public class DefaultResources implements LifecycleListener {
         if(distanceOrbit != null) {
             distanceOrbit.dispose();
             distanceOrbit = null;
+        }
+        if(distanceHeavySquare != null) {
+            distanceHeavySquare.dispose();
+            distanceHeavySquare = null;
         }
         if(msdfSlab != null) {
             msdfSlab.dispose();
@@ -1942,10 +1969,6 @@ public class DefaultResources implements LifecycleListener {
             msdfDejaVu.dispose();
             msdfDejaVu = null;
         }
-        if(msdfDejaVuItalic != null) {
-            msdfDejaVuItalic.dispose();
-            msdfDejaVuItalic = null;
-        }
         if (unicode1 != null) {
             unicode1.dispose();
             unicode1 = null;
@@ -1961,6 +1984,18 @@ public class DefaultResources implements LifecycleListener {
         if(familySlab != null) {
             familySlab.dispose();
             familySlab = null;
+        }
+        if(familyGo != null) {
+            familyGo.dispose();
+            familyGo = null;
+        }
+        if(familyLeanMSDF != null) {
+            familyLeanMSDF.dispose();
+            familyLeanMSDF = null;
+        }
+        if(familySlabMSDF != null) {
+            familySlabMSDF.dispose();
+            familySlabMSDF = null;
         }
         if(tentacle != null) {
             tentacle.dispose();

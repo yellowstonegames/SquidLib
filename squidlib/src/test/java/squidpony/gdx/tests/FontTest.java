@@ -57,15 +57,15 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 90,  70,  100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
-        heights = new int[]{22,  29,  22,  29,  17,  29,  20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
+        widths =  new int[]{120, 160, 120, 160, 120,  70,  100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
+        heights = new int[]{22,  29,  22,  29,  24,  29,  20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabFamily().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispLeanFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispLeanFamily().width(14).height(28).initBySize(),
                 //DefaultResources.getCrispLeanItalicFont().width(ZOOM * 14).height(28).initBySize(),
-                DefaultResources.getCrispDejaVuFont().width(ZOOM * 14).height(28).initBySize(),
+                DefaultResources.getCrispDejaVuFont().width(ZOOM * 15).height(18).initBySize(),
                 DefaultResources.getStretchableHeavySquareFont().width(ZOOM * 24).height(24).initBySize(),
 
                 DefaultResources.getStretchableFont().width(ZOOM * 13).height(30).initBySize(),
@@ -116,7 +116,7 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[1], heights[1], factories[1]).setTextSize(factories[1].width() + 0f * ZOOM, factories[1].height() + 0f * ZOOM),
                 new SquidPanel(widths[2], heights[2], factories[2]).setTextSize(factories[2].width() + 0f * ZOOM, factories[2].height() + 0f * ZOOM),
                 new SquidPanel(widths[3], heights[3], factories[3]).setTextSize(factories[3].width() + 0f * ZOOM, factories[3].height() + 0f * ZOOM),
-                new SquidPanel(widths[4], heights[4], factories[4]).setTextSize(factories[4].width() + 0.5f * ZOOM, factories[4].height() + 1f * ZOOM),
+                new SquidPanel(widths[4], heights[4], factories[4]).setTextSize(factories[4].width() + 2f * ZOOM, factories[4].height() + 1f * ZOOM),
                 new SquidPanel(widths[5], heights[5], factories[5]).setTextSize(factories[5].width() + 0.5f * ZOOM, factories[5].height() + 0.5f * ZOOM),
                 new SquidPanel(widths[6], heights[6], factories[6]).setTextSize(factories[6].width() + 0.75f * ZOOM, factories[6].height() + 5.25f * ZOOM),
                 new SquidPanel(widths[7], heights[7], factories[7]).setTextSize(factories[7].width() + 1f * ZOOM, factories[7].height() + 0.5f * ZOOM),

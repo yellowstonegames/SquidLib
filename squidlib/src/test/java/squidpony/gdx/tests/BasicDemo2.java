@@ -53,21 +53,26 @@ public class BasicDemo2 extends ApplicationAdapter {
     //We're displaying 30 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
     //gridHeight is 30 because that variable will be used for generating the dungeon and handling movement within
     //the upper 30 rows. The bonusHeight is the number of additional rows that aren't handled like the dungeon rows for
-    //UI reasons; here we show text generation in them. Next is gridWidth, which is 90 because we want 90 grid spaces
-    //across the whole screen. cellWidth and cellHeight are 9 and 19, which will match the starting dimensions of a
-    //cell, but won't be stuck at that value because we use a "Stretchable" font, and the cells can change size. While
+    //UI reasons; here we show text generation in them. Next is gridWidth, which is 100 because we want 100 grid spaces
+    //across the whole screen. cellWidth and cellHeight are 10 and 17, which will match the starting dimensions of a
+    //cell, but won't be stuck at that value because we use a "stretchable" font, and the cells can change size. While
     //gridWidth and gridHeight are measured in spaces on the grid, cellWidth and cellHeight are the initial pixel
     //dimensions of one cell. If the screen is resized, one pixel on the original screen will take up more or less
     //space on the resized screen, but the same measurements will be used (usually called world coordinates by libGDX).
+    //Most stretchable fonts supplied with SquidLib are distance field fonts (also called SDF, signed distance field).
+    //SDF fonts can shrink to fairly small sizes while remaining reasonably readable, but are always a little blurry.
+    //In this case we use a variant on that technique called MSDF, or multi-channel signed distance field, which
+    //doesn't shrink to small sizes as nicely but zooms to larger sizes extremely well, with a "crisp" appearance on
+    //corners, and is also faster to render because the shader it uses internally is simpler.
 
     /** In number of cells */
-    public static final int gridWidth = 80;
+    public static final int gridWidth = 100;
     /** In number of cells */
     public static final int gridHeight = 30;
     /** In number of cells */
     public static final int bonusHeight = 7;
     /** The initial pixel width of a cell */
-    public static final int cellWidth = 9;
+    public static final int cellWidth = 10;
     /** The initial pixel height of a cell */
     public static final int cellHeight = 17;
 
@@ -107,11 +112,11 @@ public class BasicDemo2 extends ApplicationAdapter {
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableSlabFont().setSmoothingMultiplier(1.625f));
+                DefaultResources.getCrispDejaVuFont());//.setSmoothingMultiplier(1.625f));
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
+        display.setTextSize(cellWidth * 1.125f, cellHeight * 1.075f);
 
         // this makes animations medium-slow, which makes multi-cell movement slower but nicer-looking.
         display.setAnimationDuration(0.11f);
