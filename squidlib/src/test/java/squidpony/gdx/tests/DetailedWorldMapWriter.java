@@ -14,6 +14,7 @@ import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.WhirlingNoise;
 
@@ -76,43 +77,33 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private WorldMapGenerator world;
     private WorldMapGenerator.DetailedBiomeMapper dbm;
 
-    private static float black = SColor.FLOAT_BLACK,
-            white = SColor.FLOAT_WHITE;
     // Biome map colors
-
-    private static float ice = SColor.ALICE_BLUE.toFloatBits();
-    private static float lightIce = white;
-
+    private static float baseIce = SColor.ALICE_BLUE.toFloatBits();
+    private static float ice = baseIce;
+    private static float lightIce = SColor.FLOAT_WHITE;
     private static float desert = SColor.floatGetI(248, 229, 180);
-
     private static float savanna = SColor.floatGetI(181, 200, 100);
-
     private static float tropicalRainforest = SColor.floatGetI(66, 123, 25);
-
     private static float tundra = SColor.floatGetI(151, 175, 159);
-
     private static float temperateRainforest = SColor.floatGetI(54, 113, 60);
-
     private static float grassland = SColor.floatGetI(169, 185, 105);
-
     private static float seasonalForest = SColor.floatGetI(100, 158, 75);
-
     private static float borealForest = SColor.floatGetI(75, 105, 45);
-
     private static float woodland = SColor.floatGetI(122, 170, 90);
-
     private static float rocky = SColor.floatGetI(171, 175, 145);
-
     private static float beach = SColor.floatGetI(255, 235, 180);
-
     private static float emptyColor = SColor.DB_INK.toFloatBits();
 
     // water colors
-    private static float deepColor = SColor.floatGetI(0, 42, 88);
-    private static float mediumColor = SColor.floatGetI(0, 89, 159);
-    private static float shallowColor = SColor.floatGetI(0, 73, 137);
-    private static float coastalColor = SColor.lerpFloatColors(shallowColor, white, 0.3f);
-    private static float foamColor = SColor.floatGetI(61,  162, 215);
+    private static float baseDeepColor = SColor.floatGetI(0, 42, 88);
+    private static float baseShallowColor = SColor.floatGetI(0, 73, 137);
+    private static float baseCoastalColor = SColor.lerpFloatColors(baseShallowColor, SColor.FLOAT_WHITE, 0.3f);
+    private static float baseFoamColor = SColor.floatGetI(61,  162, 215);
+
+    private static float deepColor = baseDeepColor;
+    private static float shallowColor = baseShallowColor;
+    private static float coastalColor = baseCoastalColor;
+    private static float foamColor = baseFoamColor;
 
     private static float[] biomeColors = {
             desert,
@@ -128,6 +119,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             beach,
             rocky,
             foamColor,
+            deepColor,
             emptyColor
     };
 
@@ -145,6 +137,34 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
             Empty                                                                                                                      //SPACE
     }, BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
+    private static final float[] NATION_COLORS = new float[144];
+    private static void randomizeColors(long seed)
+    {
+        float b, diff, alt, hue = NumberTools.randomSignedFloat(seed);
+        int bCode;
+        for (int i = 0; i < 60; i++) {
+            b = BIOME_TABLE[i];
+            bCode = (int)b;
+            alt = SColor.toEditedFloat(biomeColors[bCode],
+                    hue,
+                    NumberTools.randomSignedFloat(seed * 3L + bCode) * 0.45f - 0.1f,
+                    NumberTools.randomSignedFloat(seed * 5L + bCode) * 0.5f,
+                    0f);
+            diff = ((b % 1.0f) - 0.48f) * 0.27f;
+            BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
+                    ? SColor.lerpFloatColors(alt, SColor.FLOAT_WHITE, diff)
+                    : SColor.lerpFloatColors(alt, SColor.FLOAT_BLACK, -diff));
+            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, SColor.FLOAT_BLACK, 0.08f);
+        }
+        float sat = NumberTools.randomSignedFloat(seed * 3L - 1L) * 0.4f,
+                value = NumberTools.randomSignedFloat(seed * 5L - 1L) * 0.3f;
+
+        deepColor = SColor.toEditedFloat(baseDeepColor, hue, sat, value, 0f);
+        shallowColor = SColor.toEditedFloat(baseShallowColor, hue, sat, value, 0f);
+        coastalColor = SColor.toEditedFloat(baseCoastalColor, hue, sat, value, 0f);
+        foamColor = SColor.toEditedFloat(baseFoamColor, hue, sat, value, 0f);
+        ice = SColor.toEditedFloat(baseIce, hue, sat * 0.3f, value * 0.2f, 0f);
+    }
 
     static {
         float b, diff;
@@ -152,9 +172,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             b = BIOME_TABLE[i];
             diff = ((b % 1.0f) - 0.48f) * 0.27f;
             BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
-                    ? SColor.lerpFloatColors(biomeColors[(int)b], white, diff)
-                    : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.08f);
+                    ? SColor.lerpFloatColors(biomeColors[(int)b], SColor.FLOAT_WHITE, diff)
+                    : SColor.lerpFloatColors(biomeColors[(int)b], SColor.FLOAT_BLACK, -diff));
+            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, SColor.FLOAT_BLACK, 0.08f);
         }
         BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
     }
@@ -273,6 +293,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     public void generate(final long seed)
     {
         long startTime = System.currentTimeMillis();
+        randomizeColors(seed);
         world.generate(1, 1, seed);
         dbm.makeBiomes(world);
         ttg = System.currentTimeMillis() - startTime;
