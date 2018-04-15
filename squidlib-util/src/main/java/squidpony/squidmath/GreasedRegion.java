@@ -896,14 +896,18 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * internal RandomnessSource, per 64 cells of this GreasedRegion (if height is not a multiple of 64, round up to get
      * the number of calls this makes). As such, this sacrifices the precision of the fraction to obtain significantly
      * better speed than generating one random number per cell, although the precision is probably good enough (fraction
-     * is effectively rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). Note that this
-     * doesn't take any IRNG, since it uses {@link RNG#approximateBits(int)}, so it needs an RNG.
-     * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
+     * is effectively rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). The parameter
+     * {@code random} can be an object like a {@link LightRNG}, an {@link RNG} backed by a well-distributed
+     * RandomnessSource like its default, LightRNG, a {@link GWTRNG} (especially if you target GWT, where it will
+     * perform much better than most alternatives), or any of various other RandomnessSource implementations that
+     * distribute bits well for {@link RandomnessSource#nextLong()}, but should not be intentionally-biased RNGs like
+     * {@link DharmaRNG} or {@link EditRNG}, nor double-based QRNGs like {@link VanDerCorputQRNG} or {@link SobolQRNG}.
+     * @param random a RandomnessSource that should produce high-quality long values, like the defaults for {@link RNG}
      * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
-    public GreasedRegion(final RNG random, final double fraction, final int width, final int height)
+    public GreasedRegion(final RandomnessSource random, final double fraction, final int width, final int height)
     {
         this.width = width;
         this.height = height;
@@ -912,7 +916,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         for (int i = 0; i < width * ySections; i++) {
-            data[i] = random.approximateBits(bitCount);
+            data[i] = approximateBits(random, bitCount);
         }
         if(ySections > 0 && yEndMask != -1) {
             for (int a = ySections - 1; a < data.length; a += ySections) {
@@ -927,20 +931,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * 64 cells of this GreasedRegion (if height is not a multiple of 64, round up to get the number of calls this
      * makes). As such, this sacrifices the precision of the fraction to obtain significantly better speed than
      * generating one random number per cell, although the precision is probably good enough (fraction is effectively
-     * rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). Note that this doesn't take
-     * any IRNG, since it uses {@link RNG#approximateBits(int)}, so it needs an RNG.
-     * @param random an RNG that should have a good approximateBits() method; the default (LightRNG internally) should be fine
+     * rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). The parameter {@code random}
+     * can be an object like a {@link LightRNG}, an {@link RNG} backed by a well-distributed RandomnessSource like its
+     * default, LightRNG, a {@link GWTRNG} (especially if you target GWT, where it will perform much better than most
+     * alternatives), or any of various other RandomnessSource implementations that distribute bits well for
+     * {@link RandomnessSource#nextLong()}, but should not be intentionally-biased RNGs like {@link DharmaRNG} or
+     * {@link EditRNG}, nor double-based QRNGs like {@link VanDerCorputQRNG} or {@link SobolQRNG}.
+     * @param random a RandomnessSource that should produce high-quality long values, like the defaults for {@link RNG}
      * @param fraction between 0.0 and 1.0 (clamped), only considering a precision of 1/64.0 (0.015625) between steps
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      * @return this for chaining
      */
-    public GreasedRegion refill(final RNG random, final double fraction, final int width, final int height) {
+    public GreasedRegion refill(final RandomnessSource random, final double fraction, final int width, final int height) {
         if (random != null){
             int bitCount = (int) (fraction * 64);
             if(this.width == width && this.height == height) {
                 for (int i = 0; i < width * ySections; i++) {
-                    data[i] = random.approximateBits(bitCount);
+                    data[i] = approximateBits(random, bitCount);
                 }
             } else {
                 this.width = (width <= 0) ? 0 : width;
@@ -949,7 +957,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 yEndMask = -1L >>> (64 - (this.height & 63));
                 data = new long[this.width * ySections];
                 for (int i = 0; i < this.width * ySections; i++) {
-                    data[i] = random.approximateBits(bitCount);
+                    data[i] = approximateBits(random, bitCount);
                 }
             }
             if(ySections > 0 && yEndMask != -1) {
@@ -2757,20 +2765,87 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Removes "on" cells that are nearby other "on" cells, with a random factor to which bits are actually turned off
      * that still ensures exactly half of the bits are kept as-is (the one exception is when height is an odd number,
-     * which makes the bottom row slightly random). Note that this doesn't take any IRNG, since it uses
-     * {@link RNG#approximateBits(int)}, so it needs an RNG.
+     * which makes the bottom row slightly random).
      * @param random the RNG used for a random factor
      * @return this for chaining
      */
-    public GreasedRegion disperseRandom(RNG random)
+    public GreasedRegion disperseRandom(RandomnessSource random)
     {
         if(width < 1 || ySections <= 0)
             return this;
         int len = data.length;
         for (int j = 0; j < len; j++) {
-            data[j] &= random.randomInterleave();
+            data[j] &= randomInterleave(random);
         }
         return this;
+    }
+    /**
+     * Generates a random 64-bit long with a number of '1' bits (Hamming weight) equal on average to bitCount.
+     * For example, calling this with a parameter of 32 will be equivalent to calling nextLong() on the given
+     * RandomnessSource, which could be an {@link RNG} or any RandomnessSource with good 64-bit generation quality.
+     * Calling this with a parameter of 16 will have on average 16 of the 64 bits in the returned long set to '1',
+     * distributed pseudo-randomly, while a parameter of 47 will have on average 47 bits set. This can be useful for
+     * certain code that uses bits to represent data but needs a different ratio of set bits to unset bits than 1:1.
+     * <br>
+     * The parameter {@code random} can be an object like a {@link LightRNG}, an {@link RNG} backed by a
+     * well-distributed RandomnessSource like its default, LightRNG, a {@link GWTRNG} (especially if you target GWT,
+     * where it will perform much better than most alternatives), or any of various other RandomnessSource
+     * implementations that distribute bits well for {@link RandomnessSource#nextLong()}, but should not be
+     * intentionally-biased RNGs like {@link DharmaRNG} or {@link EditRNG}, nor double-based QRNGs like
+     * {@link VanDerCorputQRNG} or {@link SobolQRNG}.
+     * @param random used to determine random factors; likely to be an {@link RNG}, {@link LightRNG}, or {@link GWTRNG}
+     * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set
+     * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long
+     */
+    public static long approximateBits(RandomnessSource random, int bitCount) {
+        if (bitCount <= 0)
+            return 0L;
+        if (bitCount >= 64)
+            return -1L;
+        if (bitCount == 32)
+            return random.nextLong();
+        boolean high = bitCount > 32;
+        int altered = (high ? 64 - bitCount : bitCount), lsb = NumberTools.lowestOneBit(altered);
+        long data = random.nextLong();
+        for (int i = lsb << 1; i <= 16; i <<= 1) {
+            if ((altered & i) == 0)
+                data &= random.nextLong();
+            else
+                data |= random.nextLong();
+        }
+        return high ? ~(random.nextLong() & data) : (random.nextLong() & data);
+    }
+
+    /**
+     * Gets a somewhat-random long with exactly 32 bits set; in each pair of bits starting at bit 0 and bit 1, then bit
+     * 2 and bit 3, up to bit 62 and bit 3, one bit will be 1 and one bit will be 0 in each pair.
+     * <br>
+     * Not exactly general-use; meant for generating data for GreasedRegion.
+     * @return a random long with 32 "1" bits, distributed so exactly one bit is "1" for each pair of bits
+     */
+    public static long randomInterleave(RandomnessSource random) {
+        long bits = random.nextLong() & 0xFFFFFFFFL, ib = ~bits & 0xFFFFFFFFL;
+        bits |= (bits << 16);
+        ib |= (ib << 16);
+        bits &= 0x0000FFFF0000FFFFL;
+        ib &= 0x0000FFFF0000FFFFL;
+        bits |= (bits << 8);
+        ib |= (ib << 8);
+        bits &= 0x00FF00FF00FF00FFL;
+        ib &= 0x00FF00FF00FF00FFL;
+        bits |= (bits << 4);
+        ib |= (ib << 4);
+        bits &= 0x0F0F0F0F0F0F0F0FL;
+        ib &= 0x0F0F0F0F0F0F0F0FL;
+        bits |= (bits << 2);
+        ib |= (ib << 2);
+        bits &= 0x3333333333333333L;
+        ib &= 0x3333333333333333L;
+        bits |= (bits << 1);
+        ib |= (ib << 1);
+        bits &= 0x5555555555555555L;
+        ib &= 0x5555555555555555L;
+        return (bits | (ib << 1));
     }
 
     /**
@@ -5861,7 +5936,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param preservation roughly what degree of points to remove (higher keeps more); removes about {@code 1/(2^preservation)} points
      * @return a randomly modified change to this GreasedRegion
      */
-    public GreasedRegion deteriorate(RNG rng, int preservation) {
+    public GreasedRegion deteriorate(RandomnessSource rng, int preservation) {
         if(rng == null || width <= 2 || ySections <= 0 || preservation <= 0)
             return this;
         long mash;
@@ -5881,19 +5956,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * removed (roughly 0.25 will be _kept_), if 0.8, roughly 1/5 will be removed (and about 0.8 will be kept), and so
      * on. Preservation must be between 0.0 and 1.0 for this to have the intended behavior; 1.0 or higher will keep all
      * points without change (returning this GreasedRegion), while anything less than 0.015625 (1.0/64) will empty this
-     * GreasedRegion (using {@link #empty()}) and then return it.
-     * @param rng used to determine random factors
+     * GreasedRegion (using {@link #empty()}) and then return it. The parameter {@code random} can be an object like a
+     * {@link LightRNG}, an {@link RNG} backed by a well-distributed RandomnessSource like its default, LightRNG, a
+     * {@link GWTRNG} (especially if you target GWT, where it will perform much better than most alternatives), or any
+     * of various other RandomnessSource implementations that distribute bits well for
+     * {@link RandomnessSource#nextLong()}, but should not be intentionally-biased RNGs like {@link DharmaRNG} or 
+     * {@link EditRNG}, nor double-based QRNGs like {@link VanDerCorputQRNG} or {@link SobolQRNG}.
+     * @param random used to determine random factors; likely to be an {@link RNG}, {@link LightRNG}, or {@link GWTRNG}
      * @param preservation the rough fraction of points to keep, between 0.0 and 1.0
      * @return a randomly modified change to this GreasedRegion
      */
-    public GreasedRegion deteriorate(final RNG rng, final double preservation) {
-        if(rng == null || width <= 2 || ySections <= 0 || preservation >= 1)
+    public GreasedRegion deteriorate(final RandomnessSource random, final double preservation) {
+        if(random == null || width <= 2 || ySections <= 0 || preservation >= 1)
             return this;
         if(preservation <= 0)
             return empty();
         int bitCount = (int) (preservation * 64);
         for (int i = 0; i < width * ySections; i++) {
-            data[i] &= rng.approximateBits(bitCount);
+            data[i] &= approximateBits(random, bitCount);
         }
         return this;
     }

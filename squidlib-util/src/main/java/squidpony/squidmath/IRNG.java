@@ -6,18 +6,19 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Interface for full-featured random number generators to implement (more than
- * {@link RandomnessSource}). It's a stripped down version of the original
- * {@link RNG}. It's an interface instead of a class, to be able to implement
- * using random number generators that don't implement RandomnessSource, like
- * libGDX's RandomXS128, or to hard-code the RandomnessSource to avoid overhead
- * or use some methods differently (like preferring 32-bit math).
+ * Interface for full-featured random number generators to implement (it does more than, and includes all of,
+ * {@link RandomnessSource}). It's a stripped down version of the original {@link RNG}. It's an interface instead of a
+ * class, to be able to implement using random number generators that don't implement RandomnessSource, like libGDX's
+ * RandomXS128, or to hard-code the RandomnessSource to avoid overhead or use some methods differently (like preferring
+ * 32-bit math or optimizing for GWT, as {@link GWTRNG} does). You can use any IRNG as a RandomnessSource, but that only
+ * allows its {@link #next(int)}, {@link #nextLong()}, and {@link #copy()} methods to be called, so most usage that can
+ * benefit from methods like {@link #nextDouble()} or {@link #between(int, int)} should prefer IRNG for parameter types.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  * @author smelC
  */
-public interface IRNG {
+public interface IRNG extends RandomnessSource {
 
     /**
      * Get up to 32 bits (inclusive) of random output; the int this produces
