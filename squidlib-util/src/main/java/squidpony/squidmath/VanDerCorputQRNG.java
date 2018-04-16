@@ -263,7 +263,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
             numY += (s % (denY * 3)) / denY;
             denY *= 3;
         }
-        while (denY <= s) {
+        while (denZ <= s) {
             numZ *= 5;
             numZ += (s % (denZ * 5)) / denZ;
             denZ *= 5;
@@ -285,10 +285,12 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public static double determine(int base, int index)
     {
-        if(base == 2)
-            return determine2(index);
-        int s = (index+1 & 0x7fffffff),
-                num = s % base, den = base;
+        final int s = (index+1 & 0x7fffffff);
+        if(base <= 2) {
+            final int leading = Integer.numberOfLeadingZeros(s);
+            return (Integer.reverse(s) >>> leading) / (double) (1 << (32 - leading));
+        }
+        int num = s % base, den = base;
         while (den <= s) {
             num *= base;
             num += (s % (den * base)) / den;
@@ -350,7 +352,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
 
     /**
      * Given any int (0 is allowed), this gets a somewhat-sub-random float from 0.0 (inclusive) to 1.0 (exclusive)
-     * using the same implementation as {@link NumberTools#randomFloat(int)} but with index alterations. Only "weak"
+     * using the same implementation as {@link NumberTools#randomFloat(long)} but with index alterations. Only "weak"
      * because it lacks the stronger certainty of subsequent numbers being separated that the Van der Corput sequence
      * has. Not actually sub-random, but manages to be distributed remarkably evenly, likely due to the statistical
      * strength of the algorithm it uses (the same as {@link PintRNG}, derived from PCG-Random). Because PintRNG is
@@ -379,7 +381,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
 
     /**
      * Like {@link #weakDetermine(int)}, but returns a float between -1.0f and 1.0f, exclusive on both. Uses
-     * {@link NumberTools#randomSignedFloat(int)} internally but alters the index parameter so calls with nearby values
+     * {@link NumberTools#randomSignedFloat(long)} internally but alters the index parameter so calls with nearby values
      * for index are less likely to have nearby results.
      * @param index any int
      * @return a sub-random float between -1.0f and 1.0f (both exclusive, unlike some other methods)

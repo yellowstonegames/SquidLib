@@ -223,7 +223,7 @@ public final class PintRNG implements RandomnessSource, StatefulRandomness, Seri
      * American Nuclear Society (Nov. 1994). The code is mostly the same as in PCG-Random's C port by M.E. O'Neill,
      * specifically <a href="https://github.com/imneme/pcg-c/blob/master/src/pcg-advance-32.c">this file</a>. Skipping
      * ahead or behind takes more than constant time, unlike with {@link LightRNG}, but less time than calling nextInt()
-     * {@code advance} times.
+     * {@code advance} times. Skipping backwards by one step is the worst case for this.
      * @param advance Number of future generations to skip past. Can be negative to backtrack.
      * @return the int that would be generated after generating advance random numbers.
      */
@@ -238,7 +238,7 @@ public final class PintRNG implements RandomnessSource, StatefulRandomness, Seri
                 acc_mult *= cur_mult;
                 acc_plus = acc_plus * cur_mult + cur_plus;
             }
-            cur_plus = (cur_mult + 1) * cur_plus;
+            cur_plus *= (cur_mult + 1);
             cur_mult *= cur_mult;
             advance >>>= 1;
         }
