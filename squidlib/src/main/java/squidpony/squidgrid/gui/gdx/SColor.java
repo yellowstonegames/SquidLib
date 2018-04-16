@@ -11795,7 +11795,7 @@ public class SColor extends Color implements Serializable {
      * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
      * bright color, exclusive)
      */
-    public static float saturationOfFloat(float encoded) {
+    public static float saturationOfFloat(final float encoded) {
         final int e = NumberTools.floatToIntBits(encoded),
                 r = (e & 255), g = (e >>> 8 & 255),
                 b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
@@ -11810,6 +11810,144 @@ public class SColor extends Color implements Serializable {
         else                                    //Chromatic data...
         {
             return delta / max;
+        }
+    }
+
+    /**
+     * Gets the saturation of this color, as a float ranging from 0.0f to 1.0f, inclusive.
+     * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
+     * bright color, exclusive)
+     */
+    public float saturation() {
+        return saturation(this);
+    }
+
+    /**
+     * Gets the saturation of the given Color, as a float ranging from 0.0f to 1.0f, inclusive.
+     * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
+     * bright color, exclusive)
+     */
+    public static float saturation(final Color color) {
+        final float r = color.r;
+        final float g = color.g;
+        final float b = color.b;
+        final float min = Math.min(Math.min(r, g ), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);    //Max. value of RGB
+        final float delta = max - min;                     //Delta RGB value
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            return 0f;
+        }
+        else                                    //Chromatic data...
+        {
+            return delta / max;
+        }
+    }
+
+    /**
+     * Gets the value (like lightness or brightness) of the given encoded color as a float ranging from 0f to 1f, inclusive.
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return the value (essentially lightness) of the color from 0.0f (black, inclusive) to
+     * 1.0f (very bright, inclusive).
+     */
+    public static float valueOfFloat(final float encoded)
+    {
+        final int e = NumberTools.floatToIntBits(encoded);
+        final int r = (e & 255), g = (e >>> 8 & 255),
+                b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
+        return Math.max(Math.max(r, g), b) / 255f;
+    }
+
+    /**
+     * Gets the value (like lightness or brightness) of this color as a float ranging from 0f to 1f, inclusive.
+     * @return the value (essentially lightness) of the color from 0.0f (black, inclusive) to
+     * 1.0f (very bright, inclusive, including white but also other colors).
+     */
+    public float value()
+    {
+        return value(this);
+    }
+
+    /**
+     * Gets the value (like lightness or brightness) of the given Color as a float ranging from 0f to 1f, inclusive.
+     * @return the value (essentially lightness) of the color from 0.0f (black, inclusive) to
+     * 1.0f (very bright, inclusive, including white but also other colors).
+     */
+    public static float value(final Color color)
+    {
+        return Math.max(Math.max(color.r, color.g), color.b);
+    }
+
+    /**
+     * Gets the hue of the given encoded color, as a float from 0f (inclusive, red and approaching orange if increased)
+     * to 1f (exclusive, red and approaching purple if decreased).
+     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
+     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
+     * eventually to purple before looping back to almost the same red (1.0, exclusive)
+     */
+    public static float hueOfFloat(final float encoded) {
+        final int e = NumberTools.floatToIntBits(encoded);
+        final float r = (e & 255) / 255f, g = (e >>> 8 & 255) / 255f,
+                b = (e >>> 16 & 255) / 255f;//, a = (e >>> 24 & 254) / 254f;
+        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB
+        final float delta = max - min;                           //Delta RGB value
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            return 0f;
+        }
+        else                                    //Chromatic data...
+        {
+            final float rDelta = (((max - r) / 6f) + (delta * 0.5f)) / delta;
+            final float gDelta = (((max - g) / 6f) + (delta * 0.5f)) / delta;
+            final float bDelta = (((max - b) / 6f) + (delta * 0.5f)) / delta;
+
+            if      (r == max) return (1f + bDelta - gDelta) % 1f;
+            else if (g == max) return (1f + (1f / 3f) + rDelta - bDelta) % 1f;
+            else               return (1f + (2f / 3f) + gDelta - rDelta) % 1f;
+        }
+    }
+
+
+    /**
+     * Gets the hue of this color, as a float from 0f (inclusive, red and approaching orange if increased)
+     * to 1f (exclusive, red and approaching purple if decreased).
+     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
+     * eventually to purple before looping back to almost the same red (1.0, exclusive)
+     */
+    public float hue() {
+        return hue(this);
+    }
+
+    /**
+     * Gets the hue of the given Color, as a float from 0f (inclusive, red and approaching orange if increased)
+     * to 1f (exclusive, red and approaching purple if decreased).
+     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
+     * eventually to purple before looping back to almost the same red (1.0, exclusive)
+     */
+    public static float hue(final Color color) {
+        final float r = color.r;
+        final float g = color.g;
+        final float b = color.b;
+        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB
+        final float delta = max - min;                   //Delta RGB value
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            return 0f;
+        }
+        else                                    //Chromatic data...
+        {
+            final float rDelta = (((max - r) / 6f) + (delta * 0.5f)) / delta;
+            final float gDelta = (((max - g) / 6f) + (delta * 0.5f)) / delta;
+            final float bDelta = (((max - b) / 6f) + (delta * 0.5f)) / delta;
+
+            if      (r == max) return (1f + bDelta - gDelta) % 1f;
+            else if (g == max) return (1f + (1f / 3f) + rDelta - bDelta) % 1f;
+            else               return (1f + (2f / 3f) + gDelta - rDelta) % 1f;
         }
     }
 
@@ -11884,54 +12022,6 @@ public class SColor extends Color implements Serializable {
         int g = (bits1 >>> 8 & 0xFF) - (int)(color2.g * 255);
         int b = (bits1 >>> 16 & 0xFF) - (int)(color2.b * 255);
         return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
-    }
-
-    /**
-     * Gets the value (lightness/brightness) of the given encoded color, as a float ranging from 0f to 1f, inclusive.
-     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
-     * @return the value (essentially lightness) of the color from 0.0f (black, inclusive) to
-     * 1.0f (very bright, inclusive).
-     */
-    public static float valueOfFloat(final float encoded)
-    {
-        final int e = NumberTools.floatToIntBits(encoded);
-        final int r = (e & 255), g = (e >>> 8 & 255),
-                b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
-        return Math.max(Math.max(r, g), b) / 255f;
-    }
-
-    /**
-     * Gets the hue of the given encoded color, as a float from 0f (inclusive, red and approaching orange if increased)
-     * to 1f (exclusive, red and approaching purple if decreased).
-     * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
-     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
-     * eventually to purple before looping back to almost the same red (1.0, exclusive)
-     */
-    public static float hueOfFloat(final float encoded) {
-        final int e = NumberTools.floatToIntBits(encoded);
-        final float r = (e & 255) / 255f, g = (e >>> 8 & 255) / 255f,
-                b = (e >>> 16 & 255) / 255f;//, a = (e >>> 24 & 254) / 254f;
-        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
-        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB
-        final float delta = max - min;                           //Delta RGB value
-
-        float hue;
-
-        if ( delta < 0.0001f )                     //This is a gray, no chroma...
-        {
-            return 0f;
-        }
-        else                                    //Chromatic data...
-        {
-            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;
-            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;
-            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;
-
-            if      (r == max) hue = bDelta - gDelta;
-            else if (g == max) hue = (1f / 3f) + rDelta - bDelta;
-            else               hue = (2f / 3f) + gDelta - rDelta;
-            return (hue + 1f) % 1f;
-        }
     }
 
 
