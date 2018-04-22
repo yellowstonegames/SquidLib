@@ -3,13 +3,16 @@ package squidpony.gdx.tests;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.Maker;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidmath.OrderedMap;
 
 import static squidpony.StringKit.safeSubstring;
 
@@ -20,11 +23,13 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static int gridWidth = 140;
+    private static int gridWidth = 128;
+//    private static int gridWidth = 140;
     /**
      * In number of cells
      */
-    private static int gridHeight = 27;
+    private static int gridHeight = 12;
+//    private static int gridHeight = 27;
 
     /**
      * The pixel width of a cell
@@ -42,7 +47,21 @@ public class ColorTest extends ApplicationAdapter {
     private Viewport viewport;
     private TextCellFactory tcf;
     private SquidLayers display;
-
+    private int hh = 0;
+    private int vv = 0;
+    private Color tmp = new Color();
+    
+    private void show(float hue, float sat, float val)
+    {
+        display.putString(hh * 8, vv, "          ", SColor.BLACK,
+                SColor.colorFromFloat(tmp, SColor.floatGetHSV(hue, sat, val, 1f)));
+        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
+        if((vv = (vv + 1) % 6) == 0)
+        {
+            ++hh;
+            System.out.println();
+        }
+    }
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -64,16 +83,110 @@ public class ColorTest extends ApplicationAdapter {
 //        for (int i = 0; i < 32; i++) {
 //            SColor db = SColor.DAWNBRINGER_32[i];
 //            display.putString(0, i, "                                ", db, db);
-//            display.putString(1, i, db.name, scc.invert(db), db);
+//            display.putString(1, i, db.name, db.value() < 0.7f ? SColor.WHITE : SColor.BLACK, db);
 //        }
-        for (int h = 0; h < 7; h++) {
-            for (int v = 0; v < 27; v++) {
-                SColor cw = SColor.COLOR_WHEEL_PALETTE[h * 27 + v];
-                display.putString(h * 20, v, StringKit.padRightStrict(cw.name.substring(3), 20), cw.value() < 0.7f ? SColor.WHITE : SColor.BLACK, cw);
-                //display.put(h, v, scc.getHSV(h * (1f / gridWidth), 0.75f, (8 - v) / 8f));
+
+//        for (int h = 0; h < 7; h++) {
+//            for (int v = 0; v < 27; v++) {
+//                SColor cw = SColor.COLOR_WHEEL_PALETTE[h * 27 + v];
+//                display.putString(h * 20, v, StringKit.padRightStrict(cw.name.substring(3), 20), cw.value() < 0.7f ? SColor.WHITE : SColor.BLACK, cw);
+//                //display.put(h, v, scc.getHSV(h * (1f / gridWidth), 0.75f, (8 - v) / 8f));
+//            }
+//        }
+        for (int i = 15; i >= 8; i--) {
+            SColor.colorFromFloat(tmp, SColor.floatGetHSV(0, 0, i / 15f, 1f));
+            System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
+        }
+        System.out.println();
+        for (int i = 7; i >= 0; i--) {
+            SColor.colorFromFloat(tmp, SColor.floatGetHSV(0, 0, i / 15f, 1f));
+            System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
+        }
+        System.out.println();
+        OrderedMap<String, Float> smallHues = Maker.makeOM(
+                "Red", 0.03125f * 0.5f,
+                "Apricot", 0.03125f * 3.05f,
+                "Yellow", 0.03125f * 5.3f,
+                "Green", 0.03125f * 10.5f,
+                "Cyan", 0.03125f * 15.85f,
+                "Blue", 0.03125f * 19f,
+                "Violet", 0.03125f * 23.5f,
+                "Magenta", 0.03125f * 29f);
+        for (int i = 0; i < 8; i++) {
+            float hue = smallHues.getAt(i);
+            if(i == 2)
+            {
+                show(hue, 0.325f, 1f);
+                show(hue, 0.65f, 1f);
+                show(hue, 0.775f, 0.95f);
+                show(hue, 0.875f, 0.875f);
+                show(hue, 0.95f, 0.775f);
+                show(hue, 1f, 0.675f);
+            }
+            else if (i != 4) {
+                show(hue, 0.5f, 1f);
+                show(hue, 0.725f, 1f);
+                show(hue, 0.85f, 0.925f);
+                show(hue, 0.95f, 0.8f);
+                show(hue, 1f, 0.65f);
+                show(hue, 1f, 0.45f);
+//                show(hue, 0.6f, 1f);
+//                show(hue, 0.725f, 1f);
+//                show(hue, 0.85f, 0.95f);
+//                show(hue, 0.925f, 0.9f);
+//                show(hue, 0.95f, 0.8f);
+//                show(hue, 1f, 0.7f);
+//                show(hue, 1f, 0.6f);
+//                show(hue, 1f, 0.5f);
+            }
+            else
+            {
+                float hue2 = 0.03125f * 12f; // green with slightly more blue
+                show(hue2, 0.3f, 0.8f);
+                show(hue2, 0.575f, 0.75f);
+                show(hue2, 0.7f, 0.675f);
+                show(hue2, 0.8f, 0.575f);
+                show(hue2, 0.875f, 0.475f);
+                show(hue2, 0.925f, 0.35f);
+            }
+            if(i == 0)
+            {
+                float hue2 = 0.03125f * 1.75f;
+                show(hue2, 0.3f, 1f);
+                show(hue2, 0.375f, 0.925f);
+                show(hue2, 0.475f, 0.8f);
+                show(hue2, 0.55f, 0.65f);
+                show(hue2, 0.625f, 0.475f);
+                show(hue2, 0.7f, 0.3f);
+            }
+            else if (i != 2) {
+                show(hue, 0.25f, 1f);
+                show(hue, 0.325f, 0.925f);
+                show(hue, 0.425f, 0.8f);
+                show(hue, 0.5f, 0.65f);
+                show(hue, 0.575f, 0.475f);
+                show(hue, 0.65f, 0.3f);
+
+//                show(hue, 0.3f, 1f);
+//                show(hue, 0.35f, 0.925f);
+//                show(hue, 0.4f, 0.85f);
+//                show(hue, 0.45f, 0.775f);
+//                show(hue, 0.5f, 0.675f);
+//                show(hue, 0.55f, 0.55f);
+//                show(hue, 0.6f, 0.425f);
+//                show(hue, 0.65f, 0.3f);
+            }
+            else
+            {
+                float hue2 = 0.03125f * 3.2f; // between orange and yellow
+                show(hue2, 0.175f, 0.975f);
+                show(hue2, 0.35f, 0.95f);
+                show(hue2, 0.5f, 0.875f);
+                show(hue2, 0.625f, 0.75f);
+                show(hue2, 0.725f, 0.6f);
+                show(hue2, 0.8f, 0.425f);
             }
         }
-
         stage.addActor(display);
 
    //This block, when uncommented, will generate the color wheel palette code for SColor and print it to stdout.

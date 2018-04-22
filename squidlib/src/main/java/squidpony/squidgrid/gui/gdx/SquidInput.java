@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.IntIntMap;
 import squidpony.squidmath.IntVLA;
 
@@ -11,11 +12,16 @@ import squidpony.squidmath.IntVLA;
  * Mouse input and a user implementation of the SquidInput.KeyHandler interface to react to keys represented as chars
  * and the modifiers those keys were pressed with, any of alt, ctrl, and/or shift. Not all keys are representable by
  * default in unicode, so symbolic representations are stored in constants in this class, and are passed to
- * KeyHandler.handle() as chars like DOWN_ARROW or its value, '\u2193'. Shift modifies the input as it would on a
- * QWERTY keyboard, and the exact mapping is documented in fromKey() as well. This class handles mouse input
- * immediately, but stores keypresses in a queue, storing all key events and allowing them to be processed one at a time
- * using next() or all at once using drain(). To have an effect, it needs to be registered by calling
- * Input.setInputProcessor(SquidInput).
+ * {@link KeyHandler#handle(char, boolean, boolean, boolean)} as chars like DOWN_ARROW or its value, '\u2193'. Shift
+ * modifies the input as it would on a QWERTY keyboard, and the exact mapping is documented in
+ * {@link #fromCode(int, boolean)} as well. This class handles mouse input immediately, but stores keypresses in a
+ * queue, storing all key events and allowing them to be processed one at a time using {@link #next()} or all at once
+ * using {@link #drain()}. To have an effect, it needs to be registered by calling
+ * {@link Input#setInputProcessor(InputProcessor)}. Note that calling {@link #hasNext()} does more than just check if
+ * there are events that can be processed; because hasNext() is expected to be called frequently, it is also the point
+ * where this class checks if a key is being held and so the next event should occur. Holding a key only causes the
+ * keyDown() method of InputListener to be called once, so this uses hasNext() to see if there should be a next event
+ * coming from a held key.
  * <br>
  * This also allows some key remapping, including remapping so a key pressed with modifiers like Ctrl and Shift could
  * act like '?' (which could be used by expert players to avoid accidentally opening a help menu they don't need), and
@@ -26,8 +32,9 @@ import squidpony.squidmath.IntVLA;
  * It does not perform the blocking functionality of earlier SquidKey implementations, because this is meant to run
  * in an event-driven libGDX game and should not step on the toes of libGDX's input handling. To block game logic
  * until an event has been received, check hasNext() in the game's render() method and effectively "block" by not
- * running game logic if hasNext() returns false. You can process an event if hasNext() returns true by calling next().
- * Mouse inputs do not affect hasNext(), and next() will process only key pressed events.
+ * running game logic if hasNext() returns false. You can process an event if hasNext() returns true by calling 
+ * {@link #next()}. Mouse inputs do not affect hasNext(), and next() will process only key pressed events. Also, see
+ * above about the extra behavior of hasNext regarding held keys.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Nathan Sweet
@@ -63,6 +70,8 @@ public class SquidInput extends InputAdapter {
     protected boolean numpadDirections = true, ignoreInput = false;
     protected SquidMouse mouse;
     protected final IntVLA queue = new IntVLA();
+    protected long lastKeyTime = -1000000000L;
+    protected int lastKeyCode = -1;
     public final IntIntMap mapping = new IntIntMap(128);
     /**
      * Constructs a new SquidInput that does not respond to keyboard or mouse input. These can be set later by calling
@@ -365,11 +374,29 @@ public class SquidInput extends InputAdapter {
     }
 
     /**
-     * Returns true if at least one event is queued.
+     * Returns true if at least one event is queued, but also will call {@link #keyDown(int)} if a key is being held but
+     * there is a failure to process the repeated event. The conditions this checks:
+     * <ul>
+     *     <li>Is a key is currently being held?</li>
+     *     <li>Has {@link #keyDown(int)} already been called at least once?</li>
+     *     <li>Have there been at least 220 milliseconds between the last key being received and this call?</li>
+     * </ul>
+     * If all of these conditions are true, keyDown() is called again with the last key it had received, and if this has
+     * an effect (the key can be handled), then generally an event should be queued, so this will have a next event and
+     * should return true. The 220-millisecond check may be revisited in the future, but it seems to prevent accidental
+     * holds in most cases and seems to only count a normal key press as a hold extremely rarely. It may have issues
+     * with repeated presses, but hammering the keyboard is generally a sign the player doesn't care about precision.
      * @return true if there is an event queued, false otherwise.
      */
     public boolean hasNext()
     {
+        if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
+                && lastKeyCode >= 0
+                && lastKeyTime + 220 < System.currentTimeMillis() // may need to make 220 configurable
+                )
+        {
+            keyDown(lastKeyCode);
+        }
         return queue.size > 0;
     }
 
@@ -404,8 +431,9 @@ public class SquidInput extends InputAdapter {
         if (ignoreInput || keyAction == null) {
             return false;
         }
-        boolean
-                shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        lastKeyTime = System.currentTimeMillis();
+        lastKeyCode = keycode;
+        boolean shift = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         int c = fromCode(keycode, shift);
         if(c != '\0') {
             c |= (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT))
