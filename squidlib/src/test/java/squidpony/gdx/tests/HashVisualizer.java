@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 118;
-    private int hashMode = 0, rngMode = 46, noiseMode = 111;
+    private int hashMode = 0, rngMode = 46, noiseMode = 0;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -2889,7 +2889,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = //(float) (
-                                        prepare(WhirlingNoise.noise(x * 0.125, y * 0.125, ctr  * 0.0375));
+                                        prepare(WhirlingNoise.noise(x * 0.03125, y * 0.03125, ctr  * 0.0375));
                                          //               + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
@@ -2905,7 +2905,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = //(float) (
-                                        prepare(WhirlingNoise.noise(xx * 0.125, yy * 0.125));
+                                        prepare(WhirlingNoise.noise(xx * 0.03125, yy * 0.03125));
                                          //               + 1f) * 0.5f;
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2919,7 +2919,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = ((float)
-                                        WhirlingNoise.noise(x * 0.125, y * 0.125, ctr * 0.0375, dBright)
+                                        WhirlingNoise.noise(x * 0.03125, y * 0.03125, ctr * 0.0375, dBright)
                                 + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
@@ -2936,7 +2936,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 yy = y + ctr;
                                 bright =
                                         //prepare(
-                                                WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
+                                                WhirlingNoise.noiseAlt(xx * 0.03125, yy * 0.03125)
                                         //);
                                          * 0.5f + 0.5f;
                                 //+ 15f) / 30f;
@@ -2958,7 +2958,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         (WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)) * 2.34f +
                                         (WhirlingNoise.noiseAlt(xx * 0.25, yy * 0.25)) * 1.19f)
                                  */
-                                bright = prepare(WhirlingNoise.noiseAlt(xx * 0.125, yy * 0.125)
+                                bright = prepare(WhirlingNoise.noiseAlt(xx * 0.03125, yy * 0.03125)
                                 );
 
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
@@ -2970,9 +2970,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y, floatGet(
-                                        (WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr * 0.0625) + 1f) * 0.5f,
-                                        (WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr * 0.0625 + 234.5) + 1f) * 0.5f,
-                                        (WhirlingNoise.noiseAlt(x * 0.125, y * 0.125, ctr * 0.0625 + 678.9) + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.03125f, y * 0.03125f, ctr * 0.045f) + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5) + 1f) * 0.5f,
+                                        (WhirlingNoise.noiseAlt(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9) + 1f) * 0.5f,
                                         1f));
                             }
                         }
@@ -4205,7 +4205,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredWhirling.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456)); // , 1.5f
+                                bright = basicPrepare(layeredWhirling.getNoiseWithSeed(x * 0.015625f, y * 0.015625f, ctr * 0.03125f, 123456)); // , 1.5f
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }

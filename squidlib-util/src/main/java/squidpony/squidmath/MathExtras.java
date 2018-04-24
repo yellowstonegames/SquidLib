@@ -223,6 +223,15 @@ public final class MathExtras
         return Math.min(Math.max(value, min), max);
     }
 
+    /**
+     * Like the modulo operator {@code %}, but the result will always match the sign of {@code d} instead of {@code op}.
+     * @param op the dividend; negative values are permitted and wrap instead of producing negative results
+     * @param d the divisor; if this is negative then the result will be negative, otherwise it will be positive
+     * @return the remainder of the division of op by d, with a sign matching d
+     */
+    public static double remainder(final double op, final double d) {
+        return (op % d + d) % d;
+    }
 
     /**
      * Determines the greatest common divisor of a pair of natural numbers

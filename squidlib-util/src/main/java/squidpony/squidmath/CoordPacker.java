@@ -1,6 +1,5 @@
 package squidpony.squidmath;
 
-import squidpony.GwtCompatibility;
 import squidpony.squidai.AimLimit;
 import squidpony.squidai.Reach;
 import squidpony.squidgrid.Direction;
@@ -1283,8 +1282,8 @@ public class CoordPacker {
         boolean on = false;
         int idx = 0;
         short x =0, y = 0;
-        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
-        double span2 = Math.toRadians(span);
+        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? MathExtras.remainder(angle, 360.0) : angle);
+        double span2 = Math.toRadians(span) * 0.5;
 
         for(int p = 0; p < packed.length; p++, on = !on) {
             if (on) {
@@ -1294,7 +1293,7 @@ public class CoordPacker {
                     if(x >= width || y >= height)
                         continue;
                     double newAngle = NumberTools.atan2(y - centerY, x - centerX) + Math.PI * 2;
-                    if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle + Math.PI * 8, Math.PI * 2)) > span2 / 2.0)
+                    if(Math.abs(MathExtras.remainder(angle2 - newAngle, Math.PI * 2) - Math.PI) > span2)
                         unpacked[x][y] = 0.0;
                     else
                         unpacked[x][y] = 1.0;
@@ -1461,7 +1460,7 @@ public class CoordPacker {
         if(limit > levels.length)
             limit = levels.length;
 
-        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
+        double angle2 = Math.toRadians((angle > 360.0 || angle < 0.0) ? MathExtras.remainder(angle, 360.0) : angle);
         double span2 = Math.toRadians(span);
         double[][] unpacked = new double[width][height];
         short x= 0, y = 0;
@@ -1476,7 +1475,7 @@ public class CoordPacker {
                         if(x >= width || y >= height)
                             continue;
                         double newAngle = NumberTools.atan2(y - centerY, x - centerX) + Math.PI * 2;
-                        if(Math.abs(GwtCompatibility.IEEEremainder(angle2 - newAngle + Math.PI * 8, Math.PI * 2)) > span2 / 2.0)
+                        if(Math.abs(MathExtras.remainder(angle2 - newAngle, Math.PI * 2) - Math.PI) > span2 / 2.0)
                             unpacked[x][y] = 0.0;
                         else
                             unpacked[x][y] = levels[l];

@@ -1,12 +1,15 @@
 package squidpony.squidgrid;
 
 import squidpony.ArrayTools;
-import squidpony.GwtCompatibility;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * This class provides methods for calculating Field of View in grids. Field of
@@ -234,7 +237,7 @@ public class FOV implements Serializable {
         double decay = 1.0 / (radius + 1);
 
         angle = Math.toRadians((angle >= 360.0 || angle < 0.0)
-                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
+                ? MathExtras.remainder(angle, 360.0) : angle);
         span = Math.toRadians(span);
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
@@ -390,7 +393,7 @@ public class FOV implements Serializable {
         ArrayTools.fill(light, 0);
         light[startX][startY] = 1;//make the starting space full power
         angle = Math.toRadians((angle >= 360.0 || angle < 0.0)
-                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
+                ? MathExtras.remainder(angle, 360.0) : angle);
         span = Math.toRadians(span);
 
 
@@ -432,7 +435,7 @@ public class FOV implements Serializable {
         ArrayTools.fill(light, 0);
         light[startX][startY] = 1;//make the starting space full power
         angle = Math.toRadians((angle > 360.0 || angle < 0.0)
-                ? GwtCompatibility.IEEEremainder(angle + 720.0, 360.0) : angle);
+                ? MathExtras.remainder(angle, 360.0) : angle);
         float s = (float) NumberTools.sin(angle),
                 c = (float) NumberTools.cos(angle);
         double deteriorate = 1.0;
@@ -583,7 +586,7 @@ public class FOV implements Serializable {
                     continue;
                 }
                 double newAngle = NumberTools.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
-				if (Math.abs(GwtCompatibility.IEEEremainder(angle - newAngle + Math.PI * 8, Math.PI * 2)) > span / 2.0)
+				if (Math.abs(MathExtras.remainder(angle - newAngle, Math.PI * 2)) > span * 0.5)
 					continue;
 
                 double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );
@@ -734,14 +737,9 @@ public class FOV implements Serializable {
                 } else if (end > leftSlope) {
                     break;
                 }
-                double newAngle = (NumberTools.atan2(currentY - starty, currentX - startx) + Math.PI * 8.0) % (Math.PI * 2),
-                        rem = (angle - newAngle + Math.PI * 2) % (Math.PI * 2), irem = (newAngle - angle + Math.PI * 2) % (Math.PI * 2);
-				if (Math.abs(rem) > span * 0.5 && Math.abs(irem) > span * 0.5)
-					continue;
-
                 double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
                 //check if it's within the lightable area and light if needed
-                if (deltaRadius <= radius) {
+                if (deltaRadius <= radius && Math.abs(((angle - NumberTools.atan2(currentY - starty, currentX - startx) + Math.PI * 8.0) % (Math.PI * 2))) <= span * 0.666) {
                     double bright = 1 - decay * deltaRadius;
                     lightMap[currentX][currentY] = bright;
                 }

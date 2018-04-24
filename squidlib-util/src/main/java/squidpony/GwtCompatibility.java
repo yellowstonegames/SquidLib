@@ -30,7 +30,7 @@ public class GwtCompatibility {
 	}
 
 	/**
-     * A replacement for Math.IEEEremainder, just because Math.IEEEremainder isn't GWT-compatible.
+     * A replacement for {@link Math#IEEEremainder(double, double)}, because Math.IEEEremainder isn't GWT-compatible.
      * Gets the remainder of op / d, which can be negative if any parameter is negative.
 	 * @param op the operand/dividend
 	 * @param d the divisor

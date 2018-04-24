@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * Created by Tommy Ettinger on 5/13/2016.
  */
 public class FOVTest {
-    public static int width = 100, height = 100, depth = 16;
+    public static int width = 100, height = 40;
 
     public static void main(String[] args) {
         StatefulRNG rng = new StatefulRNG(0xCAFEBA77L);
