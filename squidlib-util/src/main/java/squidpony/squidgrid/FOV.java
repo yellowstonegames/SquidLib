@@ -737,9 +737,12 @@ public class FOV implements Serializable {
                 } else if (end > leftSlope) {
                     break;
                 }
-                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
+                double deltaRadius = radiusStrategy.radius(deltaX, deltaY),
+                        at2 = (angle - NumberTools.atan2(currentY - starty, currentX - startx) + Math.PI * 2) % (Math.PI * 2);
                 //check if it's within the lightable area and light if needed
-                if (deltaRadius <= radius && Math.abs(((angle - NumberTools.atan2(currentY - starty, currentX - startx) + Math.PI * 8.0) % (Math.PI * 2))) <= span * 0.666) {
+                if (deltaRadius <= radius
+                        && (at2 <= span * 0.5
+                        || at2 >= Math.PI * 2 - span * 0.5)) {
                     double bright = 1 - decay * deltaRadius;
                     lightMap[currentX][currentY] = bright;
                 }
