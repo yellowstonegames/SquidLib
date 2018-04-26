@@ -1,10 +1,12 @@
 package squidpony.squidgrid;
 
-import squidpony.annotation.GwtIncompatible;
 import squidpony.squidmath.*;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Line of Sight (LOS) algorithms find if there is or is not a path between two
@@ -42,10 +44,6 @@ public class LOS implements Serializable {
      * Uses Wu's Algorithm as modified by Elias to draw the line. Does
      * not end at an obstruction but rather returns one of the possible
      * attempted paths in full.
-     *
-     * <p>
-     * Be aware, it is GWT-incompatible.
-     * </p>
      */
     public static final int ELIAS = 2;
     /**
@@ -77,12 +75,12 @@ public class LOS implements Serializable {
      * lines and some parts of other lines, but usually is 2 cells wide.
      */
     public static final int THICK = 6;
-    private LinkedList<Coord> lastPath = new LinkedList<>();
+    private ArrayDeque<Coord> lastPath = new ArrayDeque<>();
     private int type;
     private double[][] resistanceMap;
     private int startx, starty, targetx, targety;
     private Elias elias = null;
-
+    private LOS los1 = null, los2 = null;
     /**
      * Gets the radius strategy this uses.
      * @return the current Radius enum used to measure distance; starts at CIRCLE if not specified
@@ -115,7 +113,12 @@ public class LOS implements Serializable {
     public LOS(int type) {
         this.type = type;
         if(type == ELIAS)
+        {
             elias = new Elias();
+            los1 = new LOS(BRESENHAM);
+            los2 = new LOS(BRESENHAM);
+
+        }
     }
 
     /**
@@ -186,9 +189,7 @@ public class LOS implements Serializable {
             case BRESENHAM:
                 return bresenhamReachable(radiusStrategy);
             case ELIAS:
-            	throw new IllegalStateException("Elias LOS is Gwt Incompatible");
-            	// Comment required to compile with GWT:
-            	// return eliasReachable(radiusStrategy);
+            	return eliasReachable(radiusStrategy);
             case RAY:
                 return rayReachable(radiusStrategy);
             case ORTHO:
@@ -285,15 +286,15 @@ public class LOS implements Serializable {
      * Returns the path of the last LOS calculation, with the starting point as
      * the head of the queue.
      *
-     * @return the last path found during LOS calculation, as a LinkedList of Coord with the starting point at the head
+     * @return the last path found during LOS calculation, as a ArrayDeque of Coord with the starting point at the head
      */
-    public LinkedList<Coord> getLastPath() {
+    public ArrayDeque<Coord> getLastPath() {
         return lastPath;
     }
 /*
     private boolean bresenhamReachable(Radius radiusStrategy) {
         Queue<Coord> path = Bresenham.line2D(startx, starty, targetx, targety);
-        lastPath = new LinkedList<>();
+        lastPath = new ArrayDeque<>();
         lastPath.add(Coord.get(startx, starty));
         double decay = 1 / radiusStrategy.radius(startx, starty, targetx, targety);
         double currentForce = 1;
@@ -315,7 +316,7 @@ public class LOS implements Serializable {
 */
     private boolean bresenhamReachable(Radius radiusStrategy) {
         Coord[] path = Bresenham.line2D_(startx, starty, targetx, targety);
-        lastPath = new LinkedList<>();
+        lastPath = new ArrayDeque<>();
         double rad = radiusStrategy.radius(startx, starty, targetx, targety);
         if(rad == 0.0) {
             lastPath.add(Coord.get(startx, starty));
@@ -343,7 +344,7 @@ public class LOS implements Serializable {
 
     private boolean orthoReachable(Radius radiusStrategy) {
         Coord[] path = OrthoLine.line_(startx, starty, targetx, targety);
-        lastPath = new LinkedList<>();
+        lastPath = new ArrayDeque<>();
         double rad = radiusStrategy.radius(startx, starty, targetx, targety);
         if(rad == 0.0) {
             lastPath.add(Coord.get(startx, starty));
@@ -371,7 +372,7 @@ public class LOS implements Serializable {
 
     private boolean ddaReachable(Radius radiusStrategy) {
         Coord[] path = DDALine.line_(startx, starty, targetx, targety);
-        lastPath = new LinkedList<>();
+        lastPath = new ArrayDeque<>();
         double rad = radiusStrategy.radius(startx, starty, targetx, targety);
         if(rad == 0.0) {
             lastPath.add(Coord.get(startx, starty));
@@ -399,7 +400,7 @@ public class LOS implements Serializable {
     }
 
     private boolean thickReachable(Radius radiusStrategy) {
-        lastPath = new LinkedList<>();
+        lastPath = new ArrayDeque<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety);
         double decay = 1.0 / dist; // note: decay can be positive infinity if dist is 0; this is actually OK
         OrderedSet<Coord> visited = new OrderedSet<>((int) dist + 3);
@@ -448,7 +449,7 @@ public class LOS implements Serializable {
     }
 
     private boolean brushReachable(Radius radiusStrategy, int spread) {
-        lastPath = new LinkedList<>();
+        lastPath = new ArrayDeque<>();
         double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2, decay = 1 / dist;
         OrderedSet<Coord> visited = new OrderedSet<>((int) (dist + 3) * spread);
         List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
@@ -502,7 +503,7 @@ public class LOS implements Serializable {
     }
 
     private boolean rayReachable(Radius radiusStrategy) {
-        lastPath = new LinkedList<>();//save path for later retrieval
+        lastPath = new ArrayDeque<>();//save path for later retrieval
         if (startx == targetx && starty == targety) {//already there!
             lastPath.add(Coord.get(startx, starty));
             return true;
@@ -563,63 +564,49 @@ public class LOS implements Serializable {
         return end.x == targetx && end.y == targety;
     }
 
-    @GwtIncompatible /* Because of Thread */
     private boolean eliasReachable(Radius radiusStrategy) {
         if(elias == null)
+        {
             elias = new Elias();
+            los1 = new LOS(BRESENHAM);
+            los2 = new LOS(BRESENHAM);
+        }
         List<Coord> ePath = elias.line(startx, starty, targetx, targety);
-        lastPath = new LinkedList<>(ePath);//save path for later retreival
-
-        HashMap<EliasWorker, Thread> pool = new HashMap<>();
-
-        for (Coord p : ePath) {
-            EliasWorker worker = new EliasWorker(p.x, p.y, radiusStrategy);
-            Thread thread = new Thread(worker);
-            thread.start();
-            pool.put(worker, thread);
-        }
-
-        for (EliasWorker w : pool.keySet()) {
-            try {
-                pool.get(w).join();
-            } catch (InterruptedException ex) {
-            }
-            if (w.succeeded) {
-                lastPath = w.path;
-                return true;
-            }
-        }
-
-        return false;//never got to the target point
-    }
-
-    private class EliasWorker implements Runnable {
-
-        private LinkedList<Coord> path;
-        private boolean succeeded = false;
-        private int testx, testy;
-        private Radius eliasRadiusStrategy;
-        EliasWorker(int testx, int testy, Radius radiusStrategy) {
-            this.testx = testx;
-            this.testy = testy;
-            this.eliasRadiusStrategy = radiusStrategy;
-        }
-
-        @Override
-        public void run() {
-            LOS los1 = new LOS(BRESENHAM);
-            LOS los2 = new LOS(BRESENHAM);
+        
+        for(Coord p : ePath)
+        {
             //if a non-solid midpoint on the path can see both the start and end, consider the two ends to be able to see each other
-            if (resistanceMap[testx][testy] < 1
-                    && eliasRadiusStrategy.radius(startx, starty, testx, testy) <= eliasRadiusStrategy.radius(startx, starty, targetx, targety)
-                    && los1.isReachable(resistanceMap, testx, testy, targetx, targety, eliasRadiusStrategy)
-                    && los2.isReachable(resistanceMap, startx, starty, testx, testy, eliasRadiusStrategy)) {
+            if (resistanceMap[p.x][p.y] < 1
+                    && radiusStrategy.radius(startx, starty, p.x, p.y) <= radiusStrategy.radius(startx, starty, targetx, targety)
+                    && los1.isReachable(resistanceMap, p.x, p.y, targetx, targety, radiusStrategy)
+                    && los2.isReachable(resistanceMap, startx, starty, p.x, p.y, radiusStrategy)) {
 
                 //record actual sight path used
-                path = new LinkedList<>(los2.lastPath);
-                path.addAll(los1.lastPath);
-                succeeded = true;
+                lastPath.clear();
+                lastPath.addAll(los2.lastPath);
+                lastPath.addAll(los1.lastPath);
+                return true;
             }
+
         }
+//        for (Coord p : ePath) {
+//            EliasWorker worker = new EliasWorker(p.x, p.y, radiusStrategy);
+//            Thread thread = new Thread(worker);
+//            thread.start();
+//            pool.put(worker, thread);
+//        }
+//
+//        for (EliasWorker w : pool.keySet()) {
+//            try {
+//                pool.get(w).join();
+//            } catch (InterruptedException ex) {
+//            }
+//            if (w.succeeded) {
+//                lastPath = w.path;
+//                return true;
+//            }
+//        }
+
+        return false;//never got to the target point
     }
 }

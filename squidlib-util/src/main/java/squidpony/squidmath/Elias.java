@@ -4,20 +4,19 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains methods to draw antialiased lines based on floating point
+ * Contains methods to draw anti-aliased lines based on floating-point
  * coordinates.
- *
+ * <br>
  * Because of the way this line is calculated, endpoints may be swapped and
  * therefore the list may not be in start-to-end order.
- *
+ * <br>
  * Based on work by Hugo Elias at
  * http://freespace.virgin.net/hugo.elias/graphics/x_wuline.htm which is in turn
- * base on work by Wu.
- *
+ * based on work by Wu.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
@@ -26,14 +25,14 @@ public class Elias implements Serializable {
     private static final long serialVersionUID = 5290834334572814012L;
 
     private List<Coord> path;
-    private float[][] lightMap;
+    private double[][] lightMap;
     private int width, height;
     private double threshold = 0.0;
 
     public Elias() {
     }
 
-    public synchronized float[][] lightMap(double startx, double starty, double endx, double endy) {
+    public double[][] lightMap(double startx, double starty, double endx, double endy) {
         line(startx, starty, endx, endy);
         return lightMap;
     }
@@ -47,11 +46,11 @@ public class Elias implements Serializable {
      * @param endy
      * @return
      */
-    public synchronized List<Coord> line(double startx, double starty, double endx, double endy) {
-        path = new LinkedList<>();
+    public List<Coord> line(double startx, double starty, double endx, double endy) {
+        path = new ArrayList<>();
         width = (int) (Math.max(startx, endx) + 1);
         height = (int) (Math.max(starty, endy) + 1);
-        lightMap = new float[width][height];
+        lightMap = new double[width][height];
         runLine(startx, starty, endx, endy);
         return path;
     }
@@ -65,24 +64,24 @@ public class Elias implements Serializable {
      * @param brightnessThreshold between 0.0 (default) and 1.0; only Points with higher brightness will be included
      * @return
      */
-    public synchronized List<Coord> line(double startx, double starty, double endx, double endy,
+    public List<Coord> line(double startx, double starty, double endx, double endy,
                                                 double brightnessThreshold) {
         threshold = brightnessThreshold;
-        path = new LinkedList<>();
+        path = new ArrayList<>();
         width = (int) (Math.max(startx, endx) + 1);
         height = (int) (Math.max(starty, endy) + 1);
-        lightMap = new float[width][height];
+        lightMap = new double[width][height];
         runLine(startx, starty, endx, endy);
         return path;
     }
-    public synchronized List<Coord> line(Coord start, Coord end) {
+    public List<Coord> line(Coord start, Coord end) {
         return line(start.x, start.y, end.x, end.y);
     }
-    public synchronized List<Coord> line(Coord start, Coord end, double brightnessThreshold) {
+    public List<Coord> line(Coord start, Coord end, double brightnessThreshold) {
         return line(start.x, start.y, end.x, end.y, brightnessThreshold);
     }
 
-    public synchronized List<Coord> getLastPath()
+    public List<Coord> getLastPath()
     {
         return path;
     }
@@ -98,7 +97,7 @@ public class Elias implements Serializable {
         //check bounds overflow from antialiasing
         if (x >= 0 && x < width && y >= 0 && y < height && c > threshold) {
             path.add(Coord.get((int) x, (int) y));
-            lightMap[(int) x][(int) y] = (float) c;
+            lightMap[(int) x][(int) y] = c;
         }
     }
 

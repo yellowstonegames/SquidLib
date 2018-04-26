@@ -60,7 +60,7 @@ final class FOVLOSPerformanceTest extends AbstractPerformanceTest {
             final FOV fovRippleV = new FOV(FOV.RIPPLE_VERY_LOOSE);
             final FOV fovShadow = new FOV(FOV.SHADOW);
             final LOS losBresenham = new LOS(LOS.BRESENHAM);
-            //final LOS losElias = new LOS(LOS.ELIAS);
+            final LOS losElias = new LOS(LOS.ELIAS);
             final LOS losRay = new LOS(LOS.RAY);
             final int end = DIMENSION - 2;
 
@@ -76,12 +76,12 @@ final class FOVLOSPerformanceTest extends AbstractPerformanceTest {
                     losBresenham.isReachable(map, x, y, 1, end);
                     losBresenham.isReachable(map, x, y, end, 1);
                     losBresenham.isReachable(map, x, y, end, end);
-                    /*
-					losElias.isReachable(map, x, y, 1, 1);
+                    
+                    losElias.isReachable(map, x, y, 1, 1);
 					losElias.isReachable(map, x, y, 1, end);
 					losElias.isReachable(map, x, y, end, 1);
 					losElias.isReachable(map, x, y, end, end);
-					*/
+					
                     losRay.isReachable(map, x, y, 1, 1);
                     losRay.isReachable(map, x, y, 1, end);
                     losRay.isReachable(map, x, y, end, 1);
