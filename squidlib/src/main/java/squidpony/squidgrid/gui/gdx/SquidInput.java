@@ -70,8 +70,9 @@ public class SquidInput extends InputAdapter {
     protected boolean numpadDirections = true, ignoreInput = false;
     protected SquidMouse mouse;
     protected final IntVLA queue = new IntVLA();
-    protected long lastKeyTime = -1000000000L;
+    protected long lastKeyTime = -1000000L;
     protected int lastKeyCode = -1;
+    protected long repeatGapMillis = 220L;
     public final IntIntMap mapping = new IntIntMap(128);
     /**
      * Constructs a new SquidInput that does not respond to keyboard or mouse input. These can be set later by calling
@@ -374,25 +375,49 @@ public class SquidInput extends InputAdapter {
     }
 
     /**
+     * Gets the amount of milliseconds of holding a key this requires to count as a key repeat. The default is 220. 
+     * @return how long a key needs to be held before this will count it as a key repeat, as a long in milliseconds
+     */
+    public long getRepeatGap() {
+        return repeatGapMillis;
+    }
+
+    /**
+     * Sets the amount of milliseconds of holding a key this requires to count as a key repeat. The default is 220.
+     * @param time how long a key needs to be held before this will count it as a key repeat, as a positive long in milliseconds
+     */
+    public void setRepeatGap(long time) {
+        repeatGapMillis = time;
+    }
+
+    /**
      * Returns true if at least one event is queued, but also will call {@link #keyDown(int)} if a key is being held but
      * there is a failure to process the repeated event. The conditions this checks:
      * <ul>
      *     <li>Is a key is currently being held?</li>
+     *     <li>Are no modifier keys being held (shift, control, alt)? (without this check, the modifier key counts as a
+     *     repeat of the key it modifies, which is probably never the intended behavior)</li>
      *     <li>Has {@link #keyDown(int)} already been called at least once?</li>
-     *     <li>Have there been at least 220 milliseconds between the last key being received and this call?</li>
+     *     <li>Have there been at least {@link #getRepeatGap()} milliseconds between the last key being received and this call?</li>
      * </ul>
      * If all of these conditions are true, keyDown() is called again with the last key it had received, and if this has
      * an effect (the key can be handled), then generally an event should be queued, so this will have a next event and
-     * should return true. The 220-millisecond check may be revisited in the future, but it seems to prevent accidental
-     * holds in most cases and seems to only count a normal key press as a hold extremely rarely. It may have issues
-     * with repeated presses, but hammering the keyboard is generally a sign the player doesn't care about precision.
-     * @return true if there is an event queued, false otherwise.
+     * should return true. You can change the amount of time required to hold a key to cause key repeats with
+     * {@link #setRepeatGap(long)}, but the default of 220 ms is usually suitable. Too low of a value can cause normal
+     * key presses to be counted twice or more, and too high of a value may delay an expected key repeat.
+     * @return true if there is an event queued, false otherwise
      */
     public boolean hasNext()
     {
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)
+                && !Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
+                && !Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)
+                && !Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
+                && !Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)
+                && !Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)
+                && !Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT)
                 && lastKeyCode >= 0
-                && lastKeyTime + 220 < System.currentTimeMillis() // may need to make 220 configurable
+                && System.currentTimeMillis() - lastKeyTime > repeatGapMillis // defaults to 220 ms
                 )
         {
             keyDown(lastKeyCode);
