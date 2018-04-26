@@ -12,7 +12,7 @@ package squidpony.squidmath;
  * often coupled with another kind of noise but with the result of the ValueNoise made less significant to add a "fuzzy"
  * effect to the appearance.
  * <br>
- * Implementation is based on {@link CrossHash.Wisp#hash64(int[])}, treating doubles as ints
+ * Implementation is based on {@link CrossHash#hash64(int[])}, treating doubles as ints
  * by using {@link NumberTools#doubleToMixedIntBits(double)}, which XORs the bottom and top halves of the long bits of
  * each double. Finishes by passing the top 52 bits as a significand to {@link NumberTools#longBitsToDouble(long)},
  * using an exponent that allows this to produce numbers between -1.0 and 1.0. Has special treatment for the seed when

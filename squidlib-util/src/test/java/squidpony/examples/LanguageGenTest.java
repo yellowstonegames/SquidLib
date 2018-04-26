@@ -299,7 +299,6 @@ public class LanguageGenTest {
             NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 41041041L);
 //            System.out.println("princess   : " + cipher.lookup("princess"));
 //            System.out.println("princesses : " + cipher.lookup("princesses"));
-            //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
             int ctr = 0;
             System.out.println(cipher.cipherMarkup(marked));
             for (String s : oz) {
@@ -319,8 +318,7 @@ public class LanguageGenTest {
             System.out.println();
 
             /*
-            LanguageCipher cipher = new LanguageCipher(lang, 2252637788195L);
-            //LanguageCipher cipher = new LanguageCipher(FakeLanguageGen.randomLanguage(sr));
+            NaturalLanguageCipher cipher = new NaturalLanguageCipher(lang, 2252637788195L);
             int ctr = 0;
             for (String s : oz) {
                 oz2[ctr] = cipher.cipher(s);
@@ -339,7 +337,7 @@ public class LanguageGenTest {
             System.out.println();
             */
             /*
-            cipher = new LanguageCipher(lang, 0x123456789L);
+            cipher = new NaturalLanguageCipher(lang, 0x123456789L);
             ctr = 0;
             for (String s : oz) {
                 oz2[ctr] = cipher.cipher(s);

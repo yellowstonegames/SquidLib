@@ -107,9 +107,6 @@ public class HashVisualizer extends ApplicationAdapter {
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
     private final double[][][][] seamless = new double[3][64][64][64];
     private final SeededNoise seeded = new SeededNoise(0xDEADD00D);
-    private final MeadNoise mead = new MeadNoise(); //new Noise.Layered4D(new MeadNoise(0xDEADD00D), 1, 4.55);
-    private final Noise.Noise2D mead2D = new Noise.Layered2D(MeadNoise.instance, 3);
-    private final Noise.Noise3D mead3D = new Noise.Layered3D(MeadNoise.instance, 3);
     private final Noise.Noise2D layered2D = new Noise.Layered2D(WhirlingNoise.instance, 3);
     private final Noise.Noise3D layered3D = new Noise.Layered3D(WhirlingNoise.instance, 3);
     private final Noise.Noise4D layered4D = new Noise.Layered4D(WhirlingNoise.instance, 3);
@@ -158,14 +155,6 @@ public class HashVisualizer extends ApplicationAdapter {
             seedW0 = thrust.nextLong(), seedW1 = thrust.nextLong(), seedW2 = thrust.nextLong(), seedW3 = thrust.nextLong(),
             seedU0 = thrust.nextLong(), seedU1 = thrust.nextLong(), seedU2 = thrust.nextLong(), seedU3 = thrust.nextLong(),
             seedV0 = thrust.nextLong(), seedV1 = thrust.nextLong(), seedV2 = thrust.nextLong(), seedV3 = thrust.nextLong();
-    private final double
-            randX0 = TabbyNoise.gauss(seedX0) + 0.625, randX1 = TabbyNoise.gauss(seedX1) + 0.625, randX2 = TabbyNoise.gauss(seedX2) + 0.625, randX3 = TabbyNoise.gauss(seedX3) + 0.625,
-            randY0 = TabbyNoise.gauss(seedY0) + 0.625, randY1 = TabbyNoise.gauss(seedY1) + 0.625, randY2 = TabbyNoise.gauss(seedY2) + 0.625, randY3 = TabbyNoise.gauss(seedY3) + 0.625,
-            randZ0 = TabbyNoise.gauss(seedZ0) + 0.625, randZ1 = TabbyNoise.gauss(seedZ1) + 0.625, randZ2 = TabbyNoise.gauss(seedZ2) + 0.625, randZ3 = TabbyNoise.gauss(seedZ3) + 0.625,
-            randW0 = TabbyNoise.gauss(seedW0) + 0.625, randW1 = TabbyNoise.gauss(seedW1) + 0.625, randW2 = TabbyNoise.gauss(seedW2) + 0.625, randW3 = TabbyNoise.gauss(seedW3) + 0.625,
-            randU0 = TabbyNoise.gauss(seedU0) + 0.625, randU1 = TabbyNoise.gauss(seedU1) + 0.625, randU2 = TabbyNoise.gauss(seedU2) + 0.625, randU3 = TabbyNoise.gauss(seedU3) + 0.625,
-            randV0 = TabbyNoise.gauss(seedV0) + 0.625, randV1 = TabbyNoise.gauss(seedV1) + 0.625, randV2 = TabbyNoise.gauss(seedV2) + 0.625, randV3 = TabbyNoise.gauss(seedV3) + 0.625;
-
 
     private final double[] turing = TuringPattern.initialize(width, height);
     private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4),
@@ -173,10 +162,7 @@ public class HashVisualizer extends ApplicationAdapter {
 
     private final double[] connections = {0.0, 0.0, 0.0};
     private final CosmicNumbering cosmos = new CosmicNumbering(connections);
-
-    private final float[] bandsGaussian = WaveletNoise.prepareBands(0.7f, 1.3f, 2.1f, 2.0f, 1.2f, 0.6f),
-            bandsWhite = WaveletNoise.prepareBands(1.3f, 0.8f, 0f, 0.2f, 0.6f, 0.5f);
-
+    
     private final float[][][] fillField = new float[3][width][height],
             fillField3DR = new float[1][width][height],
             fillField3DG = new float[1][width][height],
@@ -951,19 +937,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         Noise.seamless3D(seamless[0], 1337, 1);
                                         Noise.seamless3D(seamless[1], 123456, 1);
                                         Noise.seamless3D(seamless[2], -9999, 1);
-                                        /*
-                                        Noise.seamless2D(seamless[0][0], 1337, 1, mead);
-                                        Noise.seamless2D(seamless[1][0], 123456, 1, mead);
-                                        Noise.seamless2D(seamless[2][0], -9999, 1, mead);
-                                        */
                                         break;
                                     case 17:
                                     case 61:
                                         ArrayTools.fill(seamless[0], 0.0);
 
                                         Noise.seamless3D(seamless[0], -31337, 1);
-
-                                        //Noise.seamless2D(seamless[0][0], -31337, 1, mead);
                                         break;
                                     case 20:
                                     case 64:
@@ -3564,30 +3543,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 58:
                     case 86:
-                        Gdx.graphics.setTitle("Tabby 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, seedX0, seedY0, seedZ0, randX0, randY0, randZ0) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, seedX1, seedY1, seedZ1, randX1, randY1, randZ1) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, seedX2, seedY2, seedZ2, randX2, randY2, randZ2) * 0.50f) + 0.50f,
-                                                1.0f));
-                            }
-                        }
-                        break;
                     case 59:
                     case 87:
-                        Gdx.graphics.setTitle("Tabby 3D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
-                                        seedX3, seedY3, seedZ3, randX3, randY3, randZ3) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-
                     case 68:
                         Gdx.graphics.setTitle("Turing Pattern at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         TuringPattern.distort(turingActivate, width, height, stretchScaled3D, ctr * 5, 778899);
@@ -3719,51 +3676,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 74:
-                        Gdx.graphics.setTitle("Mead 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(
-                                                (float)mead2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.045, y * 0.03125 + 30 + ctr * 0.045, 1234) * 0.5f + 0.5f,
-                                                (float)mead2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.045, y * 0.03125 + 10 + ctr * 0.045, 54321) * 0.5f + 0.5f,
-                                                (float)mead2D.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.045, y * 0.03125 + 20 + ctr * 0.045, 1234321) * 0.5f + 0.5f,
-                                                1.0f));
-                            }
-                        }
-                        break;
                     case 75:
-                        Gdx.graphics.setTitle("Mead 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float)mead2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.045, y * 0.03125 + ctr * 0.045,123456)
-                                        * 0.5f + 0.5f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-
                     case 76:
-                        Gdx.graphics.setTitle("Mead 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(
-                                                (float)mead3D.getNoiseWithSeed(x * 0.03125f + 20f, y * 0.03125f + 30f, ctr * 0.045f, 1234) * 0.5f + 0.5f,
-                                                (float)mead3D.getNoiseWithSeed(x * 0.03125f + 30f, y * 0.03125f + 10f, ctr * 0.045f, 54321) * 0.5f + 0.5f,
-                                                (float)mead3D.getNoiseWithSeed(x * 0.03125f + 10f, y * 0.03125f + 20f, ctr * 0.045f, 1234321) * 0.5f + 0.5f,
-                                                1.0f));
-                            }
-                        }
-                        break;
                     case 77:
-                        Gdx.graphics.setTitle("Mead 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float)mead3D.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456) * 0.5f + 0.5f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
                     case 78:
                         Gdx.graphics.setTitle("Merlin Noise 3D, x4 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -3830,92 +3745,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 82:
-                        Gdx.graphics.setTitle("Wavelet 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(bright = WaveletNoise.instance.getRawNoise(x * 0.23125f + ctr * 0.25125f, y * 0.23125f + ctr * 0.25125f, 0f,
-                                                123456) * 0.5f + 0.5f, bright, bright, 1f));
-                            }
-                        }
-                        break;
                     case 83:
-                        Gdx.graphics.setTitle("Wavelet 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(bright = WaveletNoise.instance.getRawNoise(x * 0.23125f, y * 0.23125f, ctr * 0.25125f, -54321) * 0.5f + 0.5f,
-                                                bright, bright, 1f));
-                            }
-                        }
-                        break;
                     case 84:
-                        Gdx.graphics.setTitle("Wavelet 3D Noise with Gaussian bands at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(bright = WaveletNoise.instance.getBandedNoise(x * 0.023125f, y * 0.023125f, ctr * 0.15125f, 4321, bandsGaussian) * 0.5f + 0.5f,
-                                                bright, bright, 1f));
-                            }
-                        }
-                        break;
                     case 85:
-                        Gdx.graphics.setTitle("Wavelet 3D Noise with White Noise bands at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(bright = WaveletNoise.instance.getBandedNoise(x * 0.023125f, y * 0.023125f, ctr * 0.15125f, -4321, bandsWhite) * 0.5f + 0.5f,
-                                                bright, bright, 1f));
-                            }
-                        }
-                        break;
                     case 88:
-                        Gdx.graphics.setTitle("Tabby 4D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr + 31.337) * 0.0711125f, seedX0, seedY0, seedZ0, seedW0, randX0, randY0, randZ0, randW0) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr + 42.337) * 0.0711125f, seedX1, seedY1, seedZ1, seedW1, randX1, randY1, randZ1, randW1) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr + 53.337) * 0.0711125f, seedX2, seedY2, seedZ2, seedW2, randX2, randY2, randZ2, randW2) * 0.50f) + 0.50f,
-                                                1.0f));
-                            }
-                        }
-                        break;
                     case 89:
-                        Gdx.graphics.setTitle("Tabby 4D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
-                                        (NumberTools.zigzag((x + y - ctr) * 0.091f) + ctr) * 0.0711125f, seedX3, seedY3, seedZ3, seedW3, randX3, randY3, randZ3, randW3) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
                     case 90:
-                        Gdx.graphics.setTitle("Tabby 6D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        floatGet(
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.1) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.2) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.8) * 0.0611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0, randX0, randY0, randZ0, randW0, randU0, randV0) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.5) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.6) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.3) * 0.0611125f, seedX1, seedY1, seedZ1, seedW1, seedU1, seedV1, randX1, randY1, randZ1, randW1, randU1, randV1) * 0.50f) + 0.50f,
-                                                (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.9) * 0.0511125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.4) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.6) * 0.0611125f, seedX2, seedY2, seedZ2, seedW2, seedU2, seedV2, randX2, randY2, randZ2, randW2, randU2, randV2) * 0.50f) + 0.50f,
-                                                1.0f));
-                            }
-                        }
-                        break;
                     case 91:
-                        Gdx.graphics.setTitle("Tabby 6D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float)(TabbyNoise.instance.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, (NumberTools.zigzag((x + y - ctr) * 0.1221) - ctr - 3.6) * 0.0311125f, (NumberTools.zigzag((ctr - x) * 0.1681) + ctr + y + 1.5) * 0.0811125f, (NumberTools.zigzag((y + ctr) * 0.191828) + ctr - x + 2.2) * 0.0611125f, seedX3, seedY3, seedZ3, seedW3, seedU3, seedV3, randX3, randY3, randZ3, randW3, randU3, randV3) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
-
-
                     case 92:
                         Gdx.graphics.setTitle("Mummy 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
