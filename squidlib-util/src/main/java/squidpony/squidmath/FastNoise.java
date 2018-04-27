@@ -31,6 +31,8 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
+import static squidpony.squidmath.Noise.HastyPointHash.hash256;
+
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
  * FastNoise library, hence the name (these functions are sometimes, but not always, very fast). This implements
@@ -455,9 +457,10 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private static float gradCoord2D(int seed, int x, int y, float xd, float yd) {
-        Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) & 7];
+        //Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) & 7];
+        float[] g = WhirlingNoise.phiGrad2f[hash256(x, y, seed)];
         //Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) >>> 29];
-        return xd * g.x + yd * g.y;
+        return xd * g[0] + yd * g[1];
     }
 
     private static float gradCoord3D(int seed, int x, int y, int z, float xd, float yd, float zd) {

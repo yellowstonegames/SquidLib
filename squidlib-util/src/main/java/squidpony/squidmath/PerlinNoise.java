@@ -34,19 +34,7 @@ public class PerlinNoise {
 
     protected static final double phi = 1.61803398875,
     epi = 1.0 / Math.E / Math.PI, unit1_4 =  0.70710678118, unit1_8 = 0.38268343236, unit3_8 = 0.92387953251;
-
-    /**
-     * Not used currently; see {@link #phiGrad2} instead.
-     */
-    protected static final double[][] grad2 = {
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1},/*
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1},
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1},
-            {1, 0}, {-1, 0}, {0, 1}, {0, -1},*/
-            {unit3_8, unit1_8}, {unit3_8, -unit1_8}, {-unit3_8, unit1_8}, {-unit3_8, -unit1_8},
-            {unit1_4, unit1_4}, {unit1_4, -unit1_4}, {-unit1_4, unit1_4}, {-unit1_4, -unit1_4},
-            {unit1_8, unit3_8}, {unit1_8, -unit3_8}, {-unit1_8, unit3_8}, {-unit1_8, -unit3_8}};
-
+    
     /**
      * 256 2-element gradient vectors formed from the cos and sin of increasing multiples of phi, the golden ratio.
      * This starts with {@code Math.cos(1.61803398875 * 1), Math.sin(1.61803398875 * 1)} and increases the multiple up
