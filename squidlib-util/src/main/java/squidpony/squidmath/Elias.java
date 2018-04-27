@@ -5,7 +5,6 @@ import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Contains methods to draw anti-aliased lines based on floating-point
@@ -24,7 +23,7 @@ public class Elias implements Serializable {
 
     private static final long serialVersionUID = 5290834334572814012L;
 
-    private List<Coord> path;
+    private ArrayList<Coord> path;
     private double[][] lightMap;
     private int width, height;
     private double threshold = 0.0;
@@ -46,7 +45,7 @@ public class Elias implements Serializable {
      * @param endy
      * @return
      */
-    public List<Coord> line(double startx, double starty, double endx, double endy) {
+    public ArrayList<Coord> line(double startx, double starty, double endx, double endy) {
         path = new ArrayList<>();
         width = (int) (Math.max(startx, endx) + 1);
         height = (int) (Math.max(starty, endy) + 1);
@@ -64,7 +63,7 @@ public class Elias implements Serializable {
      * @param brightnessThreshold between 0.0 (default) and 1.0; only Points with higher brightness will be included
      * @return
      */
-    public List<Coord> line(double startx, double starty, double endx, double endy,
+    public ArrayList<Coord> line(double startx, double starty, double endx, double endy,
                                                 double brightnessThreshold) {
         threshold = brightnessThreshold;
         path = new ArrayList<>();
@@ -74,14 +73,14 @@ public class Elias implements Serializable {
         runLine(startx, starty, endx, endy);
         return path;
     }
-    public List<Coord> line(Coord start, Coord end) {
+    public ArrayList<Coord> line(Coord start, Coord end) {
         return line(start.x, start.y, end.x, end.y);
     }
-    public List<Coord> line(Coord start, Coord end, double brightnessThreshold) {
+    public ArrayList<Coord> line(Coord start, Coord end, double brightnessThreshold) {
         return line(start.x, start.y, end.x, end.y, brightnessThreshold);
     }
 
-    public List<Coord> getLastPath()
+    public ArrayList<Coord> getLastPath()
     {
         return path;
     }
@@ -184,17 +183,6 @@ public class Elias implements Serializable {
         ix2 = (int) xend;
         iy2 = (int) yend;
 
-        brightness1 = invfrac(yend) * xgap;
-        brightness2 = frac(yend) * xgap;
-
-        if (shallow) {
-            mark(ix2, iy2, brightness1);
-            mark(ix2, iy2 + 1, brightness2);
-        } else {
-            mark(iy2, ix2, brightness1);
-            mark(iy2 + 1, ix2, brightness2);
-        }
-
         //add the in-between points
         for (x = ix1 + 1; x < ix2; x++) {
             brightness1 = invfrac(yf);
@@ -210,5 +198,17 @@ public class Elias implements Serializable {
 
             yf += grad;
         }
+        
+        brightness1 = invfrac(yend) * xgap;
+        brightness2 = frac(yend) * xgap;
+
+        if (shallow) {
+            mark(ix2, iy2, brightness1);
+            mark(ix2, iy2 + 1, brightness2);
+        } else {
+            mark(iy2, ix2, brightness1);
+            mark(iy2 + 1, ix2, brightness2);
+        }
+
     }
 }

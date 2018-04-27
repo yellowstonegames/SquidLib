@@ -5,7 +5,6 @@ import squidpony.squidmath.*;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -449,57 +448,67 @@ public class LOS implements Serializable {
     }
 
     private boolean brushReachable(Radius radiusStrategy, int spread) {
-        lastPath = new ArrayDeque<>();
-        double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2, decay = 1 / dist;
+        lastPath.clear();
+        double dist = radiusStrategy.radius(startx, starty, targetx, targety) + spread * 2;
         OrderedSet<Coord> visited = new OrderedSet<>((int) (dist + 3) * spread);
-        List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
-        int length = 0;
-        List<Coord> currentPath;
+//        List<List<Coord>> paths = new ArrayList<>((int) (radiusStrategy.volume2D(spread) * 1.25));
+//        int length = 0;
+//        List<Coord> currentPath;
+        int sx = startx, sy = starty, tx = targetx, ty = targety;
         for (int i = -spread; i <= spread; i++) {
+            startx = sx + i;
+            targetx = tx + i;
             for (int j = -spread; j <= spread; j++) {
-                if(radiusStrategy.inRange(startx, starty, startx + i, starty + j, 0, spread)
-                        && startx + i >= 0 && starty + j >= 0
-                        && startx + i < resistanceMap.length && starty + j < resistanceMap[0].length
-                        && targetx + i >= 0 && targety + j >= 0
-                        && targetx + i < resistanceMap.length && targety + j < resistanceMap[0].length) {
-                    for (int q = 0x3fff; q < 0xffff; q += 0x8000) {
-                        for (int r = 0x3fff; r < 0xffff; r += 0x8000) {
-                            currentPath = DDALine.line(startx+i, starty+j, targetx+i, targety+j, q, r);
-                            paths.add(currentPath);
-                            length = Math.max(length, currentPath.size());
-                        }
-                    }
+                if(radiusStrategy.inRange(sx, sy, sx + i, sy + j, 0, spread)
+                        && sx + i >= 0 && sy + j >= 0
+                        && sx + i < resistanceMap.length && sy + j < resistanceMap[0].length
+                        && tx + i >= 0 && ty + j >= 0
+                        && tx + i < resistanceMap.length && ty + j < resistanceMap[0].length) {
+//                    for (int q = 0x3fff; q < 0xffff; q += 0x8000) {
+//                        for (int r = 0x3fff; r < 0xffff; r += 0x8000) {
+                            starty = sy + j;
+                            targety = ty + j;
+                            if(ddaReachable(radiusStrategy))
+                                visited.addAll(lastPath);
+//                            currentPath = DDALine.line(startx+i, starty+j, targetx+i, targety+j, q, r);
+//                            paths.add(currentPath);
+//                            length = Math.max(length, currentPath.size());
+
+//                        }
+//                    }
                 }
             }
         }
-        double[] forces = new double[paths.size()];
-        Arrays.fill(forces, 1.0);
-        boolean[] go = new boolean[paths.size()];
-        Arrays.fill(go, true);
-        Coord p;
-        boolean found = false;
-        for (int d = 0; d < length; d++) {
-            for (int pc = 0; pc < paths.size(); pc++) {
-                List<Coord> path = paths.get(pc);
-                if(d < path.size() && go[pc])
-                    p = path.get(d);
-                else continue;
-                if (p.x == targetx && p.y == targety) {
-                    found = true;
-                }
-                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
-                    forces[pc] -= resistanceMap[p.x][p.y];
-                }
-                double r = radiusStrategy.radius(startx, starty, p.x, p.y);
-                if (forces[pc] - (r * decay) <= 0) {
-                    go[pc] = false;
-                    continue;//too much resistance
-                }
-                visited.add(p);
-            }
-        }
+        lastPath.clear();
         lastPath.addAll(visited);
-        return found;//never got to the target point
+        return !lastPath.isEmpty();
+//        double force;
+////        boolean[] go = new boolean[paths.size()];
+////        Arrays.fill(go, true);
+//        Coord p;
+////        boolean found = false;
+//        for (int pc = 0; pc < paths.size(); pc++) {
+//            List<Coord> path = paths.get(pc);
+//            force = 1.0;
+//            for (int d = 0; d < path.size(); d++) {                  
+//                p = path.get(d);
+//                //else continue;
+////                if (p.x == targetx && p.y == targety) {
+////                    found = true;
+////                }
+//                if (p.x != startx || p.y != starty) {//don't discount the start location even if on resistant cell
+//                    force -= resistanceMap[p.x][p.y];
+//                }
+//                //double r = radiusStrategy.radius(startx, starty, p.x, p.y);
+//                if (force <= 0) {
+//                    //go[pc] = false;
+//                    break;//too much resistance
+//                }
+//                visited.add(p);
+//            }
+//        }
+//        lastPath.addAll(visited);
+//        return true;//visited.contains(Coord.get(targetx, targety));
     }
 
     private boolean rayReachable(Radius radiusStrategy) {
@@ -571,8 +580,14 @@ public class LOS implements Serializable {
             los1 = new LOS(BRESENHAM);
             los2 = new LOS(BRESENHAM);
         }
-        List<Coord> ePath = elias.line(startx, starty, targetx, targety);
-        
+        final ArrayList<Coord> ePath = elias.line(startx, starty, targetx, targety);
+//        // very similar to RNG.shuffleInPlace(); this may be handy for getting an early shortcut return
+//        final int n = ePath.size();
+//        long state = 0x58476D1CE4E5B9BFL;
+//        for (int i = n; i > 1; i--) {
+//            // inlined LightRNG.determineBounded(); can replace *= with usually-faster +=
+//            Collections.swap(ePath, (int)((i * (((state = ((state = ((state += 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31) & 0x7FFFFFFFL)) >> 31), i - 1);
+//        }
         for(Coord p : ePath)
         {
             //if a non-solid midpoint on the path can see both the start and end, consider the two ends to be able to see each other
@@ -584,29 +599,12 @@ public class LOS implements Serializable {
                 //record actual sight path used
                 lastPath.clear();
                 lastPath.addAll(los2.lastPath);
+                lastPath.remove(p); // should be the only overlapping point
                 lastPath.addAll(los1.lastPath);
                 return true;
             }
 
         }
-//        for (Coord p : ePath) {
-//            EliasWorker worker = new EliasWorker(p.x, p.y, radiusStrategy);
-//            Thread thread = new Thread(worker);
-//            thread.start();
-//            pool.put(worker, thread);
-//        }
-//
-//        for (EliasWorker w : pool.keySet()) {
-//            try {
-//                pool.get(w).join();
-//            } catch (InterruptedException ex) {
-//            }
-//            if (w.succeeded) {
-//                lastPath = w.path;
-//                return true;
-//            }
-//        }
-
         return false;//never got to the target point
     }
 }

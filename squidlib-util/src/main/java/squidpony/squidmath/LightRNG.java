@@ -351,9 +351,7 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
 
     public static int determineBounded(long state, final int bound)
     {
-        state = (((state *= 0x9E3779B97F4A7C15L) >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return (int)((bound * ((state ^ (state >>> 31)) & 0x7FFFFFFFL)) >> 31);
+        return (int)((bound * (((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31) & 0x7FFFFFFFL)) >> 31);
     }
 
     /**
