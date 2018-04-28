@@ -95,12 +95,14 @@ public class JsonConverter extends Json {
         json.addClassTag("#DecR", DeckRNG.class);
         json.addClassTag("#Ligh", LightRNG.class);
         json.addClassTag("#LonP", LongPeriodRNG.class);
-        json.addClassTag("#Thrs", ThrustRNG.class);
+        json.addClassTag("#MnwR", MoonwalkRNG.class);
         json.addClassTag("#ThrA", ThrustAltRNG.class);
         json.addClassTag("#JabR", JabRNG.class);
-        json.addClassTag("#Vort", VortexRNG.class);
+        json.addClassTag("#LthR", Lathe32RNG.class);
+        json.addClassTag("#SblR", SobolQRNG.class);
+        json.addClassTag("#GWTR", GWTRNG.class);
         json.addClassTag("#XoRo", XoRoRNG.class);
-        json.addClassTag("#XorR", XorRNG.class);
+        json.addClassTag("#OriR", Oriole32RNG.class);
         json.addClassTag("#Strm", CrossHash.Storm.class);
         json.addClassTag("#Strm", CrossHash.Mist.class);
         json.addClassTag("#Dir", Direction.class);

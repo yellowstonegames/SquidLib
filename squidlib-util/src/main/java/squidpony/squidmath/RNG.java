@@ -70,7 +70,7 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * or Android (not all 32-bit generators do this). {@link ThrustAlt32RNG},
  * {@link Zag32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators that
  * were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,
- * but should not be used on GWT: {@link PintRNG}, {@link Light32RNG}, {@link Isaac32RNG},
+ * but should not be used on GWT: {@link PintRNG}, {@link Light32RNG},
  * and {@link FlapRNG}. All other generators use longs, and so will be
  * slower than the recommended Lathe32RNG on GWT, but much faster on 64-bit JREs.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com

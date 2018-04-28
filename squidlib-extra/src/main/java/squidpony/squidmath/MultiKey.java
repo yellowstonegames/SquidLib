@@ -22,7 +22,7 @@ import java.util.SortedSet;
 @SuppressWarnings("unchecked")
 public class MultiKey {
     public final int keyCount;
-    Arrangement[] keys;
+    private Arrangement[] keys;
 
     /**
      * Constructs an empty MultiKey.

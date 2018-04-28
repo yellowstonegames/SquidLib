@@ -3,8 +3,8 @@ package squidpony.squidmath;
 /**
  * A simple Set of Enum items (which are already unique if used in a normal Set) that keeps insertion order. By
  * inheriting from {@link OrderedSet}, it gets features not present in normal JDK Sets, such as retrieval of random
- * items with {@link #randomItem(RNG)}, iteration in insertion order instead of always using enum declaration order
- * (order can be shuffled with {@link #shuffle(RNG)} or reordered with {@link #reorder(int...)}), and a little more. The
+ * items with {@link #randomItem(IRNG)}, iteration in insertion order instead of always using enum declaration order
+ * (order can be shuffled with {@link #shuffle(IRNG)} or reordered with {@link #reorder(int...)}), and a little more. The
  * implementation is nearly trivial due to how OrderedMap allows customization of hashing strategy with its IHasher
  * option, and this class always uses a specific custom IHasher to hash Enum values by their ordinal. This IHasher is
  * shared with {@link EnumOrderedMap}.

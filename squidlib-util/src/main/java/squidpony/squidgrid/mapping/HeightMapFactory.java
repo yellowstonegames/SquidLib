@@ -19,9 +19,9 @@ public class HeightMapFactory {
      * @param offset a double that changes the sampling process; often randomly generated
      * @return the created map as a 2D double array
      */
+    private static final int[] perlinDivisors = {1, 1, 2, 4, 8, 16, 64};
     public static double[][] heightMap(int width, int height, double offset) {
         double[][] heightMap = new double[width][height];
-        int perldivisors[] = new int[]{1, 1, 2, 4, 8, 16, 64};
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -29,17 +29,17 @@ public class HeightMapFactory {
                 double n = 0;
                 double xi = width * 0.1375, yi = height * 0.1375;//Math.max(width, height);
 
-                for (int p = 0; p < perldivisors.length; p++) {
-                    n += PerlinNoise.noise((x + offset) / xi, (y + offset) / yi) / perldivisors[p];
-                    xi /= 2;
-                    yi /= 2;
+                for (int p = 0; p < perlinDivisors.length; p++) {
+                    n += PerlinNoise.noise((x + offset) / xi, (y + offset) / yi) / perlinDivisors[p];
+                    xi *= 0.5;
+                    yi *= 0.5;
                 }
-                double xdist = x - width / 2.0;
+                double xdist = x - width * 0.5;
                 xdist *= xdist;
-                double ydist = y - height / 2.0;
+                double ydist = y - height * 0.5;
                 ydist *= ydist;
                 double dist = Math.sqrt(xdist + ydist);
-                n -= Math.max(0, Math.pow(dist / (width / 2), 2) - 0.4);
+                n -= Math.max(0, Math.pow(dist / (width * 0.5), 2) - 0.4);
 
                 heightMap[x][y] = n;
             }

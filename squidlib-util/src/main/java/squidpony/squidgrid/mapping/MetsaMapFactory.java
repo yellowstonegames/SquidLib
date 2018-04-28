@@ -126,7 +126,7 @@ public class MetsaMapFactory {
     }
 
 	public double[][] makeHeightMap() {
-        double[][] map = HeightMapFactory.heightMap(width, height, rng.nextInt());
+        double[][] map = HeightMapFactory.heightMap(width, height, rng.nextInt() * 0x1p-16f);
 
         for (int x = 0; x < width / 8; x++) {
             for (int y = 0; y < height; y++) {

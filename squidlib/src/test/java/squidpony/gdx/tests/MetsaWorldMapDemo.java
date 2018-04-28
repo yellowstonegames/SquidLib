@@ -1,7 +1,10 @@
-package squidpony.gdx.examples;
+package squidpony.gdx.tests;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,7 +20,7 @@ import squidpony.squidmath.Coord;
 
 import java.util.List;
 
-public class WorldMapDemo extends ApplicationAdapter {
+public class MetsaWorldMapDemo extends ApplicationAdapter {
     private MetsaMapFactory mapFactory;
 
     private SpriteBatch batch;
@@ -55,6 +58,16 @@ public class WorldMapDemo extends ApplicationAdapter {
     private int[][] biomeMap;
     private double[][] map;
     private List<Coord> cities;
+    private void remake()
+    {
+        mapFactory = new MetsaMapFactory(width, height);
+        map = mapFactory.getHeightMap();
+        biomeMap = mapFactory.makeBiomeMap();
+        mapFactory.makeWeightedMap();
+        highn = mapFactory.getMaxPeak();
+        cities = mapFactory.getCities();
+
+    }
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -64,13 +77,7 @@ public class WorldMapDemo extends ApplicationAdapter {
         cellHeight = 5;
         display = new SquidPanel(width, height, cellWidth, cellHeight);
         colorFactory = new SquidColorCenter();
-        mapFactory = new MetsaMapFactory(width, height);
-        map = mapFactory.getHeightMap();
-        biomeMap = mapFactory.makeBiomeMap();
-        mapFactory.makeWeightedMap();
-        highn = mapFactory.getMaxPeak();
-        cities = mapFactory.getCities();
-
+        remake();
         view = new ScreenViewport();
         stage = new Stage(view, batch);
 
@@ -85,6 +92,10 @@ public class WorldMapDemo extends ApplicationAdapter {
                     {
                         Gdx.app.exit();
                     }
+                    break;
+                    default:
+                        remake();
+                        break;
                 }
             }
         });
@@ -211,4 +222,15 @@ public class WorldMapDemo extends ApplicationAdapter {
         stage.addActor(display);
         Gdx.graphics.requestRendering();
 	}
+    public static void main (String[] arg) {
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        config.title = "SquidLib GDX World Map Demo";
+        config.width = 1200;
+        config.height = 600;
+        config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
+        config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
+        new LwjglApplication(new MetsaWorldMapDemo(), config);
+    }
+
 }
