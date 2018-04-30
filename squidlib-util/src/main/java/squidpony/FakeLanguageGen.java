@@ -2355,8 +2355,8 @@ public class FakeLanguageGen implements Serializable {
                 new String[]{}, new int[]{1, 2, 3, 4}, new double[]{4, 5, 3, 1}, 0.1, 1.0, 0.0, 0.3, genericSanityChecks, true)
                 .addModifiers(
                         new Modifier("([aeouáéóú])i$", "$1y"),
-                        new Modifier("([qgQG])ua", "$1ue"),
-                        new Modifier("([qgQG])uá", "$1ué"),
+                        new Modifier("([qQ])ua", "$1ue"), // guapo, agua, guano, all real Spanish, we should allow gua
+                        new Modifier("([qQ])uá", "$1ué"),
                         new Modifier("([qgQG])u[ouy]", "$1ui"),
                         new Modifier("([qgQG])u[óú]", "$1uí"));
     }
@@ -2369,6 +2369,63 @@ public class FakeLanguageGen implements Serializable {
      * Jamos daí oñuezqui, luarbezquisdas canga ombiurta irri hoño resda!
      */
     public static final FakeLanguageGen SPANISH = spanish().register("Spanish");
+    
+    private static FakeLanguageGen deepSpeech(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "o", "o", "o", "o", "u", "u", "u", "u",
+                        "a", "a", "o", "o", "o", "o", "u", "u", "u", "u",
+                        "a", "a", "o", "o", "o", "o", "u", "u", "u", "u",
+                        "a", "a", "o", "o", "o", "o", "u", "u", "u", "u",
+                        "a", "a", "o", "o", "o", "o", "u", "u", "u", "u",
+                        "aa", "aa", "oo", "oo", "oo", "oo", "uu", "uu", "uu", "uu",
+                        "aa", "aa", "oo", "oo", "oo", "oo", "uu", "uu", "uu", "uu",
+                        "ah", "ah", "oh", "oh", "oh", "oh", "uh", "uh", "uh", "uh",
+                        "aah", "ooh", "ooh", "uuh", "uuh",
+                },
+                new String[]{},
+                new String[]{
+                        "m", "ng", "r", "x", "y", "z", "v", "l",
+                        "m", "ng", "r", "x", "y", "z", "v", "l",
+                        "m", "ng", "r", "x", "y", "z", "v", "l",
+                        "m", "ng", "r", "x", "y", "z", "v", "l",
+                        "m", "ng", "r", "x", "y", "z", "v", "l",
+                        "m", "ng", "r", "z", "l",
+                        "m", "ng", "r", "z", "l",
+                        "m", "ng", "r", "z", "l",
+                        "m", "ng", "r", "z", "l",
+                        "mr", "vr", "ry", "zr",
+                        "mw", "vw", "ly", "zw",
+                        "zl", "vl"
+                },
+                new String[]{
+                },
+                new String[]{
+                        "m", "ng", "r", "x", "z", "v", "l",
+                        "m", "ng", "r", "x", "z", "v", "l",
+                        "m", "ng", "r", "x", "z", "v", "l",
+                        "m", "ng", "r", "x", "z", "v", "l",
+                        "rm", "rng", "rx", "rz", "rv", "rl",
+                        "lm", "lx", "lz", "lv",
+                },
+                new String[]{},
+                new String[]{"'"}, new int[]{1, 2, 3, 4}, new double[]{3, 6, 5, 1}, 0.18, 0.25, 0.07, 0.0, null, true);
+    }
+
+    /**
+     * Fantasy/sci-fi language that would potentially be fitting for a trade language spoken by various very-different
+     * groups, such as creatures with tentacled faces who need to communicate with spider-elves and living crystals.
+     * This language tries to use relatively few sounds so vocally-restricted species can speak it or approximate it,
+     * but some of its sounds are uncommon. It uses "ng" as Vietnamese does, as a sound that can be approximated with
+     * "w" but more accurately is like the sound at the end of "gong". It uses a breathy sound in many vowels,
+     * represented by "h", and this is separate from (and can be combined with) lengthening the vowel by doubling it
+     * ("a", "ah", "aa", and "aah" are different). The "x" sound can be approximated by any of the "kh" or "q" sounds
+     * used in various human languages, or with its usage in English for "ks". This does separate some vowels with "'",
+     * which can be a glottal stop as in Hawaiian or various other languages, or approximated with a brief pause.
+     * <br>
+     * Zrolmolurz, voluu, nguu yuh'ongohng!
+     */
+    public static final FakeLanguageGen DEEP_SPEECH = deepSpeech().register("Deep Speech");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
@@ -4676,7 +4733,7 @@ public class FakeLanguageGen implements Serializable {
 
     /**
      * A simple way to bundle a FakeLanguageGen with the arguments that would be passed to it when calling
-     * {@link FakeLanguageGen#sentence(RNG, int, int, String[], String[], double, int)} or one of its overloads.
+     * {@link FakeLanguageGen#sentence(IRNG, int, int, String[], String[], double, int)} or one of its overloads.
      * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given
      * at construction. The parameters to
      * {@link #SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)} are stored in fields of
