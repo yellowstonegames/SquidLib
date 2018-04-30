@@ -268,7 +268,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     {
         long startTime = System.currentTimeMillis();
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
-        world.generate(seed);
+        world.generate(1.0, 1.125, seed);
         dbm.makeBiomes(world);
         //counter = 0L;
         ttg = System.currentTimeMillis() - startTime;

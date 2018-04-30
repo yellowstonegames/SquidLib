@@ -378,7 +378,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
         world.generate(seed);
         dbm.makeBiomes(world);
-        randomizeColors(seed);
+        //randomizeColors(seed);
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
         counter = 0L;
@@ -401,7 +401,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //generate(rng.nextLong());
         ArrayTools.fill(display.colors, -0x1.0p125F);
         int hc, tc;
-        char p;
         int[][] heightCodeData = world.heightCodeData;
         double[][] heightData = world.heightData;
         //double xp, yp, zp;
