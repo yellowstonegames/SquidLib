@@ -31,11 +31,11 @@
 
 package squidpony.performance;
 
-import it.unimi.dsi.fastutil.Hash;
-import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenCustomHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenCustomHashSet;
+//import it.unimi.dsi.fastutil.Hash;
+//import it.unimi.dsi.fastutil.ints.Int2IntLinkedOpenHashMap;
+//import it.unimi.dsi.fastutil.ints.IntLinkedOpenHashSet;
+//import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenCustomHashMap;
+//import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenCustomHashSet;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
@@ -331,17 +331,17 @@ public class DataStructureBenchmark {
         public boolean areEqual(Object left, Object right) { return Objects.equals(left, right); }
     };
 
-    public static final Hash.Strategy<Integer> integerStrategy = new Hash.Strategy<Integer>() {
-        @Override
-        public int hashCode(Integer data) {
-            return data;
-        }
-
-        @Override
-        public boolean equals(Integer a, Integer b) {
-            return a.equals(b);
-        }
-    };
+//    public static final Hash.Strategy<Integer> integerStrategy = new Hash.Strategy<Integer>() {
+//        @Override
+//        public int hashCode(Integer data) {
+//            return data;
+//        }
+//
+//        @Override
+//        public boolean equals(Integer a, Integer b) {
+//            return a.equals(b);
+//        }
+//    };
 
     @Benchmark
     public void insertLinkedHashMap(BenchmarkState state, Blackhole blackhole)
@@ -575,123 +575,123 @@ public class DataStructureBenchmark {
 //        blackhole.consume(squidOS);
 //    }
 
-    @Benchmark
-    public void insertFastUtilOM(BenchmarkState state, Blackhole blackhole)
-    {
-        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOM.put(i, i);
-        }
-        blackhole.consume(fastutilOM);
-    }
-
-    @Benchmark
-    public void insertFastUtilOM2(BenchmarkState state, Blackhole blackhole)
-    {
-        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOM.put(i, i);
-        }
-        blackhole.consume(fastutilOM);
-    }
-
-    @Benchmark
-    public void insertFastUtilOM3(BenchmarkState state, Blackhole blackhole)
-    {
-        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOM.put(i, i);
-        }
-        blackhole.consume(fastutilOM);
-    }
-
-    @Benchmark
-    public void insertFastUtilOS(BenchmarkState state, Blackhole blackhole)
-    {
-        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOS.add(i);
-        }
-        blackhole.consume(fastutilOS);
-    }
-    @Benchmark
-    public void insertFastUtilOS2(BenchmarkState state, Blackhole blackhole)
-    {
-        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOS.add(i);
-        }
-        blackhole.consume(fastutilOS);
-    }
-    @Benchmark
-    public void insertFastUtilOS3(BenchmarkState state, Blackhole blackhole)
-    {
-        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOS.add(i);
-        }
-        blackhole.consume(fastutilOS);
-    }
-
-    @Benchmark
-    public void insertFastUtilFairOM(BenchmarkState state, Blackhole blackhole)
-    {
-        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerStrategy);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOM.put(i, i);
-        }
-        blackhole.consume(fastutilOM);
-    }
-
-    @Benchmark
-    public void insertFastUtilFairOM2(BenchmarkState state, Blackhole blackhole)
-    {
-        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerStrategy);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOM.put(i, i);
-        }
-        blackhole.consume(fastutilOM);
-    }
-
-    @Benchmark
-    public void insertFastUtilFairOM3(BenchmarkState state, Blackhole blackhole)
-    {
-        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerStrategy);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOM.put(i, i);
-        }
-        blackhole.consume(fastutilOM);
-    }
-
-    @Benchmark
-    public void insertFastUtilFairOS(BenchmarkState state, Blackhole blackhole)
-    {
-        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerStrategy);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOS.add(i);
-        }
-        blackhole.consume(fastutilOS);
-    }
-
-    @Benchmark
-    public void insertFastUtilFairOS2(BenchmarkState state, Blackhole blackhole)
-    {
-        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerStrategy);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOS.add(i);
-        }
-        blackhole.consume(fastutilOS);
-    }
-
-    @Benchmark
-    public void insertFastUtilFairOS3(BenchmarkState state, Blackhole blackhole)
-    {
-        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerStrategy);
-        for (int i = 0; i < state.SIZE; i++) {
-            fastutilOS.add(i);
-        }
-        blackhole.consume(fastutilOS);
-    }
+//    @Benchmark
+//    public void insertFastUtilOM(BenchmarkState state, Blackhole blackhole)
+//    {
+//        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOM.put(i, i);
+//        }
+//        blackhole.consume(fastutilOM);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilOM2(BenchmarkState state, Blackhole blackhole)
+//    {
+//        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOM.put(i, i);
+//        }
+//        blackhole.consume(fastutilOM);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilOM3(BenchmarkState state, Blackhole blackhole)
+//    {
+//        Int2IntLinkedOpenHashMap fastutilOM = new Int2IntLinkedOpenHashMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOM.put(i, i);
+//        }
+//        blackhole.consume(fastutilOM);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilOS(BenchmarkState state, Blackhole blackhole)
+//    {
+//        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOS.add(i);
+//        }
+//        blackhole.consume(fastutilOS);
+//    }
+//    @Benchmark
+//    public void insertFastUtilOS2(BenchmarkState state, Blackhole blackhole)
+//    {
+//        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOS.add(i);
+//        }
+//        blackhole.consume(fastutilOS);
+//    }
+//    @Benchmark
+//    public void insertFastUtilOS3(BenchmarkState state, Blackhole blackhole)
+//    {
+//        IntLinkedOpenHashSet fastutilOS = new IntLinkedOpenHashSet(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOS.add(i);
+//        }
+//        blackhole.consume(fastutilOS);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilFairOM(BenchmarkState state, Blackhole blackhole)
+//    {
+//        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerStrategy);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOM.put(i, i);
+//        }
+//        blackhole.consume(fastutilOM);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilFairOM2(BenchmarkState state, Blackhole blackhole)
+//    {
+//        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerStrategy);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOM.put(i, i);
+//        }
+//        blackhole.consume(fastutilOM);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilFairOM3(BenchmarkState state, Blackhole blackhole)
+//    {
+//        Object2ObjectLinkedOpenCustomHashMap<Integer, Integer> fastutilOM = new Object2ObjectLinkedOpenCustomHashMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerStrategy);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOM.put(i, i);
+//        }
+//        blackhole.consume(fastutilOM);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilFairOS(BenchmarkState state, Blackhole blackhole)
+//    {
+//        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerStrategy);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOS.add(i);
+//        }
+//        blackhole.consume(fastutilOS);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilFairOS2(BenchmarkState state, Blackhole blackhole)
+//    {
+//        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerStrategy);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOS.add(i);
+//        }
+//        blackhole.consume(fastutilOS);
+//    }
+//
+//    @Benchmark
+//    public void insertFastUtilFairOS3(BenchmarkState state, Blackhole blackhole)
+//    {
+//        ObjectLinkedOpenCustomHashSet<Integer> fastutilOS = new ObjectLinkedOpenCustomHashSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerStrategy);
+//        for (int i = 0; i < state.SIZE; i++) {
+//            fastutilOS.add(i);
+//        }
+//        blackhole.consume(fastutilOS);
+//    }
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================

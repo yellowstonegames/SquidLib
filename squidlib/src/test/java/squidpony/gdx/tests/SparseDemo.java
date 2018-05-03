@@ -276,7 +276,7 @@ public class SparseDemo extends ApplicationAdapter {
 //                gridHeight * cellHeight * 0.5f - display.worldY(player.y));
         display.setPosition(0f, 0f);
         // Uses shadowcasting FOV and reuses the visible array without creating new arrays constantly.
-        FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
+        FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);//, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
         
         // 0.01 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.01 will _not_ be in
         // the blockage Collection, but anything 0.01 or less will be in it. This lets us use blockage to prevent access
@@ -518,7 +518,7 @@ public class SparseDemo extends ApplicationAdapter {
         {
             display.slide(pg, player.x, player.y, newX, newY, 0.12f, null);
             player = player.translate(xmod, ymod);
-            FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
+            FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);//, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
             // a new one just for this movement.
             blockage.refill(visible, 0.0);
@@ -655,8 +655,8 @@ public class SparseDemo extends ApplicationAdapter {
         else if(input.hasNext()) {
             input.next();
         }
-        else
-            move(0,0);
+        //else
+        //    move(0,0);
         // we need to do some work with viewports here so the language display (or game info messages in a real game)
         // will display in the same place even though the map view will move around. We have the language stuff set up
         // its viewport so it is in place and won't be altered by the map. Then we just tell the Stage for the language

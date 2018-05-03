@@ -352,40 +352,26 @@ public class NumberTools {
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
-    public static double atan2(double y, double x) {
-        if(y == 0.0)
-        {
-            return x < 0 ? 3.141592653589793 : 0.0;
-        }
-        else if(y < 0.0)
-        {
-            return (x >= 0.0)
-                    ? 0.7853981633974483 * ((x + y) / (x - y)) - 0.7853981633974483
-                    : 0.7853981633974483 * ((x - y) / (-y - x)) - 2.3561944901923453;
-        }
-        else
-        {
-            return (x >= 0.0)
-                    ? 0.7853981633974483 - 0.7853981633974483 * ((x - y) / (x + y))
-                    : 2.3561944901923453 - 0.7853981633974483 * ((x + y) / (y - x));
-        }
+    public static double atan2(final double y, final double x)
+    {
+        if(y == 0.0 && x == 0.0) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y),
+                a = (ax < ay) ? ax / ay : ay / ax, s = a * a;
+        double r = ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a;
+        if(ay > ax) r = 1.57079637 - r;
+        if(x < 0.0) r = 3.14159274 - r;
+        if(y < 0.0) r = -r;
+        return r;
     }
-    public static float atan2(float y, float x) {
-        if(y == 0f)
-        {
-            return x < 0f ? 3.141592653589793f : 0.0f;
-        }
-        else if(y < 0.0f)
-        {
-            return (x >= 0.0f)
-                    ? 0.7853981633974483f * ((x + y) / (x - y)) - 0.7853981633974483f
-                    : 0.7853981633974483f * ((x - y) / (-y - x)) - 2.3561944901923453f;
-        }
-        else
-        {
-            return (x >= 0.0f)
-                    ? 0.7853981633974483f - 0.7853981633974483f * ((x - y) / (x + y))
-                    : 2.3561944901923453f - 0.7853981633974483f * ((x + y) / (y - x));
-        }
+    public static float atan2(final float y, final float x)
+    {
+        if(y == 0f && x == 0f) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y),
+                a = (ax < ay) ? ax / ay : ay / ax, s = a * a;
+        float r = ((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a;
+        if(ay > ax) r = 1.57079637f - r;
+        if(x < 0f) r = 3.14159274f - r;
+        if(y < 0f) r = -r;
+        return r;
     }
 }

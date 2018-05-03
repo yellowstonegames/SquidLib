@@ -13,7 +13,7 @@ modification, are permitted provided that the following conditions are met:
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
 
- * Neither the name of Oracle nor the names of its contributors may be used
+ * Neither the name of Oracgle nor the names of its contributors may be used
    to endorse or promote products derived from this software without
    specific prior written permission.
 
@@ -60,7 +60,7 @@ THE POSSIBILITY OF SUCH DAMAGE.
         <maven.resources.version>2.7</maven.resources.version>
         <maven.source.version>3.0.1</maven.source.version>
         <jmh.version>1.18</jmh.version>
-        <javac.target>1.8</javac.target>
+        <javac.target>1.7</javac.target>
         <uberjar.name>benchmarks</uberjar.name>
     </properties>
     <!--<repositories>-->
@@ -94,11 +94,11 @@ THE POSSIBILITY OF SUCH DAMAGE.
             <artifactId>gdx-ai</artifactId>
             <version>1.8.1</version>
         </dependency>
-        <dependency>
-            <groupId>it.unimi.dsi</groupId>
-            <artifactId>fastutil</artifactId>
-            <version>8.1.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>it.unimi.dsi</groupId>-->
+            <!--<artifactId>fastutil</artifactId>-->
+            <!--<version>8.1.1</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>

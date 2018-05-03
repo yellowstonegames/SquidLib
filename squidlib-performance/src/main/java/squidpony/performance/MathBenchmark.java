@@ -39,7 +39,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.ThrustAltRNG;
+import squidpony.squidmath.LightRNG;
 
 import java.util.concurrent.TimeUnit;
 
@@ -125,6 +125,10 @@ public class MathBenchmark {
     private short atan2ApproxYF = -0x8000;
     private short atan2GdxX = -0x4000;
     private short atan2GdxY = -0x8000;
+    private short atan2ApproxAX = -0x4000;
+    private short atan2ApproxAY = -0x8000;
+    private short atan2ApproxAXF = -0x4000;
+    private short atan2ApproxAYF = -0x8000;
 
 
     @Benchmark
@@ -491,6 +495,82 @@ public class MathBenchmark {
     {
         return MathUtils.atan2(floatInputs[atan2GdxY++ & 0xFFFF], floatInputs[atan2GdxX++ & 0xFFFF]);
     }
+    /**
+     * Rather rough approximation of the frequently-used trigonometric method atan2, meant for speed rather than high
+     * precision. Maximum error is below 0.07 radians, though most angles apparently have a much lower average error.
+     * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in radians.
+     * It is between 10 and 20 times faster than {@link Math#atan2(double, double)} (roughly 3-4 ns instead of roughly
+     * 77 ns for Math). Somewhat surprisingly, it is also 3 to 4 times faster than LibGDX' MathUtils approximation of
+     * the same method (this is true for both the double and float overloads); MathUtils has significantly lower maximum
+     * and average error, though. Credit to Jim Shima, who posted this to Usenet in 1999 and placed it in the public
+     * domain: <a href="http://dspguru.com/dsp/tricks/fixed-point-atan2-with-self-normalization/">archive here</a>.
+     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @return the angle to the given point, in radians as a double
+     */
+    public static double atan2_alt(double y, double x) {
+        if(y == 0.0)
+        {
+            return x < 0 ? 3.141592653589793 : 0.0;
+        }
+        else if(y < 0.0)
+        {
+            return (x >= 0.0)
+                    ? 0.7853981633974483 * ((x + y) / (x - y)) - 0.7853981633974483
+                    : 0.7853981633974483 * ((x - y) / (-y - x)) - 2.3561944901923453;
+        }
+        else
+        {
+            return (x >= 0.0)
+                    ? 0.7853981633974483 - 0.7853981633974483 * ((x - y) / (x + y))
+                    : 2.3561944901923453 - 0.7853981633974483 * ((x + y) / (y - x));
+        }
+    }
+
+    /**
+     * Rather rough approximation of the frequently-used trigonometric method atan2, meant for speed rather than high
+     * precision. Maximum error is below 0.07 radians, though most angles apparently have a much lower average error.
+     * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in radians.
+     * It is between 10 and 20 times faster than {@link Math#atan2(double, double)} (roughly 3-4 ns instead of roughly
+     * 77 ns for Math), even ignoring the double to float to double conversions needed to use float parameters and get a
+     * float returned. Somewhat surprisingly, it is also 3 to 4 times faster than LibGDX' MathUtils approximation of the
+     * same method (this is true for both the double and float overloads); MathUtils has significantly lower maximum and
+     * average error, though. Credit to Jim Shima, who posted this to Usenet in 1999 and placed it in the public domain:
+     * <a href="http://dspguru.com/dsp/tricks/fixed-point-atan2-with-self-normalization/">archive here</a>.
+     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @return the angle to the given point, in radians as a float
+     */
+    public static float atan2_alt(float y, float x) {
+        if(y == 0f)
+        {
+            return x < 0f ? 3.141592653589793f : 0.0f;
+        }
+        else if(y < 0.0f)
+        {
+            return (x >= 0.0f)
+                    ? 0.7853981633974483f * ((x + y) / (x - y)) - 0.7853981633974483f
+                    : 0.7853981633974483f * ((x - y) / (-y - x)) - 2.3561944901923453f;
+        }
+        else
+        {
+            return (x >= 0.0f)
+                    ? 0.7853981633974483f - 0.7853981633974483f * ((x - y) / (x + y))
+                    : 2.3561944901923453f - 0.7853981633974483f * ((x + y) / (y - x));
+        }
+    }
+
+    @Benchmark
+    public double measureApproxAtan2Alt()
+    {
+        return atan2_alt(inputs[atan2ApproxAY++ & 0xFFFF], inputs[atan2ApproxAX++ & 0xFFFF]);
+    }
+
+    @Benchmark
+    public float measureApproxAtan2AltFloat()
+    {
+        return atan2_alt(floatInputs[atan2ApproxAYF++ & 0xFFFF], floatInputs[atan2ApproxAXF++ & 0xFFFF]);
+    }
 
     /*
 mvn clean install
@@ -525,7 +605,7 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
 //        System.out.println("ClimatianoLP     : " + u.measureCosApproxClimatianoLP());
         for (long r = 100L; r < 4197; r++) {
             //margin += 0.0001;
-            short i = (short) (ThrustAltRNG.determine(r) & 0xFFFF);
+            short i = (short) (LightRNG.determine(r) & 0xFFFF);
             u.mathCos = i;
             u.mathSin = i;
             u.cosOld = i;
@@ -585,5 +665,25 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
         System.out.println("sin GDX deg      : " + sinDegGdxError);
         System.out.println("cos GDX deg      : " + cosDegGdxError);
         System.out.println("asin approx      : " + asinChristensenError);
+        double atan2ApproxError = 0, atan2GDXError = 0, atan2AltError = 0, at;
+        for(int r = 0x100; r < 0x10100; r++)
+        {
+            short i = (short) (LightRNG.determine(r) & 0xFFFF);
+            u.mathAtan2X = i;
+            u.mathAtan2Y = (short)~i;
+            u.atan2ApproxX = i;
+            u.atan2ApproxY = (short)~i;
+            u.atan2ApproxAX = i;
+            u.atan2ApproxAY = (short)~i;
+            u.atan2GdxX = i;
+            u.atan2GdxY = (short)~i;
+            at = u.measureMathAtan2();
+            atan2ApproxError += Math.abs(u.measureApproxAtan2() - at);
+            atan2AltError += Math.abs(u.measureApproxAtan2Alt() - at);
+            atan2GDXError += Math.abs(u.measureGdxAtan2() - at);
+        }
+        System.out.println("atan2 approx     : " + atan2ApproxError);
+        System.out.println("atan2 alt approx : " + atan2AltError);
+        System.out.println("atan2 GDX approx : " + atan2GDXError);
     }
 }

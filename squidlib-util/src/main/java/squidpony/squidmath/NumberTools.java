@@ -910,69 +910,71 @@ public final class NumberTools {
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
-
     /**
-     * Rather rough approximation of the frequently-used trigonometric method atan2, meant for speed rather than high
-     * precision. Maximum error is below 0.07 radians, though most angles apparently have a much lower average error.
-     * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in radians.
-     * It is between 10 and 20 times faster than {@link Math#atan2(double, double)} (roughly 3-4 ns instead of roughly
-     * 77 ns for Math). Somewhat surprisingly, it is also 3 to 4 times faster than LibGDX' MathUtils approximation of
-     * the same method (this is true for both the double and float overloads); MathUtils has significantly lower maximum
-     * and average error, though. Credit to Jim Shima, who posted this to Usenet in 1999 and placed it in the public
-     * domain: <a href="http://dspguru.com/dsp/tricks/fixed-point-atan2-with-self-normalization/">archive here</a>.
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * approximation. Maximum error is below 0.001 radians.
+     * Takes y and x (in that unusual order) as doubkes, and returns the angle from the origin to that point in radians.
+     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
+     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
+     * Credit to StackExchange user njuffa, who gave
+     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. This method changed from an earlier
+     * technique that was twice as fast but had very poor quality, enough to be visually noticeable.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in radians as a double
      */
-    public static double atan2(double y, double x) {
-        if(y == 0.0)
-        {
-            return x < 0 ? 3.141592653589793 : 0.0;
-        }
-        else if(y < 0.0)
-        {
-            return (x >= 0.0)
-                    ? 0.7853981633974483 * ((x + y) / (x - y)) - 0.7853981633974483
-                    : 0.7853981633974483 * ((x - y) / (-y - x)) - 2.3561944901923453;
-        }
-        else
-        {
-            return (x >= 0.0)
-                    ? 0.7853981633974483 - 0.7853981633974483 * ((x - y) / (x + y))
-                    : 2.3561944901923453 - 0.7853981633974483 * ((x + y) / (y - x));
-        }
+    public static double atan2(final double y, final double x)
+    {
+        /*
+a := min (|x|, |y|) / max (|x|, |y|)
+s := a * a
+r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a
+if |y| > |x| then r := 1.57079637 - r
+if x < 0 then r := 3.14159274 - r
+if y < 0 then r := -r
+         */
+        if(y == 0.0 && x == 0.0) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y),
+                a = (ax < ay) ? ax / ay : ay / ax, s = a * a;
+        double r = ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a;
+        if(ay > ax) r = 1.57079637 - r;
+        if(x < 0.0) r = 3.14159274 - r;
+        if(y < 0.0) r = -r;
+        return r;
     }
-    
+
     /**
-     * Rather rough approximation of the frequently-used trigonometric method atan2, meant for speed rather than high
-     * precision. Maximum error is below 0.07 radians, though most angles apparently have a much lower average error.
+     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
+     * approximation. Maximum error is below 0.001 radians.
      * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in radians.
-     * It is between 10 and 20 times faster than {@link Math#atan2(double, double)} (roughly 3-4 ns instead of roughly
-     * 77 ns for Math), even ignoring the double to float to double conversions needed to use float parameters and get a
-     * float returned. Somewhat surprisingly, it is also 3 to 4 times faster than LibGDX' MathUtils approximation of the
-     * same method (this is true for both the double and float overloads); MathUtils has significantly lower maximum and
-     * average error, though. Credit to Jim Shima, who posted this to Usenet in 1999 and placed it in the public domain:
-     * <a href="http://dspguru.com/dsp/tricks/fixed-point-atan2-with-self-normalization/">archive here</a>.
+     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for
+     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'
+     * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.
+     * Credit to StackExchange user njuffa, who gave
+     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. This method changed from an earlier
+     * technique that was twice as fast but had very poor quality, enough to be visually noticeable.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, in radians as a float
      */
-    public static float atan2(float y, float x) {
-        if(y == 0f)
-        {
-            return x < 0f ? 3.141592653589793f : 0.0f;
-        }
-        else if(y < 0.0f)
-        {
-            return (x >= 0.0f) 
-                    ? 0.7853981633974483f * ((x + y) / (x - y)) - 0.7853981633974483f 
-                    : 0.7853981633974483f * ((x - y) / (-y - x)) - 2.3561944901923453f;
-        }
-        else
-        {
-            return (x >= 0.0f)
-                    ? 0.7853981633974483f - 0.7853981633974483f * ((x - y) / (x + y)) 
-                    : 2.3561944901923453f - 0.7853981633974483f * ((x + y) / (y - x));
-        }
+    public static float atan2(final float y, final float x)
+    {
+        /*
+a := min (|x|, |y|) / max (|x|, |y|)
+s := a * a
+r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a
+if |y| > |x| then r := 1.57079637 - r
+if x < 0 then r := 3.14159274 - r
+if y < 0 then r := -r
+         */
+        if(y == 0f && x == 0f) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y),
+                a = (ax < ay) ? ax / ay : ay / ax, s = a * a;
+        float r = ((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a;
+        if(ay > ax) r = 1.57079637f - r;
+        if(x < 0f) r = 3.14159274f - r;
+        if(y < 0f) r = -r;
+        return r;
     }
 }
