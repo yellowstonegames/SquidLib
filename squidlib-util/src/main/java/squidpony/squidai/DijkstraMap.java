@@ -1746,6 +1746,7 @@ public class DijkstraMap implements Serializable {
      * <br>
      * This caches its result in a member field, path, which can be fetched after finding a path and will change with
      * each call to a pathfinding method.
+     *
      * @param length       the length of the path to calculate
      * @param scanLimit    how many cells away from a goal to actually process; negative to process whole map
      * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
@@ -1756,10 +1757,49 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findPath(int length, int scanLimit, Collection<Coord> impassable,
                                      Collection<Coord> onlyPassable, Coord start, Coord... targets) {
-        if (!initialized) return null;
+        return findPath(null, length, scanLimit, impassable, onlyPassable, start, targets);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed goals and start
+     * point, and returns a list of Coord positions (using the current measurement) needed to get closer
+     * to the closest reachable goal. The maximum length of the returned list is given by length, which represents
+     * movement in a system where a single move can be multiple cells if length is greater than 1 and should usually
+     * be 1 in standard roguelikes; if moving the full length of the list would place the mover in a position shared
+     * by one of the positions in onlyPassable (which is typically filled with friendly units that can be passed
+     * through in multi-cell-movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * The full map will only be scanned if scanLimit is 0 or less; for positive scanLimit values this will scan only
+     * that distance out from each goal, which can save processing time on maps where only a small part matters.
+     * Generally, scanLimit should be significantly greater than length.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer       an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param length       the length of the path to calculate
+     * @param scanLimit    how many cells away from a goal to actually process; negative to process whole map
+     * @param impassable   a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start        the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets      a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
+     */
+    public ArrayList<Coord> findPath(ArrayList<Coord> buffer, int length, int scanLimit, Collection<Coord> impassable,
+                                     Collection<Coord> onlyPassable, Coord start, Coord... targets) {
         path.clear();
-        if(length <= 0)
-            return new ArrayList<>(path);
+        if (!initialized || length <= 0)
+        {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         if (impassable == null)
             impassable2.clear();
         else
@@ -1772,7 +1812,12 @@ public class DijkstraMap implements Serializable {
         if (goals.isEmpty())
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
         if(scanLimit <= 0 || scanLimit < length)
             scan(start, impassable2);
@@ -1804,7 +1849,13 @@ public class DijkstraMap implements Serializable {
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -1813,7 +1864,7 @@ public class DijkstraMap implements Serializable {
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
                     impassable2.add(currentPos);
-                    return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);
+                    return findPath(buffer, length, scanLimit, impassable2, onlyPassable, start, targets);
                 }
                 break;
             }
@@ -1823,7 +1874,13 @@ public class DijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
     /**
@@ -1883,7 +1940,49 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findAttackPath(int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
                                            Collection<Coord> impassable, Collection<Coord> onlyPassable, Coord start, Coord... targets) {
-        if (!initialized) return null;
+        return findAttackPath(null, moveLength, minPreferredRange, maxPreferredRange, los, impassable, onlyPassable, start, targets);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to a goal, until a cell is reached with
+     * a distance from a goal that is at least equal to minPreferredRange and no more than maxPreferredRange,
+     * which may go further from a goal if the minPreferredRange has not been met at the current distance.
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in onlyPassable
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a goal overlapping one.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer            an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param moveLength        the length of the path to calculate
+     * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
+     * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target
+     * @param los               a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS
+     *                          should be disregarded.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param targets           a vararg or array of Coord that this will try to pathfind toward
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes toward a target. Copy of path.
+     */
+    public ArrayList<Coord> findAttackPath(ArrayList<Coord> buffer, int moveLength, int minPreferredRange, int maxPreferredRange, LOS los,
+                                           Collection<Coord> impassable, Collection<Coord> onlyPassable, Coord start, Coord... targets) {
+        if (!initialized || moveLength <= 0)
+        {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         if (minPreferredRange < 0) minPreferredRange = 0;
         if (maxPreferredRange < minPreferredRange) maxPreferredRange = minPreferredRange;
         double[][] resMap = new double[width][height];
@@ -1909,7 +2008,12 @@ public class DijkstraMap implements Serializable {
         if (goals.isEmpty())
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
 
         Measurement mess = measurement;
@@ -1967,7 +2071,13 @@ public class DijkstraMap implements Serializable {
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(Coord.get(currentPos.x, currentPos.y));
@@ -1977,7 +2087,7 @@ public class DijkstraMap implements Serializable {
 
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
                     impassable2.add(currentPos);
-                    return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
+                    return findAttackPath(buffer, moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
                             onlyPassable, start, targets);
                 }
                 break;
@@ -1988,7 +2098,13 @@ public class DijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
     /**
@@ -2036,7 +2152,66 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findTechniquePath(int moveLength, Technique tech, char[][] dungeon, LOS los,
                                               Collection<Coord> impassable, Collection<Coord> allies, Coord start, Collection<Coord> targets) {
-        if (!initialized) return null;
+        return findTechniquePath(null, moveLength, tech, dungeon, los, impassable, allies, start, targets);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * of Coord positions (using the current measurement) needed to get closer to a goal, where goals are
+     * considered valid if they are at a valid range for the given Technique to hit at least one target
+     * and ideal if that Technique can affect as many targets as possible from a cell that can be moved
+     * to with at most movelength steps.
+     * <br>
+     * The return value of this method is the path to get to a location to attack, but on its own it
+     * does not tell the user how to perform the attack.  It does set the targetMap 2D Coord array field
+     * so that if your position at the end of the returned path is non-null in targetMap, it will be
+     * a Coord that can be used as a target position for Technique.apply() . If your position at the end
+     * of the returned path is null, then an ideal attack position was not reachable by the path.
+     * <br>
+     * This needs a char[][] dungeon as an argument because DijkstraMap does not always have a char[][]
+     * version of the map available to it, and certain AOE implementations that a Technique uses may
+     * need a char[][] specifically to determine what they affect.
+     * <br>
+     * The maximum length of the returned list is given by moveLength; if moving the full length of
+     * the list would place the mover in a position shared by one of the positions in allies
+     * (which is typically filled with friendly units that can be passed through in multi-tile-
+     * movement scenarios, and is also used considered an undesirable thing to affect for the Technique),
+     * it will recalculate a move so that it does not pass into that cell.
+     * <br>
+     * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a target overlapping one.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer     an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param moveLength the maximum distance to try to pathfind out to; if a spot to use a Technique can be found
+     *                   while moving no more than this distance, then the targetMap field in this object will have a
+     *                   target Coord that is ideal for the given Technique at the x, y indices corresponding to the
+     *                   last Coord in the returned path.
+     * @param tech       a Technique that we will try to find an ideal place to use, and/or a path toward that place.
+     * @param dungeon    a char 2D array with '#' for walls.
+     * @param los        a squidgrid.LOS object if the preferred range should try to stay in line of sight, or null if LoS
+     *                   should be disregarded.
+     * @param impassable locations of enemies or mobile hazards/obstacles that aren't in the map as walls
+     * @param allies     called onlyPassable in other methods, here it also represents allies for Technique things
+     * @param start      the Coord the pathfinder starts at.
+     * @param targets    a Set of Coord, not an array of Coord or variable argument list as in other methods.
+     * @return an ArrayList of Coord that represents a path to travel to get to an ideal place to use tech. Copy of path.
+     */
+    public ArrayList<Coord> findTechniquePath(ArrayList<Coord> buffer, int moveLength, Technique tech, char[][] dungeon, LOS los,
+                                              Collection<Coord> impassable, Collection<Coord> allies, Coord start, Collection<Coord> targets) {
+        if (!initialized || moveLength <= 0)
+        {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         tech.setMap(dungeon);
         double[][] resMap = new double[width][height];
         double[][] worthMap = new double[width][height];
@@ -2054,7 +2229,12 @@ public class DijkstraMap implements Serializable {
         if (targets == null || targets.size() == 0)
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
         if (impassable == null)
             impassable2.clear();
@@ -2078,7 +2258,12 @@ public class DijkstraMap implements Serializable {
         if (goals.isEmpty())
         {
             cutShort = true;
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
 
         Measurement mess = measurement;
@@ -2179,7 +2364,7 @@ public class DijkstraMap implements Serializable {
             if (best >= gradientMap[currentPos.x][currentPos.y]) {
                 if (friends.contains(currentPos)) {
                     impassable2.add(currentPos);
-                    return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
+                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, impassable2,
                             friends, start, targets);
                 }
                 break;
@@ -2187,7 +2372,13 @@ public class DijkstraMap implements Serializable {
             if (best > gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(currentPos);
@@ -2196,7 +2387,7 @@ public class DijkstraMap implements Serializable {
             if (paidLength > moveLength - 1.0) {
                 if (friends.contains(currentPos)) {
                     impassable2.add(currentPos);
-                    return findTechniquePath(moveLength, tech, dungeon, los, impassable2,
+                    return findTechniquePath(buffer, moveLength, tech, dungeon, los, impassable2,
                             friends, start, targets);
                 }
                 break;
@@ -2207,7 +2398,13 @@ public class DijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
 
@@ -2245,7 +2442,7 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findFleePath(int length, double preferLongerPaths, Collection<Coord> impassable,
                                          Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
-        return findFleePath(length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+        return findFleePath(null, length, -1, preferLongerPaths, impassable, onlyPassable, start, fearSources);
     }
 
     /**
@@ -2282,7 +2479,55 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> findFleePath(int length, int scanLimit, double preferLongerPaths, Collection<Coord> impassable,
                                          Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
-        if (!initialized) return null;
+        return findFleePath(null, length, scanLimit, preferLongerPaths, impassable, onlyPassable, start, fearSources);
+    }
+    /**
+     * Scans the dungeon using DijkstraMap.scan or DijkstraMap.partialScan with the listed fearSources and start
+     * point, and returns a list of Coord positions (using this DijkstraMap's metric) needed to get further from
+     * the closest fearSources, meant for running away. The maximum length of the returned list is given by length,
+     * which represents movement in a system where a single move can be multiple cells if length is greater than 1 and
+     * should usually be 1 in standard roguelikes; if moving the full length of the list would place the mover in a
+     * position shared by one of the positions in onlyPassable (which is typically filled with friendly units that can
+     * be passed through in multi-cell-movement scenarios), it will recalculate a move so that it does not pass into
+     * that cell. The keys in impassable should be the positions of enemies and obstacles that cannot be moved
+     * through, and will be ignored if there is a fearSource overlapping one. The preferLongerPaths parameter
+     * is meant to be tweaked and adjusted; higher values should make creatures prefer to escape out of
+     * doorways instead of hiding in the closest corner, and a value of 1.2 should be typical for many maps.
+     * The parameters preferLongerPaths, impassable, and the varargs used for fearSources will be cached, and
+     * any subsequent calls that use the same values as the last values passed will avoid recalculating
+     * unnecessary scans. However, scanLimit is not cached; if you use scanLimit then it is assumed you are using some
+     * value for it that shouldn't change relative to the other parameters (like twice the length).
+     * The full map will only be scanned if scanLimit is 0 or less; for positive scanLimit values this will scan only
+     * that distance out from each goal, which can save processing time on maps where only a small part matters.
+     * Generally, scanLimit should be significantly greater than length.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer            an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param length            the length of the path to calculate
+     * @param scanLimit         how many steps away from a fear source to calculate; negative scans the whole map
+     * @param preferLongerPaths Set this to 1.2 if you aren't sure; it will probably need tweaking for different maps.
+     * @param impassable        a Set of impassable Coord positions that may change (not constant like walls); can be null
+     * @param onlyPassable      a Set of Coord positions that this pathfinder cannot end a path occupying (typically allies); can be null
+     * @param start             the start of the path, should correspond to the minimum-x, minimum-y position of the pathfinder
+     * @param fearSources       a vararg or array of Coord positions to run away from
+     * @return an ArrayList of Coord that will contain the locations of this creature as it goes away from fear sources. Copy of path.
+     */
+    public ArrayList<Coord> findFleePath(ArrayList<Coord> buffer, int length, int scanLimit, double preferLongerPaths, Collection<Coord> impassable,
+                                         Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
+        if (!initialized || length <= 0)
+        {
+            cutShort = true;
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         path.clear();
         if (impassable == null)
             impassable2.clear();
@@ -2291,8 +2536,12 @@ public class DijkstraMap implements Serializable {
 
         if (fearSources == null || fearSources.length < 1) {
             cutShort = true;
-            path.clear();
-            return new ArrayList<>(path);
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
         }
         if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable2.equals(cachedImpassable) &&
                 Arrays.equals(fearSources, cachedFearSources)) {
@@ -2308,7 +2557,12 @@ public class DijkstraMap implements Serializable {
             if (goals.isEmpty())
             {
                 cutShort = true;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>();
+                else
+                {
+                    return buffer;
+                }
             }
 
             if(length < 0) length = 0;
@@ -2354,7 +2608,13 @@ public class DijkstraMap implements Serializable {
             if (best >= gradientMap[start.x][start.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             if (path.size() > 0) {
@@ -2368,7 +2628,7 @@ public class DijkstraMap implements Serializable {
             if (paidLength > length - 1.0) {
                 if (onlyPassable != null && onlyPassable.contains(currentPos)) {
                     impassable2.add(currentPos);
-                    return findFleePath(length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
+                    return findFleePath(buffer, length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
                 break;
             }
@@ -2376,11 +2636,18 @@ public class DijkstraMap implements Serializable {
         cutShort = false;
         frustration = 0;
         goals.clear();
-        return new ArrayList<>(path);
+        if(buffer == null) 
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
     }
 
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals
+     * and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to the closest reachable
      * goal. The maximum length of the returned list is given by length; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
@@ -2486,7 +2753,8 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Scans the dungeon using DijkstraMap.scan with the listed goals and start point, and returns a list
+     * For pathfinding creatures larger than 1x1 cell; scans the dungeon using DijkstraMap.scan with the listed goals
+     * and start point, and returns a list
      * of Coord positions (using the current measurement) needed to get closer to a goal, until preferredRange is
      * reached, or further from a goal if the preferredRange has not been met at the current distance.
      * The maximum length of the returned list is given by moveLength; if moving the full length of
@@ -2897,7 +3165,9 @@ public class DijkstraMap implements Serializable {
 
 
     /**
-     * Intended primarily for internal use. Needs scan() to already be called and at least one goal to already be set,
+     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths
+     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work
+     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,
      * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.
      * <br>
      * This caches its result in a member field, path, which can be fetched after finding a path and will change with
@@ -2907,13 +3177,47 @@ public class DijkstraMap implements Serializable {
      * @return an ArrayList of Coord that make up the best path. Copy of path.
      */
     public ArrayList<Coord> findPathPreScanned(Coord target) {
+        return findPathPreScanned(null, target);
+    }
+    /**
+     * When you can control how often the (relatively time-intensive) scan() method is called, but may need simple paths
+     * very frequently (such as for a path that follows the mouse), you can use this method to reduce the amount of work
+     * needed to find paths. Needs scan() or partialScan() to already be called and at least one goal to already be set,
+     * and does not restrict the length of the path or behave as if the pathfinder has allies or enemies.
+     * <br>
+     * This overload takes a buffer parameter, an ArrayList of Coord, that the results will be appended to. If the
+     * buffer is null, a new ArrayList will be made and appended to. This caches its result in a member field, path,
+     * which can be fetched after finding a path and will change with each call to a pathfinding method. Any existing
+     * contents of buffer will not affect the path field of this DijkstraMap.
+     *
+     * @param buffer an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
+     * @param target the target cell
+     * @return an ArrayList of Coord that make up the best path, appended to buffer (if non-null)
+     */
+    public ArrayList<Coord> findPathPreScanned(ArrayList<Coord> buffer, Coord target) {
         path.clear();
-        if (!initialized || goals == null || goals.isEmpty()) return new ArrayList<>();
+        if (!initialized || goals == null || goals.isEmpty())
+        {
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+        }
         Coord currentPos = target;
         if(gradientMap[currentPos.x][currentPos.y] <= FLOOR)
             path.add(currentPos);
         else
-            return new ArrayList<>();
+        {
+            if(buffer == null)
+                return new ArrayList<>();
+            else
+            {
+                return buffer;
+            }
+
+        }
         while (true) {
             if (frustration > 2000) {
                 path.clear();
@@ -2938,7 +3242,13 @@ public class DijkstraMap implements Serializable {
             if (best >= gradientMap[currentPos.x][currentPos.y] || physicalMap[currentPos.x + dirs[choice].deltaX][currentPos.y + dirs[choice].deltaY] > FLOOR) {
                 cutShort = true;
                 frustration = 0;
-                return new ArrayList<>(path);
+                if(buffer == null)
+                    return new ArrayList<>(path);
+                else
+                {
+                    buffer.addAll(path);
+                    return buffer;
+                }
             }
             currentPos = currentPos.translate(dirs[choice].deltaX, dirs[choice].deltaY);
             path.add(0, currentPos);
@@ -2948,7 +3258,15 @@ public class DijkstraMap implements Serializable {
                 break;
         }
         cutShort = false;
-        frustration = 0; return new ArrayList<>(path);
+        frustration = 0;
+        if(buffer == null)
+            return new ArrayList<>(path);
+        else
+        {
+            buffer.addAll(path);
+            return buffer;
+        }
+
     }
 
     /**

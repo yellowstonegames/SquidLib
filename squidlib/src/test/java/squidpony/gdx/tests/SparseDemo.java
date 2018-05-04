@@ -85,7 +85,7 @@ public class SparseDemo extends ApplicationAdapter {
     private Stage stage, languageStage;
     private DijkstraMap playerToCursor;
     private Coord cursor, player;
-    private List<Coord> toCursor;
+    private ArrayList<Coord> toCursor;
     private List<Coord> awaitedMoves;
     // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
     // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
@@ -437,15 +437,13 @@ public class SparseDemo extends ApplicationAdapter {
                         // that's special to DijkstraMap; because the whole map has already been fully analyzed by the
                         // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
                         // moves, we only need to do a fraction of the work to find the best path with that info.
-                        toCursor = playerToCursor.findPathPreScanned(cursor);
+                        toCursor.clear();
+                        playerToCursor.findPathPreScanned(toCursor, cursor);
                         //findPathPreScanned includes the current cell (goal) by default, which is helpful when
                         // you're finding a path to a monster or loot, and want to bump into it, but here can be
                         // confusing because you would "move into yourself" as your first move without this.
-                        // Getting a sublist avoids potential performance issues with removing from the start of an
-                        // ArrayList, since it keeps the original list around and only gets a "view" of it.
-                        if (!toCursor.isEmpty()) {
-                            toCursor = toCursor.subList(1, toCursor.size());
-                        }
+                        if(!toCursor.isEmpty())
+                            toCursor.remove(0);
                     }
                     awaitedMoves.addAll(toCursor);
                 }
@@ -482,16 +480,13 @@ public class SparseDemo extends ApplicationAdapter {
                 // DijkstraMap.scan() method at the start of the program, and re-calculated whenever the player
                 // moves, we only need to do a fraction of the work to find the best path with that info.
 
-                toCursor = playerToCursor.findPathPreScanned(cursor);
+                toCursor.clear();
+                playerToCursor.findPathPreScanned(toCursor, cursor);
                 //findPathPreScanned includes the current cell (goal) by default, which is helpful when
                 // you're finding a path to a monster or loot, and want to bump into it, but here can be
                 // confusing because you would "move into yourself" as your first move without this.
-                // Getting a sublist avoids potential performance issues with removing from the start of an
-                // ArrayList, since it keeps the original list around and only gets a "view" of it.
-                if(!toCursor.isEmpty())
-                {
-                    toCursor = toCursor.subList(1, toCursor.size());
-                }
+                if(!toCursor.isEmpty()) 
+                    toCursor.remove(0);
                 return false;
             }
         }));
@@ -642,7 +637,6 @@ public class SparseDemo extends ApplicationAdapter {
                     // found, but the player doesn't move until a cell is clicked, the "goal" is the non-changing cell (the
                     // player's position), and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
                     // currently-moused-over cell, which we only need to set where the mouse is being handled.
-                    playerToCursor.setGoal(player);
                     playerToCursor.setGoal(player);
                     // DijkstraMap.partialScan only finds the distance to get to a cell if that distance is less than some limit,
                     // which is 13 here. It also won't try to find distances through an impassable cell, which here is the blockage
