@@ -338,9 +338,9 @@ public class UIUtil {
 		 *         {@code null} if none.
 		 */
 		public static YMoveKind of(int keycode, boolean vim) {
-			if (keycode == Keys.UP || keycode == Keys.DPAD_UP || keycode == Keys.NUMPAD_8)
+			if (keycode == Keys.UP || keycode == Keys.NUMPAD_8)
 				return UP;
-			else if (keycode == Keys.DOWN || keycode == Keys.DPAD_DOWN || keycode == Keys.NUMPAD_2)
+			else if (keycode == Keys.DOWN || keycode == Keys.NUMPAD_2)
 				return DOWN;
 			else if (keycode == Keys.PAGE_UP)
 				return PAGE_UP;

@@ -115,7 +115,7 @@ public class AStarSearch implements Serializable {
         gCache = new double[width][height];
         finished = new boolean[width][height];
         this.type = type == null ? SearchType.DIJKSTRA : type;
-        switch (type) {
+        switch (this.type) {
             case MANHATTAN:
                 dirs = Direction.CARDINALS;
                 dirCount = 4;

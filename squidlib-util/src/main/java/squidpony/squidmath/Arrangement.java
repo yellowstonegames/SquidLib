@@ -2481,8 +2481,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             return -1;
         final int pos = insertAt(k, idx), oldValue = value[pos];
         fixValues(idx);
-        if (pos < 0)
-            return size - 1;
         return oldValue;
     }
     /**

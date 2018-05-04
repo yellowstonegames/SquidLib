@@ -284,14 +284,14 @@ public interface Rectangle extends Zone {
 				throw new IllegalStateException(
 						"Expected a cardinal direction in Rectangle.Utils::getBorder. Received: " + cardinal);
 			}
-			if (start == null || dir == null)
+			if (start == null)
 				throw new IllegalStateException(
 						"Unmatched direction in Rectangle.Utils::Border: " + cardinal);
 
 			final List<Coord> result = buf == null ? new ArrayList<Coord>(len) : buf;
 			Coord now = start;
 			for (int i = 0; i < len; i++) {
-				buf.add(now);
+				result.add(now);
 				now = now.translate(dir);
 			}
 			return result;

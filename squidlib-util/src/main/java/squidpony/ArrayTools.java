@@ -129,7 +129,7 @@ public class ArrayTools {
         if (source.length < 1)
             return new char[0][0];
         char[][] target = new char[source.length][];
-        for (int i = 0; i < source.length && i < target.length; i++) {
+        for (int i = 0; i < source.length; i++) {
             target[i] = new char[source[i].length];
             System.arraycopy(source[i], 0, target[i], 0, source[i].length);
         }
@@ -148,7 +148,7 @@ public class ArrayTools {
         if (source.length < 1)
             return new double[0][0];
         double[][] target = new double[source.length][];
-        for (int i = 0; i < source.length && i < target.length; i++) {
+        for (int i = 0; i < source.length; i++) {
             target[i] = new double[source[i].length];
             System.arraycopy(source[i], 0, target[i], 0, source[i].length);
         }
@@ -167,7 +167,7 @@ public class ArrayTools {
         if (source.length < 1)
             return new int[0][0];
         int[][] target = new int[source.length][];
-        for (int i = 0; i < source.length && i < target.length; i++) {
+        for (int i = 0; i < source.length; i++) {
             target[i] = new int[source[i].length];
             System.arraycopy(source[i], 0, target[i], 0, source[i].length);
         }
@@ -186,7 +186,7 @@ public class ArrayTools {
         if (source.length < 1)
             return new boolean[0][0];
         boolean[][] target = new boolean[source.length][];
-        for (int i = 0; i < source.length && i < target.length; i++) {
+        for (int i = 0; i < source.length; i++) {
             target[i] = new boolean[source[i].length];
             System.arraycopy(source[i], 0, target[i], 0, source[i].length);
         }

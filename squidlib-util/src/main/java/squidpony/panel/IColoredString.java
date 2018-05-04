@@ -502,7 +502,6 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 						 * else: line was prepared, but did not contain anything
 						 */
 						if (chunklen <= width) {
-							curlen = chunklen;
 							current = create();
 							current.append(chunk, color);
 							/* Reinit size */

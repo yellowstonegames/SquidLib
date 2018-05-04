@@ -180,6 +180,8 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> path = new ArrayList<>();
 
+    private GreasedRegion impassable2, friends;
+    
     public boolean cutShort = false;
 
     /**
@@ -206,7 +208,8 @@ public class DijkstraMap implements Serializable {
     protected IntVLA goals = new IntVLA(256), fresh = new IntVLA(256);
 
     /**
-     * The RNG used to decide which one of multiple equally-short paths to take.
+     * The IRNG used to decide which one of multiple equally-short paths to take. You may want to give this a
+     * {@link GWTRNG} if you may target web browsers with GWT, or a {@link RNG} or {@link StatefulRNG} otherwise.
      */
     public IRNG rng;
     private int frustration = 0;
@@ -230,11 +233,11 @@ public class DijkstraMap implements Serializable {
     }
 
     /**
-     * Construct a DijkstraMap without a level to actually scan. This constructor allows you to specify an RNG before
-     * it is ever used in this class. If you use this constructor, you must call an initialize() method before using
-     * any other methods in the class.
+     * Construct a DijkstraMap without a level to actually scan. This constructor allows you to specify an IRNG, such as
+     * an {@link RNG}, before it is ever used in this class. If you use this constructor, you must call an initialize()
+     * method before using any other methods in the class.
      */
-    public DijkstraMap(RNG random) {
+    public DijkstraMap(IRNG random) {
         rng = random;
         path = new ArrayList<>();
     }
@@ -277,13 +280,13 @@ public class DijkstraMap implements Serializable {
      * Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
      * char[][] where '#' means a wall and anything else is a walkable tile. If you only have
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
-     * map that can be used here. Also takes an RNG that ensures predictable path choices given
-     * otherwise identical inputs and circumstances.
+     * map that can be used here. Also takes an IRNG, such as an {@link RNG}, that ensures
+     * predictable path choices given otherwise identical inputs and circumstances.
      *
      * @param level
      * @param rng   The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
      */
-    public DijkstraMap(final char[][] level, RNG rng) {
+    public DijkstraMap(final char[][] level, IRNG rng) {
         this(level, Measurement.MANHATTAN, rng);
     }
 
@@ -325,7 +328,7 @@ public class DijkstraMap implements Serializable {
      * @param level
      * @param rng   The RNG to use for certain decisions; only affects find* methods like findPath, not scan.
      */
-    public DijkstraMap(final char[][] level, Measurement measurement, RNG rng) {
+    public DijkstraMap(final char[][] level, Measurement measurement, IRNG rng) {
         this.rng = rng;
         path = new ArrayList<>();
         this.measurement = measurement;
@@ -354,6 +357,8 @@ public class DijkstraMap implements Serializable {
             Arrays.fill(costMap[x], 1.0);
         }
         standardCosts = true;
+        impassable2 = new GreasedRegion(width, height);
+        friends = new GreasedRegion(width, height);
         initialized = true;
         return this;
     }
@@ -382,6 +387,8 @@ public class DijkstraMap implements Serializable {
             }
         }
         standardCosts = true;
+        impassable2 = new GreasedRegion(width, height);
+        friends = new GreasedRegion(width, height);
         initialized = true;
         return this;
     }
@@ -412,6 +419,8 @@ public class DijkstraMap implements Serializable {
             }
         }
         standardCosts = true;
+        impassable2 = new GreasedRegion(width, height);
+        friends = new GreasedRegion(width, height);
         initialized = true;
         return this;
     }
@@ -1751,17 +1760,13 @@ public class DijkstraMap implements Serializable {
         path.clear();
         if(length <= 0)
             return new ArrayList<>(path);
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = new GreasedRegion(width, height);
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
-        if (onlyPassable == null)
-            onlyPassable = new GreasedRegion(width, height);
-        else if(length == 1)
-        {
+            impassable2.empty().addAll(impassable);
+        if (onlyPassable != null && length == 1) 
             impassable2.addAll(onlyPassable);
-        }
+        
         resetMap();
         setGoals(targets);
         if (goals.isEmpty())
@@ -1806,7 +1811,7 @@ public class DijkstraMap implements Serializable {
             paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
             if (paidLength > length - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
                     impassable2.add(currentPos);
                     return findPath(length, scanLimit, impassable2, onlyPassable, start, targets);
                 }
@@ -1890,13 +1895,12 @@ public class DijkstraMap implements Serializable {
             }
         }
         path.clear();
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
+            impassable2.empty().addAll(impassable);
+        if (onlyPassable != null && moveLength == 1)
+            impassable2.addAll(onlyPassable);
 
         resetMap();
         for (Coord goal : targets) {
@@ -1971,7 +1975,7 @@ public class DijkstraMap implements Serializable {
             frustration++;
             if (paidLength > moveLength - 1.0) {
 
-                if (onlyPassable.contains(currentPos)) {
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
                     impassable2.add(currentPos);
                     return findAttackPath(moveLength, minPreferredRange, maxPreferredRange, los, impassable2,
                             onlyPassable, start, targets);
@@ -2038,10 +2042,7 @@ public class DijkstraMap implements Serializable {
         double[][] worthMap = new double[width][height];
         double[][] userDistanceMap;
         double paidLength = 0.0;
-
-        OrderedSet<Coord> friends;
-
-
+        
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 resMap[x][y] = (physicalMap[x][y] == WALL) ? 1.0 : 0.0;
@@ -2055,17 +2056,15 @@ public class DijkstraMap implements Serializable {
             cutShort = true;
             return new ArrayList<>(path);
         }
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
+            impassable2.empty().addAll(impassable);
 
         if (allies == null)
-            friends = new OrderedSet<>();
+            friends.clear();
         else {
-            friends = new OrderedSet<>(allies);
-            friends.remove(start);
+            friends.empty().insertSeveral(allies).remove(start);
         }
 
         resetMap();
@@ -2285,14 +2284,11 @@ public class DijkstraMap implements Serializable {
                                          Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
-        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2 = Collections.emptySet();
+            impassable2.clear();
         else
-            impassable2 = new GreasedRegion(width, height, impassable);
+            impassable2.empty().addAll(impassable);
 
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
         if (fearSources == null || fearSources.length < 1) {
             cutShort = true;
             path.clear();
@@ -2370,7 +2366,7 @@ public class DijkstraMap implements Serializable {
             frustration++;
             paidLength += costMap[currentPos.x][currentPos.y];
             if (paidLength > length - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
                     impassable2.add(currentPos);
                     return findFleePath(length, scanLimit, preferLongerPaths, impassable2, onlyPassable, start, fearSources);
                 }
@@ -2423,9 +2419,6 @@ public class DijkstraMap implements Serializable {
         else
             impassable2 = new GreasedRegion(width, height, impassable);
 
-        if (onlyPassable == null)
-            onlyPassable = Collections.emptySet();
-
         resetMap();
         for (Coord goal : targets) {
             setGoal(goal.x, goal.y);
@@ -2477,7 +2470,7 @@ public class DijkstraMap implements Serializable {
             paidLength += costMap[currentPos.x][currentPos.y];
             frustration++;
             if (paidLength > length - 1.0) {
-                if (onlyPassable.contains(currentPos)) {
+                if (onlyPassable != null && onlyPassable.contains(currentPos)) {
                     impassable2.add(currentPos);
                     return findPathLarge(size, length, impassable2, onlyPassable, start, targets);
                 }

@@ -12836,9 +12836,9 @@ public class SColor extends Color implements Serializable {
      * @return basis, after modification; it can be passed to this method as basis again
      */
     public static float[][][] mixColoredLighting(float[][][] basis, float[][][] other) {
-        int w = basis[0].length, h = basis[0][0].length;
-        for (int x = 0; x < w && x < w; x++) {
-            for (int y = 0; y < h && y < h; y++) {
+        int w = basis[0].length, h = basis[0][0].length, w2 = other[0].length, h2 = other[0][0].length;
+        for (int x = 0; x < w && x < w2; x++) {
+            for (int y = 0; y < h && y < h2; y++) {
                 basis[1][x][y] = (basis[1][x][y] == FLOAT_WHITE)
                         ? other[1][x][y]
                         : (other[1][x][y] == FLOAT_WHITE)
