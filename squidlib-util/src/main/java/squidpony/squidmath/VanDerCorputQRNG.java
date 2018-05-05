@@ -354,14 +354,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * Given any int (0 is allowed), this gets a somewhat-sub-random float from 0.0 (inclusive) to 1.0 (exclusive)
      * using the same implementation as {@link NumberTools#randomFloat(long)} but with index alterations. Only "weak"
      * because it lacks the stronger certainty of subsequent numbers being separated that the Van der Corput sequence
-     * has. Not actually sub-random, but manages to be distributed remarkably evenly, likely due to the statistical
-     * strength of the algorithm it uses (the same as {@link PintRNG}, derived from PCG-Random). Because PintRNG is
-     * pseudo-random and uses very different starting states on subsequent calls to its {@link PintRNG#next(int)}
-     * method, this method needs to perform some manipulation of index to keep a call that passes 2 for index different
-     * enough from a call that passes 3 (this should result in 0.4257662296295166 and 0.7359509468078613). You may want
-     * to perform a similar manipulation if you find yourself reseeding a PRNG with numerically-close seeds; this can be
-     * done for a value called index with {@code ((index >>> 19 | index << 13) ^ 0x13A5BA1D)}.
-     *
+     * has. Not actually sub-random, but should be distributed fairly well (internally uses {@link ThrustAltRNG}'s
+     * algorithm, which does not guarantee that its outputs are unique).
      * <br>
      * Not all int values for index will produce unique results, since this produces a float and there are less distinct
      * floats between 0.0 and 1.0 than there are all ints (1/512 as many floats in that range as ints, specifically).
@@ -388,5 +382,27 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public static float weakSignedDetermine(final int index) {
         return NumberTools.randomSignedFloat((index >>> 19 | index << 13) ^ 0x13A5BA1D);
+    }
+
+    /**
+     * Similar to {@link #determine(int, int)}, but can take bases that aren't prime and can sometimes produce a
+     * Halton-like sequence with better distance between points. The base is allowed to be any odd long, but the upper
+     * 21 bits won't ever be considered except for the sign bit (negative bases are allowed). The index can technically
+     * also be negative, but if index is 0 this will return 0, so it's advised to start at index 1 and go up. This
+     * returns a double between 0.0 inclusive and 1.0 exclusive. The best results so far found with this for a 2D point
+     * sequence use the bases 0xDE4DBEEF and 0x1337D00D (or in decimal, -565330193 and 322424845; note that 0xDE4DBEEF
+     * is a negative integer), with the same index used for both the x and y of a point. I have no idea why these
+     * gimmicky numbers work so well, with about 6x the minimum distance when comparing 65536 points generated with this
+     * method to the same number of points generated with {@link #determine(int, int)} using bases 2 and 3. Other, less
+     * gimmicky numbers seem to be similar to a typical Halton sequence made from two calls to different bases of
+     * determine(). This method should be slightly faster than {@link #determine2(int)}, and significantly faster than
+     * {@link #determine(int, int)}, especially when the index is large.
+     * @param base any odd long; the most significant 21 bits (except the sign bit) are effectively ignored
+     * @param index any int; if 0 this will return 0
+     * @return a double between 0.0 inclusive and 1.0 exclusive
+     */
+    public static double altDetermine(final long base, final int index)
+    {
+        return ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53;
     }
 }

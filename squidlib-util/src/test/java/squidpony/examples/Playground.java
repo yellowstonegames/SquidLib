@@ -1,6 +1,5 @@
 package squidpony.examples;
 
-import squidpony.Mnemonic;
 import squidpony.squidmath.*;
 
 /**
@@ -33,6 +32,10 @@ public class Playground {
         //int s = ;//, highest = Integer.highestOneBit(s);
         //return Double.longBitsToDouble((Double.doubleToLongBits(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff))) & 0xfffffffffffffL) | 0x3FFFFFFFFFFFFFFFL);
         return NumberTools.setExponent(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff)), 0x3ff) - 1.0;
+    }
+    public static double determine4(final long base, final int index)
+    {
+        return ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53;
     }
     /*
      * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
@@ -164,13 +167,48 @@ public class Playground {
 //            System.out.printf("%f: querp: %f, carp2: %f, cerp: %f\n", f, querp(-100, 100, f), carp2(f), cerp(f));
 //        }
 
-        Mnemonic mn = new Mnemonic();
-        String text;
-        ThrustAlt32RNG rng = new ThrustAlt32RNG();
-        for (int i = 0; i <= 50; i++) {
-            int r = rng.nextInt();
-            System.out.println(r + ": " + (text = mn.toWordMnemonic(r, true)) + " decodes to " + mn.fromWordMnemonic(text));
+//        Mnemonic mn = new Mnemonic();
+//        String text;
+//        ThrustAlt32RNG rng = new ThrustAlt32RNG();
+//        for (int i = 0; i <= 50; i++) {
+//            int r = rng.nextInt();
+//            System.out.println(r + ": " + (text = mn.toWordMnemonic(r, true)) + " decodes to " + mn.fromWordMnemonic(text));
+//        }
+        final int SIZE = 0x10000;
+        double[] xs = new double[SIZE], ys = new double[SIZE];
+        double closest = 999.0, x, y, xx, yy;
+        for (int i = 0; i < SIZE; i++) {
+            xs[i] = x = determine4(0xDE4DBEEF, i + 10000000); // why do these work so well???
+            ys[i] = y = determine4(0x1337D00D, i + 10000000);
+//            xs[i] = x = determine4(3, i + 1);
+//            ys[i] = y = determine4(7, i + 1);
+            for (int k = 0; k < i; k++) {
+                xx = x - xs[k];
+                yy = y - ys[k];
+                closest = Math.min(closest, xx * xx + yy * yy);
+            }
         }
+        System.out.printf("Closest distance with integer-reversal(%d,%d): %.9f\n", 0xDE4DBEEF, 0x1337D00D, Math.sqrt(closest));
+
+//        TreeSet<Double> sorter = new TreeSet<>();
+//        for (int i = 0; i < 65536; i++) {
+//            sorter.add(determine4(3, i + 1));
+//        }
+//        System.out.println("Unique Elements : " + sorter.size());
+//        System.out.println("Lowest          : " + sorter.first());
+//        System.out.println("Highest         : " + sorter.last());
+        closest = 999.0;
+        for (int i = 0; i < SIZE; i++) {
+            xs[i] = x = VanDerCorputQRNG.determine2(i + 10000000);
+            ys[i] = y = VanDerCorputQRNG.determine(3, i + 10000000);
+            for (int k = 0; k < i; k++) {
+                xx = x - xs[k];
+                yy = y - ys[k];
+                closest = Math.min(closest, xx * xx + yy * yy);
+            }
+        }
+        System.out.printf("Closest distance with Halton(2,3): %.9f\n", Math.sqrt(closest));
+
     }
 
     private static long rand(final long z, final long mod, final long n2)
