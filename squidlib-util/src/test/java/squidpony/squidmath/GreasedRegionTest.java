@@ -9,6 +9,7 @@ import squidpony.squidgrid.mapping.styled.TilesetType;
 
 import java.util.ArrayList;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 
@@ -54,14 +55,13 @@ public class GreasedRegionTest {
     @Test
     public void testBasics() {
         //printPacked(dataCross, 64, 64);
-        GreasedRegion singleNegative = new GreasedRegion(dataCross).not(),
-                doubleNegative = new GreasedRegion(dataCross).not().not();
-        assertTrue(dataCross.equals(doubleNegative));
+        GreasedRegion doubleNegative = new GreasedRegion(dataCross).not().not();
+        assertEquals(dataCross, doubleNegative);
         GreasedRegion gr = new GreasedRegion(box2);
         printRegion(gr);
         GreasedRegion gr2 = new GreasedRegion(120, 120);
         gr2.insertRectangle(24 + 32, 24 + 32, 16, 16);
-        assertTrue(gr.equals(gr2));
+        assertEquals(gr, gr2);
         if(PRINTING) {
             srng.setState(0x123456789ABCDEFL);
             printRegion(new GreasedRegion(120, 120).insertSeveral(gr.singleRandom(srng),
@@ -75,18 +75,18 @@ public class GreasedRegionTest {
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng),
                     gr.singleRandom(srng), gr.singleRandom(srng)));
-            System.out.println("\nSOBOL:");
             int dcs = dataCross.copy().not().size() + dataCross.size() / 20;
+            System.out.println("\nSOBOL:");
             printRegion(gr = dataCross.copy().not().insertSeveral(dataCross.separatedPortion(0.05)));
             System.out.println("expected size: " + (dcs) + ", actual size " + gr.size());
             System.out.println("\nVDC_2:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.quasiRandomSeparated(0.05)));
             System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_FIXED:");
-            printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.mixedRandomSeparated(0.05)));
-            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
             System.out.println("\nZ_CURVE:");
             printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.separatedZCurve(0.05)));
+            System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
+            System.out.println("\nRANDOM_MIXED:");
+            printRegion(gr2 = dataCross.copy().not().insertSeveral(dataCross.mixedRandomSeparated(0.05)));
             System.out.println("expected size: " + (dcs) + ", actual size " + gr2.size());
             System.out.println();
             printRegion(dataDungeon);
@@ -97,11 +97,11 @@ public class GreasedRegionTest {
             System.out.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.05)));
             System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_FIXED:");
-            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.05)));
-            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
             System.out.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.05)));
+            System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
+            System.out.println("\nRANDOM_MIXED:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.05)));
             System.out.println("expected size: " + (dataDungeon.size() / 20) + ", actual size " + gr2.size());
 
             System.out.println("\nWith fraction 0.15:");
@@ -111,11 +111,11 @@ public class GreasedRegionTest {
             System.out.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.15)));
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_FIXED:");
-            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.15)));
-            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
             System.out.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.15)));
+            System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
+            System.out.println("\nRANDOM_MIXED:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.15)));
             System.out.println("expected size: " + (dataDungeon.size() * 3 / 20) + ", actual size " + gr2.size());
 
             System.out.println("\nWith fraction 0.25:");
@@ -125,11 +125,11 @@ public class GreasedRegionTest {
             System.out.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.25)));
             System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_FIXED:");
-            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.25)));
-            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
             System.out.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.25)));
+            System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
+            System.out.println("\nRANDOM_MIXED:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.25)));
             System.out.println("expected size: " + (dataDungeon.size() / 4) + ", actual size " + gr2.size());
 
             System.out.println("\nWith fraction 0.4:");
@@ -139,11 +139,11 @@ public class GreasedRegionTest {
             System.out.println("\nVDC_2:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.quasiRandomSeparated(0.4)));
             System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
-            System.out.println("\nRANDOM_FIXED:");
-            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.4)));
-            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
             System.out.println("\nZ_CURVE:");
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.separatedZCurve(0.4)));
+            System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
+            System.out.println("\nRANDOM_MIXED:");
+            printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.4)));
             System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
 
 

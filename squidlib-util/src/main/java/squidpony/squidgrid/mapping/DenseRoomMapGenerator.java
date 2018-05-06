@@ -85,7 +85,7 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
 //                CoordPacker.rectangle(1, 1, width - 2, height - 2),
 //                CoordPacker.pack(map, '#'));
 //        Coord[] holes = CoordPacker.randomSeparated(tempPacked, 3, rng);
-        for(Coord hole : new GreasedRegion(map, '.').fringe().removeEdges().randomSeparated(0.25, rng)) {
+        for(Coord hole : new GreasedRegion(map, '.').fringe().removeEdges().mixedRandomSeparated(0.25, -1, rng.nextLong())) {
             if (((map[hole.x - 1][hole.y] == '.' && map[hole.x + 1][hole.y] == '.') ||
                             (map[hole.x][hole.y - 1] == '.' && map[hole.x][hole.y + 1] == '.'))) {
                 map[hole.x][hole.y] = '.';

@@ -170,7 +170,7 @@ public class SpillWorldMap {
             area.empty().insert(pts[i]).spill(bounds, volume, rng).expand(3);
             tmpInner.remake(area).retract(4).expand8way().and(area);
             tmpEdge.remake(area).surface8way();
-            Coord[] edges = tmpEdge.separatedPortion(0.35);
+            Coord[] edges = tmpEdge.mixedRandomSeparated(0.35);
             int eLen = edges.length;
             Double[] powers = new Double[eLen];
             Arrays.fill(powers, 0.1 * waterStrength);
@@ -227,7 +227,7 @@ public class SpillWorldMap {
         }
         */
         GreasedRegion map = new GreasedRegion(sm, 0, 0x7fff);
-        Coord[] centers = map.randomSeparated(0.1, rng, factionCount);
+        Coord[] centers = map.mixedRandomSeparated(0.1, factionCount, rng.nextLong());
         int controlled = (int) (map.size() * Math.max(0.0, Math.min(1.0, controlledFraction)));
 
         spreader.initialize(sm);

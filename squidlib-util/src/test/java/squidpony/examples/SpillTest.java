@@ -71,7 +71,7 @@ public class SpillTest {
                 OrderedMap<Coord, Double> entries = new OrderedMap<>(16);
                 Coord[] section;
                 if(which == 0)
-                    section = valid.randomSeparated(20.0 / valid.size(), rng);
+                    section = valid.mixedRandomSeparated(20.0 / valid.size(), -1, rng.nextLong());
                 else
                     section = valid.quasiRandomSeparated(20.0 / valid.size());
                 for (int i = 0; i < 16 && i < section.length; i++) {

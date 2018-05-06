@@ -403,6 +403,6 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public static double altDetermine(final long base, final int index)
     {
-        return ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53;
+        return (((base * Integer.reverse(index)) << 21) & 0x1fffffffffffffL) * 0x1p-53;
     }
 }

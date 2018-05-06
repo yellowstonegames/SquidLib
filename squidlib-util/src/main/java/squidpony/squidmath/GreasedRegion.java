@@ -31,16 +31,29 @@ import java.util.*;
  * one of the two GreasedRegions), and andNot() (which can be considered the "subtract another region from me" method).
  * There are 8-way (Chebyshev distance) variants on all of the spatial methods, and methods without "8way" in the name
  * are either 4-way (Manhattan distance) or not affected by distance measurement. Once you have a GreasedRegion, you may
- * want to get a single random point from it (use {@link #singleRandom(IRNG)}), get several random points from it (use
- * {@link #randomPortion(IRNG, int)} for random sampling or {@link #randomSeparated(double, IRNG)} for points that have
- * some distance between each other), or get all points from it (use {@link #asCoords()}. You may also want to produce
- * some 2D data from one or more GreasedRegions, such as with {@link #sum(GreasedRegion...)} or {@link #toChars()}. The
- * most effective techniques regarding GreasedRegion involve multiple methods, like getting a few random points from an
- * existing GreasedRegion representing floor tiles in a dungeon with {@link #randomPortion(IRNG, int)}, then inserting
- * those into a new GreasedRegion with {@link #insertSeveral(Coord...)}, and then finding a random expansion of those
- * initial points with {@link #spill(GreasedRegion, int, IRNG)}, giving the original GreasedRegion of floor tiles as the
- * first argument. This could be used to position puddles of water or patches of mold in a dungeon level, while still
- * keeping the starting points and finished points within the boundaries of valid (floor) cells.
+ * want to:
+ * <ul>
+ *     <li>get a single random point from it (use {@link #singleRandom(IRNG)}),</li>
+ *     <li>get several random points from it with random sampling (use {@link #randomPortion(IRNG, int)}),</li>
+ *     <li>mutate the current GreasedRegion to keep random points from it with random sampling (use {@link #randomRegion(IRNG, int)}),</li>
+ *     <li>get random points that are likely to be separated (use {@link #mixedRandomSeparated(double, int, long)} with
+ *     a random long for the last parameter, or either {@link #quasiRandomSeparated(double)} or
+ *     {@link #separatedZCurve(double)} if you don't want a random seed),</li>
+ *     <li>do what any of the above "separated" methods can do, but mutate the current GreasedRegion (use
+ *     {@link #mixedRandomRegion(double, int, long)}, {@link #separatedRegionZCurve(double, int)}, or 
+ *     {@link #quasiRandomRegion(double, int)}),</li>
+ *     <li>get all points from it (use {@link #asCoords()}).</li>
+ * </ul>
+ * <br>
+ * You may also want to produce some 2D data from one or more GreasedRegions, as with {@link #sum(GreasedRegion...)} or
+ * {@link #toChars()}. The most effective techniques regarding GreasedRegion involve multiple methods, like getting a
+ * few random points from an existing GreasedRegion representing floor tiles in a dungeon with
+ * {@link #randomRegion(IRNG, int)}, then finding a random expansion of those initial points with
+ * {@link #spill(GreasedRegion, int, IRNG)}, giving the original GreasedRegion of floor tiles as the first argument.
+ * This could be used to position puddles of water or toxic waste in a dungeon level, while still keeping the starting
+ * points and finished points within the boundaries of valid (floor) cells. If you wanted to place something like mold
+ * that can be on floors or on cells immediately adjacent to floors (like walls), you could call {@link #expand()} on
+ * the floor tiles before calling spill, allowing the spill to spread onto non-floor cells that are next to floors.
  * <br>
  * For efficiency, you can place one GreasedRegion into another (typically a temporary value that is no longer needed
  * and can be recycled) using {@link #remake(GreasedRegion)}, or give the information that would normally be used to
@@ -4196,18 +4209,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
         return next;
     }
-
-    /*
-    public int[][] edgeFit(int[][] basis, int defaultValue)
-    {
-        int[][] next = GwtCompatibility.fill(defaultValue, width, height);
-        if(basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0)
-            return next;
-
-        return next;
-    }
-    */
-
+    
+    /**
+     * Don't use this in new code; prefer {@link #mixedRandomSeparated(double)}, {@link #quasiRandomSeparated(double)},
+     * or {@link #separatedZCurve(double)}. This method has issues with being unable to fill the requested fraction, but
+     * the others mentioned don't. See their documentation for what all these group of methods do.
+     * @param fraction between 0.0 and 1.0
+     * @return a Coord array that may not have the full fraction used; you have been advised
+     */
     public Coord[] separatedPortion(double fraction)
     {
         if(fraction < 0)
@@ -4257,11 +4266,27 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return vl;
 
     }
-
+    /**
+     * Don't use this in new code; prefer {@link #mixedRandomSeparated(double, int, long)} with a random long as the
+     * last parameter. This method has issues with being unable to fill the requested fraction, but mixedRandomSeparated
+     * does not. See its documentation for what this method is supposed to do.
+     * @param fraction between 0.0 and 1.0
+     * @param rng an IRNG that will be used to get a random starting point in the Sobol sequence this uses internally
+     * @return a Coord array that may not have the full fraction used; you have been advised
+     */
     public Coord[] randomSeparated(double fraction, IRNG rng)
     {
         return randomSeparated(fraction, rng, -1);
     }
+    /**
+     * Don't use this in new code; prefer {@link #mixedRandomSeparated(double, int, long)} with a random long as the
+     * last parameter. This method has issues with being unable to fill the requested fraction, but mixedRandomSeparated
+     * does not. See its documentation for what this method is supposed to do.
+     * @param fraction between 0.0 and 1.0
+     * @param rng an IRNG that will be used to get a random starting point in the Sobol sequence this uses internally
+     * @param limit how many Coord values this should return, at most; typically this will return less
+     * @return a Coord array that may not have the full fraction used; you have been advised
+     */
     public Coord[] randomSeparated(double fraction, IRNG rng, int limit)
     {
         if(fraction < 0)
@@ -4318,43 +4343,65 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
      * scattering of chosen cells with a count that matches the given {@code fraction} of the total amount of "on" cells
-     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
-     * {@link #separatedZCurve(double)}, but much faster). If you request too many cells (too high of a value for
-     * fraction), it will start to overlap, however. Does not restrict the size of the returned array other than only
-     * using up to {@code fraction * size()} cells.
+     * in this. This is pseudo-random with a fixed seed, but is very good at avoiding overlap (just as good as
+     * {@link #separatedRegionZCurve(double, int)}, and probably faster). If you request too many cells (too high of a
+     * value for fraction), it will start to overlap, but a fraction value of 0.4 reliably has had no overlap in
+     * testing. Does not restrict the size of the returned array other than only using up to
+     * {@code fraction * size()} cells.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return a freshly-allocated Coord array containing the quasi-random cells
      */
     public Coord[] mixedRandomSeparated(double fraction)
     {
-        return mixedRandomSeparated(fraction, -1);
+        return mixedRandomSeparated(fraction, -1, 1L);
     }
 
     /**
      * Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
      * scattering of chosen cells with a count that matches the given {@code fraction} of the total amount of "on" cells
-     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
-     * {@link #separatedZCurve(double, int)}, but much faster). If you request too many cells (too high of a value
-     * for fraction), it will start to overlap, however. Restricts the total size of the returned array to a maximum of
-     * {@code limit} (minimum is 0 if no cells are "on"). If limit is negative, this will not restrict the size.
+     * in this. This is pseudo-random with a fixed seed, but is very good at avoiding overlap (just as good as
+     * {@link #separatedRegionZCurve(double, int)}, and probably faster). If you request too many cells (too high of a
+     * value for fraction), it will start to overlap, but a fraction value of 0.4 reliably has had no overlap in
+     * testing. Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells
+     * are "on"). If limit is negative, this will not restrict the size.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum size of the array to return
      * @return a freshly-allocated Coord array containing the pseudo-random cells
      */
     public Coord[] mixedRandomSeparated(double fraction, int limit)
     {
+        return mixedRandomSeparated(fraction, limit, 1L);
+    }
+
+    /**
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
+     * scattering of chosen cells with a count that matches the given {@code fraction} of the total amount of "on" cells
+     * in this. This is pseudo-random with the given seed (which will be made into an odd number if it is not one
+     * already), and is very good at avoiding overlap (just as good as {@link #separatedZCurve(double, int)}, and
+     * probably faster). If you request too many cells (too high of a value for fraction), it will start to overlap, but
+     * a fraction value of 0.4 reliably has had no overlap in testing. Restricts the total size of the returned array to
+     * a maximum of {@code limit} (minimum is 0 if no cells are "on"). If limit is negative, this will not restrict the
+     * size.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum size of the array to return
+     * @param seed a long seed to change the points; the most significant 21 bits (except the sign bit) and least significant bit are ignored
+     * @return a freshly-allocated Coord array containing the pseudo-random cells
+     */
+    public Coord[] mixedRandomSeparated(double fraction, int limit, long seed)
+    {
         if(fraction < 0)
             return new Coord[0];
         if(fraction > 1)
             fraction = 1;
-        int ct = 0, tmp, total, ic;
+        int ct = 0, tmp, ic;
         long t, w;
         int[] counts = new int[width * ySections];
         for (int i = 0; i < width * ySections; i++) {
             tmp = Long.bitCount(data[i]);
             counts[i] = tmp == 0 ? -1 : (ct += tmp);
         }
-        total = ct;
+        seed |= 1L;
+        final double total = ct * 0x1p-53;
         ct *= fraction;// (int)(fraction * ct);
         if(limit >= 0 && limit < ct)
             ct = limit;
@@ -4362,7 +4409,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         EACH_QUASI:
         for (int i = 0; i < ct; i++)
         {
-            tmp = (int)(VanDerCorputQRNG.weakDetermine(i) * total);
+            // tmp's value is similar to if the following was called and total was not a tiny decimal:
+            //VanDerCorputQRNG.altDetermine(1, i + 1) * total);
+            tmp = (int)(((seed * Integer.reverse(i+1) << 21) & 0x1fffffffffffffL) * total);
+            
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
                     if ((ic = counts[x * ySections + s]) > tmp) {
@@ -4388,29 +4438,46 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     /**
      * Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
      * choosing cells so that the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells
-     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
-     * {@link #separatedRegionZCurve(double)}, but much faster).  If you request too many cells (too high of a
-     * value for fraction), it will start to overlap, however. Does not restrict the count of "on" cells after this
-     * returns other than by only using up to {@code fraction * size()} cells.
+     * in this. This is pseudo-random with a fixed seed, and is very good at avoiding overlap (just as good as
+     * {@link #separatedRegionZCurve(double, int)}, and probably faster). If you request too many cells (too high of a
+     * value for fraction), it will start to overlap, but a fraction value of 0.4 reliably has had no overlap in
+     * testing. Does not restrict the count of "on" cells after this returns other than by only using up to
+     * {@code fraction * size()} cells.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return this for chaining
      */
     public GreasedRegion mixedRandomRegion(double fraction) {
-        return mixedRandomRegion(fraction, -1);
+        return mixedRandomRegion(fraction, -1, 1L);
     }
     /**
      * Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
      * choosing cells so that the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells
-     * in this. This is pseudo-random with a fixed seed, but is relatively good at avoiding overlap (not as good as
-     * {@link #separatedRegionZCurve(double, int)}, but much faster).  If you request too many cells (too high of a
-     * value for fraction), it will start to overlap, however. Restricts the total count of "on" cells after this
-     * returns to a maximum of {@code limit} (minimum is 0 if no cells are "on"). If limit is negative, this will not
-     * restrict the count.
+     * in this. This is pseudo-random with a fixed seed, and is very good at avoiding overlap (just as good as
+     * {@link #separatedRegionZCurve(double, int)}, and probably faster). If you request too many cells (too high of a
+     * value for fraction), it will start to overlap, but a fraction value of 0.4 reliably has had no overlap in
+     * testing. Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0
+     * if no cells are "on"). If limit is negative, this will not restrict the count.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum count of "on" cells to keep
      * @return this for chaining
      */
     public GreasedRegion mixedRandomRegion(double fraction, int limit) {
+        return mixedRandomRegion(fraction, limit, 1L);
+    }
+    /**
+     * Modifies this GreasedRegion so it contains a deterministic but random-seeming subset of its previous contents,
+     * choosing cells so that the {@link #size()} matches the given {@code fraction} of the total amount of "on" cells
+     * in this. This is pseudo-random with the given seed (which will be made into an odd number if it is not one
+     * already), and is very good at avoiding overlap (just as good as {@link #separatedZCurve(double, int)}, and
+     * probably faster). If you request too many cells (too high of a value for fraction), it will start to overlap, but
+     * a fraction value of 0.4 reliably has had no overlap in testing. Restricts the total count of "on" cells after
+     * this returns to a maximum of {@code limit} (minimum is 0 if no cells are "on"). If limit is negative, this will
+     * not restrict the count.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum count of "on" cells to keep
+     * @return this for chaining
+     */
+    public GreasedRegion mixedRandomRegion(double fraction, int limit, long seed) {
         int ct = 0, idx, run = 0;
         for (int i = 0; i < width * ySections; i++) {
             ct += Long.bitCount(data[i]);
@@ -4423,14 +4490,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             limit = (int) (fraction * ct);
         if(limit <= 0)
             return empty();
+        seed |= 1L;
+        final double total = ct * 0x1p-53;
         int[] order = new int[limit];
-        for (int i = 0, m = 0; i < limit; i++, m++) {
-            idx = (int) (VanDerCorputQRNG.weakDetermine(m) * ct);
+        for (int i = 0, m = 1; i < limit; i++, m++) {
+            idx = (int)(((seed * Integer.reverse(m) << 21) & 0x1fffffffffffffL) * total);
             BIG:
             while (true) {
                 for (int j = 0; j < i; j++) {
                     if (order[j] == idx) {
-                        idx = (int) (VanDerCorputQRNG.weakDetermine(++m) * ct);
+                        idx = (int)(((seed * Integer.reverse(++m) << 21) & 0x1fffffffffffffL) * total);
                         continue BIG;
                     }
                 }
@@ -4479,9 +4548,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * request too many cells (too high of a value for fraction), it will start to overlap, however.
      * Does not restrict the size of the returned array other than only using up to {@code fraction * size()} cells.
      * <br>
-     * For some time, this method used a different implementation that was not actually quasi-random; that version is
-     * still available as {@link #mixedRandomSeparated(double)}, but the current quasi- version should have much better
-     * behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * You can choose between {@link #mixedRandomSeparated(double)}, {@link #separatedZCurve(double)}, and this method,
+     * where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional gaps between
+     * cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return a freshly-allocated Coord array containing the quasi-random cells
      */
@@ -4498,9 +4567,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Restricts the total size of the returned array to a maximum of {@code limit} (minimum is 0 if no cells are "on").
      * If limit is negative, this will not restrict the size.
      * <br>
-     * For some time, this method used a different implementation that was not actually quasi-random; that version is
-     * still available as {@link #mixedRandomSeparated(double, int)}, but the current quasi- version should have much
-     * better behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * You can choose between {@link #mixedRandomSeparated(double, int)}, {@link #separatedZCurve(double, int)}, and
+     * this method, where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional
+     * gaps between cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum size of the array to return
      * @return a freshly-allocated Coord array containing the quasi-random cells
@@ -4558,9 +4627,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Does not restrict the count of "on" cells after this returns other than by only using up to
      * {@code fraction * size()} cells.
      * <br>
-     * For some time, this method used a different implementation that was not actually quasi-random; that version is
-     * still available as {@link #mixedRandomRegion(double)}, but the current quasi- version should have much better
-     * behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * You can choose between {@link #mixedRandomRegion(double)}, {@link #separatedRegionZCurve(double)}, and this
+     * method, where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional gaps
+     * between cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @return this for chaining
      */
@@ -4575,9 +4644,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Restricts the total count of "on" cells after this returns to a maximum of {@code limit} (minimum is 0 if no
      * cells are "on"). If limit is negative, this will not restrict the count.
      * <br>
-     * For some time, this method used a different implementation that was not actually quasi-random; that version is
-     * still available as {@link #mixedRandomRegion(double, int)}, but the current quasi- version should have much
-     * better behavior regarding overlap (similar to the ZCurve methods, but faster).
+     * You can choose between {@link #mixedRandomRegion(double, int)}, {@link #separatedRegionZCurve(double, int)}, and
+     * this method, where all are quasi-random, mixedRandom is probably fastest, ZCurve may have better 2-dimensional
+     * gaps between cells, and this method is somewhere in the middle.
      * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
      * @param limit the maximum count of "on" cells to keep
      * @return this for chaining
