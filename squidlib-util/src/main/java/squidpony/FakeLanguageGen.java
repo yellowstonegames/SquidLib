@@ -28,6 +28,7 @@ public class FakeLanguageGen implements Serializable {
     public static final StatefulRNG srng = new StatefulRNG();
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64);
     protected String summary = null;
+    private String name = "Nameless Language";
     /**
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
      * and Cyrillic; for use when a String will be interpreted as a regex (as in {@link FakeLanguageGen.Alteration}).
@@ -424,6 +425,7 @@ public class FakeLanguageGen implements Serializable {
     private FakeLanguageGen register(String languageName) {
         summary = registry.size() + "@1";
         registry.put(languageName,this);
+        name = languageName;
         return copy();
     }
 
@@ -2330,10 +2332,10 @@ public class FakeLanguageGen implements Serializable {
                         "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
                         "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
                         "a", "a", "a", "a", "a", "a", "i", "i", "i", "i", "o", "o", "o", "o", "o", "e", "e", "e", "e", "e",
-                        "ai", "ai", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
-                        "ai", "ai", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
-                        "ai", "ai", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
-                        "ái", "aí", "ía", "iá", "íe", "ié", "ío", "íu", "oí", "uí", "ué", "uá",
+                        "ai", "ai", "eo", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
+                        "ai", "ai", "eo", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
+                        "ai", "ai", "eo", "ia", "ia", "ie", "io", "iu", "oi", "ui", "ue", "ua",
+                        "ái", "aí", "éo", "ía", "iá", "íe", "ié", "ío", "íu", "oí", "uí", "ué", "uá",
                         "á", "é", "í", "ó", "ú", "á", "é", "í", "ó",},
                 new String[]{"b", "c", "ch", "d", "f", "g", "gu", "h", "j", "l", "m", "n", "p", "qu", "r", "s", "t", "v", "z",
                         "b", "s", "z", "r", "n", "h", "j", "j", "s", "c", "r",
@@ -2343,8 +2345,9 @@ public class FakeLanguageGen implements Serializable {
                         "br", "gr", "fr"
                 },
                 new String[]{"ñ", "rr", "ll", "ñ", "rr", "ll", "mb", "nd", "ng", "nqu", "rqu", "zqu", "zc", "rd", "rb", "rt", "rt", "rc", "sm", "sd"},
-                new String[]{
-                        },
+                new String[]{"r", "n", "s", "s", "r", "n", "s", "s", "r", "n", "s", "s", "r", "n", "s", "s", 
+                        "r", "n", "s", "r", "n", "s", "r", "n", "s", "r", "n", "s",
+                },
                 new String[]{"on", "ez", "es", "es", "es", "es", "es",
                         "ador", "edor", "ando", "endo", "indo",
                         "ar", "as", "amos", "an", "oy", "ay",
@@ -3879,7 +3882,8 @@ public class FakeLanguageGen implements Serializable {
                 vowelEndFrequency * myInfluence + other.vowelEndFrequency * otherInfluence,
                 vowelSplitFrequency * myInfluence + other.vowelSplitFrequency * otherInfluence,
                 syllableEndFrequency * myInfluence + other.syllableEndFrequency * otherInfluence,
-                (sanityChecks == null) ? other.sanityChecks : sanityChecks, true, mods);
+                (sanityChecks == null) ? other.sanityChecks : sanityChecks, true, mods)
+                .setName(otherInfluence > 0.5 ? other.name + "/" + name : name + "/" + other.name);
     }
 
     private static double readDouble(Object o) {
@@ -4029,7 +4033,7 @@ public class FakeLanguageGen implements Serializable {
                 vowelStartFrequency,
                 vowelEndFrequency,
                 vowelSplitFrequency,
-                syllableEndFrequency, sanityChecks, clean, modifiers);
+                syllableEndFrequency, sanityChecks, clean, modifiers).setName(name + "-Bònüs");
     }
 
     private static String[] copyStrings(String[] start) {
@@ -4077,6 +4081,22 @@ public class FakeLanguageGen implements Serializable {
                 vowelEndFrequency,
                 vowelSplitFrequency,
                 syllableEndFrequency, sanityChecks, clean, modifiers);
+    }
+
+    /**
+     * Returns the name of this FakeLanguageGen, such as "English" or "Deep Speech", if one was registered for this.
+     * In the case of hybrid languages produced by {@link #mix(FakeLanguageGen, double)} or related methods, this should
+     * produce a String like "English/French" (or "English/French/Maori" if more are mixed together). If no name was
+     * registered, this will return "Nameless Language".
+     * @return the human-readable name of this language, or "Nameless Language" if none is known
+     */
+    public String getName() {
+        return name;
+    }
+    private FakeLanguageGen setName(final String languageName)
+    {
+        name = languageName;
+        return this;
     }
 
     /**
@@ -4248,7 +4268,7 @@ public class FakeLanguageGen implements Serializable {
         return new FakeLanguageGen(openingVowels, midVowels, openingConsonants, midConsonants,
                 closingConsonants, closingSyllables, vowelSplitters, syllableFrequencies, vowelStartFrequency,
                 vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency, sanityChecks, clean, modifiers)
-                .summarize(summary);
+                .summarize(summary).setName(name);
     }
 
 

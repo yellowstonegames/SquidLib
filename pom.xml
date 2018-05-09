@@ -54,13 +54,12 @@
     </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.version>3.6.1</maven.compiler.version>
-        <maven.javadoc.version>2.10.4</maven.javadoc.version>
-        <maven.resources.version>2.7</maven.resources.version>
+        <maven.compiler.version>3.7.0</maven.compiler.version>
+        <maven.javadoc.version>3.0.0</maven.javadoc.version>
+        <maven.resources.version>3.1.0</maven.resources.version>
         <maven.source.version>3.0.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
-        <maven.jxr.version>2.5</maven.jxr.version>
-        <maven.pmd.version>3.5</maven.pmd.version>
+        <maven.pmd.version>3.9.0</maven.pmd.version>
         <findbugs.version>3.0.2</findbugs.version>
         <cobertura.version>2.7</cobertura.version>
         <jdk.version>1.7</jdk.version>
@@ -69,10 +68,6 @@
         <junit.version>4.11</junit.version>
         <regexodus.version>0.1.9</regexodus.version>
     </properties>
-
-    <prerequisites>
-        <maven>3.3.0</maven>
-    </prerequisites>
 
     <issueManagement>
         <url>https://github.com/SquidPony/SquidLib/issues</url>
@@ -109,7 +104,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <configuration>
-                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <additionalOptions>-Xdoclint:none</additionalOptions>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -222,11 +217,6 @@
     <reporting>
         <plugins>
             <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jxr-plugin</artifactId>
-                <version>${maven.jxr.version}</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>

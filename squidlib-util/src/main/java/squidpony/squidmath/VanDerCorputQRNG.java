@@ -397,6 +397,21 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * gimmicky numbers seem to be similar to a typical Halton sequence made from two calls to different bases of
      * determine(). This method should be slightly faster than {@link #determine2(int)}, and significantly faster than
      * {@link #determine(int, int)}, especially when the index is large.
+     * <br>
+     * Note, the source of this method is one line, and you may see benefits from copying that code into the call-site
+     * with minor modifications. This returns
+     * {@code (((base * Integer.reverse(index)) << 21) & 0x1fffffffffffffL) * 0x1p-53;}, where base is a long and index
+     * is an int (as in the method signature). The multiplier 0x1p-53 is a very small hexadecimal double literal, using
+     * the same syntax as other parts of SquidLib use for packed floats; using this helps avoid precision loss. If you
+     * want a range larger than 0.0 to 1.0, you can change the multiplier {@code 0x1p-53} to some other constant, like
+     * declaring {@code final double upTo100 = 0x1p-53 * 100.0} before some code that wants quasi-random numbers between
+     * 0.0 inclusive and 100.0 exclusive, then using
+     * {@code (((base * Integer.reverse(index)) << 21) & 0x1fffffffffffffL) * upTo100;} to get those numbers. It isn't
+     * precise to use this technique to get numbers with an upper bound less than 1.0, because 0x1p-53 is about as small
+     * as a double can get with precision intact. In that case, you can use
+     * {@code (((base * Integer.reverse(index)) << 8) & 0xffffffffffL) * smallBound;} where smallBound has been declared
+     * as {@code final double smallBound = 0x1p-40 * 0.05;} (where 0.05 can be switched out for any double between
+     * 1.0/8192.0 and 1.0).
      * @param base any odd long; the most significant 21 bits (except the sign bit) are effectively ignored
      * @param index any int; if 0 this will return 0
      * @return a double between 0.0 inclusive and 1.0 exclusive

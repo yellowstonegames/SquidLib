@@ -79,8 +79,7 @@ public class SquidInput extends InputAdapter {
      * setKeyHandler() to allow keyboard handling or setMouse() to allow mouse handling on a grid.
      */
     public SquidInput() {
-        keyAction = null;
-        mouse = new SquidMouse(12, 12, new InputAdapter());
+        this(null, null, false);
     }
 
     /**
@@ -89,11 +88,10 @@ public class SquidInput extends InputAdapter {
      * be registered by calling Input.setInputProcessor(SquidMouse), and instead this object should be registered by
      * calling Input.setInputProcessor(SquidInput). The keyboard and mouse handling can be changed later by calling
      * setKeyHandler() to allow keyboard handling or setMouse() to change mouse handling.
-     * @param mouse a SquidMouse instance that will be used for handling mouse input. Must not be null.
+     * @param mouse a SquidMouse instance that will be used for handling mouse input.
      */
     public SquidInput(SquidMouse mouse) {
-        keyAction = null;
-        this.mouse = mouse;
+        this(null, mouse, false);
     }
 
     /**
@@ -105,8 +103,7 @@ public class SquidInput extends InputAdapter {
      * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
      */
     public SquidInput(KeyHandler keyHandler) {
-        keyAction = keyHandler;
-        mouse = new SquidMouse(12, 12, new InputAdapter());
+        this(keyHandler, null, false);
     }
     /**
      * Constructs a new SquidInput that does not respond to mouse input, but does take keyboard input and sends keyboard
@@ -118,9 +115,7 @@ public class SquidInput extends InputAdapter {
      * @param ignoreInput true if this should ignore input initially, false if it should process input normally.
      */
     public SquidInput(KeyHandler keyHandler, boolean ignoreInput) {
-        keyAction = keyHandler;
-        mouse = new SquidMouse(12, 12, new InputAdapter());
-        this.ignoreInput = ignoreInput;
+        this(keyHandler, null, ignoreInput);
     }
     /**
      * Constructs a new SquidInput that responds to mouse and keyboard input when given a SquidMouse and a
@@ -132,11 +127,10 @@ public class SquidInput extends InputAdapter {
      * this object should be registered by calling Input.setInputProcessor(SquidInput). You can use setKeyHandler() or
      * setMouse() to change keyboard or mouse handling.
      * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
-     * @param mouse a SquidMouse instance that will be used for handling mouse input. Must not be null.
+     * @param mouse a SquidMouse instance that will be used for handling mouse input.
      */
     public SquidInput(KeyHandler keyHandler, SquidMouse mouse) {
-        keyAction = keyHandler;
-        this.mouse = mouse;
+        this(keyHandler, mouse, false);
     }
 
     /**
@@ -150,7 +144,7 @@ public class SquidInput extends InputAdapter {
      * this object should be registered by calling Input.setInputProcessor(SquidInput). You can use setKeyHandler() or
      * setMouse() to change keyboard or mouse handling.
      * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
-     * @param mouse a SquidMouse instance that will be used for handling mouse input. Must not be null.
+     * @param mouse a SquidMouse instance that will be used for handling mouse input.
      * @param ignoreInput true if this should ignore input initially, false if it should process input normally.
      */
     public SquidInput(KeyHandler keyHandler, SquidMouse mouse, boolean ignoreInput) {
@@ -486,31 +480,31 @@ public class SquidInput extends InputAdapter {
 
     @Override
 	public boolean touchDown (int screenX, int screenY, int pointer, int button) {
-        if(ignoreInput) return false;
+        if(ignoreInput || mouse == null) return false;
         return mouse.touchDown(screenX, screenY, pointer, button);
     }
 
     @Override
 	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
-        if(ignoreInput) return false;
+        if(ignoreInput || mouse == null) return false;
         return mouse.touchUp(screenX, screenY, pointer, button);
     }
 
     @Override
 	public boolean touchDragged (int screenX, int screenY, int pointer) {
-        if(ignoreInput) return false;
+        if(ignoreInput || mouse == null) return false;
         return mouse.touchDragged(screenX, screenY, pointer);
     }
 
     @Override
 	public boolean mouseMoved (int screenX, int screenY) {
-        if(ignoreInput) return false;
+        if(ignoreInput || mouse == null) return false;
         return mouse.mouseMoved(screenX, screenY);
     }
 
     @Override
 	public boolean scrolled (int amount) {
-        if(ignoreInput) return false;
+        if(ignoreInput || mouse == null) return false;
         return mouse.scrolled(amount);
     }
 

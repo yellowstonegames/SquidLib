@@ -275,7 +275,7 @@ public class VisualInput extends SquidInput {
         if(spv != null) {
             screenX *= spv.getScreenWidth() / (spv.getScreenWidth() - spv.barWidth);
         }
-        return (!initialized || mouse.onGrid(screenX, screenY)) && super.touchDown(screenX, screenY, pointer, button);
+        return (!initialized || (mouse != null && mouse.onGrid(screenX, screenY))) && super.touchDown(screenX, screenY, pointer, button);
     }
 
     @Override
@@ -288,7 +288,7 @@ public class VisualInput extends SquidInput {
             screenX *= spv.getScreenWidth() / (spv.getScreenWidth() - spv.barWidth);
         }
 
-        return (!initialized || mouse.onGrid(screenX, screenY)) && super.touchUp(screenX, screenY, pointer, button);
+        return (!initialized || (mouse != null && mouse.onGrid(screenX, screenY))) && super.touchUp(screenX, screenY, pointer, button);
     }
 
     @Override
@@ -300,7 +300,7 @@ public class VisualInput extends SquidInput {
         if(spv != null) {
             screenX *= spv.getScreenWidth() / (spv.getScreenWidth() - spv.barWidth);
         }
-        return (!initialized || mouse.onGrid(screenX, screenY)) && super.touchDragged(screenX, screenY, pointer);
+        return (!initialized || (mouse != null && mouse.onGrid(screenX, screenY))) && super.touchDragged(screenX, screenY, pointer);
 
     }
     @Override
@@ -309,7 +309,7 @@ public class VisualInput extends SquidInput {
             screenX *= spv.getScreenWidth() / (spv.getScreenWidth() - spv.barWidth);
         }
 
-        if(ignoreInput || !mouse.onGrid(screenX, screenY)) return false;
+        if(ignoreInput || mouse == null || !mouse.onGrid(screenX, screenY)) return false;
         return mouse.mouseMoved(screenX, screenY);
     }
     public void reinitialize(float cellWidth, float cellHeight, float gridWidth, float gridHeight,
@@ -317,7 +317,8 @@ public class VisualInput extends SquidInput {
     {
         if(!initialized)
         {
-            mouse.reinitialize(cellWidth, cellHeight, gridWidth, gridHeight, offsetX, offsetY);
+            if(mouse != null) 
+                mouse.reinitialize(cellWidth, cellHeight, gridWidth, gridHeight, offsetX, offsetY);
             return;
         }
         if(this.screenWidth > 0)
@@ -331,7 +332,8 @@ public class VisualInput extends SquidInput {
         cellWidth /= screenWidth / (screenWidth - sectionWidth * 0.75f);
         float leftWidth = screenWidth / 32f, rightWidth = screenWidth / 96f,
                 leftHeight = screenHeight / 12f, rightHeight = screenHeight / 24f;
-        mouse.reinitialize(cellWidth, cellHeight, gridWidth, gridHeight,
+        if(mouse != null) 
+            mouse.reinitialize(cellWidth, cellHeight, gridWidth, gridHeight,
                 offsetX - MathUtils.round((screenWidth * 0.125f) * (screenWidth / (screenWidth - sectionWidth)) + cellWidth * 0.5f), offsetY);
         mouseLeft.reinitialize(leftWidth, leftHeight, 4, 16, offsetX, offsetY);
         mouseRight.reinitialize(rightWidth, rightHeight, 12, 24,
