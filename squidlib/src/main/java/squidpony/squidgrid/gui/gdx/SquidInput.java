@@ -1,9 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.IntIntMap;
 import squidpony.squidmath.IntVLA;
 
@@ -77,6 +75,17 @@ public class SquidInput extends InputAdapter {
     /**
      * Constructs a new SquidInput that does not respond to keyboard or mouse input. These can be set later by calling
      * setKeyHandler() to allow keyboard handling or setMouse() to allow mouse handling on a grid.
+     * <br>
+     * All SquidInput constructors must be called after the {@link ApplicationListener#create()} method has started, and
+     * cannot be called in an ApplicationListener's constructor or in initialization at the class level. This is because
+     * all constructors attempt to load a file, if it exists, with {@code Gdx.files.local("keymap.preferences")}, and
+     * {@code Gdx.files} is only available starting in create(). This file, keymap.preferences, is meant to contain any
+     * key remappings specified by the user, and its contents should be produced by {@link #keyMappingToString()} when
+     * any key mappings change and are saved. You can use your own filename, but keymap.preferences is the standard one
+     * and these can be exchanged between games (so common remappings for users of DVORAK or AZERTY keyboards can be
+     * sent between users even if they play different games). If you really want a custom filename, or to load the
+     * keymap from a larger user profile, you can give the contents to {@link #keyMappingFromString(String)} on a
+     * SquidInput after construction.
      */
     public SquidInput() {
         this(null, null, false);
@@ -88,6 +97,17 @@ public class SquidInput extends InputAdapter {
      * be registered by calling Input.setInputProcessor(SquidMouse), and instead this object should be registered by
      * calling Input.setInputProcessor(SquidInput). The keyboard and mouse handling can be changed later by calling
      * setKeyHandler() to allow keyboard handling or setMouse() to change mouse handling.
+     * <br>
+     * All SquidInput constructors must be called after the {@link ApplicationListener#create()} method has started, and
+     * cannot be called in an ApplicationListener's constructor or in initialization at the class level. This is because
+     * all constructors attempt to load a file, if it exists, with {@code Gdx.files.local("keymap.preferences")}, and
+     * {@code Gdx.files} is only available starting in create(). This file, keymap.preferences, is meant to contain any
+     * key remappings specified by the user, and its contents should be produced by {@link #keyMappingToString()} when
+     * any key mappings change and are saved. You can use your own filename, but keymap.preferences is the standard one
+     * and these can be exchanged between games (so common remappings for users of DVORAK or AZERTY keyboards can be
+     * sent between users even if they play different games). If you really want a custom filename, or to load the
+     * keymap from a larger user profile, you can give the contents to {@link #keyMappingFromString(String)} on a
+     * SquidInput after construction.
      * @param mouse a SquidMouse instance that will be used for handling mouse input.
      */
     public SquidInput(SquidMouse mouse) {
@@ -100,6 +120,17 @@ public class SquidInput extends InputAdapter {
      * Modifier keys do not go through the same processing but are checked for their current state when the key is
      * pressed, and the states of alt, ctrl, and shift are passed to keyHandler.handle() as well.
      * You can use setMouse() to allow mouse handling or change the KeyHandler with setKeyHandler().
+     * <br>
+     * All SquidInput constructors must be called after the {@link ApplicationListener#create()} method has started, and
+     * cannot be called in an ApplicationListener's constructor or in initialization at the class level. This is because
+     * all constructors attempt to load a file, if it exists, with {@code Gdx.files.local("keymap.preferences")}, and
+     * {@code Gdx.files} is only available starting in create(). This file, keymap.preferences, is meant to contain any
+     * key remappings specified by the user, and its contents should be produced by {@link #keyMappingToString()} when
+     * any key mappings change and are saved. You can use your own filename, but keymap.preferences is the standard one
+     * and these can be exchanged between games (so common remappings for users of DVORAK or AZERTY keyboards can be
+     * sent between users even if they play different games). If you really want a custom filename, or to load the
+     * keymap from a larger user profile, you can give the contents to {@link #keyMappingFromString(String)} on a
+     * SquidInput after construction.
      * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
      */
     public SquidInput(KeyHandler keyHandler) {
@@ -111,6 +142,17 @@ public class SquidInput extends InputAdapter {
      * Modifier keys do not go through the same processing but are checked for their current state when the key is
      * pressed, and the states of alt, ctrl, and shift are passed to keyHandler.handle() as well.
      * You can use setMouse() to allow mouse handling or change the KeyHandler with setKeyHandler().
+     * <br>
+     * All SquidInput constructors must be called after the {@link ApplicationListener#create()} method has started, and
+     * cannot be called in an ApplicationListener's constructor or in initialization at the class level. This is because
+     * all constructors attempt to load a file, if it exists, with {@code Gdx.files.local("keymap.preferences")}, and
+     * {@code Gdx.files} is only available starting in create(). This file, keymap.preferences, is meant to contain any
+     * key remappings specified by the user, and its contents should be produced by {@link #keyMappingToString()} when
+     * any key mappings change and are saved. You can use your own filename, but keymap.preferences is the standard one
+     * and these can be exchanged between games (so common remappings for users of DVORAK or AZERTY keyboards can be
+     * sent between users even if they play different games). If you really want a custom filename, or to load the
+     * keymap from a larger user profile, you can give the contents to {@link #keyMappingFromString(String)} on a
+     * SquidInput after construction.
      * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
      * @param ignoreInput true if this should ignore input initially, false if it should process input normally.
      */
@@ -126,6 +168,17 @@ public class SquidInput extends InputAdapter {
      * InputProcessor on its own, should not be registered by calling Input.setInputProcessor(SquidMouse), and instead
      * this object should be registered by calling Input.setInputProcessor(SquidInput). You can use setKeyHandler() or
      * setMouse() to change keyboard or mouse handling.
+     * <br>
+     * All SquidInput constructors must be called after the {@link ApplicationListener#create()} method has started, and
+     * cannot be called in an ApplicationListener's constructor or in initialization at the class level. This is because
+     * all constructors attempt to load a file, if it exists, with {@code Gdx.files.local("keymap.preferences")}, and
+     * {@code Gdx.files} is only available starting in create(). This file, keymap.preferences, is meant to contain any
+     * key remappings specified by the user, and its contents should be produced by {@link #keyMappingToString()} when
+     * any key mappings change and are saved. You can use your own filename, but keymap.preferences is the standard one
+     * and these can be exchanged between games (so common remappings for users of DVORAK or AZERTY keyboards can be
+     * sent between users even if they play different games). If you really want a custom filename, or to load the
+     * keymap from a larger user profile, you can give the contents to {@link #keyMappingFromString(String)} on a
+     * SquidInput after construction.
      * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
      * @param mouse a SquidMouse instance that will be used for handling mouse input.
      */
@@ -143,6 +196,17 @@ public class SquidInput extends InputAdapter {
      * InputProcessor on its own, should not be registered by calling Input.setInputProcessor(SquidMouse), and instead
      * this object should be registered by calling Input.setInputProcessor(SquidInput). You can use setKeyHandler() or
      * setMouse() to change keyboard or mouse handling.
+     * <br>
+     * All SquidInput constructors must be called after the {@link ApplicationListener#create()} method has started, and
+     * cannot be called in an ApplicationListener's constructor or in initialization at the class level. This is because
+     * all constructors attempt to load a file, if it exists, with {@code Gdx.files.local("keymap.preferences")}, and
+     * {@code Gdx.files} is only available starting in create(). This file, keymap.preferences, is meant to contain any
+     * key remappings specified by the user, and its contents should be produced by {@link #keyMappingToString()} when
+     * any key mappings change and are saved. You can use your own filename, but keymap.preferences is the standard one
+     * and these can be exchanged between games (so common remappings for users of DVORAK or AZERTY keyboards can be
+     * sent between users even if they play different games). If you really want a custom filename, or to load the
+     * keymap from a larger user profile, you can give the contents to {@link #keyMappingFromString(String)} on a
+     * SquidInput after construction.
      * @param keyHandler must implement the SquidInput.KeyHandler interface so it can handle() key input.
      * @param mouse a SquidMouse instance that will be used for handling mouse input.
      * @param ignoreInput true if this should ignore input initially, false if it should process input normally.
@@ -151,6 +215,11 @@ public class SquidInput extends InputAdapter {
         keyAction = keyHandler;
         this.mouse = mouse;
         this.ignoreInput = ignoreInput;
+        FileHandle prefFile;
+        if(Gdx.files.isLocalStorageAvailable() && (prefFile = Gdx.files.local("keymap.preferences")).exists())
+        {
+            keyMappingFromString(prefFile.readString("UTF8"));
+        }
     }
 
     public void setKeyHandler(KeyHandler keyHandler)
@@ -306,8 +375,12 @@ public class SquidInput extends InputAdapter {
 
     /**
      * Gets the current key remapping as a String, which can be saved in a file and read back with
-     * {@link #keyMappingFromString(String)}. This will allow input with any of Shift, Alt, and Ctl modifiers in any
-     * script supported by the Unicode Basic Multilingual Plane (the first 65536 chars of Unicode).
+     * {@link #keyMappingFromString(String)}. Because that method is automatically called by SquidInput's constructor
+     * and tries to load a file named "keymap.preferences" in the local folder, it is recommended that you save
+     * user-remapped keys to that file, but only if the user has actively changed them (that file could exist from an
+     * earlier run and you don't want to affect it unless the user made some change). This will allow input with any of
+     * Shift, Alt, and Ctl modifiers in any script supported by the Unicode Basic Multilingual Plane (the first 65536
+     * chars of Unicode).
      * @return a String that stores four chars per remapping.
      */
     public String keyMappingToString()
@@ -326,7 +399,10 @@ public class SquidInput extends InputAdapter {
 
     /**
      * Reads in a String (almost certainly produced by {@link #keyMappingToString()}) to set the current key remapping.
-     * This will allow input with any of Shift, Alt, and Ctl modifiers in any script supported by the Unicode Basic
+     * This is automatically called if a file named "keymap.preferences" is present in the local folder, receiving the
+     * contents of that file as a parameter, so games that want to save a user's preferences should try to save that
+     * file if possible (this also allows one file to be reused across multiple computers or installations by copying
+     * it). This will allow input with any of Shift, Alt, and Ctl modifiers in any script supported by the Unicode Basic
      * Multilingual Plane (the first 65536 chars of Unicode). You may want to call {@link #clearMapping()} before
      * calling this if you have already set the mapping and want the String's contents to be used as the only mapping.
      * @param keymap a String that was probably produced by {@link #keyMappingToString()}
