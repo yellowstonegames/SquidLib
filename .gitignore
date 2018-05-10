@@ -10,9 +10,12 @@ out/
 # Gradle temporary files
 .gradle/
 
-
 # jEdit garbage
 *~
 *#*#
 *#*.*#
 /bin/
+
+# Asset bundles, large and better distributed via SquidSetup
+assets.tar.gz
+assets.zip
