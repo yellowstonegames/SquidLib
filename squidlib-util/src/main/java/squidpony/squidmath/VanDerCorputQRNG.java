@@ -416,8 +416,5 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param index any int; if 0 this will return 0
      * @return a double between 0.0 inclusive and 1.0 exclusive
      */
-    public static double altDetermine(final long base, final int index)
-    {
-        return (((base * Integer.reverse(index)) << 21) & 0x1fffffffffffffL) * 0x1p-53;
-    }
+    public static double altDetermine(final long base, final int index) { return (((base * Integer.reverse(index)) << 21) & 0x1fffffffffffffL) * 0x1p-53; }
 }
