@@ -15,9 +15,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.LightRNG;
 import squidpony.squidmath.ThrustAltRNG;
 
@@ -49,28 +47,28 @@ public class DistanceFieldTest extends ApplicationAdapter {
     private Vector3 startPosition, targetPosition;
     private float worldWidth, worldHeight;
     private TextCellFactory[] factories;
-    private SquidPanel display;
-    private SquidPanel[] displays;
+    private SparseLayers display;
+    private SparseLayers[] displays;
     private int index = 0;
     @Override
     public void create() {
         batch = new SpriteBatch();
         factories = new TextCellFactory[]{
-                DefaultResources.getCrispSlabFont().width(14).height(24).initBySize(),
-                DefaultResources.getStretchableSlabFont().width(14).height(24).initBySize(),
+                DefaultResources.getCrispSlabFont().width(32).height(64).initBySize(),
+                DefaultResources.getStretchableSlabFont().width(32).height(64).initBySize(),
         };
         //factories[0].font().setUseIntegerPositions(true);
         //factories[1].font().setUseIntegerPositions(true);
         worldWidth = factories[0].width() * width;
         worldHeight = factories[0].height() * height;
         viewport = new StretchViewport(worldWidth, worldHeight);
-        displays = new SquidPanel[]{
-                new SquidPanel(width, height, factories[0]),
-                new SquidPanel(width, height, factories[1]),
+        displays = new SparseLayers[]{
+                new SparseLayers(width, height, 16, 32, factories[0]),
+                new SparseLayers(width, height, 16, 32, factories[1]),
         };
         StringBuilder sb = new StringBuilder(width * height);
         long seed = System.nanoTime();
-        FakeLanguageGen lang = FakeLanguageGen.randomLanguage(1234567890L);
+        FakeLanguageGen lang = FakeLanguageGen.randomLanguage(seed);
         while (sb.length() < width * (height - 2))
         {
             sb.append(lang.sentence(seed += 1337, 4, 9)).append(' ');
@@ -78,10 +76,10 @@ public class DistanceFieldTest extends ApplicationAdapter {
         List<String> wrapped = StringKit.wrap(sb, width);
         for (int i = 0; i < factories.length; i++) {
             display = displays[i];
-            int x = 0, y = 0;
+            int y = 0;
             for(String s : wrapped)
             {
-                display.put(0, y++, s);
+                display.put(0, y++, s, SColor.WHITE);
                 if (y >= height) {
                     break;
                 }
@@ -92,8 +90,8 @@ public class DistanceFieldTest extends ApplicationAdapter {
 
         startPosition = new Vector3(display.getX(), display.getY(), 0f);
         targetPosition = new Vector3(
-                (int)(LightRNG.determineFloat(System.nanoTime()) * worldWidth * 0.4f - 0.1f),
-                (int)(LightRNG.determineFloat(ThrustAltRNG.determine(System.nanoTime())) * worldHeight * -0.4f + 0.1f),
+                (int) ((LightRNG.determineFloat(System.nanoTime()) * 0.5f - 0f) * worldWidth),
+                (int) ((LightRNG.determineFloat(ThrustAltRNG.determine(System.nanoTime())) * -0.5f + 0f) * worldHeight),
                 0f);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -117,24 +115,26 @@ public class DistanceFieldTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        final long time = (System.currentTimeMillis() & 0x3FFFL);
-        final float zoom = MathUtils.clamp((time & 0x1FFFL) * 0x1.7p-13f - 0x0.7p-14f, 0.0f, 1f);
-        if((time & 0x2000L) == 0L) {
-            viewport.setWorldSize(worldWidth * (2.25f - zoom * 2f), worldHeight * (2.25f - zoom * 2f));
-            display.setPosition(MathUtils.lerp(startPosition.x, targetPosition.x, zoom),
-                    MathUtils.lerp(startPosition.y, targetPosition.y, zoom));
-            if (time < 0xFL) {
-                targetPosition.set(
-                        (int)(LightRNG.determineFloat(System.nanoTime()) * worldWidth * 0.4f - 0.1f),
-                        (int)(LightRNG.determineFloat(ThrustAltRNG.determine(System.nanoTime())) * worldHeight * -0.4f + 0.1f),
-                        0f);
-            }
-        }
-        else
-        {
+//        final long time = (System.currentTimeMillis() & 0x3FFFL);
+//        final float zoom = MathUtils.clamp((time & 0x1FFFL) * 0x1.7p-13f - 0x0.7p-14f, 0.0f, 1f);
+//        if((time & 0x2000L) == 0L) {
+        final long time = (System.nanoTime() >>> 21);
+        final float zoom = MathUtils.clamp((time & 0x7FFL) * 0x3p-12f - 0.25f, 0.0f, 1f);
+        if((time & 0x800L) == 0x800L) {
             viewport.setWorldSize(worldWidth * (0.25f + zoom * 2f), worldHeight * (0.25f + zoom * 2f));
             display.setPosition(MathUtils.lerp(targetPosition.x, startPosition.x, zoom),
                     MathUtils.lerp(targetPosition.y, startPosition.y, zoom));
+        }
+        else {
+            viewport.setWorldSize(worldWidth * (2.25f - zoom * 2f), worldHeight * (2.25f - zoom * 2f));
+            display.setPosition(MathUtils.lerp(startPosition.x, targetPosition.x, zoom),
+                    MathUtils.lerp(startPosition.y, targetPosition.y, zoom));
+            if (zoom <= 0.001f) {
+                targetPosition.set(
+                        (int) ((LightRNG.determineFloat(System.nanoTime()) - 0.5f) * worldWidth),
+                        (int) ((-LightRNG.determineFloat(ThrustAltRNG.determine(System.nanoTime())) + 0.5) * worldHeight),
+                        0f);
+            }
         }
         viewport.update(totalWidth, totalHeight, false);
         stage.draw();
@@ -145,7 +145,7 @@ public class DistanceFieldTest extends ApplicationAdapter {
         super.resize(width, height);
         totalWidth = width;
         totalHeight = height;
-        viewport.update(width, height, true);
+        viewport.update(width, height, false);
     }
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
