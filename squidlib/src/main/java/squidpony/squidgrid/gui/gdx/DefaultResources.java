@@ -258,6 +258,32 @@ public class DefaultResources implements LifecycleListener {
             + "	   gl_FragColor = vec4(mix(vec3(0.0), v_color.rgb, outline), asum * v_color.a);\n"
             + "  }\n"
             + "}\n";
+    /**
+     * An alternate shader based on {@link DefaultResources#msdfFragmentShader}, but this draws outlines around
+     * characters. This should be sharper than {@link #outlineFragmentShader},  but only works with MSDF (crisp) fonts.
+     * Unlike that shader, this doesn't have special behavior for negative
+     * {@link TextCellFactory#getSmoothingMultiplier()} values, though that may be added later.
+     * You probably need to create a new ShaderProgram to use this, which would look like
+     * {@code new ShaderProgram(DefaultResources.vertexShader, DefaultResources.msdfOutlineFragmentShader)}, and
+     * would assign this to your TextCellFactory's {@link TextCellFactory#shader} field after the TextCellFactory is
+     * fully initialized (calling {@link TextCellFactory#initBySize()}) will set the shader back to the default).
+     */
+    public static final String msdfOutlineFragmentShader =  "#ifdef GL_ES\n"
+            + "	precision mediump float;\n"
+            + "	precision mediump int;\n"
+            + "#endif\n"
+            + "\n"
+            + "uniform sampler2D u_texture;\n"
+            + "uniform float u_smoothing;\n"
+            + "varying vec4 v_color;\n"
+            + "varying vec2 v_texCoords;\n"
+            + "\n"
+            + "void main() {\n"
+            + "  vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
+            + "  float distance = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.425);"
+            //+ "  float cd = clamp(distance, 0.0, 1.0);"
+            + "  gl_FragColor = vec4(step(3.5 * u_smoothing, distance * 0.75) * v_color.rgb, clamp((distance / (3.4 * u_smoothing)) + 0.9125, 0.0, 1.0) * v_color.a);\n"
+            + "}\n";
 
     private SquidColorCenter scc = null;
     private Texture tentacle = null;

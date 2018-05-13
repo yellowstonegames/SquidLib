@@ -136,11 +136,19 @@ public final class LinnormRNG implements RandomnessSource, StatefulRandomness, S
      */
     public final long nextLong(final long bound) {
         if (bound <= 0) return 0;
-        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
-        for (; ; ) {
-            long bits = nextLong() & 0x7fffffffffffffffL;
-            if (bits >= threshold)
-                return bits % bound;
+        //// the technique libGDX uses, uncommented below, is a little faster than the commented code.
+        //// I don't know if there's a quality difference...
+        //// ranged long generation is really slow though.
+//        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
+//        for (; ; ) {
+//            long bits = nextLong() & 0x7fffffffffffffffL;
+//            if (bits >= threshold)
+//                return bits % bound;
+//        }
+        for (;;) {
+            final long bits = nextLong() & 0x7fffffffffffffffL;
+            final long value = bits % bound;
+            if (bits - value + bound > 0) return value;
         }
     }
 

@@ -33,6 +33,7 @@ public class Playground {
         //return Double.longBitsToDouble((Double.doubleToLongBits(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff))) & 0xfffffffffffffL) | 0x3FFFFFFFFFFFFFFFL);
         return NumberTools.setExponent(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff)), 0x3ff) - 1.0;
     }
+    // just puts outputs on lines, Marsaglia's Theorem style
     public static double determine4(final long base, final int index)
     {
         return ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53;
@@ -178,10 +179,10 @@ public class Playground {
         double[] xs = new double[SIZE], ys = new double[SIZE];
         double closest = 999.0, x, y, xx, yy;
         for (int i = 0; i < SIZE; i++) {
-            xs[i] = x = determine4(0xDE4DBEEF, i + 10000000); // why do these work so well???
-            ys[i] = y = determine4(0x1337D00D, i + 10000000);
-//            xs[i] = x = determine4(3, i + 1);
-//            ys[i] = y = determine4(7, i + 1);
+//            xs[i] = x = VanDerCorputQRNG.altDetermine(0xDE4DBEEF, i + 10000000); // why do these work so well???
+//            ys[i] = y = VanDerCorputQRNG.altDetermine(0x1337D00D, i + 10000000); //  now we know, they were forming lines
+            xs[i] = x = VanDerCorputQRNG.altDetermine(335577775533L, i);
+            ys[i] = y = VanDerCorputQRNG.altDetermine(773355553377L, i);
             for (int k = 0; k < i; k++) {
                 xx = x - xs[k];
                 yy = y - ys[k];

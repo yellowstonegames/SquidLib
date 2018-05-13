@@ -386,17 +386,33 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
 
     /**
      * Similar to {@link #determine(int, int)}, but can take bases that aren't prime and can sometimes produce a
-     * Halton-like sequence with better distance between points. The base is allowed to be any odd long, but the upper
-     * 21 bits won't ever be considered except for the sign bit (negative bases are allowed). The index can technically
-     * also be negative, but if index is 0 this will return 0, so it's advised to start at index 1 and go up. This
-     * returns a double between 0.0 inclusive and 1.0 exclusive. The best results so far found with this for a 2D point
-     * sequence use the bases 0xDE4DBEEF and 0x1337D00D (or in decimal, -565330193 and 322424845; note that 0xDE4DBEEF
-     * is a negative integer), with the same index used for both the x and y of a point. I have no idea why these
-     * gimmicky numbers work so well, with about 6x the minimum distance when comparing 65536 points generated with this
-     * method to the same number of points generated with {@link #determine(int, int)} using bases 2 and 3. Other, less
-     * gimmicky numbers seem to be similar to a typical Halton sequence made from two calls to different bases of
-     * determine(). This method should be slightly faster than {@link #determine2(int)}, and significantly faster than
-     * {@link #determine(int, int)}, especially when the index is large.
+     * Halton-like sequence with almost-as-good distance between points. The base is allowed to be any odd long, 
+     * (negative bases are allowed). The index can technically also be negative, and if this is given 0 it will not
+     * return any specific number (it will vary with the base). This returns a double between 0.0 inclusive and 1.0
+     * exclusive. Better results have been found with larger bases (points tend to be more spread out). It is never as
+     * good at spreading out 2D points as a 2,3 Halton sequence, at least for any bases tried so far.
+     * <br>
+     * Earlier versions of this method wound up only producing points on parallel lines in 2D, never placing points in
+     * between those lines. This sometimes formed a hex-like grid that, as hexagons do, has optimal packing properties,
+     * which made the optimal distance seem very good despite the points having a clear pattern. This can still
+     * sometimes be useful; when you want optimal distance and don't have a case where a clear pattern on a grid is an
+     * issue, it can have high performance. The code for the old way is small, though not simple:
+     * {@code ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53}, where base is an odd long and
+     * index is any int. It works best in one dimension.
+     * @param base any odd long
+     * @param index any int
+     * @return a double between 0.0 inclusive and 1.0 exclusive
+     */
+    public static double altDetermine(long base, final int index) { return (((base *= (Long.reverse(base ^ index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) >>> 11) ^ (base >>> 13) ^ (base >>> 16)) * 0x1p-53; }
+
+    /**
+     * A quasi-random number generator of doubles between 0.0 inclusive and 1.0 exclusive, but that has issues when it
+     * would be used like a Halton sequence. Only ideal in 1D, this produces well-separated points that are aligned to
+     * parallel hyperplanes when called with different bases and each base used as an axis for more than 1 dimension.
+     * This can produce points with more separation in 2D than a Halton sequence can, but not often. Two bases that do
+     * this when used together are the ints 0xDE4DBEEF and 0x1337D00D (or in decimal, -565330193 and 322424845; note
+     * that 0xDE4DBEEF is a negative integer); they were tried as a gimmick but nothing else turned out better. They do
+     * still produce points on parallel lines, and like all bases, never points between those lines.
      * <br>
      * Note, the source of this method is one line, and you may see benefits from copying that code into the call-site
      * with minor modifications. This returns
@@ -416,5 +432,5 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param index any int; if 0 this will return 0
      * @return a double between 0.0 inclusive and 1.0 exclusive
      */
-    public static double altDetermine(final long base, final int index) { return (((base * Integer.reverse(index)) << 21) & 0x1fffffffffffffL) * 0x1p-53; }
+    public static double planarDetermine(long base, final int index) { return ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53; }
 }

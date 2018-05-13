@@ -150,15 +150,16 @@ public class ShaderDemo extends ApplicationAdapter {
         // You should try this with both DefaultResources.getLeanFamily() and DefaultResources.getStretchableLeanFont()
         // if you intend to use both or are considering one over the other; the outline weights vary between fonts.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getLeanFamily());
+                DefaultResources.getCrispLeanFamily());
 
         // The main thing this demo is meant to show!
         // Here we assign a different ShaderProgram to the TextCellFactory we use, so that it draws outlines instead of
         // only fading the colors for chars out at their edges.
-        display.font.shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.outlineFragmentShader);
+        display.font.shader = new ShaderProgram(DefaultResources.vertexShader, DefaultResources.msdfOutlineFragmentShader);
         if (!display.font.shader.isCompiled()) {
-            Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + display.font.shader.getLog());
+            Gdx.app.error("shader", "Outline font shader compilation failed:\n" + display.font.shader.getLog());
         }
+        display.font.font().setUseIntegerPositions(true);
 
         languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
@@ -260,8 +261,14 @@ public class ShaderDemo extends ApplicationAdapter {
         colors = MapUtility.generateDefaultColorsFloat(decoDungeon, 0f, -0.05f, 0.35f);
         bgColors = MapUtility.generateDefaultBGColorsFloat(decoDungeon, 0f, 0f, -0.15f);
 
+        for (int x = 0; x < bigWidth; x++) {
+            for (int y = 0; y < bigHeight; y++) {
+                decoDungeon[x][y] = GDXMarkup.instance.styleChar(decoDungeon[x][y], true, false);
+            }
+        }
+        
         //places the player as an '@' at his position in orange.
-        pg = display.glyph('@', SColor.SAFETY_ORANGE.toEditedFloat(0, -0.05f, 0.35f), player.x, player.y);
+        pg = display.glyph(GDXMarkup.instance.styleChar('@', true, false), SColor.SAFETY_ORANGE.toEditedFloat(0, -0.05f, 0.35f), player.x, player.y);
 
         lang = new ArrayList<>(16);
         StringKit.wrap(lang, artOfWar, gridWidth - 2);
@@ -269,6 +276,10 @@ public class ShaderDemo extends ApplicationAdapter {
         StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
         translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
 
+        for (int i = 0; i < lang.size(); i++) {
+            lang.set(i, GDXMarkup.instance.styleString("[*]"+lang.get(i)).toString());
+        }
+        
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
         // (which is given an InputProcessor implementation and can handle multiple kinds of mouse move), or both.
@@ -470,10 +481,14 @@ public class ShaderDemo extends ApplicationAdapter {
         lang.remove(0);
         // if the last line reduced the number of lines we can show to less than what we try to show, we fill in more
         // lines using a randomly selected fake language to translate the same Art of War text.
+        int prevSize = lang.size();
         while (lang.size() < bonusHeight - 1)
         {
             StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
             translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
+        }
+        for (int i = prevSize; i < lang.size(); i++) {             
+            lang.set(i, GDXMarkup.instance.styleString("[*]"+lang.get(i)).toString());
         }
     }
 
@@ -487,7 +502,6 @@ public class ShaderDemo extends ApplicationAdapter {
         //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
         //display.clear();
 
-        float tm = (System.currentTimeMillis() & 0xffffffL) * 0.001f;
         for (int i = 0; i < bigWidth; i++) {
             for (int j = 0; j < bigHeight; j++) {
                 if(visible[i][j] > 0.0) {
@@ -522,7 +536,7 @@ public class ShaderDemo extends ApplicationAdapter {
         languageDisplay.clear(0);
         languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);
         for (int i = 0; i < 6; i++) {
-            languageDisplay.put(1, i, lang.get(i), SColor.DB_INK, languageDisplay.defaultBackground);
+            languageDisplay.put(1, i, lang.get(i), SColor.COLOR_WHEEL_PALETTE_PALE[player.hashCode() & 15], languageDisplay.defaultBackground);
         }
     }
     @Override
@@ -570,14 +584,14 @@ public class ShaderDemo extends ApplicationAdapter {
         else if(input.hasNext()) {
             input.next();
         }
-        languageDisplay.font.setSmoothingMultiplier(-languageDisplay.font.getSmoothingMultiplier());
+        //languageDisplay.font.setSmoothingMultiplier(-languageDisplay.font.getSmoothingMultiplier());
         // we need to do some work with viewports here so the language display (or game info messages in a real game)
         // will display in the same place even though the map view will move around. We have the language stuff set up
         // its viewport so it is in place and won't be altered by the map. Then we just tell the Stage for the language
         // texts to draw.
         languageStage.getViewport().apply(false);
         languageStage.draw();
-        display.font.setSmoothingMultiplier(-display.font.getSmoothingMultiplier());
+        //display.font.setSmoothingMultiplier(-display.font.getSmoothingMultiplier());
         // certain classes that use scene2d.ui widgets need to be told to act() to process input.
         stage.act();
         // we have the main stage set itself up after the language stage has already drawn.
