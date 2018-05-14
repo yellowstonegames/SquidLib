@@ -410,6 +410,101 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             }
         }
     }
+    /**
+     * Places the given char 2D array, if-non-null, with the given foreground colors in the first Color 2D array,
+     * starting at x=0, y=0, while also setting the background colors to match the second Color 2D array. If the
+     * bgColors argument is null, only affects foreground chars and colors. If the chars argument or the fgColors
+     * argument is null, only affects the background colors. Any positions where a Color in fgColors is null will not
+     * have a char placed (this can be used to restrict what is placed). This will filter each Color in the background
+     * and foreground if the color center this uses has a filter.
+     * @param chars Can be {@code null}, indicating that only colors must be put.
+     * @param fgColors the foreground Colors for the given chars
+     * @param bgColors the background Colors for the given chars
+     */
+    public void put(char[][] chars, Color[][] fgColors, Color[][] bgColors) {
+        if(chars == null || fgColors == null)
+        {
+            if(bgColors != null)
+            {
+                for (int i = 0; i < bgColors.length; i++) {
+                    if (bgColors[i] == null)
+                        continue;
+                    for (int j = 0; j < bgColors[i].length; j++) {
+                        backgrounds[i][j] = (bgColors[i][j] == null) ? 0f : scc.filter(bgColors[i][j]).toFloatBits();
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(bgColors == null)
+            {
+                for (int i = 0; i < chars.length && i < fgColors.length; i++) {
+                    if(chars[i] == null || fgColors[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length && j < fgColors[i].length; j++) {
+                        put(i, j, chars[i][j], fgColors[i][j], null);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < chars.length && i < bgColors.length && i < fgColors.length; i++) {
+                    if(bgColors[i] == null || chars[i] == null || fgColors[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length && j < bgColors[i].length && j < fgColors[i].length; j++) {                         
+                        put(i, j, chars[i][j], fgColors[i][j], bgColors[i][j]);
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Places the given char 2D array, if-non-null, with the given foreground colors in the first float 2D array,
+     * starting at x=0, y=0, while also setting the background colors to match the second float 2D array. If the
+     * bgColors argument is null, only affects foreground chars and colors. If the chars argument or the fgColors
+     * argument is null, only affects the background colors. Any positions where a float in fgColors is 0 will not
+     * have a char placed (this can be used to restrict what is placed). This will not filter any colors.
+     * @param chars Can be {@code null}, indicating that only colors must be put.
+     * @param fgColors the foreground colors for the given chars, as packed floats
+     * @param bgColors the background colors for the given chars, as packed floats
+     */
+    public void put(char[][] chars, float[][] fgColors, float[][] bgColors) {
+        if(chars == null || fgColors == null)
+        {
+            if(bgColors != null)
+            {
+                for (int i = 0; i < bgColors.length; i++) {
+                    if (bgColors[i] == null)
+                        continue;
+                    System.arraycopy(bgColors[i], 0, backgrounds[i], 0, bgColors[i].length);
+                }
+            }
+        }
+        else
+        {
+            if(bgColors == null)
+            {
+                for (int i = 0; i < chars.length && i < fgColors.length; i++) {
+                    if(chars[i] == null || fgColors[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length && j < fgColors[i].length; j++) {
+                        put(i, j, chars[i][j], fgColors[i][j], 0f);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < chars.length && i < bgColors.length && i < fgColors.length; i++) {
+                    if(bgColors[i] == null || chars[i] == null || fgColors[i] == null)
+                        continue;
+                    for (int j = 0; j < chars[i].length && j < bgColors[i].length && j < fgColors[i].length; j++) {
+                        put(i, j, chars[i][j], fgColors[i][j], bgColors[i][j]);
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * @return The number of cells that this panel spans, horizontally.
