@@ -27,17 +27,28 @@ public class Playground {
         return (Integer.reverse(s) >>> leading) / (double)(1 << (32 - leading));
     }
 
-    public static double determine3(final double base, final int index)
+    public static double planarDetermine(final long base, final int index)
     {
         //int s = ;//, highest = Integer.highestOneBit(s);
         //return Double.longBitsToDouble((Double.doubleToLongBits(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff))) & 0xfffffffffffffL) | 0x3FFFFFFFFFFFFFFFL);
-        return NumberTools.setExponent(Math.pow(1.6180339887498948482, base + (index+1 & 0x7fffffff)), 0x3ff) - 1.0;
+        
+//        return NumberTools.setExponent(Math.cbrt(NumberTools.setExponent((base * index >>> 11) + index, 0x402) + 1.0) - 2.0, 0x3FF) - 1.0; // 8.0 to 16.0
+        final double mixed = NumberTools.setExponent((base * index >>> 12 ^ index) * 1.6180339887498948482, 0x400); // 2.0 to 4.0
+        return NumberTools.setExponent(Math.pow((mixed + index), mixed * 2.6180339887498948482), 0x3ff) - 1.0;
     }
     // just puts outputs on lines, Marsaglia's Theorem style
     public static double determine4(final long base, final int index)
     {
         return ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53;
     }
+//    public static double planarDetermine(long base, final int index) {
+//        return (((base *= Long.reverse(base * index)) ^ (base >>> 5)) >>> 11) * 0x1p-53;
+//    }
+
+//    public static double planarDetermine(long base, final int index) {
+//        return (Long.reverse((base *= index) ^ Long.rotateLeft(base, 3) ^ Long.rotateLeft(base, 57)) >>> 11) * 0x1p-53; 
+//    }
+
     /*
      * Quintic-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).
      * Will smoothly transition toward start or end as a approaches 0 or 1, respectively.
@@ -103,19 +114,13 @@ public class Playground {
     public static double asin(double a) { return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) / (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527)); }
 
     private void go() {
-//        for (double i = Math.PI / 9.0; i <= 0x1p30; i *= Math.E) {
-//            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", i, NumberTools.sway((float)i), NumberTools.sway(i), swayRandomized(seed, i));
-//            System.out.printf("% 21.10f : % 3.10f  % 3.10f  % 3.10f\n", -i, NumberTools.sway((float)-i), NumberTools.sway(-i), swayRandomized(seed,-i));
+//        double r, a, b;
+//        for (int s = 1; s < 100; s++) {
+//            final int leading = Integer.numberOfLeadingZeros(s);
+//            if((r = Math.abs((a = (Integer.reverse(s) >>> leading) / (double) (1 << (32 - leading))) - (b = (Integer.reverse(s) >>> 1) * 0x1p-31))) > 0.001)
+//                System.out.println("UH OH on " + s + ": " + r);
+//            System.out.println(s + ": " + a + ", " + b);
 //        }
-
-//        for (double i = 0.0; i <= 1.0; i += 0x1p-8) {
-//            System.out.printf("% 3.10f : % 3.10f  % 3.10f\n", i,  Math.asin(i),  asin(i));
-//            System.out.printf("% 3.10f : % 3.10f  % 3.10f\n", -i, Math.asin(-i), asin(-i));
-//        }
-//        GreasedRegion remade = GreasedRegion.deserializeFromString(LZSPlus.decompress(
-//                ""
-//        ));
-//        System.out.println(remade.equals(earth));
 
 //        long seed = 0x1337DEADBEEFCAFEL;
 //        for (double i = 0.0; i <= 17.0; i += 0x1p-4) {
@@ -143,72 +148,50 @@ public class Playground {
 //        System.out.println("swayRandomized(Double.MIN_NORMAL)          :  " + NumberTools.swayRandomized(seed, Double.MIN_NORMAL));
 //        System.out.println("swayRandomized(Double.NaN)                 :  " + NumberTools.swayRandomized(seed, Double.NaN));
 
-
-
-
-//        for (int n = 100; n < 120; n++) {
-//            long i = ThrustAltRNG.determine(n);
-//            System.out.printf("%016X : % 3.10f  % 3.10f\n", i, NumberTools.formFloat((int) (i >>> 32)), NumberTools.formDouble(i));
-//            System.out.printf("%016X : % 3.10f  % 3.10f\n", ~i, NumberTools.formFloat((int)(~i >>> 32)), NumberTools.formDouble(~i));
-//        }
-
-//        TabbyNoise tabby = TabbyNoise.instance;
-//        double v;
-//        for(double x : new double[]{0.0, -1.0, 1.0, -10.0, 10.0, -100.0, 100.0, -1000.0, 1000.0, -10000.0, 10000.0}){
-//            for(double y : new double[]{0.0, -1.0, 1.0, -10.0, 10.0, -100.0, 100.0, -1000.0, 1000.0, -10000.0, 10000.0}){
-//                for(double z : new double[]{0.0, -1.0, 1.0, -10.0, 10.0, -100.0, 100.0, -1000.0, 1000.0, -10000.0, 10000.0}) {
-//                    for (double a = -0.75; a <= 0.75; a += 0.375) {
-//                        System.out.printf("x=%f,y=%f,z=%f,value=%f\n", x+a, y+a, z+a, tabby.getNoiseWithSeed(x+a, y+a, z+a, 1234567));
-//                    }
-//                }
-//            }
-//        }
-
-//        for (float f = 0f; f <= 1f; f += 0.0625f) {
-//            System.out.printf("%f: querp: %f, carp2: %f, cerp: %f\n", f, querp(-100, 100, f), carp2(f), cerp(f));
-//        }
-
-//        Mnemonic mn = new Mnemonic();
-//        String text;
-//        ThrustAlt32RNG rng = new ThrustAlt32RNG();
-//        for (int i = 0; i <= 50; i++) {
-//            int r = rng.nextInt();
-//            System.out.println(r + ": " + (text = mn.toWordMnemonic(r, true)) + " decodes to " + mn.fromWordMnemonic(text));
-//        }
         final int SIZE = 0x10000;
         double[] xs = new double[SIZE], ys = new double[SIZE];
         double closest = 999.0, x, y, xx, yy;
-        for (int i = 0; i < SIZE; i++) {
-//            xs[i] = x = VanDerCorputQRNG.altDetermine(0xDE4DBEEF, i + 10000000); // why do these work so well???
-//            ys[i] = y = VanDerCorputQRNG.altDetermine(0x1337D00D, i + 10000000); //  now we know, they were forming lines
-            xs[i] = x = VanDerCorputQRNG.altDetermine(335577775533L, i);
-            ys[i] = y = VanDerCorputQRNG.altDetermine(773355553377L, i);
-            for (int k = 0; k < i; k++) {
-                xx = x - xs[k];
-                yy = y - ys[k];
-                closest = Math.min(closest, xx * xx + yy * yy);
-            }
-        }
-        System.out.printf("Closest distance with integer-reversal(%d,%d): %.9f\n", 0xDE4DBEEF, 0x1337D00D, Math.sqrt(closest));
-
-//        TreeSet<Double> sorter = new TreeSet<>();
-//        for (int i = 0; i < 65536; i++) {
-//            sorter.add(determine4(3, i + 1));
+//        for (int i = 0; i < SIZE; i++) {
+////            xs[i] = x = planarDetermine(0xDE4DBEEF, i + 1); // why do these work so well???
+////            ys[i] = y = planarDetermine(0x1337D00D, i + 1); //  now we know, they were forming lines
+//            xs[i] = x = planarDetermine(57L, i);
+//            ys[i] = y = planarDetermine(73L, i);
+//            for (int k = 0; k < i; k++) {
+//                xx = x - xs[k];
+//                yy = y - ys[k];
+//                closest = Math.min(closest, xx * xx + yy * yy);
+//            }
 //        }
-//        System.out.println("Unique Elements : " + sorter.size());
-//        System.out.println("Lowest          : " + sorter.first());
-//        System.out.println("Highest         : " + sorter.last());
-        closest = 999.0;
-        for (int i = 0; i < SIZE; i++) {
-            xs[i] = x = VanDerCorputQRNG.determine2(i + 10000000);
-            ys[i] = y = VanDerCorputQRNG.determine(3, i + 10000000);
-            for (int k = 0; k < i; k++) {
-                xx = x - xs[k];
-                yy = y - ys[k];
-                closest = Math.min(closest, xx * xx + yy * yy);
+//        System.out.printf("Closest distance with integer-reversal(%d,%d): %.9f\n", 0xDE4DBEEF, 0x1337D00D, Math.sqrt(closest));
+        int s;
+        //Closest distance with Halton(2,13): 0.000871727
+        //Closest distance with Halton(2,39): 0.001147395
+        for(int p = 39; p < 64; p += 2) {
+            closest = 999.0;
+            for (int i = 0; i < SIZE; i++) {
+                s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
+                xs[i] = x = VanDerCorputQRNG.determine2(s);
+                ys[i] = y = VanDerCorputQRNG.determine(p, s);
+                for (int k = 0; k < i; k++) {
+                    xx = x - xs[k];
+                    yy = y - ys[k];
+                    closest = Math.min(closest, xx * xx + yy * yy);
+                }
             }
+            System.out.printf("Closest distance with Halton(2,%d): %.9f\n", p, Math.sqrt(closest));
         }
-        System.out.printf("Closest distance with Halton(2,3): %.9f\n", Math.sqrt(closest));
+//        closest = 999.0;
+//        for (int i = 0; i < SIZE; i++) {
+//            s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
+//            xs[i] = x = VanDerCorputQRNG.determine2(s);
+//            ys[i] = y = VanDerCorputQRNG.determine(3, s);
+//            for (int k = 0; k < i; k++) {
+//                xx = x - xs[k];
+//                yy = y - ys[k];
+//                closest = Math.min(closest, xx * xx + yy * yy);
+//            }
+//        }
+//        System.out.printf("Closest distance with Halton(2,3): %.9f\n", Math.sqrt(closest));
 
     }
 

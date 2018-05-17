@@ -103,7 +103,6 @@ public class DijkstraRiverTest {
             }
         }
         ArrayList<Coord> path;
-        Coord source;
         int size = riverStarts.size() >> 1;
         char[] letters = ArrayTools.letterSpan(size);
         for (int idx = 0; idx < size && idx < 26; idx++) {

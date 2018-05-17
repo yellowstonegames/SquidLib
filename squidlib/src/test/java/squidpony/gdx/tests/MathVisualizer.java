@@ -15,13 +15,11 @@ import squidpony.squidmath.*;
 
 import java.util.Arrays;
 
-import static squidpony.squidmath.NumberTools.intBitsToFloat;
-
 /**
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 0;
+    private int mode = 19;
     private int modes = 21;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -33,6 +31,16 @@ public class MathVisualizer extends ApplicationAdapter {
     private float twist(float input) {
         return (input = input * 0.5f + 1.0f) - (int)input;
     }
+//    public static double planarDetermine(long base, final int index) {
+//        return (((base = Long.reverse(base * index)) ^ base >>> 11) & 0x1fffffffffffffL) * 0x1p-53;
+//    }
+
+    public static double planarDetermine(long base, final int index) {
+        final double mixed = NumberTools.setExponent((base * index >>> 12 ^ index) * 1.6180339887498948482, 0x400); // 2.0 to 4.0
+        return NumberTools.setExponent(Math.pow((mixed + index), mixed * 2.6180339887498948482), 0x3ff) - 1.0;
+//        return ((Long.rotateLeft((base *= index), 31) ^ Long.rotateLeft(base, 17) ^ Long.rotateLeft(base, 42)) >>> 11) * 0x1p-53;
+    }
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -52,13 +60,6 @@ public class MathVisualizer extends ApplicationAdapter {
         };
         Gdx.input.setInputProcessor(input);
         update();
-    }
-    public static float formCurvedFloat(long start) {
-        return   (intBitsToFloat((int)((start = start * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) >>> 41) | 0x3F000000)
-                + intBitsToFloat((int)((start = start * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) >>> 41) | 0x3F000000)
-                + intBitsToFloat((int)((start = start * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) >>> 41) | 0x3F000000)
-                + intBitsToFloat((int)((start * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) >>> 41) | 0x3F000000)
-                - 3f);
     }
 
     public void update()
@@ -465,16 +466,18 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 19: {
-                Gdx.graphics.setTitle("Halton(2,3) sequence, first 1024 points");
-                for (int i = 0; i < 1024; i++) {
+                long size = (System.nanoTime() >>> 22 & 1023) + 1L;
+                Gdx.graphics.setTitle("Halton[striding 1](2,3) sequence, first " + size + " points");
+                for (int i = 0; i < size; i++) {
                     layers.put((int)(VanDerCorputQRNG.determine2(i) * 512), (int)(VanDerCorputQRNG.determine(3, i) * 512), SColor.FLOAT_BLACK);
                 }
             }
             break;
             case 20: {
-                Gdx.graphics.setTitle("Wat(-565330193,322424845) sequence, first 1024 points");
-                for (int i = 1; i < 1025; i++) {
-                    layers.put((int)(VanDerCorputQRNG.altDetermine(-565330193, i) * 512), (int)(VanDerCorputQRNG.altDetermine(0x1337D00D, i) * 512), SColor.FLOAT_BLACK);
+                long size = (System.nanoTime() >>> 22 & 1023) + 1L;
+                Gdx.graphics.setTitle("Halton[striding 1](2,39) sequence, first " + size + " points");
+                for (int i = 0; i < size; i++) {
+                    layers.put((int)(VanDerCorputQRNG.determine2(i) * 512), (int)(VanDerCorputQRNG.determine(39, i) * 512), SColor.FLOAT_BLACK);
                 }
             }
             break;
