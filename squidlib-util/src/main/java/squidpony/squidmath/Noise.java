@@ -1638,7 +1638,6 @@ public class Noise {
             x *= frequency;
             y *= frequency;
             for (int i = 0; i < octaves; ++i) {
-                seed = ThrustRNG.determine(seed);
                 double n = basis.getNoiseWithSeed(x, y, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
                 sum += amp * n;
@@ -1703,7 +1702,6 @@ public class Noise {
             y *= frequency;
             z *= frequency;
             for (int i = 0; i < octaves; ++i) {
-                seed = ThrustRNG.determine(seed);
                 double n = basis.getNoiseWithSeed(x, y, z, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
                 sum += amp * n;
@@ -1774,7 +1772,6 @@ public class Noise {
             z *= frequency;
             w *= frequency;
             for (int i = 0; i < octaves; ++i) {
-                //seed = ThrustRNG.determine(seed);
                 n = basis.getNoiseWithSeed(x, y, z, w, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);
                 sum += n * n * exp[i];
@@ -1851,7 +1848,6 @@ public class Noise {
             u *= frequency;
             v *= frequency;
             for (int i = 0; i < octaves; ++i) {
-                seed = ThrustRNG.determine(seed);
                 n = basis.getNoiseWithSeed(x, y, z,
                         w, u, v, (seed += 0x9E3779B97F4A7C15L));
                 n = 1.0 - Math.abs(n);

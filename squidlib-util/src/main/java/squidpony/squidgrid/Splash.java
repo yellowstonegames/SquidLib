@@ -1,6 +1,7 @@
 package squidpony.squidgrid;
 
 import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.zone.Zone;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.IRNG;
 
@@ -132,7 +133,7 @@ public class Splash {
 		}
 
 		if (0 < drunks)
-			inebriate(rng, result, DungeonUtility.border(result, null), drunks);
+			inebriate(rng, result, Zone.Helper.border(result, null), drunks);
 
 		return result;
 	}

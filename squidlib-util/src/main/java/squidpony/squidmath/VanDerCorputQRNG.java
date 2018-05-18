@@ -359,7 +359,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * desktop processors and won't risk losing precision on GWT.
      * <br>
      * Uses the same algorithm as {@link #determine2(int)} when base is 2, which should offer some speed improvement.
-     * The other bases use code from
+     * The other bases use code adapted from
      * <a href="https://blog.demofox.org/2017/05/29/when-random-numbers-are-too-random-low-discrepancy-sequences/">Alan Wolfe's blog</a>,
      * which turned out to be a lot faster than the previous way I had it implemented.
      * @param base a prime number to use as the base/radix of the van der Corput sequence

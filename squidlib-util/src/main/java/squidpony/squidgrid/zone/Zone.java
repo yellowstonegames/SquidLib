@@ -322,7 +322,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 		@Override
 		/* Convenience implementation, feel free to override. */
 		public Collection<Coord> getInternalBorder() {
-			return size() <= 1 ? getAll() : DungeonUtility.border(getAll(), null);
+			return size() <= 1 ? getAll() : Helper.border(getAll(), null);
 		}
 
 		@Override
@@ -330,7 +330,7 @@ public interface Zone extends Serializable, Iterable<Coord> {
 		public Collection<Coord> getExternalBorder() {
 			final int sz = size();
 			final List<Coord> result = new ArrayList<Coord>(sz);
-			final List<Coord> internalBorder = sz <= 1 ? getAll() : DungeonUtility.border(getAll(), null);
+			final List<Coord> internalBorder = sz <= 1 ? getAll() : Helper.border(getAll(), null);
 			final int ibsz = internalBorder.size();
 			for (int i = 0; i < ibsz; i++) {
 				final Coord b = internalBorder.get(i);
@@ -372,5 +372,39 @@ public interface Zone extends Serializable, Iterable<Coord> {
 			}
 			return max;
 		}
+	}
+	final class Helper
+	{
+		private static boolean hasANeighborNotIn(Coord c, Collection<Coord> others) {
+			for (Direction dir : Direction.OUTWARDS) {
+				if (!others.contains(c.translate(dir)))
+					return true;
+			}
+			return false;
+		}
+
+		/**
+		 * An easy way to get the Coord items in a List of Coord that are at the edge of the region, using 8-way
+		 * adjacency (a corner is adjacent to both orthogonal and diagonal neighbors). This is not the most
+		 * efficient way to do this; If you find you need to do more complicated manipulations of regions or are
+		 * calling this method often, consider using {@link squidpony.squidmath.GreasedRegion}, which should be
+		 * significantly faster and has better support for more intricate alterations on an area of Coords.
+		 * @param zone a List of Coord representing a region
+		 * @param buffer The list to fill if non null (i.e. if non-null, it is
+		 *               returned). If null, a fresh list will be allocated and
+		 *               returned.
+		 * @return Elements in {@code zone} that are neighbors to an element not in {@code zone}.
+		 */
+		public static List<Coord> border(final List<Coord> zone, /* @Nullable */ List<Coord> buffer) {
+			final int zsz = zone.size();
+			final List<Coord> border = buffer == null ? new ArrayList<Coord>(zsz / 4) : buffer;
+			for (int i = 0; i < zsz; i++) {
+				final Coord c = zone.get(i);
+				if (hasANeighborNotIn(c, zone))
+					border.add(c);
+			}
+			return border;
+		}
+
 	}
 }

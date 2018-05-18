@@ -2,7 +2,6 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.squidai.DijkstraMap;
-import squidpony.squidgrid.Direction;
 import squidpony.squidmath.*;
 
 import java.util.*;
@@ -1380,30 +1379,7 @@ public class DungeonUtility {
     public static <T> boolean inLevel(T[][] level, int x, int y) {
         return 0 <= x && x < level.length && 0 <= y && y < level[x].length;
     }
-
-    /**
-     * An easy way to get the Coord items in a List of Coord that are at the edge of the region, using 8-way
-     * adjacency (a corner is adjacent to both orthogonal and diagonal neighbors). This is not the most
-     * efficient way to do this; If you find you need to do more complicated manipulations of regions or are
-     * calling this method often, consider using {@link squidpony.squidmath.GreasedRegion}, which should be
-     * significantly faster and has better support for more intricate alterations on an area of Coords.
-     * @param zone a List of Coord representing a region
-     * @param buffer The list to fill if non null (i.e. if non-null, it is
-     *               returned). If null, a fresh list will be allocated and
-     *               returned.
-     * @return Elements in {@code zone} that are neighbors to an element not in {@code zone}.
-     */
-    public static List<Coord> border(final List<Coord> zone, /* @Nullable */ List<Coord> buffer) {
-        final int zsz = zone.size();
-        final List<Coord> border = buffer == null ? new ArrayList<Coord>(zsz / 4) : buffer;
-        for (int i = 0; i < zsz; i++) {
-            final Coord c = zone.get(i);
-            if (hasANeighborNotIn(c, zone))
-                border.add(c);
-        }
-        return border;
-    }
-
+    
     /**
      * Quickly counts the number of char elements in level that are equal to match.
      *
@@ -1461,10 +1437,57 @@ public class DungeonUtility {
         }
         return map;
     }
+    public static ArrayList<Coord> pointPath(int width, int height, IRNG rng) {
+        if (width <= 2 || height <= 2)
+            throw new IllegalArgumentException("width and height must be greater than 2");
+        CoordPacker.init();
+        long columnAlterations = (rng.nextLong() & 0xFFFFFFFFFFFFL);
+        float columnBase = width / (Long.bitCount(columnAlterations) + 48.0f);
+        long rowAlterations = (rng.nextLong() & 0xFFFFFFFFFFFFL);
+        float rowBase = height / (Long.bitCount(rowAlterations) + 48.0f);
+
+        int[] columns = new int[16], rows = new int[16];
+        int csum = 0, rsum = 0;
+        long b = 7;
+        for (int i = 0; i < 16; i++, b <<= 3) {
+            columns[i] = csum + (int) (columnBase * 0.5f * (3 + Long.bitCount(columnAlterations & b)));
+            csum += (int) (columnBase * (3 + Long.bitCount(columnAlterations & b)));
+            rows[i] = rsum + (int) (rowBase * 0.5f * (3 + Long.bitCount(rowAlterations & b)));
+            rsum += (int) (rowBase * (3 + Long.bitCount(rowAlterations & b)));
+        }
+        int cs = width - csum;
+        int rs = height - rsum;
+        int cs2 = cs, rs2 = rs, cs3 = cs, rs3 = rs;
+        for (int i = 0; i <= 7; i++) {
+            cs2 = cs2 * i / 7;
+            rs2 = rs2 * i / 7;
+            columns[i] -= cs2;
+            rows[i] -= rs2;
+        }
+        for (int i = 15; i >= 8; i--) {
+            cs3 = cs3 * (i - 8) >> 3;
+            rs3 = rs3 * (i - 8) >> 3;
+            columns[i] += cs3;
+            rows[i] += rs3;
+        }
+
+        ArrayList<Coord> points = new ArrayList<>(80);
+        int m = rng.nextInt(64);
+        Coord temp = CoordPacker.mooreToCoord(m), next;
+        temp = Coord.get(columns[temp.x], rows[temp.y]);
+        for (int i = 0, r; i < 256; r = rng.between(4, 12), i += r, m += r) {
+            next = CoordPacker.mooreToCoord(m);
+            next = Coord.get(columns[next.x], rows[next.y]);
+            points.addAll(OrthoLine.line(temp, next));
+            temp = next;
+        }
+        points.add(points.get(0));
+        return points;
+    }
 
     /**
      * Ensures a path exists in a rough ring around the map by first creating the path (using
-     * SerpentMapGenerator.pointPath with the given IRNG), then finding chars in blocking that are on that path and
+     * {@link #pointPath(int, int, IRNG)} with the given IRNG), then finding chars in blocking that are on that path and
      * replacing them with replacement. Modifies map in-place (!) and returns an ArrayList of Coord points that will
      * always be on the path.
      *
@@ -1479,7 +1502,7 @@ public class DungeonUtility {
         if (map == null || map.length <= 0 || blocking == null || blocking.length <= 0)
             return new ArrayList<Coord>(0);
         int width = map.length, height = map[0].length;
-        ArrayList<Coord> points = SerpentMapGenerator.pointPath(width, height, rng);
+        ArrayList<Coord> points = pointPath(width, height, rng);
         char[] blocks = new char[blocking.length];
         System.arraycopy(blocking, 0, blocks, 0, blocking.length);
         Arrays.sort(blocks);
@@ -1538,13 +1561,6 @@ public class DungeonUtility {
         return result;
     }
 
-    private static boolean hasANeighborNotIn(Coord c, Collection<Coord> others) {
-        for (Direction dir : Direction.OUTWARDS) {
-            if (!others.contains(c.translate(dir)))
-                return true;
-        }
-        return false;
-    }
     /**
      * Fills {@code array2d} with {@code value}; delegates to ArrayTools, and using ArrayTools is preferred.
      * @param array2d a 2D array that will be modified in-place
