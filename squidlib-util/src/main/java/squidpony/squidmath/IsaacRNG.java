@@ -89,10 +89,10 @@ public class IsaacRNG implements RandomnessSource {
             char[] chars = seed.toCharArray();
             int slen = seed.length(), i = 0;
             for (; i < 256 && i < slen; i++) {
-                results[i] = CrossHash.Wisp.hash64(chars, i, slen);
+                results[i] = CrossHash.hash64(chars, i, slen);
             }
             for (; i < 256; i++) {
-                results[i] = CrossHash.Wisp.hash64(results);
+                results[i] = CrossHash.hash64(results);
             }
             init(true);
         }
@@ -199,10 +199,10 @@ public class IsaacRNG implements RandomnessSource {
             char[] chars = seed.toCharArray();
             int slen = seed.length(), i = 0;
             for (; i < 256 && i < slen; i++) {
-                results[i] = CrossHash.Wisp.hash64(chars, i, slen);
+                results[i] = CrossHash.hash64(chars, i, slen);
             }
             for (; i < 256; i++) {
-                results[i] = CrossHash.Wisp.hash64(results);
+                results[i] = CrossHash.hash64(results);
             }
             init(true);
         }
@@ -348,18 +348,6 @@ public class IsaacRNG implements RandomnessSource {
         return Arrays.equals(mem, isaacRNG.mem);
     }
 
-    @Override
-    public int hashCode() {
-        return 31 *
-                (31 *
-                        (31 *
-                                (31 *
-                                        (31 * count + CrossHash.Wisp.hash(results)
-                                        ) + CrossHash.Wisp.hash(mem)
-                                ) + (int) (a ^ (a >>> 32))
-                        ) + (int) (b ^ (b >>> 32))
-                ) + (int) (c ^ (c >>> 32));
-    }
     @Override
     public String toString()
     {

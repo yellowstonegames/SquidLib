@@ -75,7 +75,7 @@ public class ProbabilityTable<T> implements Serializable {
      * @param seed the RNG seed as a String
      */
     public ProbabilityTable(String seed) {
-        this(CrossHash.Wisp.hash64(seed));
+        this(CrossHash.hash64(seed));
     }
 
     /**

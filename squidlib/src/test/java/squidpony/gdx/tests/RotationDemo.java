@@ -20,7 +20,6 @@ import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidgrid.mapping.MixedGenerator;
 import squidpony.squidgrid.mapping.SectionDungeonGenerator;
 import squidpony.squidgrid.mapping.SerpentMapGenerator;
 import squidpony.squidmath.*;
@@ -165,7 +164,7 @@ public class RotationDemo extends ApplicationAdapter {
 
         dungeonGen = new SectionDungeonGenerator(width, height, rng);
         dungeonGen.addWater(0, 25, 6);
-        dungeonGen.addGrass(MixedGenerator.CAVE_FLOOR, 20);
+        dungeonGen.addGrass(DungeonUtility.CAVE_FLOOR, 20);
         dungeonGen.addBoulders(0, 7);
         dungeonGen.addDoors(18, false);
         dungeonGen.addLake(20, '£', '¢');

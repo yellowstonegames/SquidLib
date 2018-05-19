@@ -454,21 +454,21 @@ public class ModularMapGenerator implements IDungeonGenerator {
         for (Coord c : line) {
             if (map[c.x][c.y] == '#') {
                 map[c.x][c.y] = '.';
-                environment[c.x][c.y] = MixedGenerator.CORRIDOR_FLOOR;
+                environment[c.x][c.y] = DungeonUtility.CORRIDOR_FLOOR;
                 temp.add(c);
             }
         }
         if (wl != null && map[wl.x][wl.y] == '#') {
             //if(line.isEmpty())
             map[wl.x][wl.y] = '.';
-            environment[wl.x][wl.y] = MixedGenerator.ROOM_FLOOR;
+            environment[wl.x][wl.y] = DungeonUtility.ROOM_FLOOR;
             //else
             //    map[wl.x][wl.y] = '+';
         }
         if (wr != null && map[wr.x][wr.y] == '#') {
             //if(line.isEmpty())
             map[wr.x][wr.y] = '.';
-            environment[wr.x][wr.y] = MixedGenerator.ROOM_FLOOR;
+            environment[wr.x][wr.y] = DungeonUtility.ROOM_FLOOR;
             //else
             //    map[wr.x][wr.y] = '+';
         }
@@ -521,14 +521,14 @@ public class ModularMapGenerator implements IDungeonGenerator {
         for (Coord c : line) {
             if (map[c.x][c.y] == '#') {
                 map[c.x][c.y] = '.';
-                environment[c.x][c.y] = MixedGenerator.CORRIDOR_FLOOR;
+                environment[c.x][c.y] = DungeonUtility.CORRIDOR_FLOOR;
                 temp.add(c);
             }
         }
         if (wt != null && map[wt.x][wt.y] == '#') {
             //if(line.isEmpty())
             map[wt.x][wt.y] = '.';
-            environment[wt.x][wt.y] = MixedGenerator.ROOM_FLOOR;
+            environment[wt.x][wt.y] = DungeonUtility.ROOM_FLOOR;
             //else
             //    map[wl.x][wl.y] = '+';
 
@@ -536,7 +536,7 @@ public class ModularMapGenerator implements IDungeonGenerator {
         if (wb != null && map[wb.x][wb.y] == '#') {
             //if(line.isEmpty())
             map[wb.x][wb.y] = '.';
-            environment[wb.x][wb.y] = MixedGenerator.ROOM_FLOOR;
+            environment[wb.x][wb.y] = DungeonUtility.ROOM_FLOOR;
             //else
             //    map[wb.x][wb.y] = '+';
         }

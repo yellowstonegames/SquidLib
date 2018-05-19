@@ -129,7 +129,7 @@ public class PacMazeGenerator {
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 maze[x][y] = map[x][y] ? '.' : '#';
-                env[x][y] = map[x][y] ? MixedGenerator.CORRIDOR_FLOOR : MixedGenerator.CORRIDOR_WALL;
+                env[x][y] = map[x][y] ? DungeonUtility.CORRIDOR_FLOOR : DungeonUtility.CORRIDOR_WALL;
             }
         }
 
@@ -138,7 +138,7 @@ public class PacMazeGenerator {
 
     public int[][] getEnvironment() {
         if (env == null)
-            return ArrayTools.fill(MixedGenerator.CORRIDOR_WALL, width, height);
+            return ArrayTools.fill(DungeonUtility.CORRIDOR_WALL, width, height);
         return env;
     }
 

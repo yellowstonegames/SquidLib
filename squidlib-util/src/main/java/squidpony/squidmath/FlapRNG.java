@@ -46,7 +46,7 @@ public class FlapRNG implements StatefulRandomness, Serializable {
     }
 
     public FlapRNG(final CharSequence seed) {
-        this(CrossHash.Wisp.hash64(seed));
+        this(CrossHash.hash64(seed));
     }
 
     public int state0, state1;

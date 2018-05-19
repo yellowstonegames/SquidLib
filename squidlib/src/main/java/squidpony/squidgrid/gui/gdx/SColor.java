@@ -12867,6 +12867,6 @@ public class SColor extends Color implements Serializable {
 
     @Override
     public int hashCode() {
-        return (155 + CrossHash.Wisp.hash(name)) * 31 + toIntBits();
+        return (155 + CrossHash.hash(name)) * 31 ^ toIntBits();
     }
 }

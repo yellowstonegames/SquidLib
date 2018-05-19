@@ -1,7 +1,7 @@
 package squidpony;
 
 import squidpony.squidmath.CrossHash.Mist;
-import squidpony.squidmath.CrossHash.Wisp;
+import squidpony.squidmath.CrossHash;
 
 /**
  * Tools for garbling Strings (making them appear to be gibberish) and degarbling earlier outputs to get the original
@@ -41,7 +41,7 @@ public final class Garbler {
 //     */
 //    public static String garble(final String text, final String keyText)
 //    {
-//        return garble(text, PermutedRNG.determine(CrossHash.Wisp.hash64(keyText) ^ 0x9E3779B97F4A7C15L));
+//        return garble(text, PermutedRNG.determine(CrossHash.hash64(keyText) ^ 0x9E3779B97F4A7C15L));
 //
 //    }
 //    /**
@@ -87,7 +87,7 @@ public final class Garbler {
 //     */
 //    public static String degarble(final String garbled, final String keyText)
 //    {
-//        return degarble(garbled, PermutedRNG.determine(CrossHash.Wisp.hash64(keyText) ^ 0x9E3779B97F4A7C15L));
+//        return degarble(garbled, PermutedRNG.determine(CrossHash.hash64(keyText) ^ 0x9E3779B97F4A7C15L));
 //    }
 //
 //    /**
@@ -152,7 +152,7 @@ public final class Garbler {
      */
     public static String garble(final String text, final String keyText)
     {
-        return garble(text,Wisp.hash(keyText) ^ 0x7F4A7C15);
+        return garble(text,CrossHash.hash(keyText) ^ 0x7F4A7C15);
     }
 
     /**
@@ -199,7 +199,7 @@ public final class Garbler {
      */
     public static String degarble(final String garbled, final String keyText)
     {
-        return degarble(garbled,Wisp.hash(keyText) ^ 0x7F4A7C15);
+        return degarble(garbled,CrossHash.hash(keyText) ^ 0x7F4A7C15);
     }
 
     /**

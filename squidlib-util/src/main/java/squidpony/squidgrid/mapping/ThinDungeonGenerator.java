@@ -152,16 +152,16 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 dHigh = d2[x + 1][y];
                 tempShapes = wallShapes;
                 switch (eLow) {
-                    case MixedGenerator.CAVE_FLOOR:
+                    case DungeonUtility.CAVE_FLOOR:
                         tempShapes >>= 4;
-                    case MixedGenerator.CORRIDOR_FLOOR:
+                    case DungeonUtility.CORRIDOR_FLOOR:
                         tempShapes >>= 4;
                         break;
                     default:
                         switch (eHigh) {
-                            case MixedGenerator.CAVE_FLOOR:
+                            case DungeonUtility.CAVE_FLOOR:
                                 tempShapes >>= 4;
-                            case MixedGenerator.CORRIDOR_FLOOR:
+                            case DungeonUtility.CORRIDOR_FLOOR:
                                 tempShapes >>= 4;
                         }
                 }
@@ -176,7 +176,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 d2[x - 1][y + 1] = '#';
                                 e2[x - 1][y - 1] = 777;
                                 e2[x - 1][y + 1] = 777;
-                                if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                                if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                     d2[x][y] = 6;
                                 continue CELL_WISE;
                             } /*else if ((dHigh == '+') && (e2[x+1][y - 2] & 1) + (e2[x+1][y - 2] & 1) == 0) {
@@ -233,13 +233,13 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         if (dLow == '+') {
                             d2[x - 1][y] = dHigh;
                             e2[x - 1][y] = eHigh;
-                            if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                            if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                 d2[x][y] = 6;
                             continue CELL_WISE;
                         } else if (dHigh == '+') {
                             d2[x + 1][y] = dLow;
                             e2[x + 1][y] = eLow;
-                            if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                            if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                 d2[x][y] = 6;
                             continue CELL_WISE;
                         }
@@ -249,23 +249,23 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 switch (eLow) {
                     case 777:
                         d2[x][y] = '#';
-                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                        e2[x][y] = DungeonUtility.UNTOUCHED;
                         continue CELL_WISE;
-                    case MixedGenerator.CAVE_WALL:
-                    case MixedGenerator.CORRIDOR_WALL:
-                    case MixedGenerator.ROOM_WALL:
-                    case MixedGenerator.UNTOUCHED:
+                    case DungeonUtility.CAVE_WALL:
+                    case DungeonUtility.CORRIDOR_WALL:
+                    case DungeonUtility.ROOM_WALL:
+                    case DungeonUtility.UNTOUCHED:
                         switch (eHigh) {
-                            case MixedGenerator.CAVE_WALL:
-                            case MixedGenerator.CORRIDOR_WALL:
-                            case MixedGenerator.ROOM_WALL:
-                            case MixedGenerator.UNTOUCHED:
-                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                            case DungeonUtility.CAVE_WALL:
+                            case DungeonUtility.CORRIDOR_WALL:
+                            case DungeonUtility.ROOM_WALL:
+                            case DungeonUtility.UNTOUCHED:
+                                e2[x][y] = DungeonUtility.UNTOUCHED;
                                 d2[x][y] = dLow;
                                 break;
-                            case MixedGenerator.CAVE_FLOOR:
+                            case DungeonUtility.CAVE_FLOOR:
                                 tempShapes >>= 4;
-                            case MixedGenerator.CORRIDOR_FLOOR:
+                            case DungeonUtility.CORRIDOR_FLOOR:
                                 tempShapes >>= 4;
                             default:
                                 switch (tempShapes & 0xF) {
@@ -274,13 +274,13 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
-                                            e2[x][y] = MixedGenerator.UNTOUCHED;
+                                            e2[x][y] = DungeonUtility.UNTOUCHED;
                                             d2[x][y] = dLow;
                                         }
                                         break;
                                     case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
-                                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                                        e2[x][y] = DungeonUtility.UNTOUCHED;
                                         d2[x][y] = dLow;
                                         break;
 
@@ -300,29 +300,29 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 break;
                         }
                         break;
-                    case MixedGenerator.CAVE_FLOOR:
+                    case DungeonUtility.CAVE_FLOOR:
                         tempShapes >>= 4;
-                    case MixedGenerator.CORRIDOR_FLOOR:
+                    case DungeonUtility.CORRIDOR_FLOOR:
                         tempShapes >>= 4;
                     default:
                         switch (eHigh) {
-                            case MixedGenerator.CAVE_WALL:
-                            case MixedGenerator.CORRIDOR_WALL:
-                            case MixedGenerator.ROOM_WALL:
-                            case MixedGenerator.UNTOUCHED:
+                            case DungeonUtility.CAVE_WALL:
+                            case DungeonUtility.CORRIDOR_WALL:
+                            case DungeonUtility.ROOM_WALL:
+                            case DungeonUtility.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
                                         if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {
-                                            e2[x][y] = MixedGenerator.UNTOUCHED;
+                                            e2[x][y] = DungeonUtility.UNTOUCHED;
                                             d2[x][y] = dHigh;
                                         }
                                         break;
                                     case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
-                                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                                        e2[x][y] = DungeonUtility.UNTOUCHED;
                                         d2[x][y] = dHigh;
                                         break;
 
@@ -341,8 +341,8 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         break;
                                 }
                                 break;
-                            case MixedGenerator.CAVE_FLOOR:
-                                e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                            case DungeonUtility.CAVE_FLOOR:
+                                e2[x][y] = DungeonUtility.CAVE_FLOOR;
                                 d2[x][y] = dHigh;
                                 break;
                             default:
@@ -352,7 +352,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         }
                         break;
                 }
-                if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0) {
+                if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0) {
                     d2[x][y] = 6;
                 }
             }
@@ -366,16 +366,16 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 dHigh = d2[x][y + 1];
                 tempShapes = wallShapes;
                 switch (eLow) {
-                    case MixedGenerator.CAVE_FLOOR:
+                    case DungeonUtility.CAVE_FLOOR:
                         tempShapes >>= 4;
-                    case MixedGenerator.CORRIDOR_FLOOR:
+                    case DungeonUtility.CORRIDOR_FLOOR:
                         tempShapes >>= 4;
                         break;
                     default:
                         switch (eHigh) {
-                            case MixedGenerator.CAVE_FLOOR:
+                            case DungeonUtility.CAVE_FLOOR:
                                 tempShapes >>= 4;
-                            case MixedGenerator.CORRIDOR_FLOOR:
+                            case DungeonUtility.CORRIDOR_FLOOR:
                                 tempShapes >>= 4;
                         }
                 }
@@ -383,7 +383,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                     case ROOM_WALL_NORMAL:
                         if (x > 0 && x < nw - 1) {
                             if (d2[x - 1][y - 1] == '+' || d2[x - 1][y + 1] == '+' || d2[x + 1][y - 1] == '+' || d2[x + 1][y + 1] == '+') {
-                                if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                                if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                     d2[x][y] = 6;
                                 continue CELL_WISE;
                             } else if ((dLow == '/') && (e2[x - 2][y - 1] & 1) + (e2[x - 2][y + 1] & 1) == 0) {
@@ -391,9 +391,9 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 e2[x][y] = eHigh;
                                 d2[x - 1][y - 1] = '#';
                                 d2[x + 1][y - 1] = '#';
-                                e2[x - 1][y - 1] = MixedGenerator.UNTOUCHED;
-                                e2[x + 1][y - 1] = MixedGenerator.UNTOUCHED;
-                                if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                                e2[x - 1][y - 1] = DungeonUtility.UNTOUCHED;
+                                e2[x + 1][y - 1] = DungeonUtility.UNTOUCHED;
+                                if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                     d2[x][y] = 6;
                                 continue CELL_WISE;
                             } else if ((dHigh == '/') && (e2[x - 2][y + 1] & 1) + (e2[x + 2][y + 1] & 1) == 0) {
@@ -401,9 +401,9 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 e2[x][y] = eLow;
                                 d2[x - 1][y + 1] = '#';
                                 d2[x + 1][y + 1] = '#';
-                                e2[x - 1][y + 1] = MixedGenerator.UNTOUCHED;
-                                e2[x + 1][y + 1] = MixedGenerator.UNTOUCHED;
-                                if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                                e2[x - 1][y + 1] = DungeonUtility.UNTOUCHED;
+                                e2[x + 1][y + 1] = DungeonUtility.UNTOUCHED;
+                                if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                     d2[x][y] = 6;
                                 continue CELL_WISE;
                             }
@@ -451,13 +451,13 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         if (dLow == '/') {
                             d2[x][y - 1] = dHigh;
                             e2[x][y - 1] = eHigh;
-                            if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                            if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                 d2[x][y] = 6;
                             continue CELL_WISE;
                         } else if (dHigh == '/') {
                             d2[x][y + 1] = dLow;
                             e2[x][y + 1] = eLow;
-                            if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0)
+                            if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0)
                                 d2[x][y] = 6;
                             continue CELL_WISE;
                         }
@@ -468,23 +468,23 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                 switch (eLow) {
                     case 777:
                         d2[x][y] = '#';
-                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                        e2[x][y] = DungeonUtility.UNTOUCHED;
                         break;
-                    case MixedGenerator.CAVE_WALL:
-                    case MixedGenerator.CORRIDOR_WALL:
-                    case MixedGenerator.ROOM_WALL:
-                    case MixedGenerator.UNTOUCHED:
+                    case DungeonUtility.CAVE_WALL:
+                    case DungeonUtility.CORRIDOR_WALL:
+                    case DungeonUtility.ROOM_WALL:
+                    case DungeonUtility.UNTOUCHED:
                         switch (eHigh) {
-                            case MixedGenerator.CAVE_WALL:
-                            case MixedGenerator.CORRIDOR_WALL:
-                            case MixedGenerator.ROOM_WALL:
-                            case MixedGenerator.UNTOUCHED:
-                                e2[x][y] = MixedGenerator.UNTOUCHED;
+                            case DungeonUtility.CAVE_WALL:
+                            case DungeonUtility.CORRIDOR_WALL:
+                            case DungeonUtility.ROOM_WALL:
+                            case DungeonUtility.UNTOUCHED:
+                                e2[x][y] = DungeonUtility.UNTOUCHED;
                                 d2[x][y] = dLow;
                                 break;
-                            case MixedGenerator.CAVE_FLOOR:
+                            case DungeonUtility.CAVE_FLOOR:
                                 tempShapes >>= 4;
-                            case MixedGenerator.CORRIDOR_FLOOR:
+                            case DungeonUtility.CORRIDOR_FLOOR:
                                 tempShapes >>= 4;
                             default:
                                 switch (tempShapes & 0xF) {
@@ -493,13 +493,13 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                             e2[x][y] = eHigh;
                                             d2[x][y] = dHigh;
                                         } else {
-                                            e2[x][y] = MixedGenerator.UNTOUCHED;
+                                            e2[x][y] = DungeonUtility.UNTOUCHED;
                                             d2[x][y] = dLow;
                                         }
                                         break;
                                     case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
-                                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                                        e2[x][y] = DungeonUtility.UNTOUCHED;
                                         d2[x][y] = dLow;
                                         break;
 
@@ -519,29 +519,29 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                 break;
                         }
                         break;
-                    case MixedGenerator.CAVE_FLOOR:
+                    case DungeonUtility.CAVE_FLOOR:
                         tempShapes >>= 4;
-                    case MixedGenerator.CORRIDOR_FLOOR:
+                    case DungeonUtility.CORRIDOR_FLOOR:
                         tempShapes >>= 4;
                     default:
                         switch (eHigh) {
-                            case MixedGenerator.CAVE_WALL:
-                            case MixedGenerator.CORRIDOR_WALL:
-                            case MixedGenerator.ROOM_WALL:
-                            case MixedGenerator.UNTOUCHED:
+                            case DungeonUtility.CAVE_WALL:
+                            case DungeonUtility.CORRIDOR_WALL:
+                            case DungeonUtility.ROOM_WALL:
+                            case DungeonUtility.UNTOUCHED:
                                 switch (tempShapes & 0xF) {
                                     case ROOM_WALL_CHAOTIC:
                                         if (PerlinNoise.noise(x * 6, y * 6) > -0.2) {
                                             e2[x][y] = eLow;
                                             d2[x][y] = dLow;
                                         } else {
-                                            e2[x][y] = MixedGenerator.UNTOUCHED;
+                                            e2[x][y] = DungeonUtility.UNTOUCHED;
                                             d2[x][y] = dHigh;
                                         }
                                         break;
                                     case ROOM_WALL_RETRACT:
                                     case ROOM_WALL_EXPAND:
-                                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                                        e2[x][y] = DungeonUtility.UNTOUCHED;
                                         d2[x][y] = dHigh;
                                         break;
 
@@ -559,8 +559,8 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         break;
                                 }
                                 break;
-                            case MixedGenerator.CAVE_FLOOR:
-                                e2[x][y] = MixedGenerator.CAVE_FLOOR;
+                            case DungeonUtility.CAVE_FLOOR:
+                                e2[x][y] = DungeonUtility.CAVE_FLOOR;
                                 d2[x][y] = dHigh;
                                 break;
                             default:
@@ -571,7 +571,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         break;
                 }
 
-                if (e2[x][y] != MixedGenerator.UNTOUCHED || d2[x][y] == 0) {
+                if (e2[x][y] != DungeonUtility.UNTOUCHED || d2[x][y] == 0) {
                     d2[x][y] = 6;
                 }
             }
@@ -588,7 +588,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         currentDun = d2[x - offset][y];
                         if (currentDun == '+' || currentDun == '/') {
                             switch (currentEnv) {
-                                case MixedGenerator.ROOM_FLOOR:
+                                case DungeonUtility.ROOM_FLOOR:
                                     if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
                                         e2[x + 2 - offset][y] = currentEnv;
                                         d2[x + 2 - offset][y] = currentDun;
@@ -598,7 +598,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         d2[x - offset][y] = d2[x - 1 - offset][y];
                                     }
                                     break;
-                                case MixedGenerator.CAVE_FLOOR:
+                                case DungeonUtility.CAVE_FLOOR:
                                     if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
 
 //                                    e2[x][y] = (currentDun == '+' || currentDun == '/') ? MixedGenerator.UNTOUCHED : currentEnv;
@@ -613,7 +613,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         d2[x - offset][y] = d2[x - 1 - offset][y];
                                     }
                                     break;
-                                case MixedGenerator.CORRIDOR_FLOOR:
+                                case DungeonUtility.CORRIDOR_FLOOR:
                                     if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
                                         e2[x + 2 - offset][y] = currentEnv;
                                         d2[x + 2 - offset][y] = currentDun;
@@ -627,7 +627,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                             }
                         } else {
                             switch (currentEnv) {
-                                case MixedGenerator.ROOM_FLOOR:
+                                case DungeonUtility.ROOM_FLOOR:
                                     if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
                                         e2[x][y] = currentEnv;
                                         d2[x][y] = currentDun;
@@ -636,7 +636,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
 
                                     }
                                     break;
-                                case MixedGenerator.CAVE_FLOOR:
+                                case DungeonUtility.CAVE_FLOOR:
                                     if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
 
 //                                    e2[x][y] = (currentDun == '+' || currentDun == '/') ? MixedGenerator.UNTOUCHED : currentEnv;
@@ -651,7 +651,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
 
                                     }
                                     break;
-                                case MixedGenerator.CORRIDOR_FLOOR:
+                                case DungeonUtility.CORRIDOR_FLOOR:
                                     if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
                                         e2[x][y] = currentEnv;
                                         d2[x][y] = currentDun;
@@ -702,7 +702,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                         currentDun = d2[x][y - offset];
                         if (currentDun == '+' || currentDun == '/') {
                             switch (currentEnv) {
-                                case MixedGenerator.ROOM_FLOOR:
+                                case DungeonUtility.ROOM_FLOOR:
                                     if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
                                         e2[x][y + 2 - offset] = currentEnv;
                                         d2[x][y + 2 - offset] = currentDun;
@@ -712,7 +712,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         d2[x][y - offset] = d2[x][y - 1 - offset];
                                     }
                                     break;
-                                case MixedGenerator.CAVE_FLOOR:
+                                case DungeonUtility.CAVE_FLOOR:
                                     if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
                                         e2[x][y + 2 - offset] = currentEnv;
                                         d2[x][y + 2 - offset] = currentDun;
@@ -722,7 +722,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         d2[x][y - offset] = d2[x][y - 1 - offset];
                                     }
                                     break;
-                                case MixedGenerator.CORRIDOR_FLOOR:
+                                case DungeonUtility.CORRIDOR_FLOOR:
                                     if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
                                         e2[x][y + 2 - offset] = currentEnv;
                                         d2[x][y + 2 - offset] = currentDun;
@@ -736,7 +736,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
 
                         } else {
                             switch (currentEnv) {
-                                case MixedGenerator.ROOM_FLOOR:
+                                case DungeonUtility.ROOM_FLOOR:
                                     if ((wallShapes & ROOM_WALL_RETRACT) != 0) {
                                         e2[x][y] = currentEnv;
                                         d2[x][y] = currentDun;
@@ -744,7 +744,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         d2[x][y - 1] = 6;
                                     }
                                     break;
-                                case MixedGenerator.CAVE_FLOOR:
+                                case DungeonUtility.CAVE_FLOOR:
                                     if ((wallShapes & CAVE_WALL_RETRACT) != 0) {
                                         e2[x][y] = currentEnv;
                                         d2[x][y] = currentDun;
@@ -752,7 +752,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
                                         d2[x][y - 1] = 6;
                                     }
                                     break;
-                                case MixedGenerator.CORRIDOR_FLOOR:
+                                case DungeonUtility.CORRIDOR_FLOOR:
                                     if ((wallShapes & CORRIDOR_WALL_RETRACT) != 0) {
                                         e2[x][y] = currentEnv;
                                         d2[x][y] = currentDun;
@@ -799,7 +799,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
         for (int x = 0; x < nw; x++) {
             for (int y = 0; y < nh; y++) {
                 if (d2[x][y] == '\u0005') {
-                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                    e2[x][y] = DungeonUtility.UNTOUCHED;
                     d2[x][y] = '#';
                 }
             }
@@ -808,19 +808,19 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
         for (int x = 1; x < nw - 1; x += 2) {
             for (int y = 1; y < nh - 1; y += 2) {
                 if (d2[x - 1][y] == '#' && d2[x + 1][y] == '#') {
-                    e2[x][y] = MixedGenerator.UNTOUCHED;
+                    e2[x][y] = DungeonUtility.UNTOUCHED;
                     d2[x][y] = '#';
                 }
             }
         }
         for (int x = 1; x < nw - 1; x++) {
             for (int y = 1; y < nh - 1; y += 2) {
-                if (e2[x][y - 1] == MixedGenerator.UNTOUCHED || e2[x][y + 1] == MixedGenerator.UNTOUCHED) {
-                    if (e2[x - 1][y] == MixedGenerator.UNTOUCHED) {
-                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                if (e2[x][y - 1] == DungeonUtility.UNTOUCHED || e2[x][y + 1] == DungeonUtility.UNTOUCHED) {
+                    if (e2[x - 1][y] == DungeonUtility.UNTOUCHED) {
+                        e2[x][y] = DungeonUtility.UNTOUCHED;
                         d2[x][y] = '#';
-                    } else if (e2[x + 1][y] == MixedGenerator.UNTOUCHED) {
-                        e2[x][y] = MixedGenerator.UNTOUCHED;
+                    } else if (e2[x + 1][y] == DungeonUtility.UNTOUCHED) {
+                        e2[x][y] = DungeonUtility.UNTOUCHED;
                         d2[x][y] = '#';
                     }
                 }

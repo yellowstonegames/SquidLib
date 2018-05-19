@@ -78,7 +78,7 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
         }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                environment[x][y] = (map[x][y] == '.') ? MixedGenerator.ROOM_FLOOR : MixedGenerator.ROOM_WALL;
+                environment[x][y] = (map[x][y] == '.') ? DungeonUtility.ROOM_FLOOR : DungeonUtility.ROOM_WALL;
             }
         }
 //        tempPacked = CoordPacker.intersectPacked(
@@ -89,7 +89,7 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
             if (((map[hole.x - 1][hole.y] == '.' && map[hole.x + 1][hole.y] == '.') ||
                             (map[hole.x][hole.y - 1] == '.' && map[hole.x][hole.y + 1] == '.'))) {
                 map[hole.x][hole.y] = '.';
-                environment[hole.x][hole.y] = MixedGenerator.CORRIDOR_FLOOR;
+                environment[hole.x][hole.y] = DungeonUtility.CORRIDOR_FLOOR;
             }
         }
 
@@ -121,14 +121,14 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
         for (int i = 0; i < width; i++) {
             map[i][0] = '#';
             map[i][upperY] = '#';
-            environment[i][0] = MixedGenerator.UNTOUCHED;
-            environment[i][upperY] = MixedGenerator.UNTOUCHED;
+            environment[i][0] = DungeonUtility.UNTOUCHED;
+            environment[i][upperY] = DungeonUtility.UNTOUCHED;
         }
         for (int i = 0; i < height; i++) {
             map[0][i] = '#';
             map[upperX][i] = '#';
-            environment[0][i] = MixedGenerator.UNTOUCHED;
-            environment[upperX][i] = MixedGenerator.UNTOUCHED;
+            environment[0][i] = DungeonUtility.UNTOUCHED;
+            environment[upperX][i] = DungeonUtility.UNTOUCHED;
         }
 
         return map;

@@ -45,7 +45,7 @@ public class LFSR implements StatefulRandomness, Serializable {
 
     public LFSR(final CharSequence seed)
     {
-        this(CrossHash.Wisp.hash64(seed));
+        this(CrossHash.hash64(seed));
     }
 
 

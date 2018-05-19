@@ -4,8 +4,7 @@ import squidpony.annotation.Beta;
 
 /**
  * A base class for cell level features common to roguelike dungeons.
- *
- *
+ * 
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  */
 @Beta
@@ -32,37 +31,33 @@ public class Terrain {
      * be for display purposes and should not be used to check for equality
      * since multiple different terrains may return the same symbol.
      *
-     * @return
+     * @return the representation of this terrain as a char
      */
     public char symbol() {
         return symbol;
     }
 
     /**
-     * Returns the color for this terrain.
+     * Returns the color for this terrain as an index into some unspecified palette.
      *
-     * @return
+     * @return the color for this terrain as an index into some unspecified palette
      */
     public int colorIndex() {
         return color;
     }
 
     @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 83 * hash + symbol;
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Terrain terrain = (Terrain) o;
+        
+        return symbol == terrain.symbol && color == terrain.color;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Terrain other = (Terrain) obj;
-        return symbol == other.symbol;
+    public int hashCode() {
+        return  31 * (int) symbol + color;
     }
 }

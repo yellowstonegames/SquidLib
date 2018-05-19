@@ -843,7 +843,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
             for (int j = 0; j < height; j++) {
                 if(dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
-                    env2[i][j] = MixedGenerator.UNTOUCHED;
+                    env2[i][j] = DungeonUtility.UNTOUCHED;
                 }
                 else if(dijkstra.gradientMap[i][j] > maxDijkstra) {
                     maxDijkstra = dijkstra.gradientMap[i][j];
@@ -851,7 +851,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
                 if (map[i][j] == '\t') {
                     map[i][j] = '.';
                     if((env2[i][j] & 1) == 0) // environment is a wall here
-                        env2[i][j] = MixedGenerator.CORRIDOR_FLOOR;
+                        env2[i][j] = DungeonUtility.CORRIDOR_FLOOR;
                 }
             }
         }
@@ -904,7 +904,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
             for (int j = 0; j < height; j++) {
                 if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {
                     map[i][j] = '#';
-                    env2[i][j] = MixedGenerator.UNTOUCHED;
+                    env2[i][j] = DungeonUtility.UNTOUCHED;
                 }
             }
         }
@@ -934,14 +934,14 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
                     dungeon[x][y] = roomMap[x][y];
                 else if (lakesAndMazes[1][x][y] != '#') {
                     dungeon[x][y] = lakesAndMazes[1][x][y];
-                    finder.environment[x][y] = MixedGenerator.CORRIDOR_FLOOR;
+                    finder.environment[x][y] = DungeonUtility.CORRIDOR_FLOOR;
                 } else if (corridorMap[x][y] != '#')
                     dungeon[x][y] = corridorMap[x][y];
                 else if (caveMap[x][y] != '#')
                     dungeon[x][y] = caveMap[x][y];
                 else if (lakesAndMazes[0][x][y] != '#') {
                     dungeon[x][y] = lakesAndMazes[0][x][y];
-                    finder.environment[x][y] = MixedGenerator.CAVE_FLOOR;
+                    finder.environment[x][y] = DungeonUtility.CAVE_FLOOR;
                 }
             }
         }

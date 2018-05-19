@@ -36,30 +36,44 @@ public class MixedGenerator implements IDungeonGenerator {
 
     /**
      * Constant for environment tiles that are not near a cave, room, or corridor. Value is 0.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     * Present here for compatibility; you should prefer {@link DungeonUtility#UNTOUCHED}.
      */
     public static final int UNTOUCHED = 0;
     /**
      * Constant for environment tiles that are floors for a room. Value is 1.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     * Present here for compatibility; you should prefer {@link DungeonUtility#ROOM_FLOOR}.
      */
     public static final int ROOM_FLOOR = 1;
     /**
      * Constant for environment tiles that are walls near a room. Value is 2.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     * Present here for compatibility; you should prefer {@link DungeonUtility#ROOM_WALL}.
      */
     public static final int ROOM_WALL = 2;
     /**
      * Constant for environment tiles that are floors for a cave. Value is 3.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     * Present here for compatibility; you should prefer {@link DungeonUtility#CAVE_FLOOR}.
      */
     public static final int CAVE_FLOOR = 3;
     /**
      * Constant for environment tiles that are walls near a cave. Value is 4.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     * Present here for compatibility; you should prefer {@link DungeonUtility#CAVE_WALL}.
      */
     public static final int CAVE_WALL = 4;
     /**
      * Constant for environment tiles that are floors for a corridor. Value is 5.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     * Present here for compatibility; you should prefer {@link DungeonUtility#CORRIDOR_FLOOR}.
      */
     public static final int CORRIDOR_FLOOR = 5;
     /**
      * Constant for environment tiles that are walls near a corridor. Value is 6.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     * Present here for compatibility; you should prefer {@link DungeonUtility#CORRIDOR_WALL}.
      */
     public static final int CORRIDOR_WALL = 6;
 
@@ -171,7 +185,7 @@ public class MixedGenerator implements IDungeonGenerator {
         walled = new boolean[width][height];
         fixedRooms = new boolean[width][height];
         Arrays.fill(dungeon[0], '#');
-        Arrays.fill(environment[0], UNTOUCHED);
+        Arrays.fill(environment[0], DungeonUtility.UNTOUCHED);
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
             System.arraycopy(environment[0], 0, environment[i], 0, height);
@@ -230,7 +244,7 @@ public class MixedGenerator implements IDungeonGenerator {
         walled = new boolean[width][height];
         fixedRooms = new boolean[width][height];
         Arrays.fill(dungeon[0], '#');
-        Arrays.fill(environment[0], UNTOUCHED);
+        Arrays.fill(environment[0], DungeonUtility.UNTOUCHED);
         for (int i = 1; i < width; i++) {
             System.arraycopy(dungeon[0], 0, dungeon[i], 0, height);
             System.arraycopy(environment[0], 0, environment[i], 0, height);
@@ -266,7 +280,6 @@ public class MixedGenerator implements IDungeonGenerator {
      * @param rng an IRNG object to use for random choices; this make a lot of random choices.
      * @param layout an IRoomLayout that will almost always be produced by LayoutGenerator; the rooms will be altered
      * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
-     * @see SerpentMapGenerator a class that uses this technique
      */
     public MixedGenerator(int width, int height, IRNG rng, IRoomLayout layout,
                           float roomSizeMultiplier) {
@@ -286,7 +299,7 @@ public class MixedGenerator implements IDungeonGenerator {
         walled = new boolean[width][height];
         fixedRooms = new boolean[width][height];
         ArrayTools.fill(dungeon, '#');
-        ArrayTools.fill(environment, UNTOUCHED);
+        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);
         totalPoints = layout.roomCount();
         points = new IntVLA(totalPoints);
         Coord c2;
@@ -613,15 +626,15 @@ public class MixedGenerator implements IDungeonGenerator {
     {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                if(environment[i][j] == UNTOUCHED)
+                if(environment[i][j] == DungeonUtility.UNTOUCHED)
                 {
                     boolean allWalls = true;
                     //lowest precedence, also checks for any floors
                     for (int x = Math.max(0, i - 1); x <= Math.min(width - 1, i + 1); x++) {
 
                         for (int y = Math.max(0, j - 1); y <= Math.min(height - 1, j + 1); y++) {
-                            if (environment[x][y] == CORRIDOR_FLOOR) {
-                                markEnvironment(i, j, CORRIDOR_WALL);
+                            if (environment[x][y] == DungeonUtility.CORRIDOR_FLOOR) {
+                                markEnvironment(i, j, DungeonUtility.CORRIDOR_WALL);
                             }
                             if(dungeon[x][y] == '.')
                                 allWalls = false;
@@ -634,8 +647,8 @@ public class MixedGenerator implements IDungeonGenerator {
                     for (int x = Math.max(0, i - 1); x <= Math.min(width - 1, i + 1); x++) {
 
                         for (int y = Math.max(0, j - 1); y <= Math.min(height - 1, j + 1); y++) {
-                            if (environment[x][y] == CAVE_FLOOR) {
-                                markEnvironment(i, j, CAVE_WALL);
+                            if (environment[x][y] == DungeonUtility.CAVE_FLOOR) {
+                                markEnvironment(i, j, DungeonUtility.CAVE_WALL);
                             }
                         }
                     }
@@ -643,8 +656,8 @@ public class MixedGenerator implements IDungeonGenerator {
                     for (int x = Math.max(0, i - 1); x <= Math.min(width - 1, i + 1); x++) {
 
                         for (int y = Math.max(0, j - 1); y <= Math.min(height - 1, j + 1); y++) {
-                            if (environment[x][y] == ROOM_FLOOR) {
-                                markEnvironment(i, j, ROOM_WALL);
+                            if (environment[x][y] == DungeonUtility.ROOM_FLOOR) {
+                                markEnvironment(i, j, DungeonUtility.ROOM_WALL);
                             }
                         }
                     }
@@ -694,8 +707,8 @@ public class MixedGenerator implements IDungeonGenerator {
      * @param y y position to mark
      */
     protected void markEnvironmentCorridor(int x, int y) {
-        if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && environment[x][y] != ROOM_FLOOR && environment[x][y] != CAVE_FLOOR) {
-            markEnvironment(x, y, CORRIDOR_FLOOR);
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && environment[x][y] != DungeonUtility.ROOM_FLOOR && environment[x][y] != DungeonUtility.CAVE_FLOOR) {
+            markEnvironment(x, y, DungeonUtility.CORRIDOR_FLOOR);
         }
     }
 
@@ -706,7 +719,7 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     protected void markEnvironmentRoom(int x, int y) {
         if (x > 0 && x < width - 1 && y > 0 && y < height - 1) {
-            markEnvironment(x, y, ROOM_FLOOR);
+            markEnvironment(x, y, DungeonUtility.ROOM_FLOOR);
         }
     }
 
@@ -716,8 +729,8 @@ public class MixedGenerator implements IDungeonGenerator {
      * @param y y position to mark
      */
     protected void markEnvironmentCave(int x, int y) {
-        if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && environment[x][y] != ROOM_FLOOR) {
-            markEnvironment(x, y, CAVE_FLOOR);
+        if (x > 0 && x < width - 1 && y > 0 && y < height - 1 && environment[x][y] != DungeonUtility.ROOM_FLOOR) {
+            markEnvironment(x, y, DungeonUtility.CAVE_FLOOR);
         }
     }
     /**

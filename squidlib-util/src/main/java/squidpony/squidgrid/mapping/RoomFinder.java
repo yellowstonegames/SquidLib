@@ -87,8 +87,8 @@ public class RoomFinder {
         allCorridors = allFloors.copy().andNot(allRooms);
 
         environment = allCorridors.writeInts(
-                allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR),
-                MixedGenerator.CORRIDOR_FLOOR);
+                allRooms.writeInts(environment, DungeonUtility.ROOM_FLOOR),
+                DungeonUtility.CORRIDOR_FLOOR);
 
         allCaves = new GreasedRegion(width, height);
         GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
@@ -141,7 +141,7 @@ public class RoomFinder {
 
         basic = DungeonUtility.simplifyDungeon(map);
 
-        if(environmentKind == MixedGenerator.ROOM_FLOOR) {
+        if(environmentKind == DungeonUtility.ROOM_FLOOR) {
 
             allFloors = new GreasedRegion(basic, '.');
             allRooms = allFloors.copy().retract8way().flood(allFloors, 2);
@@ -149,8 +149,8 @@ public class RoomFinder {
             allCaves = new GreasedRegion(width, height);
 
             environment = allCorridors.writeInts(
-                    allRooms.writeInts(environment, MixedGenerator.ROOM_FLOOR),
-                    MixedGenerator.CORRIDOR_FLOOR);
+                    allRooms.writeInts(environment, DungeonUtility.ROOM_FLOOR),
+                    DungeonUtility.CORRIDOR_FLOOR);
 
 
             GreasedRegion d = allCorridors.copy().fringe().and(allRooms);
@@ -187,7 +187,7 @@ public class RoomFinder {
             caves.put(allCaves, new ArrayList<GreasedRegion>());
             connections = mouths = allCaves.copy().andNot(allCaves.copy().retract8way()).retract().asCoords();
             doorways = new Coord[0];
-            environment = allCaves.writeInts(environment, MixedGenerator.CAVE_FLOOR);
+            environment = allCaves.writeInts(environment, DungeonUtility.CAVE_FLOOR);
 
         }
     }
@@ -218,9 +218,9 @@ public class RoomFinder {
         caves = new OrderedMap<>(32);
         basic = DungeonUtility.simplifyDungeon(map);
         allFloors = new GreasedRegion(basic, '.');
-        allRooms = new GreasedRegion(environment, MixedGenerator.ROOM_FLOOR);
-        allCorridors = new GreasedRegion(environment, MixedGenerator.CORRIDOR_FLOOR);
-        allCaves = new GreasedRegion(environment, MixedGenerator.CAVE_FLOOR);
+        allRooms = new GreasedRegion(environment, DungeonUtility.ROOM_FLOOR);
+        allCorridors = new GreasedRegion(environment, DungeonUtility.CORRIDOR_FLOOR);
+        allCaves = new GreasedRegion(environment, DungeonUtility.CAVE_FLOOR);
         GreasedRegion d = allCorridors.copy().fringe().and(allRooms),
                 m = allCaves.copy().fringe().and(allRooms.copy().or(allCorridors));
         doorways = d.asCoords();

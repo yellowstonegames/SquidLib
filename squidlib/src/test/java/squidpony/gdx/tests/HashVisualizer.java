@@ -66,7 +66,7 @@ import static squidpony.squidmath.NumberTools.swayTight;
 public class HashVisualizer extends ApplicationAdapter {
 
     // 0 commonly used hashes
-    // 1 variants on Storm and other hashes
+    // 1 variants on Mist and other hashes
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
@@ -82,7 +82,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final SColor bgColor = SColor.BLACK;
     private Stage stage;
     private Viewport view;
-    private CrossHash.Storm storm, stormA, stormB, stormC;
+    private CrossHash.Mist Mist_, Mist_A, Mist_B, Mist_C;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private NLFSR nlfsr = new NLFSR();
     private FlapRNG flap = new FlapRNG();
@@ -878,10 +878,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                filter3 = new Filters.GrayscaleFilter(),// new Filters.PaletteFilter(SColor.BLUE_VIOLET_SERIES),
 //                filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
 //                filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
-        storm = new CrossHash.Storm();
-        stormA = CrossHash.Storm.alpha;
-        stormB = CrossHash.Storm.beta;
-        stormC = CrossHash.Storm.chi;
+        Mist_ = CrossHash.Mist.omicron_.randomize();
+        Mist_A = CrossHash.Mist.alpha_;
+        Mist_B = CrossHash.Mist.beta_;
+        Mist_C = CrossHash.Mist.chi_;
         mist = new CrossHash.Mist();
         mistA = CrossHash.Mist.alpha;
         mistB = CrossHash.Mist.beta;
@@ -1115,7 +1115,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 break;
                             case 0:
                                 hashMode++;
-                                hashMode %= 61; // 45
+                                hashMode %= 53; // 45
                                 break;
                             case 1:
                                 hashMode++;
@@ -1234,34 +1234,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
 
-//                        Gdx.graphics.setTitle("Storm (alpha) on length 2, low bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) on length 2, low bits");
 //                        for (int x = 0; x < width; x++) {
 //                            coordinates[0] = x;
 //                            for (int y = 0; y < height; y++) {
 //                                coordinates[1] = y;
-//                                code = stormA.hash(coordinates) << 8 | 255L;
+//                                code = Mist_A.hash(coordinates) << 8 | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Storm (beta) on length 2, low bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormB.hash(coordinates) << 8 | 255L;
+                                code = Mist_B.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Storm (chi) on length 2, low bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormC.hash(coordinates) << 8 | 255L;
+                                code = Mist_C.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1286,31 +1286,31 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
 
-//                        Gdx.graphics.setTitle("Storm (alpha) on length 1, low bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) on length 1, low bits");
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
-//                                code = stormA.hash(coordinate) << 8 | 255L;
+//                                code = Mist_A.hash(coordinate) << 8 | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("Storm (beta) on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormB.hash(coordinate) << 8 | 255L;
+                                code = Mist_B.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 7:
-                        Gdx.graphics.setTitle("Storm (chi) on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormC.hash(coordinate) << 8 | 255L;
+                                code = Mist_C.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1325,34 +1325,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(code));
                             }
                         }
-//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, low bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 2, low bits");
 //                        for (int x = 0; x < width; x++) {
 //                            coordinates[0] = x;
 //                            for (int y = 0; y < height; y++) {
 //                                coordinates[1] = y;
-//                                code = stormA.hash64(coordinates) << 8 | 255L;
+//                                code = Mist_A.hash64(coordinates) << 8 | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 9:
-                        Gdx.graphics.setTitle("Storm (beta) 64 on length 2, low bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormB.hash64(coordinates) << 8 | 255L;
+                                code = Mist_B.hash64(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 10:
-                        Gdx.graphics.setTitle("Storm (chi) 64 on length 2, low bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormC.hash64(coordinates) << 8 | 255L;
+                                code = Mist_C.hash64(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1366,31 +1366,31 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(code));
                             }
                         }
-//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, low bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 1, low bits");
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
-//                                code = stormA.hash64(coordinate) << 8 | 255L;
+//                                code = Mist_A.hash64(coordinate) << 8 | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 12:
-                        Gdx.graphics.setTitle("Storm (beta) 64 on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormB.hash64(coordinate) << 8 | 255L;
+                                code = Mist_B.hash64(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 13:
-                        Gdx.graphics.setTitle("Storm (chi) 64 on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormC.hash64(coordinate) << 8 | 255L;
+                                code = Mist_C.hash64(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1416,34 +1416,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(code));
                             }
                         }
-//                        Gdx.graphics.setTitle("Storm (alpha) on length 2, high bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) on length 2, high bits");
 //                        for (int x = 0; x < width; x++) {
 //                            coordinates[0] = x;
 //                            for (int y = 0; y < height; y++) {
 //                                coordinates[1] = y;
-//                                code = stormA.hash(coordinates) & 0xFFFFFF00L | 255L;
+//                                code = Mist_A.hash(coordinates) & 0xFFFFFF00L | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 16:
-                        Gdx.graphics.setTitle("Storm (beta) on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormB.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Mist_B.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 17:
-                        Gdx.graphics.setTitle("Storm (chi) on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormC.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Mist_C.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1467,31 +1467,31 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(code));
                             }
                         }
-//                        Gdx.graphics.setTitle("Storm (alpha) on length 1, high bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) on length 1, high bits");
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
-//                                code = stormA.hash(coordinate) & 0xFFFFFF00L | 255L;
+//                                code = Mist_A.hash(coordinate) & 0xFFFFFF00L | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 20:
-                        Gdx.graphics.setTitle("Storm (beta) on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormB.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Mist_B.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 21:
-                        Gdx.graphics.setTitle("Storm (chi) on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormC.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Mist_C.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1506,34 +1506,34 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(code));
                             }
                         }
-//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 2, high bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 2, high bits");
 //                        for (int x = 0; x < width; x++) {
 //                            coordinates[0] = x;
 //                            for (int y = 0; y < height; y++) {
 //                                coordinates[1] = y;
-//                                code = stormA.hash64(coordinates) & 0xFFFFFF00L | 255L;
+//                                code = Mist_A.hash64(coordinates) & 0xFFFFFF00L | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 23:
-                        Gdx.graphics.setTitle("Storm (beta) 64 on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormB.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Mist_B.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 24:
-                        Gdx.graphics.setTitle("Storm (chi) 64 on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = stormC.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Mist_C.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1547,31 +1547,31 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 display.put(x, y, floatGet(code));
                             }
                         }
-//                        Gdx.graphics.setTitle("Storm (alpha) 64 on length 1, high bits");
+//                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 1, high bits");
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
-//                                code = stormA.hash64(coordinate) & 0xFFFFFF00L | 255L;
+//                                code = Mist_A.hash64(coordinate) & 0xFFFFFF00L | 255L;
 //                                display.put(x, y, floatGet(code));
 //                            }
 //                        }
                         break;
                     case 26:
-                        Gdx.graphics.setTitle("Storm (beta) 64 on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormB.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Mist_B.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 27:
-                        Gdx.graphics.setTitle("Storm (chi) 64 on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist_ (chi) 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = stormC.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Mist_C.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2083,11 +2083,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = storm.hash(coordinates) << 8 | 255L;
+                                code = Mist_.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash on length 2, low bits");
+                        Gdx.graphics.setTitle("Mist_, hash on length 2, low bits");
                         break;
                     case 3:
                         for (int x = 0; x < width; x++) {
@@ -2124,11 +2124,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = storm.hash(coordinate) << 8 | 255L;
+                                code = Mist_.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist_, hash on length 1, low bits");
                         break;
                     case 7:
                         for (int x = 0; x < width; x++) {
@@ -2156,11 +2156,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = storm.hash64(coordinates) << 8 | 255L;
+                                code = Mist_.hash64(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash64 on length 2, low bits");
+                        Gdx.graphics.setTitle("Mist_, hash64 on length 2, low bits");
                         break;
                     case 10:
                         for (int x = 0; x < width; x++) {
@@ -2187,11 +2187,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = storm.hash64(coordinate) << 8 | 255L;
+                                code = Mist_.hash64(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash64 on length 1, low bits");
+                        Gdx.graphics.setTitle("Mist_, hash64 on length 1, low bits");
                         break;
                     case 13:
                         for (int x = 0; x < width; x++) {
@@ -2230,11 +2230,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = storm.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Mist_.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist_, hash on length 2, high bits");
                         break;
                     case 17:
                         for (int x = 0; x < width; x++) {
@@ -2271,11 +2271,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = storm.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Mist_.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist_, hash on length 1, high bits");
                         break;
                     case 21:
                         for (int x = 0; x < width; x++) {
@@ -2303,11 +2303,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = storm.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Mist_.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash64 on length 2, high bits");
+                        Gdx.graphics.setTitle("Mist_, hash64 on length 2, high bits");
                         break;
                     case 24:
                         for (int x = 0; x < width; x++) {
@@ -2334,11 +2334,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = storm.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Mist_.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("Storm, hash64 on length 1, high bits");
+                        Gdx.graphics.setTitle("Mist_, hash64 on length 1, high bits");
                         break;
                     case 27:
                         for (int x = 0; x < width; x++) {
@@ -2397,7 +2397,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2407,7 +2407,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2418,7 +2418,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash64(coordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2428,7 +2428,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash64(coordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2447,7 +2447,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash(coordinate) << 8 | 255L;
+                                code = CrossHash.hash(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2457,7 +2457,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
-                                code = CrossHash.Wisp.hash64(coordinate) << 8 | 255L;
+                                code = CrossHash.hash64(coordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2468,7 +2468,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash(coordinates) << 8 | 255L;
+                                code = CrossHash.hash(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2479,7 +2479,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Wisp.hash64(coordinates) << 8 | 255L;
+                                code = CrossHash.hash64(coordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2533,7 +2533,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             doubleCoordinates[0] = Math.sqrt(x);
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash(doubleCoordinates) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash(doubleCoordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2543,7 +2543,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash(doubleCoordinate) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash(doubleCoordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2554,7 +2554,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             doubleCoordinates[0] = Math.sqrt(x);
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash64(doubleCoordinates) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash64(doubleCoordinates) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2564,7 +2564,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash64(doubleCoordinate) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.hash64(doubleCoordinate) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2574,7 +2574,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash(doubleCoordinate) << 8 | 255L;
+                                code = CrossHash.hash(doubleCoordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2584,7 +2584,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash64(doubleCoordinate) << 8 | 255L;
+                                code = CrossHash.hash64(doubleCoordinate) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2595,7 +2595,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             doubleCoordinates[0] = Math.sqrt(x);
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash(doubleCoordinates) << 8 | 255L;
+                                code = CrossHash.hash(doubleCoordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -2606,96 +2606,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             doubleCoordinates[0] = Math.sqrt(x);
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash64(doubleCoordinates) << 8 | 255L;
+                                code = CrossHash.hash64(doubleCoordinates) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash64 on length 2, low bits");
-                        break;
-
-                    case 53:
-                        for (int x = 0; x < width; x++) {
-                            doubleCoordinates[0] = Math.sqrt(x);
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double, hash32 on length 2, high bits");
-                        break;
-                    case 54:
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double, hash32 on length 1, high bits");
-                        break;
-                    case 55:
-                        for (int x = 0; x < width; x++) {
-                            doubleCoordinates[0] = Math.sqrt(x);
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double Alt, hash32 on length 2, high bits");
-                        break;
-                    case 56:
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double, hash32 on length 1, high bits");
-                        break;
-                    case 57:
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double, hash32 on length 1, low bits");
-                        break;
-                    case 58:
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinate[0] = Math.sqrt((x << 9) | y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double, hash32 on length 1, low bits");
-                        break;
-                    case 59:
-                        for (int x = 0; x < width; x++) {
-                            doubleCoordinates[0] = Math.sqrt(x);
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double, hash32 on length 2, low bits");
-                        break;
-                    case 60:
-                        for (int x = 0; x < width; x++) {
-                            doubleCoordinates[0] = Math.sqrt(x);
-                            for (int y = 0; y < height; y++) {
-                                doubleCoordinates[1] = Math.sqrt(y);
-                                code = CrossHash.Wisp.hash32(doubleCoordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
-                            }
-                        }
-                        Gdx.graphics.setTitle("Wisp Double, hash32 on length 2, low bits");
                         break;
                 }
             }
@@ -3745,9 +3660,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 82:
                         Gdx.graphics.setTitle("Whirling 2D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = (x + ctr) * 0.015625f;
+                            s0 = (x + ctr) * 0.03125f; // 0.046875f
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(WhirlingNoise.noise(s0, (y + ctr) * 0.015625f, 123456));
+                                bright = basicPrepare(WhirlingNoise.noise(s0, (y + ctr) * 0.03125f, 123456));
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3755,9 +3670,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 83:
                         Gdx.graphics.setTitle("Seeded 2D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
-                            s0 = (x + ctr) * 0.015625f;
+                            s0 = (x + ctr) * 0.03125f; // 0.046875f
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(SeededNoise.noise(s0, (y + ctr) * 0.015625f, 123456));
+                                bright = basicPrepare(SeededNoise.noise(s0, (y + ctr) * 0.03125f, 123456));
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3780,7 +3695,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(WhirlingNoise.noise(x * 0.015625f, y * 0.015625f, ctr * 0.03125f, 123456)); // , 1.5f
+                                bright = basicPrepare(WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456)); // , 1.5f
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -4735,7 +4650,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = storm.hash(coordinates) & 7L;
+                                code = Mist_.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
@@ -4779,7 +4694,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = storm.hash(coordinate) & 7L;
+                                code = Mist_.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
@@ -4814,7 +4729,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = storm.hash64(coordinates) & 7L;
+                                code = Mist_.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
@@ -4848,7 +4763,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = storm.hash64(coordinate) & 7L;
+                                code = Mist_.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
@@ -4895,7 +4810,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = storm.hash(coordinates) & 1792L;
+                                code = Mist_.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
@@ -4940,7 +4855,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = storm.hash(coordinate) & 1792L;
+                                code = Mist_.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
@@ -4975,7 +4890,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[0] = (((x + fuzzy.next(2)) >>> 2) << 3);
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
-                                code = storm.hash64(coordinates) & 1792L;
+                                code = Mist_.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
@@ -5008,7 +4923,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
-                                code = storm.hash64(coordinate) & 1792L;
+                                code = Mist_.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
                                 display.put(x, y, floatGet(code));
                             }

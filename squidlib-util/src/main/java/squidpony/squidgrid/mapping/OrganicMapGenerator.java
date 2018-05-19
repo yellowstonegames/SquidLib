@@ -113,7 +113,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
 
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                environment[x][y] = (map[x][y] == '.') ? MixedGenerator.CAVE_FLOOR : MixedGenerator.CAVE_WALL;
+                environment[x][y] = (map[x][y] == '.') ? DungeonUtility.CAVE_FLOOR : DungeonUtility.CAVE_WALL;
             }
         }
         //tempPacked = CoordPacker.pack(map, '.');
@@ -138,7 +138,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
                 if(elem.x < width && elem.y < height) {
                     if (map[elem.x][elem.y] == '#') {
                         map[elem.x][elem.y] = '.';
-                        environment[elem.x][elem.y] = MixedGenerator.CORRIDOR_FLOOR;
+                        environment[elem.x][elem.y] = DungeonUtility.CORRIDOR_FLOOR;
                         ctr++;
                     } /*else if (rng.nextBoolean() &&
                             CoordPacker.queryPacked(CoordPacker.differencePacked(tempPacked, region), elem.x, elem.y)) {
@@ -166,14 +166,14 @@ public class OrganicMapGenerator implements IDungeonGenerator {
         for (int i = 0; i < width; i++) {
             map[i][0] = '#';
             map[i][upperY] = '#';
-            environment[i][0] = MixedGenerator.UNTOUCHED;
-            environment[i][upperY] = MixedGenerator.UNTOUCHED;
+            environment[i][0] = DungeonUtility.UNTOUCHED;
+            environment[i][upperY] = DungeonUtility.UNTOUCHED;
         }
         for (int i = 0; i < height; i++) {
             map[0][i] = '#';
             map[upperX][i] = '#';
-            environment[0][i] = MixedGenerator.UNTOUCHED;
-            environment[upperX][i] = MixedGenerator.UNTOUCHED;
+            environment[0][i] = DungeonUtility.UNTOUCHED;
+            environment[upperX][i] = DungeonUtility.UNTOUCHED;
         }
 
         if(ctr < (width + height) * 3) {

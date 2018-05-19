@@ -17,6 +17,42 @@ import java.util.*;
  */
 public class DungeonUtility {
 
+    /**
+     * Constant for environment tiles that are not near a cave, room, or corridor. Value is 0.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     */
+    public static final int UNTOUCHED = 0;
+    /**
+     * Constant for environment tiles that are floors for a room. Value is 1.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     */
+    public static final int ROOM_FLOOR = 1;
+    /**
+     * Constant for environment tiles that are walls near a room. Value is 2.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     */
+    public static final int ROOM_WALL = 2;
+    /**
+     * Constant for environment tiles that are floors for a cave. Value is 3.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     */
+    public static final int CAVE_FLOOR = 3;
+    /**
+     * Constant for environment tiles that are walls near a cave. Value is 4.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     */
+    public static final int CAVE_WALL = 4;
+    /**
+     * Constant for environment tiles that are floors for a corridor. Value is 5.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     */
+    public static final int CORRIDOR_FLOOR = 5;
+    /**
+     * Constant for environment tiles that are walls near a corridor. Value is 6.
+     * Used by several classes that distinguish types of dungeon environment, like {@link SectionDungeonGenerator}.
+     */
+    public static final int CORRIDOR_WALL = 6;
+
     public DungeonUtility() {
         rng = new StatefulRNG();
     }
@@ -33,10 +69,15 @@ public class DungeonUtility {
      * The random number generator that will be used for all methods in this class with a random component.
      */
     public StatefulRNG rng;
+    
 
     /**
      * Finds a random Coord where the x and y match up to a [x][y] location on map that has '.' as a value.
-     * Uses this class' rng field for pseudo-random number generation.
+     * Uses this class' rng field for pseudo-random number generation. May fail if there are very few floor tiles;
+     * use {@link #randomCell(short[])} given {@link #packedFloors(char[][])} to get a floor cell guaranteed if there is
+     * at least one, or better still, make a {@link GreasedRegion#GreasedRegion(char[][], char)} and get a single Coord
+     * from it with {@link GreasedRegion#singleRandom(IRNG)}. You can reuse a GreasedRegion with modifications, like
+     * removing cells you already picked, but using packedFloors() needs to make new short arrays each time. 
      *
      * @param map a char[][] that should contain a '.' floor tile
      * @return a Coord that corresponds to a '.' in map, or null if a '.' cannot be found or if map is too small

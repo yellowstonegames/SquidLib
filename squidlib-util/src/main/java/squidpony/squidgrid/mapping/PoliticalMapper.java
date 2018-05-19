@@ -49,7 +49,7 @@ public class PoliticalMapper {
     public PoliticalMapper()
     {
         name = "Permadeath Planet";
-        rng = new StatefulRNG(CrossHash.Wisp.hash64(name));
+        rng = new StatefulRNG(CrossHash.hash64(name));
     }
     /**
      * Constructs a SpillWorldMap using the given world name, and uses the world name as the
@@ -59,7 +59,7 @@ public class PoliticalMapper {
      */
     public PoliticalMapper(String worldName) {
         name = worldName;
-        rng = new StatefulRNG(CrossHash.Wisp.hash64(name));
+        rng = new StatefulRNG(CrossHash.hash64(name));
     }
     /**
      * Constructs a SpillWorldMap using the given world name, and uses the world name as the

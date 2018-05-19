@@ -217,8 +217,8 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
 
     /**
      * Gets an environment map as a 2D int array that {@link SectionDungeonGenerator} can use along with the normal
-     * 2D char array dungeon map to add dungeon features. This marks cells as either {@link MixedGenerator#UNTOUCHED}
-     * (equal to 0), {@link MixedGenerator#CAVE_FLOOR} (equal to 3), or {@link MixedGenerator#CAVE_WALL} (equal to 4).
+     * 2D char array dungeon map to add dungeon features. This marks cells as either {@link DungeonUtility#UNTOUCHED}
+     * (equal to 0), {@link DungeonUtility#CAVE_FLOOR} (equal to 3), or {@link DungeonUtility#CAVE_WALL} (equal to 4).
      * If the environment has not yet been retrieved since generate() was last called, this assigns the environment map
      * to match the dungeon map; otherwise it uses the cached environment map.
      * @return a 2D int array that can be used as an environment map with SectionDungeonGenerator.
@@ -227,8 +227,8 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
     {
         if(remakeEnvironment)
         {
-            gen.region.writeIntsInto(environment, MixedGenerator.CAVE_FLOOR);
-            gen.workingRegion.remake(gen.region).fringe8way().writeIntsInto(environment, MixedGenerator.CAVE_WALL);
+            gen.region.writeIntsInto(environment, 3);
+            gen.workingRegion.remake(gen.region).fringe8way().writeIntsInto(environment, 4);
             remakeEnvironment = false;
         }
         return environment;

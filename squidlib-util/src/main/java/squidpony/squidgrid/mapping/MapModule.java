@@ -63,11 +63,11 @@ public class MapModule implements Comparable<MapModule>, Serializable {
             throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
         CoordPacker.init();
         this.map = ArrayTools.copy(map);
-        environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        environment = ArrayTools.fill(DungeonUtility.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 if(this.map[x][y] == '#')
-                    environment[x][y] = MixedGenerator.ROOM_WALL;
+                    environment[x][y] = DungeonUtility.ROOM_WALL;
             }
         }
         short[] pk = CoordPacker.fringe(
@@ -102,11 +102,11 @@ public class MapModule implements Comparable<MapModule>, Serializable {
             throw new UnsupportedOperationException("Given map cannot be empty in MapModule");
         CoordPacker.init();
         map = ArrayTools.copy(CoordPacker.unpackChar(packed, width, height, '.', '#'));
-        environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        environment = ArrayTools.fill(DungeonUtility.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 if(map[x][y] == '#')
-                    environment[x][y] = MixedGenerator.ROOM_WALL;
+                    environment[x][y] = DungeonUtility.ROOM_WALL;
             }
         }
         short[] pk = CoordPacker.fringe(
@@ -139,11 +139,11 @@ public class MapModule implements Comparable<MapModule>, Serializable {
     {
         CoordPacker.init();
         this.map = ArrayTools.copy(map);
-        environment = ArrayTools.fill(MixedGenerator.ROOM_FLOOR, this.map.length, this.map[0].length);
+        environment = ArrayTools.fill(DungeonUtility.ROOM_FLOOR, this.map.length, this.map[0].length);
         for (int x = 0; x < map.length; x++) {
             for (int y = 0; y < map[0].length; y++) {
                 if(this.map[x][y] == '#')
-                    environment[x][y] = MixedGenerator.ROOM_WALL;
+                    environment[x][y] = DungeonUtility.ROOM_WALL;
             }
         }
         this.validDoors = GwtCompatibility.cloneCoords(validDoors);

@@ -48,6 +48,8 @@
 package squidpony.squidmath;
 
 import static squidpony.squidmath.Noise.fastFloor;
+import static squidpony.squidmath.PerlinNoise.dot;
+import static squidpony.squidmath.PerlinNoise.phiGrad2;
 import static squidpony.squidmath.WhirlingNoise.gradCoord3D;
 
 /**
@@ -657,10 +659,10 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     protected static final int[] SIMPLEX = WhirlingNoise.SIMPLEX;
 
     /**
-     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
+     * Possibly useful outside SeededNoise. Uses a modified version of LinnormRNG's algorithm and generates 8 bits.
+     * @param x a long to incorporate into the hash
+     * @param y a long to incorporate into the hash
+     * @param state a long to incorporate into the hash
      * @return a pseudo-random-like int between 0 and 255, inclusive on both
      */
     //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
@@ -671,14 +673,21 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 + (seed ^ 0x632BE5AB * (y + x))) >>> 24;
     }
     */
-    public static int hash(final int x, final int y, final long seed) {
-        int a = 0x632BE5AB;
-        return  (0x9E3779B9
-                + (a ^= 0x85157AF5 * seed + x)
-                + (a ^= 0x85157AF5 * x + y)
-                + (a ^= 0x85157AF5 * y + seed)) * a >>> 24;
-    }
+//    public static int hash(final int x, final int y, final long seed) {
+//        int a = 0x632BE5AB;
+//        return  (0x9E3779B9
+//                + (a ^= 0x85157AF5 * seed + x)
+//                + (a ^= 0x85157AF5 * x + y)
+//                + (a ^= 0x85157AF5 * y + seed)) * a >>> 24;
+//    }
 
+    public static int hash(final long x, final long y, final long state)
+    {
+        long z = (state ^ y) * 0x41C64E6DL + x;
+        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+        z = (z ^ z >>> 25) ^ (state ^ x) * 0x41C64E6DL + y;
+        return (int) ((z ^ z >>> 27) * 0xAEF17502108EF2D9L >>> 56);
+    }
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
      * @param x an int to incorporate into the hash
@@ -827,7 +836,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 
     public static double noise(final double x, final double y, final long seed) {
         final double s = (x + y) * F2;
-        final double[] gradient2DLUT = SeededNoise.gradient2DLUT;
         final int i = fastFloor(x + s),
                 j = fastFloor(y + s);
         final double t = (i + j) * G2,
@@ -848,32 +856,55 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 y1 = y0 - j1 + G2,
                 x2 = x0 - 1 + 2 * G2,
                 y2 = y0 - 1 + 2 * G2;
-        final int h0 = hash(i, j, seed) << 1,
-                h1 = hash(i + i1, j + j1, seed) << 1,
-                h2 = hash(i + 1, j + 1, seed) << 1;
-        double n0, n1, n2;
-        double t0 = 0.5 - x0 * x0 - y0 * y0;
-        if (t0 < 0)
-            n0 = 0;
-        else {
+        double n = 0.0;
+        final int
+                gi0 = hash(i, j, seed),
+                gi1 = hash(i + i1, j + j1, seed),
+                gi2 = hash(i + 1, j + 1, seed);
+        // Calculate the contribution from the three corners
+        double t0 = 0.75 - x0 * x0 - y0 * y0;
+        if (t0 > 0) {
             t0 *= t0;
-            n0 = t0 * t0 * (x0 * gradient2DLUT[h0] + y0 * gradient2DLUT[h0 | 1]);
+            n += t0 * t0 * dot(phiGrad2[gi0], x0, y0);
+            // for 2D gradient
         }
-        double t1 = 0.5 - x1 * x1 - y1 * y1;
-        if (t1 < 0)
-            n1 = 0;
-        else {
+        double t1 = 0.75 - x1 * x1 - y1 * y1;
+        if (t1 > 0) {
             t1 *= t1;
-            n1 = t1 * t1 * (x1 * gradient2DLUT[h1] + y1 * gradient2DLUT[h1 | 1]);
+            n += t1 * t1 * dot(phiGrad2[gi1], x1, y1);
         }
-        double t2 = 0.5 - x2 * x2 - y2 * y2;
-        if (t2 < 0)
-            n2 = 0;
-        else {
+        double t2 = 0.75 - x2 * x2 - y2 * y2;
+        if (t2 > 0)  {
             t2 *= t2;
-            n2 = t2 * t2 * (x2 * gradient2DLUT[h2] + y2 * gradient2DLUT[h2 | 1]);
+            n += t2 * t2 * dot(phiGrad2[gi2], x2, y2);
         }
-        return (70 * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
+        // Add contributions from each corner to get the final noise value.
+        // The result is scaled to return values in the interval [-1,1].
+        return  9.125 * (n);
+
+//        double n0, n1, n2;
+//        double t0 = 0.5 - x0 * x0 - y0 * y0;
+//        if (t0 < 0)
+//            n0 = 0;
+//        else {
+//            t0 *= t0;
+//            n0 = t0 * t0 * (x0 * gradient2DLUT[h0] + y0 * gradient2DLUT[h0 | 1]);
+//        }
+//        double t1 = 0.5 - x1 * x1 - y1 * y1;
+//        if (t1 < 0)
+//            n1 = 0;
+//        else {
+//            t1 *= t1;
+//            n1 = t1 * t1 * (x1 * gradient2DLUT[h1] + y1 * gradient2DLUT[h1 | 1]);
+//        }
+//        double t2 = 0.5 - x2 * x2 - y2 * y2;
+//        if (t2 < 0)
+//            n2 = 0;
+//        else {
+//            t2 *= t2;
+//            n2 = t2 * t2 * (x2 * gradient2DLUT[h2] + y2 * gradient2DLUT[h2 | 1]);
+//        }
+//        return (70 * (n0 + n1 + n2)) * 1.42188695 + 0.001054489;
     }
 
     public static double noise(final double x, final double y, final double z, final long seed) {
