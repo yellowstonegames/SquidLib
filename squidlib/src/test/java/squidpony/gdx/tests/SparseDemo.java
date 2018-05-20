@@ -359,9 +359,9 @@ public class SparseDemo extends ApplicationAdapter {
                 switch (key)
                 {
                     case SquidInput.UP_ARROW:
-                    case 'k':
+//                    case 'k':
+//                    case 'K':
                     case 'w':
-                    case 'K':
                     case 'W':
                     {
                         toCursor.clear();
@@ -370,9 +370,9 @@ public class SparseDemo extends ApplicationAdapter {
                         break;
                     }
                     case SquidInput.DOWN_ARROW:
-                    case 'j':
+//                    case 'j':
+//                    case 'J':
                     case 's':
-                    case 'J':
                     case 'S':
                     {
                         toCursor.clear();
@@ -381,9 +381,9 @@ public class SparseDemo extends ApplicationAdapter {
                         break;
                     }
                     case SquidInput.LEFT_ARROW:
-                    case 'h':
+//                    case 'h':
+//                    case 'H':
                     case 'a':
-                    case 'H':
                     case 'A':
                     {
                         toCursor.clear();
@@ -391,9 +391,9 @@ public class SparseDemo extends ApplicationAdapter {
                         break;
                     }
                     case SquidInput.RIGHT_ARROW:
-                    case 'l':
+//                    case 'l':
+//                    case 'L':
                     case 'd':
-                    case 'L':
                     case 'D':
                     {
                         toCursor.clear();
