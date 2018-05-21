@@ -148,11 +148,11 @@ public class TextCellFactory implements Disposable {
     }
     /**
      * Initializes the factory to then be able to create text cells on demand.
-     *
-     * Will match the width and height to 12 and 12, scaling the font to fit.
-     *
-     * Calling this after the factory has already been initialized will
-     * re-initialize it.
+     * <br>
+     * Will match the width and height to the space width of the font and the
+     * line height of the font, respectively. Calling this after the factory
+     * has already been initialized will re-initialize it. This will not work
+     * with distance field or MSDF fonts; for those, use {@link #initBySize()}.
      *
      * @return this for method chaining
      */
@@ -184,11 +184,14 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Initializes the factory to then be able to create text cells on demand.
-     *
+     * <br>
      * Will strictly use the provided width and height values to size the cells.
-     *
      * Calling this after the factory has already been initialized will
-     * re-initialize it.
+     * re-initialize it, but will re-create several objects (including compiling
+     * a ShaderProgram, which can be very challenging for a GPU to do each frame).
+     * If you need to re-initialize often to adjust size, use {@link #resetSize()},
+     * which does not allocate new objects if this was already initialized, and
+     * will just delegate to this method if this wasn't initialized.
      *
      * @return this for method chaining
      */
@@ -230,7 +233,8 @@ public class TextCellFactory implements Disposable {
             //lineTweak = lineHeight * 0.0625f;
         }
         lineHeight = bmpFont.getLineHeight();
-        descent = bmpFont.getDescent();//(msdf && bmpFont.getAscent() > 0 ? -bmpFont.getDescent(): bmpFont.getDescent());
+        descent = bmpFont.getDescent();
+        //(msdf && bmpFont.getAscent() > 0 ? -bmpFont.getDescent(): bmpFont.getDescent());
         style = new Label.LabelStyle(bmpFont, null);
         BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
         dirMarker = new TextureRegion(bmpFont.getRegion(g.page), g.srcX, g.srcY, g.width, g.height);
@@ -240,10 +244,45 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Initializes the factory to then be able to create text cells on demand.
+     * Acts like calling {@link #initBySize()}, but doesn't create new ShaderPrograms or other objects if this has
+     * already been initialized. If this has not been initialized, simply returns initBySize(). This method is safe to
+     * call every frame if the font size continually changes, where initBySize() is not.
+     * @return this for chaining
+     */
+    public TextCellFactory resetSize()
+    {
+        return resetSize(width, height);
+    }
+
+    /**
+     * Acts like calling {@link #width(float)}, {@link #height(float)}, and {@link #initBySize()} in succession, but
+     * doesn't create new ShaderPrograms or other objects if this has already been initialized. If this has not been
+     * initialized, calls width() and height() and then simply returns initBySize(). This method is safe to call every
+     * frame if the font size continually changes, where initBySize() is not.
+     * @param newWidth the new width of a single cell, as a float that usually corresponds to pixels
+     * @param newHeight the new height of a single cell, as a float that usually corresponds to pixels
+     * @return this for chaining
+     */
+    public TextCellFactory resetSize(final float newWidth, final float newHeight)
+    {
+        width(newWidth);
+        height(newHeight);
+        if(!initialized)
+            return initBySize();
+        if(msdf || distanceField)
+        {
+            bmpFont.getData().setScale(width / distanceFieldScaleX, height / distanceFieldScaleY);
+        }
+        lineHeight = bmpFont.getLineHeight();
+        descent = bmpFont.getDescent();
+
+        return this;
+    }
+
+    /**
+     * Identical to {@link #initBySize()}.
      *
-     * (This is identical to initBySize() when using libGDX.)
-     *
+     * @see #initBySize() The docs for initBySize() apply here.
      * @return this for method chaining
      */
     public TextCellFactory initVerbatim() {
@@ -251,9 +290,9 @@ public class TextCellFactory implements Disposable {
     }
 
     /**
-     * Returns the font used by this factory.
+     * Returns the {@link BitmapFont} used by this factory.
      *
-     * @return the font
+     * @return the BitmapFont this uses
      */
     public BitmapFont font() {
         return bmpFont;
