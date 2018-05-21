@@ -681,12 +681,18 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 //                + (a ^= 0x85157AF5 * y + seed)) * a >>> 24;
 //    }
 
-    public static int hash(final long x, final long y, final long state)
+    public static int hash(long x, long y, final long state)
     {
-        long z = (state ^ y) * 0x41C64E6DL + x;
-        z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
-        z = (z ^ z >>> 25) ^ (state ^ x) * 0x41C64E6DL + y;
-        return (int) ((z ^ z >>> 27) * 0xAEF17502108EF2D9L >>> 56);
+        x = (x * 0x41C64E6DL + (state + 0x369DEA0F31A53F85L));
+        y = (y * 0x41C64E6DL + (state + 0xF83F4291DB34BB19L));
+//        x = (x ^ x >>> 32) * 0xAEF17502108EF2D9L;
+//        y = (y ^ y >>> 32) * 0xAEF17502108EF2D9L;
+        return (int) (((x ^ x >>> 32) * (y ^ y >>> 32) * 0xAEF17502108EF2D9L) >>> 56); //0x25DA53916F1AFBF1L
+
+//        long s = (state ^ y) * 0x41C64E6DL + x;
+//        s = (s ^ s >>> 32) * 0xAEF17502108EF2D9L;
+//        s = (s ^ s >>> 30) ^ (state ^ x) * 0x41C64E6DL + y;
+//        return (int) ((s ^ s >>> 32) * 0xAEF17502108EF2D9L >>> 56);
     }
     /**
      * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
@@ -821,7 +827,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             G6 = F6 / (1.0 + 6.0 * F6),
             LIMIT4 = 0.62,
             //LIMIT6 = 0.777
-            LIMIT6 = 0.7875
+            LIMIT6 = 0.75
             //LIMIT6 = 0.86
             /*
             sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
@@ -1158,7 +1164,8 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         }
         //return NumberTools.bounce(5.0 + 13.5 * n);
         //return NumberTools.bounce(10f + 16.25f * n);
-        return NumberTools.sway(0.5 + 5.0 * n);
+        return 13.5 * n;
+        //return NumberTools.sway(0.5 + n);
 
     }
 

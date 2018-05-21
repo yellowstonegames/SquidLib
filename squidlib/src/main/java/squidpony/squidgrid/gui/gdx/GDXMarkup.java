@@ -51,7 +51,7 @@ public class GDXMarkup implements IMarkup<Color>{
         //if(s.length() < 2) return "0" + s;
         //else return s;
         int r = MathUtils.round(f * 255);
-        return String.valueOf(StringKit.hexDigits[r >>> 8 & 15]) + StringKit.hexDigits[r & 15];
+        return String.valueOf(StringKit.hexDigits[r >>> 4 & 15]) + StringKit.hexDigits[r & 15];
     }
     @Override
     public String getMarkup(Color value) {

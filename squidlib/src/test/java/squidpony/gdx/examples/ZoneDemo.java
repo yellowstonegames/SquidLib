@@ -42,23 +42,21 @@ public class ZoneDemo extends ApplicationAdapter {
     private Stage stage;
     private SquidColorCenter colorCenter;
     private TextPanel<Color> current;
-    private int INTERNAL_ZOOM = 1;
     @Override
     public void create () {
         batch = new SpriteBatch();
         width = 90;
         height = 40;
 
-        cellWidth = 18 * INTERNAL_ZOOM;
-        cellHeight = 18 * INTERNAL_ZOOM;
+        cellWidth = 18;
+        cellHeight = 18;
         TextCellFactory tcf = DefaultResources.getStretchableHeavySquareFont().addSwap('.', ' ');
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
         //display.setTextSize(cellWidth, cellHeight);
-        //tcf.setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f));
         screenWidth = width * cellWidth;
         screenHeight = height * cellHeight;
         display.setAnimationDuration(0.2f);
-        display.setTextSize(cellWidth, cellHeight + INTERNAL_ZOOM);
+        display.setTextSize(cellWidth, cellHeight);
         stage = new Stage(new StretchViewport(screenWidth, screenHeight), batch);
 
         rng = new RNG(0xBABABADAAAAAAAL);
@@ -264,15 +262,15 @@ public class ZoneDemo extends ApplicationAdapter {
                 //new TextCellFactory().fontDistanceField("Gentium-distance.fnt", "Gentium-distance.png")
                 //new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
                 //        .setSmoothingMultiplier(0.4f).height(30).width(7)
-                DefaultResources.getSlabFamily().width(11).height(24));
-                //DefaultResources.getStretchablePrintFont().width(7 * INTERNAL_ZOOM).height(30 * INTERNAL_ZOOM));
+                //DefaultResources.getSlabFamily().width(11).height(24));
+                DefaultResources.getStretchablePrintFont());
         current.backgroundColor = colorCenter.get(30, 30, 30);
         final ColoredStringList<Color> text = new ColoredStringList<Color>();
         //text.addColoredText("SquidLib ", colorCenter.get(255, 0, 0));
-        text.addText(GDXMarkup.instance.colorString("[*][CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others"));
+        text.addText(GDXMarkup.instance.colorString("[CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others"));
         /* Jump a line */
         text.addTextOnNewLine(GDXMarkup.instance.colorString("If you wanna contribute, visit " +
-                "[/][CW Bright Sapphire]https://github.com/SquidPony/SquidLib[]"));
+                "[CW Bright Sapphire]https://github.com/SquidPony/SquidLib[]"));
         /* // useful during debugging
         char[] big = new char[50];
         Arrays.fill(big, 'A');

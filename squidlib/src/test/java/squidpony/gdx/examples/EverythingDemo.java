@@ -823,10 +823,7 @@ public class EverythingDemo extends ApplicationAdapter {
         IColoredString<Color> helping3 = new IColoredString.Impl<>("Click the top or bottom border of the lower message box to scroll.", Color.WHITE);
         IColoredString<Color> helping4 = new IColoredString.Impl<>("Each Я is an AЯMED GUAЯD; bump into them to kill them.", Color.WHITE);
         IColoredString<Color> helping5 = new IColoredString.Impl<>("If an Я starts its turn next to where you just moved, you take damage.", Color.WHITE);
-
-        /* Some grey color */
-        final Color bgColor = new Color(0.3f, 0.3f, 0.3f, 0.9f);
-
+        
         final Actor a;
             /*
 			 * Use TextPanel. There's less work to do than with

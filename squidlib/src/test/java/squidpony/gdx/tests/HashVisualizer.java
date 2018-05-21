@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 118;
-    private int hashMode = 0, rngMode = 46, noiseMode = 82;
+    private int hashMode = 0, rngMode = 46, noiseMode = 106;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -585,6 +585,33 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         final double start = NumberTools.randomSignedDouble(floor), end = NumberTools.randomSignedDouble(floor + 1L);
         a = a * a * (3.0 - 2.0 * a) * (sb | 1L) - sb;
         return (1.0 - a) * start + a * end;
+    }
+    /**
+     * A mix of the smooth transitions of {@link NumberTools#sway(float)} with (seeded) random peaks and valleys between
+     * 0f and 1f (both exclusive). The pattern this will produces will be completely different if the seed changes, and
+     * it is suitable for 1D noise. Uses a simple method of cubic interpolation between random values, where a random
+     * value is used without modification when given an integer for {@code value}. Note that this uses a different type
+     * of interpolation than {@link NumberTools#sway(float)}, which uses quintic (this causes swayRandomizedTight() to
+     * produce more outputs in the mid-range and less at extremes; it is also slightly faster and simpler).
+     * <br>
+     * Performance note: HotSpot seems to be much more able to optimize swayRandomized(long, float) than
+     * swayRandomized(long, double), with the float version almost twice as fast after JIT warms up. On GWT, the
+     * reverse should be expected because floats must be emulated there.
+     * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 1.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float swayRandomizedTight(long seed, float value)
+    {
+        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >> 25) * (seed * 0x369DEA0F31A53F85L >>> 39))) * 0x0.ffffffp-63f,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >> 25) * (seed * 0x369DEA0F31A53F85L >>> 39))) * 0x0.ffffffp-63f;
+//        System.out.printf("start %f, end %f, seed %016X\n", start, end, seed);
+//        final float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) & 0xffffffL) * 0x1p-24f,
+//                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) & 0xffffffL) * 0x1p-24f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        return (1f - value) * start + value * end;
     }
 
     public static float beachNoise(final long seed, final float xin, final float yin)
@@ -3978,30 +4005,50 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                     break;
                     case 108:
-                        Gdx.graphics.setTitle("randomWobbleTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("swayRandomizedTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
                         Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
                         if((ctr & 3) == 0) {
-                            s0 = (ThrustAlt32RNG.determine(9001) >>> 8) * 0x1.5p-25f + 0.25f;
-                            s1 = (ThrustAlt32RNG.determine(9002) >>> 8) * 0x1.5p-25f + 0.25f;
-                            c0 = (ThrustAlt32RNG.determine(9003) >>> 8) * 0x1.5p-25f + 0.25f;
-                            c1 = (ThrustAlt32RNG.determine(9004) >>> 8) * 0x1.5p-25f + 0.25f;
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
-                            iBright = (int) (randomWobble(ctr * 0.0125f, s0, s1, c0, c1) * 240f);
-                            display.put(511, 255 + iBright, bright);
-                            display.put(511, 256 + iBright, bright);
-                            display.put(511, 257 + iBright, bright);
+                            iBright = (int) (swayRandomizedTight(9001L, ctr * 0.0125f) * 480f);
+                            display.put(511, 15 + iBright, bright);
+                            display.put(511, 16 + iBright, bright);
+                            display.put(511, 17 + iBright, bright);
 
-                            display.put(510, 255 + iBright, bright);
-                            display.put(510, 256 + iBright, bright);
-                            display.put(510, 257 + iBright, bright);
+                            display.put(510, 15 + iBright, bright);
+                            display.put(510, 16 + iBright, bright);
+                            display.put(510, 17 + iBright, bright);
 
-                            display.put(509, 255 + iBright, bright);
-                            display.put(509, 256 + iBright, bright);
-                            display.put(509, 257 + iBright, bright);
+                            display.put(509, 15 + iBright, bright);
+                            display.put(509, 16 + iBright, bright);
+                            display.put(509, 17 + iBright, bright);
                         }
                         break;
+//                        Gdx.graphics.setTitle("randomWobbleTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int i = 0; i < 511; i++)
+//                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
+//                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
+//                        if((ctr & 3) == 0) {
+//                            s0 = (ThrustAlt32RNG.determine(9001) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            s1 = (ThrustAlt32RNG.determine(9002) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            c0 = (ThrustAlt32RNG.determine(9003) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            c1 = (ThrustAlt32RNG.determine(9004) >>> 8) * 0x1.5p-25f + 0.25f;
+//                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
+//                            iBright = (int) (randomWobble(ctr * 0.0125f, s0, s1, c0, c1) * 240f);
+//                            display.put(511, 255 + iBright, bright);
+//                            display.put(511, 256 + iBright, bright);
+//                            display.put(511, 257 + iBright, bright);
+//
+//                            display.put(510, 255 + iBright, bright);
+//                            display.put(510, 256 + iBright, bright);
+//                            display.put(510, 257 + iBright, bright);
+//
+//                            display.put(509, 255 + iBright, bright);
+//                            display.put(509, 256 + iBright, bright);
+//                            display.put(509, 257 + iBright, bright);
+//                        }
+//                        break;
 
 //                        Gdx.graphics.setTitle("Merlin Rivers 2D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        for (int x = 0; x < width; x++) {
