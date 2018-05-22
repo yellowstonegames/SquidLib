@@ -42,6 +42,7 @@ public class ZoneDemo extends ApplicationAdapter {
     private Stage stage;
     private SquidColorCenter colorCenter;
     private TextPanel<Color> current;
+    private TextFamily crispVariableWidth;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -50,13 +51,13 @@ public class ZoneDemo extends ApplicationAdapter {
 
         cellWidth = 18;
         cellHeight = 18;
-        TextCellFactory tcf = DefaultResources.getStretchableHeavySquareFont().addSwap('.', ' ');
+        TextCellFactory tcf = DefaultResources.getCrispSlabFont().addSwap('.', ' ');
+        crispVariableWidth = DefaultResources.getCrispPrintFamily();
         display = new SquidLayers(width, height, cellWidth, cellHeight, tcf);
-        //display.setTextSize(cellWidth, cellHeight);
         screenWidth = width * cellWidth;
         screenHeight = height * cellHeight;
         display.setAnimationDuration(0.2f);
-        display.setTextSize(cellWidth, cellHeight);
+        display.setTextSize(cellWidth, cellHeight * 1.1f);
         stage = new Stage(new StretchViewport(screenWidth, screenHeight), batch);
 
         rng = new RNG(0xBABABADAAAAAAAL);
@@ -263,14 +264,15 @@ public class ZoneDemo extends ApplicationAdapter {
                 //new TextCellFactory().fontDistanceField("Noto-Sans-distance.fnt", "Noto-Sans-distance.png")
                 //        .setSmoothingMultiplier(0.4f).height(30).width(7)
                 //DefaultResources.getSlabFamily().width(11).height(24));
-                DefaultResources.getStretchablePrintFont());
+                crispVariableWidth);
+//                DefaultResources.getStretchablePrintFont().width(6).height(24));
         current.backgroundColor = colorCenter.get(30, 30, 30);
         final ColoredStringList<Color> text = new ColoredStringList<Color>();
         //text.addColoredText("SquidLib ", colorCenter.get(255, 0, 0));
-        text.addText(GDXMarkup.instance.colorString("[CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others"));
+        text.addText(GDXMarkup.instance.colorString("[/][CW Pale Indigo]SquidLib[] is brought to you by Tommy Ettinger, Eben Howard, smelC, and others"));
         /* Jump a line */
         text.addTextOnNewLine(GDXMarkup.instance.colorString("If you wanna contribute, visit " +
-                "[CW Bright Sapphire]https://github.com/SquidPony/SquidLib[]"));
+                "[CW Bright Sapphire][*]https://github.com/SquidPony/SquidLib[]"));
         /* // useful during debugging
         char[] big = new char[50];
         Arrays.fill(big, 'A');
@@ -286,7 +288,7 @@ public class ZoneDemo extends ApplicationAdapter {
         /*
     	 * To have scrollbars, we would need to provide textures
     	 */
-        final float panelWidth = screenWidth / 2f;
+        final float panelWidth = screenWidth / 1.5f;
         final float panelHeight = screenHeight / 2f;
         final ScrollPane sp = current.getScrollPane();
         current.init(panelWidth, panelHeight, text);

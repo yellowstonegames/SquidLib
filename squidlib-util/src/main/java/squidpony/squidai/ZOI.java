@@ -14,7 +14,7 @@ import java.io.Serializable;
  * Uses CoordPacker for more memory-efficient storage and manipulation of zones; it's recommended if you use this class
  * to be somewhat familiar with the methods for manipulating packed data in that class. This class is very similar in API and implementation to {@link ZOI}, but should be
  * slightly faster on large maps at the expense of usually using more memory. The main reason to choose between ZOI and
- * GreasedZOI is whether your existing code uses GreasedRegions, like GreasedZOI, or uses CoordPacker, like thsi class.
+ * GreasedZOI is whether your existing code uses GreasedRegions, like GreasedZOI, or uses CoordPacker, like this class.
  * If you don't currently use either, GreasedZOI is probably preferable because the {@link GreasedZOI#calculate()}
  * method produces a value that can be reasonably consumed by Collection-based APIs, while {@link #calculate()} produces
  * a harder-to-use {@code short[]} that must be read by CoordPacker; GreasedZOI is probably not significantly faster for

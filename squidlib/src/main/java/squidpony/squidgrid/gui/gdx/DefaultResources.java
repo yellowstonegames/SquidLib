@@ -69,7 +69,7 @@ public class DefaultResources implements LifecycleListener {
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
             msdfDejaVu = null;
     private TextFamily familyLean = null, familySlab = null, familyGo = null,
-            familyLeanMSDF = null, familySlabMSDF = null;
+            familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
     private TextureAtlas iconAtlas = null;
     public static final String squareName = "Zodiac-Square-12x12.fnt", squareTexture = "Zodiac-Square-12x12.png",
             narrowName = "Rogue-Zodiac-6x12.fnt", narrowTexture = "Rogue-Zodiac-6x12_0.png",
@@ -128,7 +128,9 @@ public class DefaultResources implements LifecycleListener {
             crispDejaVu = "DejaVuSansMono-msdf.fnt",
             crispDejaVuTexture = "DejaVuSansMono-msdf.png",
             crispDejaVuItalic = "DejaVuSansMono-Oblique-msdf.fnt",
-            crispDejaVuItalicTexture = "DejaVuSansMono-Oblique-msdf.png"
+            crispDejaVuItalicTexture = "DejaVuSansMono-Oblique-msdf.png",
+            crispNotoSerif = "NotoSerif-Family-msdf.fnt",
+            crispNotoSerifTexture = "NotoSerif-Family-msdf.png"
                     ;
     public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
@@ -1728,6 +1730,41 @@ public class DefaultResources implements LifecycleListener {
             return instance.familySlabMSDF.copy();
         return null;
 
+    }
+    /**
+     * Returns a TextFamily already configured to use a variable-width serif font that should look like the serif
+     * fonts used in many novels' main texts, and that should scale cleanly to many sizes using an MSDF technique, and
+     * supports 4 styles (regular, bold, italic, and bold italic). Caches the result for later calls. The font used is 
+     * Noto Serif, which is OFL-licensed by Google, and looks very legible in normal use. Meant to be used in
+     * variable-width displays like TextPanel.
+     * <br>
+     * Preview: <a href="https://i.imgur.com/WsDqSfJ.png">In the foreground message box in ZoneDemo</a>
+     * <br>
+     * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work, but it can also be used as a TextCellFactory.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/NotoSerif-Family-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/NotoSerif-Family-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/NotoSerif-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font Noto Serif, made available by Google
+     */
+    public static TextFamily getCrispPrintFamily() {
+        initialize();
+        if (instance.familyPrintMSDF == null) {
+            try {
+                instance.familyPrintMSDF = new TextFamily();
+                instance.familyPrintMSDF.fontMultiDistanceField(crispNotoSerif, crispNotoSerifTexture)
+                        .height(42).width(32);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.familyPrintMSDF != null)
+            return instance.familyPrintMSDF.copy();
+        return null;
     }
 
     /**

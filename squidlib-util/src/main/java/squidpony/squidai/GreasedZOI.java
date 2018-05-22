@@ -172,6 +172,23 @@ public class GreasedZOI implements Serializable {
         }
         return found.asInts();
     }
+
+    /**
+     * Given the zones resulting from this class' calculate method and a Coord to check, finds the indices of all
+     * influencing groups in zones that have the Coord in their area, and returns all such indices as an int array.
+     * @param zones a short[][] returned by calculate; not a multi-packed short[][] from CoordPacker !
+     * @param point the Coord to test
+     * @return an int[] where each element is the index of an influencing group in zones
+     */
+    public int[] nearestInfluences(GreasedRegion[] zones, Coord point)
+    {
+        IntVLA found = new IntVLA(4);
+        for (int i = 0; i < zones.length; i++) {
+            if(zones[i].contains(point))
+                found.add(i);
+        }
+        return found.toArray();
+    }
     /**
      * This can be given a Coord to check in the results of the latest calculate() call. Finds the indices of all
      * influencing groups in zones that have the Coord in their area, and returns all such indices as an {@link IntVLA}.

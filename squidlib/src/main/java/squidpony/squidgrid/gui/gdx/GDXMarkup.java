@@ -136,7 +136,6 @@ public class GDXMarkup implements IMarkup<Color>{
                 mod ^= ITALIC;
             }
             sb.setLength(0);
-
         }
         return cs;
     }

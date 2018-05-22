@@ -751,14 +751,16 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			boolean open = false;
 			for (Bucket<T> fragment : fragments) {
 				if(fragment.color != null) {
-					if (open)
-						result.append(markup.closeMarkup());
+					// extra close-markup tags can cause variable-width text to have huge spacing.
+                    // they shouldn't be needed anyway.
+//					if (open)
+//						result.append(markup.closeMarkup());
 					result.append(markup.getMarkup(fragment.color));
 					open = true;
 				}
 				else {
-					if (open)
-						result.append(markup.closeMarkup());
+//					if (open)
+//						result.append(markup.closeMarkup());
 					open = false;
 				}
 				// maybe try this line if escape() is re-added to IMarkup

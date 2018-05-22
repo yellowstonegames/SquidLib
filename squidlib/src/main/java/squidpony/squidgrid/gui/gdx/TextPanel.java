@@ -198,7 +198,7 @@ public class TextPanel<T extends Color> {
         if (distanceFieldFont != null)
         {
             tcf = distanceFieldFont;
-            distanceField = distanceFieldFont.distanceField;
+            distanceField = distanceFieldFont.distanceField || distanceFieldFont.msdf;
             tcf.initBySize();
             font = tcf.font();
             if (markup != null)
@@ -261,7 +261,7 @@ public class TextPanel<T extends Color> {
 	 */
 	public void setMarkup(IMarkup<T> m) {
 		if (font != null)
-			font.getData().markupEnabled |= true;
+			font.getData().markupEnabled = true;
 		this.markup = m;
 	}
 
@@ -278,7 +278,7 @@ public class TextPanel<T extends Color> {
         tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))
                 .width(MathUtils.round(font.getSpaceWidth()));
 		if (markup != null)
-			font.getData().markupEnabled |= true;
+			font.getData().markupEnabled = true;
 	}
 
 	/**
@@ -460,7 +460,6 @@ public class TextPanel<T extends Color> {
         }
         @Override
         public void draw(Batch batch, float parentAlpha) {
-
             final float tx = 0;//getX();
             final float ty = 0;//getY();
             final float twidth = getWidth();
