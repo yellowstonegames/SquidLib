@@ -10714,9 +10714,9 @@ public class SColor extends Color implements Serializable {
      * and ending or starting on transparent, you should prefer making a color that has the correct RGB values
      * and also has 0 for the alpha component unless you are transitioning from opaque black to this SColor.
      * Using {@link #SColor(int, int, int, int)} will work.
-     * It can be represented as a packed float with the constant -0x1.0p125F.
+     * It can be represented as a packed float with the constant 0x0.0p0F.
      */
-    public static final SColor TRANSPARENT = new SColor(0x00000000, "Transparent");
+    public static final SColor TRANSPARENT = new SColor(0, 0, 0, 0, "Transparent");
 
     /**
      * This array is loaded with the colors found in the rainbow, in the
@@ -11354,7 +11354,7 @@ public class SColor extends Color implements Serializable {
      */
     public static GapShuffler<Integer> randomHueSequence(CharSequence seed)
     {
-        return new GapShuffler<Integer>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, seed);
+        return new GapShuffler<>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, seed);
     }
     /**
      * Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
@@ -11367,7 +11367,7 @@ public class SColor extends Color implements Serializable {
      */
     public static GapShuffler<Integer> randomHueSequence(IRNG rng)
     {
-        return new GapShuffler<Integer>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, rng);
+        return new GapShuffler<>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, rng);
     }
     /**
      * Returns an infinite Iterator (also an Iterable) over Integers 0-15 inclusive that can be used to select hues from
@@ -11380,7 +11380,7 @@ public class SColor extends Color implements Serializable {
      */
     public static GapShuffler<Integer> randomHueSequence()
     {
-        return new GapShuffler<Integer>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
+        return new GapShuffler<>(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15});
     }
 
     /**
@@ -11571,38 +11571,41 @@ public class SColor extends Color implements Serializable {
 
     /**
      * A constructor with no passed values. Builds a white (opaque all channels)
-     * object.
+     * object, with a name that's just the hex value of the color as RGBA.
      */
     public SColor() { //builds white
-        this(Color.rgb888(Color.WHITE));
+        this(Color.WHITE);
     }
 
     /**
      * Creates a new color that's the same value as the passed in color.
+     * Simply sets the name of this SColor to {@link Color#toString()}.
      *
-     * @param color
+     * @param color an existing libGDX Color to copy
      */
     public SColor(Color color) {
-        this(Color.rgb888(color));
+        super(color);
+        name = super.toString();
     }
 
     /**
      * Creates a new color that's the same value as the passed in color and
      * given the provided name.
      *
-     * @param color
-     * @param name
+     * @param color an existing libGDX Color to copy and give a name to as an SColor 
+     * @param name the name of the color, which will be registered in {@link Colors}
      */
     public SColor(Color color, String name) {
-        super((Color.rgb888(color) << 8) | 255);
+        super(color);
         this.name = name;
         Colors.put(name, this);
     }
 
     /**
      * Creates a new color that has the given combined RGB value.
-     *
-     * @param colorValue
+     * Alpha will be fully opaque.
+     * 
+     * @param colorValue an RGB int value; does not include alpha (it will be opaque)
      */
     public SColor(int colorValue) {
         super((colorValue << 8) | 255);
@@ -11611,10 +11614,10 @@ public class SColor extends Color implements Serializable {
 
     /**
      * Creates a new color that has the given combined RGB value and the
-     * provided name.
+     * provided name. Alpha will be fully opaque.
      *
-     * @param colorValue
-     * @param name
+     * @param colorValue an RGB int value; does not include alpha
+     * @param name the name of the color, which will be registered in {@link Colors}
      */
     public SColor(int colorValue, String name) {
         super((colorValue << 8) | 255);
@@ -11623,11 +11626,12 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Creates a new color that has the given RGB values.
+     * Creates a new color that has the given RGB values from 0 to 255 (inclusive).
+     * Alpha will be fully opaque.
      *
-     * @param r
-     * @param g
-     * @param b
+     * @param r red from 0 to 255, both inclusive
+     * @param g green from 0 to 255, both inclusive
+     * @param b blue from 0 to 255, both inclusive
      */
     public SColor(int r, int g, int b) {
         super(r / 255f, g / 255f, b / 255f, 1.0f);
@@ -11635,12 +11639,12 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Creates a new color that has the given ARGB values.
+     * Creates a new color that has the given RGBA values.
      *
-     * @param r
-     * @param g
-     * @param b
-     * @param a
+     * @param r red from 0 to 255, both inclusive
+     * @param g green from 0 to 255, both inclusive
+     * @param b blue from 0 to 255, both inclusive
+     * @param a alpha from 0 to 255, both inclusive
      */
     public SColor(int r, int g, int b, int a) {
         super(r / 255f, g / 255f, b / 255f, a / 255f);
@@ -11648,12 +11652,13 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Creates a new color that has the given RGB values and the provided name.
+     * Creates a new color that has the given RGB values from 0 to 255 (inclusive) and the provided name.
+     * Alpha will be fully opaque.
      *
-     * @param r
-     * @param g
-     * @param b
-     * @param name
+     * @param r red from 0 to 255, both inclusive
+     * @param g green from 0 to 255, both inclusive
+     * @param b blue from 0 to 255, both inclusive
+     * @param name the name of the color, which will be registered in {@link Colors}
      */
     public SColor(int r, int g, int b, String name) {
         super(r / 255f, g / 255f, b / 255f, 1.0f);
@@ -11662,18 +11667,30 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Creates a new color that has the given ARGB values and the provided name.
+     * Creates a new color that has the given RGBA values from 0 to 255 (inclusive) and the provided name.
      *
-     * @param r
-     * @param g
-     * @param b
-     * @param a
-     * @param name
+     * @param r red from 0 to 255, both inclusive
+     * @param g green from 0 to 255, both inclusive
+     * @param b blue from 0 to 255, both inclusive
+     * @param a alpha from 0 to 255, both inclusive
+     * @param name the name of the color, which will be registered in {@link Colors}
      */
     public SColor(int r, int g, int b, int a, String name) {
         super(r / 255f, g / 255f, b / 255f, a / 255f);
         this.name = name;
         Colors.put(name, this);
+    }
+
+    /**
+     * Packs the color components into a 32-bit integer with the format ABGR and then converts it to a float.
+     * Implemented using typed arrays on GWT, which may differ from {@link Color#toFloatBits()} internally but
+     * should produce identical results. Alpha only keeps the most-significant 7 of 8 bits. You can also
+     * look at the JavaDocs for almost all predefined SColor values to see what the packed float value is.
+     * @return the packed color as a 32-bit float
+     */
+    @Override
+    public float toFloatBits() {
+        return NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
     }
 
     /**

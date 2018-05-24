@@ -22,16 +22,25 @@ import squidpony.squidmath.StatefulRNG;
  * <br>
  * The fonts provided are mostly monospaced, with most looking rather similar (straight orthogonal lines and right-angle
  * curves), but some that look... better than the rest. For monospaced fonts that could be used on a grid in SquidPanel
- * or SquidLayers, one good choice is Inconsolata-LGC, accessible by getSmoothFont(), getLargeSmoothFont(), (ideally for
- * narrow glyphs) getStretchableFont(), or (ideally for square glyphs) getStretchableSquareFont(). Another is Computer
- * Modern, accessible by getStretchableTypewriterFont(), which has a chunky, ornamented style. For variable-width fonts
- * that can be used in TextPanel and LinesPanel, among others, you can use the high-quality serif font Gentium,
- * accessible by getStretchablePrintFont(), or Noto Sans, a clean sans font accessible by getStretchableCleanFont(). All
- * of the fonts so far support the Latin, Greek, and Cyrillic alphabets.
+ * or SquidLayers, it is recommended that you use a "stretchable" font (which use a signed distance field, or SDF,
+ * effect to stretch smoothly) or a "crisp" font (which use a multi-channel signed distance field, or MSDF, effect to
+ * stretch smoothly and remain sharp at very high zooms). For some usage you may want a TextFamily instead of a normal
+ * TextCellFactory or BitmapFont; these TextFamily fonts store regular, bold, italic, and bold-italic faces in one file,
+ * and {@link GDXMarkup} can produce text that will render in those faces. Some good choices for fonts here are
+ * Iosevka, which comes in a sans-serif version with {@link #getStretchableLeanFont()}, {@link #getCrispLeanFont()}, 
+ * {@link #getCrispLeanFamily()}, and more, as well as a slab-serif version with {@link #getStretchableSlabFont()},
+ * {@link #getCrispSlabFont()}, and {@link #getCrispSlabFamily()}, among others, as well as Inconsolata-LGC, which is
+ * more geometric sans-serif accessible with {@link #getStretchableFont()}, or (well-suited for square glyphs)
+ * {@link #getStretchableSquareFont()} (it does not have a crisp variety). Another is Computer Modern, accessible by
+ * {@link #getStretchableTypewriterFont()}, which has a chunky, ornamented style. For variable-width fonts
+ * that can be used in TextPanel and LinesPanel, among others, you can use the recommended crisp font family Noto Serif
+ * with {@link #getCrispPrintFamily()}, or for stretchable fonts there's the serif font Gentium with
+ * {@link #getStretchablePrintFont()} or Noto Sans with {@link #getStretchableCleanFont()} (Noto Sans currently has
+ * problems that Noto Serif does not have). All of the fonts so far support the Latin, Greek, and Cyrillic alphabets.
  * <br>
- * If you can't decide, go with getStretchableFont() or getStretchableSquareFont(), which return TextCellFactory
+ * If you can't decide, go with {@link #getCrispLeanFont()} or {@link #getCrispSlabFont()}, which return TextCellFactory
  * objects, and call their .width(int), .height(int), and .initBySize() methods to make them the size (and aspect ratio)
- * you want. You can use getStretchableFont() or getStretchableTypewriterFont() with the same width and height to make
+ * you want. You can use stretchable or crisp fonts with equal width and height to make
  * a horizontally-stretched version of a square font instead of the existing square fonts that add blank space.
  * <br>
  * The most Latin script support for a monospaced font is in the font Mandrill, accessible by getDefaultUnicodeFont()

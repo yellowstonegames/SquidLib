@@ -685,9 +685,10 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     {
         x = (x * 0x41C64E6DL + (state + 0x369DEA0F31A53F85L));
         y = (y * 0x41C64E6DL + (state + 0xF83F4291DB34BB19L));
+        return (int) (((x ^ x >>> 32) * (y ^ y >>> 32) * 0xAEF17502108EF2D9L) >>> 56);
+        //0x25DA53916F1AFBF1L
 //        x = (x ^ x >>> 32) * 0xAEF17502108EF2D9L;
 //        y = (y ^ y >>> 32) * 0xAEF17502108EF2D9L;
-        return (int) (((x ^ x >>> 32) * (y ^ y >>> 32) * 0xAEF17502108EF2D9L) >>> 56); //0x25DA53916F1AFBF1L
 
 //        long s = (state ^ y) * 0x41C64E6DL + x;
 //        s = (s ^ s >>> 32) * 0xAEF17502108EF2D9L;
