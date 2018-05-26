@@ -71,8 +71,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 118;
-    private int hashMode = 0, rngMode = 46, noiseMode = 106;//82;
+    private static final int NOISE_LIMIT = 122;
+    private int hashMode = 0, rngMode = 46, noiseMode = 121;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -4154,6 +4154,59 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 118:
+                        Gdx.graphics.setTitle("Classic 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright =
+                                        basicPrepare(ClassicNoise.instance.getNoise(xx * 0.03125, yy * 0.03125)
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 119:
+                        Gdx.graphics.setTitle("Classic 3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045)
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 120:
+                        Gdx.graphics.setTitle("Classic 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04))
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 121:
+                        Gdx.graphics.setTitle("Classic 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04), 
+                                                NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5, NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25
+                                                )
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+
                 }
             }
             break;
