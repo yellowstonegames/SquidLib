@@ -13,10 +13,7 @@ import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.WhirlingNoise;
+import squidpony.squidmath.*;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -44,10 +41,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Ocean                  = 13,
         Empty                  = 14;
 
-    private static final int width = 1920, height = 1080;
+    //private static final int width = 1920, height = 1080;
     //private static final int width = 1024, height = 512; // elliptical
     //private static final int width = 512, height = 256; // mimic, elliptical
-    //private static final int width = 800, height = 800; // space view
+    private static final int width = 800, height = 800; // space view
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -193,10 +190,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Sphere " + date + "/";
         //path = "out/worlds/Tiling " + date + "/";
         //path = "out/worlds/AltSphere " + date + "/";
-        path = "out/worlds/Ellipse " + date + "/";
+        //path = "out/worlds/Ellipse " + date + "/";
         //path = "out/worlds/Mimic " + date + "/";
         //path = "out/worlds/Dump " + date + "/";
-        //path = "out/worlds/SpaceView " + date + "/";
+        path = "out/worlds/SpaceView " + date + "/";
 
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
@@ -211,9 +208,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         ///world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.625);
         //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
-        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 1.5);
-        //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 1.5);
-        //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, WhirlingNoise.instance, 1.5);
+        //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 1.5);
+        //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 1.5);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
@@ -337,7 +334,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                         case 2:
                         case 3:
                             Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
-                                    (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
                             pm.setColor(tempColor);
                             pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 //                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
@@ -346,7 +343,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                             continue PER_CELL;
                         case 4:
                             Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
-                                    (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
+                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
                             pm.setColor(tempColor);
                             pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 //                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
@@ -361,7 +358,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                     case 2:
                     case 3:
                         Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
-                                (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
                         pm.setColor(tempColor);
                         pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 //                            pm.drawPixel(x, y, Color.rgba8888(tempColor));

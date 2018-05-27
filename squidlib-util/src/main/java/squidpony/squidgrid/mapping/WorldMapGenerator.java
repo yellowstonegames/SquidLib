@@ -61,9 +61,9 @@ public abstract class WorldMapGenerator implements Serializable {
             deepWaterLower = -1.0, deepWaterUpper = -0.7,        // 0
             mediumWaterLower = -0.7, mediumWaterUpper = -0.3,    // 1
             shallowWaterLower = -0.3, shallowWaterUpper = -0.1,  // 2
-            coastalWaterLower = -0.1, coastalWaterUpper = 0.1,   // 3
-            sandLower = 0.1, sandUpper = 0.18,                   // 4
-            grassLower = 0.18, grassUpper = 0.35,                // 5
+            coastalWaterLower = -0.1, coastalWaterUpper = 0.02,   // 3
+            sandLower = 0.02, sandUpper = 0.12,                   // 4
+            grassLower = 0.14, grassUpper = 0.35,                // 5
             forestLower = 0.35, forestUpper = 0.6,               // 6
             rockLower = 0.6, rockUpper = 0.8,                    // 7
             snowLower = 0.8, snowUpper = 1.0;                    // 8
@@ -1127,12 +1127,13 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     bc |= (hc + mc * 6) << 10;
                     if(heightCode < 4)
-                        biomeCodeData[x][y] = bc | (int)((heightData[x][y] + 1.0) * 0.909091) << 20;
+                        biomeCodeData[x][y] = bc | (int)((heightData[x][y] + 1.0) * 1000.0) << 20;
                     else if (isRiver || isLake)
                         biomeCodeData[x][y] = bc | (int)(moist * 358.4 + 665.0) << 20;
                     else
-                        biomeCodeData[x][y] = bc | (int) ((heightCode == 4) ? (0.18 - high) * 12800.0 :
-                                        NumberTools.sway((high + moist) * (4.1 + high - hot)) * 512 + 512) << 20;
+                        biomeCodeData[x][y] = bc | (int) ((heightCode == 4) 
+                                ? (sandUpper - high) * 10240.0 // multiplier affected by changes to sandLower
+                                : NumberTools.sway((high + moist) * (4.1 + high - hot)) * 512 + 512) << 20;
                 }
             }
         }
@@ -1342,9 +1343,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-                    minHeightActual0 = Math.min(minHeightActual0, h);
-                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+//                    minHeightActual0 = Math.min(minHeightActual0, h);
+//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    h = heightData[x][y];
                     heightCodeData[x][y] = (t = codeHeight(h));
                     hMod = 1.0;
                     switch (t) {
@@ -1670,9 +1672,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-                    minHeightActual0 = Math.min(minHeightActual0, h);
-                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+//                    minHeightActual0 = Math.min(minHeightActual0, h);
+//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    h = heightData[x][y];
                     heightCodeData[x][y] = (t = codeHeight(h));
                     hMod = 1.0;
                     switch (t) {
@@ -2028,9 +2031,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-                    minHeightActual0 = Math.min(minHeightActual0, h);
-                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+//                    minHeightActual0 = Math.min(minHeightActual0, h);
+//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    h = heightData[x][y];
                     heightCodeData[x][y] = (t = codeHeight(h));
                     hMod = 1.0;
                     switch (t) {
@@ -2159,9 +2163,8 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
-         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
-         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
          * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link EllipticalMap#EllipticalMap(long, int, int, Noise3D, double)}, then this would be the
@@ -2172,9 +2175,8 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
-         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
-         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
@@ -2188,9 +2190,8 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
-         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
-         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
@@ -2205,9 +2206,8 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
-         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
-         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
@@ -2223,13 +2223,13 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
-         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
-         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
+         * implementation to use is {@link ClassicNoise#instance}, and {@link WhirlingNoise#instance} is also good.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -2241,18 +2241,18 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
-         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
-         * have significantly-exaggerated-in-size features while the equator is not distorted.
-         * Takes an initial seed, the width/height of the map, and parameters for noise
-         * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
+         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
          * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
          * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
          * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). The
+         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
+         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
          * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
          * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
          * is fine and may even be too high for maps that don't require zooming.
@@ -2410,9 +2410,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-                    minHeightActual0 = Math.min(minHeightActual0, h);
-                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+//                    minHeightActual0 = Math.min(minHeightActual0, h);
+//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    h = heightData[x][y];
                     if(heightCodeData[x][y] == 10000) {
                         heightCodeData[x][y] = 1000;
                         continue;
@@ -2774,7 +2775,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         if(shallow.contains(x, y))
                             h *= 0.375;
                         else
-                            h -= 0.1;
+                            h -= coastalWaterUpper;
                     }
                     h *= waterModifier;
                     heightData[x][y] = h;
@@ -2820,9 +2821,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-                    minHeightActual0 = Math.min(minHeightActual0, h);
-                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+//                    minHeightActual0 = Math.min(minHeightActual0, h);
+//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    h = heightData[x][y];
                     if(heightCodeData[x][y] == 10000) {
                         heightCodeData[x][y] = 1000;
                         continue;
@@ -3173,9 +3175,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-                    minHeightActual0 = Math.min(minHeightActual0, h);
-                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
+//                    minHeightActual0 = Math.min(minHeightActual0, h);
+//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
+                    h = heightData[x][y];
                     if(heightCodeData[x][y] == 10000) {
                         heightCodeData[x][y] = 1000;
                         continue;
@@ -3242,49 +3245,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet = pc;
             }
             landData.refill(heightCodeData, 4, 999);
-            /*
-            if(generateRivers) {
-                if (fresh) {
-                    addRivers();
-                    riverData.connect8way().thin().thin();
-                    lakeData.connect8way().thin();
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                } else {
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                    int stx = Math.min(Math.max((zoomStartX >> zoom) - (width >> 2), 0), width),
-                            sty = Math.min(Math.max((zoomStartY >> zoom) - (height >> 2), 0), height);
-                    for (int i = 1; i <= zoom; i++) {
-                        int stx2 = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
-                                sty2 = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
-                        //(zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom)
-
-//                        Map is 200x100, GreasedRegions have that size too.
-//                        Zoom 0 only allows 100,50 as the center, 0,0 as the corner
-//                        Zoom 1 allows 100,50 to 300,150 as the center (x2 coordinates), 0,0 to 200,100 (refers to 200,100) as the corner
-//                        Zoom 2 allows 100,50 to 700,350 as the center (x4 coordinates), 0,0 to 200,100 (refers to 600,300) as the corner
-
-
-                        System.out.printf("zoomStartX: %d zoomStartY: %d, stx: %d sty: %d, stx2: %d, sty2: %d\n", zoomStartX, zoomStartY, stx, sty, stx2, sty2);
-                        if ((i & 3) == 3) {
-                            partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
-                            partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
-                        } else {
-                            partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
-                            partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
-                        }
-                        //stx = (width >> 1) ;//Math.min(Math.max(, 0), width);
-                        //sty = (height >> 1);//Math.min(Math.max(, 0), height);
-                    }
-                    System.out.println();
-                }
-            }
-            */
         }
     }
 

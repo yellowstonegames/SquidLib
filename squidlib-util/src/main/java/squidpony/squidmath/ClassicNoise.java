@@ -63,12 +63,14 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     }
 
     @Override
-    public double getNoise(double x, double y) {
+    public double getNoise(final double x, final double y) {
         return getNoiseWithSeed(x, y, seed);
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final long seed) {
+    public double getNoiseWithSeed(double x, double y, final long seed) {
+        x *= 2.0;
+        y *= 2.0;
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y);         
@@ -81,12 +83,15 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     }
 
     @Override
-    public double getNoise(double x, double y, double z) {
+    public double getNoise(final double x, final double y, final double z) {
         return getNoiseWithSeed(x, y, z, seed);
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
+    public double getNoiseWithSeed(double x, double y, double z, final long seed) {
+        x *= 2.0;
+        y *= 2.0;
+        z *= 2.0;
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y),
@@ -108,7 +113,11 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
+    public double getNoiseWithSeed(double x, double y, double z, double w, final long seed) {
+        x *= 2.0;
+        y *= 2.0;
+        z *= 2.0;
+        w *= 2.0;
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y),
@@ -141,7 +150,13 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     }
 
     @Override
-    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {
+    public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
+        x *= 2.0;
+        y *= 2.0;
+        z *= 2.0;
+        w *= 2.0;
+        u *= 2.0;
+        v *= 2.0;
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y),
