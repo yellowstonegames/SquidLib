@@ -4401,7 +4401,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             counts[i] = tmp == 0 ? -1 : (ct += tmp);
         }
         seed |= 1L;
-        final double total = ct * 0x1p-53;
+        final int total = ct;
         ct *= fraction;// (int)(fraction * ct);
         if(limit >= 0 && limit < ct)
             ct = limit;
@@ -4409,9 +4409,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         EACH_QUASI:
         for (int i = 0; i < ct; i++)
         {
-            // tmp's value is similar to if the following was called and total was not a tiny decimal:
-            //VanDerCorputQRNG.altDetermine(1, i + 1) * total);
-            tmp = (int)(((seed * Integer.reverse(i+1) << 21) & 0x1fffffffffffffL) * total);
+            tmp = (int)(VanDerCorputQRNG.altDetermine(seed, i+1) * total);
             
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
@@ -4491,15 +4489,15 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(limit <= 0)
             return empty();
         seed |= 1L;
-        final double total = ct * 0x1p-53;
+        final int total = ct;
         int[] order = new int[limit];
         for (int i = 0, m = 1; i < limit; i++, m++) {
-            idx = (int)(((seed * Integer.reverse(m) << 21) & 0x1fffffffffffffL) * total);
+            idx = (int)(VanDerCorputQRNG.altDetermine(seed, m) * total);
             BIG:
             while (true) {
                 for (int j = 0; j < i; j++) {
                     if (order[j] == idx) {
-                        idx = (int)(((seed * Integer.reverse(++m) << 21) & 0x1fffffffffffffL) * total);
+                        idx = (int)(VanDerCorputQRNG.altDetermine(seed, ++m) * total);
                         continue BIG;
                     }
                 }

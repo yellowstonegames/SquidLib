@@ -5,14 +5,19 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
+import squidpony.FakeLanguageGen;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.mapping.PoliticalMapper;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.StatefulRNG;
 import squidpony.squidmath.WhirlingNoise;
 
@@ -66,7 +71,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     //private static final int bigWidth = 1024, bigHeight = 512;
     private static final int bigWidth = 512, bigHeight = 256;
     //private static final int bigWidth = 400, bigHeight = 400;
-    private static final int cellWidth = 16, cellHeight = 16;
+    private static final int cellWidth = 17, cellHeight = 17;
     private static final int shownWidth = 96, shownHeight = 48;
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -77,6 +82,9 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     private long seed;
     private Vector3 position, previousPosition, nextPosition;
     private WorldMapGenerator.MimicMap world;
+    private PoliticalMapper pm;
+    private OrderedMap<Character, FakeLanguageGen> atlas;
+    private OrderedMap<Coord, String> cities;
     //private WorldMapGenerator.EllipticalMap world;
     //private final float[][][] cloudData = new float[128][128][128];
     private long counter = 0;
@@ -84,8 +92,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     private long ttg = 0; // time to generate
     private float moveAmount = 0f, moveLength = 1000f;
     private WorldMapGenerator.DetailedBiomeMapper dbm;
-    //private FantasyPoliticalMapper fpm;
-    //private char[][] political;
+    private char[][] political;
     private static float black = SColor.FLOAT_BLACK,
             white = SColor.FLOAT_WHITE;
     // Biome map colors
@@ -179,7 +186,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispSlabFont());
+        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispLeanFont());
+        display.font.tweakHeight(18f).tweakWidth(15f);
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
@@ -190,6 +198,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
         world.generateRivers = false;
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
+        pm = new PoliticalMapper(FakeLanguageGen.SIMPLISH.word(rng, true));
+        cities = new OrderedMap<>(96);
         position = new Vector3(bigWidth * cellWidth * 0.5f, bigHeight * cellHeight * 0.5f, 0);
         previousPosition = position.cpy();
         nextPosition = position.cpy();
@@ -229,6 +239,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                 previousPosition.set(position);
                 nextPosition.set(screenX, screenY, 0);
                 stage.getCamera().unproject(nextPosition);
+                nextPosition.set(MathUtils.round(nextPosition.x), MathUtils.round(nextPosition.y), nextPosition.z);
                 counter = System.currentTimeMillis();
                 moveAmount = 0f;
                 return true;
@@ -270,6 +281,24 @@ public class WorldMapTextDemo extends ApplicationAdapter {
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
         world.generate(1.0, 1.125, seed);
         dbm.makeBiomes(world);
+        atlas = new OrderedMap<>(80);
+        atlas.clear();
+        for (int i = 0; i < 64; i++) {
+            atlas.put(ArrayTools.letterAt(i), rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages));
+        }
+        political = pm.generate(world, atlas, 1.0);
+        cities.clear();
+        Coord[] points = world.earth.copy().disperse8way().removeEdges().mixedRandomSeparated(0.05, 96, rng.nextLong());
+        for (int i = 0; i < points.length; i++) {
+            char p = political[points[i].x][points[i].y];
+            if(p == '~' || p == '%')
+                continue;
+            FakeLanguageGen lang = atlas.get(p);
+            if(lang != null)
+            {
+                cities.put(points[i], lang.word(rng, true));
+            }
+        }
         //counter = 0L;
         ttg = System.currentTimeMillis() - startTime;
     }
@@ -299,14 +328,14 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                         case 2:
                         case 3:
                             shown = SColor.lerpFloatColors(shallowColor, ice,
-                                    (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0)));
+                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
 //                            if(cloud > 0.0)
 //                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
                             display.put(x, y, '~', SColor.lerpFloatColors(ice, black, 0.35f), shown);
                             continue PER_CELL;
                         case 4:
                             shown = SColor.lerpFloatColors(lightIce, ice,
-                                    (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1)));
+                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));
 //                            if(cloud > 0.0)
 //                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
                             display.put(x, y, '¤', SColor.lerpFloatColors(ice, black, 0.25f), shown);
@@ -318,12 +347,12 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                     case 1:
                     case 2:
                         shown = SColor.lerpFloatColors(deepColor, coastalColor,
-                                (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0)));
+                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
                         display.put(x, y, '≈', SColor.lerpFloatColors(foamColor, white, 0.3f), shown);
                         break;
                     case 3:
                         shown = SColor.lerpFloatColors(deepColor, coastalColor,
-                                (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0)));
+                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
                         display.put(x, y, '~', SColor.lerpFloatColors(foamColor, white, 0.3f), shown);
                         break;
                     default:
@@ -349,6 +378,12 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                 }
             }
         }
+        for (int i = 0; i < cities.size(); i++) {
+            Coord ct = cities.keyAt(i);
+            String cname = cities.getAt(i);
+            display.put(ct.x, ct.y, '□', SColor.SOOTY_WILLOW_BAMBOO);
+            display.put(ct.x - (cname.length() >> 1), ct.y - 1, cname, SColor.WHITE, SColor.SOOTY_WILLOW_BAMBOO);
+        }
     }
     @Override
     public void render() {
@@ -358,11 +393,14 @@ public class WorldMapTextDemo extends ApplicationAdapter {
         Gdx.gl.glDisable(GL20.GL_BLEND);
         if(!nextPosition.epsilonEquals(previousPosition)) {
             moveAmount = (System.currentTimeMillis() - counter) * 0.001f;
-            if (moveAmount <= 1f)
+            if (moveAmount <= 1f) {
                 position.set(previousPosition).lerp(nextPosition, moveAmount);
+                position.set(MathUtils.round(position.x), MathUtils.round(position.y), position.z);
+            }
             else {
                 previousPosition.set(position);
                 nextPosition.set(position);
+                nextPosition.set(MathUtils.round(nextPosition.x), MathUtils.round(nextPosition.y), nextPosition.z);
                 moveAmount = 0f;
                 counter = System.currentTimeMillis();
             }

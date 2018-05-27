@@ -2449,6 +2449,16 @@ public class FakeLanguageGen implements Serializable {
             registered[i] = registry.getAt(i+1);
         }
     }
+
+    /**
+     * FakeLanguageGen constants that are meant to sound like specific real-world languages, and that all use the Latin
+     * script (like English) with maybe some accents.
+     */
+    public static final FakeLanguageGen[] romanizedHumanLanguages = {
+            ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH, MAORI,
+            GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI
+    };
+
     /**
      * Zero-arg constructor for a FakeLanguageGen; produces a FakeLanguageGen equivalent to FakeLanguageGen.ENGLISH .
      */
