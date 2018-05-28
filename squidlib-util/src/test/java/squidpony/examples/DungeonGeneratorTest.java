@@ -95,8 +95,8 @@ public class DungeonGeneratorTest {
         dungeonGenerator.addTraps(2);
         MixedGenerator mix = new MixedGenerator(width, height, rng);
         mix.putCaveCarvers(1);
-        mix.putWalledBoxRoomCarvers(9);
-        mix.putWalledRoundRoomCarvers(7);
+        mix.putBoxRoomCarvers(9);
+        mix.putRoundRoomCarvers(7);
         dungeonGenerator.generate(mix.generate());
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
         dungeon = dungeonGenerator.getDungeon();

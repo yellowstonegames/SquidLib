@@ -130,26 +130,27 @@ public class MixedGenerator implements IDungeonGenerator {
     {
         width -= 2;
         height -= 2;
-        float mx = rng.nextFloat() * 0.2f, my = rng.nextFloat() * 0.2f;
-        int index = 9 + rng.next(4), sz = width * height / 157;
+        //float mx = rng.nextFloat() * 0.2f, my = rng.nextFloat() * 0.2f;
+        int blocks = width * height / 80 >> 3, sz = blocks << 3, index = 0,
+                seed = rng.nextInt()|1, seed2 = rng.nextInt()|1;
         //System.out.println("mx: " + mx + ", my: " + my + ", index: " + index);
         List<Coord> list = new ArrayList<>(sz);
-        list.add(Coord.get((int)(((VanDerCorputQRNG.determine2(index) + mx) % 1.0) * width + 1),
-                (int) (((VanDerCorputQRNG.determine2_scrambled(index-1) + my) % 1.0) * height + 1)));
-        for (int i = 0; i < sz; i++) {
-            list.add(Coord.get((int) (((VanDerCorputQRNG.determine2(++index) + mx) % 1.0) * width + 1),
-                    (int) (((VanDerCorputQRNG.determine2_scrambled(index-1) + my) % 1.0) * height + 1)));
+        for (int i = 0; i < blocks; i++) {
+            Coord area = VanDerCorputQRNG.haltoid(seed2, width * 3 >> 2, height * 3 >> 2, 1, 1, i);
+            for (int j = 0; j < 4; j++) {
+                list.add(VanDerCorputQRNG.haltoid(seed, width >> 2, height >> 2, area.x, area.y, index++));
+            }
         }
         return list;
     }
 
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given RNG.
-     * This version of the constructor uses Poisson Disk sampling to generate the points it will draw caves and
-     * corridors between, ensuring a minimum distance between points, but it does not ensure that paths between points
-     * will avoid overlapping with rooms or other paths. You call the different carver-adding methods to affect what the
-     * dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to only
-     * caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
+     * This version of the constructor uses a sub-random point sequence to generate the points it will draw caves and
+     * corridors between, helping to ensure a minimum distance between points, but it does not ensure that paths between
+     * points  will avoid overlapping with rooms or other paths. You call the different carver-adding methods to affect
+     * what the dungeon will look like, putCaveCarvers(), putBoxRoomCarvers(), and putRoundRoomCarvers(), defaulting to
+     * only caves if none are called. You call generate() after adding carvers, which returns a char[][] for a map.
      * @param width the width of the final map in cells
      * @param height the height of the final map in cells
      * @param rng an RNG object to use for random choices; this make a lot of random choices.
@@ -860,10 +861,8 @@ public class MixedGenerator implements IDungeonGenerator {
         Coord block = null;
         for (int i = pos.x - halfWidth; i <= pos.x + halfWidth; i++) {
             for (int j = pos.y - halfHeight; j <= pos.y + halfHeight; j++) {
-                if(mark(i, j))
-                    block = Coord.get(i, j);
-                else
-                    markEnvironmentRoom(i, j);
+                markPiercing(i, j);
+                markEnvironmentRoom(i, j);
             }
         }
         for (int i = Math.max(0, pos.x - halfWidth - 1); i <= Math.min(width - 1, pos.x + halfWidth + 1); i++) {
@@ -918,10 +917,8 @@ public class MixedGenerator implements IDungeonGenerator {
             high = (int)Math.floor(Math.sqrt(radius * radius - dx * dx));
             for (int dy = -high; dy <= high; ++dy)
             {
-                if(mark(pos.x + dx, pos.y + dy))
-                    block = pos.translate(dx, dy);
-                else
-                    markEnvironmentRoom(pos.x + dx, pos.y + dy);
+                markPiercing(pos.x + dx, pos.y + dy);
+                markEnvironmentRoom(pos.x + dx, pos.y + dy);
             }
         }
         for (int dx = -radius; dx <= radius; ++dx)

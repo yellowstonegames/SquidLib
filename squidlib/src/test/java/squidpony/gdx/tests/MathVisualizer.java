@@ -522,11 +522,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 22: {
                 long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("AltHalton(777) sequence, first " + size + " points");
-                int a, x, y, p2 = 777 * 0x2C9277B5 | 3;
+                int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
                 //int lfsr = 7;
                 // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
                 for (int i = 0; i < size; i++) {
-                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i^0xAC564B05)));
+                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
                     x = a >>> 7 & 0x1ff;
                     y = a >>> 23 & 0x1ff;
 //                    x = a >>> 9 & 0x7f;

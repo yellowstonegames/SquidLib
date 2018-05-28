@@ -250,6 +250,26 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      */
     public static Coord halton(int width, int height, int index)
     {
+        return halton(width, height, 0, 0, index);
+    }
+    /**
+     * Convenience method that gets a quasi-random Coord between integer (0,0) inclusive and (width,height) exclusive
+     * and gets the corresponding Coord from the Coord pool. This is roughly equivalent to creating two VanDerCorputQRNG
+     * generators, one with {@code new VanDerCorputQRNG(2, index, false)} and the other with
+     * {@code new VanDerCorputQRNG(39, index, false)}, then getting an x-coordinate from the first with
+     * {@code (int)(nextDouble() * width)} and similarly for y with the other generator. You might find an advantage in
+     * using values for index that start higher than 20 or so, but you can pass sequential values for index and
+     * generally get points that won't be near each other; this is not true for all parameters to Halton sequences, but
+     * it is true for this one.
+     * @param width the width of the area this can cover
+     * @param height the height of the area this can cover
+     * @param xOffset the lowest x-coordinate this can produce, and also added to width to get the upper bound on x
+     * @param yOffset the lowest y-coordinate this can produce, and also added to height to get the upper bound on y
+     * @param index an int that, if unique, positive, and not too large, will usually result in unique points
+     * @return point after modifications to the first two items, or a new array if point is null or too small
+     */
+    public static Coord halton(int width, int height, int xOffset, int yOffset, int index)
+    {
         double denominator = 39.0, resY = 0.0;
         int n = (index+1 & 0x7fffffff);
         while (n > 0)
@@ -258,8 +278,9 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
             n /= 39;
             denominator *= 39.0;
         }
-        return Coord.get((int)(width * (Integer.reverse(index + 1) >>> 1) * 0x1p-31), (int)(resY * height));
+        return Coord.get((int)(width * (Integer.reverse(index + 1) >>> 1) * 0x1p-31) + xOffset, (int)(resY * height) + yOffset);
     }
+
     /**
      * Convenience method that gets a quasi-random 3D point between integer (0,0,0) inclusive and (width,height,depth)
      * exclusive. This is roughly equivalent to creating three VanDerCorputQRNG generators, one with
@@ -485,7 +506,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param index any int
      * @return a double between 0.0 inclusive and 1.0 exclusive
      */
-    public static double altDetermine(long base, final int index) { return (((base = (Long.reverse(index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) >>> 11) ^ (base >>> 13) ^ (base >>> 14)) * 0x1p-53; }
+    public static double altDetermine(long base, final int index) { return (((base = (Long.reverse(base + index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) >>> 11) ^ (base >>> 13) ^ (base >>> 14)) * 0x1p-53; }
 //    public static double altDetermine(long base, final int index) { return ((((index * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) >>> 11) * 0x1p-53; }
 
     /**
@@ -516,4 +537,29 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @return a double between 0.0 inclusive and 1.0 exclusive
      */
     public static double planarDetermine(long base, final int index) { return ((base * Integer.reverse(index) << 21) & 0x1fffffffffffffL) * 0x1p-53; }
+
+    /**
+     * Samples a quasi-random Coord sequence that is almost unique to the given seed, getting a Coord with x between
+     * xOffset (inclusive) and width + xOffset (exclusive), y between yOffset (inclusive) and height + yOffset
+     * (exclusive). The seed is "almost" unique because even seeds are discouraged; there is an identical sequence for
+     * every even seed produced by some odd seed. This generates a not-very random number, reverses its bits as other
+     * methods in this class do, then treats that single 32-bit int as two coordinates on a Z-order curve to get
+     * separate x and y from them. In practice these Coords are very well-dispersed if only a small amount are sampled
+     * and all the index values are close-by, and get closer together as more are sampled. Unlike the Halton sequence,
+     * this has very different results with different seeds (Halton only allows bases to be changed), and doesn't
+     * involve any division, modulus, conditionals, or loops.
+     * @param seed an int seed that should be an odd number
+     * @param width the width of the area this can cover
+     * @param height the height of the area this can cover
+     * @param xOffset the lowest x-coordinate this can produce, and also added to width to get the upper bound on x
+     * @param yOffset the lowest y-coordinate this can produce, and also added to height to get the upper bound on y
+     * @param index the index in the sequence, almost always a positive int that increases by 1 with each call
+     * @return a Coord between (xOffset, yOffset) inclusive and (width+xOffset, height+yOffset) exclusive
+     */
+    public static Coord haltoid(int seed, int width, int height, int xOffset, int yOffset, int index)
+    {
+        int morton = GreasedRegion.disperseBits(Integer.reverse((seed * 0x2C9277B5 | 1) * (index + 1)));
+        return Coord.get((int)(width * ((morton & 0xffff) * 0x1p-16)) + xOffset, (int)(((morton >>> 16 & 0xffff) * 0x1p-16) * height) + yOffset);
+    }
+
 }
