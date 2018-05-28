@@ -163,10 +163,31 @@ public class Playground {
 //            }
 //        }
 //        System.out.printf("Closest distance with integer-reversal(%d,%d): %.9f\n", 0xDE4DBEEF, 0x1337D00D, Math.sqrt(closest));
-        int s;
+        int s, p2;
+        for(int p : new int[]{1, 3, 11, 13, 23, 29, 39, 41, 47}) {
+//        for (int p = 1; p < 2500; p+=101) {
+            closest = 999.0;
+            p2 = p * 0x2C9277B5 | 3;
+            for (int i = 0; i < SIZE; i++) {
+                //s = GreasedRegion.disperseBits(Integer.reverse(i * p + 1));
+//                s = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(p, i) * 0x40000000));
+                s = GreasedRegion.disperseBits(Integer.reverse(p2 * (i ^ 0xAC564B05)));
+
+                xs[i] = x = (s & 0xffff) * 0x1p-16;
+                ys[i] = y = (s >>> 16 & 0xffff) * 0x1p-16;
+//                xs[i] = x = (s & 0x7fff) * 0x1p-15;
+//                ys[i] = y = (s >>> 16 & 0x7fff) * 0x1p-15;
+                for (int k = 0; k < i; k++) {
+                    xx = x - xs[k];
+                    yy = y - ys[k];
+                    closest = Math.min(closest, xx * xx + yy * yy);
+                }
+            }
+            System.out.printf("Closest distance with Z-order on altHalton(%d): %.9f\n", p, Math.sqrt(closest));
+        }
         //Closest distance with Halton(2,13): 0.000871727
         //Closest distance with Halton(2,39): 0.001147395
-        for(int p = 39; p < 64; p += 2) {
+        for(int p : new int[]{3, 11, 13, 23, 29, 39, 41, 47}) {
             closest = 999.0;
             for (int i = 0; i < SIZE; i++) {
                 s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
@@ -180,19 +201,6 @@ public class Playground {
             }
             System.out.printf("Closest distance with Halton(2,%d): %.9f\n", p, Math.sqrt(closest));
         }
-//        closest = 999.0;
-//        for (int i = 0; i < SIZE; i++) {
-//            s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
-//            xs[i] = x = VanDerCorputQRNG.determine2(s);
-//            ys[i] = y = VanDerCorputQRNG.determine(3, s);
-//            for (int k = 0; k < i; k++) {
-//                xx = x - xs[k];
-//                yy = y - ys[k];
-//                closest = Math.min(closest, xx * xx + yy * yy);
-//            }
-//        }
-//        System.out.printf("Closest distance with Halton(2,3): %.9f\n", Math.sqrt(closest));
-
     }
 
     private static long rand(final long z, final long mod, final long n2)

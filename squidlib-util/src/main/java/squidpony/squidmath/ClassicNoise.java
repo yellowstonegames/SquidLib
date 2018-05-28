@@ -35,14 +35,14 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     protected static double gradCoord2D(long seed, int x, int y,
                                         double xd, double yd) {
         final double[] grad = phiGrad2[
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y) ^ seed >>> 13) * (seed & 0xFFFFF))
+                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y) ^ seed >>> 13) * (seed))
                         >>> 24)];
         return xd * grad[0] + yd * grad[1];
     }
     protected static double gradCoord4D(long seed, int x, int y, int z, int w,
                                         double xd, double yd, double zd, double wd) {
         final int hash =
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed >>> 13) * (seed & 0xFFFFF))
+                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed >>> 13) * (seed))
                         >>> 24) & -4;
         return xd * grad4[hash] + yd * grad4[hash + 1] + zd * grad4[hash + 2] + wd * grad4[hash + 3];
     }
@@ -50,14 +50,14 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                         double xd, double yd, double zd, double wd, double ud, double vd) {
         final int hash =
                 ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w ^ 0x94B5B * u ^ 0xD2385 * v)
-                        ^ seed >>> 13) * (seed & 0xFFFFF))
+                        ^ seed >>> 13) * (seed))
                         >>> 24) * 6;
         return xd * gradient6DLUT[hash] + yd * gradient6DLUT[hash + 1] + zd * gradient6DLUT[hash + 2]
                 + wd * gradient6DLUT[hash + 3] + ud * gradient6DLUT[hash + 4] + vd * gradient6DLUT[hash + 5];
     }
     protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {
         final int hash =
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * (seed & 0xFFFFF))
+                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * (seed))
                         >>> 27) * 3;
         return (xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2]);
     }
@@ -75,9 +75,10 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 x0 = fastFloor(x),
                 y0 = fastFloor(y);         
 //        final double res =
-        return cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),
+        return 
+                cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),
                                 cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),
-                                y - y0) * 1.4444;
+                                y - y0) * 1.4142;
 //        if(res < -1.0 || res > 1.0) System.out.println(res);
 //        return res;
     }
@@ -97,12 +98,13 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 y0 = fastFloor(y),
                 z0 = fastFloor(z);
 //        final double res =
-         return cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),
+         return 
+                 cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),
                 cerp(gradCoord3D(seed, x0, y0+1, z0, x - x0, y - y0-1, z - z0), gradCoord3D(seed, x0+1, y0+1, z0, x - x0 - 1, y - y0 - 1, z - z0), x - x0),
                 y - y0),
                 cerp(cerp(gradCoord3D(seed, x0, y0, z0+1, x - x0, y - y0, z - z0-1), gradCoord3D(seed, x0+1, y0, z0+1, x - x0 - 1, y - y0, z - z0-1), x - x0),
                         cerp(gradCoord3D(seed, x0, y0+1, z0+1, x - x0, y - y0-1, z - z0-1), gradCoord3D(seed, x0+1, y0+1, z0+1, x - x0 - 1, y - y0 - 1, z - z0-1), x - x0),
-                        y - y0), z - z0) * 1.125;
+                        y - y0), z - z0) * 1.0625;
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }
@@ -124,7 +126,8 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 z0 = fastFloor(z),
                 w0 = fastFloor(w);
 //        final double res =
-        return cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),
+        return 
+                cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),
                         cerp(gradCoord4D(seed, x0, y0+1, z0, w0, x - x0, y - y0-1, z - z0, w - w0), gradCoord4D(seed, x0+1, y0+1, z0, w0, x - x0 - 1, y - y0 - 1, z - z0, w - w0), x - x0),
                         y - y0),
                         cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0, x - x0, y - y0, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0, z0+1, w0, x - x0 - 1, y - y0, z - z0-1, w - w0), x - x0),
@@ -138,7 +141,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                         cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0+1, x - x0, y - y0-1, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0+1, w0+1, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0 - 1), x - x0),
                                         y - y0),
                                 z - z0),
-                        w - w0) * 0.6;
+                        w - w0) * 0.555;
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }

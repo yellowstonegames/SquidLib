@@ -485,7 +485,8 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
      * @param index any int
      * @return a double between 0.0 inclusive and 1.0 exclusive
      */
-    public static double altDetermine(long base, final int index) { return (((base *= (Long.reverse(base ^ index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) >>> 11) ^ (base >>> 13) ^ (base >>> 16)) * 0x1p-53; }
+    public static double altDetermine(long base, final int index) { return (((base = (Long.reverse(index) ^ 0x5851F42D4C957F2DL) * 0x14057B7EF767814BL) >>> 11) ^ (base >>> 13) ^ (base >>> 14)) * 0x1p-53; }
+//    public static double altDetermine(long base, final int index) { return ((((index * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) * 0x5851F42D4C957F2DL + base) >>> 11) * 0x1p-53; }
 
     /**
      * A quasi-random number generator of doubles between 0.0 inclusive and 1.0 exclusive, but that has issues when it

@@ -617,7 +617,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
 //        seed ^= (seed >>> 13);
 //        final int hash = (int)(seed & 31) * 3;
         final int hash =
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * (seed & 0xFFFFF))
+                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed >>> 13) * (seed))
                        >>> 27) * 3;
         return xd * grad3d[hash] + yd * grad3d[hash + 1] + zd * grad3d[hash + 2];
     }
@@ -993,7 +993,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         }
         // Add contributions from each corner to get the final noise value.
         // The result is scaled to stay just inside [-1,1]
-        return 31.5 * n;
+//        n *= 31.5;
+//        if(n < -1 || n > 1) System.out.println(n);
+        return n * 31.5;
 
     }
 

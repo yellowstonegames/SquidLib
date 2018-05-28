@@ -20,7 +20,7 @@ import java.util.Arrays;
  */
 public class MathVisualizer extends ApplicationAdapter {
     private int mode = 19;
-    private int modes = 21;
+    private int modes = 23;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -44,7 +44,7 @@ public class MathVisualizer extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
+        layers = new SparseLayers(512, 520, 2, 2, new TextCellFactory().includedFont());
         layers.setDefaultForeground(SColor.WHITE);
         input = new InputAdapter(){
             @Override
@@ -52,6 +52,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER)
                 {
                     mode = (mode + 1) % modes;
+                    System.out.println("Changed to mode " + mode);
                     update();
                     return true;
                 }
@@ -466,18 +467,77 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 19: {
-                long size = (System.nanoTime() >>> 22 & 1023) + 1L;
+                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Halton[striding 1](2,3) sequence, first " + size + " points");
+                int x, y;
                 for (int i = 0; i < size; i++) {
-                    layers.put((int)(VanDerCorputQRNG.determine2(i) * 512), (int)(VanDerCorputQRNG.determine(3, i) * 512), SColor.FLOAT_BLACK);
+                    x = (int)(VanDerCorputQRNG.determine2(i) * 512);
+                    y = (int)(VanDerCorputQRNG.determine(3, i) * 512);
+                    if(layers.backgrounds[x][y] != 0f)
+                    {
+                        layers.put(x, y, -0x1.7677e8p125F);
+                        System.out.println("Overlap on index " + i);
+                    }
+                    else
+                        layers.put(x, y, SColor.FLOAT_BLACK);
                 }
             }
             break;
             case 20: {
-                long size = (System.nanoTime() >>> 22 & 1023) + 1L;
+                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Halton[striding 1](2,39) sequence, first " + size + " points");
+                int x, y;
                 for (int i = 0; i < size; i++) {
-                    layers.put((int)(VanDerCorputQRNG.determine2(i) * 512), (int)(VanDerCorputQRNG.determine(39, i) * 512), SColor.FLOAT_BLACK);
+                    x = (int) (VanDerCorputQRNG.determine2(i) * 512);
+                    y = (int) (VanDerCorputQRNG.determine(39, i) * 512);
+                    if (layers.backgrounds[x][y] != 0f) {
+                        layers.put(x, y, -0x1.7677e8p125F);
+                        System.out.println("Overlap on index " + i);
+                    } else
+                        layers.put(x, y, SColor.FLOAT_BLACK);
+                }
+            }
+            break;
+            case 21: {
+                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                Gdx.graphics.setTitle("AltVDC(7) sequence, first " + size + " points");
+                int a, x, y;
+                for (int i = 0; i < size; i++) {
+                    a = GreasedRegion.disperseBits((int)(VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
+                    x = a & 0x1ff;
+                    y = a >>> 16 & 0x1ff;
+//                    a = GreasedRegion.disperseBits((int)(VanDerCorputQRNG.altDetermine(7L, i) * 0x4000));
+//                    x = a & 0x7f;
+//                    y = a >>> 16 & 0x7f;
+                    if(layers.backgrounds[x][y] != 0f)
+                    {
+                        layers.put(x, y, -0x1.7677e8p125F);
+                        System.out.println("Overlap on index " + i);
+                    }
+                    else
+                        layers.put(x, y, SColor.FLOAT_BLACK);
+                }
+            }
+            break;
+            case 22: {
+                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                Gdx.graphics.setTitle("AltHalton(777) sequence, first " + size + " points");
+                int a, x, y, p2 = 777 * 0x2C9277B5 | 3;
+                //int lfsr = 7;
+                // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
+                for (int i = 0; i < size; i++) {
+                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i^0xAC564B05)));
+                    x = a >>> 7 & 0x1ff;
+                    y = a >>> 23 & 0x1ff;
+//                    x = a >>> 9 & 0x7f;
+//                    y = a >>> 25 & 0x7f;
+                    if(layers.backgrounds[x][y] != 0f)
+                    {
+                        layers.put(x, y, -0x1.7677e8p125F);
+                        System.out.println("Overlap on index " + i);
+                    }
+                    else
+                        layers.put(x, y, SColor.FLOAT_BLACK);
                 }
             }
             break;
@@ -498,8 +558,8 @@ public class MathVisualizer extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Visualizer for Math Testing/Checking";
-        config.width = 512;
-        config.height = 520;
+        config.width = 512 * 2;
+        config.height = 520 * 2;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-64.png", Files.FileType.Internal);
