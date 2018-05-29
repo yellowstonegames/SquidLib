@@ -2909,7 +2909,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
         public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
-        public final Noise4D terrain4D;
+        //public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -3029,8 +3029,8 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
-            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
+            //terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
+            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25, 0.475);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -3112,7 +3112,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     edges[y << 1 | 1] = x;
                     th = asin(rho); // c
                     ps = NumberTools.sin(th);
-                    lat = asin((iyPos * ps) / rho);
+                    lat = rho == 0.0 ? 0.0 : asin((iyPos * ps) / rho); // check for uncommon case where rho == 0.0
                     // need Math.atan2(), not NumberTools.atan2(), since approximate isn't good enough here
                     // approximate seems fine for everything else here though.
                     // ... later ...
@@ -3121,17 +3121,21 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);
-
+                    
                     pc = NumberTools.cos(lon) * qc;
                     ps = NumberTools.sin(lon) * qc;
 
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
-                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
-                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
-                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-                            seedA) * waterModifier);
+                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
+                                    terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA),
+                            ps, qs, seedA) * waterModifier);
+//                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
+//                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
+//                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
+//                            seedA) * waterModifier);
+
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
