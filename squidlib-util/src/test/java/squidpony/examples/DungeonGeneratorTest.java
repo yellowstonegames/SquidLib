@@ -5,10 +5,7 @@ import squidpony.squidai.WaypointPathfinder;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -84,7 +81,7 @@ public class DungeonGeneratorTest {
 
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
-        StatefulRNG rng = new StatefulRNG(2252637788195L);
+        StatefulRNG rng = new StatefulRNG(new LinnormRNG(2252637788195L));
         System.out.println("MixedGenerator");
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
         char[][] dungeon;
@@ -93,23 +90,28 @@ public class DungeonGeneratorTest {
         dungeonGenerator.addGrass(10);
         dungeonGenerator.addBoulders(5);
         dungeonGenerator.addTraps(2);
-        MixedGenerator mix = new MixedGenerator(width, height, rng);
-        mix.putCaveCarvers(1);
-        mix.putBoxRoomCarvers(9);
-        mix.putRoundRoomCarvers(7);
-        dungeonGenerator.generate(mix.generate());
-        //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
-        dungeon = dungeonGenerator.getDungeon();
-        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
-        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+        for (int i = 0; i < 3; i++) {
+            MixedGenerator mix = new MixedGenerator(width, height, rng);
+            mix.putCaveCarvers(1);
+            mix.putWalledBoxRoomCarvers(9);
+            mix.putWalledRoundRoomCarvers(5);
+            
+            dungeon = mix.generate();
+            dungeonGenerator.generate(dungeon);
+//            dungeonGenerator.setDungeon(mix.generate());
+//            dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+            dungeon = dungeonGenerator.getDungeon();
+            dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+            dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
-        dungeonGenerator.setDungeon(
-                DungeonUtility.hashesToLines(dungeon, true));
-        System.out.println(dungeonGenerator);
-        System.out.println();
-        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
-        System.out.println(dungeonGenerator);
-        System.out.println("------------------------------------------------------------");
+            dungeonGenerator.setDungeon(DungeonUtility.hashesToLines(dungeon, true));
+            System.out.println(dungeonGenerator);
+            System.out.println();
+            dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+            System.out.println(dungeonGenerator);
+            System.out.println("------------------------------------------------------------");
+        }
+
         System.out.println("SerpentMapGenerator\n");
 
 

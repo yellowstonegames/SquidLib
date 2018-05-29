@@ -24,15 +24,12 @@ import java.util.*;
  * @see squidpony.squidgrid.mapping.SerpentDeepMapGenerator uses MixedGenerator as it makes a multi-level dungeon
  * Created by Tommy Ettinger on 10/22/2015.
  */
-public class MixedGenerator implements IDungeonGenerator {
-    public enum CarverType
-    {
-        CAVE,
-        BOX,
-        ROUND,
-        BOX_WALLED,
-        ROUND_WALLED
-    }
+public class MixedGenerator implements IDungeonGenerator {     
+    public static final int CAVE = 0,
+        BOX = 1,
+        ROUND = 2,
+        BOX_WALLED = 3,
+        ROUND_WALLED = 4;
 
     /**
      * Constant for environment tiles that are not near a cave, room, or corridor. Value is 0.
@@ -77,7 +74,9 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public static final int CORRIDOR_WALL = 6;
 
-    protected EnumMap<CarverType, Integer> carvers;
+    //protected EnumMap<CarverType, Integer> carvers;
+    protected double[] carvers;
+    protected WeightedTable carverTable;
     protected int width, height;
     protected float roomWidth, roomHeight;
     public IRNG rng;
@@ -131,14 +130,14 @@ public class MixedGenerator implements IDungeonGenerator {
         width -= 2;
         height -= 2;
         //float mx = rng.nextFloat() * 0.2f, my = rng.nextFloat() * 0.2f;
-        int blocks = width * height / 80 >> 3, sz = blocks << 3, index = 0,
+        int blocks = width * height / 640, sz = blocks * 5, index = 0,
                 seed = rng.nextInt()|1, seed2 = rng.nextInt()|1;
         //System.out.println("mx: " + mx + ", my: " + my + ", index: " + index);
         List<Coord> list = new ArrayList<>(sz);
         for (int i = 0; i < blocks; i++) {
-            Coord area = VanDerCorputQRNG.haltoid(seed2, width * 3 >> 2, height * 3 >> 2, 1, 1, i);
-            for (int j = 0; j < 4; j++) {
-                list.add(VanDerCorputQRNG.haltoid(seed, width >> 2, height >> 2, area.x, area.y, index++));
+            Coord area = VanDerCorputQRNG.haltoid(seed, width * 3 >> 2, height * 3 >> 2, 1, 1, i);
+            for (int j = 0; j < 5; j++) {
+                list.add(VanDerCorputQRNG.haltoid(seed2, width >> 2, height >> 2, area.x, area.y, index++));
             }
         }
         return list;
@@ -197,7 +196,7 @@ public class MixedGenerator implements IDungeonGenerator {
             Coord c1 = sequence.get(i), c2 = sequence.get(i + 1);
             points.add(((c1.x & 0xff) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
         }
-        carvers = new EnumMap<>(CarverType.class);
+        carvers = new double[5];
     }
     /**
      * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
@@ -262,7 +261,7 @@ public class MixedGenerator implements IDungeonGenerator {
                 points.add(((c1.x & 0xff) << 24) | ((c1.y & 0xff) << 16) | ((c2.x & 0xff) << 8) | (c2.y & 0xff));
             }
         }
-        carvers = new EnumMap<>(CarverType.class);
+        carvers = new double[5];
     }
 
     /**
@@ -332,7 +331,7 @@ public class MixedGenerator implements IDungeonGenerator {
             removing.remove(room);
         }
         totalPoints = points.size;
-        carvers = new EnumMap<>(CarverType.class);
+        carvers = new double[5];
     }
 
     /**
@@ -346,7 +345,7 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public void putCaveCarvers(int count)
     {
-        carvers.put(CarverType.CAVE, count);
+        carvers[CAVE] = count;
     }
     /**
      * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
@@ -361,7 +360,7 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public void putBoxRoomCarvers(int count)
     {
-        carvers.put(CarverType.BOX, count);
+        carvers[BOX] = count;
     }
 
     /**
@@ -377,7 +376,7 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public void putRoundRoomCarvers(int count)
     {
-        carvers.put(CarverType.ROUND, count);
+        carvers[ROUND] = count;
     }
     /**
      * Changes the number of "carvers" that will create right-angle corridors from one room to the next, create rooms
@@ -394,7 +393,7 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public void putWalledBoxRoomCarvers(int count)
     {
-        carvers.put(CarverType.BOX_WALLED, count);
+        carvers[BOX_WALLED] = count;
     }
 
     /**
@@ -412,7 +411,7 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public void putWalledRoundRoomCarvers(int count)
     {
-        carvers.put(CarverType.ROUND_WALLED, count);
+        carvers[ROUND_WALLED] = count;
     }
 
     /**
@@ -424,33 +423,36 @@ public class MixedGenerator implements IDungeonGenerator {
      */
     public char[][] generate()
     {
-        CarverType[] carvings = carvers.keySet().toArray(new CarverType[carvers.size()]);
-        int[] carvingsCounters = new int[carvings.length];
-        int totalLength = 0;
-        for (int i = 0; i < carvings.length; i++) {
-            carvingsCounters[i] = carvers.get(carvings[i]);
-            totalLength += carvingsCounters[i];
-        }
-        CarverType[] allCarvings = new CarverType[totalLength];
+        if(carvers[0] <= 0 && carvers[1] <= 0 && carvers[2] <= 0 && carvers[3] <= 0 && carvers[4] <= 0)
+            carvers[0] = 1;
+        carverTable = new WeightedTable(carvers);
+//        CarverType[] carvings = carvers.keySet().toArray(new CarverType[carvers.size()]);
+//        int[] carvingsCounters = new int[carvings.length];
+//        int totalLength = 0;
+//        for (int i = 0; i < carvings.length; i++) {
+//            carvingsCounters[i] = carvers.get(carvings[i]);
+//            totalLength += carvingsCounters[i];
+//        }
+//        CarverType[] allCarvings = new CarverType[totalLength];
+//
+//        for (int i = 0, c = 0; i < carvings.length; i++) {
+//            for (int j = 0; j < carvingsCounters[i]; j++) {
+//                allCarvings[c++] = carvings[i];
+//            }
+//        }
+//        if(allCarvings.length == 0)
+//        {
+//            allCarvings = new CarverType[]{CarverType.CAVE};
+//            totalLength = 1;
+//        }
+//        else
+//            allCarvings = rng.shuffle(allCarvings, new CarverType[allCarvings.length]);
 
-        for (int i = 0, c = 0; i < carvings.length; i++) {
-            for (int j = 0; j < carvingsCounters[i]; j++) {
-                allCarvings[c++] = carvings[i];
-            }
-        }
-        if(allCarvings.length == 0)
-        {
-            allCarvings = new CarverType[]{CarverType.CAVE};
-            totalLength = 1;
-        }
-        else
-            allCarvings = rng.shuffle(allCarvings, new CarverType[allCarvings.length]);
-
-        for (int p = 0, c = 0; p < totalPoints; p++, c = (c+1) % totalLength) {
+        for (int p = 0; p < totalPoints; p++) {
             int pair = points.get(p);
             Coord start = Coord.get(pair >>> 24 & 0xff, pair >>> 16 & 0xff),
                   end   = Coord.get(pair >>> 8 & 0xff, pair & 0xff);
-            CarverType ct = allCarvings[c];
+            int ct = carverTable.random(rng.nextLong());
             Direction dir;
             switch (ct)
             {
