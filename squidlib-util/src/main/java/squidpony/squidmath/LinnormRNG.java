@@ -21,9 +21,13 @@ import java.io.Serializable;
  * state from an output of {@link #nextLong()}. At least in theory, and supported in practice by how PCG-Random works,
  * this type of generator could be used to make a generator with multiple non-overlapping streams by changing the linear
  * congruential generator to add a different odd number instead of 1; any odd number should work, but optimizations can
- * apply to adding 1 that aren't possible for other numbers, so that's a good default to use here. A determine() method
- * could be written for LinnormRNG, but it couldn't be applied to sequential states with any suggestion of randomness,
- * and would need a more elaborate state transition applied across sequences of input.
+ * apply to adding 1 that aren't possible for other numbers, so that's a good default to use here. LinnormRNG has a
+ * static determine() method that uses a slightly different algorithm; it performs similar operations to
+ * {@link LightRNG#determine(long)}. That involves 3 multiplications by constants, 3 "xorshifts" that each use a XOR and
+ * a bitwise right shift on a local variable, and 3 temporary assignments; this determine() uses 3 multiplications by
+ * constants, only 2 xorshifts, only 2 temporary assignments, and one XOR by a constant. Like LightRNG's determine(),
+ * LinnormRNG.determine() can take any long as input and has all longs as possible outputs. Unlike LightRNG's
+ * determine(), an input of 0 does not produce a result of 0.
  * <br>
  * The name comes from LINear congruential generator this uses to change it state, while the rest is a NORMal
  * SplitMix64-like generator. "Linnorm" is a Norwegian name for a kind of dragon, as well. 
@@ -260,4 +264,64 @@ public final class LinnormRNG implements RandomnessSource, StatefulRandomness, S
     public int hashCode() {
         return (int) (state ^ (state >>> 32));
     }
+
+    /**
+     * Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.
+     * It is recommended that you use {@code LinnormRNG.determine(++state)} or {@code LinnormRNG.determine(--state)} to
+     * produce a sequence of different numbers, but you can also use {@code LinnormRNG.determine(state += 12345L)} or
+     * any odd-number increment. All longs are accepted by this method, and all longs can be produced; unlike several
+     * other classes' determine() methods, passing 0 here does not return 0.
+     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
+     * @return any long
+     */
+    public static long determine(long state)
+    {
+        return (state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 32) * 0xAEF17502108EF2D9L) ^ state >>> 28;
+    }
+
+    /**
+     * Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)
+     * and bound (exclusive); state is expected to change between calls to this. It is recommended that you use
+     * {@code LinnormRNG.determineBounded(++state, bound)} or {@code LinnormRNG.determineBounded(--state, bound)} to
+     * produce a sequence of different numbers, but you can also use
+     * {@code LinnormRNG.determineBounded(state += 12345L, bound)} or any odd-number increment. All longs are accepted
+     * by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any
+     * odd-number values for bound, this isn't possible for most generators). The bound can be negative.
+     * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
+     * @param bound the outer exclusive bound, as an int
+     * @return an int between 0 (inclusive) and bound (exclusive)
+     */
+    public static int determineBounded(long state, final int bound)
+    {
+        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 32) * 0xAEF17502108EF2D9L) ^ state >>> 28) & 0x7FFFFFFFL)) >> 31);
+    }
+
+    /**
+     * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+     * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},
+     * where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
+     * {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much different from using a
+     * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
+     * less than 2 to the 30 possible floats between 0 and 1.
+     * @param state a variable that should be different every time you want a different random result;
+     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
+     *              generate numbers in reverse order
+     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
+     */
+    public static float determineFloat(long state) { return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 32) * 0xAEF17502108EF2D9L) ^ state >>> 28) & 0xFFFFFF) * 0x1p-24f; }
+
+    /**
+     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+     * will return the same float. This is expected to be called with a changing variable, e.g.
+     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't really matter. This
+     * multiplies state by {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much
+     * different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or
+     * decrement by 1, but there are less than 2 to the 62 possible doubles between 0 and 1.
+     * @param state a variable that should be different every time you want a different random result;
+     *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
+     *              generate numbers in reverse order
+     * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}
+     */
+    public static double determineDouble(long state) { return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 32) * 0xAEF17502108EF2D9L) ^ state >>> 28) & 0x1FFFFFFFFFFFFFL) * 0x1p-53; }
+
 }
