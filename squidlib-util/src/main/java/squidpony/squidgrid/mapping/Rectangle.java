@@ -20,14 +20,14 @@ public interface Rectangle extends Zone {
 	 */
 	Coord getBottomLeft();
 	/**
-	 * @return The room's width (from {@link #getBottomLeft()). It is greater or
+	 * @return The room's width (from {@link #getBottomLeft()}). It is greater or
 	 *         equal than 0.
 	 */
 	@Override
 	int getWidth();
 
 	/**
-	 * @return The room's height (from {@link #getBottomLeft()). It is greater
+	 * @return The room's height (from {@link #getBottomLeft()}). It is greater
 	 *         or equal than 0.
 	 */
 	@Override

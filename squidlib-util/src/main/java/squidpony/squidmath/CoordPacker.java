@@ -45,7 +45,7 @@ import java.util.List;
  * {@link #packMulti(byte[][], int)} and other Multi kinds of method, no {@link #radiate(short[], short[], int)}, and no
  * {@link #reachable(short[], short[], Reach)}, while CoordPacker has no equivalent to
  * {@link GreasedRegion#expandSeriesToLimit()} and other ToLimit kinds of method, no
- * {@link GreasedRegion#flip(int, int)}, no {@link GreasedRegion#deteriorate(RNG, int)}, no
+ * {@link GreasedRegion#flip(int, int)}, no {@link GreasedRegion#deteriorate(RandomnessSource, int)}, no
  * {@link GreasedRegion#insert(int, int, GreasedRegion)} (though CoordPacker can generally use
  * {@link #unionPacked(short[], short[])} for that), and several other methods don't have equivalents. In general, you
  * will probably find GreasedRegion more intuitive because it involves working with objects instead of a short[] that is
@@ -933,7 +933,7 @@ public class CoordPacker {
 
         double[] levels = new double[totalLevels];
         for (int i = 0; i < totalLevels; i++) {
-            levels[i] = 1.0 * i / totalLevels + 0.5 / totalLevels;
+            levels[i] = (i + 0.5) / totalLevels;
         }
         return levels;
     }
@@ -1475,7 +1475,7 @@ public class CoordPacker {
                         if(x >= width || y >= height)
                             continue;
                         double newAngle = NumberTools.atan2(y - centerY, x - centerX) + Math.PI * 2;
-                        if(Math.abs(MathExtras.remainder(angle2 - newAngle, Math.PI * 2) - Math.PI) > span2 / 2.0)
+                        if(Math.abs(MathExtras.remainder(angle2 - newAngle, Math.PI * 2) - Math.PI) > span2 * 0.5)
                             unpacked[x][y] = 0.0;
                         else
                             unpacked[x][y] = levels[l];
@@ -5011,10 +5011,10 @@ public class CoordPacker {
     public static short[] decodeBraille(String text)
     {
         int len = text.length();
-        if(len % 2 != 0 || len == 0)
+        if((len & 1) != 0 || len == 0)
             return ALL_WALL;
         char[] chars = text.toCharArray();
-        short[] packed = new short[len / 2];
+        short[] packed = new short[len >> 1];
         for (int c = 0, i = 0; c < len; i++, c += 2) {
             packed[i] = (short)((chars[c] ^ 0x2800) | ((chars[c+1] ^ 0x2800) << 8));
         }
@@ -5210,13 +5210,13 @@ public class CoordPacker {
      * in 2D space that corresponds to that point on the Hilbert curve. This uses a lookup table for the
      * 16x16 Hilbert curve, which should make it faster than calculating the position repeatedly.
      * The parameter moore is an int but only 8 unsigned bits are used, and since the Moore Curve loops, it is
-     * calculated as {@code moore % 256}.
+     * calculated as {@code moore & 255}.
      * @param moore a distance to travel down the Moore Curve
      * @return a Coord corresponding to the position in 2D space at the given distance down the Hilbert Curve
      */
     public static Coord mooreToCoord( final int moore )
     {
-        return Coord.get(mooreX[moore % 256], mooreY[moore % 256]);
+        return Coord.get(mooreX[moore & 255], mooreY[moore & 255]);
     }
 
 
@@ -5496,7 +5496,7 @@ public class CoordPacker {
     public static int getZMoore3D(final int index, final int n) {
         int hilbert = index & 0x1ff;
         int sector = index >> 9;
-        if ((sector / n) % 2 == 0)
+        if (((sector / n) & 1) == 0)
             return hilbert3Z[hilbert] + 8 * (sector % n);
         else
             return (8 * n - 1) - hilbert3Z[hilbert] - 8 * (sector % n);
