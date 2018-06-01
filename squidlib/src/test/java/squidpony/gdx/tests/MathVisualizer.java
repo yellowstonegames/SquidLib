@@ -19,7 +19,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 19;
+    private int mode = 22;
     private int modes = 23;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -43,8 +43,9 @@ public class MathVisualizer extends ApplicationAdapter {
 
     @Override
     public void create() {
+        Coord.expandPoolTo(512, 512);
         batch = new SpriteBatch();
-        layers = new SparseLayers(512, 520, 2, 2, new TextCellFactory().includedFont());
+        layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
         layers.setDefaultForeground(SColor.WHITE);
         input = new InputAdapter(){
             @Override
@@ -520,24 +521,35 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 22: {
-                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
-                Gdx.graphics.setTitle("AltHalton(777) sequence, first " + size + " points");
-                int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
+                //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                final long size = 128;
+                Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
+                //int a, x, y, p2 = 777 * 0x2C9277B5 | 1;
                 //int lfsr = 7;
                 // (lfsr = (lfsr >>> 1 ^ (-(lfsr & 1) & 0x3802))) // 0x20400 is 18-bit // 0xD008 is 16-bit // 0x3802 is 14-bit
+                int x, y;
+                Coord c;
                 for (int i = 0; i < size; i++) {
-                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
-                    x = a >>> 7 & 0x1ff;
-                    y = a >>> 23 & 0x1ff;
+//                    a = GreasedRegion.disperseBits(Integer.reverse(p2 * (i + 1))); //^ 0xAC564B05
+//                    x = a >>> 7 & 0x1ff;
+//                    y = a >>> 23 & 0x1ff;
+                    c = VanDerCorputQRNG.haltoid(777, 510, 510, 1, 1, i);
+                    x = c.x;
+                    y = c.y;
 //                    x = a >>> 9 & 0x7f;
 //                    y = a >>> 25 & 0x7f;
-                    if(layers.backgrounds[x][y] != 0f)
-                    {
-                        layers.put(x, y, -0x1.7677e8p125F);
-                        System.out.println("Overlap on index " + i);
-                    }
-                    else
-                        layers.put(x, y, SColor.FLOAT_BLACK);
+//                    if(layers.backgrounds[x][y] != 0f)
+//                    {
+//                        layers.put(x, y, -0x1.7677e8p125F);
+//                        System.out.println("Overlap on index " + i);
+//                    }
+//                    else
+                    final float color = SColor.floatGetHSV(i * 0x1p-7f, 1f - i * 0x0.3p-7f, 0.7f, 1f);
+                    layers.put(x, y, color);
+                    layers.put(x+1, y, color);
+                    layers.put(x-1, y, color);
+                    layers.put(x, y+1, color);
+                    layers.put(x, y-1, color);
                 }
             }
             break;
@@ -558,8 +570,8 @@ public class MathVisualizer extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Visualizer for Math Testing/Checking";
-        config.width = 512 * 2;
-        config.height = 520 * 2;
+        config.width = 512;
+        config.height = 520;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-64.png", Files.FileType.Internal);

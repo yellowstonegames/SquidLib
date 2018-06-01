@@ -110,6 +110,14 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
                 b & 0xff << granularity,
                 a & 0xff << granularity);
     }
+    @Override
+    protected long getUniqueIdentifier(Color c) {
+        return super.getUniqueIdentifier(
+                (int)(c.r * 255) & 0xff << granularity,
+                (int)(c.g * 255) & 0xff << granularity,
+                (int)(c.b * 255) & 0xff << granularity,
+                (int)(c.a * 255) & 0xff << granularity);
+    }
 
     /**
      * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.

@@ -1,11 +1,11 @@
 package squidpony;
 
 import squidpony.panel.IColoredString;
+import squidpony.squidmath.CrossHash;
 import squidpony.squidmath.IRNG;
+import squidpony.squidmath.UnorderedSet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * How to manage colors, making sure that a color is allocated at most once.
@@ -269,7 +269,29 @@ public interface IColorCenter<T> {
 	 */
 	abstract class Skeleton<T> implements IColorCenter<T> {
 
-		private final Map<Long, T> cache = new HashMap<>(256);
+		@SuppressWarnings("unchecked")
+		protected class GranularHasher implements CrossHash.IHasher{
+			int[] feed = new int[4];
+			@Override
+			public int hash(final Object data) {
+				if(data == null) return 0;
+				final long y = (data == feed)
+						? getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3])
+						: getUniqueIdentifier((T)data);
+				final int x = (int)(y ^ y >>> 32) * 0x62BD5;
+				return x ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
+			}
+
+			@Override
+			public boolean areEqual(final Object left, final Object right) {
+				return (left == right) || (left != null && right != null && 
+						((left == feed && getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3]) == getUniqueIdentifier((T)right)) || 
+						(right == feed && getUniqueIdentifier((T)left) == getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3])) ||
+								(left != feed && right != feed && getUniqueIdentifier((T)left) == getUniqueIdentifier((T)right))));
+			}
+		} 
+		protected GranularHasher theHasher = new GranularHasher();
+		private final UnorderedSet<T> cache = new UnorderedSet<>(256, theHasher);
 
 		protected /*Nullable*/ IFilter<T> filter;
 
@@ -311,11 +333,7 @@ public interface IColorCenter<T> {
          */
         public void copyCache(Skeleton<T> other)
         {
-            for (Map.Entry<Long, T> k : other.cache.entrySet())
-            {
-                cache.put(k.getKey(), create(getRed(k.getValue()), getGreen(k.getValue()), getBlue(k.getValue()),
-                        getAlpha(k.getValue())));
-            }
+        	cache.addAll(other.cache);
         }
 
 		/**
@@ -333,15 +351,23 @@ public interface IColorCenter<T> {
 
 		protected transient Long tempValue;
 
-        @Override
+        @SuppressWarnings("SuspiciousMethodCalls")
+		@Override
         public T get(int red, int green, int blue, int opacity) {
-            tempValue = getUniqueIdentifier(red, green, blue, opacity);
-            T t = cache.get(tempValue);
-            if (t == null) {
+			theHasher.feed[0] = red;
+			theHasher.feed[1] = green;
+			theHasher.feed[2] = blue;
+			theHasher.feed[3] = opacity;
+			T t;
+            if (cache.contains(theHasher.feed)) {
+            	t = cache.get(theHasher.feed);
+			}
+			else
+			{
 				/* Miss */
                 t = create(red, green, blue, opacity);
 				/* Put in cache */
-                cache.put(tempValue, t);
+                cache.add(t);
             }
             return t;
         }
@@ -688,7 +714,12 @@ public interface IColorCenter<T> {
         protected abstract T create(int red, int green, int blue, int opacity);
 
 		protected long getUniqueIdentifier(int r, int g, int b, int a) {
-			return ((a & 0xffL) << 48) | ((r & 0xffffL) << 32) | ((g & 0xffffL) << 16) | (b & 0xffffL);
+			return ((a & 0xffL) << 48) | ((r & 0xffL) << 32) | ((g & 0xffL) << 16) | (b & 0xffL);
+		}
+		protected long getUniqueIdentifier(T item)
+		{
+			return ((getAlpha(item) & 0xffL) << 48) | ((getRed(item) & 0xffL) << 32)
+					| ((getGreen(item) & 0xffL) << 16) | (getBlue(item) & 0xffL);
 		}
 
 	}
