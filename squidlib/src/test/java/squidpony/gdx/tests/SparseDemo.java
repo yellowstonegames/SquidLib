@@ -578,7 +578,7 @@ public class SparseDemo extends ApplicationAdapter {
         // gridWidth/gridHeight + 2 cells have been rendered (the + 2 is also for the camera movement).
         for (int x = Math.max(0, player.x - (gridWidth >> 1) - 1), i = 0; x < bigWidth && i < gridWidth + 2; x++, i++) {
             for (int y = Math.max(0, player.y - (gridHeight >> 1) - 1), j = 0; y < bigHeight && j < gridHeight + 2; y++, j++) {
-                if(visible[x][y] > 0.0) {
+                if (visible[x][y] > 0.0) {
                     // Here we use a convenience method in SparseLayers that puts a char at a specified position (the
                     // first three parameters), with a foreground color for that char (fourth parameter), as well as
                     // placing a background tile made of a one base color (fifth parameter) that is adjusted to bring it
@@ -589,7 +589,7 @@ public class SparseDemo extends ApplicationAdapter {
                     // because all cells at the same distance will have the same amount of lighting applied.
                     // We use prunedDungeon here so segments of walls that the player isn't aware of won't be shown.
                     display.putWithConsistentLight(x, y, prunedDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, visible[x][y]);
-                } else if(seen.contains(x, y))
+                } else if (seen.contains(x, y))
                     display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
             }
         }

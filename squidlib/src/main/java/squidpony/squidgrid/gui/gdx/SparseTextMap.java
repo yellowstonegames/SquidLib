@@ -62,19 +62,19 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     private transient Keys keys1, keys2;
 
     /**
-     * Creates a new map with an initial capacity of 51 and a load factor of 0.8.
+     * Creates a new map with an initial capacity of 51 and a load factor of 0.55.
      */
     public SparseTextMap() {
-        this(51, 0.8f);
+        this(63, 0.55f);
     }
 
     /**
-     * Creates a new map with a load factor of 0.8.
+     * Creates a new map with a load factor of 0.55.
      *
      * @param initialCapacity If not a power of two, it is increased to the next nearest power of two.
      */
     public SparseTextMap(int initialCapacity) {
-        this(initialCapacity, 0.8f);
+        this(initialCapacity, 0.55f);
     }
 
     /**

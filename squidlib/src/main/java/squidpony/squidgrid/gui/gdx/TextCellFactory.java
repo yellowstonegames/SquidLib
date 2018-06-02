@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
+import regexodus.ds.CharCharMap;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
 import squidpony.squidmath.OrderedMap;
@@ -84,7 +85,11 @@ public class TextCellFactory implements Disposable {
     protected float smoothingMultiplier = 1.2f;
     protected float descent, lineHeight;
     protected Label.LabelStyle style;
-    protected OrderedMap<Character, Character> swap = new OrderedMap<>(32);
+    //protected OrderedMap<Character, Character> swap = new OrderedMap<>(32);
+    protected CharCharMap swap = new CharCharMap(8);
+    {
+        swap.defaultReturnValue('\uffff');
+    }
     protected char directionGlyph = '^';
     protected OrderedMap<Character, TextureRegion> glyphTextures = new OrderedMap<>(16);
 
@@ -123,7 +128,8 @@ public class TextCellFactory implements Disposable {
             bmpFont = DefaultResources.getIncludedFont();
         next.bmpFont = DefaultResources.copyFont(bmpFont);
         next.block = block;
-        next.swap = new OrderedMap<>(swap);
+        next.swap = swap.clone(); // explicitly implemented by CharCharMap
+        next.swap.defaultReturnValue('\uffff'); // ... but it forgets to copy this field
         next.distanceField = distanceField;
         next.msdf = msdf;
         next.distanceFieldScaleX = distanceFieldScaleX;
@@ -859,7 +865,12 @@ public class TextCellFactory implements Disposable {
 
         return fitting.contains(String.valueOf(Character.toChars(codepoint)));
     }
-
+    
+    private char getOrDefault(final char toGet)
+    {
+        final char got = swap.get(toGet);
+        return got == '\uffff' ? toGet : got;
+    }
     /**
      * Use the specified Batch to draw a String (often just one char long) with the default color (white), with x and y
      * determining the world-space coordinates for the upper-left corner.
@@ -883,7 +894,7 @@ public class TextCellFactory implements Disposable {
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
             bmpFont.setColor(1f,1f,1f,1f);
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            mut.setCharAt(0, getOrDefault(s.charAt(0)));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -912,7 +923,7 @@ public class TextCellFactory implements Disposable {
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
             bmpFont.setColor(1f,1f,1f,1f);
-            mut.setCharAt(0, swap.getOrDefault(c, c));
+            mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -946,7 +957,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            mut.setCharAt(0, getOrDefault(s.charAt(0)));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -978,7 +989,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(color);
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            mut.setCharAt(0, getOrDefault(s.charAt(0)));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -1010,7 +1021,7 @@ public class TextCellFactory implements Disposable {
         } else
         {
             colorFromFloat(bmpFont.getColor(), encodedColor);
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            mut.setCharAt(0, getOrDefault(s.charAt(0)));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -1037,7 +1048,7 @@ public class TextCellFactory implements Disposable {
         } else
         {
             bmpFont.getColor().set(color);
-            mut.setCharAt(0, swap.getOrDefault(c, c));
+            mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -1064,7 +1075,7 @@ public class TextCellFactory implements Disposable {
         } else
         {
             colorFromFloat(bmpFont.getColor(), encodedColor);
-            mut.setCharAt(0, swap.getOrDefault(c, c));
+            mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -1364,7 +1375,7 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            mut.setCharAt(0, getOrDefault(s.charAt(0)));
             Label lb = new Label(mut, style);
             //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
@@ -1438,7 +1449,7 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            mut.setCharAt(0, swap.getOrDefault(s.charAt(0), s.charAt(0)));
+            mut.setCharAt(0, getOrDefault(s.charAt(0)));
             ColorChangeLabel lb = new ColorChangeLabel(mut, style, loopTime, doubleWidth, colors2);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
@@ -1465,7 +1476,7 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            mut.setCharAt(0, swap.getOrDefault(c, c));
+            mut.setCharAt(0, getOrDefault(c));
             Label lb = new Label(mut, style);
             //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width, height - descent); //+ lineTweak * 1f
@@ -1497,7 +1508,7 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            mut.setCharAt(0, swap.getOrDefault(c, c));
+            mut.setCharAt(0, getOrDefault(c));
             Label lb = new Label(mut, style);
             //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width, height - descent); //+ lineTweak * 1f
@@ -1565,7 +1576,7 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            mut.setCharAt(0, swap.getOrDefault(c, c));
+            mut.setCharAt(0, getOrDefault(c));
             ColorChangeLabel lb = new ColorChangeLabel(mut, style, loopTime, doubleWidth, colors2);
             lb.setSize(width, height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
@@ -1997,7 +2008,9 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Gets the current mapping of "swaps", or replacement pairs, to replace keys requested for drawing with their
-     * values in the OrderedMap.
+     * values in the {@link CharCharMap}. CharCharMap is a class from RegExodus (a dependency of squidlib-util that is
+     * used for text matching and Unicode support), which is used here to avoid making yet another primitive-backed
+     * collection class.
      * <br>
      * This can be useful when you want to use certain defaults in squidlib-util's dungeon generation, like '~' for deep
      * water, but not others, like ',' for shallow water, and would rather have a glyph of your choice replace something
@@ -2007,7 +2020,7 @@ public class TextCellFactory implements Disposable {
      * swapping, like a top-down char-based map, and elements that should not, like those that display normal text.
      * @return the mapping of replacement pairs
      */
-    public OrderedMap<Character, Character> getAllSwaps() {
+    public CharCharMap getAllSwaps() {
         return swap;
     }
 

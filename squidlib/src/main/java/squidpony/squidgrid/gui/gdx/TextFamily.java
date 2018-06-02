@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.assets.AssetManager;
-import squidpony.squidmath.OrderedMap;
 
 /**
  * A variant of {@link TextCellFactory} that allows switching between regular, bold, italic, and bold italic styles.
@@ -54,7 +53,8 @@ public class TextFamily extends TextCellFactory {
             bmpFont = DefaultResources.getIncludedFont();
         next.bmpFont = DefaultResources.copyFont(bmpFont);
         next.block = block;
-        next.swap = new OrderedMap<>(swap);
+        next.swap = swap.clone(); // explicitly implemented by CharCharMap
+        next.swap.defaultReturnValue('\uffff'); // ... but it forgets to copy this field
         next.distanceField = distanceField;
         next.msdf = msdf;
         next.distanceFieldScaleX = distanceFieldScaleX;
