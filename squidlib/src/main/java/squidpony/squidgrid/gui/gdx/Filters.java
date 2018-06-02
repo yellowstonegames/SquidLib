@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.IFilter;
+import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.ThrustAltRNG;
 
 import java.util.ArrayList;
@@ -322,7 +323,7 @@ public class Filters {
         }
         @Override
         public Color alter(float r, float g, float b, float a) {
-            state[0] += 0.00003f;
+            state[0] = (System.currentTimeMillis() & 0xfff) * 0x1p-12f;
             if(state[0] >= 1.0f)
                 state[0] = 0f;
             float h = globalSCC.getHue(r, g, b),
@@ -331,7 +332,7 @@ public class Filters {
             return globalSCC.getHSV(
                     (v * 4f + h + state[0]) % 1.0f,
                     Math.max(0f, Math.min((h + v) * 0.65f + state[0] * 0.4f, 1f)),
-                    (h + v + s) * 0.35f + 0.7f,
+                    MathExtras.clamp((h + v + s) * 0.35f + 0.7f, 0f, 1f),
                     a);
         }
 

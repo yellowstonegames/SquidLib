@@ -149,11 +149,17 @@ public class EverythingDemo extends ApplicationAdapter {
         colorCenters[0] = new SquidColorCenter(new Filters.HallucinateFilter());
         colorCenters[1] = colorCenters[0];
 
-        // WiggleFilter here is used to randomize the colors slightly.
+        // WiggleFilter was used here to make a glitchy effect, but it's mostly headache-inducing.
 
-        colorCenters[2] = new SquidColorCenter(new Filters.WiggleFilter());
+        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
+        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
+
+        colorCenters[2] = new SquidColorCenter(new Filters.MultiLerpFilter(
+                new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
+                new float[]{0.25f, 0.2f}
+        ));
         colorCenters[3] = colorCenters[2];
-
+        
         // PaletteFilter here is used to limit colors to specific sets.
         Filters.PaletteFilter paletteFilter = new Filters.PaletteFilter(SColor.COLOR_WHEEL_PALETTE);
         colorCenters[4] = new SquidColorCenter(
@@ -163,16 +169,14 @@ public class EverythingDemo extends ApplicationAdapter {
                 new Filters.ChainFilter(paletteFilter,
                         new Filters.SaturationValueFilter(0.85f, 0.875f)));
 
-        // MultiLerpFilter here is given two colors to tint everything toward one of; this is meant to reproduce the
-        // "Hollywood action movie poster" style of using primarily light orange (explosions) and gray-blue (metal).
-
         colorCenters[6] = new SquidColorCenter(new Filters.MultiLerpFilter(
-                new Color[]{SColor.GAMBOGE_DYE, SColor.COLUMBIA_BLUE},
-                new float[]{0.25f, 0.2f}
+                new Color[]{SColor.CW_PALE_ROSE, SColor.CW_BRIGHT_APRICOT, SColor.CW_LIGHT_YELLOW, SColor.CW_BRIGHT_HONEYDEW, SColor.CW_FADED_BLUE, SColor.CW_BRIGHT_PURPLE},
+                new float[]{0.2f, 0.2f, 0.2f, 0.2f, 0.2f, 0.2f}
         ));
         colorCenters[7] = colorCenters[6];
 
-        // MultiLerpFilter here is given three colors to tint everything toward one of; this is meant to look bolder.
+        // MultiLerpFilter here is given three colors and will tint any requested color toward one of those three; this
+        // is meant to look bolder.
 
         colorCenters[8] = new SquidColorCenter(new Filters.MultiLerpFilter(
                 new Color[]{SColor.CW_RED, SColor.CW_BRIGHT_SAPPHIRE, SColor.CW_RICH_GREEN},
@@ -494,7 +498,7 @@ public class EverythingDemo extends ApplicationAdapter {
                         //currentCenter = (currentCenter + 1 & 1) + 8; // for testing red-green color blindness filter
 
                         // idx is 3 when we use the HallucinateFilter, which needs special work
-                        changingColors = currentCenter == 3;
+                        changingColors = currentCenter == 0;
                         fgCenter = colorCenters[currentCenter * 2];
                         bgCenter = colorCenters[currentCenter * 2 + 1];
                         display.setFGColorCenter(fgCenter);
@@ -886,7 +890,7 @@ public class EverythingDemo extends ApplicationAdapter {
                 // if we see it now, we remember the cell and show a lit cell based on the fovmap value (between 0.0
                 // and 1.0), with 1.0 being brighter at +75 lightness and 0.0 being rather dark at -105.
                 if (fovmap[ci][cj] > 0.0) {
-                    if(currentCenter >= 5)
+                    if(currentCenter > 5)
                         display.put(ci, cj, (overlapping) ? ' ' : lineDungeon[ci][cj], fgCenter.filter(colors[ci][cj]), bgCenter.filter(bgColors[ci][cj]),
                             (int) (-95 +
                                     160 * (fovmap[ci][cj] * (1.0 + 0.2 * SeededNoise.noise(ci * 0.2, cj * 0.2, tm * 0.0004, 10000)))));
@@ -919,7 +923,7 @@ public class EverythingDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(bgColor.r / 255.0f, bgColor.g / 255.0f, bgColor.b / 255.0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if(currentCenter >= 5) // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
+        if(currentCenter > 5) // this does the standard lighting for walls, floors, etc. but also uses the time to do the Simplex noise thing.
             display.autoLight((System.currentTimeMillis() & 0xFFFFFFL) * 0.012);
         else // this does standard lighting without Simplex noise.
             MapUtility.fillLightnessModifiers(display.lightnesses, decoDungeon);

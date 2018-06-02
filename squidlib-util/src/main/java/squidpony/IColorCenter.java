@@ -284,10 +284,35 @@ public interface IColorCenter<T> {
 
 			@Override
 			public boolean areEqual(final Object left, final Object right) {
-				return (left == right) || (left != null && right != null && 
-						((left == feed && getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3]) == getUniqueIdentifier((T)right)) || 
-						(right == feed && getUniqueIdentifier((T)left) == getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3])) ||
-								(left != feed && right != feed && getUniqueIdentifier((T)left) == getUniqueIdentifier((T)right))));
+				if(left == right) return true;
+				if(left != null && right != null)
+				{
+					if(left == feed)
+					{
+						return getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3]) == getUniqueIdentifier((T)right);
+//						final long f = getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3]);
+//						final long i = getUniqueIdentifier((T)right);
+//						System.out.printf("left 0x%016X, right 0x%016X\n", f, i);
+//						return f == i;
+					}
+					else if(right == feed)
+					{
+						return getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3]) == getUniqueIdentifier((T)left);
+//						final long f = getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3]);
+//						final long i = getUniqueIdentifier((T)left);
+//						System.out.printf("left 0x%016X, right 0x%016X\n", i, f);
+//						return f == i;
+					}
+					else 
+					{
+						return (getUniqueIdentifier((T)left) == getUniqueIdentifier((T)right));
+					}
+				}
+				return false;
+//				return (left == right) || (left != null && right != null &&
+//						((left == feed && getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3]) == getUniqueIdentifier((T)right)) ||
+//								(right == feed && getUniqueIdentifier((T)left) == getUniqueIdentifier(feed[0], feed[1], feed[2], feed[3])) ||
+//								(left != feed && right != feed && getUniqueIdentifier((T)left) == getUniqueIdentifier((T)right))));
 			}
 		} 
 		protected GranularHasher theHasher = new GranularHasher();
