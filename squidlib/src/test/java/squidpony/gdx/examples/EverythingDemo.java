@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -131,6 +132,7 @@ public class EverythingDemo extends ApplicationAdapter {
     private Viewport viewport, messageViewport;
     private Camera camera;
     private float currentZoomX = INTERNAL_ZOOM, currentZoomY = INTERNAL_ZOOM;
+    private Vector2 screenPosition;
 
     @Override
     public void create() {
@@ -604,6 +606,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // stage.addActor(subCell); // this is not added since it is manually drawn after other steps
         messageStage.addActor(messages);
         //viewport = input.resizeInnerStage(stage);
+        screenPosition = new Vector2(cellWidth, cellHeight);
     }
 
     /**
@@ -1032,6 +1035,8 @@ public class EverythingDemo extends ApplicationAdapter {
         // each stage has its own batch that it starts an ends, so certain batch-wide effects only change one stage.
         stage.draw();
         if (help == null) {
+            screenPosition.set(cellWidth * 5, cellHeight);
+            stage.screenToStageCoordinates(screenPosition);
             // display does not draw all AnimatedEntities by default, since FOV often changes how they need to be drawn.
             batch.begin();
             // the player needs to get drawn every frame, of course.
@@ -1043,6 +1048,8 @@ public class EverythingDemo extends ApplicationAdapter {
                     display.drawActor(batch, 1.0f, mon.entity);
                 }
             }
+            display.getTextFactory().draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", screenPosition.x, screenPosition.y);
+
             //subCell.draw(batch, 1.0F);
             // batch must end if it began.
             batch.end();

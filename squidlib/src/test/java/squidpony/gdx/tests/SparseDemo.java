@@ -6,6 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
@@ -87,6 +88,10 @@ public class SparseDemo extends ApplicationAdapter {
     private Coord cursor, player;
     private ArrayList<Coord> toCursor;
     private List<Coord> awaitedMoves;
+
+    private Vector2 screenPosition;
+
+
     // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
     // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
     private final String artOfWar =
@@ -498,7 +503,7 @@ public class SparseDemo extends ApplicationAdapter {
         stage.addActor(display);
         languageStage.addActor(languageDisplay);
 
-
+        screenPosition = new Vector2(cellWidth, cellHeight);
     }
     /**
      * Move the player if he isn't bumping into a wall or trying to go off the map somehow.
@@ -662,7 +667,13 @@ public class SparseDemo extends ApplicationAdapter {
         // we have the main stage set itself up after the language stage has already drawn.
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
-        stage.draw();
+        batch.setProjectionMatrix(stage.getCamera().combined);
+        screenPosition.set(cellWidth * 6, cellHeight);
+        stage.screenToStageCoordinates(screenPosition);
+        batch.begin();
+        stage.getRoot().draw(batch, 1);
+        display.font.draw(batch, Gdx.graphics.getFramesPerSecond() + " FPS", screenPosition.x, screenPosition.y);
+        batch.end();
         Gdx.graphics.setTitle("SparseLayers Demo running at FPS: " + Gdx.graphics.getFramesPerSecond());
     }
 

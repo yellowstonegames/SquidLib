@@ -894,8 +894,7 @@ public class TextCellFactory implements Disposable {
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
             bmpFont.setColor(1f,1f,1f,1f);
-            mut.setCharAt(0, getOrDefault(s.charAt(0)));
-            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
 
@@ -957,8 +956,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(r, g, b, a);
-            mut.setCharAt(0, getOrDefault(s.charAt(0)));
-            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
 
@@ -989,8 +987,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else {
             bmpFont.setColor(color);
-            mut.setCharAt(0, getOrDefault(s.charAt(0)));
-            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
     /**
@@ -1021,8 +1018,7 @@ public class TextCellFactory implements Disposable {
         } else
         {
             colorFromFloat(bmpFont.getColor(), encodedColor);
-            mut.setCharAt(0, getOrDefault(s.charAt(0)));
-            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
 
@@ -1375,8 +1371,7 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            mut.setCharAt(0, getOrDefault(s.charAt(0)));
-            Label lb = new Label(mut, style);
+            Label lb = new Label(s, style);
             //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             lb.setColor(scc.filter(color));
@@ -1449,8 +1444,7 @@ public class TextCellFactory implements Disposable {
             // im.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return im;
         } else {
-            mut.setCharAt(0, getOrDefault(s.charAt(0)));
-            ColorChangeLabel lb = new ColorChangeLabel(mut, style, loopTime, doubleWidth, colors2);
+            ColorChangeLabel lb = new ColorChangeLabel(s, style, loopTime, doubleWidth, colors2);
             lb.setSize(width * s.length(), height - descent); //+ lineTweak * 1f
             // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
