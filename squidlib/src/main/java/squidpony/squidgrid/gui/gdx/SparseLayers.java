@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -2763,11 +2764,12 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight;
+        float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight, gxo, gyo;
         font.draw(batch, backgrounds, xo, yo);
         int len = layers.size();
+        Frustum frustum = getStage().getViewport().getCamera().frustum;
         for (int i = 0; i < len; i++) {
-            layers.get(i).draw(batch, font, xo, yOff);
+            layers.get(i).draw(batch, font, frustum, xo, yOff);
         }
         int x, y;
         for (int i = 0; i < glyphs.size(); i++) {
@@ -2777,9 +2779,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             glyph.act(Gdx.graphics.getDeltaTime());
             if(
                     !glyph.isVisible() ||
-                    (x = Math.round((glyph.getX() - xo) / font.actualCellWidth)) < 0 || x >= gridWidth ||
-                    (y = Math.round((glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
-                    backgrounds[x][y] == 0f)
+                    (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) < 0 || x >= gridWidth ||
+                    (y = Math.round((gyo = glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
+                    backgrounds[x][y] == 0f || !frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))
                 continue;
             glyph.draw(batch, 1f);
         }

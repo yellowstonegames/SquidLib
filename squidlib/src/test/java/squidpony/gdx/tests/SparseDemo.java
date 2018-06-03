@@ -412,6 +412,12 @@ public class SparseDemo extends ApplicationAdapter {
                         Gdx.app.exit();
                         break;
                     }
+                    case 'c':
+                    case 'C':
+                    {
+                        seen.fill(true);
+                        break;
+                    }
                 }
             }
         },
