@@ -49,7 +49,7 @@ public abstract class WorldMapGenerator implements Serializable {
             //partialRiverData, partialLakeData;
     //protected transient GreasedRegion workingData;
     public final int[][] heightCodeData;
-    public double waterModifier = -1.0, coolingModifier = 1.0,
+    public double landModifier = -1.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
@@ -167,13 +167,13 @@ public abstract class WorldMapGenerator implements Serializable {
      * The worlds this produces will always have width and height as specified in the constructor (default 256x256).
      * You can call {@link #zoomIn(int, int, int)} to double the resolution and center on the specified area, but the width
      * and height of the 2D arrays this changed, such as {@link #heightData} and {@link #moistureData} will be the same.
-     * @param waterMod should be between 0.85 and 1.2; a random value will be used if this is negative
-     * @param coolMod should be between 0.85 and 1.4; a random value will be used if this is negative
+     * @param landMod 1.0 is Earth-like, less than 1 is more-water, more than 1 is more-land; a random value will be used if this is negative
+     * @param coolMod 1.125 is Earth-like, less than 1 is cooler, more than 1 is hotter; a random value will be used if this is negative
      * @param state the state to give this generator's RNG; if the same as the last call, this will reuse data
      */
-    public void generate(double waterMod, double coolMod, long state)
+    public void generate(double landMod, double coolMod, long state)
     {
-        if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+        if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
         {
             seed = state;
             zoom = 0;
@@ -189,7 +189,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
         regenerate(startX = (zoomStartX >> zoom) - (width >> 1 + zoom), startY = (zoomStartY >> zoom) - (height >> 1 + zoom),
                 //startCacheX.peek(), startCacheY.peek(),
-                usedWidth = (width >> zoom), usedHeight = (height >> zoom), waterMod, coolMod, state);
+                usedWidth = (width >> zoom), usedHeight = (height >> zoom), landMod, coolMod, state);
     }
 
     /**
@@ -247,7 +247,7 @@ public abstract class WorldMapGenerator implements Serializable {
             regenerate(startX = (zoomStartX >> zoom) - (width >> zoom + 1), startY = (zoomStartY >> zoom) - (height >> zoom + 1),
                     //startCacheX.peek(), startCacheY.peek(),
                     usedWidth = width >> zoom,  usedHeight = height >> zoom,
-                    waterModifier, coolingModifier, cachedState);
+                    landModifier, coolingModifier, cachedState);
             rng.setState(cachedState);
         }
 
@@ -312,12 +312,12 @@ public abstract class WorldMapGenerator implements Serializable {
         regenerate(startX = (zoomStartX >> zoom) - (width >> 1 + zoom), startY = (zoomStartY >> zoom) - (height >> 1 + zoom),
                 //startCacheX.peek(), startCacheY.peek(),
                 usedWidth = width >> zoom, usedHeight = height >> zoom,
-                waterModifier, coolingModifier, cachedState);
+                landModifier, coolingModifier, cachedState);
         rng.setState(cachedState);
     }
 
     protected abstract void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                              double waterMod, double coolMod, long state);
+                              double landMod, double coolMod, long state);
 
     public int codeHeight(final double high)
     {
@@ -1248,10 +1248,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double waterMod, double coolMod, long state)
+                                  double landMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -1272,7 +1272,7 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p, q,
@@ -1296,8 +1296,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     pc = trigTable[xt++];//NumberTools.cos(p);
                     h = terrain.getNoiseWithSeed(pc +
                                     terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
-                            ps, qc, qs, seedA);
-                    h *= waterModifier;
+                            ps, qc, qs, seedA) + landModifier - 1.0;
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
                                     + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)
@@ -1574,10 +1573,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double waterMod, double coolMod, long state)
+                                  double landMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -1598,7 +1597,7 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p,
@@ -1627,8 +1626,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     zPositions[x][y] = qs;
                     h = terrain.getNoiseWithSeed(pc +
                                     terrainRidged.getNoiseWithSeed(pc, ps, qs,seedA + seedB),
-                            ps, qs, seedA);
-                    h *= waterModifier;
+                            ps, qs, seedA) + landModifier - 1.0;
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
@@ -1933,10 +1931,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double waterMod, double coolMod, long state)
+                                  double landMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -1957,7 +1955,7 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p,
@@ -1987,7 +1985,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
                             (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
                                     + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-                            seedA) * waterModifier);
+                            seedA) + landModifier - 1.0);
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
@@ -2293,10 +2291,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double waterMod, double coolMod, long state)
+                                  double landMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(zoom <= 0 || cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(zoom <= 0 || cachedState != state || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -2319,7 +2317,7 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.2) + 0.91 : waterMod;
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p,
@@ -2367,7 +2365,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
                             (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
                             + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-                            seedA) * waterModifier);
+                            seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
@@ -2676,10 +2674,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double waterMod, double coolMod, long state)
+                                  double landMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -2700,7 +2698,7 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.29) + 0.91 : waterMod;
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             earth.remake(earthOriginal);
@@ -2777,7 +2775,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         else
                             h -= coastalWaterUpper;
                     }
-                    h *= waterModifier;
+                    h += landModifier - 1.0;
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
@@ -3051,10 +3049,10 @@ public abstract class WorldMapGenerator implements Serializable {
         //private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double waterMod, double coolMod, long state)
+                                  double landMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(cachedState != state || waterMod != waterModifier || coolMod != coolingModifier)
+            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -3077,7 +3075,7 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            waterModifier = (waterMod <= 0) ? rng.nextDouble(0.2) + 0.91 : waterMod;
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p,
@@ -3130,11 +3128,11 @@ public abstract class WorldMapGenerator implements Serializable {
                     zPositions[x][y] = qs;
                     heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
                                     terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA),
-                            ps, qs, seedA) * waterModifier);
+                            ps, qs, seedA) + landModifier - 1.0);
 //                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
 //                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
 //                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-//                            seedA) * waterModifier);
+//                            seedA) * landModifier);
 
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps

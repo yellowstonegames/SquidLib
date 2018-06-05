@@ -16,10 +16,7 @@ import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.FantasyPoliticalMapper;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.ClassicNoise;
-import squidpony.squidmath.Noise;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
@@ -49,9 +46,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 1024, height = 512;
     //private static final int width = 512, height = 256;
     //private static final int width = 400, height = 400;
-//    private static final int width = 300, height = 300;
+    //private static final int width = 300, height = 300;
     //private static final int width = 1600, height = 800;
-    private static final int width = 400, height = 400;
+    //private static final int width = 1000, height = 1000;
+    private static final int width = 700, height = 700;
     private SpriteBatch batch;
 //    private SquidPanel dislay;//, overlay;
     private static final int cellWidth = 1, cellHeight = 1;
@@ -70,7 +68,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Texture pt;
     private int counter = 0;
     private Color tempColor = Color.WHITE.cpy();
-
+    
+    private boolean spinning = false;
+    
     private boolean cloudy = false;
     private float nation = 0f;
     private long ttg = 0; // time to generate
@@ -325,6 +325,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 'c':
                         cloudy = !cloudy;
                         break;
+                    case 'P':
+                    case 'p':
+                        spinning = !spinning;
+                        break;
                     case 'Q':
                     case 'q':
                     case SquidInput.ESCAPE: {
@@ -350,6 +354,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                 return true;
             }
         }));
+        input.setRepeatGap(Long.MAX_VALUE);
         generate(seed);
         rng.setState(seed);
         Gdx.input.setInputProcessor(input);
@@ -360,12 +365,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     public void zoomIn() {
-        zoomIn(width >> 1, height >> 1);
+        zoomIn(width>>1, height>>1);
     }
     public void zoomIn(int zoomX, int zoomY)
     {
         long startTime = System.currentTimeMillis();
-        world.zoomIn(1, zoomX, zoomY);
+        world.zoomIn(1, zoomX<<1, zoomY<<1);
         dbm.makeBiomes(world);
         //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
@@ -378,7 +383,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public void zoomOut(int zoomX, int zoomY)
     {
         long startTime = System.currentTimeMillis();
-        world.zoomOut(1, zoomX, zoomY);
+        world.zoomOut(1, zoomX<<1, zoomY<<1);
         dbm.makeBiomes(world);
         //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
@@ -390,7 +395,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
         world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
         //world.setCenterLongitude(++counter * 0.02);
-        world.generate(seed);
+        world.generate(1.0 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
+                LinnormRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.2 + 0.9, seed);
         dbm.makeBiomes(world);
         //randomizeColors(seed);
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
@@ -403,7 +409,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         long startTime = System.currentTimeMillis();
         world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
         //world.setCenterLongitude(++counter * 0.02);
-        world.generate(world.waterModifier, world.coolingModifier, seed);
+        world.generate(world.landModifier, world.coolingModifier, seed);
         dbm.makeBiomes(world);
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
@@ -506,61 +512,62 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 //            }
 //        }
 //    }
-public void putMap() {
-    int hc, tc, bc;
-    int[][] heightCodeData = world.heightCodeData;
-    double[][] heightData = world.heightData;
-    int[][] heatCodeData = dbm.heatCodeData;
-    int[][] biomeCodeData = dbm.biomeCodeData;
-    pm.setColor(SColor.DB_INK);
-    pm.fill();
-    for (int y = 0; y < height; y++) {
-        PER_CELL:
-        for (int x = 0; x < width; x++) {
-            hc = heightCodeData[x][y];
-            if (hc == 1000)
-                continue;
-            tc = heatCodeData[x][y];
-            bc = biomeCodeData[x][y];
-            if (tc == 0) {
+
+    public void putMap() {
+        int hc, tc, bc;
+        int[][] heightCodeData = world.heightCodeData;
+        double[][] heightData = world.heightData;
+        int[][] heatCodeData = dbm.heatCodeData;
+        int[][] biomeCodeData = dbm.biomeCodeData;
+        pm.setColor(quantize(SColor.DB_INK));
+        pm.fill();
+        for (int y = 0; y < height; y++) {
+            PER_CELL:
+            for (int x = 0; x < width; x++) {
+                hc = heightCodeData[x][y];
+                if (hc == 1000)
+                    continue;
+                tc = heatCodeData[x][y];
+                bc = biomeCodeData[x][y];
+                if (tc == 0) {
+                    switch (hc) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
+                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
+//                        pm.setColor(tempColor);
+//                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                            pm.drawPixel(x, y, quantize(tempColor));//Color.rgba8888(tempColor));
+                            //display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
+                            //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                            continue PER_CELL;
+                        case 4:
+                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
+                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
+//                        pm.setColor(tempColor);
+//                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
+                            pm.drawPixel(x, y, quantize(tempColor));//Color.rgba8888(tempColor));
+                            //display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
+                            //        (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
+                            continue PER_CELL;
+                    }
+                }
                 switch (hc) {
                     case 0:
                     case 1:
                     case 2:
                     case 3:
-                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
+                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
-//                        pm.setColor(tempColor);
-//                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                        //display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
-                        //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
-                        continue PER_CELL;
-                    case 4:
-                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
-                                (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
-//                        pm.setColor(tempColor);
-//                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                        //display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
-                        //        (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
-                        continue PER_CELL;
-                }
-            }
-            switch (hc) {
-                case 0:
-                case 1:
-                case 2:
-                case 3:
-                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
-                            (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
 //                    pm.setColor(tempColor);
 //                    pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                    //display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
-                    //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
-                    break;
-                default:
+                        pm.drawPixel(x, y, quantize(tempColor));//Color.rgba8888(tempColor));
+                        //display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
+                        //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
+                        break;
+                    default:
                         /*
                         if(partialLakeData.contains(x, y))
                             System.out.println("LAKE  x=" + x + ",y=" + y + ':' + (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 19
@@ -570,33 +577,50 @@ public void putMap() {
                                     + shadingData[x][y] * 13) * 0.03125f);
                         */
 
-                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
-                            BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
+                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
+                                BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
 //                    pm.setColor(tempColor);
 //                    pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
-                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                    //display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
-                    //        BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
-                    //        (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
-                    //                shadingData[x][y]// * 21) * 0.03125f
-                    //        ));
+                        pm.drawPixel(x, y, quantize(tempColor));//Color.rgba8888(tempColor));
+                        //display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
+                        //        BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
+                        //        (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
+                        //                shadingData[x][y]// * 21) * 0.03125f
+                        //        ));
 
-                    //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
+                        //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
+                }
             }
         }
+        batch.begin();
+        pt.draw(pm, 0, 0);
+        batch.draw(pt, 0, 0, width >> 1, height >> 1);
+        batch.end();
     }
-    batch.begin();
-    pt.draw(pm, 0, 0);
-    batch.draw(pt, 0, 0, width>>1, height>>1);
-    batch.end();
-}
+    
+    public int quantize(Color color)
+    {
+        // Full 8-bit RGBA channels. No limits on what colors can be displayed.
+        //return Color.rgba8888(color);
+
+        // Limits red, green, and blue channels to only use 5 bits (32 values) instead of 8 (256 values).
+        //return Color.rgba8888(color) & 0xF8F8F8FF;
+
+        // 253 possible colors, including one all-zero transparent color. 6 possible red values (not bits), 7 possible
+        // green values, 6 possible blue values, and the aforementioned fully-transparent black. White is 0xFFFFFFFF and
+        // not some off-white value, but other than black (0x000000FF), grayscale values have non-zero saturation.
+        // Could be made into a palette, and images that use this can be saved as GIF or in PNG-8 indexed mode.
+        return ((0xFF000000 & (int)(color.r*6) * 0x2AAAAAAA) | (0xFF0000 & (int)(color.g*7) * 0x249249) | (0xFF00 & (int)(color.b*6) * 0x2AAA) | 255) & -(int)(color.a + 0.5f);
+    }
+    
     @Override
     public void render() {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(SColor.DB_INK.r, SColor.DB_INK.g, SColor.DB_INK.b, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        rotate();
+        if(spinning) 
+            rotate();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         putMap();
         ++counter;//nation = NumberTools.swayTight(++counter * 0.0125f);

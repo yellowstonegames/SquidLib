@@ -16,10 +16,7 @@ import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.PoliticalMapper;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.WhirlingNoise;
+import squidpony.squidmath.*;
 
 /**
  * Map generator that uses text to show features at a location as well as color.
@@ -279,7 +276,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     {
         long startTime = System.currentTimeMillis();
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
-        world.generate(1.0, 1.125, seed);
+        world.generate(0.975 + NumberTools.formCurvedDouble(seed) * 0.075, 1.125, seed);
         dbm.makeBiomes(world);
         atlas = new OrderedMap<>(80);
         atlas.clear();
