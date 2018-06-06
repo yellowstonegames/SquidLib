@@ -71,8 +71,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 122;
-    private int hashMode = 0, rngMode = 46, noiseMode = 82;//118;
+    private static final int NOISE_LIMIT = 124;
+    private int hashMode = 0, rngMode = 46, noiseMode = 118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -1214,6 +1214,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 }
             }
         });
+        input.setRepeatGap(Long.MAX_VALUE);
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(input);
         // and then add display, our one visual component, to the list of things that act in Stage.
@@ -2891,9 +2892,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y, floatGet(
-                                        (WhirlingNoise.noiseAlt(x * 0.03125f, y * 0.03125f, ctr * 0.045f) + 1f) * 0.5f,
-                                        (WhirlingNoise.noiseAlt(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5) + 1f) * 0.5f,
-                                        (WhirlingNoise.noiseAlt(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9) + 1f) * 0.5f,
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 1234567L) + 1f) * 0.5f,
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5, 7654321L) + 1f) * 0.5f,
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9, 9999999L) + 1f) * 0.5f,
                                         1f));
                             }
                         }
@@ -4203,6 +4204,30 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         );
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 122:
+                        Gdx.graphics.setTitle("Whirling 3D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGetYCbCr(
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 1234567L) + 1f) * 0.5f,
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5, 7654321L)) * 0.7f,
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9, 9999999L)) * 0.7f,
+                                        1f));
+                            }
+                        }
+                        break;
+                    case 123:
+                        Gdx.graphics.setTitle("Classic 3D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                display.put(x, y, floatGetYCbCr(
+                                        ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 1234567L) + 1f) * 0.5f,
+                                        ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5, 7654321L)) * 0.7f,
+                                        ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9, 9999999L)) * 0.7f,
+                                        1f));
                             }
                         }
                         break;

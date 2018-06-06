@@ -11639,7 +11639,7 @@ public class SColor extends Color implements Serializable {
      * @param b blue from 0 to 255, both inclusive
      */
     public SColor(int r, int g, int b) {
-        super(r / 255f, g / 255f, b / 255f, 1.0f);
+        super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, 1.0f);
         this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
         name = super.toString();
     }
@@ -11653,7 +11653,7 @@ public class SColor extends Color implements Serializable {
      * @param a alpha from 0 to 255, both inclusive
      */
     public SColor(int r, int g, int b, int a) {
-        super(r / 255f, g / 255f, b / 255f, a / 255f);
+        super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, a * 0.003921569f);
         this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
         name = super.toString();
     }
@@ -11668,7 +11668,7 @@ public class SColor extends Color implements Serializable {
      * @param name the name of the color, which will be registered in {@link Colors}
      */
     public SColor(int r, int g, int b, String name) {
-        super(r / 255f, g / 255f, b / 255f, 1.0f);
+        super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, 1.0f);
         this.name = name;
         this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
         Colors.put(name, this);
@@ -11684,7 +11684,7 @@ public class SColor extends Color implements Serializable {
      * @param name the name of the color, which will be registered in {@link Colors}
      */
     public SColor(int r, int g, int b, int a, String name) {
-        super(r / 255f, g / 255f, b / 255f, a / 255f);
+        super(r * 0.003921569f, g * 0.003921569f, b * 0.003921569f, a * 0.003921569f);
         this.name = name;
         this.calculatedFloat =  NumberTools.intBitsToFloat(((int)(255 * a) << 24 & 0xfe000000) | ((int)(255 * b) << 16) | ((int)(255 * g) << 8) | ((int)(255 * r)));
         Colors.put(name, this);
@@ -11745,8 +11745,8 @@ public class SColor extends Color implements Serializable {
      */
     public static Color colorFromFloat(final float encoded) {
         int c = NumberTools.floatToIntBits(encoded);
-        return new Color(((c & 0x000000ff)) / 255f, ((c & 0x0000ff00) >>> 8) / 255f,
-                ((c & 0x00ff0000) >>> 16) / 255f, ((c & 0xff000000) >>> 24) / 255f);
+        return new Color(((c & 0x000000ff)) * 0.003921569f, ((c & 0x0000ff00) >>> 8) * 0.003921569f,
+                ((c & 0x00ff0000) >>> 16) * 0.003921569f, ((c & 0xfe000000) >>> 24) * 0.003937008f);
     }
 
     /**
@@ -11791,9 +11791,9 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Gets the red channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * Gets the red channel value of the given encoded color, as a float from 0.0f to 1.0f, inclusive.
      * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
-     * @return an int from 0 to 255, inclusive, representing the red channel value of the given encoded color
+     * @return a float from 0.0f to 1.0f, inclusive, representing the red channel value of the given encoded color
      */
     public static float redOfFloatF(final float encoded)
     {
@@ -11801,9 +11801,9 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Gets the green channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * Gets the green channel value of the given encoded color, as a float from 0.0f to 1.0f, inclusive.
      * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
-     * @return an int from 0 to 255, inclusive, representing the green channel value of the given encoded color
+     * @return a float from 0.0f to 1.0f, inclusive, representing the green channel value of the given encoded color
      */
     public static float greenOfFloatF(final float encoded)
     {
@@ -11811,9 +11811,9 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Gets the blue channel value of the given encoded color, as an int ranging from 0 to 255, inclusive.
+     * Gets the blue channel value of the given encoded color, as a float from 0.0f to 1.0f, inclusive.
      * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
-     * @return an int from 0 to 255, inclusive, representing the blue channel value of the given encoded color
+     * @return a float from 0.0f to 1.0f, inclusive, representing the blue channel value of the given encoded color
      */
     public static float blueOfFloatF(final float encoded)
     {
@@ -11821,10 +11821,9 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * Gets the alpha channel value of the given encoded color, as a float ranging from 0f to 1f, inclusive. Because
-     * of how alpha is stored in libGDX, no odd-number values are possible for alpha.
+     * Gets the alpha channel value of the given encoded color, as a float from 0.0f to 1.0f, inclusive.
      * @param encoded a color as a packed float that can be obtained by {@link Color#toFloatBits()}
-     * @return an even int from 0 to 254, inclusive, representing the alpha channel value of the given encoded color
+     * @return a float from 0.0f to 1.0f, inclusive, representing the alpha channel value of the given encoded color
      */
     public static float alphaOfFloatF(final float encoded)
     {
@@ -11840,8 +11839,8 @@ public class SColor extends Color implements Serializable {
         final int e = NumberTools.floatToIntBits(encoded),
                 r = (e & 255), g = (e >>> 8 & 255),
                 b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
-        final float min = Math.min(Math.min(r, g ), b) / 255f;   //Min. value of RGB
-        final float max = Math.max(Math.max(r, g), b) / 255f;    //Max. value of RGB
+        final float min = Math.min(Math.min(r, g), b) * 0.003921569f;   //Min. value of RGB
+        final float max = Math.max(Math.max(r, g), b) * 0.003921569f;    //Max. value of RGB
         final float delta = max - min;                     //Delta RGB value
 
         if ( delta < 0.0001f )                     //This is a gray, no chroma...
@@ -11897,7 +11896,7 @@ public class SColor extends Color implements Serializable {
         final int e = NumberTools.floatToIntBits(encoded);
         final int r = (e & 255), g = (e >>> 8 & 255),
                 b = (e >>> 16 & 255);//, a = (e >>> 24 & 254) / 254f;
-        return Math.max(Math.max(r, g), b) / 255f;
+        return Math.max(Math.max(r, g), b) * 0.003921569f;
     }
 
     /**
@@ -11929,8 +11928,8 @@ public class SColor extends Color implements Serializable {
      */
     public static float hueOfFloat(final float encoded) {
         final int e = NumberTools.floatToIntBits(encoded);
-        final float r = (e & 255) / 255f, g = (e >>> 8 & 255) / 255f,
-                b = (e >>> 16 & 255) / 255f;//, a = (e >>> 24 & 254) / 254f;
+        final float r = (e & 255) * 0.003921569f, g = (e >>> 8 & 255) * 0.003921569f,
+                b = (e >>> 16 & 255) * 0.003921569f;//, a = (e >>> 24 & 254) / 254f;
         final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
         final float max = Math.max(Math.max(r, g), b);   //Max value of RGB
         final float delta = max - min;                           //Delta RGB value
@@ -11990,6 +11989,67 @@ public class SColor extends Color implements Serializable {
             else if (g == max) return (1f + (1f / 3f) + rDelta - bDelta) % 1f;
             else               return (1f + (2f / 3f) + gDelta - rDelta) % 1f;
         }
+    }
+
+    /**
+     * The "luma," or lightness, of the given packed float in YCbCr format; ranges from 0.0f to 1.0f .
+     * You can go back to an RGB color as a packed float with {@link #floatGetYCbCr(float, float, float, float)}.
+     * YCbCr is useful for modifications to colors because you can get a grayscale version of a color by setting Cb and
+     * Cr to 0, you can desaturate by multiplying Cb and Cr by a number between 0 and 1, you can oversaturate by
+     * multiplying Cb and Cr by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth.
+     * @param encoded a packed float
+     * @return the luma as a float from 0.0f to 1.0f
+     */
+    public static float lumaOfFloat(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return  (bits & 0x000000ff) * (0x1.010102p-8f  * 0.299f) +
+                (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
+                (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f);
+    }
+
+    /**
+     * The "Chroma B," or Cb, of the given packed float in YCbCr format; ranges from -0.5f to 0.5f .
+     * This is related to Chroma R; when Chroma B is high and Chroma R is low, the color is more blue; when Chroma R is
+     * high and Chroma B is low, the color is more red, when both are low it is more green, and when both are high it is
+     * more purple. When Chroma R and Chroma B are both near 0.0f, the color is closer to gray. Because Chroma values
+     * are centered on 0.0f, you can multiply them by a value like 0.5f to halve the colorfulness of the color.
+     * You can go back to an RGB color as a packed float with {@link #floatGetYCbCr(float, float, float, float)}.
+     * YCbCr is useful for modifications to colors because you can get a grayscale version of a color by setting Cb and
+     * Cr to 0, you can desaturate by multiplying Cb and Cr by a number between 0 and 1, you can oversaturate by
+     * multiplying Cb and Cr by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth.
+     * @param encoded a packed float
+     * @return the Chroma B as a float from -0.5f to 0.5f
+     */
+    public static float chromaBOfFloat(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return  (bits & 0x000000ff) * (0x1.010102p-8f  * -0.168736f) +
+                (bits & 0x0000ff00) * (0x1.010102p-16f * -0.331264f) +
+                (bits & 0x00ff0000) * (0x1.010102p-24f * 0.5f);
+    }
+    /**
+     * The "Chroma R," or Cr, of the given packed float in YCbCr format; ranges from -0.5f to 0.5f .
+     * This is related to Chroma B; when Chroma B is high and Chroma R is low, the color is more blue; when Chroma R is
+     * high and Chroma B is low, the color is more red, when both are low it is more green, and when both are high it is
+     * more purple. When Chroma R and Chroma B are both near 0.0f, the color is closer to gray. Because Chroma values
+     * are centered on 0.0f, you can multiply them by a value like 0.5f to halve the colorfulness of the color.
+     * You can go back to an RGB color as a packed float with {@link #floatGetYCbCr(float, float, float, float)}.
+     * YCbCr is useful for modifications to colors because you can get a grayscale version of a color by setting Cb and
+     * Cr to 0, you can desaturate by multiplying Cb and Cr by a number between 0 and 1, you can oversaturate by
+     * multiplying Cb and Cr by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth.
+     * @param encoded a packed float
+     * @return the Chroma R as a float from -0.5f to 0.5f
+     */
+    public static float chromaROfFloat(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return  (bits & 0x000000ff) * (0x1.010102p-8f  * 0.5f) +
+                (bits & 0x0000ff00) * (0x1.010102p-16f * -0.418688f) +
+                (bits & 0x00ff0000) * (0x1.010102p-24f * -0.081312f);
     }
 
     /**
@@ -12361,6 +12421,40 @@ public class SColor extends Color implements Serializable {
             }
         }
     }
+    /**
+     * Gets a color as a packed float given floats representing hue, saturation, value, and opacity.
+     * All parameters should normally be between 0 and 1 inclusive, though hue is tolerated if it is negative down to
+     * -6f at the lowest or positive up to any finite value, though precision loss may affect the color if the hue is
+     * too large. A hue of 0 is red, progressively higher hue values go to orange, yellow, green, blue, and purple
+     * before wrapping around to red as it approaches 1. A saturation of 0 is grayscale, a saturation of 1 is brightly
+     * colored, and values close to 1 will usually appear more distinct than values close to 0, especially if the
+     * hue is different (saturation below 0.0039f is treated specially here, and does less work to simply get a color
+     * between black and white with the given opacity). The value is similar to lightness; a value of 0.0039 or less is
+     * always black (also using a shortcut if this is the case, respecting opacity), while a value of 1 is as bright as
+     * the color gets with the given saturation and value. To get a value of white, you would need both a value of 1 and
+     * a saturation of 0.
+     *
+     * @param luma       0f to 1f, lightness (see {@link #lumaOfFloat(float)})
+     * @param chromaB    -0.5f to 0.5f, "blueness" of chroma component, with 0.5 more blue (see {@link #chromaBOfFloat(float)})
+     * @param chromaR    -0.5f to 0.5f, "redness" of chroma component, with 0.5 more red (see {@link #chromaROfFloat(float)})
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a float encoding a color with the given properties
+     */
+    public static float floatGetYCbCr(float luma, float chromaB, float chromaR, float opacity) {
+        if (luma <= 0.0039f) {
+            return floatGet(0f, 0f, 0f, opacity);
+        } else if (luma >= 0.9961f) {
+            return floatGet(1f, 1f, 1f, opacity);
+        }
+        if (chromaR >= -0.0039f && chromaR <= 0.0039f && chromaB >= -0.0039f && chromaB <= 0.0039f) {
+            return floatGet(luma, luma, luma, opacity);
+        }
+        return floatGet(MathUtils.clamp(luma + chromaR * 1.402f, 0f, 1f),
+                MathUtils.clamp(luma - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 1f),
+                MathUtils.clamp(luma + chromaB * 1.772f, 0f, 1f),
+                opacity);
+    }
+
 
     /**
      * Gets a variation on this SColor as a packed float that can have its hue, saturation, and value changed to
