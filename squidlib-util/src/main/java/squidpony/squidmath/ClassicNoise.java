@@ -15,15 +15,19 @@ import static squidpony.squidmath.WhirlingNoise.grad4;
  * memory when dimensionality exceeds 10 or so, since it needs to hash {@code Math.pow(2, dimensionality)} points per
  * sample of noise, which involves over a thousand points in 10 dimensions and over a million points in 20 dimensions.
  * For that reason, it's limited to 6D noise here, and also implements 2D, 3D, and 4D. Its performance is surprisingly
- * good at 2D, 3D, and 4D but trails off quickly at 6D. Its quality is not great in 2D, but it's better than some
- * implementations of classic Perlin noise. This uses different gradient vectors than what was recommended in the
- * "Improved Perlin Noise" paper, since the ones this uses avoid 45-degree angular artifacts.
+ * good at 2D, 3D, and 4D but trails off quickly at 6D. Its quality is improved substantially in 2D over vanilla Perlin
+ * Noise because this jitters the points on the grid, but the 3D and higher dimensionality versions don't seem to need
+ * this step to avoid grid artifacts. This uses different gradient vectors than what was recommended in the "Improved
+ * Perlin Noise" paper, since the ones this uses avoid 45-degree angular artifacts in all dimensions implemented.
+ * <br>
+ * ClassicNoise is recommended for most usage in {@link squidpony.squidgrid.mapping.WorldMapGenerator} that needs a
+ * Noise3D implementation, and it tends to about as fast as {@link WhirlingNoise} in 2D and 3D while producing more
+ * detail in 2D (suggesting it needs less octaves when layered).
  */
 @Beta
 public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {
     public static final ClassicNoise instance = new ClassicNoise();
     public long seed;
-
     public ClassicNoise() {
         this(0x1337BEEFCAFEL);
     }
@@ -31,13 +35,12 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
     public ClassicNoise(final long seed) {
         this.seed = seed;
     }
-
     protected static double gradCoord2D(long seed, int x, int y,
                                         double xd, double yd) {
-        final double[] grad = phiGrad2[
-                ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y) ^ seed >>> 13) * (seed))
-                        >>> 24)];
-        return xd * grad[0] + yd * grad[1];
+        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed >>> 13) * (seed)));
+        //final int hash = (int)((((seed = (((seed * (0x632BE59BD9B4E019L + (x << 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (y << 23)))) ^ seed >>> 27 ^ x + y) * 0xAEF17502108EF2D9L) >>> 56);
+        final double[] grad = phiGrad2[hash >>> 24], jitter = phiGrad2[hash >>> 16 & 0xFF];
+        return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];
     }
     protected static double gradCoord4D(long seed, int x, int y, int z, int w,
                                         double xd, double yd, double zd, double wd) {
@@ -78,7 +81,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         return 
                 cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),
                                 cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),
-                                y - y0) * 1.4142;
+                                y - y0) * 0.875;// * 1.4142;
 //        if(res < -1.0 || res > 1.0) System.out.println(res);
 //        return res;
     }

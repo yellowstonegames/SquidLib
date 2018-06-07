@@ -113,7 +113,33 @@ public class Playground {
 
     public static double asin(double a) { return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) / (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527)); }
 
+    private double mixedBaseVDC(int index)
+    {
+        double denominator = 11.0, res = 0.0;
+        res += (++index % 11) / denominator;
+        index /= 11;
+        denominator *= 3;
+        while (index > 0)
+        {
+            res += (index % 3) / denominator;
+            index /= 3;
+            denominator *= 3;
+        }
+        return res;
+
+    }
     private void go() {
+        double x, y, v;
+        final double PI2 = Math.PI * 2.0;
+        System.out.println("{");
+        for (int i = 1; i <= 256; i++) {
+            v = 0.61803398874989484820458683436563811772 * i + (i / (1.5 * 2.7182818284590452354));
+            //v = VanDerCorputQRNG.determine(5, i) * PI2;
+            x = Math.cos(v);
+            y = Math.sin(v);
+            System.out.println("{" + x + ", " + y + "},");
+        }
+        System.out.println("}");
 //        double r, a, b;
 //        for (int s = 1; s < 100; s++) {
 //            final int leading = Integer.numberOfLeadingZeros(s);
@@ -148,63 +174,63 @@ public class Playground {
 //        System.out.println("swayRandomized(Double.MIN_NORMAL)          :  " + NumberTools.swayRandomized(seed, Double.MIN_NORMAL));
 //        System.out.println("swayRandomized(Double.NaN)                 :  " + NumberTools.swayRandomized(seed, Double.NaN));
 
-        final int SIZE = 0x8000;
-        double[] xs = new double[SIZE], ys = new double[SIZE];
-        double closest = 999.0, average = 0.0, x, y, xx, yy, t;
-//        for (int i = 0; i < SIZE; i++) {
-////            xs[i] = x = planarDetermine(0xDE4DBEEF, i + 1); // why do these work so well???
-////            ys[i] = y = planarDetermine(0x1337D00D, i + 1); //  now we know, they were forming lines
-//            xs[i] = x = planarDetermine(57L, i);
-//            ys[i] = y = planarDetermine(73L, i);
-//            for (int k = 0; k < i; k++) {
-//                xx = x - xs[k];
-//                yy = y - ys[k];
-//                closest = Math.min(closest, xx * xx + yy * yy);
+//        final int SIZE = 0x8000;
+//        double[] xs = new double[SIZE], ys = new double[SIZE];
+//        double closest = 999.0, average = 0.0, x, y, xx, yy, t;
+////        for (int i = 0; i < SIZE; i++) {
+//////            xs[i] = x = planarDetermine(0xDE4DBEEF, i + 1); // why do these work so well???
+//////            ys[i] = y = planarDetermine(0x1337D00D, i + 1); //  now we know, they were forming lines
+////            xs[i] = x = planarDetermine(57L, i);
+////            ys[i] = y = planarDetermine(73L, i);
+////            for (int k = 0; k < i; k++) {
+////                xx = x - xs[k];
+////                yy = y - ys[k];
+////                closest = Math.min(closest, xx * xx + yy * yy);
+////            }
+////        }
+////        System.out.printf("Closest distance with integer-reversal(%d,%d): %.9f\n", 0xDE4DBEEF, 0x1337D00D, Math.sqrt(closest));
+//        int s, p2;
+//        for(int p : new int[]{1, 3, 11, 13, 15, 23, 29, 39, 41, 47, 71, 93}) {
+////        for (int p = 1; p < 100; p+=2) {
+//            closest = 999.0;
+//            average = 0.0;
+//            p2 = p * 0x2C9277B5 | 1;  //0xAC564B05
+//            for (int i = 0; i < SIZE; i++) {
+//                //s = GreasedRegion.disperseBits(Integer.reverse(i * p + 1));
+////                s = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(p, i) * 0x40000000));
+//                s = GreasedRegion.disperseBits(Integer.reverse((p * 0x2C9277B5 | 1) * (i + 1)));
+//                xs[i] = x = (s & 0xffff) * 0x1p-16;
+//                ys[i] = y = (s >>> 16 & 0xffff) * 0x1p-16;
+////                xs[i] = x = (s & 0x7fff) * 0x1p-15;
+////                ys[i] = y = (s >>> 16 & 0x7fff) * 0x1p-15;
+//                for (int k = 0; k < i; k++) {
+//                    xx = x - xs[k];
+//                    yy = y - ys[k];
+//                    closest = Math.min(closest, t = xx * xx + yy * yy);
+//                    average += t * 0x1p-15;
+//                }
 //            }
+//            System.out.printf("Closest distance with Z-order on altHalton(%d): %.9f, 'average' %9.9f\n", p, Math.sqrt(closest), average);
 //        }
-//        System.out.printf("Closest distance with integer-reversal(%d,%d): %.9f\n", 0xDE4DBEEF, 0x1337D00D, Math.sqrt(closest));
-        int s, p2;
-        for(int p : new int[]{1, 3, 11, 13, 15, 23, 29, 39, 41, 47, 71, 93}) {
-//        for (int p = 1; p < 100; p+=2) {
-            closest = 999.0;
-            average = 0.0;
-            p2 = p * 0x2C9277B5 | 1;  //0xAC564B05
-            for (int i = 0; i < SIZE; i++) {
-                //s = GreasedRegion.disperseBits(Integer.reverse(i * p + 1));
-//                s = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(p, i) * 0x40000000));
-                s = GreasedRegion.disperseBits(Integer.reverse((p * 0x2C9277B5 | 1) * (i + 1)));
-                xs[i] = x = (s & 0xffff) * 0x1p-16;
-                ys[i] = y = (s >>> 16 & 0xffff) * 0x1p-16;
-//                xs[i] = x = (s & 0x7fff) * 0x1p-15;
-//                ys[i] = y = (s >>> 16 & 0x7fff) * 0x1p-15;
-                for (int k = 0; k < i; k++) {
-                    xx = x - xs[k];
-                    yy = y - ys[k];
-                    closest = Math.min(closest, t = xx * xx + yy * yy);
-                    average += t * 0x1p-15;
-                }
-            }
-            System.out.printf("Closest distance with Z-order on altHalton(%d): %.9f, 'average' %9.9f\n", p, Math.sqrt(closest), average);
-        }
-        //Closest distance with Halton(2,13): 0.000871727
-        //Closest distance with Halton(2,39): 0.001147395
-        for(int p : new int[]{3, 11, 13, 23, 29, 39, 41, 47, 69, 75, 87}) {
-//        for (int p = 3; p < 100; p+=2) {
-            closest = 999.0;
-            average = 0.0;
-            for (int i = 0; i < SIZE; i++) {
-                s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
-                xs[i] = x = VanDerCorputQRNG.determine2(s);
-                ys[i] = y = VanDerCorputQRNG.determine(p, s);
-                for (int k = 0; k < i; k++) {
-                    xx = x - xs[k];
-                    yy = y - ys[k];
-                    closest = Math.min(closest, t = xx * xx + yy * yy);
-                    average += t * 0x1p-15;
-                }
-            }
-            System.out.printf("Closest distance with Halton(2,%d): %.9f, 'average' %9.9f\n", p, Math.sqrt(closest), average);
-        }
+//        //Closest distance with Halton(2,13): 0.000871727
+//        //Closest distance with Halton(2,39): 0.001147395
+//        for(int p : new int[]{3, 11, 13, 23, 29, 39, 41, 47, 69, 75, 87}) {
+////        for (int p = 3; p < 100; p+=2) {
+//            closest = 999.0;
+//            average = 0.0;
+//            for (int i = 0; i < SIZE; i++) {
+//                s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
+//                xs[i] = x = VanDerCorputQRNG.determine2(s);
+//                ys[i] = y = VanDerCorputQRNG.determine(p, s);
+//                for (int k = 0; k < i; k++) {
+//                    xx = x - xs[k];
+//                    yy = y - ys[k];
+//                    closest = Math.min(closest, t = xx * xx + yy * yy);
+//                    average += t * 0x1p-15;
+//                }
+//            }
+//            System.out.printf("Closest distance with Halton(2,%d): %.9f, 'average' %9.9f\n", p, Math.sqrt(closest), average);
+//        }
     }
 
     private static long rand(final long z, final long mod, final long n2)
