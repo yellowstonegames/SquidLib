@@ -58,6 +58,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
+    private int mode = 0, maxModes = 4;
     private WorldMapGenerator.SpaceViewMap world;
     //private WorldMapGenerator.MimicMap world;
     //private WorldMapGenerator.EllipticalMap world;
@@ -329,6 +330,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 'p':
                         spinning = !spinning;
                         break;
+                    case 'M':
+                    case 'm':
+                        mode = (mode + 1) % maxModes;
+                        break;
                     case 'Q':
                     case 'q':
                     case SquidInput.ESCAPE: {
@@ -597,20 +602,124 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         batch.draw(pt, 0, 0, width >> 1, height >> 1);
         batch.end();
     }
-    
+    public void putHeatMap() {
+        int hc;
+        int[][] heightCodeData = world.heightCodeData;
+        double[][] heatData = world.heatData;
+        double heat;
+        pm.setColor(quantize(SColor.DB_INK));
+        pm.fill();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                hc = heightCodeData[x][y];
+                if (hc == 1000)
+                    continue;
+                heat = heatData[x][y];
+                if(hc < 4)
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(ice, deepColor,
+                            (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))));
+                else
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(-0x1.5bbf5ap126F, // SColor.MOSS_GREEN
+                             -0x1.8081fep125F, // SColor.CORAL_RED
+                        (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))));
+                pm.drawPixel(x, y, quantize(tempColor));
+            }
+        }
+        batch.begin();
+        pt.draw(pm, 0, 0);
+        batch.draw(pt, 0, 0, width >> 1, height >> 1);
+        batch.end();
+    }
+    public void putMoistureMap() {
+        int hc;
+        int[][] heightCodeData = world.heightCodeData;
+        double[][] moistureData = world.moistureData;
+        double moisture;
+        pm.setColor(quantize(SColor.DB_INK));
+        pm.fill();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                hc = heightCodeData[x][y];
+                if (hc == 1000)
+                    continue;
+                moisture = moistureData[x][y];
+                if(hc < 4)
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, deepColor,
+                            (float) ((moisture - world.minWet) / (world.maxWet - world.minWet + 0.001))));
+                else
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(desert, tropicalRainforest,
+                            (float) ((moisture - world.minWet) / (world.maxWet - world.minWet + 0.001))));
+                pm.drawPixel(x, y, quantize(tempColor));
+            }
+        }
+        batch.begin();
+        pt.draw(pm, 0, 0);
+        batch.draw(pt, 0, 0, width >> 1, height >> 1);
+        batch.end();
+    }
+    private final float emphasize(final float a)
+    {
+        return a * a * (3f - 2f * a);
+    }
+    private final float extreme(final float a)
+    {
+        return a * a * a * (a * (a * 6f - 15f) + 10f);
+    }
+    public void putExperimentMap() {
+        int hc;
+        final int[][] heightCodeData = world.heightCodeData;
+        final double[][] moistureData = world.moistureData, heatData = world.heatData, heightData = world.heightData;
+        double heat, moisture;
+        pm.setColor(quantize(SColor.DB_INK));
+        pm.fill();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                hc = heightCodeData[x][y];
+                if (hc == 1000)
+                    continue;
+                moisture = moistureData[x][y];
+                heat = heatData[x][y];
+                if(hc < 4)
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(
+                            heat < 0.26 ? shallowColor : deepColor, heat < 0.26 ? ice : coastalColor,
+                            (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
+                else if(hc == 4)
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(heat < 0.26 ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_COLOR_TABLE[36], BIOME_COLOR_TABLE[41],
+                            (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
+                            SColor.lerpFloatColors(heat < 0.26 ? ice : SColor.lerpFloatColors(rocky, desert,
+                                    (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
+                                    heat < 0.26 ? lightIce : SColor.lerpFloatColors(woodland, tropicalRainforest,
+                                            ((float)heat)),// ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001)))),
+                                    extreme((float) (moisture))),
+                            (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
+                else
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(heat < 0.26 ? ice : SColor.lerpFloatColors(rocky, desert,
+                            (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
+                            heat < 0.26 ? lightIce : SColor.lerpFloatColors(woodland, tropicalRainforest,
+                                    ((float)heat)),// ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001)))),
+                            extreme((float) (moisture))));
+                pm.drawPixel(x, y, quantize(tempColor));
+            }
+        }
+        batch.begin();
+        pt.draw(pm, 0, 0);
+        batch.draw(pt, 0, 0, width >> 1, height >> 1);
+        batch.end();
+    }
+
     public int quantize(Color color)
     {
         // Full 8-bit RGBA channels. No limits on what colors can be displayed.
         //return Color.rgba8888(color);
 
         // Limits red, green, and blue channels to only use 5 bits (32 values) instead of 8 (256 values).
-        //return Color.rgba8888(color) & 0xF8F8F8FF;
+        return Color.rgba8888(color) & 0xFCFCFCFF;
 
         // 253 possible colors, including one all-zero transparent color. 6 possible red values (not bits), 7 possible
         // green values, 6 possible blue values, and the aforementioned fully-transparent black. White is 0xFFFFFFFF and
         // not some off-white value, but other than black (0x000000FF), grayscale values have non-zero saturation.
         // Could be made into a palette, and images that use this can be saved as GIF or in PNG-8 indexed mode.
-        return ((0xFF000000 & (int)(color.r*6) * 0x2AAAAAAA) | (0xFF0000 & (int)(color.g*7) * 0x249249) | (0xFF00 & (int)(color.b*6) * 0x2AAA) | 255) & -(int)(color.a + 0.5f);
+        //return ((0xFF000000 & (int)(color.r*6) * 0x2AAAAAAA) | (0xFF0000 & (int)(color.g*7) * 0x249249) | (0xFF00 & (int)(color.b*6) * 0x2AAA) | 255) & -(int)(color.a + 0.5f);
     }
     
     @Override
@@ -622,7 +731,17 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         if(spinning) 
             rotate();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
-        putMap();
+        switch (mode)
+        {
+            case 1: putHeatMap();
+            break;
+            case 2: putMoistureMap();
+            break;
+            case 3: putExperimentMap();
+            break;
+            default: putMap();
+            break;
+        }
         ++counter;//nation = NumberTools.swayTight(++counter * 0.0125f);
         Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
 
