@@ -71,8 +71,8 @@ public class HashVisualizer extends ApplicationAdapter {
     // 4 noise
     // 5 RNG results
     private int testType = 4;
-    private static final int NOISE_LIMIT = 126;
-    private int hashMode = 0, rngMode = 46, noiseMode = 118;//82;
+    private static final int NOISE_LIMIT = 130;
+    private int hashMode = 0, rngMode = 46, noiseMode = 112;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -4169,7 +4169,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 119:
+                    case 120:
                         Gdx.graphics.setTitle("Classic 3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -4181,7 +4181,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 120:
+                    case 122:
                         Gdx.graphics.setTitle("Classic 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -4193,12 +4193,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 121:
+                    case 124:
                         Gdx.graphics.setTitle("Classic 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright =
-                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04), 
+                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04),
                                                 NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5, NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25
                                                 )
                                         );
@@ -4207,7 +4207,59 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 122:
+                    case 119:
+                        Gdx.graphics.setTitle("Jitter 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright =
+                                        basicPrepare(JitterNoise.instance.getNoise(xx * 0.025, yy * 0.025)
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 121:
+                        Gdx.graphics.setTitle("Jitter 3D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.025, y * 0.025, ctr * 0.03125)
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 123:
+                        Gdx.graphics.setTitle("Jitter 4D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04))
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 125:
+                        Gdx.graphics.setTitle("Jitter 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright =
+                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04),
+                                                NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5, NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25
+                                                )
+                                        );
+                                //+ 15f) / 30f;
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 126:
                         Gdx.graphics.setTitle("Whirling 2D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
@@ -4215,47 +4267,47 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 yy = y + ctr;
                                 display.put(x, y, floatGetYCbCr(
                                         ((float) WhirlingNoise.noise(xx * 0.03125f + 0.1f, yy * 0.03125f + 0.4f, 1234567L) + 1f) * 0.5f,
-                                        ((float) WhirlingNoise.noise(xx * 0.03125f + 0.4f, yy * 0.03125f + 0.7f, 7654321L)) * 0.35f,
-                                        ((float) WhirlingNoise.noise(xx * 0.03125f + 0.7f, yy * 0.03125f + 0.1f, 9999999L)) * 0.35f,
+                                        ((float) WhirlingNoise.noise(xx * 0.03125f + 0.4f, yy * 0.03125f + 0.7f, 7654321L)) * 0.45f,
+                                        ((float) WhirlingNoise.noise(xx * 0.03125f + 0.7f, yy * 0.03125f + 0.1f, 9999999L)) * 0.45f,
                                         1f));
                             }
                         }
                         break;
-                    case 123:
-                        Gdx.graphics.setTitle("Classic 2D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 127:
+                        Gdx.graphics.setTitle("Jitter 2D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 display.put(x, y, floatGetYCbCr(
-                                        ((float) ClassicNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.1f, yy * 0.025f + 0.4f, 1234567L) + 1f) * 0.5f,
-                                        ((float) ClassicNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.4f, yy * 0.025f + 0.7f, 7654321L)) * 0.35f,
-                                        ((float) ClassicNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.7f, yy * 0.025f + 0.1f, 9999999L)) * 0.35f,
+                                        ((float) JitterNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.1f, yy * 0.025f + 0.4f, 1234567L) + 1f) * 0.5f,
+                                        ((float) JitterNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.4f, yy * 0.025f + 0.7f, 7654321L)) * 0.45f,
+                                        ((float) JitterNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.7f, yy * 0.025f + 0.1f, 9999999L)) * 0.45f,
                                         1f));
                             }
                         }
                         break;
 
-                    case 124:
+                    case 128:
                         Gdx.graphics.setTitle("Whirling 3D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y, floatGetYCbCr(
                                         ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 1234567L) + 1f) * 0.5f,
-                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5, 7654321L)) * 0.35f,
-                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9, 9999999L)) * 0.35f,
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5, 7654321L)) * 0.45f,
+                                        ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9, 9999999L)) * 0.45f,
                                         1f));
                             }
                         }
                         break;
-                    case 125:
+                    case 129:
                         Gdx.graphics.setTitle("Classic 3D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 display.put(x, y, floatGetYCbCr(
                                         ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f, 1234567L) + 1f) * 0.5f,
-                                        ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 234.5, 7654321L)) * 0.35f,
-                                        ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 678.9, 9999999L)) * 0.35f,
+                                        ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 234.5, 7654321L)) * 0.45f,
+                                        ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 678.9, 9999999L)) * 0.45f,
                                         1f));
                             }
                         }
