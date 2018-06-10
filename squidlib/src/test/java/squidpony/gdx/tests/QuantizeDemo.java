@@ -20,37 +20,41 @@ import java.nio.ByteBuffer;
 /**
  * Demo for various ways to quantize images to fit in fewer bits per pixel.
  * Uses a public-domain image of the painting "Étang en Ile de France", by Henri Biva, obtained from Wikimedia Commons:
- * <a href="https://commons.wikimedia.org/wiki/Category:Henri_Biva#/media/File:Henri_Biva,_Étang_en_Ile_de_France,_oil_on_canvas,_54_x_65_cm.jpg">See here</a>.
- * Shows the original, a way of quantizing to 8 bits with 3 different lookup tables (LUTs) for the RGB channels, a way
- * of quantizing to 15 bits by using only the 5 most significant bits of each channel, and a way of quantizing to 8 bits
- * by reducing the possible values per channel from 256 to 6.
+ * <a href="https://commons.wikimedia.org/wiki/Category:Henri_Biva#/media/File:Henri_Biva,_Étang_en_Ile_de_France,_oil_on_canvas,_54_x_65_cm.jpg">See here</a>,
+ * and a color-remastered version of the famous (also public domain) "Mona Lisa", by Leonardo da Vinci:
+ * <a href="https://commons.wikimedia.org/wiki/File:Leonardo_da_Vinci_-_Mona_Lisa_(Louvre,_Paris)FXD.tif">See here</a>.
+ * Shows the original, a way of quantizing to 8 bits with 3 different lookup tables (LUTs) for the RGB channels, to 15
+ * bits by using only the 5 most significant bits of each channel, to 9 bits by using only the 3 most significant bits
+ * of each channel, and a way of quantizing to under 8 bits by reducing the possible values per channel from 256 to 6.
+ * Shows all of the Biva variations before showing the da Vinci variations.
  */
 public class QuantizeDemo extends ApplicationAdapter {
-    private static int width = 574, height = 480;
+    private static int width = 574, width1 = width, width2 = 345, height = 512, height1 = 480, height2 = 512;
     private SpriteBatch batch;
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
     private Viewport view;
-    private int mode = 0, maxModes = 4;
-    private Pixmap pm, original;
+    private int mode = 0, maxModes = 10;
+    private Pixmap edit, bivaOriginal, monaOriginal;
     private ByteBuffer pixels;
     private Texture pt;
-    private Color tempColor = Color.WHITE.cpy();
-    
-    private long ttg = 0; // time to generate
     
     @Override
     public void create() {
         batch = new SpriteBatch();
-        view = new StretchViewport(width*cellWidth, height*cellHeight);
-        original = new Pixmap(Gdx.files.internal("special/Painting_by_Henri_Biva.jpg"));
-        original.setBlending(Pixmap.Blending.None);
-        pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGBA8888);
-        pm.setBlending(Pixmap.Blending.None);
-        pm.drawPixmap(original, 0, 0);
-        pixels = pm.getPixels();
-        pt = new Texture(pm);
-        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        view = new StretchViewport(width, height);
+        bivaOriginal = new Pixmap(Gdx.files.internal("special/Painting_by_Henri_Biva.jpg"));
+        bivaOriginal.setBlending(Pixmap.Blending.None);
+        monaOriginal = new Pixmap(Gdx.files.internal("special/Mona_Lisa.jpg"));
+        monaOriginal.setBlending(Pixmap.Blending.None);
+        edit = new Pixmap(width << 1, height << 1, Pixmap.Format.RGBA8888);
+        edit.setBlending(Pixmap.Blending.None);
+        edit.setFilter(Pixmap.Filter.NearestNeighbour);
+        edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+        pixels = edit.getPixels();
+        pt = new Texture(edit);
+        pt.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+//        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -75,13 +79,14 @@ public class QuantizeDemo extends ApplicationAdapter {
 
     public void generate()
     {
-        long startTime = System.currentTimeMillis();
         int color, pos;
-        pm.drawPixmap(original, 0, 0);
+        edit.setColor(0x222222FF);
+        edit.fill();
         switch (mode)
         {
             case 1:
                 Gdx.graphics.setTitle("(Custom LUT) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
                 while (pixels.remaining() >= 4) {
                     pos = pixels.position();
                     color = (redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31] | 255) & (pixels.get() >> 31);
@@ -92,6 +97,7 @@ public class QuantizeDemo extends ApplicationAdapter {
                 break;
             case 2:
                 Gdx.graphics.setTitle("(32-value channels) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
                 while (pixels.remaining() >= 4)
                 {
                     color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
@@ -100,7 +106,18 @@ public class QuantizeDemo extends ApplicationAdapter {
                 pixels.rewind();
                 break;
             case 3:
+                Gdx.graphics.setTitle("(8-value channels) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+                while (pixels.remaining() >= 4)
+                {
+                    color = (pixels.getInt() & 0xE0E0E0FF) | 0xFF;
+                    pixels.putInt(pixels.position() - 4, color);
+                }
+                pixels.rewind();
+                break;
+            case 4:
                 Gdx.graphics.setTitle("(6-value channels) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
                 while (pixels.remaining() >= 4) {
                     pos = pixels.position();
                     color = (((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAAAA & 0xFF000000)
@@ -112,16 +129,65 @@ public class QuantizeDemo extends ApplicationAdapter {
                 }
                 pixels.rewind();
                 break;
-                default:
-                    Gdx.graphics.setTitle("(Original) Étang en Ile de France by Henri Biva");
-                    break;
+            case 0:
+                Gdx.graphics.setTitle("(Original) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+                break;
+            case 6:
+                Gdx.graphics.setTitle("(Custom LUT) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2, 0);
+                while (pixels.remaining() >= 4) {
+                    pos = pixels.position();
+                    color = (redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31] | 255) & (pixels.get() >> 31);
+                    pixels.putInt(pos, color);
+                    pixels.position(pos+4);
+                }
+                pixels.rewind();
+                break;
+            case 7:
+                Gdx.graphics.setTitle("(32-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2, 0);
+                while (pixels.remaining() >= 4)
+                {
+                    color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
+                    pixels.putInt(pixels.position() - 4, color);
+                }
+                pixels.rewind();
+                break;
+            case 8:
+                Gdx.graphics.setTitle("(8-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2, 0);
+                while (pixels.remaining() >= 4)
+                {
+                    color = (pixels.getInt() & 0xE0E0E0FF) | 0xFF;
+                    pixels.putInt(pixels.position() - 4, color);
+                }
+                pixels.rewind();
+                break;
+            case 9:
+                Gdx.graphics.setTitle("(6-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2, 0);
+                while (pixels.remaining() >= 4) {
+                    pos = pixels.position();
+                    color = (((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAAAA & 0xFF000000)
+                            | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAA & 0xFF0000)
+                            | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA & 0xFF00)
+                            | 255) & (pixels.get() >> 31);
+                    pixels.putInt(pos, color);
+                    pixels.position(pos+4);
+                }
+                pixels.rewind();
+                break;
+            case 5:
+                Gdx.graphics.setTitle("(Original) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2, 0);
+                break;
         }
         batch.begin();
-        pt.draw(pm, 0, 0);
+        pt.draw(edit, 0, 0);
         batch.draw(pt, 0, 0, width, height);
         batch.end();
         Gdx.graphics.requestRendering();
-        ttg = System.currentTimeMillis() - startTime;
     }
     
     private final float emphasize(final float a)
@@ -135,26 +201,26 @@ public class QuantizeDemo extends ApplicationAdapter {
     private static final int[]
             redLUT =   {
             0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-            0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x7A000000, 0x7A000000,
+            0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x7A000000,
             0x7A000000, 0x7A000000, 0x7A000000, 0x7A000000, 0xB0000000, 0xB0000000, 0xB0000000, 0xB0000000,
-            0xB0000000, 0xE2000000, 0xE2000000, 0xE2000000, 0xE2000000, 0xFF000000, 0xFF000000, 0xFF000000,},
+            0xDC000000, 0xDC000000, 0xDC000000, 0xDC000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000,},
             greenLUT = {
-            0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
-            0x300000, 0x300000, 0x300000, 0x300000, 0x300000, 0x720000, 0x720000, 0x720000,
-            0x720000, 0x720000, 0x980000, 0x980000, 0x980000, 0x980000, 0x980000, 0xC40000,
+            0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x380000,
+            0x380000, 0x380000, 0x380000, 0x380000, 0x380000, 0x600000, 0x600000, 0x600000,
+            0x600000, 0x600000, 0x980000, 0x980000, 0x980000, 0x980000, 0x980000, 0xC40000,
             0xC40000, 0xC40000, 0xC40000, 0xE40000, 0xE40000, 0xE40000, 0xFF0000, 0xFF0000,},
             blueLUT =  {
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x3800,
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x3800, 0x3800,
             0x3800, 0x3800, 0x3800, 0x3800, 0x3800, 0x6A00, 0x6A00, 0x6A00,
-            0x6A00, 0x6A00, 0xA000, 0xA000, 0xA000, 0xA000, 0xA000, 0xD600, 
-            0xD600, 0xD600, 0xD600, 0xD600, 0xFF00, 0xFF00, 0xFF00, 0xFF00,};
+            0x6A00, 0x6A00, 0x6A00, 0x6A00, 0xA000, 0xA000, 0xA000, 0xA000, 
+            0xA000, 0xD000, 0xD000, 0xD000, 0xD000, 0xFF00, 0xFF00, 0xFF00,};
     public int quantize(Color color)
     {
         // Full 8-bit RGBA channels. No limits on what colors can be displayed.         
         //return Color.rgba8888(color);
 
         // Limits red, green, and blue channels to only use 5 bits (32 values) instead of 8 (256 values).
-        //return Color.rgba8888(color) & 0xFCFCFCFF;
+        //return Color.rgba8888(color) & 0xF8F8F8FF;
 
         // 253 possible colors, including one all-zero transparent color. 6 possible red values (not bits), 7 possible
         // green values, 6 possible blue values, and the aforementioned fully-transparent black. White is 0xFFFFFFFF and

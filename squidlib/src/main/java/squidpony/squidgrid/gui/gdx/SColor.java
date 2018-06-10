@@ -12351,7 +12351,7 @@ public class SColor extends Color implements Serializable {
      * @return a packed float that can be given to the setColor method in LibGDX's Batch classes
      */
     public static float floatGet(int c) {
-        return NumberTools.intBitsToFloat((c >>> 24) | (c >>> 8 & 0xff00) | (c << 8 & 0xff0000) | (c << 24 & 0xFE000000));
+        return NumberTools.intBitsToFloat(Integer.reverseBytes(c) & 0xFEFFFFFF);
     }
 
     /**
@@ -12455,7 +12455,87 @@ public class SColor extends Color implements Serializable {
                 opacity);
     }
 
+    private static final int[]
+            redLUT =   {
+            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000,
+            0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00007A,
+            0xFE00007A, 0xFE00007A, 0xFE00007A, 0xFE00007A, 0xFE0000B0, 0xFE0000B0, 0xFE0000B0, 0xFE0000B0,
+            0xFE0000DC, 0xFE0000DC, 0xFE0000DC, 0xFE0000DC, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF,},
+            greenLUT = {
+                    0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE003800,
+                    0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE006000, 0xFE006000, 0xFE006000,
+                    0xFE006000, 0xFE006000, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE00C400,
+                    0xFE00C400, 0xFE00C400, 0xFE00C400, 0xFE00E400, 0xFE00E400, 0xFE00E400, 0xFE00FF00, 0xFE00FF00,},
+            blueLUT =  {
+                    0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE380000, 0xFE380000,
+                    0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE6A0000, 0xFE6A0000, 0xFE6A0000,
+                    0xFE6A0000, 0xFE6A0000, 0xFE6A0000, 0xFE6A0000, 0xFEA00000, 0xFEA00000, 0xFEA00000, 0xFEA00000,
+                    0xFEA00000, 0xFED00000, 0xFED00000, 0xFED00000, 0xFED00000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000,};
+    private static float[]
+            redLUTf = {
+            0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f,
+            0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x7A/255f,
+            0x7A/255f, 0x7A/255f, 0x7A/255f, 0x7A/255f, 0xB0/255f, 0xB0/255f, 0xB0/255f, 0xB0/255f,
+            0xDC/255f, 0xDC/255f, 0xDC/255f, 0xDC/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f,
+            },
+            greenLUTf = {
+                    0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x38/255f,
+                    0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x60/255f, 0x60/255f, 0x60/255f,
+                    0x60/255f, 0x60/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0xC4/255f,
+                    0xC4/255f, 0xC4/255f, 0xC4/255f, 0xE4/255f, 0xE4/255f, 0xE4/255f, 0xFF/255f, 0xFF/255f,
+            },
+            blueLUTf =  {
+                    0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x38/255f, 0x38/255f,
+                    0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x6A/255f, 0x6A/255f, 0x6A/255f,
+                    0x6A/255f, 0x6A/255f, 0x6A/255f, 0x6A/255f, 0xA0/255f, 0xA0/255f, 0xA0/255f, 0xA0/255f,
+                    0xA0/255f, 0xD0/255f, 0xD0/255f, 0xD0/255f, 0xD0/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f,
+            };
 
+    /**
+     * Reduces the color depth of the given r, g, and b color channels to fit in 252 colors plus fully transparent (an
+     * all-0 value is used when alpha is less than 0.5f). Uses a lookup table per channel that is not perfectly accurate
+     * to the original color's brightness, and when this quantize technique is applied to an image of a painting, it
+     * tends to make it much more bold and highly-contrasted. Returns a packed float.
+     * @param r red channel, from 0f to 1f inclusive
+     * @param g green channel, from 0f to 1f inclusive
+     * @param b blue channel, from 0f to 1f inclusive
+     * @param a alpha channel, from 0f to 1f inclusive; will only change the result if less than 0.5f
+     * @return one of 253 possible float values with the reduced color depth, as a packed float
+     */
+    public static float quantize253F(float r, float g, float b, float a)
+    {
+        return NumberTools.intBitsToFloat((redLUT[(int)(r*31.999f)] | greenLUT[(int)(g*31.999f)] | blueLUT[(int)(b*31.999f)]) & -(int)(a + 0.5f));
+    }
+
+    /**
+     * Reduces the color depth of the given packed float color to fit in 252 colors plus fully transparent (an all-0
+     * value is used when alpha is less than 0.5f). Uses a lookup table per channel that is not perfectly accurate to
+     * the original color's brightness, and when this quantize technique is applied to an image of a painting, it tends
+     * to make it much more bold and highly-contrasted. Returns a packed float.
+     * @param packed a packed float color, as returned by {@link #toFloatBits()}
+     * @return a possibly-different packed float color that has been reduced in color depth
+     */
+    public static float quantize253F(float packed)
+    {
+        final int unpacked = NumberTools.floatToIntBits(packed);
+        return NumberTools.intBitsToFloat((redLUT[unpacked >>> 3 & 31] | greenLUT[unpacked >>> 1 & 31] | blueLUT[unpacked >>> 19 & 31]) & unpacked >> 31);
+    }
+
+    /**
+     * Reduces the color depth of the given Color and returns a new Color that fits in 252 colors plus fully transparent
+     * (an all-0 value is used when alpha is less than 0.5f). Uses a lookup table per channel that is not perfectly
+     * accurate to the original color's brightness, and when this quantize technique is applied to an image of a
+     * painting, it tends to make it much more bold and highly-contrasted. Returns a new Color and does not change this
+     * SColor object.
+     * @return a new Color that must be one of 253 possible quantized colors
+     */
+    public Color quantize253()
+    {
+        if(a >= 0.5f) 
+            return new Color(redLUTf[(int)(r*31.999f)], greenLUTf[(int)(g*31.999f)], blueLUTf[(int)(b*31.999f)], 1f);
+        else
+            return new Color(0f, 0f, 0f, 0f);
+    }
     /**
      * Gets a variation on this SColor as a packed float that can have its hue, saturation, and value changed to
      * specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a specific need
