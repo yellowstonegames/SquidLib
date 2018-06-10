@@ -49,8 +49,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 400, height = 400;
     //private static final int width = 300, height = 300;
     //private static final int width = 1600, height = 800;
-    //private static final int width = 1000, height = 1000;
-    private static final int width = 700, height = 700;
+    private static final int width = 1000, height = 1000;
+    //private static final int width = 700, height = 700;
     private SpriteBatch batch;
 //    private SquidPanel dislay;//, overlay;
     private static final int cellWidth = 1, cellHeight = 1;
@@ -59,7 +59,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private int mode = 3, maxModes = 4;
+    private int mode = 0, maxModes = 4;
     private WorldMapGenerator.SpaceViewMap world;
     //private WorldMapGenerator.MimicMap world;
     //private WorldMapGenerator.EllipticalMap world;
@@ -719,20 +719,38 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         batch.draw(pt, 0, 0, width >> 1, height >> 1);
         batch.end();
     }
-
+    
+    private static final int[]
+            redLUT =   {
+            0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+            0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x7A000000, 0x7A000000,
+            0x7A000000, 0x7A000000, 0x7A000000, 0x7A000000, 0xB0000000, 0xB0000000, 0xB0000000, 0xB0000000,
+            0xB0000000, 0xE2000000, 0xE2000000, 0xE2000000, 0xE2000000, 0xFF000000, 0xFF000000, 0xFF000000,},
+            greenLUT = {
+            0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
+            0x300000, 0x300000, 0x300000, 0x300000, 0x300000, 0x720000, 0x720000, 0x720000,
+            0x720000, 0x720000, 0x980000, 0x980000, 0x980000, 0x980000, 0x980000, 0xC40000,
+            0xC40000, 0xC40000, 0xC40000, 0xE40000, 0xE40000, 0xE40000, 0xFF0000, 0xFF0000,},
+            blueLUT =  {
+            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x3800,
+            0x3800, 0x3800, 0x3800, 0x3800, 0x3800, 0x6A00, 0x6A00, 0x6A00,
+            0x6A00, 0x6A00, 0xA000, 0xA000, 0xA000, 0xA000, 0xA000, 0xD600, 
+            0xD600, 0xD600, 0xD600, 0xD600, 0xFF00, 0xFF00, 0xFF00, 0xFF00,};
     public int quantize(Color color)
     {
         // Full 8-bit RGBA channels. No limits on what colors can be displayed.
-        //return Color.rgba8888(color);
+        if((mode & 1) == 0) 
+            return Color.rgba8888(color);
 
         // Limits red, green, and blue channels to only use 5 bits (32 values) instead of 8 (256 values).
-        return Color.rgba8888(color) & 0xFCFCFCFF;
+        //return Color.rgba8888(color) & 0xF8F8F8FF;
 
         // 253 possible colors, including one all-zero transparent color. 6 possible red values (not bits), 7 possible
         // green values, 6 possible blue values, and the aforementioned fully-transparent black. White is 0xFFFFFFFF and
         // not some off-white value, but other than black (0x000000FF), grayscale values have non-zero saturation.
         // Could be made into a palette, and images that use this can be saved as GIF or in PNG-8 indexed mode.
         //return ((0xFF000000 & (int)(color.r*6) * 0x2AAAAAAA) | (0xFF0000 & (int)(color.g*7) * 0x249249) | (0xFF00 & (int)(color.b*6) * 0x2AAA) | 255) & -(int)(color.a + 0.5f);
+        return (redLUT[(int)(color.r*31.999f)] | greenLUT[(int)(color.g*31.999f)] | blueLUT[(int)(color.b*31.999f)] | 255) & -(int)(color.a + 0.5f);
     }
     
     @Override
@@ -746,10 +764,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         switch (mode)
         {
-            case 1: putHeatMap();
+            /*
+            case 3: putHeatMap();
             break;
             case 2: putMoistureMap();
             break;
+            */
+            case 2:
             case 3: putExperimentMap();
             break;
             default: putMap();
