@@ -12455,47 +12455,91 @@ public class SColor extends Color implements Serializable {
                 opacity);
     }
 
-    private static final int[]
+    /**
+     * A lookup table from 32 possible levels in the red channel to 6 possible values in the red channel; only change
+     * this if you know what you're doing. Affects {@link #quantize253F(float, float, float, float)} and
+     * {@link #quantize253F(float)}.
+     */
+    public static final int[]
             redLUT =   {
-            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000,
-            0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00004C, 0xFE00007A,
-            0xFE00007A, 0xFE00007A, 0xFE00007A, 0xFE00007A, 0xFE0000B0, 0xFE0000B0, 0xFE0000B0, 0xFE0000B0,
-            0xFE0000DC, 0xFE0000DC, 0xFE0000DC, 0xFE0000DC, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF,},
-            greenLUT = {
-                    0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE003800,
-                    0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE006000, 0xFE006000, 0xFE006000,
-                    0xFE006000, 0xFE006000, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE00C400,
-                    0xFE00C400, 0xFE00C400, 0xFE00C400, 0xFE00E400, 0xFE00E400, 0xFE00E400, 0xFE00FF00, 0xFE00FF00,},
-            blueLUT =  {
-                    0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE380000, 0xFE380000,
-                    0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE6A0000, 0xFE6A0000, 0xFE6A0000,
-                    0xFE6A0000, 0xFE6A0000, 0xFE6A0000, 0xFE6A0000, 0xFEA00000, 0xFEA00000, 0xFEA00000, 0xFEA00000,
-                    0xFEA00000, 0xFED00000, 0xFED00000, 0xFED00000, 0xFED00000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000,};
-    private static float[]
+            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE00003A,
+            0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE000074, 0xFE000074,
+            0xFE000074, 0xFE000074, 0xFE000074, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6,
+            0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF,};
+    /**
+     * A lookup table from 32 possible levels in the red channel to 6 possible values in the red channel as floats; only
+     * change this if you know what you're doing. Affects {@link #quantize253()}.
+     */
+    public static final float[]
             redLUTf = {
-            0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f,
-            0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x4C/255f, 0x7A/255f,
-            0x7A/255f, 0x7A/255f, 0x7A/255f, 0x7A/255f, 0xB0/255f, 0xB0/255f, 0xB0/255f, 0xB0/255f,
-            0xDC/255f, 0xDC/255f, 0xDC/255f, 0xDC/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f,
-            },
+            0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x3A/255f,
+            0x3A/255f, 0x3A/255f, 0x3A/255f, 0x3A/255f, 0x3A/255f, 0x3A/255f, 0x74/255f, 0x74/255f,
+            0x74/255f, 0x74/255f, 0x74/255f, 0xB6/255f, 0xB6/255f, 0xB6/255f, 0xB6/255f, 0xB6/255f,
+            0xE0/255f, 0xE0/255f, 0xE0/255f, 0xE0/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f,
+    };
+    /**
+     * The 6 possible values that can be used in the red channel with {@link #redLUT}.
+     */
+    public static final byte[] redPossibleLUT = {0x00, 0x3A, 0x74, (byte)0xB6, (byte)0xE0, (byte)0xFF};
+
+    /**
+     * A lookup table from 32 possible levels in the green channel to 7 possible values in the green channel; only
+     * change this if you know what you're doing. Affects {@link #quantize253F(float, float, float, float)} and
+     * {@link #quantize253F(float)}.
+     */
+    public static final int[]
+            greenLUT = {             
+            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE003800,
+            0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE006000, 0xFE006000, 0xFE006000, 0xFE006000,
+            0xFE006000, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE00C400, 0xFE00C400, 0xFE00C400,
+            0xFE00C400, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00FF00, 0xFE00FF00, 0xFE00FF00,};
+    /**
+     * A lookup table from 32 possible levels in the green channel to 7 possible values in the green channel as floats;
+     * only change this if you know what you're doing. Affects {@link #quantize253()}.
+     */
+    public static final float[]
             greenLUTf = {
-                    0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x38/255f,
-                    0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x60/255f, 0x60/255f, 0x60/255f,
-                    0x60/255f, 0x60/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0xC4/255f,
-                    0xC4/255f, 0xC4/255f, 0xC4/255f, 0xE4/255f, 0xE4/255f, 0xE4/255f, 0xFF/255f, 0xFF/255f,
-            },
+            0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x38/255f,
+            0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x60/255f, 0x60/255f, 0x60/255f, 0x60/255f,
+            0x60/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0x98/255f, 0xC4/255f, 0xC4/255f, 0xC4/255f,
+            0xC4/255f, 0xEE/255f, 0xEE/255f, 0xEE/255f, 0xEE/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f,
+    };
+    /**
+     * The 7 possible values that can be used in the green channel with {@link #greenLUT}.
+     */
+    public static final byte[] greenPossibleLUT = {0x00, 0x38, 0x60, (byte)0x98, (byte)0xC4, (byte)0xEE, (byte)0xFF};
+    /**
+     * A lookup table from 32 possible levels in the blue channel to 6 possible values in the blue channel; only change
+     * this if you know what you're doing. Affects {@link #quantize253F(float, float, float, float)} and
+     * {@link #quantize253F(float)}.
+     */
+    public static final int[]
+            blueLUT =  {
+            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE380000,
+            0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE760000, 0xFE760000, 0xFE760000,
+            0xFE760000, 0xFE760000, 0xFE760000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000,
+            0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000,};
+    /**
+     * A lookup table from 32 possible levels in the blue channel to 6 possible values in the blue channel as floats;
+     * only change this if you know what you're doing. Affects {@link #quantize253()}.
+     */
+    public static final float[]
             blueLUTf =  {
-                    0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x38/255f, 0x38/255f,
-                    0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x6A/255f, 0x6A/255f, 0x6A/255f,
-                    0x6A/255f, 0x6A/255f, 0x6A/255f, 0x6A/255f, 0xA0/255f, 0xA0/255f, 0xA0/255f, 0xA0/255f,
-                    0xA0/255f, 0xD0/255f, 0xD0/255f, 0xD0/255f, 0xD0/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f,
-            };
+            0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x00/255f, 0x38/255f,
+            0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x38/255f, 0x76/255f, 0x76/255f, 0x76/255f,
+            0x76/255f, 0x76/255f, 0x76/255f, 0xAC/255f, 0xAC/255f, 0xAC/255f, 0xAC/255f, 0xAC/255f,
+            0xEA/255f, 0xEA/255f, 0xEA/255f, 0xEA/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f, 0xFF/255f,
+    };
+    /**
+     * The 6 possible values that can be used in the blue channel with {@link #blueLUT}.
+     */
+    public static final byte[] bluePossibleLUT = {0x00, 0x38, 0x76, (byte)0xAC, (byte)0xEA, (byte)0xFF};
 
     /**
      * Reduces the color depth of the given r, g, and b color channels to fit in 252 colors plus fully transparent (an
      * all-0 value is used when alpha is less than 0.5f). Uses a lookup table per channel that is not perfectly accurate
      * to the original color's brightness, and when this quantize technique is applied to an image of a painting, it
-     * tends to make it much more bold and highly-contrasted. Returns a packed float.
+     * tends to make it more bold and highly-contrasted. Returns a packed float.
      * @param r red channel, from 0f to 1f inclusive
      * @param g green channel, from 0f to 1f inclusive
      * @param b blue channel, from 0f to 1f inclusive
@@ -12511,21 +12555,47 @@ public class SColor extends Color implements Serializable {
      * Reduces the color depth of the given packed float color to fit in 252 colors plus fully transparent (an all-0
      * value is used when alpha is less than 0.5f). Uses a lookup table per channel that is not perfectly accurate to
      * the original color's brightness, and when this quantize technique is applied to an image of a painting, it tends
-     * to make it much more bold and highly-contrasted. Returns a packed float.
+     * to make it more bold and highly-contrasted. Returns a packed float.
      * @param packed a packed float color, as returned by {@link #toFloatBits()}
      * @return a possibly-different packed float color that has been reduced in color depth
      */
     public static float quantize253F(float packed)
     {
         final int unpacked = NumberTools.floatToIntBits(packed);
-        return NumberTools.intBitsToFloat((redLUT[unpacked >>> 3 & 31] | greenLUT[unpacked >>> 1 & 31] | blueLUT[unpacked >>> 19 & 31]) & unpacked >> 31);
+        return NumberTools.intBitsToFloat((redLUT[unpacked >>> 3 & 31] | greenLUT[unpacked >>> 11 & 31] | blueLUT[unpacked >>> 19 & 31]) & unpacked >> 31);
+    }
+
+    /**
+     * Reduces the color depth of the given packed float color to fit in 252 colors plus fully transparent (an all-0
+     * value is used when alpha is less than 0.5f) and returns the color as an RGBA8888 int. Uses a lookup table per
+     * channel that is not perfectly accurate to the original color's brightness, and when this quantize technique is
+     * applied to an image of a painting, it tends to make it more bold and highly-contrasted. Returns an int.
+     * @param packed a packed float color, as returned by {@link #toFloatBits()}
+     * @return an int representing an RGBA8888 color
+     */
+    public static int quantize253I(float packed)
+    {
+        final int unpacked = NumberTools.floatToIntBits(packed);
+        return Integer.reverseBytes((redLUT[unpacked >>> 3 & 31] | greenLUT[unpacked >>> 11 & 31] | blueLUT[unpacked >>> 19 & 31]) & unpacked >> 31);
+    }
+    /**
+     * Reduces the color depth of the given Color to fit in 252 colors plus fully transparent (an all-0 value is used
+     * when alpha is less than 0.5f) and returns the color as an RGBA8888 int. Uses a lookup table per channel that is
+     * not perfectly accurate to the original color's brightness, and when this quantize technique is applied to an
+     * image of a painting, it tends to make it more bold and highly-contrasted. Returns an int.
+     * @param color a libGDX Color, will not be modified
+     * @return an int representing an RGBA8888 color
+     */
+    public static int quantize253I(Color color)
+    {
+        return Integer.reverseBytes((redLUT[(int)(color.r*31.999f)] | greenLUT[(int)(color.g*31.999f)] | blueLUT[(int)(color.b*31.999f)]) & -(int)(color.a + 0.5));
     }
 
     /**
      * Reduces the color depth of the given Color and returns a new Color that fits in 252 colors plus fully transparent
      * (an all-0 value is used when alpha is less than 0.5f). Uses a lookup table per channel that is not perfectly
      * accurate to the original color's brightness, and when this quantize technique is applied to an image of a
-     * painting, it tends to make it much more bold and highly-contrasted. Returns a new Color and does not change this
+     * painting, it tends to make it more bold and highly-contrasted. Returns a new Color and does not change this
      * SColor object.
      * @return a new Color that must be one of 253 possible quantized colors
      */

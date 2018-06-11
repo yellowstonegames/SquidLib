@@ -17,6 +17,10 @@ import squidpony.squidgrid.gui.gdx.SquidInput;
 
 import java.nio.ByteBuffer;
 
+import static squidpony.squidgrid.gui.gdx.SColor.blueLUT;
+import static squidpony.squidgrid.gui.gdx.SColor.greenLUT;
+import static squidpony.squidgrid.gui.gdx.SColor.redLUT;
+
 /**
  * Demo for various ways to quantize images to fit in fewer bits per pixel.
  * Uses a public-domain image of the painting "Étang en Ile de France", by Henri Biva, obtained from Wikimedia Commons:
@@ -89,7 +93,7 @@ public class QuantizeDemo extends ApplicationAdapter {
                 edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
                 while (pixels.remaining() >= 4) {
                     pos = pixels.position();
-                    color = (redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31] | 255) & (pixels.get() >> 31);
+                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
                     pixels.putInt(pos, color);
                     pixels.position(pos+4);
                 }
@@ -138,7 +142,7 @@ public class QuantizeDemo extends ApplicationAdapter {
                 edit.drawPixmap(monaOriginal, width - width2, 0);
                 while (pixels.remaining() >= 4) {
                     pos = pixels.position();
-                    color = (redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31] | 255) & (pixels.get() >> 31);
+                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
                     pixels.putInt(pos, color);
                     pixels.position(pos+4);
                 }
@@ -198,22 +202,22 @@ public class QuantizeDemo extends ApplicationAdapter {
     {
         return a * a * a * (a * (a * 6f - 15f) + 10f);
     }
-    private static final int[]
-            redLUT =   {
-            0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-            0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x7A000000,
-            0x7A000000, 0x7A000000, 0x7A000000, 0x7A000000, 0xB0000000, 0xB0000000, 0xB0000000, 0xB0000000,
-            0xDC000000, 0xDC000000, 0xDC000000, 0xDC000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000,},
-            greenLUT = {
-            0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x380000,
-            0x380000, 0x380000, 0x380000, 0x380000, 0x380000, 0x600000, 0x600000, 0x600000,
-            0x600000, 0x600000, 0x980000, 0x980000, 0x980000, 0x980000, 0x980000, 0xC40000,
-            0xC40000, 0xC40000, 0xC40000, 0xE40000, 0xE40000, 0xE40000, 0xFF0000, 0xFF0000,},
-            blueLUT =  {
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x3800, 0x3800,
-            0x3800, 0x3800, 0x3800, 0x3800, 0x3800, 0x6A00, 0x6A00, 0x6A00,
-            0x6A00, 0x6A00, 0x6A00, 0x6A00, 0xA000, 0xA000, 0xA000, 0xA000, 
-            0xA000, 0xD000, 0xD000, 0xD000, 0xD000, 0xFF00, 0xFF00, 0xFF00,};
+//    private static final int[]
+//            redLUT =   {
+//            0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
+//            0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x7A000000,
+//            0x7A000000, 0x7A000000, 0x7A000000, 0x7A000000, 0xB0000000, 0xB0000000, 0xB0000000, 0xB0000000,
+//            0xDC000000, 0xDC000000, 0xDC000000, 0xDC000000, 0xFF000000, 0xFF000000, 0xFF000000, 0xFF000000,},
+//            greenLUT = {
+//            0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x380000,
+//            0x380000, 0x380000, 0x380000, 0x380000, 0x380000, 0x600000, 0x600000, 0x600000,
+//            0x600000, 0x600000, 0x980000, 0x980000, 0x980000, 0x980000, 0x980000, 0xC40000,
+//            0xC40000, 0xC40000, 0xC40000, 0xE40000, 0xE40000, 0xE40000, 0xFF0000, 0xFF0000,},
+//            blueLUT =  {
+//            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x3800, 0x3800,
+//            0x3800, 0x3800, 0x3800, 0x3800, 0x3800, 0x6A00, 0x6A00, 0x6A00,
+//            0x6A00, 0x6A00, 0x6A00, 0x6A00, 0xA000, 0xA000, 0xA000, 0xA000, 
+//            0xA000, 0xD000, 0xD000, 0xD000, 0xD000, 0xFF00, 0xFF00, 0xFF00,};
     public int quantize(Color color)
     {
         // Full 8-bit RGBA channels. No limits on what colors can be displayed.         

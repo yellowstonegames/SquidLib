@@ -693,8 +693,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                     : SColor.lerpFloatColors(
                             BIOME_COLOR_TABLE[56], coastalColor,
                             a));
-//                    if(heat >= 0.26 && (x & 31) + (y & 31) == 0 && (x * y & 31) == 0)
-//                        System.out.println("x=" + x + ", y= " + y + ", a=" + a + ", tempColor="+tempColor);
                 }
                 else if(hc == 4)
                     Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(icy ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_DARK_COLOR_TABLE[36], BIOME_COLOR_TABLE[41],
@@ -720,22 +718,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         batch.end();
     }
     
-    private static final int[]
-            redLUT =   {
-            0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000, 0x00000000,
-            0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x4C000000, 0x7A000000, 0x7A000000,
-            0x7A000000, 0x7A000000, 0x7A000000, 0x7A000000, 0xB0000000, 0xB0000000, 0xB0000000, 0xB0000000,
-            0xB0000000, 0xE2000000, 0xE2000000, 0xE2000000, 0xE2000000, 0xFF000000, 0xFF000000, 0xFF000000,},
-            greenLUT = {
-            0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000, 0x000000,
-            0x300000, 0x300000, 0x300000, 0x300000, 0x300000, 0x720000, 0x720000, 0x720000,
-            0x720000, 0x720000, 0x980000, 0x980000, 0x980000, 0x980000, 0x980000, 0xC40000,
-            0xC40000, 0xC40000, 0xC40000, 0xE40000, 0xE40000, 0xE40000, 0xFF0000, 0xFF0000,},
-            blueLUT =  {
-            0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x3800,
-            0x3800, 0x3800, 0x3800, 0x3800, 0x3800, 0x6A00, 0x6A00, 0x6A00,
-            0x6A00, 0x6A00, 0xA000, 0xA000, 0xA000, 0xA000, 0xA000, 0xD600, 
-            0xD600, 0xD600, 0xD600, 0xD600, 0xFF00, 0xFF00, 0xFF00, 0xFF00,};
     public int quantize(Color color)
     {
         // Full 8-bit RGBA channels. No limits on what colors can be displayed.
@@ -750,7 +732,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         // not some off-white value, but other than black (0x000000FF), grayscale values have non-zero saturation.
         // Could be made into a palette, and images that use this can be saved as GIF or in PNG-8 indexed mode.
         //return ((0xFF000000 & (int)(color.r*6) * 0x2AAAAAAA) | (0xFF0000 & (int)(color.g*7) * 0x249249) | (0xFF00 & (int)(color.b*6) * 0x2AAA) | 255) & -(int)(color.a + 0.5f);
-        return (redLUT[(int)(color.r*31.999f)] | greenLUT[(int)(color.g*31.999f)] | blueLUT[(int)(color.b*31.999f)] | 255) & -(int)(color.a + 0.5f);
+        return SColor.quantize253I(color);
+        //return (redLUT[(int)(color.r*31.999f)] | greenLUT[(int)(color.g*31.999f)] | blueLUT[(int)(color.b*31.999f)] | 255) & -(int)(color.a + 0.5f);
     }
     
     @Override
