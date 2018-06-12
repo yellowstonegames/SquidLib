@@ -834,21 +834,24 @@ public class RNG implements Serializable, IRNG {
     }
 
     /**
-     * Returns a random long below the given bound, or 0 if the bound is 0 or
-     * negative.
-     *
-     * @param bound the upper bound (exclusive)
-     * @return the found number
+     * Exclusive on bound (which must be positive), with an inner bound of 0.
+     * If bound is negative or 0 this always returns 0.
+     * <br>
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
+     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
+     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets
+     * exactly one random number, so it advances the state as much as {@link #nextInt(int)}.
+     * @param bound the outer exclusive bound; should be positive, otherwise this always returns 0L
+     * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    @Override
     public long nextLong(final long bound) {
-        if (bound <= 0) return 0;
-        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
-        for (; ; ) {
-            long bits = random.nextLong() & 0x7fffffffffffffffL;
-            if (bits >= threshold)
-                return bits % bound;
-        }
+        long rtop = random.nextLong();
+        if(bound <= 0)
+            return 0;
+        final long rlow = rtop & 0xFFFFFFFFL;
+        rtop >>= 32;
+        final long low = bound & 0xFFFFFFFFL, top = bound >> 32, flip = (rlow ^ rtop) >> 63;
+        return (((rtop * low) >> 32) + ((rlow * top) >> 32) + (rtop * top) ^ flip) - flip;
     }
 
     /**

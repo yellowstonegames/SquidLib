@@ -133,38 +133,35 @@ public final class LinnormRNG implements RandomnessSource, StatefulRandomness, S
     }
 
     /**
-     * Exclusive on the upper bound. The lower bound is 0.
-     *
-     * @param bound the upper bound; should be positive (if negative, this returns 0)
-     * @return a random long less than n
+     * Exclusive on bound (which may be positive or negative), with an inner bound of 0.
+     * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
+     * can even be 0, which will cause this to return 0L every time.
+     * <br>
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
+     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
+     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at
+     * most one random number, so it advances the state as much as {@link #nextInt(int)}.
+     * @param bound the outer exclusive bound; can be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    public final long nextLong(final long bound) {
-        if (bound <= 0) return 0;
-        //// the technique libGDX uses, uncommented below, is a little faster than the commented code.
-        //// I don't know if there's a quality difference...
-        //// ranged long generation is really slow though.
-//        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
-//        for (; ; ) {
-//            long bits = nextLong() & 0x7fffffffffffffffL;
-//            if (bits >= threshold)
-//                return bits % bound;
-//        }
-        for (;;) {
-            final long bits = nextLong() & 0x7fffffffffffffffL;
-            final long value = bits % bound;
-            if (bits - value + bound > 0) return value;
-        }
+    public long nextLong(final long bound) {
+        long rtop = (state = state * 0x41C64E6DL + 1L);
+        rtop = (rtop ^ rtop >>> 27) * 0xAEF17502108EF2D9L;
+        rtop ^= rtop >>> 25;
+        final long rlow = rtop & 0xFFFFFFFFL;
+        rtop >>= 32;
+        final long low = bound & 0xFFFFFFFFL, top = bound >> 32, flip = (rlow ^ rtop) >> 63;
+        return (((rtop * low) >> 32) + ((rlow * top) >> 32) + (rtop * top) ^ flip) - flip;
     }
-
     /**
-     * Inclusive lower, exclusive upper.
+     * Inclusive inner, exclusive outer; lower and upper can be positive or negative and there's no requirement for one
+     * to be greater than or less than the other.
      *
      * @param lower the lower bound, inclusive, can be positive or negative
-     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
-     * @return a random long at least equal to lower and less than upper
+     * @param upper the upper bound, exclusive, can be positive or negative
+     * @return a random long that may be equal to lower and will otherwise be between lower and upper
      */
     public final long nextLong(final long lower, final long upper) {
-        if (upper - lower <= 0) throw new IllegalArgumentException("Upper bound must be greater than lower bound");
         return lower + nextLong(upper - lower);
     }
 
