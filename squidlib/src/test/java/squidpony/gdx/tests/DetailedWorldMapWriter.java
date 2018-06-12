@@ -6,7 +6,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
@@ -24,6 +27,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.text.DateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedOutputStream;
@@ -86,7 +90,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private WorldMapGenerator world;
     //private WorldMapGenerator.DetailedBiomeMapper dbm;
 
-    PNG writer;
+    PNG8 writer;
     
     // Biome map colors
     private static float baseIce = SColor.ALICE_BLUE.toFloatBits();
@@ -227,8 +231,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
 
-        writer = new PNG((int)(pm.getWidth() * pm.getHeight() * 1.5f)); // Guess at deflated size.
-
+        writer = new PNG8((int)(pm.getWidth() * pm.getHeight() * 1.5f)); // Guess at deflated size.
+        writer.setFlipY(false);
+        writer.setCompression(6);
 
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng = new StatefulRNG(0L);
@@ -352,7 +357,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        double[][] heightData = world.heightData;
 //        int[][] heatCodeData = dbm.heatCodeData;
 //        int[][] biomeCodeData = dbm.biomeCodeData;
-        pm.setColor(SColor.quantize253I(SColor.DB_INK));
+        //pm.setColor(SColor.quantize253I(SColor.DB_INK));
+        pm.setColor(Color.rgba8888(SColor.DB_INK));
         pm.fill();
 //        for (int y = 0; y < height; y++) {
 //            PER_CELL:
@@ -373,7 +379,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 ////                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
 ////                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
 ////                            pm.setColor(tempColor);
-//                            pm.setColor(SColor.quantize253I(SColor.lerpFloatColors(shallowColor, ice,
+//                            pm.setColor(SColor.floatToInt(SColor.lerpFloatColors(shallowColor, ice,
 //                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)))));
 //                            pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 ////                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
@@ -384,7 +390,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 ////                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
 ////                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
 ////                            pm.setColor(tempColor);
-//                            pm.setColor(SColor.quantize253I(SColor.lerpFloatColors(lightIce, ice,
+//                            pm.setColor(SColor.floatToInt(SColor.lerpFloatColors(lightIce, ice,
 //                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)))));
 //                            pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 ////                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
@@ -401,7 +407,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 ////                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
 ////                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
 ////                        pm.setColor(tempColor);
-//                        pm.setColor(SColor.quantize253I(SColor.lerpFloatColors(deepColor, coastalColor,
+//                        pm.setColor(SColor.floatToInt(SColor.lerpFloatColors(deepColor, coastalColor,
 //                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)))));
 //                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 ////                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
@@ -421,7 +427,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 ////                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
 ////                                BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
 ////                        pm.setColor(tempColor);
-//                        pm.setColor(SColor.quantize253I(SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
+//                        pm.setColor(SColor.floatToInt(SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
 //                                BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc))));
 //                        pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
 ////                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
@@ -445,16 +451,15 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                 elevation = heightData[x][y];
                 icy = heat - elevation * 0.25 < 0.16;
                 if(hc < 4) {
-                    float a = (MathUtils.clamp((float) (((elevation + 0.06) * 16.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f));
-                    pm.drawPixel(x, y, SColor.quantize253I(
+                    pm.drawPixel(x, y, SColor.floatToInt(
                             heat < 0.26 ? SColor.lerpFloatColors(shallowColor, ice,
                                     (float)((elevation + 1.0) / (WorldMapGenerator.sandLower+1.0)))
                                     : SColor.lerpFloatColors(
                                     BIOME_COLOR_TABLE[56], coastalColor,
-                                    a)));
+                                    (MathUtils.clamp((float) (((elevation + 0.06) * 16.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)))));
                 }
                 else if(hc == 4)
-                    pm.drawPixel(x, y, SColor.quantize253I(SColor.lerpFloatColors(icy ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_DARK_COLOR_TABLE[36], BIOME_COLOR_TABLE[41],
+                    pm.drawPixel(x, y, SColor.floatToInt(SColor.lerpFloatColors(icy ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_DARK_COLOR_TABLE[36], BIOME_COLOR_TABLE[41],
                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
                             SColor.lerpFloatColors(icy ? ice : SColor.lerpFloatColors(rocky, desertAlt,
                                     (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
@@ -463,7 +468,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                                     (extreme((float) (moisture)))),
                             (float) ((elevation - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)))));
                 else
-                    pm.drawPixel(x, y, SColor.quantize253I(SColor.lerpFloatColors(icy ? ice : SColor.lerpFloatColors(rocky, desertAlt,
+                    pm.drawPixel(x, y, SColor.floatToInt(SColor.lerpFloatColors(icy ? ice : SColor.lerpFloatColors(rocky, desertAlt,
                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
                             icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[35],
                                     ((float)heat)),
@@ -629,31 +634,44 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         new LwjglApplication(new DetailedWorldMapWriter(), config);
     }
 
-    public static final IntIntMap paletteMapping = new IntIntMap(253);
-    public static final int[] paletteArray = new int[253];
-    static {
-        paletteMapping.put(0, 0);
-        paletteArray[0]=0;
-        int p;
-        for (int r = 0; r < 6; r++) {
-            for (int g = 0; g < 7; g++) {
-                for (int b = 0; b < 6; b++) {
-                    p = SColor.redPossibleLUT[r] << 24
-                            | (SColor.greenPossibleLUT[g] << 16 & 0xFF0000)
-                            | (SColor.bluePossibleLUT[b] << 8 & 0xFF00) | 0xFE;
-                    paletteArray[paletteMapping.size]=p;
-                    paletteMapping.put(p, paletteMapping.size);
-                }
-            }
-        }
-    }
+//    public void buildComputedPalette(Pixmap pixmap) {
+//        Arrays.fill(paletteArray, 0);
+//        int color;
+//        final ByteBuffer pixels = pixmap.getPixels();
+//        switch (pixmap.getFormat()) {
+//            case RGBA8888: {
+//                while (pixels.remaining() >= 4) {
+//                    color = (pixels.getInt() & 0xF8F8F880);
+//                    if ((color & 0x80) == 0)
+//                        color = 0;
+//                    else {
+//                        color |= (color >>> 6 & 0x07070700) | 0xFE;
+//                    }
+//                }
+//            }
+//            case RGB888:
+//            {
+//                while (pixels.remaining() >= 6) {
+//                    color = (pixels.getInt() & 0xF8F8F800);
+//                    color |= (color >>> 6 & 0x07070700) | 0xFE;
+//                    pixels.position(pixels.position() - 1);
+//                }
+//                if(pixels.remaining() >= 3) 
+//                {
+//                    color = ((pixels.get() & 0xF8) << 24 | (pixels.get() & 0xF8) << 16 | (pixels.get() & 0xF8) << 8);
+//                    color |= (color >>> 6 & 0x07070700) | 0xFE;
+//                }
+//                
+//            }
+//        }
+//    }
 
-
-    /** PNG encoder with compression. An instance can be reused to encode multiple PNGs with minimal allocation.
+    /** PNG-8 encoder with compression. An instance can be reused to encode multiple PNGs with minimal allocation.
      *
      * <pre>
      * Copyright (c) 2007 Matthias Mann - www.matthiasmann.de
      * Copyright (c) 2014 Nathan Sweet
+     * Copyright (c) 2018 Tommy Ettinger
      *
      * Permission is hereby granted, free of charge, to any person obtaining a copy
      * of this software and associated documentation files (the "Software"), to deal
@@ -674,8 +692,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
      * THE SOFTWARE.
      * </pre>
      * @author Matthias Mann
-     * @author Nathan Sweet */
-    static public class PNG implements Disposable {
+     * @author Nathan Sweet
+     * @author Tommy Ettinger (PNG-8 parts only) */
+    static public class PNG8 implements Disposable {
         static private final byte[] SIGNATURE = {(byte)137, 80, 78, 71, 13, 10, 26, 10};
         static private final int IHDR = 0x49484452, IDAT = 0x49444154, IEND = 0x49454E44,
                 PLTE = 0x504C5445, TRNS = 0x74524E53;
@@ -688,19 +707,59 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         private final ChunkBuffer buffer;
         private final Deflater deflater;
         private ByteArray lineOutBytes, curLineBytes, prevLineBytes;
-        private boolean flipY = false;
+        private boolean flipY = true;
         private int lastLineLen;
 
-        public PNG () {
+        public final byte[] paletteMapping = new byte[0x8000];
+        public final int[] paletteArray = new int[256];
+
+        public void build253Palette()
+        {
+            Arrays.fill(paletteArray, 0);
+            int i = 0, j, rl, gl, bl, rMin, rMax=0, gMin, gMax, bMin, bMax;
+            for (int r = 0; r < 6; r++) {
+                rl = SColor.redPossibleLUT[r] & 0xFF;
+                rMin=rMax;
+                for (j = rMin; j < 32 && (SColor.redLUT[j] & 0xFF) == rl; j++) { }
+                rMax=j;
+                gMax = 0;
+                for (int g = 0; g < 7; g++) {
+                    gl = SColor.greenPossibleLUT[g] & 0xFF;
+                    gMin=gMax;
+                    for (j = gMin; j < 32 && (SColor.greenLUT[j] >> 8 & 0xFF) == gl; j++) { }
+                    gMax=j;
+                    bMax = 0;
+                    for (int b = 0; b < 6; b++) {
+                        bl = SColor.bluePossibleLUT[b] & 0xFF;
+                        bMin=bMax;
+                        for (j = bMin; j < 32 && (SColor.blueLUT[j] >> 16 & 0xFF) == bl; j++) { }
+                        bMax=j;
+                        paletteArray[++i] =
+                                (rl << 24
+                                        | (gl << 16 & 0xFF0000)
+                                        | (bl << 8 & 0xFF00) | 0xFE);
+                        for (int rm = rMin; rm < rMax; rm++) {
+                            for (int gm = gMin; gm < gMax; gm++) {
+                                Arrays.fill(paletteMapping, (rm << 10) + (gm << 5) + (bMin), (rm << 10) + (gm << 5) + (bMax), (byte)i);
+                            }
+                        }
+                    }
+                }
+            }
+            System.out.println(i);
+        }
+
+        public PNG8() {
             this(128 * 128);
         }
 
-        public PNG (int initialBufferSize) {
+        public PNG8(int initialBufferSize) {
             buffer = new ChunkBuffer(initialBufferSize);
-            deflater = new Deflater(4, false);
+            deflater = new Deflater();
+            build253Palette();
         }
 
-        /** If true, the resulting PNG is flipped vertically. Default is false. */
+        /** If true, the resulting PNG is flipped vertically. Default is true. */
         public void setFlipY (boolean flipY) {
             this.flipY = flipY;
         }
@@ -767,21 +826,22 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             lastLineLen = lineLen;
 
             ByteBuffer pixels = pixmap.getPixels();
-            int oldPosition = pixels.position();
-            boolean rgba8888 = pixmap.getFormat() == Pixmap.Format.RGBA8888;
+            int oldPosition = pixels.position(), color;
+            final int w = pixmap.getWidth();
             for (int y = 0, h = pixmap.getHeight(); y < h; y++) {
                 int py = flipY ? (h - y - 1) : y;
-//                    pixels.position(py * lineLen);
-//                    pixels.get(curLine, 0, lineLen);
-                for (int px = 0, x = 0; px < pixmap.getWidth(); px++) {
-                    curLine[x++] = (byte) (paletteMapping.get(pixmap.getPixel(px, py), 0) & 0xff);
+                for (int px = 0; px < w; px++) {
+                    color = pixmap.getPixel(px, py);
+                    if ((color & 0x80) == 0)
+                        curLine[px] = 0;
+                    else {
+                        curLine[px] = paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)];
+                    }
                 }
                     
                 lineOut[0] = (byte)(curLine[0] - prevLine[0]);
-//                lineOut[1] = (byte)(curLine[1] - prevLine[1]);
-//                lineOut[2] = (byte)(curLine[2] - prevLine[2]);
-//                lineOut[3] = (byte)(curLine[3] - prevLine[3]);
-
+                
+                //Paeth
                 for (int x = 1; x < lineLen; x++) {
                     int a = curLine[x - 1] & 0xff;
                     int b = prevLine[x] & 0xff;

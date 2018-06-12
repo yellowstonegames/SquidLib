@@ -88,14 +88,18 @@ public class QuantizeDemo extends ApplicationAdapter {
         edit.fill();
         switch (mode)
         {
-            case 1:
-                Gdx.graphics.setTitle("(Custom LUT) Étang en Ile de France by Henri Biva");
+            case 0:
+                Gdx.graphics.setTitle("(Original) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
-                while (pixels.remaining() >= 4) {
-                    pos = pixels.position();
-                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
-                    pixels.putInt(pos, color);
-                    pixels.position(pos+4);
+                break;
+            case 1:
+                Gdx.graphics.setTitle("(64-value channels) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+                while (pixels.remaining() >= 4)
+                {
+                    color = (pixels.getInt() & 0xFCFCFCFF) | 0xFF;
+                    color |= color >>> 6 & 0x03030300;
+                    pixels.putInt(pixels.position() - 4, color);
                 }
                 pixels.rewind();
                 break;
@@ -105,17 +109,19 @@ public class QuantizeDemo extends ApplicationAdapter {
                 while (pixels.remaining() >= 4)
                 {
                     color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
+                    color |= color >>> 5 & 0x07070700;
                     pixels.putInt(pixels.position() - 4, color);
                 }
                 pixels.rewind();
                 break;
             case 3:
-                Gdx.graphics.setTitle("(8-value channels) Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(Custom LUT) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
-                while (pixels.remaining() >= 4)
-                {
-                    color = (pixels.getInt() & 0xE0E0E0FF) | 0xFF;
-                    pixels.putInt(pixels.position() - 4, color);
+                while (pixels.remaining() >= 4) {
+                    pos = pixels.position();
+                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
+                    pixels.putInt(pos, color);
+                    pixels.position(pos+4);
                 }
                 pixels.rewind();
                 break;
@@ -133,18 +139,18 @@ public class QuantizeDemo extends ApplicationAdapter {
                 }
                 pixels.rewind();
                 break;
-            case 0:
-                Gdx.graphics.setTitle("(Original) Étang en Ile de France by Henri Biva");
-                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+            case 5:
+                Gdx.graphics.setTitle("(Original) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2, 0);
                 break;
             case 6:
-                Gdx.graphics.setTitle("(Custom LUT) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(64-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2, 0);
-                while (pixels.remaining() >= 4) {
-                    pos = pixels.position();
-                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
-                    pixels.putInt(pos, color);
-                    pixels.position(pos+4);
+                while (pixels.remaining() >= 4)
+                {
+                    color = (pixels.getInt() & 0xFCFCFCFF) | 0xFF;
+                    color |= color >>> 6 & 0x03030300;
+                    pixels.putInt(pixels.position() - 4, color);
                 }
                 pixels.rewind();
                 break;
@@ -154,17 +160,19 @@ public class QuantizeDemo extends ApplicationAdapter {
                 while (pixels.remaining() >= 4)
                 {
                     color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
+                    color |= color >>> 5 & 0x07070700;
                     pixels.putInt(pixels.position() - 4, color);
                 }
                 pixels.rewind();
                 break;
             case 8:
-                Gdx.graphics.setTitle("(8-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(Custom LUT) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2, 0);
-                while (pixels.remaining() >= 4)
-                {
-                    color = (pixels.getInt() & 0xE0E0E0FF) | 0xFF;
-                    pixels.putInt(pixels.position() - 4, color);
+                while (pixels.remaining() >= 4) {
+                    pos = pixels.position();
+                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
+                    pixels.putInt(pos, color);
+                    pixels.position(pos+4);
                 }
                 pixels.rewind();
                 break;
@@ -181,10 +189,6 @@ public class QuantizeDemo extends ApplicationAdapter {
                     pixels.position(pos+4);
                 }
                 pixels.rewind();
-                break;
-            case 5:
-                Gdx.graphics.setTitle("(Original) Mona Lisa by Leonardo da Vinci (remastered)");
-                edit.drawPixmap(monaOriginal, width - width2, 0);
                 break;
         }
         batch.begin();

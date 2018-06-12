@@ -559,7 +559,7 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
     public static Coord haltoid(int seed, int width, int height, int xOffset, int yOffset, int index)
     {
         int morton = GreasedRegion.disperseBits(Integer.reverse((seed * 0x2C9277B5 | 1) * (index + 1)));
-        return Coord.get((int)(width * ((morton & 0xffff) * 0x1p-16)) + xOffset, (int)(((morton >>> 16 & 0xffff) * 0x1p-16) * height) + yOffset);
+        return Coord.get((int)(width * ((morton & 0xffff) * 0x1p-16)) + xOffset, (int)(((morton >>> 16) * 0x1p-16) * height) + yOffset);
     }
 
 }

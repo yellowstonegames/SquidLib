@@ -12606,6 +12606,18 @@ public class SColor extends Color implements Serializable {
         else
             return new Color(0f, 0f, 0f, 0f);
     }
+
+    /**
+     * Converts a packed float color in the format produced by {@link #toFloatBits()} to an RGBA8888 int. This format of
+     * int can be used with Pixmap and in some other places in libGDX.
+     * @param packed a packed float color, as produced by {@link #toFloatBits()}
+     * @return an RGBA8888 int color
+     */
+    public static int floatToInt(final float packed)
+    {
+        return Integer.reverseBytes(NumberTools.floatToIntBits(packed));
+    }
+
     /**
      * Gets a variation on this SColor as a packed float that can have its hue, saturation, and value changed to
      * specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a specific need
