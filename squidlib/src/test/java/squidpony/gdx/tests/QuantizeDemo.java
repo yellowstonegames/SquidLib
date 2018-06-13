@@ -5,16 +5,16 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.squidgrid.gui.gdx.PNG8;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import static squidpony.squidgrid.gui.gdx.SColor.blueLUT;
@@ -42,7 +42,8 @@ public class QuantizeDemo extends ApplicationAdapter {
     private Pixmap edit, bivaOriginal, monaOriginal;
     private ByteBuffer pixels;
     private Texture pt;
-    
+    private PNG8 png8;
+    private PixmapIO.PNG png;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -58,6 +59,33 @@ public class QuantizeDemo extends ApplicationAdapter {
         pixels = edit.getPixels();
         pt = new Texture(edit);
         pt.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        png8 = new PNG8((int)(monaOriginal.getWidth() * monaOriginal.getHeight() * 1.5f));
+        png = new PixmapIO.PNG((int)(monaOriginal.getWidth() * monaOriginal.getHeight() * 1.5f));
+        png8.setFlipY(false);
+        png.setFlipY(false);
+        png8.setCompression(6);
+        png.setCompression(6);
+        try {
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
+        }
+        try {
+            png.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG32.png"), bivaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG32.png", ex);
+        }
+        try {
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
+        }
+        try {
+            png.write(Gdx.files.local("out/Mona_Lisa_PNG32.png"), monaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG32.png", ex);
+        }
+
 //        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
