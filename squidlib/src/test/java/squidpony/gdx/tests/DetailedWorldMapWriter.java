@@ -5,7 +5,6 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -16,23 +15,15 @@ import com.badlogic.gdx.utils.*;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
+import squidpony.squidgrid.gui.gdx.PNG8;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
 import squidpony.squidmath.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
 import java.text.DateFormat;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.zip.CRC32;
-import java.util.zip.CheckedOutputStream;
-import java.util.zip.Deflater;
-import java.util.zip.DeflaterOutputStream;
 
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
@@ -227,7 +218,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             Gdx.files.local(path).mkdirs();
         //Gdx.files.local(path + "Earth.txt").writeString(StringKit.hex(earthHash), false);
 
-        pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGBA8888);
+        pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
 
@@ -633,278 +624,4 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
         new LwjglApplication(new DetailedWorldMapWriter(), config);
     }
-
-//    public void buildComputedPalette(Pixmap pixmap) {
-//        Arrays.fill(paletteArray, 0);
-//        int color;
-//        final ByteBuffer pixels = pixmap.getPixels();
-//        switch (pixmap.getFormat()) {
-//            case RGBA8888: {
-//                while (pixels.remaining() >= 4) {
-//                    color = (pixels.getInt() & 0xF8F8F880);
-//                    if ((color & 0x80) == 0)
-//                        color = 0;
-//                    else {
-//                        color |= (color >>> 6 & 0x07070700) | 0xFE;
-//                    }
-//                }
-//            }
-//            case RGB888:
-//            {
-//                while (pixels.remaining() >= 6) {
-//                    color = (pixels.getInt() & 0xF8F8F800);
-//                    color |= (color >>> 6 & 0x07070700) | 0xFE;
-//                    pixels.position(pixels.position() - 1);
-//                }
-//                if(pixels.remaining() >= 3) 
-//                {
-//                    color = ((pixels.get() & 0xF8) << 24 | (pixels.get() & 0xF8) << 16 | (pixels.get() & 0xF8) << 8);
-//                    color |= (color >>> 6 & 0x07070700) | 0xFE;
-//                }
-//                
-//            }
-//        }
-//    }
-
-    /** PNG-8 encoder with compression. An instance can be reused to encode multiple PNGs with minimal allocation.
-     *
-     * <pre>
-     * Copyright (c) 2007 Matthias Mann - www.matthiasmann.de
-     * Copyright (c) 2014 Nathan Sweet
-     * Copyright (c) 2018 Tommy Ettinger
-     *
-     * Permission is hereby granted, free of charge, to any person obtaining a copy
-     * of this software and associated documentation files (the "Software"), to deal
-     * in the Software without restriction, including without limitation the rights
-     * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-     * copies of the Software, and to permit persons to whom the Software is
-     * furnished to do so, subject to the following conditions:
-     *
-     * The above copyright notice and this permission notice shall be included in
-     * all copies or substantial portions of the Software.
-     *
-     * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-     * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-     * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-     * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-     * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-     * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-     * THE SOFTWARE.
-     * </pre>
-     * @author Matthias Mann
-     * @author Nathan Sweet
-     * @author Tommy Ettinger (PNG-8 parts only) */
-    static public class PNG8 implements Disposable {
-        static private final byte[] SIGNATURE = {(byte)137, 80, 78, 71, 13, 10, 26, 10};
-        static private final int IHDR = 0x49484452, IDAT = 0x49444154, IEND = 0x49454E44,
-                PLTE = 0x504C5445, TRNS = 0x74524E53;
-        static private final byte COLOR_INDEXED = 3;
-        static private final byte COMPRESSION_DEFLATE = 0;
-        static private final byte FILTER_NONE = 0;
-        static private final byte INTERLACE_NONE = 0;
-        static private final byte PAETH = 4;
-
-        private final ChunkBuffer buffer;
-        private final Deflater deflater;
-        private ByteArray lineOutBytes, curLineBytes, prevLineBytes;
-        private boolean flipY = true;
-        private int lastLineLen;
-
-        public final byte[] paletteMapping = new byte[0x8000];
-        public final int[] paletteArray = new int[256];
-
-        public void build253Palette()
-        {
-            Arrays.fill(paletteArray, 0);
-            int i = 0, j, rl, gl, bl, rMin, rMax=0, gMin, gMax, bMin, bMax;
-            for (int r = 0; r < 6; r++) {
-                rl = SColor.redPossibleLUT[r] & 0xFF;
-                rMin=rMax;
-                for (j = rMin; j < 32 && (SColor.redLUT[j] & 0xFF) == rl; j++) { }
-                rMax=j;
-                gMax = 0;
-                for (int g = 0; g < 7; g++) {
-                    gl = SColor.greenPossibleLUT[g] & 0xFF;
-                    gMin=gMax;
-                    for (j = gMin; j < 32 && (SColor.greenLUT[j] >> 8 & 0xFF) == gl; j++) { }
-                    gMax=j;
-                    bMax = 0;
-                    for (int b = 0; b < 6; b++) {
-                        bl = SColor.bluePossibleLUT[b] & 0xFF;
-                        bMin=bMax;
-                        for (j = bMin; j < 32 && (SColor.blueLUT[j] >> 16 & 0xFF) == bl; j++) { }
-                        bMax=j;
-                        paletteArray[++i] =
-                                (rl << 24
-                                        | (gl << 16 & 0xFF0000)
-                                        | (bl << 8 & 0xFF00) | 0xFE);
-                        for (int rm = rMin; rm < rMax; rm++) {
-                            for (int gm = gMin; gm < gMax; gm++) {
-                                Arrays.fill(paletteMapping, (rm << 10) + (gm << 5) + (bMin), (rm << 10) + (gm << 5) + (bMax), (byte)i);
-                            }
-                        }
-                    }
-                }
-            }
-            System.out.println(i);
-        }
-
-        public PNG8() {
-            this(128 * 128);
-        }
-
-        public PNG8(int initialBufferSize) {
-            buffer = new ChunkBuffer(initialBufferSize);
-            deflater = new Deflater();
-            build253Palette();
-        }
-
-        /** If true, the resulting PNG is flipped vertically. Default is true. */
-        public void setFlipY (boolean flipY) {
-            this.flipY = flipY;
-        }
-
-        /** Sets the deflate compression level. Default is {@link Deflater#DEFAULT_COMPRESSION}. */
-        public void setCompression (int level) {
-            deflater.setLevel(level);
-        }
-
-        public void write (FileHandle file, Pixmap pixmap) throws IOException {
-            OutputStream output = file.write(false);
-            try {
-                write(output, pixmap);
-            } finally {
-                StreamUtils.closeQuietly(output);
-            }
-        }
-
-        /** Writes the pixmap to the stream without closing the stream. */
-        public void write (OutputStream output, Pixmap pixmap) throws IOException {
-            DeflaterOutputStream deflaterOutput = new DeflaterOutputStream(buffer, deflater);
-            DataOutputStream dataOutput = new DataOutputStream(output);
-            dataOutput.write(SIGNATURE);
-
-            buffer.writeInt(IHDR);
-            buffer.writeInt(pixmap.getWidth());
-            buffer.writeInt(pixmap.getHeight());
-            buffer.writeByte(8); // 8 bits per component.
-            buffer.writeByte(COLOR_INDEXED);
-            buffer.writeByte(COMPRESSION_DEFLATE);
-            buffer.writeByte(FILTER_NONE);
-            buffer.writeByte(INTERLACE_NONE);
-            buffer.endChunk(dataOutput);
-            
-            buffer.writeInt(PLTE);
-            for (int i = 0; i < paletteArray.length; i++) {
-                int p = paletteArray[i];
-                buffer.write(p>>>24);
-                buffer.write(p>>>16);
-                buffer.write(p>>>8);
-            }
-            buffer.endChunk(dataOutput);
-            
-            buffer.writeInt(TRNS);
-            buffer.write(0);
-            buffer.endChunk(dataOutput);
-            
-            buffer.writeInt(IDAT);
-            deflater.reset();
-
-            int lineLen = pixmap.getWidth();
-            byte[] lineOut, curLine, prevLine;
-            if (lineOutBytes == null) {
-                lineOut = (lineOutBytes = new ByteArray(lineLen)).items;
-                curLine = (curLineBytes = new ByteArray(lineLen)).items;
-                prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
-            } else {
-                lineOut = lineOutBytes.ensureCapacity(lineLen);
-                curLine = curLineBytes.ensureCapacity(lineLen);
-                prevLine = prevLineBytes.ensureCapacity(lineLen);
-                for (int i = 0, n = lastLineLen; i < n; i++)
-                    prevLine[i] = 0;
-            }
-            lastLineLen = lineLen;
-
-            ByteBuffer pixels = pixmap.getPixels();
-            int oldPosition = pixels.position(), color;
-            final int w = pixmap.getWidth();
-            for (int y = 0, h = pixmap.getHeight(); y < h; y++) {
-                int py = flipY ? (h - y - 1) : y;
-                for (int px = 0; px < w; px++) {
-                    color = pixmap.getPixel(px, py);
-                    if ((color & 0x80) == 0)
-                        curLine[px] = 0;
-                    else {
-                        curLine[px] = paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)];
-                    }
-                }
-                    
-                lineOut[0] = (byte)(curLine[0] - prevLine[0]);
-                
-                //Paeth
-                for (int x = 1; x < lineLen; x++) {
-                    int a = curLine[x - 1] & 0xff;
-                    int b = prevLine[x] & 0xff;
-                    int c = prevLine[x - 1] & 0xff;
-                    int p = a + b - c;
-                    int pa = p - a;
-                    if (pa < 0) pa = -pa;
-                    int pb = p - b;
-                    if (pb < 0) pb = -pb;
-                    int pc = p - c;
-                    if (pc < 0) pc = -pc;
-                    if (pa <= pb && pa <= pc)
-                        c = a;
-                    else if (pb <= pc) //
-                        c = b;
-                    lineOut[x] = (byte)(curLine[x] - c);
-                }
-
-                deflaterOutput.write(PAETH);
-                deflaterOutput.write(lineOut, 0, lineLen);
-
-                byte[] temp = curLine;
-                curLine = prevLine;
-                prevLine = temp;
-            }
-            pixels.position(oldPosition);
-            deflaterOutput.finish();
-            buffer.endChunk(dataOutput);
-
-            buffer.writeInt(IEND);
-            buffer.endChunk(dataOutput);
-
-            output.flush();
-        }
-
-        /** Disposal will happen automatically in {@link #finalize()} but can be done explicitly if desired. */
-        public void dispose () {
-            deflater.end();
-        }
-
-        static class ChunkBuffer extends DataOutputStream {
-            final ByteArrayOutputStream buffer;
-            final CRC32 crc;
-
-            ChunkBuffer (int initialSize) {
-                this(new ByteArrayOutputStream(initialSize), new CRC32());
-            }
-
-            private ChunkBuffer (ByteArrayOutputStream buffer, CRC32 crc) {
-                super(new CheckedOutputStream(buffer, crc));
-                this.buffer = buffer;
-                this.crc = crc;
-            }
-
-            public void endChunk (DataOutputStream target) throws IOException {
-                flush();
-                target.writeInt(buffer.size() - 4);
-                buffer.writeTo(target);
-                target.writeInt((int)crc.getValue());
-                buffer.reset();
-                crc.reset();
-            }
-        }
-    }
-
 }
