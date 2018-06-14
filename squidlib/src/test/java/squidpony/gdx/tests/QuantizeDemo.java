@@ -76,26 +76,26 @@ public class QuantizeDemo extends ApplicationAdapter {
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
         }
-//        try {
-//            png.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG32.png"), bivaOriginal);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG32.png", ex);
-//        }
-//        try {
-//            png.write(Gdx.files.local("out/Mona_Lisa_PNG32.png"), monaOriginal);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG32.png", ex);
-//        }
-//        try {
-//            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
-//        }
-//        try {
-//            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
-//        }
+        try {
+            png.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG32.png"), bivaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG32.png", ex);
+        }
+        try {
+            png.write(Gdx.files.local("out/Mona_Lisa_PNG32.png"), monaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG32.png", ex);
+        }
+        try {
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
+        }
+        try {
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
+        }
 
 //        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         input = new SquidInput(new SquidInput.KeyHandler() {

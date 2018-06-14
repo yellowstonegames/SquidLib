@@ -59,6 +59,7 @@ public class PNG8 implements Disposable {
     private final ChunkBuffer buffer;
     private final Deflater deflater;
     private ByteArray lineOutBytes, curLineBytes, prevLineBytes;
+//    private IntArray curErrorInts, nextErrorInts;
     private boolean flipY = true;
     private int lastLineLen;
 
@@ -187,6 +188,83 @@ public class PNG8 implements Disposable {
     {
         return quickDistance((color >>> 27 & 0x1F) - r, (color >>> 19 & 0x1F) - g, (color >>> 11 & 0x1F) - b);
     }
+
+    public static int difference2(final int color1, final int color2)
+    {
+        int rmean = ((color1 >>> 24) + (color2 >>> 24)) >> 1;
+        int r = (color1 >>> 24) - (color2 >>> 24);
+        int g = (color1 >>> 16 & 0xFF) - (color2 >>> 16 & 0xFF);
+        int b = (color1 >>> 8 & 0xFF) - (color2 >>> 8 & 0xFF);
+        return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
+    }
+    public static int difference2(final int color1, int r2, int g2, int b2)
+    {
+        r2 = (r2 << 3 | r2 >>> 2);
+        g2 = (g2 << 3 | g2 >>> 2);
+        b2 = (b2 << 3 | b2 >>> 2);
+        final int rmean = ((color1 >>> 24) + r2) >> 1, 
+                r = (color1 >>> 24) - r2,
+                g = (color1 >>> 16 & 0xFF) - g2 << 1,
+                b = (color1 >>> 8 & 0xFF) - b2;
+        return (((512+rmean)*r*r)>>8) + g*g + (((767-rmean)*b*b)>>8);
+    }
+    public static int difference2(final int r1, final int r2, final int g1, final int g2, final int b1, final int b2)
+    {
+        final int rmean = (r1 + r2) >> 1,
+                r = r1 - r2,
+                g = g1 - g2 << 1,
+                b = b1 - b2;
+        return (((512+rmean)*r*r)>>8) + g*g + (((767-rmean)*b*b)>>8);
+    }
+
+//    public static float differenceYCbCr(final int color1, final int color2, final float lumaBias)
+//    {
+//        final int r1 = color1 >>> 24, r2 = color2 >>> 24,
+//                g1 = color1 >>> 16 & 255, g2 = color2 >>> 16 & 255,
+//                b1 = color1 >>> 8 & 255, b2 = color2 >>> 8 & 255;
+//        final float
+//                y1 = r1 * 0.299f + g1 * 0.587f + b1 * 0.114f,
+//                y2 = r2 * 0.299f + g2 * 0.587f + b2 * 0.114f,
+//                cr1 = r1 * 0.5f + g1 * -0.418688f + b1 * -0.081312f,
+//                cr2 = r2 * 0.5f + g2 * -0.418688f + b2 * -0.081312f,
+//                cb1 = r1 * -0.168736f + g1 * -0.331264f + b1 * 0.5f,
+//                cb2 = r2 * -0.168736f + g2 * -0.331264f + b2 * 0.5f,
+//                y = y2 - y1, cb = cb2 - cb1, cr = cr2 - cr1;
+//        return y * y + cb * cb + cr * cr;
+//    }
+//
+//    public static float differenceYCbCr(final int color1, int r2, int g2, int b2)
+//    {
+//        r2 = (r2 << 3 | r2 >>> 2);
+//        g2 = (g2 << 3 | g2 >>> 2);
+//        b2 = (b2 << 3 | b2 >>> 2);
+//        final int r1 = color1 >>> 24,
+//                g1 = color1 >>> 16 & 255,
+//                b1 = color1 >>> 8 & 255;
+//        final float
+//                y1 = r1 * 0.299f + g1 * 0.587f + b1 * 0.114f,
+//                y2 = r2 * 0.299f + g2 * 0.587f + b2 * 0.114f,
+//                cr1 = r1 * 0.5f + g1 * -0.418688f + b1 * -0.081312f,
+//                cr2 = r2 * 0.5f + g2 * -0.418688f + b2 * -0.081312f,
+//                cb1 = r1 * -0.168736f + g1 * -0.331264f + b1 * 0.5f,
+//                cb2 = r2 * -0.168736f + g2 * -0.331264f + b2 * 0.5f,
+//                y = y2 - y1, cb = cb2 - cb1, cr = cr2 - cr1;
+//        return y * y + cb * cb + cr * cr;
+//    }
+//
+//    public static float differenceYCbCr(final int r1, final int r2, final int g1, final int g2, final int b1, final int b2)
+//    {
+//        final float
+//                y1 = r1 * 0.299f + g1 * 0.587f + b1 * 0.114f,
+//                y2 = r2 * 0.299f + g2 * 0.587f + b2 * 0.114f,
+//                cr1 = r1 * 0.5f + g1 * -0.418688f + b1 * -0.081312f,
+//                cr2 = r2 * 0.5f + g2 * -0.418688f + b2 * -0.081312f,
+//                cb1 = r1 * -0.168736f + g1 * -0.331264f + b1 * 0.5f,
+//                cb2 = r2 * -0.168736f + g2 * -0.331264f + b2 * 0.5f,
+//                y = y2 - y1, cb = cb2 - cb1, cr = cr2 - cr1;
+//        return y * y + cb * cb + cr * cr;
+//    }
+
     public void buildKnownPalette(int[] rgbaPalette)
     {
         if(rgbaPalette == null || rgbaPalette.length < 2)
@@ -197,7 +275,8 @@ public class PNG8 implements Disposable {
         Arrays.fill(paletteArray, 0);
         Arrays.fill(paletteMapping, (byte) 0);
         final int plen = Math.min(256, rgbaPalette.length);
-        int color, c2, dist;
+        int color, c2;
+        int dist;
         for (int i = 0; i < plen; i++) {
             color = rgbaPalette[i];
             paletteArray[i] = color;
@@ -211,7 +290,7 @@ public class PNG8 implements Disposable {
                     {
                         dist = 0x7FFFFFFF;
                         for (int i = 1; i < 256; i++) {
-                            if(dist > (dist = Math.min(dist, quickDistance(paletteArray[i], r, g, b))))
+                            if(dist > (dist = Math.min(dist, difference2(paletteArray[i], r, g, b))))
                                 paletteMapping[c2] = (byte)i;
                         }
                     }
@@ -281,7 +360,8 @@ public class PNG8 implements Disposable {
                                 {
                                     dist = 0x7FFFFFFF;
                                     for (int i = 1; i < 256; i++) {
-                                        if(dist > (dist = Math.min(dist, quickDistance(reds[i] - r, greens[i] - g, blues[i] - b))))
+//                                        if(dist > (dist = Math.min(dist, quickDistance(reds[i] - r, greens[i] - g, blues[i] - b))))
+                                        if(dist > (dist = Math.min(dist, difference2(reds[i], r, greens[i], g, blues[i], b))))
                                             paletteMapping[c2] = (byte)i;
                                     }
                                 }
@@ -346,7 +426,7 @@ public class PNG8 implements Disposable {
                                 {
                                     dist = 0x7FFFFFFF;
                                     for (int i = 1; i < 256; i++) {
-                                        if(dist > (dist = Math.min(dist, quickDistance(reds[i] - r, greens[i]- g, blues[i] - b))))
+                                        if(dist > (dist = Math.min(dist, difference2(reds[i], r, greens[i], g, blues[i], b))))
                                             paletteMapping[c2] = (byte)i;
                                     }
                                 }
@@ -466,24 +546,41 @@ public class PNG8 implements Disposable {
 
         int lineLen = pixmap.getWidth();
         byte[] lineOut, curLine, prevLine;
+//        int[] curError, nextError;
         if (lineOutBytes == null) {
             lineOut = (lineOutBytes = new ByteArray(lineLen)).items;
             curLine = (curLineBytes = new ByteArray(lineLen)).items;
             prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
+//            curError = (curErrorInts = new IntArray(lineLen)).items;
+//            nextError = (nextErrorInts = new IntArray(lineLen)).items;
         } else {
             lineOut = lineOutBytes.ensureCapacity(lineLen);
             curLine = curLineBytes.ensureCapacity(lineLen);
             prevLine = prevLineBytes.ensureCapacity(lineLen);
+//            curError = curErrorInts.ensureCapacity(lineLen);
+//            nextError = nextErrorInts.ensureCapacity(lineLen);
             for (int i = 0, n = lastLineLen; i < n; i++)
+            {
                 prevLine[i] = 0;
+            }
         }
+//        for (int i = 0; i < lineLen; i++) {
+//            nextError[i] = 0x20080200;
+//        }
+
         lastLineLen = lineLen;
 
         ByteBuffer pixels = pixmap.getPixels();
-        int oldPosition = pixels.position(), color;
+        int oldPosition = pixels.position(), color;//, error, t, used, rdiff, gdiff, bdiff;
+//        byte paletteIndex;
         final int w = pixmap.getWidth();
         for (int y = 0, h = pixmap.getHeight(); y < h; y++) {
             int py = flipY ? (h - y - 1) : y;
+//            int ny = flipY ? (h - y - 2) : y + 1;
+//            for (int i = 0; i < lineLen; i++) {
+//                curError[i] = nextError[i];
+//                nextError[i] = 0x20080200;
+//            }
             for (int px = 0; px < w; px++) {
                 color = pixmap.getPixel(px, py);
                 if ((color & 0x80) == 0)
@@ -492,6 +589,61 @@ public class PNG8 implements Disposable {
                     curLine[px] = paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)];
                 }
             }
+//            for (int px = 0; px < w; px++) {
+//                color = pixmap.getPixel(px, py);
+//                if ((color & 0x80) == 0)
+//                    curLine[px] = 0;
+//                else {
+//                    error = curError[px];
+//                    int rr = ((color >>> 17) + ((error >>> 24 & 63) - 32 << 10) & 0x7C00) >>> 10;
+//                    int gg = ((color >>> 14) + ((error >>> 14 & 63) - 32 << 5) & 0x3E0) >>> 5;
+//                    int bb = ((color >>> 11) + ((error >>> 4 & 63) - 32) & 0x1F);
+//                    curLine[px] = paletteIndex = 
+//                            paletteMapping[((color >>> 17) + ((error >>> 24 & 63) - 32 << 10) & 0x7C00)
+//                                    | ((color >>> 14) + ((error >>> 14 & 63) - 32 << 5) & 0x3E0)
+//                                    | ((color >>> 11) + ((error >>> 4 & 63) - 32) & 0x1F)];
+//                    used = paletteArray[paletteIndex & 0xFF];
+//                    rdiff = (used>>>24)-(color>>>24) << 21;
+//                    gdiff = (used>>>16&255)-(color>>>16&255) << 11;
+//                    bdiff = (used>>>8&255)-(color>>>8&255)<<1;
+//                    if(px < w - 1)
+//                    {
+//                        error = curError[px+1];
+//                        if(((error & 0x3FF00000) + rdiff & 0xC00FFFFF) == 0)
+//                            error += rdiff;
+//                        if(((error & 0xFFC00) + gdiff & 0xFFF003FF) == 0)
+//                            error += gdiff;
+//                        if(((error & 0x3FF) + bdiff & 0xFFFFFC00) == 0)
+//                            error += bdiff;
+//                        curError[px+1] = error;
+//                    }
+//                    if(ny >= 0 && ny < h)
+//                    {
+//                        rdiff >>>= 1;
+//                        gdiff >>>= 1;
+//                        bdiff >>>= 1;
+//                        if(px > 0)
+//                        {
+//                            error = nextError[px-1];
+//                            if(((error & 0x3FF00000) + rdiff & 0xC00FFFFF) == 0)
+//                                error += rdiff;
+//                            if(((error & 0xFFC00) + gdiff & 0xFFF003FF) == 0)
+//                                error += gdiff;
+//                            if(((error & 0x3FF) + bdiff & 0xFFFFFC00) == 0)
+//                                error += bdiff;
+//                            nextError[px-1] = error;
+//                        }
+//                        error = nextError[px];
+//                        if(((error & 0x3FF00000) + rdiff & 0xC00FFFFF) == 0)
+//                            error += rdiff;
+//                        if(((error & 0xFFC00) + gdiff & 0xFFF003FF) == 0)
+//                            error += gdiff;
+//                        if(((error & 0x3FF) + bdiff & 0xFFFFFC00) == 0)
+//                            error += bdiff;
+//                        nextError[px] = error;
+//                    }
+//                }
+//            }
                 
             lineOut[0] = (byte)(curLine[0] - prevLine[0]);
             
