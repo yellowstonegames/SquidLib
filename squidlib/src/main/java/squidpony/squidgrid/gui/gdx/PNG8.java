@@ -2,6 +2,7 @@ package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.*;
 import squidpony.annotation.GwtIncompatible;
 
@@ -59,7 +60,7 @@ public class PNG8 implements Disposable {
     private final ChunkBuffer buffer;
     private final Deflater deflater;
     private ByteArray lineOutBytes, curLineBytes, prevLineBytes;
-//    private IntArray curErrorInts, nextErrorInts;
+    private ByteArray curErrorRedBytes, nextErrorRedBytes, curErrorGreenBytes, nextErrorGreenBytes, curErrorBlueBytes, nextErrorBlueBytes;
     private boolean flipY = true;
     private int lastLineLen;
 
@@ -546,104 +547,103 @@ public class PNG8 implements Disposable {
 
         int lineLen = pixmap.getWidth();
         byte[] lineOut, curLine, prevLine;
-//        int[] curError, nextError;
+        byte[] curErrorRed, nextErrorRed, curErrorGreen, nextErrorGreen, curErrorBlue, nextErrorBlue;
         if (lineOutBytes == null) {
             lineOut = (lineOutBytes = new ByteArray(lineLen)).items;
             curLine = (curLineBytes = new ByteArray(lineLen)).items;
             prevLine = (prevLineBytes = new ByteArray(lineLen)).items;
-//            curError = (curErrorInts = new IntArray(lineLen)).items;
-//            nextError = (nextErrorInts = new IntArray(lineLen)).items;
+            curErrorRed = (curErrorRedBytes = new ByteArray(lineLen)).items;
+            nextErrorRed = (nextErrorRedBytes = new ByteArray(lineLen)).items;
+            curErrorGreen = (curErrorGreenBytes = new ByteArray(lineLen)).items;
+            nextErrorGreen = (nextErrorGreenBytes = new ByteArray(lineLen)).items;
+            curErrorBlue = (curErrorBlueBytes = new ByteArray(lineLen)).items;
+            nextErrorBlue = (nextErrorBlueBytes = new ByteArray(lineLen)).items;
         } else {
             lineOut = lineOutBytes.ensureCapacity(lineLen);
             curLine = curLineBytes.ensureCapacity(lineLen);
             prevLine = prevLineBytes.ensureCapacity(lineLen);
-//            curError = curErrorInts.ensureCapacity(lineLen);
-//            nextError = nextErrorInts.ensureCapacity(lineLen);
+            curErrorRed = curErrorRedBytes.ensureCapacity(lineLen);
+            nextErrorRed = nextErrorRedBytes.ensureCapacity(lineLen);
+            curErrorGreen = curErrorGreenBytes.ensureCapacity(lineLen);
+            nextErrorGreen = nextErrorGreenBytes.ensureCapacity(lineLen);
+            curErrorBlue = curErrorBlueBytes.ensureCapacity(lineLen);
+            nextErrorBlue = nextErrorBlueBytes.ensureCapacity(lineLen);
             for (int i = 0, n = lastLineLen; i < n; i++)
             {
                 prevLine[i] = 0;
             }
+            for (int i = 0; i < lineLen; i++) {
+                nextErrorRed[i] = 0;
+                nextErrorGreen[i] = 0;
+                nextErrorBlue[i] = 0;
+            }
+
         }
-//        for (int i = 0; i < lineLen; i++) {
-//            nextError[i] = 0x20080200;
-//        }
 
         lastLineLen = lineLen;
 
         ByteBuffer pixels = pixmap.getPixels();
-        int oldPosition = pixels.position(), color;//, error, t, used, rdiff, gdiff, bdiff;
-//        byte paletteIndex;
+        int oldPosition = pixels.position(), color, used, rdiff, gdiff, bdiff;
+        byte er, eg, eb, paletteIndex;
         final int w = pixmap.getWidth();
         for (int y = 0, h = pixmap.getHeight(); y < h; y++) {
             int py = flipY ? (h - y - 1) : y;
-//            int ny = flipY ? (h - y - 2) : y + 1;
-//            for (int i = 0; i < lineLen; i++) {
-//                curError[i] = nextError[i];
-//                nextError[i] = 0x20080200;
-//            }
-            for (int px = 0; px < w; px++) {
-                color = pixmap.getPixel(px, py);
-                if ((color & 0x80) == 0)
-                    curLine[px] = 0;
-                else {
-                    curLine[px] = paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)];
-                }
+            int ny = flipY ? (h - y - 2) : y + 1;
+            for (int i = 0; i < lineLen; i++) {
+                curErrorRed[i] = nextErrorRed[i];
+                curErrorGreen[i] = nextErrorGreen[i];
+                curErrorBlue[i] = nextErrorBlue[i];
+                nextErrorRed[i] = 0;
+                nextErrorGreen[i] = 0;
+                nextErrorBlue[i] = 0;
             }
 //            for (int px = 0; px < w; px++) {
 //                color = pixmap.getPixel(px, py);
 //                if ((color & 0x80) == 0)
 //                    curLine[px] = 0;
 //                else {
-//                    error = curError[px];
-//                    int rr = ((color >>> 17) + ((error >>> 24 & 63) - 32 << 10) & 0x7C00) >>> 10;
-//                    int gg = ((color >>> 14) + ((error >>> 14 & 63) - 32 << 5) & 0x3E0) >>> 5;
-//                    int bb = ((color >>> 11) + ((error >>> 4 & 63) - 32) & 0x1F);
-//                    curLine[px] = paletteIndex = 
-//                            paletteMapping[((color >>> 17) + ((error >>> 24 & 63) - 32 << 10) & 0x7C00)
-//                                    | ((color >>> 14) + ((error >>> 14 & 63) - 32 << 5) & 0x3E0)
-//                                    | ((color >>> 11) + ((error >>> 4 & 63) - 32) & 0x1F)];
-//                    used = paletteArray[paletteIndex & 0xFF];
-//                    rdiff = (used>>>24)-(color>>>24) << 21;
-//                    gdiff = (used>>>16&255)-(color>>>16&255) << 11;
-//                    bdiff = (used>>>8&255)-(color>>>8&255)<<1;
-//                    if(px < w - 1)
-//                    {
-//                        error = curError[px+1];
-//                        if(((error & 0x3FF00000) + rdiff & 0xC00FFFFF) == 0)
-//                            error += rdiff;
-//                        if(((error & 0xFFC00) + gdiff & 0xFFF003FF) == 0)
-//                            error += gdiff;
-//                        if(((error & 0x3FF) + bdiff & 0xFFFFFC00) == 0)
-//                            error += bdiff;
-//                        curError[px+1] = error;
-//                    }
-//                    if(ny >= 0 && ny < h)
-//                    {
-//                        rdiff >>>= 1;
-//                        gdiff >>>= 1;
-//                        bdiff >>>= 1;
-//                        if(px > 0)
-//                        {
-//                            error = nextError[px-1];
-//                            if(((error & 0x3FF00000) + rdiff & 0xC00FFFFF) == 0)
-//                                error += rdiff;
-//                            if(((error & 0xFFC00) + gdiff & 0xFFF003FF) == 0)
-//                                error += gdiff;
-//                            if(((error & 0x3FF) + bdiff & 0xFFFFFC00) == 0)
-//                                error += bdiff;
-//                            nextError[px-1] = error;
-//                        }
-//                        error = nextError[px];
-//                        if(((error & 0x3FF00000) + rdiff & 0xC00FFFFF) == 0)
-//                            error += rdiff;
-//                        if(((error & 0xFFC00) + gdiff & 0xFFF003FF) == 0)
-//                            error += gdiff;
-//                        if(((error & 0x3FF) + bdiff & 0xFFFFFC00) == 0)
-//                            error += bdiff;
-//                        nextError[px] = error;
-//                    }
+//                    curLine[px] = paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)];
 //                }
 //            }
+            for (int px = 0; px < w; px++) {
+                color = pixmap.getPixel(px, py);
+                if ((color & 0x80) == 0)
+                    curLine[px] = 0;
+                else {
+                    er = curErrorRed[px];
+                    eg = curErrorRed[px];
+                    eb = curErrorRed[px];
+                    int rr = MathUtils.clamp(((color >>> 24)       ) + (er << 1), 0, 0xFF);
+                    int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (eg << 1), 0, 0xFF);
+                    int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (eb << 1), 0, 0xFF);
+                    curLine[px] = paletteIndex = 
+                            paletteMapping[((rr << 7) & 0x7C00)
+                                    | ((gg << 2) & 0x3E0)
+                                    | ((bb >>> 3))];
+                    used = paletteArray[paletteIndex & 0xFF];
+                    rdiff = (color>>>24)-    (used>>>24);
+                    gdiff = (color>>>16&255)-(used>>>16&255);
+                    bdiff = (color>>>8&255)- (used>>>8&255);
+                    if(px < w - 1)
+                    {
+                        curErrorRed[px+1]   += rdiff >> 2;
+                        curErrorGreen[px+1] += gdiff >> 2;
+                        curErrorBlue[px+1]  += bdiff >> 2;
+                    }
+                    if(ny >= 0 && ny < h)
+                    {
+                        if(px > 0)
+                        {
+                            nextErrorRed[px-1]   += rdiff >> 3;
+                            nextErrorGreen[px-1] += gdiff >> 3;
+                            nextErrorBlue[px-1]  += bdiff >> 3;
+                        }
+                        nextErrorRed[px]   += rdiff >> 3;
+                        nextErrorGreen[px] += gdiff >> 3;
+                        nextErrorBlue[px]  += bdiff >> 3;
+                    }
+                }
+            }
                 
             lineOut[0] = (byte)(curLine[0] - prevLine[0]);
             
