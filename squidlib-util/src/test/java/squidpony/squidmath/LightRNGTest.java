@@ -31,16 +31,16 @@ public class LightRNGTest {
 		LightRNG rng = new LightRNG(2L);
         assertEquals(-7541218347953203506L, rng.nextLong());
         assertEquals(-4627371582388691390L, rng.nextLong());
-		assertEquals(43L, rng.nextLong(100));
+		assertEquals(43L, rng.compatibleNextLong(100));
 		assertEquals(-4327252827158612380L, rng.nextLong());
 		assertEquals(5747796768693156649L, rng.nextLong());
 		assertEquals(6394052312532759219L, rng.nextLong());
-		assertEquals(1L, rng.nextLong(1, 10));
-        assertEquals(47L, rng.nextLong(100));
-        assertEquals(39L, rng.nextLong(100));
-        assertEquals(24L, rng.nextLong(100));
-        assertEquals(29L, rng.nextLong(100));
-        assertEquals(15L, rng.nextLong(100));
+		assertEquals(1L, rng.compatibleNextLong(1, 10));
+        assertEquals(47L, rng.compatibleNextLong(100));
+        assertEquals(39L, rng.compatibleNextLong(100));
+        assertEquals(24L, rng.compatibleNextLong(100));
+        assertEquals(29L, rng.compatibleNextLong(100));
+        assertEquals(15L, rng.compatibleNextLong(100));
     }
 
 	@Test
@@ -75,7 +75,7 @@ public class LightRNGTest {
 
 	@Test
 	public void testNextIntException() {
-		assertEquals(0, l.nextInt(0));
+		assertEquals(0, l.compatibleNextInt(0));
 	}
 
 	// not sure this is a valid test; the method isn't documented as throwing an Exception
@@ -86,12 +86,12 @@ public class LightRNGTest {
 
 	@Test
 	public void testNextLongException() {
-		assertEquals(0, l.nextLong(0));
+		assertEquals(0, l.compatibleNextLong(0));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testNextLongException2() {
-		l.nextLong(2, 1);
+		l.compatibleNextLong(2, 1);
 	}
 
 }

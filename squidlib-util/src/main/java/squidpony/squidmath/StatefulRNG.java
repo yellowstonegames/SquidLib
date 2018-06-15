@@ -17,36 +17,37 @@ public class StatefulRNG extends RNG implements Serializable, IRNG {
     }
 
     public StatefulRNG(RandomnessSource random) {
-        super((random instanceof StatefulRandomness) ? random : new LightRNG(random.nextLong()));
+        super((random instanceof StatefulRandomness) ? random : new LinnormRNG(random.nextLong()));
     }
 
     /**
-     * Seeded constructor uses LightRNG, which is of high quality, but low period (which rarely matters for games),
+     * Seeded constructor uses LinnormRNG, which is of high quality, but low period (which rarely matters for games),
      * and has good speed and tiny state size.
      */
     public StatefulRNG(long seed) {
-        this(new LightRNG(seed));
+        this(new LinnormRNG(seed));
     }
     /**
-     * String-seeded constructor uses the hash of the String as a seed for LightRNG, which is of high quality, but
+     * String-seeded constructor uses the hash of the String as a seed for LinnormRNG, which is of high quality, but
      * low period (which rarely matters for games), and has good speed and tiny state size.
      *
-     * Note: This constructor changed behavior on April 22, 2017, and again on December 23, 2017. The first was when it
-     * was noticed that it was not seeding very effectively (only assigning to 32 bits of seed instead of all 64). The
-     * older behavior isn't fully preserved, since it used a rather low-quality String hashing algorithm and so probably
-     * had problems producing good starting seeds, but you can get close by replacing {@code new StatefulRNG(text)} with
-     * {@code new StatefulRNG(new LightRNG(CrossHash.hash(text)))}. The new technique assigns to all 64 bits and has
-     * less correlation between similar inputs causing similar starting states. It's also faster, but that shouldn't
-     * matter in a constructor. It uses a better hashing algorithm because CrossHash no longer has the older, worse one.
+     * Note: This constructor changed behavior on April 22, 2017, again on December 23, 2017, and again on June 14,
+     * 2018. The first was when it was noticed that it was not seeding very effectively (only assigning to 32 bits of
+     * seed instead of all 64). The older behavior isn't fully preserved, since it used a rather low-quality String
+     * hashing algorithm and so probably had problems producing good starting seeds, but you can get close by replacing
+     * {@code new StatefulRNG(text)} with {@code new StatefulRNG(new LightRNG(CrossHash.hash(text)))}. The new technique
+     * assigns to all 64 bits and has less correlation between similar inputs causing similar starting states. It's also
+     * faster, but that shouldn't matter in a constructor. It uses a better hashing algorithm because CrossHash no
+     * longer has the older, worse one. The latest change in June switched to LinnormRNG instead of LightRNG.
      */
     public StatefulRNG(CharSequence seedString) {
-        this(new LightRNG(CrossHash.hash64(seedString)));
+        this(new LinnormRNG(CrossHash.hash64(seedString)));
     }
 
     @Override
     public void setRandomness(RandomnessSource random) {
-        super.setRandomness(random == null ? new LightRNG() :
-                (random instanceof StatefulRandomness) ? random : new LightRNG(random.nextLong()));
+        super.setRandomness(random == null ? new LinnormRNG() :
+                (random instanceof StatefulRandomness) ? random : new LinnormRNG(random.nextLong()));
     }
 
     /**

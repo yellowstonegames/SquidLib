@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
  * <p>
- * This takes a RandomnessSource, defaulting to a LightRNG, and uses it to generate random values, but tracks the total
+ * This takes a RandomnessSource, defaulting to a LinnormRNG, and uses it to generate random values, but tracks the total
  * and compares it to the potential total of a generator of only numbers with a desired value (default 0.54,
  * so it compares against a sequence of all 0.54). If the current generated total is too high or low compared to the
  * desired total, the currently used seed is possibly changed, the generated number is moved in the direction of the
@@ -77,7 +77,7 @@ public class DharmaRNG extends RNG implements Serializable{
 
     /**
      * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
-     * seed for LightRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+     * seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
      * tiny state size, and excellent 64-bit number generation.
      *
      * @param seedString a String as a seed
@@ -89,7 +89,7 @@ public class DharmaRNG extends RNG implements Serializable{
 
     /**
      * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
-     * seed for LightRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+     * seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
      * tiny state size, and excellent 64-bit number generation.
      *
      * @param seedString a String as a seed

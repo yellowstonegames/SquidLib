@@ -81,37 +81,46 @@ public class LFSR implements StatefulRandomness, Serializable {
     }
 
     /**
-     * Exclusive on the upper bound.  The lower bound is 0.
-     * @param bound the upper bound; should be positive
-     * @return a random int less than n and at least equal to 0
+     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
+     * result.
+     * @param bound the outer exclusive bound; may be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
      */
     public int nextInt( final int bound ) {
         return (int)((bound * (nextLong() & 0x7FFFFFFFL)) >> 31);
     }
     /**
      * Inclusive lower, exclusive upper.
-     * @param lower the lower bound, inclusive, can be positive or negative
-     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
-     * @return a random int at least equal to lower and less than upper
+     * @param inner the inner bound, inclusive, can be positive or negative
+     * @param outer the outer bound, exclusive, should be positive, should usually be greater than inner
+     * @return a random int that may be equal to inner and will otherwise be between inner and outer
      */
-    public int nextInt( final int lower, final int upper ) {
-        if ( upper - lower <= 0 ) throw new IllegalArgumentException("Upper bound must be greater than lower bound");
-        return lower + nextInt(upper - lower);
+    public int nextInt(final int inner, final int outer) {
+        return inner + nextInt(outer - inner);
     }
 
     /**
-     * Exclusive on the upper bound. The lower bound is 0.
-     * @param bound the upper bound; should be positive
-     * @return a random long less than n
+     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
+     * result.
+     * @param bound the outer exclusive bound; may be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    public long nextLong( final long bound ) {
-        if ( bound <= 0 ) return 0;
-        long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
-        for (;;) {
-            long bits = nextLong() & 0x7fffffffffffffffL;
-            if (bits >= threshold)
-                return bits % bound;
-        }
+    public long nextLong(final long bound) {
+        long rtop = nextLong();
+        final long rlow = rtop & 0xFFFFFFFFL;
+        rtop >>= 32;
+        final long low = bound & 0xFFFFFFFFL, top = bound >> 32, flip = (rlow ^ rtop) >> 63;
+        return (((rtop * low) >> 32) + ((rlow * top) >> 32) + (rtop * top) ^ flip) - flip;
+    }
+
+    /**
+     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative.
+     * @param inner the inner bound, inclusive, can be positive or negative
+     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner
+     * @return a random long that may be equal to inner and will otherwise be between inner and outer
+     */
+    public long nextLong(final long inner, final long outer) {
+        return inner + nextLong(outer - inner);
     }
 
     public double nextDouble() {

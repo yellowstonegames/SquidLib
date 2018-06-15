@@ -210,7 +210,7 @@ public final class Lathe32RNG implements StatefulRandomness, Serializable {
      */
     public void setState(int stateA, int stateB)
     {
-        this.stateA = stateA == 0 && stateB == 0 ? 1 : stateA;
+        this.stateA = (stateA | stateB) == 0 ? 1 : stateA;
         this.stateB = stateB;
     }
 

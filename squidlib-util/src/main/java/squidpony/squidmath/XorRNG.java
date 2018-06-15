@@ -74,24 +74,46 @@ public class XorRNG implements RandomnessSource {
         return (int) nextLong();
     }
 
-    public int nextInt(final int n) {
-        if (n <= 0) {
-            throw new IllegalArgumentException();
-        }
-        return (int) ((nextLong() >>> 1) % n);
+    /**
+     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
+     * result.
+     * @param bound the outer exclusive bound; may be positive or negative
+     * @return a random int between 0 (inclusive) and bound (exclusive)
+     */
+    public int nextInt(final int bound) {
+        return (int) ((bound * (nextLong() >>> 33)) >> 31);
+    }
+    /**
+     * Inclusive lower, exclusive upper.
+     * @param inner the inner bound, inclusive, can be positive or negative
+     * @param outer the outer bound, exclusive, should be positive, should usually be greater than inner
+     * @return a random int that may be equal to inner and will otherwise be between inner and outer
+     */
+    public int nextInt(final int inner, final int outer) {
+        return inner + nextInt(outer - inner);
     }
 
-    public long nextLong(final long n) {
-        if (n <= 0) {
-            throw new IllegalArgumentException();
-        }
-        for (;;) {
-            final long bits = nextLong() >>> 1;
-            final long value = bits % n;
-            if (bits - value + (n - 1) >= 0) {
-                return value;
-            }
-        }
+    /**
+     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
+     * result.
+     * @param bound the outer exclusive bound; may be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
+     */
+    public long nextLong(final long bound) {
+        long rtop = nextLong();
+        final long rlow = rtop & 0xFFFFFFFFL;
+        rtop >>= 32;
+        final long low = bound & 0xFFFFFFFFL, top = bound >> 32, flip = (rlow ^ rtop) >> 63;
+        return (((rtop * low) >> 32) + ((rlow * top) >> 32) + (rtop * top) ^ flip) - flip;
+    }
+    /**
+     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative.
+     * @param inner the inner bound, inclusive, can be positive or negative
+     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner
+     * @return a random long that may be equal to inner and will otherwise be between inner and outer
+     */
+    public long nextLong(final long inner, final long outer) {
+        return inner + nextLong(outer - inner);
     }
 
     public double nextDouble() {

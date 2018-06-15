@@ -83,7 +83,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
 
     /**
      * Gets a random int with at most the specified number of bits.
-     * Equivalent in its effect on the state to calling nextLong() exactly one time.
+     * Equivalent in its effect on the state to calling {@link #nextLong()} exactly one time.
      * @param bits the number of bits to be returned, between 1 and 32
      * @return a pseudo-random int with at most the specified bits
      */
@@ -96,7 +96,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
 
     /**
      * Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.
-     * Equivalent in its effect on the state to calling nextLong() exactly one time.
+     * Equivalent in its effect on the state to calling {@link #nextLong()} exactly one time.
      * @return any int, all 32 bits are random
      */
     public int nextInt() {
@@ -134,7 +134,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
 
     /**
      * Exclusive on the outer bound; the inner bound is 0.
-     * Will call nextLong() with no arguments exactly once.
+     * Calls {@link #nextLong()} exactly once.
      * @param bound the upper bound; can be positive or negative
      * @return a random int less than n and at least equal to 0
      */
@@ -145,7 +145,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
     /**
      * Inclusive lower, exclusive upper. The upper bound is really the outer bound, and the lower bound the inner bound,
      * because upper is permitted to be less than lower, though upper is still exclusive there.
-     * Will call nextLong() with no arguments exactly once.
+     * Calls {@link #nextLong()} exactly once.
      * @param lower the lower bound, inclusive, can be positive or negative
      * @param upper the upper bound, exclusive, can be positive or negative
      * @return a random int at least equal to lower and less than upper (if upper is less than lower, then the result
@@ -156,40 +156,31 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
     }
 
     /**
-     * Exclusive on the upper bound n. The lower bound is 0.
-     *
-     * Will call nextLong() with no arguments at least 1 time, possibly more.
-     * @param n the upper bound; should be positive
-     * @return a random long less than n
+     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
+     * result. Calls {@link #nextLong()} exactly once.
+     * @param bound the outer exclusive bound; may be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    public long nextLong( final long n ) {
-        if ( n <= 0 ) return 0;
-        long threshold = (0x7fffffffffffffffL - n + 1) % n;
-        for (;;) {
-            long bits = nextLong() & 0x7fffffffffffffffL;
-            if (bits >= threshold)
-                return bits % n;
-        }
+    public long nextLong(final long bound) {
+        long rtop = nextLong();
+        final long rlow = rtop & 0xFFFFFFFFL;
+        rtop >>= 32;
+        final long low = bound & 0xFFFFFFFFL, top = bound >> 32, flip = (rlow ^ rtop) >> 63;
+        return (((rtop * low) >> 32) + ((rlow * top) >> 32) + (rtop * top) ^ flip) - flip;
     }
-
     /**
-     * Exclusive on the upper bound n. The lower bound is 0.
-     *
-     * Will call nextLong() at least 1 time, possibly more.
-     * @param lower the lower bound, inclusive, can be positive or negative
-     * @param upper the upper bound, exclusive, should be positive, must be greater than lower
-     * @return a random long at least equal to lower and less than upper
+     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative. Calls {@link #nextLong()}
+     * exactly once.
+     * @param inner the inner bound, inclusive, can be positive or negative
+     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner
+     * @return a random long that may be equal to inner and will otherwise be between inner and outer
      */
-    public long nextLong( final long lower, final long upper ) {
-        if ( upper - lower <= 0 ) return 0;
-        return lower + nextLong(upper - lower);
+    public long nextLong(final long inner, final long outer) {
+        return inner + nextLong(outer - inner);
     }
-
     /**
-     * Gets a uniform random double in the range [0.0,1.0)
-     *
-     * Calls nextLong() exactly one time.
-     *
+     * Gets a uniform random double in the range {@code [0.0,1.0)}.
+     * Calls {@link #nextLong()} exactly once.
      * @return a random double at least equal to 0.0 and less than 1.0
      */
     public double nextDouble() {
@@ -199,9 +190,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
     /**
      * Gets a uniform random double in the range [0.0,outer) given a positive parameter outer. If outer
      * is negative, it will be the (exclusive) lower bound and 0.0 will be the (inclusive) upper bound.
-     *
-     * Calls nextLong() exactly one time.
-     *
+     * Calls {@link #nextLong()} exactly once.
      *  @param outer the exclusive outer bound, can be negative
      * @return a random double between 0.0 (inclusive) and outer (exclusive)
      */
@@ -210,9 +199,8 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
     }
 
     /**
-     * Gets a uniform random float in the range [0.0,1.0)
-     *
-     * Calls nextLong() exactly one time.
+     * Gets a uniform random float in the range {@code [0.0,1.0)}
+     * Calls {@link #nextLong()} exactly once.
      *
      * @return a random float at least equal to 0.0f and less than 1.0f
      */
@@ -222,7 +210,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
 
     /**
      * Gets a random value, true or false.
-     * Calls nextLong() once.
+     * Calls {@link #nextLong()} exactly once.
      * @return a random true or false value.
      */
     public boolean nextBoolean() {
@@ -231,7 +219,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
 
     /**
      * Given a byte array as a parameter, this will fill the array with random bytes (modifying it
-     * in-place). Calls nextLong() {@code Math.ceil(bytes.length / 8.0)} times.
+     * in-place). Calls {@link #nextLong()} {@code Math.ceil(bytes.length / 8.0)} times.
      * @param bytes a byte array that will have its contents overwritten with random bytes.
      */
     public void nextBytes( final byte[] bytes ) {
@@ -260,7 +248,7 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
     }
     /**
      * Gets the current state of this generator.
-     * @return the current seed of this PermutedRNG, changed once per call to nextLong()
+     * @return the current seed of this PermutedRNG, changed once per call to {@link #nextLong()}
      */
     @Override
 	public long getState( ) {
@@ -269,10 +257,11 @@ public final class PermutedRNG implements RandomnessSource, StatefulRandomness, 
 
     /**
      * Advances or rolls back the PermutedRNG's state without actually generating each number. Skips forward
-     * or backward a number of steps specified by advance, where a step is equal to one call to nextLong(),
+     * or backward a number of steps specified by advance, where a step is equal to one call to {@link #nextLong()},
      * and returns the random number produced at that step (you can get the state with {@link #getState()}).
      * Skipping ahead or behind takes more than constant time, unlike with {@link LightRNG}, but less time
-     * than calling nextLong() {@code advance} times. Skipping backwards by one step is the worst case for this.
+     * than calling {@link #nextLong()} {@code advance} times. Skipping backwards by one step is the worst case for this
+     * technique.
      * @param advance Number of future generations to skip past. Can be negative to backtrack.
      * @return the number that would be generated after generating advance random numbers.
      */

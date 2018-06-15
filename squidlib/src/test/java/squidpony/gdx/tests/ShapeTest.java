@@ -17,7 +17,7 @@ import squidpony.squidgrid.gui.gdx.SparseLayers;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidmath.GapShuffler;
 import squidpony.squidmath.MaskedShapeGenerator;
-import squidpony.squidmath.ThrustRNG;
+import squidpony.squidmath.ThrustAltRNG;
 
 /**
  * Created by Tommy Ettinger on 10/12/2017.
@@ -72,19 +72,19 @@ public class ShapeTest extends ApplicationAdapter {
     }
     public void putMap()
     {
-        int t;
+        //int t;
         ArrayTools.fill(data, 0);
         for (int y = 0; y < 6; y++) {
             for (int x = 0; x < 6; x++) {
                 gen.generateIntoShaded8way(data, x * 16 + 2, y * 16 + 2);
-                int sat = ThrustRNG.determineBounded(++counter + (x << 3) + y, 3),
+                int sat = ThrustAltRNG.determineBounded(++counter + (x << 3) + y, 3),
                 hue = shuffler.next();
                 colorChoices[x][y<<2|1] = SColor.COLOR_WHEEL_PALETTES[sat][hue].toFloatBits();
                 colorChoices[x][y<<2|2] = SColor.COLOR_WHEEL_PALETTES[sat + 3][hue].toFloatBits();
                 colorChoices[x][y<<2|3] = SColor.COLOR_WHEEL_PALETTES[sat + 6][hue].toFloatBits();
-                //colorChoices[x][y] = ((t = counter + x + 6 * y) & 15) | (ThrustRNG.determineBounded(t, 3) << 4);
+                //colorChoices[x][y] = ((t = counter + x + 6 * y) & 15) | (ThrustAltRNG.determineBounded(t, 3) << 4);
 //                colorChoices[x][y] = ((counter + x + 36 * y) * 13 % 21) * 9
-//                        + ThrustRNG.determineBounded(counter + x + 36 * y, 3);
+//                        + ThrustAltRNG.determineBounded(counter + x + 36 * y, 3);
             }
         }
         for (int y = 0; y < height; y++) {
@@ -147,7 +147,7 @@ public class ShapeTest extends ApplicationAdapter {
         config.width = width * cellHeight;
         config.height = height * cellHeight;
         config.foregroundFPS = 2;
-        //config.vSyncEnabled = false;
+        config.vSyncEnabled = true;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);

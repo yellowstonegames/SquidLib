@@ -234,9 +234,9 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
 
     /**
      * Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.
-     * Does allow taking a seed because internally it uses a ThrustRNG to quickly generate initial white noise before
+     * Does allow taking a seed because internally it uses a LinnormRNG to quickly generate initial white noise before
      * processing it into more continuous noise. This generates a lot of random numbers (at least 1 + 14 * height, or
-     * more if width is greater than 64), so ThrustRNG's high speed and fairly good period are both assets here.
+     * more if width is greater than 64), so LinnormRNG's high speed and fairly good period are both assets here.
      * <br>
      * The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is
      * impossible for this to generate, it should be fine to use values from this as denominators in division.
@@ -247,7 +247,7 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
      * @return a 2D int array where each int should be between 1 and 255, inclusive
      */
     public static int[][] preCalcNoise2D(int width, int height, long seed) {
-        ThrustRNG random = new ThrustRNG(seed);
+        LinnormRNG random = new LinnormRNG(seed);
         int w = (width << 1) + 2, h = (height << 1) + 2;
         GreasedRegion[] regions = new GreasedRegion[]{
                 new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),

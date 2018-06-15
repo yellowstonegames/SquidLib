@@ -56,11 +56,11 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                                         double xd, double yd, double zd, double wd) {
         final int hash =
                 (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed >>> 13) * (seed)),
-                        idx = (hash >>> 24) & 0xFC;//, jitter = (hash >>> 18) & 0x7F;
-        return ((xd+grad4[hash >>> 18 & 0xFF]*0.25) * grad4[idx]
-                + (yd+grad4[hash >>> 16 & 0xFF]*0.25) * grad4[idx + 1]
-                + (zd+grad4[hash >>> 14 & 0xFF]*0.25) * grad4[idx + 2]
-                + (wd+grad4[hash >>> 12 & 0xFF]*0.25) * grad4[idx + 3]);
+                        idx = (hash >>> 24) & 0xFC, jitter = (hash >>> 18) & 0xFC;
+        return ((xd+grad4[jitter]*0.25) * grad4[idx]
+                + (yd+grad4[jitter + 1]*0.25) * grad4[idx + 1]
+                + (zd+grad4[jitter + 2]*0.25) * grad4[idx + 2]
+                + (wd+grad4[jitter + 3]*0.25) * grad4[idx + 3]);
     }
     protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,
                                         double xd, double yd, double zd, double wd, double ud, double vd) {

@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 46, noiseMode = 112;//82;
+    private int hashMode = 0, rngMode = 46, noiseMode = 79;//118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -3649,17 +3649,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         c2 = MathUtils.cosDeg(ctr * 0.625f + 261f) * 0.015f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[0] = x * s0 - y * c0 + ctr * 0.007;
-                                connections[1] = y * c1 - x * s1 + ctr * 0.009;
-                                connections[2] = x * s2 + y * c2 + ctr * 0.013;
-                                connections[0] += cosmos.getDoubleBase();
-                                connections[1] += cosmos.getDoubleBase();
-                                connections[2] += cosmos.getDoubleBase();
+                                connections[0] = ctr * 0.007 + x * c0 - y * s0;
+                                connections[1] = ctr * 0.009 - x * c1 + y * s1;
+                                connections[2] = ctr * 0.013 + x * c2 + y * s2;
+                                connections[0] = cosmos.getDouble() * 0.25;
+                                connections[1] = cosmos.getDouble() * 0.25;
+                                connections[2] = cosmos.getDouble() * 0.25;
                                 display.put(x, y,
                                         floatGet(
-                                                NumberTools.zigzag((float)connections[0]) * 0.5f + 0.5f,
-                                                NumberTools.zigzag((float)connections[1]) * 0.5f + 0.5f,
-                                                NumberTools.zigzag((float)connections[2]) * 0.5f + 0.5f,
+                                                (float)connections[0] * 4f,//NumberTools.sway((float)connections[0]) * 0.5f + 0.5f,
+                                                (float)connections[1] * 4f,//NumberTools.sway((float)connections[1]) * 0.5f + 0.5f,
+                                                (float)connections[2] * 4f,//NumberTools.sway((float)connections[2]) * 0.5f + 0.5f,
                                                 1.0f));
                             }
                         }
@@ -3674,13 +3674,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         c2 = MathUtils.cosDeg(ctr * 0.625f + 261f) * 0.015f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                connections[0] = x * s0 - y * c0 + ctr * 0.007;
-                                connections[1] = y * c1 - x * s1 + ctr * 0.009;
-                                connections[2] = x * s2 + y * c2 + ctr * 0.013;
-                                connections[0] += cosmos.getDoubleBase();
-                                connections[1] += cosmos.getDoubleBase();
-                                connections[2] += cosmos.getDoubleBase();
-                                bright = NumberTools.zigzag((float)connections[0]) * 0.5f + 0.5f;
+                                connections[0] = ctr * 0.007 + x * c0 - y * s0;
+                                connections[1] = ctr * 0.009 - x * c1 + y * s1;
+                                connections[2] = ctr * 0.013 + x * c2 + y * s2;
+                                connections[0] = cosmos.getDouble() * 0.25;
+                                connections[1] = cosmos.getDouble() * 0.25;
+                                connections[2] = cosmos.getDouble() * 0.25;
+                                bright = (float)connections[1] * 4f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -4186,27 +4186,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright =
-                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04))
+                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.015 - y * 0.01625, ctr * 0.0225 - x * 0.01625, y * 0.015 - ctr * 0.0225, x * 0.0225 + y * 0.02 + ctr * 0.01625)
                                         );
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
-                    case 124:
-                        Gdx.graphics.setTitle("Classic 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 124: {
+                        Gdx.graphics.setTitle("Classic 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        double u = NumberTools.swayRandomized(123456L, ctr * -0.04),
+                                v = NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5,
+                                w = NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright =
-                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04),
-                                                NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5, NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25
-                                                )
+                                        basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, u + x * 0.015, v - y * 0.014, w - ctr * 0.021)
                                         );
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
+                    }
                     case 119:
                         Gdx.graphics.setTitle("Jitter 2D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -4238,27 +4240,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright =
-                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04))
+                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.015 - y * 0.01625, ctr * 0.0225 - x * 0.01625, y * 0.015 - ctr * 0.0225, x * 0.0225 + y * 0.02 + ctr * 0.01625)
                                         );
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
                         break;
-                    case 125:
-                        Gdx.graphics.setTitle("Jitter 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                    case 125: {
+                        Gdx.graphics.setTitle("Jitter 6D Noise, unprocessed, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        double u = NumberTools.swayRandomized(123456L, ctr * -0.04),
+                                v = NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5,
+                                w = NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright =
-                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, NumberTools.swayRandomized(123456L, ctr * -0.04),
-                                                NumberTools.swayRandomized(-987654321L, ctr * -0.013 + 0.3) * 1.5, NumberTools.swayRandomized(543212345L, ctr * -0.02 + 0.7) * 1.25
-                                                )
+                                        basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, u + x * 0.015, v - y * 0.014, w - ctr * 0.021)
                                         );
                                 //+ 15f) / 30f;
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
-                        break;
+                    }
+                    break;
                     case 126:
                         Gdx.graphics.setTitle("Whirling 2D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {

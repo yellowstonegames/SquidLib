@@ -21,7 +21,7 @@ public class MaskedShapeGenerator {
     public static final GreasedRegion potentialBody = new GreasedRegion(spaceship, 1), // can be body or empty
             potentialSolid = new GreasedRegion(spaceship, 2, 4), // can be solid or body, never empty
             alwaysSolid = new GreasedRegion(spaceship, 3); // must be solid
-    public ThrustRNG randomness = new ThrustRNG(123456789L);
+    public LinnormRNG randomness = new LinnormRNG(123456789L);
     public RNG rng = new RNG(randomness);
     public final GreasedRegion randomRegion = new GreasedRegion(randomness, 6, 12);
     private final GreasedRegion workingBody = new GreasedRegion(6, 12),

@@ -2,7 +2,7 @@ package squidpony.examples;
 
 import squidpony.LZSPlus;
 import squidpony.StringKit;
-import squidpony.squidmath.ThrustRNG;
+import squidpony.squidmath.LinnormRNG;
 
 /**
  * Created by Tommy Ettinger on 7/13/2017.
@@ -26,8 +26,8 @@ public class LZSPlusTest {
         }, compressed = new String[ozzes.length];
         String oz = StringKit.join("", ozzes), allCompressed;
         //long[] keys = Garbler.makeKeyArray(7, "There's no place like home...");
-        long[] keys = {ThrustRNG.determine(10000L), ThrustRNG.determine(12000L),
-                ThrustRNG.determine(12300L), ThrustRNG.determine(12340L)};
+        long[] keys = {LinnormRNG.determine(10000L), LinnormRNG.determine(12000L),
+                LinnormRNG.determine(12300L), LinnormRNG.determine(12340L)};
 
         for (int i = 0; i < ozzes.length; i++) {
             System.out.println(compressed[i] = LZSPlus.compress(ozzes[i], keys));

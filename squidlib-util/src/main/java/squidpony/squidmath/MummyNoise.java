@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import static squidpony.squidmath.Noise.cerp;
+import static squidpony.squidmath.Noise.longFloor;
 
 /**
  * A different kind of noise that has spotted and striped areas, like a tabby cat.
@@ -19,33 +20,23 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     public MummyNoise(final int seed) {
-        seedX = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seed + 0xC6BC279692B5CC83L);
-        seedY = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedX ^ 0xC7BC279692B5CB83L);
-        seedZ = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedY ^ 0xC8BC279692B5CA83L);
-        seedW = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedZ ^ 0xC9BC279692B5C983L);
-        seedU = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedW ^ 0xCABC279692B5C883L);
-        seedV = 0x9E3779B97F4A7C15L * ThrustRNG.determine(seedU ^ 0xCBBC279692B5C783L);
-    }
-    /**
-     * Like {@link Math#floor}, but returns a long. Doesn't consider weird doubles like INFINITY and NaN.
-     *
-     * @param t the double to find the floor for
-     * @return the floor of t, as a long
-     */
-    public static long longFloor(double t) {
-        return t >= 0 ? (long) t : (long) t - 1;
+        seedX = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seed + 0xC6BC279692B5CC83L);
+        seedY = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedX ^ 0xC7BC279692B5CB83L);
+        seedZ = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedY ^ 0xC8BC279692B5CA83L);
+        seedW = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedZ ^ 0xC9BC279692B5C983L);
+        seedU = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedW ^ 0xCABC279692B5C883L);
+        seedV = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedU ^ 0xCBBC279692B5C783L);
     }
 
     /**
-     * The same as {@link ThrustRNG#determine(long)}, except this assumes state has already been multiplied by
-     * 0x9E3779B97F4A7C15L . 
-     * @param state a long that should change in increments of 0x9E3779B97F4A7C15L
+     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by
+     * 0x632BE59BD9B4E019L.
+     * @param state a long that should change in increments of 0x632BE59BD9B4E019L
      * @return a pseudo-random permutation of state
      */
     public static long determine(long state)
     {
-        state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
-        return state ^ state >>> 28;
+        return (state = ((state = ((state ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
     }
 
     //    public static double gauss(final long state) {
@@ -56,9 +47,8 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 //        return ((((y ^ y >>> 28) & 0x7FFFFFL) + ((y ^ y >>> 28) >>> 41))
 //                + (((z ^ z >>> 28) & 0x7FFFFFL) + ((z ^ z >>> 28) >>> 41))) * 0x1p-24 - 1.0;
 //    }
-    public static double signedFloat(long state) {
-        state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
-        return (state ^ state >>> 28) * 0x1p-63;
+    public static double signedDouble(long state) {
+        return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) >> 12) * 0x1p-52;
     }
 
     @Override
@@ -69,7 +59,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final long seed) {
         final long
-                rs = ThrustRNG.determine(seed ^ ~seed << 32),
+                rs = LinnormRNG.determine(seed ^ ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L);
         return getNoiseWithSeeds(x, y, rx, ry);
@@ -100,7 +90,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
         final long
-                rs = ThrustRNG.determine(seed ^ ~seed << 32),
+                rs = LinnormRNG.determine(seed ^ ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L);
@@ -140,7 +130,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         final long
-                rs = ThrustRNG.determine(seed ^ ~seed << 32),
+                rs = LinnormRNG.determine(seed ^ ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L),
@@ -197,7 +187,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {
         final long
-                rs = ThrustRNG.determine(seed ^ ~seed << 32),
+                rs = LinnormRNG.determine(seed ^ ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L),
@@ -346,7 +336,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         if(scratch == null || scratch.length < upper)
             scratch = new double[upper];
         for (int i = 0; i < len; i++) {
-            seed = ThrustRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed << 32);
+            seed = LinnormRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed << 32);
             scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(coordinates[i])) * seed) + seed;
         }
         long working;

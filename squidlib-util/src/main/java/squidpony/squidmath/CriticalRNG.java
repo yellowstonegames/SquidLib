@@ -23,26 +23,26 @@ public class CriticalRNG extends RNG {
     public float luck = 0f;
 
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded ThrustRNG for its RandomnessSource.
+     * Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded LinnormRNG for its RandomnessSource.
      */
     public CriticalRNG() {
-        super(new ThrustRNG());
+        super(new LinnormRNG());
     }
 
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a ThrustRNG with the given seed for its RandomnessSource.
+     * Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource.
      * @param seed any long
      */
     public CriticalRNG(long seed) {
-        super(new ThrustRNG(seed));
+        super(new LinnormRNG(seed));
     }
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a ThrustRNG with the given seed for its RandomnessSource (this
-     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the ThrustRNG).
+     * Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
+     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the LinnormRNG).
      * @param seedString any String
      */
     public CriticalRNG(CharSequence seedString) {
-        super(new ThrustRNG(CrossHash.hash64(seedString)));
+        super(new LinnormRNG(CrossHash.hash64(seedString)));
     }
 
     /**
@@ -54,32 +54,32 @@ public class CriticalRNG extends RNG {
     }
 
     /**
-     * Makes a CriticalRNG with the given luck factor and a randomly-seeded ThrustRNG for its RandomnessSource.
+     * Makes a CriticalRNG with the given luck factor and a randomly-seeded LinnormRNG for its RandomnessSource.
      * @param luck typically a small float, often between -0.5f and 0.5f, that will affect the results this returns
      */
     public CriticalRNG(float luck) {
-        super(new ThrustRNG());
+        super(new LinnormRNG());
         this.luck = luck;
     }
 
     /**
-     * Makes a CriticalRNG with the given luck factor and a ThrustRNG with the given seed for its RandomnessSource.
+     * Makes a CriticalRNG with the given luck factor and a LinnormRNG with the given seed for its RandomnessSource.
      * @param seed any long
      * @param luck typically a small float, often between -0.5f and 0.5f, that will affect the results this returns
      */
     public CriticalRNG(long seed, float luck) {
-        super(new ThrustRNG(seed));
+        super(new LinnormRNG(seed));
         this.luck = luck;
     }
 
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a ThrustRNG with the given seed for its RandomnessSource (this
-     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the ThrustRNG).
+     * Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
+     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the LinnormRNG).
      * @param seedString any String
      * @param luck typically a small float, often between -0.5f and 0.5f, that will affect the results this returns
      */
     public CriticalRNG(CharSequence seedString, float luck) {
-        super(new ThrustRNG(CrossHash.hash64(seedString)));
+        super(new LinnormRNG(CrossHash.hash64(seedString)));
         this.luck = luck;
     }
 
@@ -95,12 +95,12 @@ public class CriticalRNG extends RNG {
 
     @Override
     public double nextDouble() {
-        return NumberTools.formCurvedFloat(random.nextLong()) * 0.875 + 0.5 + luck;
+        return NumberTools.formCurvedDouble(random.nextLong()) * 0.875 + 0.5 + luck;
     }
 
     @Override
     public double nextDouble(double max) {
-        return (NumberTools.formCurvedFloat(random.nextLong()) * 0.875 + 0.5 + luck) * max;
+        return (NumberTools.formCurvedDouble(random.nextLong()) * 0.875 + 0.5 + luck) * max;
     }
 
     @Override
@@ -122,27 +122,27 @@ public class CriticalRNG extends RNG {
 
     @Override
     public long nextLong() {
-        return longify((NumberTools.formCurvedFloat(random.nextLong()) + luck * -2.0) * 0x8000000000000000L);
+        return longify((NumberTools.formCurvedDouble(random.nextLong()) + luck * -2.0) * 0x8000000000000000L);
     }
 
     @Override
     public long nextLong(long bound) {
-        return longify((NumberTools.formCurvedFloat(random.nextLong()) * 0.875 + 0.5 + luck) * bound);
+        return longify((NumberTools.formCurvedDouble(random.nextLong()) * 0.875 + 0.5 + luck) * bound);
     }
 
     @Override
     public int nextInt(int bound) {
-        return intify((NumberTools.formCurvedFloat(random.nextLong()) * 0.875 + 0.5 + luck) * bound);
+        return intify((NumberTools.formCurvedDouble(random.nextLong()) * 0.875 + 0.5 + luck) * bound);
     }
 
     @Override
     public int nextIntHasty(int bound) {
-        return intify((NumberTools.formCurvedFloat(random.nextLong()) * 0.875 + 0.5 + luck) * bound);
+        return intify((NumberTools.formCurvedDouble(random.nextLong()) * 0.875 + 0.5 + luck) * bound);
     }
 
     @Override
     public int nextInt() {
-        return intify((NumberTools.formCurvedFloat(random.nextLong()) + luck * -2.0) * 0x80000000);
+        return intify((NumberTools.formCurvedDouble(random.nextLong()) + luck * -2.0) * 0x80000000);
     }
 
     @Override
@@ -191,6 +191,6 @@ public class CriticalRNG extends RNG {
 
     @Override
     public double nextGaussian() {
-        return NumberTools.formCurvedFloat(random.nextLong()) * 1.75 + luck * 2;
+        return NumberTools.formCurvedDouble(random.nextLong()) * 1.75 + luck * 2.0;
     }
 }

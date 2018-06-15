@@ -2,6 +2,9 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
+import static squidpony.squidmath.Noise.cerp;
+import static squidpony.squidmath.Noise.longFloor;
+
 /**
  * Like a kind of RNG, but fully deterministic in a way that depends on certain connected variables.
  * Intended as a way to produce similar values when small changes occur in the connections, while potentially producing
@@ -42,7 +45,7 @@ public class CosmicNumbering implements Serializable {
         seeds = new long[len];
         seeds[0] = seed | 1L;
         for (int i = 1; i < len; i++) {
-            seeds[i] = ThrustRNG.determine(seed + i) | 1L;
+            seeds[i] = LinnormRNG.determine(seed + i) | 1L;
         }
         effect = 0x1.81p-62 * Math.pow(1.1875, len);
     }
@@ -64,7 +67,7 @@ public class CosmicNumbering implements Serializable {
             long seed = seeds[0];
             seeds = new long[len];
             for (int i = 1; i < len; i++) {
-                seeds[i] = ThrustRNG.determine(seed + i) | 1L;
+                seeds[i] = LinnormRNG.determine(seed + i) | 1L;
             }
             effect = 0x1.81p-62 * Math.pow(1.1875, len);
         }
@@ -188,40 +191,15 @@ public class CosmicNumbering implements Serializable {
     }
 
     /**
-     * Like {@link Math#floor}, but returns a long. Doesn't consider weird doubles like INFINITY and NaN.
-     *
-     * @param t the double to find the floor for
-     * @return the floor of t, as a long
-     */
-    public static long longFloor(double t) {
-        return t >= 0 ? (long) t : (long) t - 1;
-    }
-
-    /**
-     * The same as {@link ThrustRNG#determine(long)}, except this assumes state has already been multiplied by
-     * 0x9E3779B97F4A7C15L .
-     * @param state a long that should change in increments of 0x9E3779B97F4A7C15L
+     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by
+     * 0x632BE59BD9B4E019L.
+     * @param state a long that should change in increments of 0x632BE59BD9B4E019L
      * @return a pseudo-random permutation of state
      */
     public static long determine(long state)
     {
-        state = (state ^ state >>> 26) * 0x2545F4914F6CDD1DL;
-        return state ^ state >>> 28;
+        return (state = ((state = ((state ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
     }
-
-    /**
-     * Cubic-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).
-     * Will smoothly transition toward start or end as a approaches 0 or 1, respectively. Somewhat faster than
-     * quintic interpolation (querp), but slower (and smoother) than linear interpolation (lerp).
-     * @param start a valid double
-     * @param end a valid double
-     * @param a a double between 0 and 1 inclusive
-     * @return a double between start and end inclusive
-     */
-    private static double cerp(final double start, final double end, double a) {
-        return (1.0 - (a *= a * (3.0 - 2.0 * a))) * start + a * end;
-    }
-
 
     /*
      * Linearly interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).

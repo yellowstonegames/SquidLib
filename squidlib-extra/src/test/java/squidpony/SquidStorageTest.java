@@ -56,7 +56,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3), lang2;
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new ThrustRNG(75L), 75, 75), g2;
+            GreasedRegion grease = new GreasedRegion(new LinnormRNG(75L), 75, 75), g2;
             store.put("rng", srng);
             store.put("language", randomLanguage);
             store.put("world", world);
@@ -100,7 +100,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             noCompression.json.setElementType(TestClass.class, "em", String.class);
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new ThrustRNG(75L), 75, 75);
+            GreasedRegion grease = new GreasedRegion(new LinnormRNG(75L), 75, 75);
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
             ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
             table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);

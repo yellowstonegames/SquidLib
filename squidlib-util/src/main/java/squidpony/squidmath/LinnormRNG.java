@@ -8,13 +8,16 @@ import java.io.Serializable;
  * A very-high-quality StatefulRandomness that is the fastest 64-bit generator in this library that passes statistical
  * tests and is equidistributed. Has 64 bits of state and natively outputs 64 bits at a time, changing the state with a
  * basic linear congruential generator (it is simply {@code state = state * 1103515245 + 1}). Starting with that LCG's
- * output, it xorshifts that output, multiplies by a very large negative long, then returns another xorshift. For
+ * output, it xorshifts that long, multiplies by a very large negative long, then returns another xorshift. For
  * whatever reason, the output of this simple function passes all 32TB of PractRand with no anomalies, meaning its
  * statistical quality is excellent. As mentioned earlier, this is the fastest high-quality generator here other than
  * {@link ThrustAltRNG}. Unlike ThrustAltRNG, this can produce all long values as output; ThrustAltRNG bunches some
  * outputs and makes producing them more likely while others can't be produced at all. Notably, this generator is faster
  * than {@link LightRNG} while keeping the same or higher quality, and also faster than {@link XoRoRNG} while passing
- * tests that XoRoRNG always or frequently fails, such as binary matrix rank tests.
+ * tests that XoRoRNG always or frequently fails, such as binary matrix rank tests. It is not the fastest option on GWT;
+ * if you intend to target GWT then {@link Lathe32RNG} or {@link GWTRNG} is recommended (they use the same algorithm,
+ * xoroshiro64++ as it has recently been termed, and it has almost identical period to LinnormRNG but avoids math on
+ * longs to increase performance on GWT).
  * <br>
  * This generator is a StatefulRandomness but not a SkippingRandomness, so it can't (efficiently) have the skip() method
  * that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the

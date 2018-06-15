@@ -194,12 +194,42 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
     }
 
     /**
-     * Exclusive on the upper bound. The lower bound is 0. Unlike {@link #nextInt(int)}, this may sometimes advance the
-     * state more than once, depending on what numbers are produced internally and the bound.
-     * @param bound the upper bound; should be positive
-     * @return a random long less than n
+     * Exclusive on the outer bound; the inner bound is 0. The bound may be negative, which will produce a non-positive
+     * result.
+     * @param bound the outer exclusive bound; may be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    public long nextLong( final long bound ) {
+    public long nextLong(final long bound) {
+        long rtop = nextLong();
+        final long rlow = rtop & 0xFFFFFFFFL;
+        rtop >>= 32;
+        final long low = bound & 0xFFFFFFFFL, top = bound >> 32, flip = (rlow ^ rtop) >> 63;
+        return (((rtop * low) >> 32) + ((rlow * top) >> 32) + (rtop * top) ^ flip) - flip;
+    }
+    
+    /**
+     * Inclusive inner, exclusive outer; both inner and outer can be positive or negative.
+     * @param inner the inner bound, inclusive, can be positive or negative
+     * @param outer the outer bound, exclusive, can be positive or negative and may be greater than or less than inner
+     * @return a random long that may be equal to inner and will otherwise be between inner and outer
+     */
+    public long nextLong(final long inner, final long outer) {
+        return inner + nextLong(outer - inner);
+    }
+
+
+    /**
+     * Exclusive on the upper bound. The lower bound is 0. Unlike {@link #nextInt(int)} or {@link #nextLong(long)}, this
+     * may sometimes advance the state more than once, depending on what numbers are produced internally and the bound.
+     * {@link #nextLong(long)} is preferred because it is much faster and reliably advances the state only once. Because
+     * this method uses rejection sampling, getting multiple random longs to "smooth the odds" when the bound is such
+     * that it can't fairly distribute one random long across all possible outcomes, it may be more "fair" than
+     * {@link #nextLong(long)}, though it could potentially consume more of the period faster if pathologically bad
+     * bounds were used very often, and if enough of the period is gone then statistical flaws may become detectable.
+     * @param bound the upper bound; if this isn't positive, this method always returns 0
+     * @return a random long less than n and at least equal to 0
+     */
+    public long compatibleNextLong(final long bound) {
         if ( bound <= 0 ) return 0;
         long threshold = (0x7fffffffffffffffL - bound + 1) % bound;
         for (;;) {
@@ -215,9 +245,9 @@ public final class LightRNG implements RandomnessSource, StatefulRandomness, Ski
      * @param upper the upper bound, exclusive, should be positive, must be greater than lower
      * @return a random long at least equal to lower and less than upper
      */
-    public long nextLong( final long lower, final long upper ) {
+    public long compatibleNextLong( final long lower, final long upper ) {
         if ( upper - lower <= 0 )  throw new IllegalArgumentException("Upper bound must be greater than lower bound");
-        return lower + nextLong(upper - lower);
+        return lower + compatibleNextLong(upper - lower);
     }
     /**
      * Gets a uniform random double in the range [0.0,1.0)

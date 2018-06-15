@@ -790,7 +790,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * Constructor for a random GreasedRegion of the given width and height, typically assigning approximately half of
      * the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more efficient than an RNG when
      * you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG is excellent but Lathe32RNG is faster on GWT (only there) 
+     * @param random a RandomnessSource that should have a good nextLong() method; LinnormRNG is excellent but Lathe32RNG is faster on GWT (only there) 
      * @param width the maximum width for the GreasedRegion
      * @param height the maximum height for the GreasedRegion
      */
@@ -815,7 +815,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * (without extra allocations) if this.width == width and this.height == height, and typically assigning
      * approximately half of the cells in this to "on" and the rest to off. A RandomnessSource can be slightly more
      * efficient than an RNG when you're making a lot of calls on it.
-     * @param random a RandomnessSource that should have a good nextLong() method; LightRNG is excellent but Lathe32RNG is faster on GWT (only there) 
+     * @param random a RandomnessSource that should have a good nextLong() method; LinnormRNG is excellent but Lathe32RNG is faster on GWT (only there) 
      * @param width the width of the desired GreasedRegion
      * @param height the height of the desired GreasedRegion
      * @return this for chaining
@@ -910,8 +910,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * the number of calls this makes). As such, this sacrifices the precision of the fraction to obtain significantly
      * better speed than generating one random number per cell, although the precision is probably good enough (fraction
      * is effectively rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). The parameter
-     * {@code random} can be an object like a {@link LightRNG}, an {@link RNG} backed by a well-distributed
-     * RandomnessSource like its default, LightRNG, a {@link GWTRNG} (especially if you target GWT, where it will
+     * {@code random} can be an object like a {@link LinnormRNG}, an {@link RNG} backed by a well-distributed
+     * RandomnessSource like its default, LinnormRNG, a {@link GWTRNG} (especially if you target GWT, where it will
      * perform much better than most alternatives), or any of various other RandomnessSource implementations that
      * distribute bits well for {@link RandomnessSource#nextLong()}, but should not be intentionally-biased RNGs like
      * {@link DharmaRNG} or {@link EditRNG}, nor double-based QRNGs like {@link VanDerCorputQRNG} or {@link SobolQRNG}.
@@ -945,8 +945,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * makes). As such, this sacrifices the precision of the fraction to obtain significantly better speed than
      * generating one random number per cell, although the precision is probably good enough (fraction is effectively
      * rounded down to the nearest multiple of 0.015625, and clamped between 0.0 and 1.0). The parameter {@code random}
-     * can be an object like a {@link LightRNG}, an {@link RNG} backed by a well-distributed RandomnessSource like its
-     * default, LightRNG, a {@link GWTRNG} (especially if you target GWT, where it will perform much better than most
+     * can be an object like a {@link LinnormRNG}, an {@link RNG} backed by a well-distributed RandomnessSource like its
+     * default, LinnormRNG, a {@link GWTRNG} (especially if you target GWT, where it will perform much better than most
      * alternatives), or any of various other RandomnessSource implementations that distribute bits well for
      * {@link RandomnessSource#nextLong()}, but should not be intentionally-biased RNGs like {@link DharmaRNG} or
      * {@link EditRNG}, nor double-based QRNGs like {@link VanDerCorputQRNG} or {@link SobolQRNG}.
@@ -2800,13 +2800,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * distributed pseudo-randomly, while a parameter of 47 will have on average 47 bits set. This can be useful for
      * certain code that uses bits to represent data but needs a different ratio of set bits to unset bits than 1:1.
      * <br>
-     * The parameter {@code random} can be an object like a {@link LightRNG}, an {@link RNG} backed by a
-     * well-distributed RandomnessSource like its default, LightRNG, a {@link GWTRNG} (especially if you target GWT,
+     * The parameter {@code random} can be an object like a {@link LinnormRNG}, an {@link RNG} backed by a
+     * well-distributed RandomnessSource like its default, LinnormRNG, a {@link GWTRNG} (especially if you target GWT,
      * where it will perform much better than most alternatives), or any of various other RandomnessSource
      * implementations that distribute bits well for {@link RandomnessSource#nextLong()}, but should not be
      * intentionally-biased RNGs like {@link DharmaRNG} or {@link EditRNG}, nor double-based QRNGs like
      * {@link VanDerCorputQRNG} or {@link SobolQRNG}.
-     * @param random used to determine random factors; likely to be an {@link RNG}, {@link LightRNG}, or {@link GWTRNG}
+     * @param random used to determine random factors; likely to be an {@link RNG}, {@link LinnormRNG}, or {@link GWTRNG}
      * @param bitCount an int, only considered if between 0 and 64, that is the average number of bits to set
      * @return a 64-bit long that, on average, should have bitCount bits set to 1, potentially anywhere in the long
      */
@@ -6024,12 +6024,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * on. Preservation must be between 0.0 and 1.0 for this to have the intended behavior; 1.0 or higher will keep all
      * points without change (returning this GreasedRegion), while anything less than 0.015625 (1.0/64) will empty this
      * GreasedRegion (using {@link #empty()}) and then return it. The parameter {@code random} can be an object like a
-     * {@link LightRNG}, an {@link RNG} backed by a well-distributed RandomnessSource like its default, LightRNG, a
+     * {@link LinnormRNG}, an {@link RNG} backed by a well-distributed RandomnessSource like its default, LinnormRNG, a
      * {@link GWTRNG} (especially if you target GWT, where it will perform much better than most alternatives), or any
      * of various other RandomnessSource implementations that distribute bits well for
      * {@link RandomnessSource#nextLong()}, but should not be intentionally-biased RNGs like {@link DharmaRNG} or 
      * {@link EditRNG}, nor double-based QRNGs like {@link VanDerCorputQRNG} or {@link SobolQRNG}.
-     * @param random used to determine random factors; likely to be an {@link RNG}, {@link LightRNG}, or {@link GWTRNG}
+     * @param random used to determine random factors; likely to be an {@link RNG}, {@link LinnormRNG}, or {@link GWTRNG}
      * @param preservation the rough fraction of points to keep, between 0.0 and 1.0
      * @return a randomly modified change to this GreasedRegion
      */

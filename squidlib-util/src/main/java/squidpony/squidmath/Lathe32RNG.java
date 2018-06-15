@@ -14,22 +14,25 @@ import java.io.Serializable;
 /**
  * A modification of Blackman and Vigna's xoroshiro128+ generator using two 32-bit ints of state instead of two 64-bit
  * longs, as well as modifying the output with two additional operations on the existing state; this is both the fastest
- * generator on GWT I have found without statistical failures, and a StatefulRandomness. Lathe32RNG passes the full 32TB
- * battery of PractRand's statistical tests, and does so with 3 "unusual" anomalies, no more-serious anomalies, and no
- * failures. It isn't especially likely that this can pass much more than 32TB of testing (judging by related attempts,
- * 128TB would be a likely failure point), but because multi-threaded code is either impossible or impractical on GWT,
- * actually using that many numbers would take a very long time (generating them would take about 3 nanoseconds per int,
- * but it would take more than 2 to the 43 ints to start to approach detectable failures, and detecting the failures in
- * anything but the worst case would take more than a day). In statistical testing, xoroshiro always fails some binary
- * matrix rank tests, but smaller-state versions fail other tests as well. The changes Lathe makes apply only to the
- * output of xoroshiro, not its well-tested state transition, and these changes eliminate all statistical failures on
- * 32TB of tested data, avoiding the failures the small-state variant of xoroshiro suffers on BinaryRank, BCFN, DC6, and
- * FPF. It avoids multiplication (except in {@link #setSeed(int)}, which needs to use a different algorithm to spread a
- * seed out across twice as much state), like xoroshiro and much of the xorshift family of generators, and any
- * arithmetic it performs is safe for GWT. Lathe makes an extremely small set of changes to xoroshiro, running xoroshiro
- * as normal (holding on to the result as well as the initial stateA, called s[0] in the original xoroshiro code) and
- * then bitwise-rotating the result and adding the (now previous) stateA. Although no bits of xoroshiro are truly free
- * of artifacts, some are harder to find issues with
+ * generator on GWT I have found without statistical failures, and a StatefulRandomness. This algorithm is sometimes
+ * called xoroshiro64++ and is mentioned in <a href="http://vigna.di.unimi.it/ftp/papers/ScrambledLinear.pdf">this paper
+ * by Blackman and Vigna</a> (in section 10.7; the 'r' constant is 10, which seems to usually do well on those same
+ * authors' HWD test). Lathe32RNG passes the full 32TB battery of PractRand's statistical tests, and does so with 3
+ * "unusual" anomalies, no more-serious anomalies, and no failures. It isn't especially likely that this can pass much
+ * more than 32TB of testing (judging by related attempts, 128TB would be a likely failure point), but because
+ * multi-threaded code is either impossible or impractical on GWT, actually using that many numbers would take a very
+ * long time (generating them would take about 3 nanoseconds per int, but it would take more than 2 to the 43 ints to
+ * start to approach detectable failures, and detecting the failures in anything but the worst case would take more than
+ * a day). In statistical testing, xoroshiro with the '+' scrambler always fails some binary matrix rank tests, but
+ * smaller-state versions fail other tests as well. The changes Lathe makes apply only to the output of xoroshiro64+ (in
+ * Vigna's and Blackman's terms, they are a scrambler), not its well-tested state transition, and these changes
+ * eliminate all statistical failures on 32TB of tested data, avoiding the failures the small-state variant of xoroshiro
+ * suffers on BinaryRank, BCFN, DC6, and FPF. It avoids multiplication (except in {@link #setSeed(int)}, which needs to
+ * use a different algorithm to spread a seed out across twice as much state), like xoroshiro and much of the xorshift
+ * family of generators, and any arithmetic it performs is safe for GWT. Lathe makes an extremely small set of changes
+ * to xoroshiro64+, running xoroshiro64+ as normal (holding on to the result as well as the initial stateA, called s[0]
+ * in the original xoroshiro code) and then bitwise-rotating the result and adding the (now previous) stateA. Although
+ * no bits of xoroshiro are truly free of artifacts, some are harder to find issues with
  * (see <a href="http://www.pcg-random.org/posts/xoroshiro-fails-truncated.html">this article by PCG-Random's author</a>
  * for more detail). It is unclear if the changes made here would improve the larger-state version, but they probably
  * would help to some extent with at least the binary rank failures. The period is identical to xoroshiro with two
@@ -42,12 +45,13 @@ import java.io.Serializable;
  * could be better or worse than xoroshiro128+).
  * <br>
  * The name comes from a tool that rotates very quickly to remove undesirable parts of an object, akin to how this
- * generator adds an extra bitwise rotation to xoroshiro's variant with 32-bit states to remove several types of
+ * generator adds an extra bitwise rotation to xoroshiro64+ to remove several types of
  * undesirable statistical failures from its test results.
  * <br>
  * <a href="http://xoroshiro.di.unimi.it/xoroshiro128plus.c">Original version here for xorshiro128+</a>; this version
  * uses <a href="https://groups.google.com/d/msg/prng/Ll-KDIbpO8k/bfHK4FlUCwAJ">different constants</a> by the same
- * author, Sebastiano Vigna.
+ * author, Sebastiano Vigna. It does not use <a href="http://xoshiro.di.unimi.it/xoroshiro64star.c">the constants used
+ * in other xoroshiro64 scrambled generators</a>, instead using similar-quality ones from the earlier constants link.
  * <br>
  * Written in 2016 by David Blackman and Sebastiano Vigna (vigna@acm.org)
  * Ported and modified in 2018 by Tommy Ettinger
@@ -207,7 +211,7 @@ public final class Lathe32RNG implements StatefulRandomness, Serializable {
      */
     public void setState(int stateA, int stateB)
     {
-        this.stateA = stateA == 0 && stateB == 0 ? 1 : stateA;
+        this.stateA = (stateA | stateB) == 0 ? 1 : stateA;
         this.stateB = stateB;
     }
 
