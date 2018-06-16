@@ -6,10 +6,7 @@ import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * This class provides methods for calculating Field of View in grids. Field of
@@ -194,19 +191,12 @@ public class FOV implements Serializable {
                 doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
                 break;
             case SHADOW:
-               	// hotfix for too large radius -> set to longest possible straight-line Manhattan distance instead
-                // does not cause problems with brightness falloff because shadowcasting is on/off
-
-                // this should be fixed now, sorta. the distance is checked in the method this calls, so it doesn't ever
-                // run through more than (width + height) iterations of the radius-related loop (which seemed to be the
-                // only problem, running through billions of iterations when Integer/MAX_VALUE is given as a radius).
                 for (Direction d : Direction.DIAGONALS) {
                     shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
                     shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
                 }
                 break;
         }
-
         return light;
     }
 
@@ -339,8 +329,8 @@ public class FOV implements Serializable {
      * @param radiusTechnique provides a means to calculate the radius as desired
      * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}
      */
-    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique) {
-
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique)
+    {
         radius = Math.max(1, radius);
         double decay = 1.0 / radius;
         ArrayTools.fill(light, 0);
@@ -358,6 +348,48 @@ public class FOV implements Serializable {
 
         shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        return light;
+    }
+    /**
+     * Calculates which cells have line of sight from the given x, y coordinates.
+     * Assigns to, and returns, a light map where the values
+     * are always either 0.0 for "not in line of sight" or 1.0 for "in line of
+     * sight," which doesn't mean a cell is actually visible if there's no light
+     * in that cell. Always uses shadowcasting FOV, which allows this method to
+     * be static since it doesn't need to keep any state around, and can reuse the
+     * state the user gives it via the {@code light} parameter. The values in light
+     * are always cleared before this is run, because prior state can make this give
+     * incorrect results.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are pretty much irrelevant because
+     * the distance doesn't matter, only the presence of a clear line, but this uses
+     * {@link Radius#SQUARE} if it matters.
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "no line"
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @return the computed light grid, which is the same 2D array as the value assigned to {@code light}
+     */
+    public static double[][] reuseLOS(double[][] resistanceMap, double[][] light, int startX, int startY)
+    {
+        double radius = light.length + light[0].length;
+        double decay = 1.0 / radius;
+        ArrayTools.fill(light, 0);
+        light[startX][startY] = 1;//make the starting space full power
+        
+        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        
+        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        
+        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        
+        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+        
         return light;
     }
     /**
@@ -534,8 +566,7 @@ public class FOV implements Serializable {
 	}
 
     private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy) {
-    	/* Not using Deque's interface, it isn't GWT compatible */
-        final LinkedList<Coord> dq = new LinkedList<>();
+        final ArrayDeque<Coord> dq = new ArrayDeque<>();
         int width = lightMap.length;
         int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
@@ -567,8 +598,7 @@ public class FOV implements Serializable {
 
 
     private static void doRippleFOV(double[][] lightMap, int ripple, int x, int y, int startx, int starty, double decay, double radius, double[][] map, boolean[][] indirect, Radius radiusStrategy, double angle, double span) {
-    	/* Not using Deque's interface, it isn't GWT compatible */
-        final LinkedList<Coord> dq = new LinkedList<>();
+        final ArrayDeque<Coord> dq = new ArrayDeque<>();
         int width = lightMap.length;
         int height = lightMap[0].length;
         dq.offer(Coord.get(x, y));
@@ -665,8 +695,14 @@ public class FOV implements Serializable {
     }
 
     private static double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
-                                  double radius, int startx, int starty, double decay, double[][] lightMap,
-                                  double[][] map, Radius radiusStrategy) {
+                                         double radius, int startx, int starty, double decay, double[][] lightMap,
+                                         double[][] map, Radius radiusStrategy) {
+	    return shadowCast(row, start, end, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, false);
+    }
+
+    private static double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                         double radius, int startx, int starty, double decay, double[][] lightMap,
+                                         double[][] map, Radius radiusStrategy, boolean binary) {
         double newStart = 0;
         if (start < end) {
             return lightMap;
@@ -691,8 +727,12 @@ public class FOV implements Serializable {
                 double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
                 //check if it's within the lightable area and light if needed
                 if (deltaRadius <= radius) {
-                    double bright = 1 - decay * deltaRadius;
-                    lightMap[currentX][currentY] = bright;
+                    if (binary)
+                        lightMap[currentX][currentY] = 1.0;
+                    else {
+                        double bright = 1 - decay * deltaRadius;
+                        lightMap[currentX][currentY] = bright;
+                    }
                 }
 
                 if (blocked) { //previous cell was a blocking one
@@ -785,7 +825,7 @@ public class FOV implements Serializable {
     }
     /**
      * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
-     * Clamps the highest value for any single position at 1.0.
+     * Clamps the highest value for any single position at 1.0. Allocates a new 2D double array and returns it.
      * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()
      * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match
      */
@@ -809,10 +849,34 @@ public class FOV implements Serializable {
         }
         return map;
     }
+    /**
+     * Adds multiple FOV maps to basis cell-by-cell, modifying basis; does not check line-of-sight between FOV maps.
+     * Clamps the highest value for any single position at 1.0. Returns basis without allocating new objects.
+     * @param basis a 2D double array that will be modified by adding values in maps to it and clamping to 1.0 or less 
+     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()
+     * @return basis, with all elements in all of maps added to the corresponding cells and clamped
+     */
+    public static double[][] addFOVsInto(double[][] basis, double[][]... maps) {
+        if (maps == null || maps.length == 0)
+            return basis;
+        for (int i = 1; i < maps.length; i++) {
+            for (int x = 0; x < basis.length && x < maps[i].length; x++) {
+                for (int y = 0; y < basis[x].length && y < maps[i][x].length; y++) {
+                    basis[x][y] += maps[i][x][y];
+                }
+            }
+        }
+        for (int x = 0; x < basis.length; x++) {
+            for (int y = 0; y < basis[x].length; y++) {
+                if (basis[x][y] > 1.0) basis[x][y] = 1.0;
+            }
+        }
+        return basis;
+    }
 
     /**
      * Adds multiple FOV maps together in the simplest way possible; does not check line-of-sight between FOV maps.
-     * Clamps the highest value for any single position at 1.0.
+     * Clamps the highest value for any single position at 1.0. Allocates a new 2D double array and returns it.
      * @param maps an Iterable of 2D double arrays (most collections implement Iterable),
      *             each usually returned by calculateFOV()
      * @return the sum of all the 2D double arrays passed, using the dimensions of the first if they don't all match
@@ -845,9 +909,9 @@ public class FOV implements Serializable {
     /**
      * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
      * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
-     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.
-     * Clamps the highest value for any single position at 1.0.
-     * @param losMap an LOS map such as one generated by calculateLOSMap()
+     * is calculated by {@link #reuseLOS(double[][], double[][], int, int)}, using the same resistance map used to
+     * calculate the FOV maps. Clamps the highest value for any single position at 1.0.
+     * @param losMap an LOS map such as one generated by {@link #reuseLOS(double[][], double[][], int, int)}
      * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()
      * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap
      */
@@ -855,18 +919,60 @@ public class FOV implements Serializable {
     {
         if(losMap == null || losMap.length == 0)
             return addFOVs(maps);
-        double[][] map = new double[losMap.length][losMap[0].length];
+        final int width = losMap.length, height = losMap[0].length;
+        double[][] map = new double[width][height];
         if(maps == null || maps.length == 0)
             return map;
         for(int i = 0; i < maps.length; i++)
         {
-            for (int x = 0; x < losMap.length && x < map.length && x < maps[i].length; x++) {
-                for (int y = 0; y < losMap[x].length && y < map[x].length && y < maps[i][x].length; y++) {
+            for (int x = 0; x < width && x < maps[i].length; x++) {
+                for (int y = 0; y < height && y < maps[i][x].length; y++) {
                     if(losMap[x][y] > 0.0001) {
                         map[x][y] += maps[i][x][y];
-                        if(map[x][y] > 1.0) map[x][y] = 1.0;
                     }
                 }
+            }
+        }
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(map[x][y] > 1.0) map[x][y] = 1.0;
+            }
+        }
+
+        return map;
+    }
+    /**
+     * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
+     * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
+     * is calculated by {@link #reuseLOS(double[][], double[][], int, int)}, using the same resistance map used to
+     * calculate the FOV maps. Clamps the highest value for any single position at 1.0.
+     * @param losMap an LOS map such as one generated by {@link #reuseLOS(double[][], double[][], int, int)}
+     * @param basis an existing 2D double array that should have matching width and height to losMap; will be modified
+     * @param maps an array or vararg of 2D double arrays, each usually returned by calculateFOV()
+     * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap
+     */
+    public static double[][] mixVisibleFOVsInto(double[][] losMap, double[][] basis, double[][]... maps)
+
+    {
+        if(losMap == null || losMap.length <= 0 || losMap[0].length <= 0)
+            return addFOVsInto(basis, maps);
+        final int width = losMap.length, height = losMap[0].length;
+        double[][] map = new double[width][height];
+        if(maps == null || maps.length == 0)
+            return map;
+        for(int i = 0; i < maps.length; i++)
+        {
+            for (int x = 0; x < width && x < maps[i].length; x++) {
+                for (int y = 0; y < height && y < maps[i][x].length; y++) {
+                    if(losMap[x][y] > 0.0001) {
+                        map[x][y] += maps[i][x][y];
+                    }
+                }
+            }
+        }
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if(map[x][y] > 1.0) map[x][y] = 1.0;
             }
         }
         return map;
@@ -875,9 +981,9 @@ public class FOV implements Serializable {
     /**
      * Adds together multiple FOV maps, but only adds to a position if it is visible in the given LOS map. Useful if
      * you want distant lighting to be visible only if the player has line-of-sight to a lit cell. Typically the LOS map
-     * is calculated by calculateLOSMap(), using the same resistance map used to calculate the FOV maps.
-     * Clamps the highest value for any single position at 1.0.
-     * @param losMap an LOS map such as one generated by calculateLOSMap()
+     * is calculated by {@link #reuseLOS(double[][], double[][], int, int)}, using the same resistance map used to
+     * calculate the FOV maps. Clamps the highest value for any single position at 1.0.
+     * @param losMap an LOS map such as one generated by {@link #reuseLOS(double[][], double[][], int, int)}
      * @param maps an Iterable of 2D double arrays, each usually returned by calculateFOV()
      * @return the sum of all the 2D double arrays in maps where a cell was visible in losMap
      */
@@ -885,21 +991,16 @@ public class FOV implements Serializable {
     {
         if(losMap == null || losMap.length == 0)
             return addFOVs(maps);
-        double[][] map = new double[losMap.length][losMap[0].length], t;
+        final int width = losMap.length, height = losMap[0].length;
+        double[][] map = new double[width][height];
         if(maps == null)
             return map;
-        Iterator<double[][]> it = maps.iterator();
-        if(!it.hasNext())
-            return map;
-
-        while (it.hasNext())
-        {
-            t = it.next();
-            for (int x = 0; x < losMap.length && x < map.length && x < t.length; x++) {
-                for (int y = 0; y < losMap[x].length && y < map[x].length && y < t[x].length; y++) {
+        for (double[][] map1 : maps) {
+            for (int x = 0; x < width && x < map1.length; x++) {
+                for (int y = 0; y < height && y < map1[x].length; y++) {
                     if (losMap[x][y] > 0.0001) {
-                        map[x][y] += t[x][y];
-                        if(map[x][y] > 1.0) map[x][y] = 1.0;
+                        map[x][y] += map1[x][y];
+                        if (map[x][y] > 1.0) map[x][y] = 1.0;
                     }
                 }
             }
@@ -919,8 +1020,38 @@ public class FOV implements Serializable {
      */
     public double[][] calculateLOSMap(double[][] resistanceMap, int startX, int startY)
     {
-        if(resistanceMap == null || resistanceMap.length == 0)
+        if(resistanceMap == null || resistanceMap.length <= 0  || resistanceMap[0].length <= 0)
             return new double[0][0];
-        return calculateFOV(resistanceMap, startX, startY, resistanceMap.length + resistanceMap[0].length, Radius.SQUARE);
+
+        int width = resistanceMap.length;
+        int height = resistanceMap[0].length;
+        double rad = width + height;
+        double decay = 1.0 / rad;
+
+        initializeLightMap(width, height);
+        light[startX][startY] = 1;//make the starting space full power
+
+        switch (type) {
+            case RIPPLE:
+            case RIPPLE_LOOSE:
+            case RIPPLE_TIGHT:
+            case RIPPLE_VERY_LOOSE:
+                initializeNearLight(width, height);
+                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, Radius.SQUARE);
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        if(light[x][y] > 0.0001)
+                            light[x][y] = 1.0;
+                    }
+                }
+                break;
+            case SHADOW:
+                for (Direction d : Direction.DIAGONALS) {
+                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true);
+                }
+                break;
+        }
+        return light;
     }
 }

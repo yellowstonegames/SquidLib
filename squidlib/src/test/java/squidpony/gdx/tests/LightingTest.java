@@ -13,9 +13,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
-import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
-import squidpony.squidgrid.mapping.*;
+import squidpony.squidgrid.mapping.DungeonUtility;
+import squidpony.squidgrid.mapping.FlowingCaveGenerator;
+import squidpony.squidgrid.mapping.SectionDungeonGenerator;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
@@ -78,6 +79,8 @@ public class LightingTest extends ApplicationAdapter{
         map = org.generate();
         map = gen.generate(map, org.getEnvironment());
         displayedMap = DungeonUtility.hashesToLines(map, true);
+        SColor.LIMITED_PALETTE[0] = SColor.DB_GRAPHITE;
+        SColor.LIMITED_PALETTE[2] = SColor.DB_CAPPUCCINO;
         fgColors = MapUtility.generateDefaultColorsFloat(map);
         bgColors = MapUtility.generateDefaultBGColorsFloat(map);
         resMap = DungeonUtility.generateResistances(map);
@@ -89,9 +92,9 @@ public class LightingTest extends ApplicationAdapter{
         Coord pt;
         for(int c = 0; c < points.length; c++)
         {
-            offsets[c] = rng.next(9);
+            offsets[c] = (Integer.reverse(c + 1) >>> 23); // similar to VanDerCorputQRNG.determine2()
             pt = points[c];
-            FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 7, Radius.CIRCLE);
+            FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 8.5);
             SColor.colorLightingInto(tempColorful, tempLit, colors.get((colorIndex + offsets[c]) & 511).toFloatBits());
             SColor.mixColoredLighting(colorful, tempColorful);
             markers[c] = layers.directionMarker(pt.x, pt.y, mColors, 4f, 2, false);
@@ -134,7 +137,7 @@ public class LightingTest extends ApplicationAdapter{
                         break;
                     }
                 }
-                FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 7, Radius.CIRCLE);
+                FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 8.5);
                 SColor.colorLightingInto(tempColorful, tempLit, colors.get((colorIndex + offsets[i]) & 511).toFloatBits());
                 SColor.mixColoredLighting(colorful, tempColorful);
             }
@@ -143,7 +146,7 @@ public class LightingTest extends ApplicationAdapter{
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
                 layers.put(x, y, displayedMap[x][y], fgColors[x][y],
-                        bgColors[x][y], Math.max(0.2f, colorful[0][x][y]), colorful[1][x][y]);
+                        bgColors[x][y], colorful[0][x][y], colorful[1][x][y]);
             }
         }
         stage.getViewport().apply(false);

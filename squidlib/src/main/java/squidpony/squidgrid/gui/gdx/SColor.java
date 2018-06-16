@@ -13128,8 +13128,10 @@ public class SColor extends Color implements Serializable {
      * Adds two 3D arrays produced by {@link #colorLighting(double[][], float)} or this method and modifies the basis
      * parameter so it contains the combined brightnesses and colors of basis and other, in a pair of 2D arrays.
      *
-     * @param basis a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)}; will be modified!
-     * @param other a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)}; will not be modified
+     * @param basis a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)};
+     *              will be modified to contain its existing contents mixed with other's contents 
+     * @param other a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)};
+     *              will not be modified
      * @return basis, after modification; it can be passed to this method as basis again
      */
     public static float[][][] mixColoredLighting(float[][][] basis, float[][][] other) {
