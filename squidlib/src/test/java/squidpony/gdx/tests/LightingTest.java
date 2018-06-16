@@ -16,6 +16,7 @@ import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.*;
+import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
@@ -23,17 +24,18 @@ import squidpony.squidmath.StatefulRNG;
 import java.util.ArrayList;
 
 /**
+ * Tests colored lighting using various methods in {@link FOV}, {@link SColor}, and {@link MapUtility}, along with their
+ * usage in {@link SquidLayers}.
+ * <br>
  * Created by Tommy Ettinger on 4/6/2016.
  */
-public class SquidLayersTest extends ApplicationAdapter{
-    public static final int gridWidth = 50, gridHeight = 25, cellWidth = 11, cellHeight = 20;
+public class LightingTest extends ApplicationAdapter{
+    public static final int gridWidth = 80, gridHeight = 40, cellWidth = 11, cellHeight = 20;
 
     private SquidLayers layers;
     private char[][] map, displayedMap;
     private int[][] lightness;
-    Color[][] fgColors, bgColors;
-    private FOV fov;
-    private TextCellFactory tcf;
+    private float[][] fgColors, bgColors;
     private StatefulRNG rng;
     private Stage stage;
     private SpriteBatch batch;
@@ -44,8 +46,9 @@ public class SquidLayersTest extends ApplicationAdapter{
     private AnimatedEntity[] markers;
     private double[][] resMap;
     private float ctr = 0;
-    private final double[][] lit = new double[gridWidth][gridHeight], tempLit = new double[gridWidth][gridHeight];
-    private final float[][][] colorful = SColor.blankColoredLighting(gridWidth, gridHeight), tempColorful = new float[2][gridWidth][gridHeight];
+    private final double[][] tempLit = new double[gridWidth][gridHeight];
+    private final float[][][] colorful = SColor.blankColoredLighting(gridWidth, gridHeight),
+            tempColorful = new float[2][gridWidth][gridHeight];
     @Override
     public void create() {
         super.create();
@@ -53,33 +56,33 @@ public class SquidLayersTest extends ApplicationAdapter{
 
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 //DefaultResources.getStretchableCodeFont());
-                DefaultResources.getStretchableLeanFont());
+                DefaultResources.getCrispLeanFont());
         //new TextCellFactory().fontDistanceField("SourceCodePro-Medium-distance.fnt", "SourceCodePro-Medium-distance.png"));
                 //DefaultResources.getStretchableFont());
         layers.setTextSize(cellWidth + 1, cellHeight + 2);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
         colors = DefaultResources.getSCC().rainbow(0.85f, 1.0f, 512);
-        mColors = DefaultResources.getSCC().loopingGradient(SColor.SKY_BLUE, SColor.MAGIC_MINT, 523);
+        mColors = DefaultResources.getSCC().loopingGradient(SColor.BLACK, SColor.WHITE, 523);
         //colors.addAll(DefaultResources.getSCC().zigzagGradient(Color.MAGENTA, Color.RED, 200));
-        layers.setLightingColor(colors.get(colorIndex));
-        fov = new FOV(FOV.SHADOW);
+        layers.setLightingColor(SColor.WHITE);
         //PacMazeGenerator maze = new PacMazeGenerator(gridWidth, gridHeight, rng);
         //OrganicMapGenerator org = new OrganicMapGenerator(gridWidth, gridHeight, rng);
-        SerpentMapGenerator org = new SerpentMapGenerator(gridWidth, gridHeight, rng, 0.1);
-        org.putBoxRoomCarvers(3);
-        org.putRoundRoomCarvers(1);
-        org.putCaveCarvers(1);
+//        SerpentMapGenerator org = new SerpentMapGenerator(gridWidth, gridHeight, rng, 0.1);
+//        org.putBoxRoomCarvers(3);
+//        org.putRoundRoomCarvers(1);
+//        org.putCaveCarvers(1);
         SectionDungeonGenerator gen = new SectionDungeonGenerator(gridWidth, gridHeight, rng);
-        gen.addMaze(10);
-        gen.addBoulders(0, 8);
+//        gen.addMaze(10);
+//        gen.addBoulders(0, 8);
+        FlowingCaveGenerator org = new FlowingCaveGenerator(gridWidth, gridHeight, TilesetType.ROUND_ROOMS_DIAGONAL_CORRIDORS, rng);
         map = org.generate();
         map = gen.generate(map, org.getEnvironment());
         displayedMap = DungeonUtility.hashesToLines(map, true);
-        fgColors = MapUtility.generateDefaultColors(map);
-        bgColors = MapUtility.generateDefaultBGColors(map);
+        fgColors = MapUtility.generateDefaultColorsFloat(map);
+        bgColors = MapUtility.generateDefaultBGColorsFloat(map);
         resMap = DungeonUtility.generateResistances(map);
         GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
-        points = packed.randomPortion(rng, 25);
+        points = packed.randomScatter(rng, 7, 32).asCoords();
         offsets = new int[points.length];
         markers = new AnimatedEntity[points.length];
         lightness = new int[gridWidth][gridHeight];
@@ -139,8 +142,8 @@ public class SquidLayersTest extends ApplicationAdapter{
         //layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
         for (int x = 0; x < gridWidth; x++) {
             for (int y = 0; y < gridHeight; y++) {
-                layers.put(x, y, displayedMap[x][y], fgColors[x][y].toFloatBits(),
-                        bgColors[x][y].toFloatBits(), Math.max(0.2f, colorful[0][x][y]), colorful[1][x][y]);
+                layers.put(x, y, displayedMap[x][y], fgColors[x][y],
+                        bgColors[x][y], Math.max(0.2f, colorful[0][x][y]), colorful[1][x][y]);
             }
         }
         stage.getViewport().apply(false);
@@ -156,13 +159,13 @@ public class SquidLayersTest extends ApplicationAdapter{
 
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Test: SquidLayers";
+        config.title = "SquidLib Test: Lighting";
         config.width = gridWidth * cellWidth;
         config.height = gridHeight * cellHeight;
         config.foregroundFPS = 0;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
-        new LwjglApplication(new SquidLayersTest(), config);
+        new LwjglApplication(new LightingTest(), config);
     }
 }

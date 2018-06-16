@@ -4,6 +4,7 @@ import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.CellularAutomaton;
 import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
 
 import java.util.ArrayList;
@@ -95,7 +96,7 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
     public final int width;
     public final int height;
     public TilesetType type;
-    public RNG rng;
+    public IRNG rng;
     public final int[][] environment;
     private boolean remakeEnvironment = true;
     protected CellularAutomaton ca;
@@ -130,7 +131,7 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
      * @param type a TilesetType enum value; {@link TilesetType#DEFAULT_DUNGEON} is used if null or unspecified
      * @param rng a random number generator to use when generating the caves; if null this will use a default RNG
      */
-    public FlowingCaveGenerator(int width, int height, TilesetType type, RNG rng) {
+    public FlowingCaveGenerator(int width, int height, TilesetType type, IRNG rng) {
         this.width = Math.max(3, width);
         this.height = Math.max(3, height);
         this.type = type == null ? TilesetType.DEFAULT_DUNGEON : type;
@@ -141,8 +142,8 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
     }
 
     /**
-     * Generates a dungeon or other map as a 2D char array. Any implementation may allow its own configuration and
-     * customization of how dungeons are generated, but each must provide this as a sane default. Thus uses the
+     * Generates a flowing cave dungeon withthe same {@link TilesetType} this was made with, or
+     * {@link TilesetType#DEFAULT_DUNGEON} if none was specified. This uses the
      * convention of '#' representing a wall and '.' representing a bare floor.
      *
      * @return a 2D char array representing a cave system with '#' for walls and '.' for floors
