@@ -59,7 +59,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private int mode = 0, maxModes = 4;
+    private int mode = 3, maxModes = 4;
     private WorldMapGenerator.SpaceViewMap world;
     //private WorldMapGenerator.MimicMap world;
     //private WorldMapGenerator.EllipticalMap world;
@@ -695,18 +695,18 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                             a));
                 }
                 else if(hc == 4)
-                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(icy ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_DARK_COLOR_TABLE[36], BIOME_COLOR_TABLE[41],
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(icy ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_DARK_COLOR_TABLE[34], BIOME_COLOR_TABLE[41],
                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
                             SColor.lerpFloatColors(icy ? ice : SColor.lerpFloatColors(rocky, desertAlt,
                                     (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
-                                    icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[35],
+                                    icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[28],
                                             ((float)heat)),
                                     (extreme((float) (moisture)))),
                             (float) ((elevation - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
                 else
                     Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(icy ? ice : SColor.lerpFloatColors(rocky, desertAlt,
                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))),
-                            icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[35],
+                            icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[28],
                                     ((float)heat)),
                             (extreme((float) (moisture)))));
                 pm.drawPixel(x, y, quantize(tempColor));
@@ -721,7 +721,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public int quantize(Color color)
     {
         // Full 8-bit RGBA channels. No limits on what colors can be displayed.
-        if((mode & 1) == 0) 
+        //if((mode & 1) == 0) 
             return Color.rgba8888(color);
 
         // Limits red, green, and blue channels to only use 5 bits (32 values) instead of 8 (256 values).
@@ -732,7 +732,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         // not some off-white value, but other than black (0x000000FF), grayscale values have non-zero saturation.
         // Could be made into a palette, and images that use this can be saved as GIF or in PNG-8 indexed mode.
         //return ((0xFF000000 & (int)(color.r*6) * 0x2AAAAAAA) | (0xFF0000 & (int)(color.g*7) * 0x249249) | (0xFF00 & (int)(color.b*6) * 0x2AAA) | 255) & -(int)(color.a + 0.5f);
-        return SColor.quantize253I(color);
+        //return SColor.quantize253I(color);
         //return (redLUT[(int)(color.r*31.999f)] | greenLUT[(int)(color.g*31.999f)] | blueLUT[(int)(color.b*31.999f)] | 255) & -(int)(color.a + 0.5f);
     }
     

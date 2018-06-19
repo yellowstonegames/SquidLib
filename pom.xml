@@ -66,7 +66,7 @@
         <!-- As in build.gradle-->
         <gdx.version>1.9.8</gdx.version>
         <junit.version>4.11</junit.version>
-        <regexodus.version>0.1.9</regexodus.version>
+        <regexodus.version>0.1.10</regexodus.version>
     </properties>
 
     <issueManagement>

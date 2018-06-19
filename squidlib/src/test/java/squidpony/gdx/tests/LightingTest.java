@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
-import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.gui.gdx.*;
@@ -35,7 +34,6 @@ public class LightingTest extends ApplicationAdapter{
 
     private SquidLayers layers;
     private char[][] map, displayedMap;
-    private int[][] lightness;
     private float[][] fgColors, bgColors;
     private StatefulRNG rng;
     private Stage stage;
@@ -88,7 +86,6 @@ public class LightingTest extends ApplicationAdapter{
         points = packed.randomScatter(rng, 7, 32).asCoords();
         offsets = new int[points.length];
         markers = new AnimatedEntity[points.length];
-        lightness = new int[gridWidth][gridHeight];
         Coord pt;
         for(int c = 0; c < points.length; c++)
         {
@@ -121,7 +118,6 @@ public class LightingTest extends ApplicationAdapter{
         if(ctr > 0.6) {
             ctr -= 0.6;
             SColor.eraseColoredLighting(colorful);
-            ArrayTools.fill(lightness, 0);
             Direction[] dirs = new Direction[4];
             Coord alter;
             for (int i = 0; i < points.length; i++) {

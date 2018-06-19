@@ -76,14 +76,18 @@ public abstract class AbstractRNG implements IRNG {
      * @param bound the outer exclusive bound; should be positive, otherwise this always returns 0L
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
-    public long nextLong(final long bound) {
-        long rtop = nextLong();
-        if(bound <= 0)
-            return 0;
-        final long rlow = rtop & 0xFFFFFFFFL;
-        rtop >>= 32;
-        final long low = bound & 0xFFFFFFFFL, top = bound >> 32, flip = (rlow ^ rtop) >> 63;
-        return (((rtop * low) >> 32) + ((rlow * top) >> 32) + (rtop * top) ^ flip) - flip;
+    public long nextLong(long bound) {
+        long rand = nextLong();
+        if (bound <= 0) return 0;
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long boundLow = bound & 0xFFFFFFFFL;
+        rand >>>= 32;
+        bound >>>= 32;
+        final long z = (randLow * boundLow >>> 32);
+        long t = rand * boundLow + z;
+        final long tLow = t & 0xFFFFFFFFL;
+        t >>>= 32;
+        return rand * bound + t + (tLow + randLow * bound >> 32);
     }
 
     /**
