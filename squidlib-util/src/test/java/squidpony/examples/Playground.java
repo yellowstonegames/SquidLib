@@ -128,18 +128,68 @@ public class Playground {
         return res;
 
     }
-    private void go() {
-        double x, y, v;
-        final double PI2 = Math.PI * 2.0;
-        System.out.println("{");
-        for (int i = 1; i <= 256; i++) {
-            v = 0.61803398874989484820458683436563811772 * i + (i / (1.5 * 2.7182818284590452354));
-            //v = VanDerCorputQRNG.determine(5, i) * PI2;
-            x = Math.cos(v);
-            y = Math.sin(v);
-            System.out.println("{" + x + ", " + y + "},");
+    private long splatterBits(final LightRNG r, final int count)
+    {
+        long n = GreasedRegion.approximateBits(r, 12);
+        for (int i = 0; i < count; i++) {
+            n ^= 1L << (int)(r.nextFloat() * r.nextFloat() * 64);
         }
-        System.out.println("}");
+        return n << 3 | 0x4000000000000003L;
+    }
+    private void go() {
+        LightRNG r = new LightRNG();
+        System.out.printf("state: 0x%016XL\n\n", r.getState());
+        long l;
+//        System.out.printf("0x%016X, %d\n", l = GreasedRegion.randomInterleave(r) << 3 | 3L, Long.bitCount(l));
+        for (int b = 10; b < 18; b++) {
+            for (int i = 0; i < 5; i++) {
+                System.out.printf("0x%016X, %d\n", l = splatterBits(r, b), Long.bitCount(l));
+            }
+        }
+        long bits = 0x41C64E6BL, ib = ~bits & 0xFFFFFFFFL;
+        bits |= (bits << 16);
+        ib |= (ib << 16);
+        bits &= 0x0000FFFF0000FFFFL;
+        ib &= 0x0000FFFF0000FFFFL;
+        bits |= (bits << 8);
+        ib |= (ib << 8);
+        bits &= 0x00FF00FF00FF00FFL;
+        ib &= 0x00FF00FF00FF00FFL;
+        bits |= (bits << 4);
+        ib |= (ib << 4);
+        bits &= 0x0F0F0F0F0F0F0F0FL;
+        ib &= 0x0F0F0F0F0F0F0F0FL;
+        bits |= (bits << 2);
+        ib |= (ib << 2);
+        bits &= 0x3333333333333333L;
+        ib &= 0x3333333333333333L;
+        bits |= (bits << 1);
+        ib |= (ib << 1);
+        bits &= 0x5555555555555555L;
+        ib &= 0x5555555555555555L;
+        System.out.printf("\n0x%016X, %d\n", bits = (-8L & (bits | (ib << 1))) | 3L, Long.bitCount(bits));
+        bits &= 0x7FFFFFFFFFFFFFFBL;
+        for (int b = 20; b < 29; b++) {
+            for (int i = 0; i < 5; i++) {
+                System.out.printf("0x%016X, %d\n", l = (bits & GreasedRegion.approximateBits(r, b)) | 0x4000000000000003L, Long.bitCount(l));
+                
+            }
+        }
+
+        
+//        double x, y, v;
+//        final double PI2 = Math.PI * 2.0;
+//        System.out.println("{");
+//        for (int i = 1; i <= 256; i++) {
+//            v = 0.61803398874989484820458683436563811772 * i + (i / (1.5 * 2.7182818284590452354));
+//            //v = VanDerCorputQRNG.determine(5, i) * PI2;
+//            x = Math.cos(v);
+//            y = Math.sin(v);
+//            System.out.println("{" + x + ", " + y + "},");
+//        }
+//        System.out.println("}");
+
+
 //        double r, a, b;
 //        for (int s = 1; s < 100; s++) {
 //            final int leading = Integer.numberOfLeadingZeros(s);

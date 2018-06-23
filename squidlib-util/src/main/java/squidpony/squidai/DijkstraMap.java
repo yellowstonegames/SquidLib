@@ -66,18 +66,16 @@ public class DijkstraMap implements Serializable {
 
         public double heuristic(Direction target) {
             switch (this) {
-                case MANHATTAN:
-                case CHEBYSHEV:
-                    return 1.0;
-                default:
+                case EUCLIDEAN:
                     switch (target) {
                         case DOWN_LEFT:
                         case DOWN_RIGHT:
                         case UP_LEFT:
                         case UP_RIGHT:
                             return root2;
-                        default: return 1.0;
                     }
+                default: 
+                    return 1.0;
             }
         }
 
@@ -783,15 +781,15 @@ public class DijkstraMap implements Serializable {
         }
     }
 
-    protected void setFresh(final int x, final int y, double counter) {
-        if (!initialized || x < 0 || x >= width || y < 0 || y >= height || gradientMap[x][y] < counter)
+    private void setFresh(final int x, final int y, double counter) {
+        if (x < 0 || x >= width || y < 0 || y >= height || gradientMap[x][y] < counter)
             return;
         gradientMap[x][y] = counter;
         fresh.add(encode(x, y));
     }
 
-    protected void setFresh(final Coord pt, double counter) {
-        if (!initialized || !pt.isWithin(width, height) || gradientMap[pt.x][pt.y] < counter)
+    private void setFresh(final Coord pt, double counter) {
+        if (!pt.isWithin(width, height) || gradientMap[pt.x][pt.y] < counter)
             return;
         gradientMap[pt.x][pt.y] = counter;
         fresh.add(encode(pt));

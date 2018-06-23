@@ -152,21 +152,21 @@ public class PNG8 implements Disposable {
         Arrays.fill(paletteArray, 0);
         int i = 0, j, rl, gl, bl, rMin, rMax=0, gMin, gMax, bMin, bMax;
         for (int r = 0; r < 6; r++) {
-            rl = SColor.redPossibleLUT[r] & 0xFF;
+            rl = redPossibleLUT[r] & 0xFF;
             rMin=rMax;
-            for (j = rMin; j < 32 && (SColor.redLUT[j] & 0xFF) == rl; j++) { }
+            for (j = rMin; j < 32 && (redLUT[j] & 0xFF) == rl; j++) { }
             rMax=j;
             gMax = 0;
             for (int g = 0; g < 7; g++) {
-                gl = SColor.greenPossibleLUT[g] & 0xFF;
+                gl = greenPossibleLUT[g] & 0xFF;
                 gMin=gMax;
-                for (j = gMin; j < 32 && (SColor.greenLUT[j] >> 8 & 0xFF) == gl; j++) { }
+                for (j = gMin; j < 32 && (greenLUT[j] >> 8 & 0xFF) == gl; j++) { }
                 gMax=j;
                 bMax = 0;
                 for (int b = 0; b < 6; b++) {
-                    bl = SColor.bluePossibleLUT[b] & 0xFF;
+                    bl = bluePossibleLUT[b] & 0xFF;
                     bMin=bMax;
-                    for (j = bMin; j < 32 && (SColor.blueLUT[j] >> 16 & 0xFF) == bl; j++) { }
+                    for (j = bMin; j < 32 && (blueLUT[j] >> 16 & 0xFF) == bl; j++) { }
                     bMax=j;
                     paletteArray[++i] =
                             (rl << 24
@@ -300,6 +300,9 @@ public class PNG8 implements Disposable {
         }
     }
     public void buildComputedPalette(Pixmap pixmap) {
+        buildComputedPalette(pixmap, 1000);
+    }
+    public void buildComputedPalette(Pixmap pixmap, int threshold) {
         Arrays.fill(paletteArray, 0);
         int color;
         final ByteBuffer pixels = pixmap.getPixels();
@@ -329,7 +332,7 @@ public class PNG8 implements Disposable {
                         paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)] = (byte) idx++;
                     }
                 }
-                else
+                else // reduce color count
                 {
                     IntIntMap.Entries es = counts.entries();
                     SortedIntList<IntIntMap.Entry> sil = new SortedIntList<>();
@@ -343,14 +346,20 @@ public class PNG8 implements Disposable {
                     Arrays.fill(paletteMapping, (byte) 0);
                     Iterator<SortedIntList.Node<IntIntMap.Entry>> it = sil.iterator();
                     int[] reds = new int[256], greens = new int[256], blues = new int[256]; 
-                    for (int i = 1; i < 256 && it.hasNext(); i++) {
+                    PER_BEST:
+                    for (int i = 1; i < 256 && it.hasNext();) {
                         color = it.next().value.key;
+                        for (int j = 1; j < i; j++) {
+                            if(difference2(color, paletteArray[j]) < threshold)
+                                continue PER_BEST;
+                        }
                         paletteArray[i] = color;
                         color = (color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F);
                         paletteMapping[color] = (byte) i;
                         reds[i] = color >>> 10;
                         greens[i] = color >>> 5 & 31;
                         blues[i] = color & 31;
+                        i++;
                     }
                     int c2, dist;
                     for (int r = 0; r < 32; r++) {
@@ -409,14 +418,20 @@ public class PNG8 implements Disposable {
                     Arrays.fill(paletteMapping, (byte) 0);
                     Iterator<SortedIntList.Node<IntIntMap.Entry>> it = sil.iterator();
                     int[] reds = new int[256], greens = new int[256], blues = new int[256];
-                    for (int i = 1; i < 256 && it.hasNext(); i++) {
+                    PER_BEST:
+                    for (int i = 1; i < 256 && it.hasNext();) {
                         color = it.next().value.key;
+                        for (int j = 1; j < i; j++) {
+                            if(difference2(color, paletteArray[j]) < threshold)
+                                continue PER_BEST;
+                        }
                         paletteArray[i] = color;
                         color = (color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F);
                         paletteMapping[color] = (byte) i;
                         reds[i] = color >>> 10;
                         greens[i] = color >>> 5 & 31;
                         blues[i] = color & 31;
+                        i++;
                     }
                     int c2, dist;
                     for (int r = 0; r < 32; r++) {
