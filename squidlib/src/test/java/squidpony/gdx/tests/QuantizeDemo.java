@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.squidgrid.gui.gdx.PNG8;
+import squidpony.squidgrid.gui.gdx.PaletteReducer;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 
@@ -44,6 +45,7 @@ public class QuantizeDemo extends ApplicationAdapter {
     private Texture pt;
     private PNG8 png8;
     private PixmapIO.PNG png;
+    private PaletteReducer auroraPalette, monaPalette, bivaPalette;
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -65,17 +67,19 @@ public class QuantizeDemo extends ApplicationAdapter {
         png.setFlipY(false);
         png8.setCompression(6);
         png.setCompression(6);
-        png8.buildKnownPalette(PNG8.auroraPalette);
+        auroraPalette = new PaletteReducer();
+        png8.palette = auroraPalette;
         try {
             png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Aurora.png"), bivaOriginal, false);
         } catch (IOException ex) {
-            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Aurora.png", ex);
         }
         try {
             png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Aurora.png"), monaOriginal, false);
         } catch (IOException ex) {
-            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Aurora.png", ex);
         }
+        // use computed palette
         try {
             png.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG32.png"), bivaOriginal);
         } catch (IOException ex) {
@@ -86,15 +90,30 @@ public class QuantizeDemo extends ApplicationAdapter {
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG32.png", ex);
         }
+        bivaPalette = new PaletteReducer(bivaOriginal);
+        monaPalette = new PaletteReducer(monaOriginal);
+        png8.palette = bivaPalette;
         try {
-            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal);
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
         }
+        png8.palette = monaPalette;
         try {
-            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal);
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
+        }
+        try {
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Mona.png", ex);
+        }
+        png8.palette = bivaPalette;
+        try {
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Biva.png"), monaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Biva.png", ex);
         }
 
 //        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -143,26 +162,28 @@ public class QuantizeDemo extends ApplicationAdapter {
                 pixels.rewind();
                 break;
             case 2:
-                Gdx.graphics.setTitle("(32-value channels) Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(DawnBringer Aurora)  Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
-                while (pixels.remaining() >= 4)
-                {
-                    color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
-                    color |= color >>> 5 & 0x07070700;
-                    pixels.putInt(pixels.position() - 4, color);
-                }
-                pixels.rewind();
+//                while (pixels.remaining() >= 4)
+//                {
+//                    color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
+//                    color |= color >>> 5 & 0x07070700;
+//                    pixels.putInt(pixels.position() - 4, color);
+//                }
+//                pixels.rewind();
+                auroraPalette.reduce(edit);
                 break;
             case 3:
-                Gdx.graphics.setTitle("(Custom LUT) Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(Adaptive Palette) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
-                while (pixels.remaining() >= 4) {
-                    pos = pixels.position();
-                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
-                    pixels.putInt(pos, color);
-                    pixels.position(pos+4);
-                }
-                pixels.rewind();
+//                while (pixels.remaining() >= 4) {
+//                    pos = pixels.position();
+//                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
+//                    pixels.putInt(pos, color);
+//                    pixels.position(pos+4);
+//                }
+//                pixels.rewind();
+                bivaPalette.reduce(edit);
                 break;
             case 4:
                 Gdx.graphics.setTitle("(6-value channels) Étang en Ile de France by Henri Biva");
@@ -194,26 +215,28 @@ public class QuantizeDemo extends ApplicationAdapter {
                 pixels.rewind();
                 break;
             case 7:
-                Gdx.graphics.setTitle("(32-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(DawnBringer Aurora) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2, 0);
-                while (pixels.remaining() >= 4)
-                {
-                    color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
-                    color |= color >>> 5 & 0x07070700;
-                    pixels.putInt(pixels.position() - 4, color);
-                }
-                pixels.rewind();
+//                while (pixels.remaining() >= 4)
+//                {
+//                    color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
+//                    color |= color >>> 5 & 0x07070700;
+//                    pixels.putInt(pixels.position() - 4, color);
+//                }
+//                pixels.rewind();
+                auroraPalette.reduce(edit);
                 break;
             case 8:
-                Gdx.graphics.setTitle("(Custom LUT) Mona Lisa by Leonardo da Vinci (remastered)");
+                Gdx.graphics.setTitle("(Adaptive Palette) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2, 0);
-                while (pixels.remaining() >= 4) {
-                    pos = pixels.position();
-                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
-                    pixels.putInt(pos, color);
-                    pixels.position(pos+4);
-                }
-                pixels.rewind();
+//                while (pixels.remaining() >= 4) {
+//                    pos = pixels.position();
+//                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
+//                    pixels.putInt(pos, color);
+//                    pixels.position(pos+4);
+//                }
+//                pixels.rewind();
+                monaPalette.reduce(edit);
                 break;
             case 9:
                 Gdx.graphics.setTitle("(6-value channels) Mona Lisa by Leonardo da Vinci (remastered)");

@@ -12125,6 +12125,53 @@ public class SColor extends Color implements Serializable {
         return (((512+rmean)*r*r)>>8) + 4*g*g + (((767-rmean)*b*b)>>8);
     }
 
+    public static float differenceYCbCr(final int color1, final int color2)
+    {
+        final int r1 = color1 >>> 24, r2 = color2 >>> 24,
+                g1 = color1 >>> 16 & 255, g2 = color2 >>> 16 & 255,
+                b1 = color1 >>> 8 & 255, b2 = color2 >>> 8 & 255;
+        final float
+                y1 = r1 * 0.299f + g1 * 0.587f + b1 * 0.114f,
+                y2 = r2 * 0.299f + g2 * 0.587f + b2 * 0.114f,
+                cr1 = r1 * 0.5f + g1 * -0.418688f + b1 * -0.081312f,
+                cr2 = r2 * 0.5f + g2 * -0.418688f + b2 * -0.081312f,
+                cb1 = r1 * -0.168736f + g1 * -0.331264f + b1 * 0.5f,
+                cb2 = r2 * -0.168736f + g2 * -0.331264f + b2 * 0.5f,
+                y = y2 - y1, cb = cb2 - cb1, cr = cr2 - cr1;
+        return y * y + cb * cb + cr * cr;
+    }
+
+    public static float differenceYCbCr(final int color1, int r2, int g2, int b2)
+    {
+        r2 = (r2 << 3 | r2 >>> 2);
+        g2 = (g2 << 3 | g2 >>> 2);
+        b2 = (b2 << 3 | b2 >>> 2);
+        final int r1 = color1 >>> 24,
+                g1 = color1 >>> 16 & 255,
+                b1 = color1 >>> 8 & 255;
+        final float
+                y1 = r1 * 0.299f + g1 * 0.587f + b1 * 0.114f,
+                y2 = r2 * 0.299f + g2 * 0.587f + b2 * 0.114f,
+                cr1 = r1 * 0.5f + g1 * -0.418688f + b1 * -0.081312f,
+                cr2 = r2 * 0.5f + g2 * -0.418688f + b2 * -0.081312f,
+                cb1 = r1 * -0.168736f + g1 * -0.331264f + b1 * 0.5f,
+                cb2 = r2 * -0.168736f + g2 * -0.331264f + b2 * 0.5f,
+                y = y2 - y1, cb = cb2 - cb1, cr = cr2 - cr1;
+        return y * y + cb * cb + cr * cr;
+    }
+
+    public static float differenceYCbCr(final int r1, final int r2, final int g1, final int g2, final int b1, final int b2)
+    {
+        final float
+                y1 = r1 * 0.299f + g1 * 0.587f + b1 * 0.114f,
+                y2 = r2 * 0.299f + g2 * 0.587f + b2 * 0.114f,
+                cr1 = r1 * 0.5f + g1 * -0.418688f + b1 * -0.081312f,
+                cr2 = r2 * 0.5f + g2 * -0.418688f + b2 * -0.081312f,
+                cb1 = r1 * -0.168736f + g1 * -0.331264f + b1 * 0.5f,
+                cb2 = r2 * -0.168736f + g2 * -0.331264f + b2 * 0.5f,
+                y = y2 - y1, cb = cb2 - cb1, cr = cr2 - cr1;
+        return y * y + cb * cb + cr * cr;
+    }
 
 
     /**

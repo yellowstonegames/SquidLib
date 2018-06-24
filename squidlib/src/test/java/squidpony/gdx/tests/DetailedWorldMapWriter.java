@@ -11,11 +11,12 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.*;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.FakeLanguageGen;
 import squidpony.squidgrid.gui.gdx.PNG8;
+import squidpony.squidgrid.gui.gdx.PaletteReducer;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
@@ -81,7 +82,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private WorldMapGenerator world;
     //private WorldMapGenerator.DetailedBiomeMapper dbm;
 
-    PNG8 writer;
+    private PNG8 writer;
     
     // Biome map colors
     private static float baseIce = SColor.ALICE_BLUE.toFloatBits();
@@ -218,13 +219,14 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
             Gdx.files.local(path).mkdirs();
         //Gdx.files.local(path + "Earth.txt").writeString(StringKit.hex(earthHash), false);
 
-        pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
+        pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGBA8888);
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
 
         writer = new PNG8((int)(pm.getWidth() * pm.getHeight() * 1.5f)); // Guess at deflated size.
         writer.setFlipY(false);
         writer.setCompression(6);
+        writer.palette = new PaletteReducer();
 
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng = new StatefulRNG(0L);
@@ -466,13 +468,14 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                             (extreme((float) (moisture))))));
             }
         }
-
+        writer.palette.analyze(pm);
+        writer.palette.reduce(pm);
         batch.begin();
         pt.draw(pm, 0, 0);
         batch.draw(pt, 0, 0);
         batch.end();
         try {
-            writer.write(Gdx.files.local(path + name + ".png"), pm);
+            writer.write(Gdx.files.local(path + name + ".png"), pm, false);
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: " + path + name + ".png", ex);
         }
