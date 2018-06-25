@@ -142,7 +142,7 @@ public class QuantizeDemo extends ApplicationAdapter {
     public void generate()
     {
         int color, pos;
-        edit.setColor(0x222222FF);
+        edit.setColor(0);
         edit.fill();
         switch (mode)
         {
@@ -155,7 +155,7 @@ public class QuantizeDemo extends ApplicationAdapter {
                 edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
                 while (pixels.remaining() >= 4)
                 {
-                    color = (pixels.getInt() & 0xFCFCFCFF) | 0xFF;
+                    color = (pixels.getInt() & 0xFCFCFCFF);
                     color |= color >>> 6 & 0x03030300;
                     pixels.putInt(pixels.position() - 4, color);
                 }
@@ -208,7 +208,7 @@ public class QuantizeDemo extends ApplicationAdapter {
                 edit.drawPixmap(monaOriginal, width - width2, 0);
                 while (pixels.remaining() >= 4)
                 {
-                    color = (pixels.getInt() & 0xFCFCFCFF) | 0xFF;
+                    color = (pixels.getInt() & 0xFCFCFCFF);
                     color |= color >>> 6 & 0x03030300;
                     pixels.putInt(pixels.position() - 4, color);
                 }

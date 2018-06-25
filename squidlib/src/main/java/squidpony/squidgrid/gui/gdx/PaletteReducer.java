@@ -490,7 +490,7 @@ public class PaletteReducer {
         }
         Pixmap.Blending blending = pixmap.getBlending();
         pixmap.setBlending(Pixmap.Blending.None);
-        int color, used, rdiff, gdiff, bdiff; 
+        int color, used, rdiff, gdiff, bdiff;
         byte er, eg, eb, paletteIndex;
         for (int y = 0; y < h; y++) {
             int ny = y + 1;
@@ -508,11 +508,11 @@ public class PaletteReducer {
                     pixmap.drawPixel(px, y, 0);
                 else {
                     er = curErrorRed[px];
-                    eg = curErrorRed[px];
-                    eb = curErrorRed[px];
-                    int rr = MathUtils.clamp(((color >>> 24)       ) + (er << 1), 0, 0xFF);
-                    int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (eg << 1), 0, 0xFF);
-                    int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (eb << 1), 0, 0xFF);
+                    eg = curErrorGreen[px];
+                    eb = curErrorBlue[px];
+                    int rr = MathUtils.clamp(((color >>> 24)       ) + (er), 0, 0xFF);
+                    int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (eg), 0, 0xFF);
+                    int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (eb), 0, 0xFF);
                     paletteIndex =
                             paletteMapping[((rr << 7) & 0x7C00)
                                     | ((gg << 2) & 0x3E0)
@@ -524,25 +524,62 @@ public class PaletteReducer {
                     bdiff = (color>>>8&255)- (used>>>8&255);
                     if(px < lineLen - 1)
                     {
-                        curErrorRed[px+1]   += rdiff >> 2;
-                        curErrorGreen[px+1] += gdiff >> 2;
-                        curErrorBlue[px+1]  += bdiff >> 2;
+                        curErrorRed[px+1]   += rdiff >> 1;
+                        curErrorGreen[px+1] += gdiff >> 1;
+                        curErrorBlue[px+1]  += bdiff >> 1;
                     }
                     if(ny < h)
                     {
                         if(px > 0)
                         {
-                            nextErrorRed[px-1]   += rdiff >> 3;
-                            nextErrorGreen[px-1] += gdiff >> 3;
-                            nextErrorBlue[px-1]  += bdiff >> 3;
+                            nextErrorRed[px-1]   += rdiff >> 2;
+                            nextErrorGreen[px-1] += gdiff >> 2;
+                            nextErrorBlue[px-1]  += bdiff >> 2;
                         }
-                        nextErrorRed[px]   += rdiff >> 3;
-                        nextErrorGreen[px] += gdiff >> 3;
-                        nextErrorBlue[px]  += bdiff >> 3;
+                        nextErrorRed[px]   += rdiff >> 2;
+                        nextErrorGreen[px] += gdiff >> 2;
+                        nextErrorBlue[px]  += bdiff >> 2;
                     }
                 }
             }
-            
+
+        }
+        pixmap.setBlending(blending);
+        return pixmap;
+    }
+
+    /**
+     * Modifies the given Pixmap so it only uses colors present in this PaletteReducer, without dithering. This produces
+     * blocky solid sections of color in most images where the palette isn't exact, instead of checkerboard-like
+     * dithering patterns. If you want to reduce the colors in a Pixmap based on what it currently contains, call
+     * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
+     * Pixmap. You may instead want to use a known palette instead of one computed from a Pixmap;
+     * {@link #exact(int[])} is the tool for that job.
+     * @param pixmap a Pixmap that will be modified in place
+     * @return the given Pixmap, for chaining
+     */
+    public Pixmap reduceSolid (Pixmap pixmap) {
+        boolean hasTransparent = (paletteArray[0] == 0);
+        final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
+        Pixmap.Blending blending = pixmap.getBlending();
+        pixmap.setBlending(Pixmap.Blending.None);
+        int color;
+        for (int y = 0; y < h; y++) {
+            for (int px = 0; px < lineLen; px++) {
+                color = pixmap.getPixel(px, y);
+                if ((color & 0x80) == 0 && hasTransparent)
+                    pixmap.drawPixel(px, y, 0);
+                else {
+                    int rr = ((color >>> 24)       );
+                    int gg = ((color >>> 16) & 0xFF);
+                    int bb = ((color >>> 8)  & 0xFF);
+                    pixmap.drawPixel(px, y, paletteArray[
+                            paletteMapping[((rr << 7) & 0x7C00)
+                            | ((gg << 2) & 0x3E0)
+                            | ((bb >>> 3))] & 0xFF]);
+                }
+            }
+
         }
         pixmap.setBlending(blending);
         return pixmap;
