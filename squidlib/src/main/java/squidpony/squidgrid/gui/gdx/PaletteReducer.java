@@ -503,13 +503,14 @@ public class PaletteReducer {
                 nextErrorBlue[i] = 0;
             }
             for (int px = 0; px < lineLen; px++) {
-                color = pixmap.getPixel(px, y);
+                color = pixmap.getPixel(px, y) & 0xF8F8F880;
                 if ((color & 0x80) == 0 && hasTransparent)
                     pixmap.drawPixel(px, y, 0);
                 else {
                     er = curErrorRed[px];
                     eg = curErrorGreen[px];
                     eb = curErrorBlue[px];
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
                     int rr = MathUtils.clamp(((color >>> 24)       ) + (er), 0, 0xFF);
                     int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (eg), 0, 0xFF);
                     int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (eb), 0, 0xFF);

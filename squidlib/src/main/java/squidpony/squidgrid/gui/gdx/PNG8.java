@@ -19,7 +19,8 @@ import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 /** PNG-8 encoder with compression. An instance can be reused to encode multiple PNGs with minimal allocation.
- *
+ * <br>
+ * From LibGDX in the class PixmapIO, with modifications to support indexed-mode files, dithering, and other features.
  * <pre>
  * Copyright (c) 2007 Matthias Mann - www.matthiasmann.de
  * Copyright (c) 2014 Nathan Sweet
@@ -192,6 +193,25 @@ public class PNG8 implements Disposable {
             StreamUtils.closeQuietly(output);
         }
     }
+    /**
+     * Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
+     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a PaletteReducer value), this will
+     * compute a palette from the given Pixmap regardless of computePalette. Optionally dithers the result if
+     * {@code dither} is true.
+     * @param file a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image
+     * @param pixmap a Pixmap to write to the given output stream
+     * @param computePalette if true, this will analyze the Pixmap and use the most common colors
+     * @param dither true if this should dither colors that can't be represented exactly
+     * @throws IOException if file writing fails for any reason
+     */
+    public void write (FileHandle file, Pixmap pixmap, boolean computePalette, boolean dither) throws IOException {
+        OutputStream output = file.write(false);
+        try {
+            write(output, pixmap, computePalette, dither);
+        } finally {
+            StreamUtils.closeQuietly(output);
+        }
+    }
 
     /** Writes the pixmap to the stream without closing the stream and computes an 8-bit palette from the Pixmap.
      * @param output an OutputStream that will not be closed
@@ -297,16 +317,6 @@ public class PNG8 implements Disposable {
         final int w = pixmap.getWidth();
         for (int y = 0, h = pixmap.getHeight(); y < h; y++) {
             int py = flipY ? (h - y - 1) : y;
-            int ny = flipY ? (h - y - 2) : y + 1;
-            
-//            for (int px = 0; px < w; px++) {
-//                color = pixmap.getPixel(px, py);
-//                if ((color & 0x80) == 0)
-//                    curLine[px] = 0;
-//                else {
-//                    curLine[px] = paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)];
-//                }
-//            }
             for (int px = 0; px < w; px++) {
                 color = pixmap.getPixel(px, py);
                 if ((color & 0x80) == 0 && hasTransparent)
@@ -337,7 +347,7 @@ public class PNG8 implements Disposable {
                 if (pc < 0) pc = -pc;
                 if (pa <= pb && pa <= pc)
                     c = a;
-                else if (pb <= pc) //
+                else if (pb <= pc)
                     c = b;
                 lineOut[x] = (byte)(curLine[x] - c);
             }
@@ -462,22 +472,15 @@ public class PNG8 implements Disposable {
                 nextErrorGreen[i] = 0;
                 nextErrorBlue[i] = 0;
             }
-//            for (int px = 0; px < w; px++) {
-//                color = pixmap.getPixel(px, py);
-//                if ((color & 0x80) == 0)
-//                    curLine[px] = 0;
-//                else {
-//                    curLine[px] = paletteMapping[(color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F)];
-//                }
-//            }
             for (int px = 0; px < w; px++) {
-                color = pixmap.getPixel(px, py);
+                color = pixmap.getPixel(px, py) & 0xF8F8F880;
                 if ((color & 0x80) == 0 && hasTransparent)
                     curLine[px] = 0;
                 else {
                     er = curErrorRed[px];
                     eg = curErrorGreen[px];
                     eb = curErrorBlue[px];
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
                     int rr = MathUtils.clamp(((color >>> 24)       ) + (er), 0, 0xFF);
                     int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (eg), 0, 0xFF);
                     int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (eb), 0, 0xFF);
@@ -526,7 +529,7 @@ public class PNG8 implements Disposable {
                 if (pc < 0) pc = -pc;
                 if (pa <= pb && pa <= pc)
                     c = a;
-                else if (pb <= pc) //
+                else if (pb <= pc)
                     c = b;
                 lineOut[x] = (byte)(curLine[x] - c);
             }
