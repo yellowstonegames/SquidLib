@@ -142,6 +142,7 @@ public class QuantizeDemo extends ApplicationAdapter {
     public void generate()
     {
         int color, pos;
+        byte r, g, b;
         edit.setColor(0);
         edit.fill();
         switch (mode)
@@ -188,14 +189,29 @@ public class QuantizeDemo extends ApplicationAdapter {
             case 4:
                 Gdx.graphics.setTitle("(6-value channels) Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
-                while (pixels.remaining() >= 4) {
-                    pos = pixels.position();
-                    color = (((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAAAA & 0xFF000000)
-                            | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAA & 0xFF0000)
-                            | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA & 0xFF00)
-                            | 255) & (pixels.get() >> 31);
-                    pixels.putInt(pos, color);
-                    pixels.position(pos+4);
+                switch (edit.getFormat()) {
+                    case RGBA8888: {
+                        while (pixels.remaining() >= 4) {
+                            pos = pixels.position();
+                            color = (((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAAAA & 0xFF000000)
+                                    | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAA & 0xFF0000)
+                                    | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA & 0xFF00)
+                                    | 255) & (pixels.get() >> 31);
+                            pixels.putInt(pos, color);
+                            pixels.position(pos + 4);
+                        }
+                    }
+                    break;
+                    case RGB888: {
+                        while (pixels.remaining() >= 3) {
+                            pos = pixels.position();
+                            pixels.put(pos, (byte) ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.put(pos + 1, (byte)((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.put(pos + 2, (byte) ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.position(pos + 3);
+                        }
+                    }
+                    break;
                 }
                 pixels.rewind();
                 break;
@@ -241,14 +257,29 @@ public class QuantizeDemo extends ApplicationAdapter {
             case 9:
                 Gdx.graphics.setTitle("(6-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
                 edit.drawPixmap(monaOriginal, width - width2, 0);
-                while (pixels.remaining() >= 4) {
-                    pos = pixels.position();
-                    color = (((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAAAA & 0xFF000000)
-                            | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAA & 0xFF0000)
-                            | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA & 0xFF00)
-                            | 255) & (pixels.get() >> 31);
-                    pixels.putInt(pos, color);
-                    pixels.position(pos+4);
+                switch (edit.getFormat()) {
+                    case RGBA8888: {
+                        while (pixels.remaining() >= 4) {
+                            pos = pixels.position();
+                            color = (((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAAAA & 0xFF000000)
+                                    | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAA & 0xFF0000)
+                                    | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA & 0xFF00)
+                                    | 255) & (pixels.get() >> 31);
+                            pixels.putInt(pos, color);
+                            pixels.position(pos + 4);
+                        }
+                    }
+                    break;
+                    case RGB888: {
+                        while (pixels.remaining() >= 3) {
+                            pos = pixels.position();
+                            pixels.put(pos, (byte) ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.put(pos + 1, (byte)((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.put(pos + 2, (byte) ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.position(pos + 3);
+                        }
+                    }
+                    break;
                 }
                 pixels.rewind();
                 break;
