@@ -281,6 +281,6 @@ public class CoordPackerZone extends Skeleton implements Collection<Coord>, Immu
 
     @Override
     public int hashCode() {
-        return CrossHash.Falcon.hash(shorts);
+        return CrossHash.hash(shorts);
     }
 }

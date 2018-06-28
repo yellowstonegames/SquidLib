@@ -1,10 +1,13 @@
 package squidpony.examples;
 
+import org.junit.Test;
 import squidpony.FakeLanguageGen;
+import squidpony.MarkovText;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /**
  * Created by Tommy Ettinger on 8/15/2016.
@@ -50,7 +53,8 @@ public class HashQualityTest {
     //public static final int restrict = 0x5555FFFF;
     //where this restrict is used, it will use all bits of a hash
     public static final int restrict = -1;
-    public static void main(String[] args)
+    @Test
+    public void testMost()
     {
         CrossHash.Mist storm = CrossHash.Mist.chi;
         CrossHash.Mist mist = CrossHash.Mist.epsilon;
@@ -499,4 +503,136 @@ public class HashQualityTest {
         colliderWis.clear();
         */
     }
+    public static int slitherHash(final CharSequence data) {
+        if (data == null)
+            return 0;
+        //long result = 0x9E3779B97F4A7C80L, a = 0x632BE59BD9B4E019L;
+        long result = 0x1A976FDF6BF60B8EL, a = 0x60642E2A34326F15L;// 253
+        final int len = data.length();
+        for (int i = 0; i < len; i++) {
+            result += (a = (a ^ data.charAt(i)) * 0x41C64E6BL);
+        }
+        a ^= (result ^ result >>> 27) * 0xAEF17502108EF2D9L;
+        return (int) (((a ^ a >>> 25)));// ^ (a >>> 32));
+    }
+    public static int slitherHashConfig(final CharSequence data, long running, long receiver) {
+        if (data == null)
+            return 0;
+        //long running = 0x9E3779B97F4A7C80L, receiver = 0x632BE59BD9B4E019L;
+        final int len = data.length();
+        for (int i = 0; i < len; i++) {
+            running += (receiver = (receiver ^ data.charAt(i)) * 0x41C64E6BL);
+        }
+        receiver ^= (running ^ running >>> 27) * 0xAEF17502108EF2D9L;
+        return (int) (((receiver ^ receiver >>> 25)));// ^ (a >>> 32));
+// 0x9E3779B97F4A7C15L
+        //        if (data == null)
+//            return 0;
+//        long result = 0x9E3779B97F4A7C80L, a = 0x632BE59BD9B4E019L;
+//        final int len = data.length();
+//        for (int i = 0; i < len; i++) {
+//            result += (a = (a ^ data.charAt(i)) * 0xC6BC279692B5CC83L);
+//        }
+//        a ^= (result ^ result >>> 27);
+//        return (int) (((a ^ a >>> 25)));// ^ (a >>> 32));
+    }
+    public static int joltHash(final CharSequence data) {
+        if (data == null)
+            return 0;
+        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+        //long z = 0x632BE59BD9B4E019L, result = 1L;
+        for (int i = 0; i < data.length(); i++) {
+            result ^= (z += (data.charAt(i) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+        }
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        return (int) (result ^ result >>> 25 ^ z ^ z >>> 29);
+    }
+
+    @Test
+    public void testLimited()
+    {
+        int restrict = 0xFFFFF;
+        CrossHash.Mist storm = CrossHash.Mist.chi;
+        CrossHash.Mist mist = CrossHash.Mist.epsilon;
+
+        MarkovText markovText = new MarkovText();
+        String theme = "dun dun dun, dun dundun, dun dundun, dun dun dun dun dundun dun dundun.";
+        markovText.analyze(theme);//theme.replace("dun", "wiggle")
+        UnorderedSet<String> strings = new UnorderedSet<>(10000);
+        for (int i = 0; i < 40000 && strings.size() < 10000; i++) {
+            //strings.add(markovText.chain(LinnormRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 100));
+            strings.add(markovText.chain(LinnormRNG.determine(i), 140));
+        }
+        int stringHashLength = strings.size();
+        IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderLit = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderSto = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderSli = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderWis = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderMis = new IntDoubleOrderedMap(stringHashLength, 0.5f);
+        LightRNG rng1 = new LightRNG(LinnormRNG.determine(System.nanoTime() * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L));
+        LinnormRNG rng2 = new LinnormRNG(LightRNG.determine(System.nanoTime() * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L));
+        final int SIZE = 1024;
+        long[][] pairs = new long[SIZE][2];
+        IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[SIZE];
+        for (int i = 0; i < SIZE; i++) {
+            colliders[i] = new IntDoubleOrderedMap(stringHashLength, 0.65f);
+            pairs[i][0] = rng1.nextLong();
+            pairs[i][1] = rng2.nextLong();
+        }
+        for(String s : strings)
+        {
+            colliderJDK.put(s.hashCode() & restrict, 1.0);
+            colliderLit.put(CrossHash.Lightning.hash(s) & restrict, 1.0);
+            colliderSto.put(storm.hash(s) & restrict, 1.0);
+            colliderSli.put(slitherHash(s) & restrict, 1.0);
+            colliderWis.put(CrossHash.hash(s) & restrict, 1.0);
+            colliderMis.put(joltHash(s) & restrict, 1.0);
+            for (int i = 0; i < SIZE; i++) {
+                colliders[i].put(slitherHashConfig(s, pairs[i][0], pairs[i][1]) & restrict, i);
+            }
+        }
+        System.out.println(strings.iterator().next());
+        System.out.println("With " + stringHashLength + " distinct Strings:");
+        System.out.println("JDK collisions, 16-bit: " + (stringHashLength - colliderJDK.size()));
+        System.out.println("Lit collisions, 16-bit: " + (stringHashLength - colliderLit.size()));
+        System.out.println("Sto collisions, 16-bit: " + (stringHashLength - colliderSto.size()));
+        System.out.println("Sli collisions, 16-bit: " + (stringHashLength - colliderSli.size()));
+        System.out.println("Wis collisions, 16-bit: " + (stringHashLength - colliderWis.size()));
+        System.out.println("Jol collisions, 16-bit: " + (stringHashLength - colliderMis.size()));
+        Arrays.sort(colliders, new Comparator<IntDoubleOrderedMap>() {
+            @Override
+            public int compare(IntDoubleOrderedMap o1, IntDoubleOrderedMap o2) {
+                return o2.size() - o1.size();
+            }
+        });
+        IntDoubleOrderedMap idm;
+        int idx;
+        for (int i = 0; i < 10; i++) {
+            idm = colliders[i];
+            idx = (int)idm.get(idm.firstIntKey());
+            System.out.printf("0x%016X, 0x%016X : %d\n", pairs[idx][0], pairs[idx][1], (stringHashLength - idm.size()));
+            idm.clear();
+        }
+        System.out.println();
+        colliderJDK.clear();
+        colliderLit.clear();
+        colliderSto.clear();
+        colliderSli.clear();
+        colliderWis.clear();
+        colliderMis.clear();
+    }
+    /*
+    0x2EF022689E573495L, 0x8628F680AFADEDABL : 629
+    0xCFEB847AE4B6AD26, 0xE7FFD14DDB14DD2D : 652
+    0xA8BC4AE2C9542B80, 0xC8D3A0DE9FE21288 : 653
+    0x7DC2031CCF49AC00, 0x20BF5813242226B7 : 654
+    
+    0x7B59E7FC789BA792L, a = 0xA0729045E286D65FL;// 959
+    0xABCB254A1454AE87, 0x6762DC42F20490D1 : 963
+    0xED55E99E89BAC9AA, 0x2AD7C0BD32AA8502 : 966
+    0x63B36541EDEA1AE2, 0x37B32F846A5CB867 : 971
+    
+    0x1A976FDF6BF60B8E, a = 0x60642E2A34326F15L;// 253
+     */
 }
