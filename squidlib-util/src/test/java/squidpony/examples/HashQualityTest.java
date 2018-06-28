@@ -566,7 +566,7 @@ public class HashQualityTest {
         int stringHashLength = strings.size();
         IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderLit = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderSto = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderFal = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderSli = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderWis = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderMis = new IntDoubleOrderedMap(stringHashLength, 0.5f);
@@ -584,7 +584,7 @@ public class HashQualityTest {
         {
             colliderJDK.put(s.hashCode() & restrict, 1.0);
             colliderLit.put(CrossHash.Lightning.hash(s) & restrict, 1.0);
-            colliderSto.put(storm.hash(s) & restrict, 1.0);
+            colliderFal.put(CrossHash.Falcon.hash(s) & restrict, 1.0);
             colliderSli.put(slitherHash(s) & restrict, 1.0);
             colliderWis.put(CrossHash.hash(s) & restrict, 1.0);
             colliderMis.put(joltHash(s) & restrict, 1.0);
@@ -596,7 +596,7 @@ public class HashQualityTest {
         System.out.println("With " + stringHashLength + " distinct Strings:");
         System.out.println("JDK collisions, 16-bit: " + (stringHashLength - colliderJDK.size()));
         System.out.println("Lit collisions, 16-bit: " + (stringHashLength - colliderLit.size()));
-        System.out.println("Sto collisions, 16-bit: " + (stringHashLength - colliderSto.size()));
+        System.out.println("Fal collisions, 16-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println("Sli collisions, 16-bit: " + (stringHashLength - colliderSli.size()));
         System.out.println("Wis collisions, 16-bit: " + (stringHashLength - colliderWis.size()));
         System.out.println("Jol collisions, 16-bit: " + (stringHashLength - colliderMis.size()));
@@ -617,7 +617,7 @@ public class HashQualityTest {
         System.out.println();
         colliderJDK.clear();
         colliderLit.clear();
-        colliderSto.clear();
+        colliderFal.clear();
         colliderSli.clear();
         colliderWis.clear();
         colliderMis.clear();

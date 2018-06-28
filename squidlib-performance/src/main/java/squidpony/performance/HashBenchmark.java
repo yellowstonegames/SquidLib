@@ -31,19 +31,17 @@
 
 package squidpony.performance;
 
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
+import squidpony.FakeLanguageGen;
 import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.LongPeriodRNG;
-import squidpony.squidmath.ThunderRNG;
-import squidpony.squidmath.CrossHash.Sketch;
+import squidpony.squidmath.HashCommon;
+import squidpony.squidmath.LinnormRNG;
+import squidpony.squidmath.RNG;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -135,459 +133,156 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.measureWisp          avgt    8   12.761 ± 0.166  ms/op // about the same (good) speed
  * HashBenchmark.measureWispInt       avgt    8   14.122 ± 0.190  ms/op // slightly slower, finalization step probably
  */
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@Fork(1)
+@Warmup(iterations = 5)
+@Measurement(iterations = 5)
+
 public class HashBenchmark {
-
-    private static long seed = 9000;
-    private static int iseed = 9000;
-
-    public long doFNV()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += CrossHash.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureFNV() throws InterruptedException {
-        seed = 9000;
-        doFNV();
-    }
-
-    public long doFNVInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += CrossHash.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureFNVInt() throws InterruptedException {
-        iseed = 9000;
-        doFNVInt();
-    }
-
-    public long doLightning()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += CrossHash.Lightning.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureLightning() throws InterruptedException {
-        seed = 9000;
-        doLightning();
-    }
-
-    public long doLightningInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += CrossHash.Lightning.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureLightningInt() throws InterruptedException {
-        iseed = 9000;
-        doLightningInt();
-    }
-
-    public long doJVMInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += Arrays.hashCode(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureJVMInt() throws InterruptedException {
-        iseed = 9000;
-        doJVMInt();
-    }
-/*
-    public long doStorm()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-        CrossHash.Storm storm = new CrossHash.Storm();
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += storm.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureStorm() throws InterruptedException {
-        seed = 9000;
-        doStorm();
-    }
-
-    public long doStormInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        CrossHash.Storm storm = new CrossHash.Storm();
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += storm.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureStormInt() throws InterruptedException {
-        iseed = 9000;
-        doStormInt();
-    }
-    */
-    public long doStorm()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-        final CrossHash.Storm storm = CrossHash.Storm.mu;
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += storm.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureStorm() throws InterruptedException {
-        seed = 9000;
-        doStorm();
-    }
-
-    public long doStormInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        final CrossHash.Storm storm = CrossHash.Storm.mu;
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += storm.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureStormInt() throws InterruptedException {
-        iseed = 9000;
-        doStormInt();
-    }
-
-    public long doSketch()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += Sketch.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSketch() throws InterruptedException {
-        seed = 9000;
-        doSketch();
-    }
-
-    public long doSketchInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += Sketch.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureSketchInt() throws InterruptedException {
-        iseed = 9000;
-        doSketchInt();
-    }
-
-    public long doFalcon()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += CrossHash.Falcon.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureFalcon() throws InterruptedException {
-        seed = 9000;
-        doFalcon();
-    }
-
-    public long doFalconInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += CrossHash.Falcon.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureFalconInt() throws InterruptedException {
-        iseed = 9000;
-        doFalconInt();
-    }
-
-    public long doWisp()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += CrossHash.Wisp.hash64(rng.state);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWisp() throws InterruptedException {
-        seed = 9000;
-        doWisp();
-    }
-
-    public long doWispInt()
-    {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += CrossHash.Wisp.hash(rng.state);
-        }
-        return iseed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWispInt() throws InterruptedException {
-        iseed = 9000;
-        doWispInt();
-    }
-    /*
-    public long doWispDouble32()
-    {
-        final ThunderRNG rng = new ThunderRNG(seed);
-        double[] data = new double[16];
-        for (int i = 0; i < 1000000; i++) {
-            for (int j = 0; j < 16; j++) {
-                data[j] = rng.nextDouble();
-                seed += data[j] * 1024;
+    @State(Scope.Thread)
+    public static class BenchmarkState {
+        public String[] words;
+        public char[][] chars;
+        public int idx;
+        @Setup(Level.Trial)
+        public void setup() {
+            FakeLanguageGen[] languages = new FakeLanguageGen[16];
+            for (int i = 0; i < 16; i++) {
+                languages[i] = FakeLanguageGen.randomLanguage(LinnormRNG.determine(i));
             }
-            seed += CrossHash.Wisp.hash(data);
-        }
-        return seed;
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWispDouble32() throws InterruptedException {
-        seed = 9000;
-        doWispDouble32();
-    }
-
-    public long doWispDouble32Alt()
-    {
-        final ThunderRNG rng = new ThunderRNG(seed);
-        double[] data = new double[16];
-        for (int i = 0; i < 1000000; i++) {
-            for (int j = 0; j < 16; j++) {
-                data[j] = rng.nextDouble();
-                seed += data[j] * 1024;
+            RNG random = new RNG(1000L);
+            words = new String[4096];
+            chars = new char[4096][];
+            for (int i = 0; i < 4096; i++) {
+                chars[i] = (words[i] = languages[i & 15].word(random, random.nextBoolean(), random.next(3)+1)).toCharArray();
             }
-            seed += CrossHash.Wisp.hashAlt(data);
+            idx = 0;
         }
-        return seed;
+
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWispDouble32Alt() throws InterruptedException {
-        seed = 9000;
-        doWispDouble32Alt();
-    }
-
-    public long doWispDouble64()
+    public long doWisp64(BenchmarkState state)
     {
-        final ThunderRNG rng = new ThunderRNG(seed);
-        double[] data = new double[16];
-        for (int i = 0; i < 1000000; i++) {
-            for (int j = 0; j < 16; j++) {
-                data[j] = rng.nextDouble();
-                seed += data[j] * 1024;
-            }
-            seed += CrossHash.Wisp.hash64(data);
-        }
-        return seed;
+        return CrossHash.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWispDouble64() throws InterruptedException {
-        seed = 9000;
-        doWispDouble64();
-    }
-
-    public long doWispDouble64Alt()
+    public int doWisp32(BenchmarkState state)
     {
-        final ThunderRNG rng = new ThunderRNG(seed);
-        double[] data = new double[16];
-        for (int i = 0; i < 1000000; i++) {
-            for (int j = 0; j < 16; j++) {
-                data[j] = rng.nextDouble();
-                seed += data[j] * 1024;
-            }
-            seed += CrossHash.Wisp.hash64Alt(data);
-        }
-        return seed;
+        return CrossHash.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureWispDouble64Alt() throws InterruptedException {
-        seed = 9000;
-        doWispDouble64Alt();
-    }
-    */
-    public long doMist()
+    public long doLightning64(BenchmarkState state)
     {
-        final LongPeriodRNG rng = new LongPeriodRNG(seed);
-        final CrossHash.Mist storm = CrossHash.Mist.mu;
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            seed += storm.hash64(rng.state);
-        }
-        return seed;
+        return CrossHash.Lightning.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMist() throws InterruptedException {
-        seed = 9000;
-        doMist();
-    }
-
-    public long doMistInt()
+    public int doLightning32(BenchmarkState state)
     {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-        final CrossHash.Mist storm = CrossHash.Mist.mu;
-        for (int i = 0; i < 1000000; i++) {
-            rng.nextLong();
-            iseed += storm.hash(rng.state);
-        }
-        return iseed;
+        return CrossHash.Lightning.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureMistInt() throws InterruptedException {
-        iseed = 9000;
-        doMistInt();
-    }
-
-    public long doControl()
+    public long doFalcon64(BenchmarkState state)
     {
-        final LongPeriodRNG rng = new LongPeriodRNG(iseed);
-
-        for (int i = 0; i < 1000000; i++) {
-            iseed += rng.nextLong();
-        }
-        return iseed;
+        return CrossHash.Falcon.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureControl() throws InterruptedException {
-        iseed = 9000;
-        doControl();
-    }
-
-    public long doControlDouble()
+    public int doFalcon32(BenchmarkState state)
     {
-        final ThunderRNG rng = new ThunderRNG(seed);
-        double[] data = new double[16];
-        for (int i = 0; i < 1000000; i++) {
-            for (int j = 0; j < 16; j++) {
-                data[j] = rng.nextDouble();
-                seed += data[j] * 1024;
-            }
-        }
-        return seed;
+        return CrossHash.Falcon.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
-    public void measureControlDouble() throws InterruptedException {
-        seed = 9000;
-        doControlDouble();
+    public long doMist64(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
+    @Benchmark
+    public int doMist32(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doJDK32(BenchmarkState state)
+    {
+        return state.words[state.idx = state.idx + 1 & 4095].hashCode();
+    }
+
+    @Benchmark
+    public int doJDK32Mixed(BenchmarkState state)
+    {
+        return HashCommon.mix(state.words[state.idx = state.idx + 1 & 4095].hashCode());
+    }
+
+
+
+    @Benchmark
+    public long doCharWisp64(BenchmarkState state)
+    {
+        return CrossHash.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharWisp32(BenchmarkState state)
+    {
+        return CrossHash.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doCharLightning64(BenchmarkState state)
+    {
+        return CrossHash.Lightning.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharLightning32(BenchmarkState state)
+    {
+        return CrossHash.Lightning.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doCharFalcon64(BenchmarkState state)
+    {
+        return CrossHash.Falcon.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharFalcon32(BenchmarkState state)
+    {
+        return CrossHash.Falcon.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doCharMist64(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharMist32(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharJDK32(BenchmarkState state)
+    {
+        return Arrays.hashCode(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharJDK32Mixed(BenchmarkState state)
+    {
+        return HashCommon.mix(Arrays.hashCode(state.chars[state.idx = state.idx + 1 & 4095]));
+    }
 
 
     /*

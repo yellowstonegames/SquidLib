@@ -1664,6 +1664,14 @@ public class CrossHash {
             return (result ^ result >>> 25 ^ z ^ z >>> 29);
         }
 
+        public static long hash64(final String data) {
+            if (data == null)
+                return 0;
+            long x = data.hashCode() * 0x9E3779B97F4A7C15L;
+            x ^= x >>> 25;
+            return x ^ ((x << 17) | (x >>> 47)) ^ ((x << 41) | (x >>> 23));
+        }
+
         /**
          * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
          *
@@ -1859,6 +1867,13 @@ public class CrossHash {
             }
             result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
             return (int)(result ^ result >>> 25 ^ z ^ z >>> 29);
+        }
+        public static int hash(final String data) {
+            if (data == null)
+                return 0;
+            int x = data.hashCode() * 0x62BD5;
+            x ^= x >>> 13;
+            return x ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
         }
 
         /**

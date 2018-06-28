@@ -69,7 +69,7 @@ public class HashCommon {
      * @param x an integer.
      * @return a hash value obtained by mixing the bits of {@code x}.
      */
-    static int mix(int x)
+    public static int mix(int x)
     {
 //        x = ((x *= 0x62BD5) ^ x >>> 13) * ((x & 0xFFFF8) ^ 0xCD7B5);
 //        return ((x << 21) | (x >>> 11)) ^ (((x << 7) | (x >>> 25)) * 0x62BD5);
@@ -97,7 +97,7 @@ public class HashCommon {
      * @return a hash value obtained by mixing the bits of {@code x}.
      * @see #invMix(long)
      */
-    static long mix(final long x) {
+    public static long mix(final long x) {
         long h = x * LONG_PHI;
         h ^= h >>> 32;
         return h ^ (h >>> 16);
