@@ -308,7 +308,7 @@ public class PaletteReducer {
         Arrays.fill(paletteArray, 0);
         Arrays.fill(paletteMapping, (byte) 0);
         int color;
-        final ByteBuffer pixels = pixmap.getPixels();
+        final ByteBuffer pixels = pixmap.getPixels().duplicate();
         IntIntMap counts = new IntIntMap(256);
         int hasTransparent = 0;
         int[] reds = new int[256], greens = new int[256], blues = new int[256];

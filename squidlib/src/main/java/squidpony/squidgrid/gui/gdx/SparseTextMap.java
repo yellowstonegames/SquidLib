@@ -184,8 +184,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             x = (n & 0xFFFF) * widthInc + screenOffsetX;
             y = (n >>> 16) * heightInc + screenOffsetY;
             if(frustum.boundsInFrustum(x, y, 0f, widthInc, -heightInc, 0f))
-                textFactory.draw(batch, entry.charValue, entry.floatValue,
-                    (n & 0xFFFF) * widthInc + screenOffsetX, (n >>> 16) * heightInc + screenOffsetY);
+                textFactory.draw(batch, entry.charValue, entry.floatValue, x, y);
         }
     }
     /**
@@ -227,8 +226,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
             x = (n & 0xFFFF) * widthInc + screenOffsetX;
             y = (n >>> 16) * heightInc + screenOffsetY;
             if(frustum.boundsInFrustum(x, y, 0f, widthInc, -heightInc, 0f)) 
-                textFactory.draw(batch, replacement, entry.floatValue,
-                    x, y);
+                textFactory.draw(batch, replacement, entry.floatValue, x, y);
         }
     }
 
