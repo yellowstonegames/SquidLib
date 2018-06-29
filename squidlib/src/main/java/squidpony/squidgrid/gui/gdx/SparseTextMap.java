@@ -38,8 +38,8 @@ import java.util.NoSuchElementException;
  */
 public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     //private static final int PRIME1 = 0xbe1f14b1;
-    private static final int PRIME2 = 0xb4b82e39;
-    private static final int PRIME3 = 0xced1c241;
+    private static final int PRIME2 = 0x1EBF69;//0xb4b82e39;
+    private static final int PRIME3 = 0x1A3491;//0xced1c241;
     private static final int EMPTY = 0;
 
     public int size;
@@ -146,6 +146,60 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      *
      * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
      * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
+     */
+    public void draw(Batch batch, TextCellFactory textFactory) {
+        draw(batch, textFactory, 0f, 0f);
+    }
+    /**
+     * Draws the contents of this SparseTextMap, using the keys as x,y pairs as they would be entered by calling
+     * {@link #place(int, int, char, float)} and drawing the associated char at that x,y position, potentially with an
+     * offset on x and/or y. Uses a {@link Frustum} object, usually obtained from the current Camera with
+     * {@link com.badlogic.gdx.graphics.Camera#frustum}, to cull anything that would be drawn out of view. Treats the
+     * float value as a color for the char, using the encoding for colors as floats that {@link Color#toFloatBits()}
+     * uses. Relies on the sizing information from the given TextCellFactory (its
+     * {@link TextCellFactory#actualCellWidth} and {@link TextCellFactory#actualCellHeight}, which may differ from its
+     * width and height if either of {@link TextCellFactory#tweakWidth(float)} or
+     * {@link TextCellFactory#tweakHeight(float)} were called). It also, of course, uses the TextCellFactory to
+     * determine what its text will look like (font, size, and so on). The TextCellFactory must have been initialized,
+     * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
+     * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
+     *
+     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
+     * @param screenOffsetX offset to apply to the x position of each char rendered; positive moves chars right
+     * @param screenOffsetY offset to apply to the y position of each char rendered; positive moves chars up
+     */
+    public void draw(Batch batch, TextCellFactory textFactory, float screenOffsetX, float screenOffsetY) {
+        //textFactory.configureShader(batch);
+        final float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;
+        int n;
+        for (Entry entry : entries()) {
+            n = entry.key;
+            n ^= n >>> 16;
+            n *= 0xA123B;
+//            n ^= n << 26;
+//            n ^= n >>> 15;
+//            n ^= n << 17;
+            textFactory.draw(batch, entry.charValue, entry.floatValue,
+                    (n & 0xFFFF) * widthInc + screenOffsetX, (n >>> 16) * heightInc + screenOffsetY);
+        }
+    }
+    /**
+     * Draws the contents of this SparseTextMap, using the keys as x,y pairs as they would be entered by calling
+     * {@link #place(int, int, char, float)} and drawing the associated char at that x,y position. Uses a
+     * {@link Frustum} object, usually obtained from the current Camera with
+     * {@link com.badlogic.gdx.graphics.Camera#frustum}, to cull anything that would be drawn out of view. Treats the
+     * float value as a color for the char, using the encoding for colors as floats that {@link Color#toFloatBits()}
+     * uses. Relies on the sizing information from the given TextCellFactory (its
+     * {@link TextCellFactory#actualCellWidth} and {@link TextCellFactory#actualCellHeight}, which may differ from its
+     * width and height if either of {@link TextCellFactory#tweakWidth(float)} or
+     * {@link TextCellFactory#tweakHeight(float)} were called). It also, of course, uses the TextCellFactory to
+     * determine what its text will look like (font, size, and so on). The TextCellFactory must have been initialized,
+     * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
+     * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
+     *
+     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
      * @param frustum     a {@link Frustum} object to determine culling, almost always obtained from {@link com.badlogic.gdx.graphics.Camera#frustum}
      */
     public void draw(Batch batch, TextCellFactory textFactory, Frustum frustum) {
@@ -172,21 +226,24 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @param screenOffsetY offset to apply to the y position of each char rendered; positive moves chars up
      */
     public void draw(Batch batch, TextCellFactory textFactory, Frustum frustum, float screenOffsetX, float screenOffsetY) {
-        textFactory.configureShader(batch);
+        //textFactory.configureShader(batch);
         final float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;
         float x, y;
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n ^= n << 26;
-            n ^= n >>> 15;
-            n ^= n << 17;
+            n ^= n >>> 16;
+            n *= 0xA123B;
+//            n ^= n << 26;
+//            n ^= n >>> 15;
+//            n ^= n << 17;
             x = (n & 0xFFFF) * widthInc + screenOffsetX;
             y = (n >>> 16) * heightInc + screenOffsetY;
             if(frustum.boundsInFrustum(x, y, 0f, widthInc, -heightInc, 0f))
                 textFactory.draw(batch, entry.charValue, entry.floatValue, x, y);
         }
     }
+
     /**
      * Draws the contents of this SparseTextMap, using the keys as x,y pairs as they would be entered by calling
      * {@link #place(int, int, char, float)} and drawing the char replacement at that x,y position, potentially with an
@@ -210,15 +267,17 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      *                    with Unicode value 0, which renders as a solid block.
      */
     public void draw(Batch batch, TextCellFactory textFactory, Frustum frustum, float screenOffsetX, float screenOffsetY, char replacement) {
-        textFactory.configureShader(batch);
+        //textFactory.configureShader(batch);
         final float widthInc = textFactory.actualCellWidth, heightInc = -textFactory.actualCellHeight;
         float x, y;
         int n;
         for (Entry entry : entries()) {
             n = entry.key;
-            n ^= n << 26;
-            n ^= n >>> 15;
-            n ^= n << 17;
+            n ^= n >>> 16;
+            n *= 0xA123B;
+//            n ^= n << 26;
+//            n ^= n >>> 15;
+//            n ^= n << 17;
 //            n =    ((n & 0x22222222) << 1) | ((n >>> 1) & 0x22222222) | (n & 0x99999999);
 //            n =    ((n & 0x0c0c0c0c) << 2) | ((n >>> 2) & 0x0c0c0c0c) | (n & 0xc3c3c3c3);
 //            n =    ((n & 0x00f000f0) << 4) | ((n >>> 4) & 0x00f000f0) | (n & 0xf00ff00f);
@@ -240,10 +299,13 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      */
     public static int encodePosition(final int x, final int y) {
         int n = (x | y << 16);
-        n ^= n << 17;
-        n ^= n >>> 15;
-        n ^= n >>> 30;
-        return n ^ n << 26;
+        n *= 0x4F6F3;
+        return n ^ n >>> 16;
+
+//        n ^= n << 17;
+//        n ^= n >>> 15;
+//        n ^= n >>> 30;
+//        return n ^ n << 26;
         //return GreasedRegion.interleaveBits(x, y);
     }
 
@@ -255,8 +317,10 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the x component packed in the parameter
      */
     public static int decodeX(int encoded) {
-        encoded ^= encoded << 26;
-        return (encoded ^ encoded >>> 15) & 0xFFFF;
+        encoded ^= encoded >>> 16;
+        return (encoded * 0xA123B) & 0xFFFF;
+//        encoded ^= encoded << 26;
+//        return (encoded ^ encoded >>> 15) & 0xFFFF;
         //return GreasedRegion.disperseBits(encoded) & 0xFFFF;
     }
 
@@ -268,9 +332,11 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * @return the y component packed in the parameter
      */
     public static int decodeY(int encoded) {
-        encoded ^= encoded << 26;
-        encoded ^= encoded >>> 15;
-        return (encoded ^ encoded << 17) >>> 16;
+        encoded ^= encoded >>> 16;
+        return (encoded * 0xA123B) >>> 16;
+//        encoded ^= encoded << 26;
+//        encoded ^= encoded >>> 15;
+//        return (encoded ^ encoded << 17) >>> 16;
         //return GreasedRegion.disperseBits(encoded) >>> 16;
     }
 

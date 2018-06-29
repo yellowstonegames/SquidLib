@@ -153,7 +153,7 @@ public class SparseDemo extends ApplicationAdapter {
         // cause the usage of an RNG to change). You can randomize the dungeon and several other initial settings by
         // just removing the String seed, making the line "rng = new RNG();" . Keeping the seed as a default allows
         // changes to be more easily reproducible, and using a fixed seed is strongly recommended for tests. 
-        rng = new RNG("SquidLib!");
+        rng = new RNG(artOfWar);
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         batch = new SpriteBatch();

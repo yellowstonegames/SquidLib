@@ -1,6 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.TemporalAction;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.IntIntMap;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
@@ -2767,10 +2769,38 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight, gxo, gyo;
         font.draw(batch, backgrounds, xo, yo);
         int len = layers.size();
-        Frustum frustum = getStage().getViewport().getCamera().frustum;
-        for (int i = 0; i < len; i++) {
-            layers.get(i).draw(batch, font, frustum, xo, yOff);
+        Frustum frustum = null;
+        Stage stage = getStage();
+        if(stage != null) {
+            Viewport viewport = stage.getViewport();             
+            if(viewport != null)
+            {
+                Camera camera = viewport.getCamera();
+                if(camera != null)
+                {
+                    if(
+                            camera.frustum != null &&
+                            camera.frustum.boundsInFrustum(xo, yOff - font.actualCellHeight - 1f, 0f, font.actualCellWidth, font.actualCellHeight, 0f) &&
+                            camera.frustum.boundsInFrustum(xo + font.actualCellWidth * (gridWidth-1), yo, 0f, font.actualCellWidth, font.actualCellHeight, 0f)        
+                    )
+                        frustum = camera.frustum;
+                }
+            }
         }
+        font.configureShader(batch);
+        if(frustum == null) {
+            for (int i = 0; i < len; i++) {
+                layers.get(i).draw(batch, font, xo, yOff);
+            }
+
+        }
+        else
+        {
+            for (int i = 0; i < len; i++) {
+                layers.get(i).draw(batch, font, frustum, xo, yOff);
+            }
+        }
+        
         int x, y;
         for (int i = 0; i < glyphs.size(); i++) {
             TextCellFactory.Glyph glyph = glyphs.get(i);
@@ -2781,7 +2811,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                     !glyph.isVisible() ||
                     (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) < 0 || x >= gridWidth ||
                     (y = Math.round((gyo = glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) < 0 || y >= gridHeight ||
-                    backgrounds[x][y] == 0f || !frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))
+                    backgrounds[x][y] == 0f || (frustum != null && !frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f)))
                 continue;
             glyph.draw(batch, 1f);
         }
