@@ -50,9 +50,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Empty                  = 14;
 
     //private static final int width = 1920, height = 1080;
-    //private static final int width = 1024, height = 512; // elliptical
+    private static final int width = 1024, height = 512; // elliptical, roundSide
     //private static final int width = 512, height = 256; // mimic, elliptical
-    private static final int width = 1000, height = 1000; // space view
+    //private static final int width = 1000, height = 1000; // space view
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -213,7 +213,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Ellipse " + date + "/";
         //path = "out/worlds/Mimic " + date + "/";
         //path = "out/worlds/Dump " + date + "/";
-        path = "out/worlds/SpaceView " + date + "/";
+        //path = "out/worlds/SpaceView " + date + "/";
+        path = "out/worlds/RoundSide " + date + "/";
 
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
@@ -236,8 +237,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-//        dbm = new WorldMapGenerator.DetailedBiomeMapper();
+        //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
+        world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.7);
+        //dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
@@ -474,6 +476,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pt.draw(pm, 0, 0);
         batch.draw(pt, 0, 0);
         batch.end();
+//        PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
         try {
             writer.write(Gdx.files.local(path + name + ".png"), pm, false);
         } catch (IOException ex) {

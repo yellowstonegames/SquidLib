@@ -62,7 +62,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private int mode = 3, maxModes = 4;
     //private WorldMapGenerator.SpaceViewMap world;
     //private WorldMapGenerator.MimicMap world;
-    private WorldMapGenerator.EllipticalMap world;
+    //private WorldMapGenerator.EllipticalMap world;
+    private WorldMapGenerator.RoundSideMap world;
     //private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
 
@@ -298,9 +299,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0x0c415cf07774ab2eL;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
-        world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.8);
+        //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.8);
         //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
         //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
+        world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
