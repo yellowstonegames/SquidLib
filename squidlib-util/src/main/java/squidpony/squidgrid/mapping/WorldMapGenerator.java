@@ -54,6 +54,16 @@ public abstract class WorldMapGenerator implements Serializable {
             minHeightActual = Double.POSITIVE_INFINITY, maxHeightActual = Double.NEGATIVE_INFINITY,
             minHeat = Double.POSITIVE_INFINITY, maxHeat = Double.NEGATIVE_INFINITY,
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
+    protected double centerLongitude = 0.0;
+
+    public double getCenterLongitude() {
+        return centerLongitude;
+    }
+
+    public void setCenterLongitude(double centerLongitude) {
+        this.centerLongitude = centerLongitude;
+    }
+
     public int zoom = 0, startX = 0, startY = 0, usedWidth, usedHeight;
     protected IntVLA startCacheX = new IntVLA(8), startCacheY = new IntVLA(8);
     protected int zoomStartX = 0, zoomStartY = 0;
@@ -2153,7 +2163,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
         public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
-        public final Noise4D terrain4D;
+//        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -2267,7 +2277,7 @@ public abstract class WorldMapGenerator implements Serializable {
             zPositions = new double[width][height];
             edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
+//            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
             terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
@@ -2290,11 +2300,16 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
+//        @Override
+//        public void setCenterLongitude(double centerLongitude) {
+//            super.setCenterLongitude(centerLongitude < Math.PI ? -((Math.PI - centerLongitude) % (Math.PI * 2.0) - Math.PI) : centerLongitude % (Math.PI * 2.0));
+//        }
+
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
                                   double landMod, double coolMod, long state)
         {
             boolean fresh = false;
-            if(zoom <= 0 || cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -2319,7 +2334,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
             landModifier = (landMod <= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
-
+            
             double p,
                     ps, pc,
                     qs, qc,
@@ -2332,7 +2347,6 @@ public abstract class WorldMapGenerator implements Serializable {
 
             yPos = startY - ry;
             for (int y = 0; y < height; y++, yPos += i_uh) {
-
                 thx = asin((yPos) * iry);
                 lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? thx : Math.PI * irx * 0.5 / NumberTools.cos(thx);
                 thy = thx * 2.0;
@@ -2356,16 +2370,32 @@ public abstract class WorldMapGenerator implements Serializable {
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-
+                    th += centerLongitude;
                     ps = NumberTools.sin(th) * qc;
                     pc = NumberTools.cos(th) * qc;
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
-                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
-                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
-                            + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-                            seedA) + landModifier - 1.0);
+//                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
+//                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
+//                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
+//                            seedA) + landModifier - 1.0);
+//                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
+//                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+//                            , qs, seedB));
+//                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
+//                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+//                            , seedC));
+//                    freshwaterData[x][y] = (ps = Math.min(
+//                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
+//                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
+                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
+                                    terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA),
+                            ps, qs, seedA) + landModifier - 1.0);
+//                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
+//                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
+//                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
+//                            seedA) * landModifier);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
@@ -2392,13 +2422,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxHeightActual = Math.max(maxHeightActual, maxHeight);
 
             }
-            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),
-                    heatDiff = 0.8 / (maxHeat0 - minHeat0),
+            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),
                     wetDiff = 1.0 / (maxWet0 - minWet0),
                     hMod,
                     halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
-            double minHeightActual0 = minHeightActual;
-            double maxHeightActual0 = maxHeightActual;
             yPos = startY + i_uh;
             ps = Double.POSITIVE_INFINITY;
             pc = Double.NEGATIVE_INFINITY;
@@ -2408,9 +2435,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-//                    minHeightActual0 = Math.min(minHeightActual0, h);
-//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
                     h = heightData[x][y];
                     if(heightCodeData[x][y] == 10000) {
                         heightCodeData[x][y] = 1000;
@@ -2753,7 +2777,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-
+//                    th += centerLongitude;
                     ps = NumberTools.sin(th) * qc;
                     pc = NumberTools.cos(th) * qc;
                     xPositions[x][y] = pc;
@@ -2761,7 +2785,8 @@ public abstract class WorldMapGenerator implements Serializable {
                     zPositions[x][y] = qs;
                     if(earth.contains(x, y))
                     {
-                        h = NumberTools.swayTight(terrain4D.getNoiseWithSeed(pc, ps, qs, terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA), seedA)) * 0.85;
+                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(pc + terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA),
+                                ps, qs, seedA)) * 0.85;
                         if(coast.contains(x, y))
                             h += 0.05;
                         else
@@ -2769,11 +2794,12 @@ public abstract class WorldMapGenerator implements Serializable {
                     }
                     else
                     {
-                        h = NumberTools.swayTight(terrain4D.getNoiseWithSeed(pc, ps, qs, terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA), seedA)) * -0.9;
+                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(pc + terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA),
+                                ps, qs, seedA)) * -0.9;
                         if(shallow.contains(x, y))
-                            h *= 0.375;
+                            h = (h - 0.08) * 0.375;
                         else
-                            h -= coastalWaterUpper;
+                            h = (h - 0.125) * 0.75;
                     }
                     h += landModifier - 1.0;
                     heightData[x][y] = h;
@@ -2912,15 +2938,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 yPositions,
                 zPositions;
         protected final int[] edges;
-        protected double centerLongitude = 0.0;
-
-        public double getCenterLongitude() {
-            return centerLongitude;
-        }
-
-        public void setCenterLongitude(double centerLongitude) {
-            this.centerLongitude = centerLongitude;
-        }
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
@@ -3115,7 +3132,8 @@ public abstract class WorldMapGenerator implements Serializable {
                     // approximate seems fine for everything else here though.
                     // ... later ...
                     // NumberTools is better now, it seems good visually, but is there a speed difference?
-                    lon = (centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th)) + (3.0 * Math.PI)) % (Math.PI * 2.0) - Math.PI; 
+                    //lon = (centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th)) + (3.0 * Math.PI)) % (Math.PI * 2.0) - Math.PI;
+                    lon = centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th));
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);
@@ -3133,8 +3151,6 @@ public abstract class WorldMapGenerator implements Serializable {
 //                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
 //                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
 //                            seedA) * landModifier);
-
-                    heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
@@ -3161,13 +3177,10 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxHeightActual = Math.max(maxHeightActual, maxHeight);
 
             }
-            double heightDiff = 2.0 / (maxHeightActual - minHeightActual),
-                    heatDiff = 0.8 / (maxHeat0 - minHeat0),
+            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),
                     wetDiff = 1.0 / (maxWet0 - minWet0),
                     hMod,
                     halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
-            double minHeightActual0 = minHeightActual;
-            double maxHeightActual0 = maxHeightActual;
             yPos = startY + i_uh;
             ps = Double.POSITIVE_INFINITY;
             pc = Double.NEGATIVE_INFINITY;
@@ -3177,9 +3190,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
-//                    heightData[x][y] = (h = (heightData[x][y] - minHeightActual) * heightDiff - 1.0);
-//                    minHeightActual0 = Math.min(minHeightActual0, h);
-//                    maxHeightActual0 = Math.max(maxHeightActual0, h);
                     h = heightData[x][y];
                     if(heightCodeData[x][y] == 10000) {
                         heightCodeData[x][y] = 1000;
@@ -3249,6 +3259,4 @@ public abstract class WorldMapGenerator implements Serializable {
             landData.refill(heightCodeData, 4, 999);
         }
     }
-
-
 }
