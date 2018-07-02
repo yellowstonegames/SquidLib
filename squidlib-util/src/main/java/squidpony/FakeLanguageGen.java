@@ -3391,6 +3391,8 @@ public class FakeLanguageGen implements Serializable {
         }
     }
 
+    private static final String[] mid = {",", ",", ",", ";"}, end = {".", ".", ".", "!", "?", "..."};
+
     /**
      * Generate a sentence from this FakeLanguageGen, using and changing the current seed, with the length in words
      * between minWords and maxWords, both inclusive. This can use commas and semicolons between words, and can end a
@@ -3401,8 +3403,7 @@ public class FakeLanguageGen implements Serializable {
      * @return a sentence in the fake language as a String
      */
     public String sentence(int minWords, int maxWords) {
-        return sentence(srng, minWords, maxWords, new String[]{",", ",", ",", ";"},
-                new String[]{".", ".", ".", "!", "?", "..."}, 0.2);
+        return sentence(srng, minWords, maxWords, mid, end, 0.2);
     }
 
     /**
@@ -3431,8 +3432,8 @@ public class FakeLanguageGen implements Serializable {
      * @return a sentence in the fake language as a String
      */
     public String sentence(IRNG rng, int minWords, int maxWords) {
-        return sentence(rng, minWords, maxWords, new String[]{",", ",", ",", ";"},
-                new String[]{".", ".", ".", "!", "?", "..."}, 0.2);
+        return sentence(rng, minWords, maxWords, mid,
+                end, 0.2);
     }
 
     /**
@@ -4786,8 +4787,8 @@ public class FakeLanguageGen implements Serializable {
         public SentenceForm()
         {
             this(FakeLanguageGen.FANTASY_NAME, FakeLanguageGen.srng, 1, 9,
-                    new String[]{",", ",", ",", ";", ";"},
-                    new String[]{".", ".", ".", "!", "?", "..."}, 0.18, -1);
+                    mid,
+                    end, 0.18, -1);
         }
         /**
          * Builds a SentenceForm with only a few fields specified. The {@link #rng} will be made based on
@@ -4802,8 +4803,8 @@ public class FakeLanguageGen implements Serializable {
          */
         public SentenceForm(FakeLanguageGen language, int minWords, int maxWords)
         {
-            this(language, FakeLanguageGen.srng, minWords, maxWords, new String[]{",", ",", ",", ";", ";"},
-                    new String[]{".", ".", ".", "!", "?", "..."}, 0.18, -1);
+            this(language, FakeLanguageGen.srng, minWords, maxWords, mid,
+                    end, 0.18, -1);
         }
         /**
          * Builds a SentenceForm with all fields specified except for {@link #rng}, which will be made based on

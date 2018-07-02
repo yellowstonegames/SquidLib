@@ -7,7 +7,6 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
 /**
  * Created by Tommy Ettinger on 8/15/2016.
@@ -536,32 +535,97 @@ public class HashQualityTest {
 //        a ^= (result ^ result >>> 27);
 //        return (int) (((a ^ a >>> 25)));// ^ (a >>> 32));
     }
-    public static int joltHash(final CharSequence data) {
+//    public static int joltHash(final CharSequence data) {
+//        if (data == null)
+//            return 0;
+//        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+//        for (int i = 0; i < data.length(); i++) {
+//            result ^= (z += (data.charAt(i) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+//        }
+//        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+//        return (int) (result ^ result >>> 25 ^ z ^ z >>> 29);
+//    }
+    
+    public static int joltHash(final CharSequence data)
+    {
         if (data == null)
             return 0;
         long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
-        //long z = 0x632BE59BD9B4E019L, result = 1L;
-        for (int i = 0; i < data.length(); i++) {
+        final int len = data.length();
+        for (int i = 0; i < len; ++i) {
             result ^= (z += (data.charAt(i) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
         }
         result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
-        return (int) (result ^ result >>> 25 ^ z ^ z >>> 29);
+        result ^= result >>> 25 ^ z ^ z >>> 29;
+        result = (result ^ result >>> 33) * 0XFF51AFD7ED558CCDL;
+        result = (result ^ result >>> 33) * 0XC4CEB9FE1A85EC53L;
+        return (int)(result ^ result >>> 33);
+    }
+    
+    public static int buzzHash(final CharSequence data) {
+        if (data == null)
+            return 0;
+        //long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+        //int result = 0xA539B, z = 0xE47AF;
+        int result = 0xF369B, z = 0xEF17B;
+        for (int i = 0; i < data.length(); i++) {
+            result ^= (z += (data.charAt(i) ^ 0xC74EAD55) * 0xA5CB3);
+        }
+        result += (z ^ z >>> 13) * 0x62BD5;
+        return (result ^ result >>> 11 ^ z ^ z >>> 15);
+    }
+    public static int buzzHashConfig(final CharSequence data, int result, int z) {
+        if (data == null)
+            return 0;
+        //long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+        for (int i = 0; i < data.length(); i++) {
+            result ^= (z += (data.charAt(i) ^ 0xC74EAD55) * 0xA5CB3);
+        }
+        result += (z ^ z >>> 13) * 0x62BD5;
+        return (result ^ result >>> 11 ^ z ^ z >>> 15);
+    }
+    public static int lantern(int state)
+    {
+        //return (state = ((state = (((state * 0x62BD5) ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13) * 0xAF2D9) ^ state >>> 10;
+        return ((state = ((state = ((state ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13) * 0x62BD5) << 22 | state >>> 10);
+    }
+    public static int yuraHash(final CharSequence data, final int seed)
+    {
+        int h1 = seed ^ 0x41C64E6B;
+        int h2 = (seed << 15 | seed >>> 17);
+        final int len = data.length();
+        for (int i = 0; i < len; i++) {
+            h1 += data.charAt(i);
+            h2 += (h1 ^= h1 << 3);
+            h2 = (h2 << 7 | h2 >>> 25);
+            h2 ^= h2 << 2;
+        }
+        h1 ^= h2;
+        h1 += (h2 << 14 | h2 >>> 18);
+        h2 ^= h1;
+        h2 += (h1 << 26 | h1 >>> 6);
+        h1 ^= h2;
+        h1 += (h2 << 5 | h2 >>> 27);
+        return (h2 + (h1 << 24 | h1 >>> 8)) ^ h1;
     }
 
     @Test
     public void testLimited()
     {
         int restrict = 0xFFFFF;
-        CrossHash.Mist storm = CrossHash.Mist.chi;
-        CrossHash.Mist mist = CrossHash.Mist.epsilon;
-
         MarkovText markovText = new MarkovText();
         String theme = "dun dun dun, dun dundun, dun dundun, dun dun dun dun dundun dun dundun.";
-        markovText.analyze(theme);//theme.replace("dun", "wiggle")
-        UnorderedSet<String> strings = new UnorderedSet<>(10000);
-        for (int i = 0; i < 40000 && strings.size() < 10000; i++) {
+        String party = "party party party, I wanna have a party, we're gonna have a party, you better have a party!";
+        //markovText.analyze(party);//theme.replace("dun", "wiggle")
+        final int LIMIT = 0x100000;
+        UnorderedSet<String> strings = new UnorderedSet<>(LIMIT);
+        for (int i = 0; i < (LIMIT << 2) && strings.size() < LIMIT; i++) {
+            // usually not necessary
             //strings.add(markovText.chain(LinnormRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 100));
-            strings.add(markovText.chain(LinnormRNG.determine(i), 140));
+            // try changing length
+            //strings.add(markovText.chain(LinnormRNG.determine(i + 0x1234567890L), 190));
+            strings.add(String.format("FooBar%06d", i));
+            //strings.add(FakeLanguageGen.JAPANESE_ROMANIZED.sentence(LinnormRNG.determine(i + 0x12345678), 10, 10));
         }
         int stringHashLength = strings.size();
         IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(stringHashLength, 0.5f),
@@ -569,17 +633,21 @@ public class HashQualityTest {
                 colliderFal = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderSli = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderWis = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderMis = new IntDoubleOrderedMap(stringHashLength, 0.5f);
-        LightRNG rng1 = new LightRNG(LinnormRNG.determine(System.nanoTime() * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L));
-        LinnormRNG rng2 = new LinnormRNG(LightRNG.determine(System.nanoTime() * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L));
-        final int SIZE = 1024;
-        long[][] pairs = new long[SIZE][2];
-        IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[SIZE];
-        for (int i = 0; i < SIZE; i++) {
-            colliders[i] = new IntDoubleOrderedMap(stringHashLength, 0.65f);
-            pairs[i][0] = rng1.nextLong();
-            pairs[i][1] = rng2.nextLong();
-        }
+                colliderJol = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderSer = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderSpl = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderYur = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderBuz = new IntDoubleOrderedMap(stringHashLength, 0.5f);
+//        LightRNG rng1 = new LightRNG(LinnormRNG.determine(System.nanoTime() * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L));
+//        LinnormRNG rng2 = new LinnormRNG(LightRNG.determine(System.nanoTime() * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L));
+//        final int SIZE = 1024;
+//        int[][] pairs = new int[SIZE][2];
+//        IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[SIZE];
+//        for (int i = 0; i < SIZE; i++) {
+//            colliders[i] = new IntDoubleOrderedMap(stringHashLength, 0.65f);
+//            pairs[i][0] = rng1.next(20);
+//            pairs[i][1] = rng2.next(20);
+//        }
         for(String s : strings)
         {
             colliderJDK.put(s.hashCode() & restrict, 1.0);
@@ -587,10 +655,17 @@ public class HashQualityTest {
             colliderFal.put(CrossHash.Falcon.hash(s) & restrict, 1.0);
             colliderSli.put(slitherHash(s) & restrict, 1.0);
             colliderWis.put(CrossHash.hash(s) & restrict, 1.0);
-            colliderMis.put(joltHash(s) & restrict, 1.0);
-            for (int i = 0; i < SIZE; i++) {
-                colliders[i].put(slitherHashConfig(s, pairs[i][0], pairs[i][1]) & restrict, i);
-            }
+            colliderJol.put(joltHash(s) & restrict, 1.0);
+            colliderSer.put((int)LinnormRNG.determine(s.hashCode()) & restrict, 1.0);
+            colliderSpl.put(lantern(s.hashCode()) & restrict, 1.0);
+            colliderYur.put(yuraHash(s, 0xC74EAD55) & restrict, 1.0);
+            colliderBuz.put(buzzHash(s) & restrict, 1.0);
+//            for (int i = 0; i < SIZE; i++) {
+//                colliders[i].put(slitherHashConfig(s, pairs[i][0], pairs[i][1]) & restrict, i);
+//            }
+//            for (int i = 0; i < SIZE; i++) {
+//                colliders[i].put(buzzHashConfig(s, pairs[i][0], pairs[i][1]) & restrict, i);
+//            }
         }
         System.out.println(strings.iterator().next());
         System.out.println("With " + stringHashLength + " distinct Strings:");
@@ -599,28 +674,36 @@ public class HashQualityTest {
         System.out.println("Fal collisions, 16-bit: " + (stringHashLength - colliderFal.size()));
         System.out.println("Sli collisions, 16-bit: " + (stringHashLength - colliderSli.size()));
         System.out.println("Wis collisions, 16-bit: " + (stringHashLength - colliderWis.size()));
-        System.out.println("Jol collisions, 16-bit: " + (stringHashLength - colliderMis.size()));
-        Arrays.sort(colliders, new Comparator<IntDoubleOrderedMap>() {
-            @Override
-            public int compare(IntDoubleOrderedMap o1, IntDoubleOrderedMap o2) {
-                return o2.size() - o1.size();
-            }
-        });
-        IntDoubleOrderedMap idm;
-        int idx;
-        for (int i = 0; i < 10; i++) {
-            idm = colliders[i];
-            idx = (int)idm.get(idm.firstIntKey());
-            System.out.printf("0x%016X, 0x%016X : %d\n", pairs[idx][0], pairs[idx][1], (stringHashLength - idm.size()));
-            idm.clear();
-        }
+        System.out.println("Jol collisions, 16-bit: " + (stringHashLength - colliderJol.size()));
+        System.out.println("Ser collisions, 16-bit: " + (stringHashLength - colliderSer.size()));
+        System.out.println("Lan collisions, 16-bit: " + (stringHashLength - colliderSpl.size()));
+        System.out.println("Yur collisions, 16-bit: " + (stringHashLength - colliderYur.size()));
+        System.out.println("Buz collisions, 16-bit: " + (stringHashLength - colliderBuz.size()));
+//        Arrays.sort(colliders, new Comparator<IntDoubleOrderedMap>() {
+//            @Override
+//            public int compare(IntDoubleOrderedMap o1, IntDoubleOrderedMap o2) {
+//                return o2.size() - o1.size();
+//            }
+//        });
+//        IntDoubleOrderedMap idm;
+//        int idx;
+//        for (int i = 0; i < 10; i++) {
+//            idm = colliders[i];
+//            idx = (int)idm.get(idm.firstIntKey());
+//            System.out.printf("0x%08X, 0x%08X : %d\n", pairs[idx][0], pairs[idx][1], (stringHashLength - idm.size()));
+//            idm.clear();
+//        }
         System.out.println();
         colliderJDK.clear();
         colliderLit.clear();
         colliderFal.clear();
         colliderSli.clear();
         colliderWis.clear();
-        colliderMis.clear();
+        colliderJol.clear();
+        colliderSer.clear();
+        colliderSpl.clear();
+        colliderYur.clear();
+        colliderBuz.clear();
     }
     /*
     0x2EF022689E573495L, 0x8628F680AFADEDABL : 629
@@ -634,5 +717,11 @@ public class HashQualityTest {
     0x63B36541EDEA1AE2, 0x37B32F846A5CB867 : 971
     
     0x1A976FDF6BF60B8E, a = 0x60642E2A34326F15L;// 253
+    
+    with 32-bit:
+    0x000A539B, 0x000E47AF : 6786
+    0x0007A702, 0x00023F9F : 6786
+    0x000284FD, 0x0008F853 : 6787
+    0x00056F55, 0x00021219 : 6789
      */
 }

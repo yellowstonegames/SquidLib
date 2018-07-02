@@ -179,7 +179,6 @@ public class DijkstraBenchmark {
             gg = new GridGraph(floors, map);
             astar = new IndexedAStarPathFinder<>(gg);
             dgp = new DefaultGraphPath<>(128 * 128);
-
         }
 
     }
