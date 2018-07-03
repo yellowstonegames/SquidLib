@@ -6,6 +6,7 @@ import squidpony.StringKit;
 import squidpony.squidmath.*;
 
 import static org.junit.Assert.assertTrue;
+import static squidpony.examples.LanguageGenTest.PRINTING;
 
 /**
  * Created by Tommy Ettinger on 7/7/2017.
@@ -14,7 +15,6 @@ public class RNGFeatureTest {
     public static ThrustAltRNG tar = new ThrustAltRNG(CrossHash.hash64("Testing all the while..."));
     public static RNG rng = new RNG(tar);
     public static CriticalRNG crng = new CriticalRNG(0x123456789ABCDEF0L);
-    public static final boolean PRINTING = false;
     @Test
     public void testUniqueCells(){
         int width = 21, height = 16;

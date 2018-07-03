@@ -81,7 +81,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ct = 0;
         for (int i = 0, tmp; i < counts.length; i++) {
             tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+            counts[i] = tmp == 0 ? 0 : (ct += tmp);
         }
         tallied = true;
     }
@@ -99,7 +99,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = new long[64];
         counts = new int[64];
         ct = 0;
-        Arrays.fill(counts, -1);
         tallied = true;
     }
 
@@ -755,7 +754,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         counts = new int[width  * ySections];
-        Arrays.fill(counts, -1);
         ct = 0;
         tallied = true;
     }
@@ -773,7 +771,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion resizeAndEmpty(final int width, final int height) {
         if (width == this.width && height == this.height) {
             Arrays.fill(data, 0L);
-            Arrays.fill(counts, -1);
+            Arrays.fill(counts, 0);
             ct = 0;
             tallied = true;
         } else {
@@ -783,7 +781,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             yEndMask = -1L >>> (64 - (this.height & 63));
             data = new long[this.width * ySections];
             counts = new int[this.width * ySections];
-            Arrays.fill(counts, -1);
             ct = 0;
             tallied = true;
         }
@@ -807,7 +804,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
         counts = new int[width * ySections];
-        Arrays.fill(counts, -1);
         if(single.x < width && single.y < height && single.x >= 0 && single.y >= 0)
         {
             data[ct = single.x * ySections + (single.y >> 6)] |= 1L << (single.y & 63);
@@ -1889,7 +1885,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion empty()
     {
         Arrays.fill(data, 0L);
-        Arrays.fill(counts, -1);
+        Arrays.fill(counts, 0);
         ct = 0;
         tallied = true;
         return this;
@@ -1966,7 +1962,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         else
         {
             Arrays.fill(data, 0L);
-            Arrays.fill(counts, -1);
+            Arrays.fill(counts, 0);
             ct = 0;
             tallied = true;
         }
@@ -3866,6 +3862,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         long[] b2 = new long[t.data.length];
         System.arraycopy(t.data, 0, b2, 0, b2.length);
         t.remake(this).fringe().and(bounds).tally();
+        if(t.ct <= 0)
+            return this;
         Coord c;
         int x, y, p;
         for (int i = current; i < volume; i++) {
@@ -3875,38 +3873,36 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             if(data[p = x * ySections + (y >> 6)] != (data[p] |= 1L << (y & 63)))
             {
                 counts[p]++;
+                for (int j = p+1; j < data.length; j++) {
+                    if(counts[j] > 0) ++counts[j];
+                }
                 ct++;
                 t.data[p] &= ~(1L << (y & 63));
-                t.counts[p]--;
-                t.ct--;
-                if(x > 0 && (b2[p = (x-1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0
-                        && t.data[p] != (t.data[p] |= 1L << (y & 63)))
+//                b2[p] &= ~(1L << (y & 63));
+                if(x < width - 1 && (b2[p = (x+1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0)
                 {
-                    t.counts[p]++;
-                    t.ct++;
+                    t.data[p] |= 1L << (y & 63);
                 }
-                if(x < width - 1 && (b2[p = (x+1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0
-                        && t.data[p] != (t.data[p] |= 1L << (y & 63)))
+                if(y < height - 1 && (b2[p = x * ySections + (y+1 >> 6)] & 1L << (y+1 & 63)) != 0)
                 {
-                    t.counts[p]++;
-                    t.ct++;
+                    t.data[p] |= 1L << (y+1 & 63);
                 }
-                if(y > 0 && (b2[p = x * ySections + (y-1 >> 6)] & 1L << (y-1 & 63)) != 0
-                        && t.data[p] != (t.data[p] |= 1L << (y-1 & 63)))
+                if(y > 0 && (b2[p = x * ySections + (y-1 >> 6)] & 1L << (y-1 & 63)) != 0)
                 {
-                    t.counts[p]++;
-                    t.ct++;
+                    t.data[p] |= 1L << (y-1 & 63);
                 }
-                if(y < height - 1 && (b2[p = x * ySections + (y+1 >> 6)] & 1L << (y+1 & 63)) != 0
-                        && t.data[p] != (t.data[p] |= 1L << (y+1 & 63)))
+                if(x > 0 && (b2[p = (x-1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0)
                 {
-                    t.counts[p]++;
-                    t.ct++;
+
+                    t.data[p] |= 1L << (y & 63);
                 }
+                t.tally();
+                if(t.ct <= 0) break;
             }
             else
                 break;
         }
+        tallied = false;
         return this;
     }
 

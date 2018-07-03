@@ -12,7 +12,7 @@ public class DiceTest
     //@Test
     public void showDiceResults()
     {
-        StatefulRNG r = new StatefulRNG(0x1337BEEFDEAL);
+        StatefulRNG r = new StatefulRNG(new LightRNG(0x1337BEEFDEAL));
         Dice d = new Dice(r);
         System.out.println(d.roll("1d6")); // 3
         System.out.println(d.roll("3d8")); // 17
@@ -47,7 +47,7 @@ public class DiceTest
     @Test
     public void testDiceResults()
     {
-        StatefulRNG r = new StatefulRNG(0x1337BEEFDEAL);
+        StatefulRNG r = new StatefulRNG(new LightRNG(0x1337BEEFDEAL));
         Dice d = new Dice(r);
         Assert.assertEquals(d.roll("1d6"),   3 );
         Assert.assertEquals(d.roll("3d8"),   17);
@@ -78,6 +78,5 @@ public class DiceTest
         Assert.assertEquals(d.roll("42!"), 42);
         Assert.assertEquals(d.roll("d"), 0);
         Assert.assertEquals(d.roll("!"), 0);
-
     }
 }

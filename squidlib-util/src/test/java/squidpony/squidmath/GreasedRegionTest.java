@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static squidpony.examples.LanguageGenTest.PRINTING;
 
 
 /**
@@ -33,7 +34,6 @@ public class GreasedRegionTest {
         //printRegion(dataCross);
         //printRegion(dataCross2);
     }
-    public static final boolean PRINTING = false;
     public static void print2D(int[][] data)
     {
         if(!PRINTING)

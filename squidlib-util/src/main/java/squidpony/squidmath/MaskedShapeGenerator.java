@@ -45,7 +45,7 @@ public class MaskedShapeGenerator {
      */
     public int[][] generateInto(int[][] changing, int xPos, int yPos)
     {
-        int w = workingBody.width, h = workingBody.height, ys = workingBody.ySections;
+        int w = workingBody.width, h = workingBody.height, ys = (h + 63) >> 6;
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
@@ -99,7 +99,7 @@ public class MaskedShapeGenerator {
      */
     public int[][] generateIntoShaded(int[][] changing, int xPos, int yPos)
     {
-        int w = workingBody.width, h = workingBody.height, ys = workingBody.ySections;
+        int w = workingBody.width, h = workingBody.height, ys = (h + 63) >> 6;
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
@@ -136,7 +136,7 @@ public class MaskedShapeGenerator {
      */
     public int[][] generateIntoShaded8way(int[][] changing, int xPos, int yPos)
     {
-        int w = workingBody.width, h = workingBody.height, ys = workingBody.ySections;
+        int w = workingBody.width, h = workingBody.height, ys = (h + 63) >> 6;
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
