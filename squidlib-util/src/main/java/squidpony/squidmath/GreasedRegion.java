@@ -3,7 +3,6 @@ package squidpony.squidmath;
 import squidpony.ArrayTools;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
-import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.zone.MutableZone;
 import squidpony.squidgrid.zone.Zone;
 
@@ -71,8 +70,21 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public long[] data;
     public int height;
     public int width;
-    protected int ySections;
-    protected long yEndMask;
+    private int ySections;
+    private long yEndMask;
+    private boolean tallied;
+    private int ct;
+    private int[] counts;
+
+    private void tally()
+    {
+        ct = 0;
+        for (int i = 0, tmp; i < counts.length; i++) {
+            tmp = Long.bitCount(data[i]);
+            counts[i] = tmp == 0 ? -1 : (ct += tmp);
+        }
+        tallied = true;
+    }
 
     /**
      * Constructs an empty 64x64 GreasedRegion.
@@ -85,6 +97,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ySections = 1;
         yEndMask = -1L;
         data = new long[64];
+        counts = new int[64];
+        ct = 0;
+        Arrays.fill(counts, -1);
+        tallied = true;
     }
 
     /**
@@ -99,11 +115,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ySections = (height + 63) >> 6;
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
-        for (int x = 0; x < width; x++) {
+        for (int x = 0, xs = 0; x < width; x++, xs += ySections) {
             for (int y = 0; y < height; y++) {
-                if(bits[x][y]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                if(bits[x][y]) data[xs + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion with the given rectangular boolean array, reusing the current data storage (without
@@ -121,6 +139,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= (map[x][y] ? 1L : 0L) << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             width = (map == null) ? 0 : map.length;
@@ -133,6 +152,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(map[x][y]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -155,6 +176,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion with the given rectangular char array, reusing the current data storage (without
@@ -172,6 +195,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= ((map[x][y] == yes) ? 1L : 0L) << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             width = (map == null) ? 0 : map.length;
@@ -184,6 +208,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -206,6 +232,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 if(map[y].charAt(x) == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
 
     /**
@@ -223,6 +251,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= ((map[y].charAt(x) == yes) ? 1L : 0L) << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             height = (map == null) ? 0 : map.length;
@@ -235,6 +264,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(map[y].charAt(y) == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -256,6 +287,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion with the given rectangular int array, reusing the current data storage (without
@@ -273,6 +306,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= ((map[x][y] == yes) ? 1L : 0L) << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             width = (map == null) ? 0 : map.length;
@@ -285,6 +319,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(map[x][y] == yes) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -310,6 +346,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
 
     /**
@@ -332,6 +370,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= ((column[y] >= lower && column[y] < upper) ? 1L : 0L) << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             width = (map == null) ? 0 : map.length;
@@ -346,6 +385,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -371,6 +412,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
 
     /**
@@ -393,6 +436,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= ((column[y] >= lower && column[y] < upper) ? 1L : 0L) << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             width = (map == null) ? 0 : map.length;
@@ -407,6 +451,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -430,6 +476,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion with the given rectangular double array, reusing the current data storage (without
@@ -448,6 +496,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(map[x][y] <= upperBound) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             width = (map == null) ? 0 : map.length;
@@ -460,6 +509,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(map[x][y] <= upperBound) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -487,6 +538,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion with the given rectangular double array, reusing the current data storage (without
@@ -508,6 +561,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= ((column[y] >= lower && column[y] < upper) ? 1L : 0L) << (y & 63);
                 }
             }
+            tallied = false;
             return this;
         } else {
             width = (map == null) ? 0 : map.length;
@@ -522,6 +576,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if(column[y] >= lower && column[y] < upper) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -561,6 +617,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion with the given rectangular double array, reusing the current data storage (without
@@ -597,6 +655,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     }
                 }
             }
+            tallied = false;
             return this;
         } else {
             int baseWidth = (map == null) ? 0 : map.length,
@@ -620,6 +679,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     }
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -642,6 +703,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
             if(bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion with the given 1D boolean array, reusing the current data storage (without
@@ -659,6 +722,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int a = 0, x = 0, y = 0; a < bits.length; a++, x = a / height, y = a % height) {
                 data[x * ySections + (y >> 6)] |= (bits[a] ? 1L : 0L) << (y & 63);
             }
+            tallied = false;
             return this;
         } else {
             this.width = (bits == null || width < 0) ? 0 : width;
@@ -671,6 +735,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if (bits[a]) data[x * ySections + (y >> 6)] |= 1L << (y & 63);
                 }
             }
+            counts = new int[width * ySections];
+            tallied = false;
             return this;
         }
     }
@@ -688,6 +754,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ySections = (height + 63) >> 6;
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
+        counts = new int[width  * ySections];
+        Arrays.fill(counts, -1);
+        ct = 0;
+        tallied = true;
     }
 
     /**
@@ -703,12 +773,19 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion resizeAndEmpty(final int width, final int height) {
         if (width == this.width && height == this.height) {
             Arrays.fill(data, 0L);
+            Arrays.fill(counts, -1);
+            ct = 0;
+            tallied = true;
         } else {
             this.width = (width <= 0) ? 0 : width;
             this.height = (height <= 0) ? 0 : height;
             ySections = (this.height + 63) >> 6;
             yEndMask = -1L >>> (64 - (this.height & 63));
             data = new long[this.width * ySections];
+            counts = new int[this.width * ySections];
+            Arrays.fill(counts, -1);
+            ct = 0;
+            tallied = true;
         }
         return this;
 
@@ -729,9 +806,20 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ySections = (height + 63) >> 6;
         yEndMask = -1L >>> (64 - (height & 63));
         data = new long[width * ySections];
-
+        counts = new int[width * ySections];
+        Arrays.fill(counts, -1);
         if(single.x < width && single.y < height && single.x >= 0 && single.y >= 0)
-            data[single.x * ySections + (single.y >> 6)] |= 1L << (single.y & 63);
+        {
+            data[ct = single.x * ySections + (single.y >> 6)] |= 1L << (single.y & 63);
+            counts[ct] = 1;
+            ct = 1;
+            tallied = true;
+        }
+        else
+        {
+            ct = 0;
+            tallied = true;
+        }
     }
 
     /**
@@ -758,6 +846,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
 
     /**
@@ -784,6 +874,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
+
     }
 
     /**
@@ -809,6 +902,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
@@ -835,12 +930,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int i = 0; i < this.width * ySections; i++) {
                     data[i] = random.nextLong();
                 }
+                counts = new int[this.width * ySections];
             }
             if(ySections > 0 && yEndMask != -1) {
                 for (int a = ySections - 1; a < data.length; a += ySections) {
                     data[a] &= yEndMask;
                 }
             }
+            tallied = false;
         }
         return this;
     }
@@ -868,6 +965,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion by filling it with random values from random, reusing the current data storage
@@ -893,12 +992,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int i = 0; i < this.width * ySections; i++) {
                     data[i] = random.nextLong();
                 }
+                counts = new int[width * ySections];
             }
             if(ySections > 0 && yEndMask != -1) {
                 for (int a = ySections - 1; a < data.length; a += ySections) {
                     data[a] &= yEndMask;
                 }
             }
+            tallied = false;
         }
         return this;
     }
@@ -936,6 +1037,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Reassigns this GreasedRegion randomly, reusing the current data storage (without extra allocations) if this.width
@@ -972,6 +1075,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int i = 0; i < this.width * ySections; i++) {
                     data[i] = approximateBits(random, bitCount);
                 }
+                counts = new int[width * ySections];
             }
             if(ySections > 0 && yEndMask != -1) {
                 for (int a = ySections - 1; a < data.length; a += ySections) {
@@ -998,7 +1102,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ySections = other.ySections;
         yEndMask = other.yEndMask;
         data = new long[width * ySections];
+        counts = new int[width * ySections];
         System.arraycopy(other.data, 0, data, 0, width * ySections);
+        System.arraycopy(other.data, 0, data, 0, width * ySections);
+        ct  = other.ct;
+        tallied = other.tallied;
     }
 
     /**
@@ -1023,6 +1131,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        counts = new int[width * ySections];
     }
 
     /**
@@ -1071,6 +1180,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        counts = new int[width * ySections];
     }
     /**
      * Primarily for internal use, this method copies data2 into the internal long array the new GreasedRegion will
@@ -1094,6 +1204,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             ySections = (height + 63) >> 6;
             yEndMask = -1L >>> (64 - (height & 63));
             data = new long[width * ySections];
+            counts = new int[width * ySections];
         }
         else {
             Arrays.fill(data, 0L);
@@ -1123,6 +1234,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -1143,6 +1255,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion remake(GreasedRegion other) {
         if (width == other.width && height == other.height) {
             System.arraycopy(other.data, 0, data, 0, width * ySections);
+            System.arraycopy(other.counts, 0, counts, 0, width * ySections);
+            ct = other.ct;
+            tallied = other.tallied;
             return this;
         } else {
             width = other.width;
@@ -1151,6 +1266,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             yEndMask = other.yEndMask;
             data = new long[width * ySections];
             System.arraycopy(other.data, 0, data, 0, width * ySections);
+            System.arraycopy(other.counts, 0, counts, 0, width * ySections);
+            ct = other.ct;
+            tallied = other.tallied;
             return this;
         }
     }
@@ -1177,11 +1295,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             ySections= 0;
             yEndMask = -1;
             data = new long[0];
+            counts = new int[0];
+            ct = 0;
+            tallied = true;
             return this;
         }
         int newYSections = (newHeight + 63) >> 6;
         yEndMask = -1L >>> (64 - (newHeight & 63));
-        long[] newData = new long[newWidth * newYSections];
+        long[] newData = new long[newWidth * newYSections];         
+        counts = new int[newWidth * newYSections];
+        
         for (int x = 0; x < width && x < newWidth; x++) {
             for (int ys = 0; ys < ySections && ys < newYSections; ys++) {
                 newData[x * newYSections + ys] = data[x * ySections + ys];
@@ -1196,6 +1319,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -1213,6 +1337,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[x * ySections + (y >> 6)] |= 1L << (y & 63);
             else
                 data[x * ySections + (y >> 6)] &= ~(1L << (y & 63));
+            tallied = false;
         }
         return this;
     }
@@ -1240,7 +1365,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion insert(int x, int y)
     {
         if(x < width && y < height && x >= 0 && y >= 0)
+        {
             data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+            tallied = false;
+        }
         return this;
     }
 
@@ -1253,7 +1381,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion insert(int tight)
     {
         if(tight < width * height && tight >= 0)
+        {
             data[(tight % width) * ySections + ((tight / width) >>> 6)] |= 1L << ((tight / width) & 63);
+            tallied = false;
+        }
         return this;
     }
     /**
@@ -1391,7 +1522,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
-
+        tallied = false;
         return this;
     }
 
@@ -1401,7 +1532,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             x = points[i].x;
             y = points[i].y;
             if(x < width && y < height && x >= 0 && y >= 0)
+            {
                 data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                tallied = false;
+            }
         }
         return this;
     }
@@ -1411,7 +1545,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int i = 0, tight; i < points.length; i++) {
             tight = points[i];
             if(tight < width * height && tight >= 0)
+            {
                 data[(tight % width) * ySections + ((tight / width) >>> 6)] |= 1L << ((tight / width) & 63);
+                tallied = false;
+            }
         }
         return this;
     }
@@ -1423,7 +1560,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             x = pt.x;
             y = pt.y;
             if(x < width && y < height && x >= 0 && y >= 0)
+            {
                 data[x * ySections + (y >> 6)] |= 1L << (y & 63);
+                tallied = false;
+            }
         }
         return this;
     }
@@ -1470,23 +1610,40 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
 
-        if(ySections > 0 && yEndMask != -1) {
+        if(yEndMask != -1L) {
             for (int a = ySections - 1; a < data.length; a += ySections) {
                 data[a] &= yEndMask;
             }
         }
+        tallied = false;
         return this;
     }
 
     public GreasedRegion insertCircle(Coord center, int radius)
     {
-        return insertSeveral(Radius.CIRCLE.pointsInside(center, radius, false, width, height));
+        float high, changedX;
+        int rndX, rndY;
+        for (int dx = -radius; dx <= radius; ++dx) {
+            changedX = dx - 0.25f * Math.signum(dx);
+            rndX = Math.round(changedX);
+            high = (float) Math.sqrt(radius * radius - changedX * changedX);             
+            insert(center.x + rndX, center.y);
+            for (float dy = high; dy >= 0.75f; --dy) {
+                rndY = Math.round(dy - 0.25f);                 
+                insert(center.x + rndX, center.y + rndY);
+                insert(center.x + rndX, center.y - rndY);
+            }
+        }
+        return this;
     }
 
     public GreasedRegion remove(int x, int y)
     {
         if(x < width && y < height && x >= 0 && y >= 0)
+        {
             data[x * ySections + (y >> 6)] &= ~(1L << (y & 63));
+            tallied = false;
+        }
         return this;
     }
     public GreasedRegion remove(Coord point)
@@ -1617,6 +1774,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        tallied = false;
 
         return this;
     }
@@ -1626,7 +1784,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             x = points[i].x;
             y = points[i].y;
             if(x < width && y < height && x >= 0 && y >= 0)
+            {
                 data[x * ySections + (y >> 6)] &= ~(1L << (y & 63));
+                tallied = false;
+            }
         }
         return this;
     }
@@ -1638,7 +1799,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             x = pt.x;
             y = pt.y;
             if(x < width && y < height && x >= 0 && y >= 0)
+            {
                 data[x * ySections + (y >> 6)] &= ~(1L << (y & 63));
+                tallied = false;
+            }
         }
         return this;
     }
@@ -1696,12 +1860,26 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= mask;
             }
         }
+        tallied = false;
         return this;
     }
 
     public GreasedRegion removeCircle(Coord center, int radius)
     {
-        return removeSeveral(Radius.CIRCLE.pointsInside(center, radius, false, width, height));
+        float high, changedX;
+        int rndX, rndY;
+        for (int dx = -radius; dx <= radius; ++dx) {
+            changedX = dx - 0.25f * Math.signum(dx);
+            rndX = Math.round(changedX);
+            high = (float) Math.sqrt(radius * radius - changedX * changedX);
+            remove(center.x + rndX, center.y);
+            for (float dy = high; dy >= 0.75f; --dy) {
+                rndY = Math.round(dy - 0.25f);
+                remove(center.x + rndX, center.y + rndY);
+                remove(center.x + rndX, center.y - rndY);
+            }
+        }
+        return this;
     }
 
     /**
@@ -1711,6 +1889,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion empty()
     {
         Arrays.fill(data, 0L);
+        Arrays.fill(counts, -1);
+        ct = 0;
+        tallied = true;
         return this;
     }
 
@@ -1724,15 +1905,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         {
             if(yEndMask == -1) {
                 Arrays.fill(data, -1);
+                Arrays.fill(counts, 64);
+                ct = ySections * width << 6;
+                tallied = true;
             }
             else
             {
+                ct = Long.bitCount(yEndMask);
                 for (int a = ySections - 1; a < data.length; a += ySections) {
                     data[a] = yEndMask;
+                    counts[a] = ct;
                     for (int i = 0; i < ySections - 1; i++) {
                         data[a-i-1] = -1;
+                        counts[a-i-1] = 64;
                     }
                 }
+                ct *= width;
+                ct += (ySections - 1) * width << 6;
+                tallied = true;
             }
         }
         return this;
@@ -1751,15 +1941,24 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             {
                 if(yEndMask == -1) {
                     Arrays.fill(data, -1);
+                    Arrays.fill(counts, 64);
+                    ct = ySections * width << 6;
+                    tallied = true;
                 }
                 else
                 {
+                    ct = Long.bitCount(yEndMask);
                     for (int a = ySections - 1; a < data.length; a += ySections) {
                         data[a] = yEndMask;
+                        counts[a] = ct;
                         for (int i = 0; i < ySections - 1; i++) {
                             data[a-i-1] = -1;
+                            counts[a-i-1] = 64;
                         }
                     }
+                    ct *= width;
+                    ct += (ySections - 1) * width << 6;
+                    tallied = true;
                 }
             }
             //else... what, if ySections is 0 there's nothing to do
@@ -1767,6 +1966,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         else
         {
             Arrays.fill(data, 0L);
+            Arrays.fill(counts, -1);
+            ct = 0;
+            tallied = true;
         }
         return this;
     }
@@ -1792,8 +1994,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int a = ySections * 2 - 1; a < data.length - ySections; a += ySections) {
                     data[a] &= yEndMask >>> 1;
                 }
-
             }
+            tallied = false;
         }
         return this;
     }
@@ -2088,6 +2290,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        tallied = false;
 
         return this;
     }
@@ -2105,6 +2308,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[x * ySections + y] &= other.data[x * ySections + y];
             }
         }
+        tallied = false;
         return this;
     }
     /**
@@ -2121,6 +2325,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[x * ySections + y] &= ~other.data[x * ySections + y];
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -2138,6 +2343,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[x * ySections + y] = other.data[x * ySections + y] & ~data[x * ySections + y];
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -2162,6 +2368,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -2181,6 +2388,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] &= yEndMask;
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -2251,6 +2459,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
 
         data = data2;
+        tallied = false;
         return this;
     }
 
@@ -2325,6 +2534,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         }
 
         data = data2;
+        tallied = false;
         return this;
     }
 
@@ -2451,12 +2661,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
 
-        if(ySections > 0 && yEndMask != -1) {
+        if(yEndMask != -1) {
             for (int a = ySections - 1; a < data.length; a += ySections) {
                 data[a] &= yEndMask;
             }
         }
-
+        tallied = false;
         return this;
     }
 
@@ -2516,6 +2726,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -2583,6 +2794,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
     /**
@@ -2652,6 +2864,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -2755,6 +2968,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
             mask = ~mask;
         }
+        tallied = false;
         return this;
     }
     /**
@@ -2773,6 +2987,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             data[j] &= mask;
             data[j+1] = 0;
         }
+        tallied = false;
         return this;
     }
     /**
@@ -2790,6 +3005,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int j = 0; j < len; j++) {
             data[j] &= randomInterleave(random);
         }
+        tallied = false;
         return this;
     }
     /**
@@ -2905,6 +3121,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
     /**
@@ -3088,6 +3305,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -3210,6 +3428,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -3345,6 +3564,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -3466,6 +3686,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -3582,6 +3803,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -3640,10 +3862,50 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         int current = size();
         if(current >= volume)
             return this;
-        GreasedRegion t = new GreasedRegion(this);
-        Coord c = Coord.get(-1, -1);
+        GreasedRegion t = new GreasedRegion(this).notAnd(bounds);
+        long[] b2 = new long[t.data.length];
+        System.arraycopy(t.data, 0, b2, 0, b2.length);
+        t.remake(this).fringe().and(bounds).tally();
+        Coord c;
+        int x, y, p;
         for (int i = current; i < volume; i++) {
-            insert(t.remake(this).fringe().and(bounds).singleRandom(rng));
+            c = t.singleRandom(rng);
+            x = c.x;
+            y = c.y;
+            if(data[p = x * ySections + (y >> 6)] != (data[p] |= 1L << (y & 63)))
+            {
+                counts[p]++;
+                ct++;
+                t.data[p] &= ~(1L << (y & 63));
+                t.counts[p]--;
+                t.ct--;
+                if(x > 0 && (b2[p = (x-1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0
+                        && t.data[p] != (t.data[p] |= 1L << (y & 63)))
+                {
+                    t.counts[p]++;
+                    t.ct++;
+                }
+                if(x < width - 1 && (b2[p = (x+1) * ySections + (y >> 6)] & 1L << (y & 63)) != 0
+                        && t.data[p] != (t.data[p] |= 1L << (y & 63)))
+                {
+                    t.counts[p]++;
+                    t.ct++;
+                }
+                if(y > 0 && (b2[p = x * ySections + (y-1 >> 6)] & 1L << (y-1 & 63)) != 0
+                        && t.data[p] != (t.data[p] |= 1L << (y-1 & 63)))
+                {
+                    t.counts[p]++;
+                    t.ct++;
+                }
+                if(y < height - 1 && (b2[p = x * ySections + (y+1 >> 6)] & 1L << (y+1 & 63)) != 0
+                        && t.data[p] != (t.data[p] |= 1L << (y+1 & 63)))
+                {
+                    t.counts[p]++;
+                    t.ct++;
+                }
+            }
+            else
+                break;
         }
         return this;
     }
@@ -3713,6 +3975,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         data = next;
+        tallied = false;
         return this;
     }
 
@@ -3870,8 +4133,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[i] = (data[i] << 1);
                 }
             }
-
         }
+        tallied = false;
         return this;
     }
 
@@ -3896,8 +4159,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[i] = (data[i] >>> 1);
                 }
             }
-
         }
+        tallied = false;
         return this;
     }
 
@@ -3917,6 +4180,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
             data[a] = 0L;
         }
+        tallied = false;
         return this;
     }
 
@@ -3936,6 +4200,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
             data[(width-1)*ySections+a] = 0L;
         }
+        tallied = false;
         return this;
     }
 
@@ -3992,6 +4257,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[(width-1)*ySections+a] = 0L;
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -4020,6 +4286,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[a] = 0L;
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -4048,6 +4315,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 data[(width-1)*ySections+a] = 0L;
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -4108,11 +4376,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public int size()
     {
-        int c = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            c += Long.bitCount(data[i]);
-        }
-        return c;
+        if(!tallied)
+            tally();
+        return ct;
     }
 
     public Coord fit(double xFraction, double yFraction)
@@ -4393,16 +4659,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return new Coord[0];
         if(fraction > 1)
             fraction = 1;
-        int ct = 0, tmp, ic;
+        int tmp, ic;
         long t, w;
-        int[] counts = new int[width * ySections];
-        for (int i = 0; i < width * ySections; i++) {
-            tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
-        }
         seed |= 1L;
-        final int total = ct;
-        ct *= fraction;// (int)(fraction * ct);
+        final int total = size();
+        int ct = (int)(total * fraction);
         if(limit >= 0 && limit < ct)
             ct = limit;
         Coord[] vl = new Coord[ct];
@@ -4476,20 +4737,17 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return this for chaining
      */
     public GreasedRegion mixedRandomRegion(double fraction, int limit, long seed) {
-        int ct = 0, idx, run = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            ct += Long.bitCount(data[i]);
-        }
-        if (ct <= limit)
+        int idx, run = 0;
+        final int total = size();
+        if (total <= limit)
             return this;
-        if (ct <= 0)
+        if (total <= 0)
             return empty();
         if (limit < 0)
             limit = (int) (fraction * ct);
         if(limit <= 0)
             return empty();
         seed |= 1L;
-        final int total = ct;
         int[] order = new int[limit];
         for (int i = 0, m = 1; i < limit; i++, m++) {
             idx = (int)(VanDerCorputQRNG.altDetermine(seed, m) * total);
@@ -4536,6 +4794,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -4650,10 +4909,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return this for chaining
      */
     public GreasedRegion quasiRandomRegion(double fraction, int limit) {
-        int ct = 0, idx, run = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            ct += Long.bitCount(data[i]);
-        }
+        int ct = size(), idx, run = 0;
         if (ct <= limit)
             return this;
         if (ct <= 0)
@@ -4708,6 +4964,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
+        tallied = false;
         return this;
     }
 
@@ -4752,7 +5009,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion randomScatter(IRNG rng, int minimumDistance, int limit) {
         int ic = 0;
         for (; ic < width * ySections; ic++) {
-            if(Long.bitCount(data[ic]) > 0)
+            if(data[ic] != 0)
                 break;
         }
         if(ic == width * ySections)
@@ -4765,13 +5022,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         long t, w;
         int tmp, total = 0;
         MAIN_LOOP:
-        while (total < limit) {
-            int ct = 0;
-            int[] counts = new int[width * ySections];
-            for (int i = 0; i < width * ySections; i++) {
-                tmp = Long.bitCount(data[i]);
-                counts[i] = tmp == 0 ? -1 : (ct += tmp);
-            }
+        while (total < limit) { 
+            if(!tallied) 
+                tally();
             tmp = rng.nextInt(ct);
 
             for (int s = 0; s < ySections; s++) {
@@ -4797,6 +5050,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             break;
         }
         data = data2;
+        tallied = false;
         return this;
     }
 
@@ -4941,10 +5195,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
     public int[] asEncoded()
     {
-        int ct = 0, idx = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            ct += Long.bitCount(data[i]);
-        }
+        int ct = size(), idx = 0;
         int[] points = new int[ct];
         long t, w;
         for (int x = 0; x < width; x++) {
@@ -4964,10 +5215,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
     public int[] asTightEncoded()
     {
-        int ct = 0, idx = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            ct += Long.bitCount(data[i]);
-        }
+        int ct = size(), idx = 0;
         int[] points = new int[ct];
         long t, w;
         for (int x = 0; x < width; x++) {
@@ -5039,12 +5287,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     {
         if(index < 0)
             return Coord.get(-1, -1);
-        int ct = 0, tmp;
-        int[] counts = new int[width * ySections];
-        for (int i = 0; i < width * ySections; i++) {
-            tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
-        }
+        int ct = size(), tmp;
         if(index >= ct)
             return Coord.get(-1, -1);
         long t, w;
@@ -5067,12 +5310,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public Coord atFraction(final double fraction)
     {
-        int ct = 0, tmp;
-        int[] counts = new int[width * ySections];
-        for (int i = 0; i < width * ySections; i++) {
-            tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
-        }
+        int ct = size(), tmp;
+        if(ct <= 0) return Coord.get(-1, -1);
         tmp = Math.abs((int)(fraction * ct) % ct);
         long t, w;
         for (int s = 0; s < ySections; s++) {
@@ -5094,12 +5333,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public int atFractionTight(final double fraction)
     {
-        int ct = 0, tmp;
-        int[] counts = new int[width * ySections];
-        for (int i = 0; i < width * ySections; i++) {
-            tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
-        }
+        int ct = size(), tmp;
         if(ct <= 0) return -1;
         tmp = Math.abs((int)(fraction * ct) % ct);
         long t, w;
@@ -5123,13 +5357,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public Coord singleRandom(IRNG rng)
     {
-        int ct = 0, tmp;
-        int[] counts = new int[width * ySections];
-        for (int i = 0; i < width * ySections; i++) {
-            tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
-        }
-        tmp = rng.nextInt(ct);
+        int ct = size(), tmp = rng.nextInt(ct);
         long t, w;
         for (int s = 0; s < ySections; s++) {
             for (int x = 0; x < width; x++) {
@@ -5145,19 +5373,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
-
         return Coord.get(-1, -1);
     }
 
     public int singleRandomTight(IRNG rng)
     {
-        int ct = 0, tmp;
-        int[] counts = new int[width * ySections];
-        for (int i = 0; i < width * ySections; i++) {
-            tmp = Long.bitCount(data[i]);
-            counts[i] = tmp == 0 ? -1 : (ct += tmp);
-        }
-        tmp = rng.nextInt(ct);
+        int ct = size(), tmp = rng.nextInt(ct);
         long t, w;
         for (int s = 0; s < ySections; s++) {
             for (int x = 0; x < width; x++) {
@@ -5410,10 +5631,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public Coord[] randomPortion(IRNG rng, int size)
     {
-        int ct = 0, idx = 0, run = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            ct += Long.bitCount(data[i]);
-        }
+        int ct = size(), idx = 0, run = 0;
         if(ct <= 0 || size <= 0)
             return new Coord[0];
         if(ct <= size)
@@ -5444,10 +5662,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     public GreasedRegion randomRegion(IRNG rng, int size)
     {
-        int ct = 0, idx = 0, run = 0;
-        for (int i = 0; i < width * ySections; i++) {
-            ct += Long.bitCount(data[i]);
-        }
+        int ct = size(), idx = 0, run = 0;
         if(ct <= 0 || size <= 0)
             return empty();
         if(ct <= size)
@@ -5491,6 +5706,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      */
     @Override
     public boolean isEmpty() {
+        if(tallied) return ct > 0;
         for (int i = 0; i < data.length; i++) {
             if(data[i] != 0L) return false;
         }
@@ -6014,6 +6230,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
             data[i] &= mash;
         }
+        tallied = false;
         return this;
     }
 
@@ -6042,6 +6259,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int i = 0; i < width * ySections; i++) {
             data[i] &= approximateBits(random, bitCount);
         }
+        tallied = false;
         return this;
     }
 
@@ -6053,7 +6271,10 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      */
     public GreasedRegion flip(int x, int y) {
         if(x >= 0 && y >= 0 && x < width && y < height && ySections > 0)
+        {
             data[x * ySections + (y >> 6)] ^= (1L << (y & 63));
+            tallied = false;
+        }
         return this;
 
     }
@@ -6100,7 +6321,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return {@code this} copied and shifted by {@code (c.x,c.y)}
      */
     @Override
-    public Zone translate(Coord c) {
+    public GreasedRegion translate(Coord c) {
         return copy().translate(c.x, c.y);
     }
     /**
@@ -6285,38 +6506,31 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public class GRIterator implements Iterator<Coord>
     {
         public int index = 0;
-        private int[] counts;
-        private int limit;
         private long t, w;
         public GRIterator()
         {
-            limit = 0;
-            counts = new int[width * ySections];
-            int tmp;
-            for (int i = 0; i < width * ySections; i++) {
-                tmp = Long.bitCount(data[i]);
-                counts[i] = tmp == 0 ? -1 : (limit += tmp);
-            }
+            if(!tallied)
+                tally();
         }
         @Override
         public boolean hasNext() {
-            return index < limit;
+            return index < ct;
         }
 
         @Override
         public Coord next() {
-            int ct;
-            if(index >= limit)
+            int c;
+            if(index >= ct)
                 return null;
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
-                    if ((ct = counts[x * ySections + s]) > index) {
+                    if ((c = counts[x * ySections + s]) > index) {
                         t = data[x * ySections + s];
                         w = NumberTools.lowestOneBit(t);
-                        for (--ct; w != 0; ct--) {
-                            if (ct == index)
+                        for (--c; w != 0; c--) {
+                            if (c == index)
                             {
-                                if(index++ < limit)
+                                if(index++ < ct)
                                     return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
                                 else
                                     return null;
