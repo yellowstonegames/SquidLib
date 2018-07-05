@@ -511,6 +511,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             {
                 fixOrder(n);
                 order.insert(idx, n);
+                if(idx == 0)
+                    first = idx;
+                if(idx == size - 1)
+                    last = idx;
                 return n;
             }
             containsNullKey = true;
@@ -524,6 +528,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 {
                     fixOrder(pos);
                     order.insert(idx, pos);
+                    if(idx == 0)
+                        first = idx;
+                    if(idx == size - 1)
+                        last = idx;
                     return pos;
                 }
                 while ((curr = key[pos = (pos + 1) & mask]) != null)
@@ -531,6 +539,10 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                     {
                         fixOrder(pos);
                         order.insert(idx, pos);
+                        if(idx == 0)
+                            first = idx;
+                        if(idx == size - 1)
+                            last = idx;
                         return pos;
                     }
             }
@@ -540,6 +552,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         if (size == 0) {
             first = last = pos;
         }
+        //fixOrder(pos);
         order.insert(idx, pos);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
@@ -1161,7 +1174,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             first = d;
             order.set(0, d);
         }
-        else if (last == s) {
+        else if (order.peek() == s) {
             last = d;
             order.set(order.size - 1, d);
         }
