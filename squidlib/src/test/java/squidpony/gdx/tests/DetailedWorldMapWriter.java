@@ -50,7 +50,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Empty                  = 14;
 
     //private static final int width = 1920, height = 1080;
-    private static final int width = 1024, height = 512; // elliptical, roundSide
+    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
     //private static final int width = 512, height = 256; // mimic, elliptical
     //private static final int width = 1000, height = 1000; // space view
     //private static final int width = 256, height = 128;
@@ -214,7 +214,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Mimic " + date + "/";
         //path = "out/worlds/Dump " + date + "/";
         //path = "out/worlds/SpaceView " + date + "/";
-        path = "out/worlds/RoundSide " + date + "/";
+        //path = "out/worlds/RoundSide " + date + "/";
+        path = "out/worlds/Hyperellipse " + date + "/";
 
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
@@ -238,7 +239,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.7);
+        //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.7);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.75);
         //dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {

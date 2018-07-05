@@ -117,6 +117,11 @@ MimicFill and DetailedMimic are direct ports of https://github.com/mxgmn/ConvCha
 https://github.com/mxgmn/SynTex from C# to Java; the former is public domain while the
 latter is MIT-licensed.
 
+ProjectionTools and parts of WorldMapGenerator.HyperellipticalMap are derived from
+Justin Kunimune's work on Map-Projections, https://github.com/jkunimune15/Map-Projections ,
+which is MIT licensed. Those in turn are derived from Waldo Tobler's work on the
+hyperelliptical map projection that bears his name.
+
 A substantial amount of work on SquidLib has been done by smelC, https://github.com/smelc ,
 especially in the areas of color handling, text layout, and shape analysis for dungeons.
 His help has been very welcome in helping to manage the growing codebase and to keep

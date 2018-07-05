@@ -3282,9 +3282,9 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link RoundSideMap#RoundSideMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0}.
          */
         public RoundSideMap() {
             this(0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0);
@@ -3296,7 +3296,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
@@ -3311,7 +3311,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -3327,7 +3327,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses ClassicNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -3350,7 +3350,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -3375,7 +3375,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier) {
@@ -3633,6 +3633,385 @@ public abstract class WorldMapGenerator implements Serializable {
                 }
             }
             */
+        }
+    }
+    /**
+     * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto a shape that resembles a
+     * mix part-way between an ellipse and a rectangle. This is an equal-area projection, like EllipticalMap, so effects that fill
+     * areas on a map like {@link PoliticalMapper} will fill (almost) equally on any part of the map. This has less
+     * distortion around all the edges than the other maps here, especially when comparing the North and South poles
+     * with RoundSideMap.
+     * This uses the <a href="https://en.wikipedia.org/wiki/Tobler_hyperelliptical_projection">Tobler hyperelliptical projection</a>.
+     * <a href="">Example map</a>
+     */
+    @Beta
+    public static class HyperellipticalMap extends WorldMapGenerator {
+        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
+                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
+                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
+
+        public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
+        //        public final Noise4D terrain4D;
+        public final double[][] xPositions,
+                yPositions,
+                zPositions;
+        protected final int[] edges;
+        private final double alpha, kappa, epsilon;
+        private final double[] Z;
+
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Always makes a 200x100 map.
+         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * If you were using {@link HyperellipticalMap#HyperellipticalMap(long, int, int, Noise3D, double)}, then this would be the
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0}.
+         */
+        public HyperellipticalMap() {
+            this(0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Takes only the width/height of the map. The initial seed is set to the same large long
+         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
+         * height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param mapWidth  the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         */
+        public HyperellipticalMap(int mapWidth, int mapHeight) {
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  ClassicNoise.instance,1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         */
+        public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight) {
+            this(initialSeed, mapWidth, mapHeight, ClassicNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses ClassicNoise as its noise generator, with the given octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
+            this(initialSeed, mapWidth, mapHeight, ClassicNoise.instance, octaveMultiplier);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
+         * implementation to use is {@link ClassicNoise#instance}, and {@link WhirlingNoise#instance} is also good.
+         *
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         */
+        public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
+            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
+         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
+         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
+         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
+         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
+         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
+         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
+         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
+         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
+         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
+         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
+         * is fine and may even be too high for maps that don't require zooming.
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier){
+            this(initialSeed, mapWidth, mapHeight, noiseGenerator, octaveMultiplier, 0.1, 3.25);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * ellipse without distortion of the sizes of features but with significant distortion of shape.
+         * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
+         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
+         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
+         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
+         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
+         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
+         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
+         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
+         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
+         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
+         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
+         * is fine and may even be too high for maps that don't require zooming.
+         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param mapWidth the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         * @param alpha one of the Tobler parameters;  0.1 is the default and this can range from 0.0 to 1.0 at least
+         * @param kappa one of the Tobler parameters; 3.25 is the default but 2.0-5.0 range values are also often used
+         */
+        public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator,
+                                  double octaveMultiplier, double alpha, double kappa){
+            super(initialSeed, mapWidth, mapHeight);
+            xPositions = new double[width][height];
+            yPositions = new double[width][height];
+            zPositions = new double[width][height];
+            edges = new int[height << 1];
+            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
+            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
+            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
+            this.alpha = alpha;
+            this.kappa = kappa;
+            this.Z = new double[height << 2];
+            this.epsilon = ProjectionTools.simpsonIntegrateHyperellipse(0.0, 1.0, 0.25 / height, kappa);
+            ProjectionTools.simpsonODESolveHyperellipse(1, this.Z, 0.25 / height, alpha, kappa, epsilon);
+        }
+
+        @Override
+        public int wrapX(final int x, int y) {
+            y = Math.max(0, Math.min(y, height - 1));
+            if(x < edges[y << 1])
+                return edges[y << 1 | 1];
+            else if(x > edges[y << 1 | 1])
+                return edges[y << 1];
+            else return x;
+        }
+
+        @Override
+        public int wrapY(final int x, final int y)  {
+            return Math.max(0, Math.min(y, height - 1));
+        }
+
+        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                                  double landMod, double coolMod, long state)
+        {
+            boolean fresh = false;
+            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            {
+                minHeight = Double.POSITIVE_INFINITY;
+                maxHeight = Double.NEGATIVE_INFINITY;
+                minHeightActual = Double.POSITIVE_INFINITY;
+                maxHeightActual = Double.NEGATIVE_INFINITY;
+                minHeat0 = Double.POSITIVE_INFINITY;
+                maxHeat0 = Double.NEGATIVE_INFINITY;
+                minHeat1 = Double.POSITIVE_INFINITY;
+                maxHeat1 = Double.NEGATIVE_INFINITY;
+                minHeat = Double.POSITIVE_INFINITY;
+                maxHeat = Double.NEGATIVE_INFINITY;
+                minWet0 = Double.POSITIVE_INFINITY;
+                maxWet0 = Double.NEGATIVE_INFINITY;
+                minWet = Double.POSITIVE_INFINITY;
+                maxWet = Double.NEGATIVE_INFINITY;
+                cachedState = state;
+                fresh = true;
+            }
+            rng.setState(state);
+            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
+            int t;
+
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;
+            coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
+
+            double p,
+                    ps, pc,
+                    qs, qc,
+                    h, temp, yPos, xPos,
+                    i_uw = usedWidth / (double)width,
+                    i_uh = usedHeight / (double)height,
+                    th, lon,
+                    rx = width * 0.5, irx = Math.PI / rx, hw = width * 0.5,
+                    ry = height * 0.5, iry = 1.0 / ry;
+
+            yPos = startY - ry;
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+//                thy = yPos * iry;//NumberTools.sin(thb);
+//                thb = asin(thy);
+//                thx = NumberTools.cos(thb);
+//                //1.3265004 0.7538633073600218  1.326500428177002
+//                lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? 0x1.0p100 : irx / (0.42223820031577125 * (1.0 + thx));
+//                qs = (thb + (thx + 2.0) * thy) * 0.2800495767557787;
+//                lat = asin(qs);
+//
+//                qc = NumberTools.cos(lat);
+                
+                lon = asin(Z[(int)(0.5 + Math.abs(yPos*iry)*(Z.length-1))])*Math.signum(yPos);
+                qs = NumberTools.sin(lon);
+                qc = NumberTools.cos(lon);
+
+                boolean inSpace = true;
+                xPos = startX - hw;
+                for (int x = 0/*, xt = 0*/; x < width; x++, xPos += i_uw) {
+                    //th = lon * xPos;
+                    th = xPos * irx / Math.abs(alpha + (1-alpha)*ProjectionTools.hyperellipse(yPos * iry, kappa));
+                    if(th < -3.141592653589793 || th > 3.141592653589793) {
+                    //if(th < -2.0 || th > 2.0) {
+                        heightCodeData[x][y] = 10000;
+                        inSpace = true;
+                        continue;
+                    }
+                    if(inSpace)
+                    {
+                        inSpace = false;
+                        edges[y << 1] = x;
+                    }
+                    edges[y << 1 | 1] = x;
+                    th += centerLongitude;
+                    ps = NumberTools.sin(th) * qc;
+                    pc = NumberTools.cos(th) * qc;
+                    xPositions[x][y] = pc;
+                    yPositions[x][y] = ps;
+                    zPositions[x][y] = qs;
+                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
+                                    terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA),
+                            ps, qs, seedA) + landModifier - 1.0);
+                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                            , qs, seedB));
+                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
+                            , seedC));
+                    freshwaterData[x][y] = (ps = Math.min(
+                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
+                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
+                    minHeightActual = Math.min(minHeightActual, h);
+                    maxHeightActual = Math.max(maxHeightActual, h);
+                    if(fresh) {
+                        minHeight = Math.min(minHeight, h);
+                        maxHeight = Math.max(maxHeight, h);
+
+                        minHeat0 = Math.min(minHeat0, p);
+                        maxHeat0 = Math.max(maxHeat0, p);
+
+                        minWet0 = Math.min(minWet0, temp);
+                        maxWet0 = Math.max(maxWet0, temp);
+                    }
+                }
+                minHeightActual = Math.min(minHeightActual, minHeight);
+                maxHeightActual = Math.max(maxHeightActual, maxHeight);
+
+            }
+            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),
+                    wetDiff = 1.0 / (maxWet0 - minWet0),
+                    hMod,
+                    halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
+            yPos = startY + i_uh;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                temp = Math.abs(yPos - halfHeight) * i_half;
+                temp *= (2.4 - temp);
+                temp = 2.2 - temp;
+                for (int x = 0; x < width; x++) {
+                    h = heightData[x][y];
+                    if(heightCodeData[x][y] == 10000) {
+                        heightCodeData[x][y] = 1000;
+                        continue;
+                    }
+                    else
+                        heightCodeData[x][y] = (t = codeHeight(h));
+                    hMod = 1.0;
+                    switch (t) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            h = 0.4;
+                            hMod = 0.2;
+                            break;
+                        case 6:
+                            h = -0.1 * (h - forestLower - 0.08);
+                            break;
+                        case 7:
+                            h *= -0.25;
+                            break;
+                        case 8:
+                            h *= -0.4;
+                            break;
+                        default:
+                            h *= 0.05;
+                    }
+                    heatData[x][y] = (h = (((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6) * temp);
+                    if (fresh) {
+                        ps = Math.min(ps, h); //minHeat0
+                        pc = Math.max(pc, h); //maxHeat0
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat1 = ps;
+                maxHeat1 = pc;
+            }
+            heatDiff = coolingModifier / (maxHeat1 - minHeat1);
+            qs = Double.POSITIVE_INFINITY;
+            qc = Double.NEGATIVE_INFINITY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
+                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
+                    if (fresh) {
+                        qs = Math.min(qs, h);
+                        qc = Math.max(qc, h);
+                        ps = Math.min(ps, temp);
+                        pc = Math.max(pc, temp);
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat = qs;
+                maxHeat = qc;
+                minWet = ps;
+                maxWet = pc;
+            }
+            landData.refill(heightCodeData, 4, 999);
         }
     }
 
