@@ -374,4 +374,47 @@ public class NumberTools {
         if(y < 0f) r = -r;
         return r;
     }
+    public static double atan2_(final double y, final double x)
+    {
+        if(y == 0.0 && x == 0.0) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y), a, s;
+        double r;
+        if(ay > ax)
+        {
+            a = ax / ay;
+            s = a * a;
+            r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+        }
+        else
+        {
+            a = ay / ax;
+            s = a * a;
+            r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+        }
+        if(x < 0.0) r = 0.5 - r;
+        if(y < 0.0) r = 1 - r;
+        return r;
+    }
+    public static float atan2_(final float y, final float x)
+    {
+        if(y == 0f && x == 0f) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y), a, s;
+        float r;
+        if(ay > ax)
+        {
+            a = ax / ay;
+            s = a * a;
+            r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+        }
+        else
+        {
+            a = ay / ax;
+            s = a * a;
+            r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+        }
+        if(x < 0f) r = 0.5f - r;
+        if(y < 0f) r = 1f - r;
+        return r;
+    }
+
 }

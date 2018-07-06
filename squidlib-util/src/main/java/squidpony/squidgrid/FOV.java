@@ -226,9 +226,9 @@ public class FOV implements Serializable {
 
         double decay = 1.0 / (radius + 1);
 
-        angle = Math.toRadians((angle >= 360.0 || angle < 0.0)
-                ? MathExtras.remainder(angle, 360.0) : angle);
-        span = Math.toRadians(span);
+        angle = ((angle >= 360.0 || angle < 0.0)
+                ? MathExtras.remainder(angle, 360.0) : angle) * 0.002777777777777778;
+        span = span * 0.002777777777777778;
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
@@ -424,9 +424,9 @@ public class FOV implements Serializable {
         double decay = 1.0 / (radius + 1.0);
         ArrayTools.fill(light, 0);
         light[startX][startY] = 1;//make the starting space full power
-        angle = Math.toRadians((angle >= 360.0 || angle < 0.0)
-                ? MathExtras.remainder(angle, 360.0) : angle);
-        span = Math.toRadians(span);
+        angle = ((angle >= 360.0 || angle < 0.0)
+                ? MathExtras.remainder(angle, 360.0) : angle) * 0.002777777777777778;
+        span = span * 0.002777777777777778;
 
 
         light = shadowCastLimited(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique, angle, span);
@@ -615,9 +615,10 @@ public class FOV implements Serializable {
                         || radiusStrategy.radius(startx, starty, x2, y2) >= radius + 1) {//+1 to cover starting tile
                     continue;
                 }
-                double newAngle = NumberTools.atan2(y2 - starty, x2 - startx) + Math.PI * 2;
-				if (Math.abs(MathExtras.remainder(angle - newAngle, Math.PI * 2)) > span * 0.5)
-					continue;
+                double newAngle = NumberTools.atan2_(y2 - starty, x2 - startx) + Math.PI * 2;
+                if (newAngle > span * 0.5 && newAngle < 1.0 - span * 0.5) 
+                    continue;
+//if (Math.abs(MathExtras.remainder(angle - newAngle, Math.PI * 2)) > span * 0.5)
 
                 double surroundingLight = nearRippleLight(x2, y2, ripple, startx, starty, decay, lightMap, map, indirect, radiusStrategy );
                 if (lightMap[x2][y2] < surroundingLight) {
@@ -778,11 +779,11 @@ public class FOV implements Serializable {
                     break;
                 }
                 double deltaRadius = radiusStrategy.radius(deltaX, deltaY),
-                        at2 = (angle - NumberTools.atan2(currentY - starty, currentX - startx) + Math.PI * 2) % (Math.PI * 2);
+                        at2 = Math.abs(angle - NumberTools.atan2_(currentY - starty, currentX - startx));// + 1.0) % 1.0;
                 //check if it's within the lightable area and light if needed
                 if (deltaRadius <= radius
                         && (at2 <= span * 0.5
-                        || at2 >= Math.PI * 2 - span * 0.5)) {
+                        || at2 >= 1.0 - span * 0.5)) {
                     double bright = 1 - decay * deltaRadius;
                     lightMap[currentX][currentY] = bright;
                 }

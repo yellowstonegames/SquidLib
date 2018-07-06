@@ -977,4 +977,73 @@ if y < 0 then r := -r
         if(y < 0f) r = -r;
         return r;
     }
+    /**
+     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as 
+     * doubles and returning an angle from 0.0 to 1.0 (inclusive), with one cycle over the range equivalent to 360
+     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
+     * to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a negative number,
+     * which may help avoid costly floating-point modulus when you actually want a positive number.
+     * Credit to StackExchange user njuffa, who gave
+     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that
+     * {@link #atan2(double, double)} returns an angle in radians and can return negative results, which may be fine for
+     * many tasks; these two methods are extremely close in implementation and speed.
+     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @return the angle to the given point, as a double from 0.0 to 1.0, inclusive
+     */
+    public static double atan2_(final double y, final double x)
+    {
+        if(y == 0.0 && x == 0.0) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y), a, s;
+        double r;
+        if(ay > ax)
+        {
+            a = ax / ay;
+            s = a * a;
+            r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+        }
+        else
+        {
+            a = ay / ax;
+            s = a * a;
+            r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+        }
+        if(x < 0.0) r = 0.5 - r;
+        if(y < 0.0) r = 1 - r;
+        return r;
+    }
+    /**
+     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
+     * and returning an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI radians.
+     * You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f} to change to degrees.
+     * Takes y and x (in that unusual order) as floats. Will never return a negative number, which may help avoid costly
+     * floating-point modulus when you actually want a positive number. Credit to StackExchange user njuffa, who gave
+     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that {@link #atan2(float, float)}
+     * returns an angle in radians and can return negative results, which may be fine for many tasks; these two methods
+     * are extremely close in implementation and speed.
+     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
+     * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
+     */
+    public static float atan2_(final float y, final float x)
+    {
+        if(y == 0f && x == 0f) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y), a, s;
+        float r;
+        if(ay > ax)
+        {
+            a = ax / ay;
+            s = a * a;
+            r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+        }
+        else
+        {
+            a = ay / ax;
+            s = a * a;
+            r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+        }
+        if(x < 0f) r = 0.5f - r;
+        if(y < 0f) r = 1f - r;
+        return r;
+    }
 }

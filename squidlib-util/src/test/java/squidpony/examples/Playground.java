@@ -137,44 +137,55 @@ public class Playground {
         return n << 3 | 0x4000000000000003L;
     }
     private void go() {
-        LightRNG r = new LightRNG();
-        System.out.printf("state: 0x%016XL\n\n", r.getState());
-        long l;
-//        System.out.printf("0x%016X, %d\n", l = GreasedRegion.randomInterleave(r) << 3 | 3L, Long.bitCount(l));
-        for (int b = 10; b < 18; b++) {
-            for (int i = 0; i < 5; i++) {
-                System.out.printf("0x%016X, %d\n", l = splatterBits(r, b), Long.bitCount(l));
+        float r, r_;
+        for (int xx = 0; xx < 20; xx++) {
+            float x = LinnormRNG.determineFloat(xx) * 4f - 2f;
+            for (int yy = 0; yy < 20; yy++) {
+                float y = LinnormRNG.determineFloat(yy) * 4f - 2f;
+                System.out.printf("x: %1.9f, y: %1.9f, atan2: %1.9f, atan2_: %1.9f, diff: %1.9f\n", x, y,
+                        r = (NumberTools.atan2(y, x) / (3.141592653589793f * 2f) + 1f) % 1f,
+                        r_ = NumberTools.atan2_(y, x),
+                        Math.abs(r - r_));
             }
         }
-        long bits = 0x41C64E6BL, ib = ~bits & 0xFFFFFFFFL;
-        bits |= (bits << 16);
-        ib |= (ib << 16);
-        bits &= 0x0000FFFF0000FFFFL;
-        ib &= 0x0000FFFF0000FFFFL;
-        bits |= (bits << 8);
-        ib |= (ib << 8);
-        bits &= 0x00FF00FF00FF00FFL;
-        ib &= 0x00FF00FF00FF00FFL;
-        bits |= (bits << 4);
-        ib |= (ib << 4);
-        bits &= 0x0F0F0F0F0F0F0F0FL;
-        ib &= 0x0F0F0F0F0F0F0F0FL;
-        bits |= (bits << 2);
-        ib |= (ib << 2);
-        bits &= 0x3333333333333333L;
-        ib &= 0x3333333333333333L;
-        bits |= (bits << 1);
-        ib |= (ib << 1);
-        bits &= 0x5555555555555555L;
-        ib &= 0x5555555555555555L;
-        System.out.printf("\n0x%016X, %d\n", bits = (-8L & (bits | (ib << 1))) | 3L, Long.bitCount(bits));
-        bits &= 0x7FFFFFFFFFFFFFFBL;
-        for (int b = 20; b < 29; b++) {
-            for (int i = 0; i < 5; i++) {
-                System.out.printf("0x%016X, %d\n", l = (bits & GreasedRegion.approximateBits(r, b)) | 0x4000000000000003L, Long.bitCount(l));
-                
-            }
-        }
+//        LightRNG r = new LightRNG();
+//        System.out.printf("state: 0x%016XL\n\n", r.getState());
+//        long l;
+////        System.out.printf("0x%016X, %d\n", l = GreasedRegion.randomInterleave(r) << 3 | 3L, Long.bitCount(l));
+//        for (int b = 10; b < 18; b++) {
+//            for (int i = 0; i < 5; i++) {
+//                System.out.printf("0x%016X, %d\n", l = splatterBits(r, b), Long.bitCount(l));
+//            }
+//        }
+//        long bits = 0x41C64E6BL, ib = ~bits & 0xFFFFFFFFL;
+//        bits |= (bits << 16);
+//        ib |= (ib << 16);
+//        bits &= 0x0000FFFF0000FFFFL;
+//        ib &= 0x0000FFFF0000FFFFL;
+//        bits |= (bits << 8);
+//        ib |= (ib << 8);
+//        bits &= 0x00FF00FF00FF00FFL;
+//        ib &= 0x00FF00FF00FF00FFL;
+//        bits |= (bits << 4);
+//        ib |= (ib << 4);
+//        bits &= 0x0F0F0F0F0F0F0F0FL;
+//        ib &= 0x0F0F0F0F0F0F0F0FL;
+//        bits |= (bits << 2);
+//        ib |= (ib << 2);
+//        bits &= 0x3333333333333333L;
+//        ib &= 0x3333333333333333L;
+//        bits |= (bits << 1);
+//        ib |= (ib << 1);
+//        bits &= 0x5555555555555555L;
+//        ib &= 0x5555555555555555L;
+//        System.out.printf("\n0x%016X, %d\n", bits = (-8L & (bits | (ib << 1))) | 3L, Long.bitCount(bits));
+//        bits &= 0x7FFFFFFFFFFFFFFBL;
+//        for (int b = 20; b < 29; b++) {
+//            for (int i = 0; i < 5; i++) {
+//                System.out.printf("0x%016X, %d\n", l = (bits & GreasedRegion.approximateBits(r, b)) | 0x4000000000000003L, Long.bitCount(l));
+//                
+//            }
+//        }
 
         
 //        double x, y, v;
