@@ -755,8 +755,8 @@ public class FOV implements Serializable {
         return lightMap;
     }
     private static double[][] shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy,
-                                         double radius, int startx, int starty, double decay, double[][] lightMap,
-                                         double[][] map, Radius radiusStrategy, double angle, double span) {
+                                                double radius, int startx, int starty, double decay, double[][] lightMap,
+                                                double[][] map, Radius radiusStrategy, double angle, double span) {
         double newStart = 0;
         if (start < end) {
             return lightMap;
@@ -799,6 +799,117 @@ public class FOV implements Serializable {
                     if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
                         blocked = true;
                         lightMap = shadowCastLimited(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, angle, span);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+        return lightMap;
+    }
+
+    private static final double[] directionRanges = new double[8];
+    /**
+     * Calculates the Field Of View for the provided map from the given x, y
+     * coordinates, lighting with the view "pointed at" the given {@code angle} in degrees,
+     * extending to different ranges based on the direction the light is traveling.
+     * The direction ranges are {@code forward}, {@code sideForward}, {@code side},
+     * {@code sideBack}, and {@code back}; all are multiplied by {@code radius}.
+     * Assigns to, and returns, a light map where the values represent a percentage of fully
+     * lit. The values in light are cleared before this is run, because prior state can make
+     * this give incorrect results. You can use {@link #addFOVsInto(double[][], double[][]...)}
+     * if you want to mix FOV results, which works as an alternative to using the prior light state.
+     * <br>
+     * The starting point for the calculation is considered to be at the center
+     * of the origin cell. Radius determinations are determined by the provided
+     * RadiusStrategy. If all direction ranges are the same, this acts like
+     * {@link #reuseFOV(double[][], double[][], int, int, double, Radius)}; otherwise
+     * may produce conical shapes (potentially more than one, or overlapping ones).
+     *
+     * @param resistanceMap the grid of cells to calculate on; the kind made by DungeonUtility.generateResistances()
+     * @param light the grid of cells to assign to; may have existing values, and 0.0 is used to mean "unlit"
+     * @param startX the horizontal component of the starting location
+     * @param startY the vertical component of the starting location
+     * @param radius the distance the light will extend to (roughly); direction ranges will be multiplied by this
+     * @param radiusTechnique provides a means to shape the FOV by changing distance calculation (circle, square, etc.)
+     * @param angle the angle in degrees that will be the center of the FOV cone, 0 points right
+     * @param forward the range to extend when the light is within 22.5 degrees of angle; will be interpolated with sideForward
+     * @param sideForward the range to extend when the light is between 22.5 and 67.5 degrees of angle; will be interpolated with forward or side
+     * @param side the range to extend when the light is between 67.5 and 112.5 degrees of angle; will be interpolated with sideForward or sideBack
+     * @param sideBack the range to extend when the light is between 112.5 and 157.5 degrees of angle; will be interpolated with side or back
+     * @param back the range to extend when the light is more than 157.5 degrees away from angle; will be interpolated with sideBack
+     * @return the computed light grid (the same as {@code light})
+     */
+    public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY,
+                                      double radius, Radius radiusTechnique, double angle,
+                                      double forward, double sideForward, double side, double sideBack, double back) {
+        directionRanges[0] = forward * radius;
+        directionRanges[7] = directionRanges[1] = sideForward * radius;
+        directionRanges[6] = directionRanges[2] = side * radius;
+        directionRanges[5] = directionRanges[3] = sideBack * radius;
+        directionRanges[4] = back * radius;
+
+        radius = Math.max(1, radius);
+        ArrayTools.fill(light, 0);
+        light[startX][startY] = 1;//make the starting space full power
+        angle = ((angle >= 360.0 || angle < 0.0)
+                ? MathExtras.remainder(angle, 360.0) : angle) * 0.002777777777777778;
+
+
+        light = shadowCastPersonalized(1, 1.0, 0.0, 0, 1, 1, 0,   radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        light = shadowCastPersonalized(1, 1.0, 0.0, 1, 0, 0, 1,   radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        light = shadowCastPersonalized(1, 1.0, 0.0, 0, -1, 1, 0,  radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        light = shadowCastPersonalized(1, 1.0, 0.0, -1, 0, 0, 1,  radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        light = shadowCastPersonalized(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        light = shadowCastPersonalized(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        light = shadowCastPersonalized(1, 1.0, 0.0, 0, 1, -1, 0,  radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        light = shadowCastPersonalized(1, 1.0, 0.0, 1, 0, 0, -1,  radius, startX, startY, light, resistanceMap, radiusTechnique, angle, directionRanges);
+        return light;
+    }
+
+    private static double[][] shadowCastPersonalized(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                                     double radius, int startx, int starty, double[][] lightMap,
+                                                     double[][] map, Radius radiusStrategy, double angle, final double[] directionRanges) {
+        double newStart = 0;
+        if (start < end) {
+            return lightMap;
+        }
+        int width = lightMap.length;
+        int height = lightMap[0].length;
+
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && distance < width + height && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startx + deltaX * xx + deltaY * xy;
+                int currentY = starty + deltaX * yx + deltaY * yy;
+                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= 0 && currentY >= 0 && currentX < width && currentY < height) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+                double at2 = Math.abs(angle - NumberTools.atan2_(currentY - starty, currentX - startx)) * 8.0,
+                        deltaRadius = radiusStrategy.radius(deltaX, deltaY);
+                int ia = (int)(at2), low = ia & 7, high = ia + 1 & 7;
+                double a = at2 - ia, adjRadius = (1.0 - a) * directionRanges[low] + a * directionRanges[high];
+                //check if it's within the lightable area and light if needed
+                if (deltaRadius <= adjRadius) {
+                    lightMap[currentX][currentY] = 1.0 - (deltaRadius / (adjRadius + 1.0)); // how bright the tile is
+                }
+
+                if (blocked) { //previous cell was a blocking one
+                    if (map[currentX][currentY] >= 1) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
+                    }
+                } else {
+                    if (map[currentX][currentY] >= 1 && distance < adjRadius) {//hit a wall within sight line
+                        blocked = true;
+                        lightMap = shadowCastPersonalized(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, lightMap, map, radiusStrategy, angle, directionRanges);
                         newStart = rightSlope;
                     }
                 }
