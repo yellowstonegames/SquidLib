@@ -23,6 +23,7 @@ public class Converters {
     {
         return ObText.makeMatcherNoComments(text);
     }
+    
     public static <K> StringConvert<OrderedSet<K>> convertOrderedSet(final StringConvert<K> convert) {
         CharSequence[] types = StringConvert.asArray("OrderedSet", convert.name);
         StringConvert found = StringConvert.lookup(types);
@@ -173,6 +174,69 @@ public class Converters {
 
     public static <K, V> StringConvert<OrderedMap<K, V>> convertOrderedMap(final Class<K> typeK, final Class<V> typeV) {
         return convertOrderedMap((StringConvert<K>) StringConvert.get(typeK.getSimpleName()),
+                (StringConvert<V>) StringConvert.get(typeV.getSimpleName()));
+    }
+
+    public static <K, V> StringConvert<UnorderedMap<K, V>> convertUnorderedMap(final StringConvert<K> convertK, final StringConvert<V> convertV) {
+        CharSequence[] types = StringConvert.asArray("UnorderedMap", convertK.name, convertV.name);
+        StringConvert found = StringConvert.lookup(types);
+        if (found != null)
+            return found; // in this case we've already created a StringConvert for this type combination
+
+        return new StringConvert<UnorderedMap<K, V>>(types) {
+            @Override
+            public String stringify(UnorderedMap<K, V> item) {
+                StringBuilder sb = new StringBuilder(100);
+                K k;
+                V v;
+                Iterator<Map.Entry<K, V>> it = item.entrySet().iterator();
+                Map.Entry<K, V> ent;
+                while (it.hasNext())
+                {
+                    ent = it.next();
+                    k = ent.getKey();
+                    if (k == item)
+                        return "";
+                    appendQuoted(sb, convertK.stringify(k));
+                    sb.append(' ');
+                    v = ent.getValue();
+                    if (v == item)
+                        return "";
+                    appendQuoted(sb, convertV.stringify(v));
+                    if (it.hasNext())
+                        sb.append(' ');
+                }
+                return sb.toString();
+            }
+
+            @Override
+            public UnorderedMap<K, V> restore(String text) {
+                ObText.ContentMatcher m = makeMatcher(text);
+                UnorderedMap<K, V> d;
+                if(convertK.isArray)
+                    d = new UnorderedMap<>(CrossHash.generalHasher);
+                else
+                    d = new UnorderedMap<>();
+                String t;
+                while (m.find()) {
+                    if (m.hasMatch()) {
+                        t = m.getMatch();
+                        if (m.find() && m.hasMatch()) {
+                            d.put(convertK.restore(t), convertV.restore(m.getMatch()));
+                        }
+                    }
+                }
+                return d;
+            }
+        };
+    }
+
+    public static <K, V> StringConvert<UnorderedMap<K, V>> convertUnorderedMap(final CharSequence typeK, final CharSequence typeV) {
+        return convertUnorderedMap((StringConvert<K>) StringConvert.get(typeK), (StringConvert<V>) StringConvert.get(typeV));
+    }
+
+    public static <K, V> StringConvert<UnorderedMap<K, V>> convertUnorderedMap(final Class<K> typeK, final Class<V> typeV) {
+        return convertUnorderedMap((StringConvert<K>) StringConvert.get(typeK.getSimpleName()),
                 (StringConvert<V>) StringConvert.get(typeV.getSimpleName()));
     }
 
@@ -538,6 +602,17 @@ public class Converters {
         }
     };
 
+    public static final StringConvert<WeightedTable> convertWeightedTable = new StringConvert<WeightedTable>("WeightedTable") {
+        @Override
+        public String stringify(WeightedTable item) {
+            return item.serializeToString();
+        }
+
+        @Override
+        public WeightedTable restore(String text) {
+            return WeightedTable.deserializeFromString(text);
+        }
+    };
 
 
 

@@ -1,5 +1,7 @@
 package squidpony.squidmath;
 
+import squidpony.StringKit;
+
 import java.io.Serializable;
 
 /**
@@ -114,6 +116,11 @@ public class WeightedTable implements Serializable {
             mixed[large.pop()<<1] = 0x7FFFFFFF;
     }
 
+    private WeightedTable(int[] mixed, boolean ignored)
+    {
+        size = mixed.length >> 1;
+        this.mixed = mixed;
+    }
     /**
      * Gets an index of one of the weights in this WeightedTable, with the choice determined deterministically by the
      * given long, but higher weights will be returned by more possible inputs than lower weights. The state parameter
@@ -134,6 +141,24 @@ public class WeightedTable implements Serializable {
         // use the other half of the bits of state to get a double, compare to probability and choose either the
         // current column or the alias for that column based on that probability
         return ((state >>> 33) <= mixed[column << 1]) ? column : mixed[column << 1 | 1];
+    }
+    
+    public String serializeToString()
+    {
+        return size + ":" + StringKit.join(",", mixed);
+    }
+    public static WeightedTable deserializeFromString(String data)
+    {
+        if(data == null || data.isEmpty())
+            return null;
+        int pos = data.indexOf(':');
+        int size = StringKit.intFromDec(data, 0, pos);
+        int count = StringKit.count(data, ',') + 1;
+        int[] mixed = new int[count];
+        for (int i = 0; i < count; i++) {
+            mixed[i] = StringKit.intFromDec(data, pos+1, pos = data.indexOf(',', pos+1));
+        }
+        return new WeightedTable(mixed, true);
     }
 
 }
