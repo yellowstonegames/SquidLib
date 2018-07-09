@@ -70,10 +70,12 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public TextCellFactory font;
     /**
-     * The current count of how many animations are running; checked by {@link #hasActiveAnimations()}, and if certain
-     * states occur where this variable becomes out of step with the actual animations in process, hasActiveAnimations()
-     * can return incorrect values. This variable is public to allow manual correction of the animation count in such
-     * conditions, but shouldn't be changed frequently because various other methods may rely on it or change it.
+     * Will always be 0 unless user code affects it; use {@link #hasActiveAnimations()} to track animations instead.
+     * The approach of tracking animations via a counter was prone to error when multiple effects might remove a Glyph
+     * or adjust the animationCount in one direction but not the other. This could result in never-ending phases of a
+     * game where input wasn't handled because animationCount was greater than 0, but whatever effect was supposed to
+     * reduce animationCount would never happen.
+     * @deprecated Use {@link #hasActiveAnimations()} instead of adjusting this manually
      */
     public int animationCount = 0;
     /**
@@ -1527,7 +1529,12 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     @Override
     public boolean hasActiveAnimations()
     {
-        return 0 < animationCount || 0 < getActions().size;
+        if(hasActions())
+            return true;
+        for (int i = 0; i < glyphs.size(); i++) {
+            if(glyphs.get(i).hasActions()) return true;
+        }
+        return false;
     }
 
     /**
@@ -1750,14 +1757,13 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
 
     /**
      * A way to remove a Glyph from the group of glyphs this renders, while also ending any animations or other Actions
-     * that the removed Glyph was scheduled to perform. This can be important to keep the animation count, for
-     * {@link #hasActiveAnimations()}, at the correct value if a Glyph is removed before its animations end.
+     * that the removed Glyph was scheduled to perform.
      * @param glyph a Glyph that should be removed from the {@link #glyphs} List this holds
      */
     public void removeGlyph(TextCellFactory.Glyph glyph)
     {
-        if(glyphs.remove(glyph))
-            animationCount -= glyph.getActions().size;
+        glyph.clearActions();
+        glyphs.remove(glyph);
     }
     /**
      * Start a bumping animation in the given direction that will last duration seconds.
@@ -1776,7 +1782,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * 
      * @param delay how long to wait in seconds before starting the effect
      * @param glyph
-     *              A {@link TextCellFactory.Glyph}, probably produced by
+     *              A {@link TextCellFactory.Glyph}, which should be produced by a SparseLayers method like
      *              {@link #glyph(char, float, int, int)} or {@link #glyphFromGrid(int, int)}
      * @param direction the direction for the glyph to bump towards
      * @param duration a float, measured in seconds, for how long the animation should last; commonly 0.12f
@@ -1787,8 +1793,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         final float x = glyph.getX(),
                 y = glyph.getY();
         duration = Math.max(0.015f, duration);
-        animationCount++;
-        final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         int index = 0;
         final Action[] sequence = new Action[nbActions];
         if (0 < delay)
@@ -1799,15 +1804,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         sequence[index++] = Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.65F);
         if(postRunnable != null)
         {
-            sequence[index++] = Actions.run(postRunnable);
+            sequence[index] = Actions.run(postRunnable);
         }
-        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
-        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                --animationCount;
-            }
-        }));
         glyph.addAction(Actions.sequence(sequence));
     }
 
@@ -1863,8 +1861,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                       final int newY, float duration, /* @Nullable */ Runnable postRunnable) {
         glyph.setPosition(worldX(startX), worldY(startY));
         duration = Math.max(0.015f, duration);
-        animationCount++;
-        final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final int nbActions = 1 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         int index = 0;
         final Action[] sequence = new Action[nbActions];
         if (0 < delay)
@@ -1874,15 +1871,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         sequence[index++] = Actions.moveToAligned(nextX, nextY, Align.bottomLeft, duration);
         if(postRunnable != null)
         {
-            sequence[index++] = Actions.run(postRunnable);
+            sequence[index] = Actions.run(postRunnable);
         }
-		/* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
-        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                --animationCount;
-            }
-        }));
 
         glyph.addAction(Actions.sequence(sequence));
     }
@@ -1915,8 +1905,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         final float x = glyph.getX(), y = glyph.getY(),
                 cellWidth = font.actualCellWidth, cellHeight = font.actualCellHeight;
         duration = Math.max(0.015f, duration);
-        animationCount++;
-        final int nbActions = 6 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
+        final int nbActions = 5 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
         int index = 0;
         if (0 < delay)
@@ -1933,15 +1922,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         sequence[index++] = Actions.moveToAligned(x, y, Align.bottomLeft, duration * 0.2F);
         if(postRunnable != null)
         {
-            sequence[index++] = Actions.run(postRunnable);
+            sequence[index] = Actions.run(postRunnable);
         }
-        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
-        sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
-            @Override
-            public void run() {
-                --animationCount;
-            }
-        }));
         glyph.addAction(Actions.sequence(sequence));
     }
     /**
@@ -1997,7 +1979,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         duration = Math.max(0.015f, duration);
-        animationCount++;
         final float ac = backgrounds[x][y];
         final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
@@ -2020,12 +2001,10 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         {
             sequence[index++] = Actions.run(postRunnable);
         }
-        /* Do this one last, so that hasActiveAnimations() returns true during 'postRunnables' */
         sequence[index] = Actions.delay(duration, Actions.run(new Runnable() {
             @Override
             public void run() {
                 backgrounds[x][y] = ac;
-                --animationCount;
             }
         }));
 
@@ -2103,7 +2082,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             return;
         final SparseTextMap l = layers.get(layer);
         duration = Math.max(0.015f, duration);
-        animationCount++;
         final int pos = SparseTextMap.encodePosition(x, y);
         final float ac = l.getFloat(pos,0f);
         final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
@@ -2132,7 +2110,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             @Override
             public void run() {
                 l.updateFloat(pos, ac);
-                --animationCount;
             }
         }));
         addAction(Actions.sequence(sequence));
@@ -2140,11 +2117,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     /**
      * Tints the given glyph (which may or may not be part of the {@link #glyphs} list this holds) so it becomes the
      * given encodedColor, then after the tint is complete it returns the cell to its original color, taking duration
-     * seconds.
-     * <br>
-     * This is not a method on {@link TextCellFactory.Glyph} because it increments the {@link #animationCount} variable
-     * while the tint animation is running, and decrements it when it finishes the animation (it also resets the glyph
-     * to its pre-tint color at this time).
+     * seconds. This resets the glyph to its pre-tint color before it ends.
      * @param glyph the {@link TextCellFactory.Glyph} to tint
      * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
      * @param duration how long the total "round-trip" transition should take in seconds
@@ -2156,11 +2129,8 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * Tints the given glyph (which may or may not be part of the {@link #glyphs} list this holds) so it becomes the
      * given encodedColor, waiting for {@code delay} (in seconds) before performing it, then after the tint is complete
      * it returns the cell to its original color, taking duration seconds. Additionally, enqueue {@code postRunnable}
-     * for running after the created action ends.
-     * <br>
-     * This is not a method on {@link TextCellFactory.Glyph} because it increments the {@link #animationCount} variable
-     * while the tint animation is running, and decrements it when it finishes the animation (it also resets the glyph
-     * to its pre-tint color at this time).
+     * for running after the created action ends. This resets the glyph to its pre-tint color before it runs any
+     * {@code postRunnable}.
      * @param delay how long to wait in seconds before starting the effect
      * @param glyph the {@link TextCellFactory.Glyph} to tint
      * @param encodedColor what to transition the cell's color towards, and then transition back from, as a packed float
@@ -2170,7 +2140,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public void tint(float delay, final TextCellFactory.Glyph glyph, final float encodedColor, float duration,
             /* @Nullable */ Runnable postRunnable) {
         duration = Math.max(0.015f, duration);
-        animationCount++;
         final float ac = glyph.getPackedColor();
         final int nbActions = 3 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
@@ -2198,7 +2167,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             @Override
             public void run() {
                 glyph.setPackedColor(ac);
-                --animationCount;
             }
         }));
         addAction(Actions.sequence(sequence));
@@ -2247,7 +2215,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             /* @Nullable */ Runnable postRunnable)
     {
         duration = Math.max(0.015f, duration);
-        animationCount++;
         final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         int index = 0;
         final Action[] sequence = new Action[nbActions];
@@ -2270,7 +2237,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         sequence[index] = Actions.run(new Runnable() {
             @Override
             public void run() {
-                --animationCount;
                 glyphs.remove(glyph);
             }
         });
@@ -2322,7 +2288,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             /* @Nullable */ Runnable postRunnable)
     {
         duration = Math.max(0.015f, duration);
-        animationCount++;
         final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         int index = 0;
         final Action[] sequence = new Action[nbActions];
@@ -2345,7 +2310,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         sequence[index] = Actions.run(new Runnable() {
             @Override
             public void run() {
-                --animationCount;
                 glyphs.remove(glyph);
             }
         });
@@ -2611,7 +2575,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         if(x < 0 || x >= gridWidth || y < 0 || y >= gridHeight)
             return;
         duration = Math.max(0.015f, duration);
-        animationCount++;
         final float ac = backgrounds[x][y];
         final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
         final Action[] sequence = new Action[nbActions];
@@ -2633,7 +2596,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             @Override
             public void run() {
                 backgrounds[x][y] = encodedColor;
-                --animationCount;
             }
         }));
 
@@ -2724,7 +2686,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             return;
         final SparseTextMap l = layers.get(layer);
         duration = Math.max(0.015f, duration);
-        animationCount++;
         final int pos = SparseTextMap.encodePosition(x, y);
         final float ac = l.getFloat(pos, 0f);
         final int nbActions = 2 + (0 < delay ? 1 : 0) + (postRunnable == null ? 0 : 1);
@@ -2747,7 +2708,6 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             @Override
             public void run() {
                 l.updateFloat(pos, encodedColor);
-                --animationCount;
             }
         }));
         addAction(Actions.sequence(sequence));
