@@ -76,19 +76,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * Whether this set contains the key zero.
      */
     protected boolean containsNullKey;
+
     /**
-     * The index of the first entry in iteration order. It is valid iff {@link #size} is nonzero; otherwise, it contains -1.
+     * The ordering of entries, with the nth entry in order being the index into {@link #key} and {@link #value} to find
+     * that entry's key and value. The ints in order are always less than or equal to n, and greater than or equal to 0.
      */
-    protected int first = -1;
-    /**
-     * The index of the last entry in iteration order. It is valid iff {@link #size} is nonzero; otherwise, it contains -1.
-     */
-    protected int last = -1;
-    /*
-     * For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>. The first entry contains predecessor -1, and the
-     * last entry contains successor -1.
-     */
-    //protected long[] link;
     protected IntVLA order;
     /**
      * The current table size.
@@ -448,11 +440,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             }
         }
         key[pos] = k;
-        if (size == 0) {
-            first = last = pos;
-        } else {
-            last = pos;
-        }
         order.add(pos);
         value[pos] = size;
         if (size++ >= maxFill)
@@ -485,15 +472,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             }
         }
         key[pos] = k;
-        if (size == 0) {
-            first = last = pos;
-        } else if(at == 0)
-        {
-            first = pos;
-        }
-        else if(at == size) {
-            last = pos;
-        }
         order.insert(at, pos);
         value[pos] = at;
         if (size++ >= maxFill)
@@ -698,19 +676,8 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     public K removeFirst() {
         if (size == 0)
             throw new NoSuchElementException();
-        final int pos = first;
+        final int pos = order.removeIndex(0);
         K fst = key[pos];
-        order.removeIndex(0);
-        if(order.size > 0)
-            first = order.get(0);
-        else
-            first = -1;
-        // Abbreviated version of fixOrder(pos)
-        /*first = (int) link[pos];
-        if (0 <= first) {
-            // Special case of SET_PREV( link[ first ], -1 )
-            link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-        }*/
         size--;
         final int v = value[pos];
         if (pos == n) {
@@ -734,21 +701,8 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     public K removeLast() {
         if (size == 0)
             throw new NoSuchElementException();
-        final int pos = last;
+        final int pos = order.pop();
         K lst = key[pos];
-        order.pop();
-        if(order.size > 0)
-            last = order.get(order.size - 1);
-        else
-            last = -1;
-
-        // Abbreviated version of fixOrder(pos)
-        /*
-        last = (int) (link[pos] >>> 32);
-        if (0 <= last) {
-            // Special case of SET_NEXT( link[ last ], -1 )
-            link[last] |= -1 & 0xFFFFFFFFL;
-        }*/
         size--;
         if (pos == n) {
             containsNullKey = false;
@@ -757,52 +711,20 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             shiftKeys(pos);
         //fixValues(v); // one case where we don't need to do this; the last item is just given -1
         value[pos] = -1;
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
-            rehash(n / 2);
+        if (size < maxFill >> 2 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n >> 1);
         return lst;
     }
     private void moveIndexToFirst(final int i) {
-        if(size <= 1 || first == i)
+        if(size <= 1 || order.items[0] == i)
             return;
         order.moveToFirst(i);
-        if (last == i) {
-            last = order.peek();
-            //last = (int) (link[i] >>> 32);
-            // Special case of SET_NEXT( link[ last ], -1 );
-            //link[last] |= -1 & 0xFFFFFFFFL;
-        }/* else {
-            final long linki = link[i];
-            final int prev = (int) (linki >>> 32);
-            final int next = (int) linki;
-            link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-        }
-        link[first] ^= ((link[first] ^ ((i & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-        link[i] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
-        */
-        first = i;
         fixValues(0);
     }
     private void moveIndexToLast(final int i) {
-        if(size <= 1 || last == i)
+        if(size <= 1 || order.items[order.size-1] == i)
             return;
         order.moveToLast(i);
-        if (first == i) {
-            first = order.get(0);
-            //first = (int) link[i];
-            // Special case of SET_PREV( link[ first ], -1 );
-            //link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-        } /*else {
-            final long linki = link[i];
-            final int prev = (int) (linki >>> 32);
-            final int next = (int) linki;
-            link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-        }
-        link[last] ^= ((link[last] ^ (i & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[i] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
-        */
-        last = i;
         fixValues(i);
     }
     /**
@@ -913,15 +835,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             }
         }
         key[pos] = k;
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
-        } else {
-            //link[first] ^= ((link[first] ^ ((pos & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-            //link[pos] = ((-1 & 0xFFFFFFFFL) << 32) | (first & 0xFFFFFFFFL);
-            first = pos;
-        }
         order.insert(0, pos);
         fixValues(0);
         if (size++ >= maxFill)
@@ -965,15 +878,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         }
         key[pos] = k;
         value[pos] = size;
-        if (size == 0) {
-            first = last = pos;
-            // Special case of SET_UPPER_LOWER( link[ pos ], -1, -1 );
-            //link[pos] = -1L;
-        } else {
-            //link[last] ^= ((link[last] ^ (pos & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[pos] = ((last & 0xFFFFFFFFL) << 32) | (-1 & 0xFFFFFFFFL);
-            last = pos;
-        }
         order.add(pos);
         if (size++ >= maxFill)
             rehash(arraySize(size, f));
@@ -1057,7 +961,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         containsNullKey = false;
         Arrays.fill(key, null);
         Arrays.fill(value, -1);
-        first = last = -1;
         order.clear();
     }
 
@@ -1141,45 +1044,16 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     }
 
     /**
-     * Modifies the link vector so that the given entry is removed. This method will complete in logarithmic time.
+     * Modifies the link vector so that the given entry is removed. This method will complete in linear time.
      *
      * @param i the index of an entry.
      */
     protected void fixOrder(final int i) {
         if (size == 0) {
             order.clear();
-            first = last = -1;
             return;
         }
         order.removeValue(i);
-        if (first == i) {
-            first = order.get(0);
-            //first = (int) link[i];
-            /*
-            if (0 <= first) {
-                // Special case of SET_PREV( link[ first ], -1 )
-                link[first] |= (-1 & 0xFFFFFFFFL) << 32;
-            }
-            return;
-            */
-        }
-        if (last == i) {
-            last = order.peek();
-            //last = (int) (link[i] >>> 32);
-            /*if (0 <= last) {
-                // Special case of SET_NEXT( link[ last ], -1 )
-                link[last] |= -1 & 0xFFFFFFFFL;
-            }
-            return;
-            */
-        }
-        /*
-        final long linki = link[i];
-        final int prev = (int) (linki >>> 32);
-        final int next = (int) linki;
-        link[prev] ^= ((link[prev] ^ (linki & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ (linki & 0xFFFFFFFF00000000L)) & 0xFFFFFFFF00000000L);
-        */
     }
 
     /**
@@ -1191,38 +1065,19 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param d the destination position.
      */
     protected void fixOrder(int s, int d) {
-        if (size == 1) {
-            first = last = d;
-            // Special case of SET_UPPER_LOWER( link[ d ], -1, -1 )
-            //link[d] = -1L;
+        if(size == 0)
+            return;
+        if (size == 1 || order.items[0] == s) {
             order.set(0, d);
         }
-        else if (first == s) {
-            first = d;
-            order.set(0, d);
-            //link[(int) link[s]] ^= ((link[(int) link[s]] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-            //link[d] = link[s];
-        }
-        else if (last == s) {
-            last = d;
+        else if (order.items[order.size-1] == s) {
             order.set(order.size - 1, d);
-            //link[(int) (link[s] >>> 32)] ^= ((link[(int) (link[s] >>> 32)] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-            //link[d] = link[s];
         }
         else
         {
             int idx = order.indexOf(s);
             order.set(idx, d);
-            //value[s] = idx;
         }
-        /*
-        final long links = link[s];
-        final int prev = (int) (links >>> 32);
-        final int next = (int) links;
-        link[prev] ^= ((link[prev] ^ (d & 0xFFFFFFFFL)) & 0xFFFFFFFFL);
-        link[next] ^= ((link[next] ^ ((d & 0xFFFFFFFFL) << 32)) & 0xFFFFFFFF00000000L);
-        link[d] = links;
-        */
     }
 
     /**
@@ -1233,7 +1088,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     public K firstKey() {
         if (size == 0)
             throw new NoSuchElementException();
-        return key[first];
+        return key[order.items[0]];
     }
     /**
      * Returns the last key of this map in iteration order.
@@ -1243,7 +1098,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     public K lastKey() {
         if (size == 0)
             throw new NoSuchElementException();
-        return key[last];
+        return key[order.items[order.size-1]];
     }
     /**
      * Retains in this collection only elements from the given collection.
@@ -1308,7 +1163,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
          */
         int index = 0;
         private MapIterator() {
-            next = first;
+            next = size == 0 ? -1 : order.items[0];
             index = 0;
         }
         /*
@@ -1417,15 +1272,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                 else
                     next = -1;
             }
-            /*
-			 * Now we manually fix the pointers. Because of our knowledge of
-			 * next and prev, this is going to be faster than calling
-			 * fixOrder().
-			 */
-            if (prev == -1)
-                first = next;
-            if (next == -1)
-                last = prev;
             order.removeIndex(index);
             size--;
             int last, slot, pos = curr;
@@ -1549,12 +1395,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         public Entry<K, Integer> first() {
             if (size == 0)
                 throw new NoSuchElementException();
-            return new MapEntry(Arrangement.this.first);
+            return new MapEntry(order.items[0]);
         }
         public Entry<K, Integer> last() {
             if (size == 0)
                 throw new NoSuchElementException();
-            return new MapEntry(Arrangement.this.last);
+            return new MapEntry(order.items[order.size-1]);
         }
         @SuppressWarnings("unchecked")
         public boolean contains(final Object o) {
@@ -1817,12 +1663,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
 
         public K first() {
             if (size == 0) throw new NoSuchElementException();
-            return key[first];
+            return key[order.items[0]];
         }
 
         public K last() {
             if (size == 0) throw new NoSuchElementException();
-            return key[last];
+            return key[order.items[order.size-1]];
         }
 
         public Comparator<K> comparator() {
@@ -2150,10 +1996,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             newValue[pos] = value[i];
             oi[q] = pos;
         }
-        if(sz > 0) {
-            first = oi[0];
-            last = oi[sz - 1];
-        }
 
         n = newN;
         this.mask = mask;
@@ -2380,8 +2222,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final K key[] = this.key = (K[]) new Object[n + 1];
         final int[] value = this.value = new int[n + 1];
         final IntVLA order = this.order = new IntVLA(n + 1);
-        int prev = -1;
-        first = last = -1;
         K k;
         int v;
         for (int i = size, pos; i-- != 0;) {
@@ -2399,14 +2239,8 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
 
             key[pos] = k;
             value[pos] = v;
-            if (first != -1) {
-                prev = pos;
-            } else {
-                prev = first = pos;
-            }
             order.add(pos);
         }
-        last = prev;
     }
 
     /**
@@ -2527,8 +2361,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         if(size < 2)
             return this;
         order.shuffle(rng);
-        first = order.get(0);
-        last = order.peek();
         fixValues(0);
         return this;
     }
@@ -2554,8 +2386,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         if(ordering == null || ordering.length <= 0)
             return this;
         order.reorder(ordering);
-        first = order.get(0);
-        last = order.peek();
         fixValues(0);
         return this;
     }
@@ -2587,10 +2417,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             value[rep] = v;
         }
         order.set(op, rep);
-        if(isFirst)
-            first = rep;
-        if(isLast)
-            last = rep;
         return v;
     }
     private int alterNullEntry(final K replacement) {
