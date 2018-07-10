@@ -10,13 +10,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.gui.gdx.AnimatedEntity;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.MapUtility;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.*;
@@ -121,23 +119,25 @@ public class IconsTest extends ApplicationAdapter{
         super.render();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        ctr = System.currentTimeMillis();
-        if(ctr > 125 + lastUpdate) {
-            lastUpdate = ctr;
+//        ctr = System.currentTimeMillis();
+//        if(ctr > 125 + lastUpdate) {
+//            lastUpdate = ctr;
+        {
             AnimatedEntity ent;
-            Integer uo;
+            boolean hasActiveAnimations = false;
             for (int i = 0; i < things.size(); i++) {
                 ent = things.getAt(i);
                 if (ent == null || ent.actor == null)
                     continue;
-                uo = ((Integer) (ent.actor.getUserObject()) + 1) & 63;
-                ent.actor.setUserObject(uo);
-                ent.actor.setColor(colors.get(uo));
+                ent.actor.setColor(colors.get((Integer) (ent.actor.getUserObject()) + (int)(System.nanoTime() >> 26) & 63));
+                hasActiveAnimations |= ent.actor.hasActions();
             }
 
-            if (!layers.hasActiveAnimations()) {
+            if (!hasActiveAnimations) 
+            {
                 Direction[] dirs = new Direction[4];
                 Coord alter, pt;
+                SquidPanel fg = layers.getForegroundLayer();
                 for (int i = 0; i < things.size(); i++) {
                     pt = things.keyAt(i);
                     rng.shuffle(Direction.CARDINALS, dirs);
@@ -145,7 +145,8 @@ public class IconsTest extends ApplicationAdapter{
                         alter = pt.translate(dirs[di]);
                         if (map[alter.x][alter.y] == '.' && !things.containsKey(alter)) {
                             ent = things.getAt(i);
-                            layers.slide(ent, alter.x, alter.y);
+                            ent.actor.addAction(Actions.moveTo(fg.adjustX(alter.x, false), fg.adjustY(alter.y), 0.35f));
+//                            layers.slide(ent, alter.x, alter.y, 0, 0.35f);
                             things.alter(pt, alter);
                             break;
                         }
