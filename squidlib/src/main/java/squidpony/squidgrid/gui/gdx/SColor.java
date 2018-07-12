@@ -2322,7 +2322,7 @@ public class SColor extends Color implements Serializable {
     public static final SColor FADED_CHINESE_TEA_BROWN = new SColor(0x60281E, "Faded Chinese Tea Brown");
 
     /**
-     * This color constant "Faded Den No Rikyu's Tea" has RGB code {@code 0xB0927A}, hue 0.07407403, saturation 0.3068182, and value 0.6901961.
+     * This color constant "Faded Sen No Rikyu's Tea" has RGB code {@code 0xB0927A}, hue 0.07407403, saturation 0.3068182, and value 0.6901961.
      * It can be represented as a packed float with the constant {@code -0x1.f5256p125F}.
      * <pre>
      * <font style='background-color: #B0927A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B0927A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -2333,7 +2333,7 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ff0000; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #B0927A'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
      */
-    public static final SColor FADED_SEN_NO_RIKYUS_TEA = new SColor(0xB0927A, "Faded Den No Rikyu's Tea");
+    public static final SColor FADED_SEN_NO_RIKYUS_TEA = new SColor(0xB0927A, "Faded Sen No Rikyu's Tea");
 
     /**
      * This color constant "Fake Purple" has RGB code {@code 0x43242A}, hue 0.96774197, saturation 0.46268657, and value 0.2627451.
@@ -2546,7 +2546,7 @@ public class SColor extends Color implements Serializable {
     public static final SColor FRESH_ONION = new SColor(0x5B8930, "Fresh Onion");
 
     /**
-     * This color constant "Fucshia Pink" has RGB code {@code 0xFF77FF}, hue 0.8333333, saturation 0.5333333, and value 1.0.
+     * This color constant "Fuchsia Pink" has RGB code {@code 0xFF77FF}, hue 0.8333333, saturation 0.5333333, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.feeffep126F}.
      * <pre>
      * <font style='background-color: #FF77FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF77FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -2557,7 +2557,7 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ff0000; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #FF77FF'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
      */
-    public static final SColor FUCSHIA_PINK = new SColor(0xFF77FF, "Fucshia Pink");
+    public static final SColor FUCHSIA_PINK = new SColor(0xFF77FF, "Fuchsia Pink");
 
     /**
      * This color constant "Gamboge" has RGB code {@code 0xE49B0F}, hue 0.109546185, saturation 0.93421054, and value 0.89411765.
@@ -5976,7 +5976,7 @@ public class SColor extends Color implements Serializable {
     public static final SColor SCHOOL_BUS_YELLOW = new SColor(0xFFD800, "School Bus Yellow");
 
     /**
-     * This color constant "Scortched Brown" has RGB code {@code 0x351F19}, hue 0.03571427, saturation 0.5283019, and value 0.20784314.
+     * This color constant "Scorched Brown" has RGB code {@code 0x351F19}, hue 0.03571427, saturation 0.5283019, and value 0.20784314.
      * It can be represented as a packed float with the constant {@code -0x1.323e6ap125F}.
      * <pre>
      * <font style='background-color: #351F19; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #351F19; color: #000000'>&nbsp;@&nbsp;</font>
@@ -5987,7 +5987,7 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ff0000; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #351F19'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
      */
-    public static final SColor SCORTCHED_BROWN = new SColor(0x351F19, "Scortched Brown");
+    public static final SColor SCORCHED_BROWN = new SColor(0x351F19, "Scorched Brown");
 
     /**
      * This color constant "Sea Green" has RGB code {@code 0x2E8B57}, hue 0.40681005, saturation 0.66906476, and value 0.54509807.
@@ -6032,7 +6032,7 @@ public class SColor extends Color implements Serializable {
     public static final SColor SELECTIVE_YELLOW = new SColor(0xFFBA00, "Selective Yellow");
 
     /**
-     * This color constant "Sen No Riyu's Tea" has RGB code {@code 0x826B58}, hue 0.075396836, saturation 0.32307693, and value 0.50980395.
+     * This color constant "Sen No Rikyu's Tea" has RGB code {@code 0x826B58}, hue 0.075396836, saturation 0.32307693, and value 0.50980395.
      * It can be represented as a packed float with the constant {@code -0x1.b0d704p125F}.
      * <pre>
      * <font style='background-color: #826B58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #826B58; color: #000000'>&nbsp;@&nbsp;</font>
@@ -6043,7 +6043,7 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ff0000; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #826B58'>&nbsp;@&nbsp;</font>
      * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
      */
-    public static final SColor SEN_NO_RIKYUS_TEA = new SColor(0x826B58, "Sen No Riyu's Tea");
+    public static final SColor SEN_NO_RIKYUS_TEA = new SColor(0x826B58, "Sen No Rikyu's Tea");
 
     /**
      * This color constant "Sepia" has RGB code {@code 0x704214}, hue 0.08333331, saturation 0.8214286, and value 0.4392157.
@@ -10708,14 +10708,84 @@ public class SColor extends Color implements Serializable {
     public static final SColor CW_WHITE = new SColor(0xFFFFFF, "CW White");
 
 
+    /**
+     * This color constant "Fucshia Pink" (misspelled but here for compatibility) has RGB code {@code 0xFF77FF}, hue 
+     * 0.8333333, saturation 0.5333333, and value 1.0. It can be represented as a packed float with the constant
+     * {@code -0x1.feeffep126F}. It is equivalent except for in name to {@link #FUCHSIA_PINK}.
+     * <pre>
+     * <font style='background-color: #FF77FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF77FF; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #FF77FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #FF77FF; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #FF77FF; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF77FF; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #FF77FF'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #FF77FF'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
+     * @deprecated This color name was misspelled; prefer {@link #FUCHSIA_PINK}
+     */
+    @Deprecated
+    public static final SColor FUCSHIA_PINK = new SColor(0xFF7FF, "Fucshia Pink");
 
+    /**
+     * This color constant "Scortched Brown"  (misspelled but here for compatibility) has RGB code {@code 0x351F19}, hue
+     * 0.03571427, saturation 0.5283019, and value 0.20784314. It can be represented as a packed float with the constant
+     * {@code -0x1.323e6ap125F}. It is equivalent except for in name to {@link #SCORCHED_BROWN}.
+     * <pre>
+     * <font style='background-color: #351F19; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #351F19; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #351F19; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #351F19; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #351F19; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #351F19; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #351F19'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #351F19'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
+     * @deprecated This color name was misspelled; prefer {@link #SCORCHED_BROWN}
+     */
+    @Deprecated
+    public static final SColor SCORTCHED_BROWN = new SColor(0x351F19, "Scortched Brown");
+
+    /**
+     * This color constant "Sen No Riyu's Tea" (misspelled but here for compatibility; correctly it should refer to
+     * <a href="https://en.wikipedia.org/wiki/Sen_no_Rikyū">Sen No Rikyu</a>) has RGB code {@code 0x826B58}, hue
+     * 0.075396836, saturation 0.32307693, and value 0.50980395. It can be represented as a packed float with the
+     * constant {@code -0x1.b0d704p125F}. It is equivalent except for in name to {@link #SEN_NO_RIKYUS_TEA}.
+     * <pre>
+     * <font style='background-color: #826B58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #826B58; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #826B58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #826B58; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #826B58; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #826B58; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #826B58'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #826B58'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
+     * @deprecated This color name was misspelled; prefer {@link #SEN_NO_RIKYUS_TEA}
+     */
+    @Deprecated
+    public static final SColor SEN_NO_RIYUS_TEA = new SColor(0x826B58, "Sen No Riyu's Tea");
+
+    /**
+     * This color constant "Faded Den No Rikyu's Tea" (misspelled but here for compatibility; correctly it should refer
+     * to <a href="https://en.wikipedia.org/wiki/Sen_no_Rikyū">Sen No Rikyu</a>) has RGB code {@code 0xB0927A}, hue
+     * 0.07407403, saturation 0.3068182, and value 0.6901961. It can be represented as a packed float with the constant
+     * {@code -0x1.f5256p125F}. It is equivalent except for in name to {@link #FADED_SEN_NO_RIKYUS_TEA}.
+     * <pre>
+     * <font style='background-color: #B0927A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B0927A; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #B0927A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #B0927A; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #B0927A; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B0927A; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * <br>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #B0927A'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #B0927A'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>
+     * @deprecated This color name was misspelled; prefer {@link #FADED_SEN_NO_RIKYUS_TEA}
+     */
+    @Deprecated
+    public static final SColor FADED_DEN_NO_RIKYUS_TEA = new SColor(0xB0927A, "Faded Den No Rikyu's Tea");
+    
     /**
      * A color constant that is fully transparent. The RGB portion is 000000 (black), but
      * should not render when used in a method that respects alpha values. When transitioning between colors
      * and ending or starting on transparent, you should prefer making a color that has the correct RGB values
      * and also has 0 for the alpha component unless you are transitioning from opaque black to this SColor.
-     * Using {@link #SColor(int, int, int, int)} will work.
-     * It can be represented as a packed float with the constant 0x0.0p0F.
+     * Using {@link #SColor(int, int, int, int)} will work, as will copying the SColor with {@link #cpy()} to
+     * get a Color and setting the copy's {@link #a} to 0. It can be represented as a packed float with the constant 
+     * 0x0.0p0F.
      */
     public static final SColor TRANSPARENT = new SColor(0, 0, 0, 0, "Transparent");
 
@@ -10754,7 +10824,7 @@ public class SColor extends Color implements Serializable {
     public static final SColor[] YELLOW_RED_SERIES = {
             WALNUT, SUMAC, RICH_GARDENIA, RED_OCHRE, POLISHED_BROWN, STYLISH_PERSIMMON, DAYLILY, RED_DYE_TURMERIC,
             LEGAL_DYE, AMBER_DYE, DECAYING_LEAVES, CLOVE_DYED, BRUSHWOOD_DYED, SOOTY_BAMBOO, EARTHEN_YELLOW, CHINESE_TEA_YELLOW,
-            CATTAIL, SCORTCHED_BROWN, WASHED_OUT_PERSIMMON, SAWTOOTH_OAK, GREEN_TEA_DYE, PALE_PERSIMMON, PLUM_DYED,
+            CATTAIL, SCORCHED_BROWN, WASHED_OUT_PERSIMMON, SAWTOOTH_OAK, GREEN_TEA_DYE, PALE_PERSIMMON, PLUM_DYED,
             CLOVE_BROWN, LOQUAT_BROWN, PALE_INCENSE, GOLDEN_BROWN_DYE, FOX, ALOEWOOD, WHITE_TEA_DYE,
             DRIED_WEATHERED_BAMBOO, FLATTERY_BROWN};
     /**
@@ -11412,7 +11482,7 @@ public class SColor extends Color implements Serializable {
             EGYPTIAN_BLUE, ELECTRIC_BLUE, ELECTRIC_GREEN, ELECTRIC_INDIGO, ELECTRIC_LIME, ELECTRIC_PURPLE, EMERALD,
             EGGPLANT, FADED_CHINESE_TEA_BROWN, FADED_SEN_NO_RIKYUS_TEA, FAKE_PURPLE, FALU_RED, FERN_GREEN,
             FINCH_BROWN, FIREBRICK, FLATTERY_BROWN, FLAX, FLIRTATIOUS_INDIGO_TEA, FLORAL_LEAF, FOREIGN_CRIMSON,
-            FOREST_GREEN, FOX, FRAGILE_SEAWEED_BROWN, FRENCH_ROSE, FRESH_ONION, FUCSHIA_PINK, GAMBOGE, GAMBOGE_DYE,
+            FOREST_GREEN, FOX, FRAGILE_SEAWEED_BROWN, FRENCH_ROSE, FRESH_ONION, FUCHSIA_PINK, GAMBOGE, GAMBOGE_DYE,
             GLAZED_PERSIMMON, GOLD, GOLDEN, GOLDEN_BROWN, GOLDEN_BROWN_DYE, GOLDEN_FALLEN_LEAVES, GOLDEN_OAK,
             GOLDEN_YELLOW, GOLDENROD, GORYEO_STOREROOM, GRAPE_MOUSE, GRAY, GRAY_ASPARAGUS, GREEN, GREENFINCH,
             GREEN_BAMBOO, GREEN_TEA_DYE, GREEN_YELLOW, GREYISH_DARK_GREEN, HALF_PURPLE, HAN_PURPLE, HARBOR_RAT,
@@ -11444,7 +11514,7 @@ public class SColor extends Color implements Serializable {
             RICH_CARMINE, RICH_GARDENIA, RINSED_OUT_RED, RIKAN_BROWN, ROBIN_EGG_BLUE, ROSE, ROSE_MADDER, ROSE_TAUPE,
             ROYAL_BLUE, ROYAL_PURPLE, RUBY, RUSSET, RUST, RUSTED_LIGHT_BLUE, RUSTY_CELADON, RUSTY_STORAGE,
             RUSTY_STOREROOM, SAFETY_ORANGE, SAFFLOWER, SAFFRON, SALMON, SANDY_BROWN, SANGRIA, SAPPHIRE, SAPPANWOOD,
-            SAPPANWOOD_INCENSE, SAWTOOTH_OAK, SCARLET, SCHOOL_BUS_YELLOW, SCORTCHED_BROWN, SEA_GREEN, SEASHELL,
+            SAPPANWOOD_INCENSE, SAWTOOTH_OAK, SCARLET, SCHOOL_BUS_YELLOW, SCORCHED_BROWN, SEA_GREEN, SEASHELL,
             SELECTIVE_YELLOW, SEN_NO_RIKYUS_TEA, SEPIA, SHAMROCK_GREEN, SHOCKING_PINK, SHRIMP_BROWN,
             SILK_CREPE_BROWN, SILVER, SILVER_GREY, SILVERED_RED, SIMMERED_SEAWEED, SISKIN_SPROUT_YELLOW, SKY,
             SKY_BLUE, SLATE_GRAY, SMALT, SOOTY_BAMBOO, SOOTY_WILLOW_BAMBOO, SPARROW_BROWN, SPRING_BUD,
