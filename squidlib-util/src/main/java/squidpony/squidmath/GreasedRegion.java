@@ -6046,6 +6046,16 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         result += (a ^= 0x8329C6EB9E6AD3E3L * width);
         return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
     }
+    public long hash64() {
+        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+        final int len = data.length;
+        for (int i = 0; i < len; i++) {
+            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
+        }
+        result += (a ^= 0x8329C6EB9E6AD3E3L * height);
+        result += (a ^= 0x8329C6EB9E6AD3E3L * width);
+        return (result * (a | 1L) ^ (result >>> 27 | result << 37));
+    }
 
     public String serializeToString()
     {
