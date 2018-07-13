@@ -136,7 +136,9 @@ import java.util.concurrent.TimeUnit;
  
  New benchmarks, using JMH's recommendations to test one iteration per benchmark run.
  These are in milliseconds, but the test will now use microseconds because there isn't
- enough precision on the very fast GreasedRegion calls.
+ enough precision on the very fast GreasedRegion calls. These benchmarks had a lot of
+ extra load on the machine from a separate multi-threaded run of PractRand, so they
+ probably take more time than they should.
  
  Benchmark                          Mode  Cnt  Score    Error  Units
  CoordPackerBenchmark.doExpand      avgt    3  1.736 ±  0.155  ms/op
@@ -169,6 +171,17 @@ import java.util.concurrent.TimeUnit;
  into an array that was already generated and stored. Using doRandomG requires linear-time
  iteration over the full long array in a GreasedRegion (skipping lots of it), and doRandom
  with CoordPacker is linear-time as well but can't skip as easily.
+ 
+ Benchmarking again, still with lots of load, but also testing GreasedRegion.singleRandomAlt:
+
+ Benchmark                          Mode  Cnt  Score   Error  Units
+ CoordPackerBenchmark.doRandom      avgt    3  3.321 ± 0.478  us/op
+ CoordPackerBenchmark.doRandomA     avgt    3  0.049 ± 0.026  us/op
+ CoordPackerBenchmark.doRandomAltG  avgt    3  1.470 ± 0.040  us/op
+ CoordPackerBenchmark.doRandomG     avgt    3  1.597 ± 0.066  us/op
+
+ doRandomAltG does better than the original doRandomG, even though they're very close in code.
+ More of GreasedRegion will probably switch over to the technique it uses.
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MICROSECONDS)
@@ -319,13 +332,19 @@ public class CoordPackerBenchmark {
     {         
         return state.tmp.empty().insert(state.floorsG[state.counter = state.counter + 1 & 0xFF].singleRandom(state.srng)).flood8way(state.floorsG[state.counter], 10).hash64();
     }
-    
+
     @Benchmark
     public int doRandomG(BenchmarkState state)
     {
         return state.floorsG[state.counter = state.counter + 1 & 0xFF].singleRandom(state.srng).hashCode();
     }
-    
+
+    @Benchmark
+    public int doRandomAltG(BenchmarkState state)
+    {
+        return state.floorsG[state.counter = state.counter + 1 & 0xFF].singleRandomAlt(state.srng).hashCode();
+    }
+
     @Benchmark
     public int doRandomA(BenchmarkState state)
     {

@@ -5351,6 +5351,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         return -1;
     }
 
+    /**
+     * Gets a single random Coord from the "on" positions in this GreasedRegion, or the Coord (-1,-1) if this is empty.
+     * Uses the given IRNG to generate one random int, which is used as an index.
+     * @param rng an IRNG such as an {@link RNG} or {@link GWTRNG}
+     * @return a single randomly-chosen Coord from the "on" positions in this GreasedRegion, or (-1,-1) if empty
+     */
     public Coord singleRandom(IRNG rng)
     {
         int ct = size(), tmp = rng.nextInt(ct);
@@ -6508,6 +6514,36 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public GreasedRegion getInternalBorder() {
         return copy().surface8way();
     }
+
+    /**
+     * Should produce similar, if not identical, output to {@link #singleRandom(IRNG)}, but uses a different internal
+     * technique to iterate over bits in a block of bits. This technique can be credited to Erling Ellingsen and Daniel
+     * Lemire, found <a href="https://lemire.me/blog/2013/12/23/even-faster-bitmap-decoding/">here</a>, and seems to be
+     * a little faster than singleRandom. More benchmarks are underway to figure out if other methods will benefit more.
+     * @param rng an IRNG such as an {@link RNG} or {@link GWTRNG}
+     * @return a single randomly-chosen Coord from the "on" positions in this GreasedRegion, or (-1,-1) if empty
+     */
+    public Coord singleRandomAlt(IRNG rng)
+    {
+        int ct = size(), tmp = rng.nextInt(ct);
+        long t, w;
+        for (int s = 0; s < ySections; s++) {
+            for (int x = 0; x < width; x++) {
+                if ((ct = counts[x * ySections + s]) > tmp) {
+                    t = data[x * ySections + s];
+                    for (--ct; t != 0; ct--) {
+                        w = t & -t;
+                        if (ct == tmp)
+                            return Coord.get(x, (s << 6) | Long.bitCount(w-1));
+                        t ^= w;
+                    }
+                }
+            }
+        }
+        return Coord.get(-1, -1);
+    }
+
+
 
     public class GRIterator implements Iterator<Coord>
     {
