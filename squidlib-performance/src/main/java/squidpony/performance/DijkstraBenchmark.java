@@ -122,8 +122,8 @@ import static squidpony.squidai.DijkstraMap.Measurement.CHEBYSHEV;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Fork(1)
-@Warmup(iterations = 5)
-@Measurement(iterations = 5)
+@Warmup(iterations = 4)
+@Measurement(iterations = 3)
 public class DijkstraBenchmark {
 
     @State(Scope.Thread)
@@ -135,10 +135,12 @@ public class DijkstraBenchmark {
         public double[][] astarMap;
         public GreasedRegion floors;
         public int floorCount;
+        public Coord[] floorArray;
         public Coord[][] nearbyMap;
         public int[] customNearbyMap;
         public Adjacency adj;
         public DijkstraMap dijkstra;
+        public squidpony.performance.other.DijkstraMap otherDijkstra;
         public CustomDijkstraMap customDijkstra;
         public StatefulRNG srng;
         public GridGraph gg;
@@ -152,6 +154,7 @@ public class DijkstraBenchmark {
             map = dungeonGen.generate();
             floors = new GreasedRegion(map, '.');
             floorCount = floors.size();
+            floorArray = floors.asCoords();
             System.out.println("Floors: " + floorCount);
             System.out.println("Percentage walkable: " + floorCount * 100.0 / (DIMENSION * DIMENSION) + "%");
             astarMap = DungeonUtility.generateAStarCostMap(map, Collections.<Character, Double>emptyMap(), 1);
@@ -173,7 +176,10 @@ public class DijkstraBenchmark {
             }
             dijkstra = new DijkstraMap(
                     map, CHEBYSHEV, new StatefulRNG(0x1337BEEF));
+            otherDijkstra = new squidpony.performance.other.DijkstraMap(map, 
+                    squidpony.performance.other.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
             dijkstra.setBlockingRequirement(0);
+            otherDijkstra.setBlockingRequirement(0);
             customDijkstra = new CustomDijkstraMap(
                     map, adj, new StatefulRNG(0x1337BEEF));
             gg = new GridGraph(floors, map);
@@ -187,7 +193,26 @@ public class DijkstraBenchmark {
     public long doScanDijkstra(BenchmarkState state)
     {
         long scanned = 0;
-        DijkstraMap dijkstra = state.dijkstra;
+        final DijkstraMap dijkstra = state.dijkstra;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                dijkstra.setGoal(x, y);
+                dijkstra.scan(null);
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned++;
+            }
+        }
+        return scanned;
+    }
+
+    @Benchmark
+    public long doScanOtherDijkstra(BenchmarkState state)
+    {
+        long scanned = 0;
+        final squidpony.performance.other.DijkstraMap dijkstra = state.otherDijkstra;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
                 if (state.map[x][y] == '#')
@@ -241,9 +266,9 @@ public class DijkstraBenchmark {
     public long doPathDijkstra(BenchmarkState state)
     {
         Coord r;
-        Coord[] tgts = new Coord[1];
+        final Coord[] tgts = new Coord[1];
         long scanned = 0;
-        DijkstraMap dijkstra = state.dijkstra;
+        final DijkstraMap dijkstra = state.dijkstra;
         final int PATH_LENGTH = state.DIMENSION * state.DIMENSION;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
@@ -252,7 +277,32 @@ public class DijkstraBenchmark {
                 // this should ensure no blatant correlation between R and W
                 state.srng.setState((x << 22) | (y << 16) | (x * y));
                 //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
-                r = state.floors.singleRandom(state.srng);
+                r = state.srng.getRandomElement(state.floorArray);
+                tgts[0] = Coord.get(x, y);
+                dijkstra.findPath(PATH_LENGTH, null, null, r, tgts);
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned += dijkstra.path.size();
+            }
+        }
+        return scanned;
+    }
+    @Benchmark
+    public long doPathOtherDijkstra(BenchmarkState state)
+    {
+        Coord r;
+        final Coord[] tgts = new Coord[1];
+        long scanned = 0;
+        final squidpony.performance.other.DijkstraMap dijkstra = state.otherDijkstra;
+        final int PATH_LENGTH = state.DIMENSION * state.DIMENSION;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
+                r = state.srng.getRandomElement(state.floorArray);
                 tgts[0] = Coord.get(x, y);
                 dijkstra.findPath(PATH_LENGTH, null, null, r, tgts);
                 dijkstra.clearGoals();
@@ -268,14 +318,14 @@ public class DijkstraBenchmark {
     {
         Coord r;
         long scanned = 0;
-        Coord[] tgts = new Coord[1];
-        DijkstraMap dijkstra = state.dijkstra;
+        final Coord[] tgts = new Coord[1];
+        final DijkstraMap dijkstra = state.dijkstra;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
                 if (state.map[x][y] == '#')
                     continue;
                 // this should ensure no blatant correlation between R and W
-                state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //state.srng.setState((x << 22) | (y << 16) | (x * y));
                 //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
                 r = state.nearbyMap[x][y];
                 tgts[0] = Coord.get(x, y);
@@ -288,6 +338,33 @@ public class DijkstraBenchmark {
         }
         return scanned;
     }
+
+    @Benchmark
+    public long doTinyPathOtherDijkstra(BenchmarkState state)
+    {
+        Coord r;
+        long scanned = 0;
+        final Coord[] tgts = new Coord[1];
+        final squidpony.performance.other.DijkstraMap dijkstra = state.otherDijkstra;
+        for (int x = 1; x < state.DIMENSION - 1; x++) {
+            for (int y = 1; y < state.DIMENSION - 1; y++) {
+                if (state.map[x][y] == '#')
+                    continue;
+                // this should ensure no blatant correlation between R and W
+                //state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
+                r = state.nearbyMap[x][y];
+                tgts[0] = Coord.get(x, y);
+                //dijkstra.partialScan(r,9, null);
+                dijkstra.findPath(9, 9, null, null, r, tgts);
+                dijkstra.clearGoals();
+                dijkstra.resetMap();
+                scanned += dijkstra.path.size();
+            }
+        }
+        return scanned;
+    }
+
     @Benchmark
     public long doPathCustomDijkstra(BenchmarkState state)
     {
@@ -304,7 +381,7 @@ public class DijkstraBenchmark {
                 // this should ensure no blatant correlation between R and W
                 state.srng.setState((x << 22) | (y << 16) | (x * y));
                 //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
-                r = state.floors.singleRandom(state.srng);
+                r = state.srng.getRandomElement(state.floorArray);
                 p = state.adj.composite(r.x, r.y, 0, 0);
                 tgts[0] = state.adj.composite(x, y, 0, 0);
                 dijkstra.findPath(PATH_LENGTH, null, null, p, tgts);
@@ -328,7 +405,7 @@ public class DijkstraBenchmark {
                 if (state.map[x][y] == '#')
                     continue;
                 // this should ensure no blatant correlation between R and W
-                state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //state.srng.setState((x << 22) | (y << 16) | (x * y));
                 //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
                 r = state.nearbyMap[x][y];
                 p = state.adj.composite(r.x, r.y, 0, 0);
@@ -484,7 +561,7 @@ public class DijkstraBenchmark {
                     continue;
                 // this should ensure no blatant correlation between R and W
                 state.srng.setState((x << 22) | (y << 16) | (x * y));
-                r = state.floors.singleRandom(state.srng);
+                r = state.srng.getRandomElement(state.floorArray);
                 state.dgp.clear();
                 if(state.astar.searchNodePath(r, Coord.get(x, y), state.gg.heu, state.dgp))
                     scanned+= state.dgp.getCount();
@@ -503,7 +580,7 @@ public class DijkstraBenchmark {
                 if (state.map[x][y] == '#')
                     continue;
                 // this should ensure no blatant correlation between R and W
-                state.srng.setState((x << 22) | (y << 16) | (x * y));
+                //state.srng.setState((x << 22) | (y << 16) | (x * y));
                 r = state.nearbyMap[x][y];
                 state.dgp.clear();
                 if(state.astar.searchNodePath(r, Coord.get(x, y), state.gg.heu, state.dgp))

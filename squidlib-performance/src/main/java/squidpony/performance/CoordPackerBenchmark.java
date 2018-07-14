@@ -373,14 +373,6 @@ public class CoordPackerBenchmark {
     }
 
     @Benchmark
-    public long measureQuasiRegionAltG(BenchmarkState state)
-    {
-        return state.tmp.remake(state.floorsG[state.counter = state.counter + 1 & 0xFF]).quasiRandomRegionAlt(0.1, 64).hash64();
-    }
-
-
-
-    @Benchmark
     public int doRandomA(BenchmarkState state)
     {
         return state.srng.getRandomElement(state.unpacked[state.counter = state.counter + 1 & 0xFF]).hashCode();

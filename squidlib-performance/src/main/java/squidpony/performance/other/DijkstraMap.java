@@ -1,6 +1,7 @@
-package squidpony.squidai;
+package squidpony.performance.other;
 
 import squidpony.ArrayTools;
+import squidpony.squidai.Technique;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.LOS;
 import squidpony.squidgrid.Radius;
@@ -178,7 +179,7 @@ public class DijkstraMap implements Serializable {
      */
     public ArrayList<Coord> path = new ArrayList<>();
 
-    private Set<Coord> impassable2, friends;
+    private GreasedRegion impassable2, friends;
     
     public boolean cutShort = false;
 
@@ -355,8 +356,8 @@ public class DijkstraMap implements Serializable {
             Arrays.fill(costMap[x], 1.0);
         }
         standardCosts = true;
-        impassable2 = new UnorderedSet<>(CrossHash.mildHasher);
-        friends = new UnorderedSet<>(CrossHash.mildHasher);
+        impassable2 = new GreasedRegion(width, height);
+        friends = new GreasedRegion(width, height);
         initialized = true;
         return this;
     }
@@ -385,8 +386,8 @@ public class DijkstraMap implements Serializable {
             }
         }
         standardCosts = true;
-        impassable2 = new UnorderedSet<>(CrossHash.mildHasher);
-        friends = new UnorderedSet<>(CrossHash.mildHasher);
+        impassable2 = new GreasedRegion(width, height);
+        friends = new GreasedRegion(width, height);
         initialized = true;
         return this;
     }
@@ -417,8 +418,8 @@ public class DijkstraMap implements Serializable {
             }
         }
         standardCosts = true;
-        impassable2 = new UnorderedSet<>(CrossHash.mildHasher);
-        friends = new UnorderedSet<>(CrossHash.mildHasher);
+        impassable2 = new GreasedRegion(width, height);
+        friends = new GreasedRegion(width, height);
         initialized = true;
         return this;
     }
@@ -663,6 +664,7 @@ public class DijkstraMap implements Serializable {
      */
     public void setGoals(GreasedRegion pts) {
         if (!initialized || pts.width > width || pts.height > height) return;
+        int[] enc = new GreasedRegion(physicalMap, FLOOR).and(pts).asTightEncoded();
         for(Coord c : pts)
         {
             if(physicalMap[c.x][c.y] <= FLOOR) {
@@ -688,6 +690,7 @@ public class DijkstraMap implements Serializable {
     /**
      * Marks many cells as goals for pathfinding, ignoring cells in walls or unreachable areas. Simply loops through
      * pts and calls {@link #setGoal(Coord)} on each Coord in pts.
+     * If you have a GreasedRegion, you should use it with {@link #setGoals(GreasedRegion)}, which is faster.
      * @param pts an array of Coord to mark as goals
      */
     public void setGoals(Coord[] pts) {
@@ -1202,7 +1205,7 @@ public class DijkstraMap implements Serializable {
      * @return the Coord that it found first.
      */
     public Coord findNearest(Coord start, Coord... targets) {
-        return findNearest(start, new UnorderedSet<>(targets, CrossHash.mildHasher));
+        return findNearest(start, new OrderedSet<>(targets));
     }
 
     /**
@@ -1799,10 +1802,7 @@ public class DijkstraMap implements Serializable {
         if (impassable == null)
             impassable2.clear();
         else
-        {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+            impassable2.empty().addAll(impassable);
         if (onlyPassable != null && length == 1) 
             impassable2.addAll(onlyPassable);
         
@@ -1996,10 +1996,7 @@ public class DijkstraMap implements Serializable {
         if (impassable == null)
             impassable2.clear();
         else
-        {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+            impassable2.empty().addAll(impassable);
         if (onlyPassable != null && moveLength == 1)
             impassable2.addAll(onlyPassable);
 
@@ -2240,16 +2237,13 @@ public class DijkstraMap implements Serializable {
         }
         if (impassable == null)
             impassable2.clear();
-        else {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+        else
+            impassable2.empty().addAll(impassable);
+
         if (allies == null)
             friends.clear();
         else {
-            friends.clear();
-            friends.addAll(allies);
-            friends.remove(start);
+            friends.empty().insertSeveral(allies).remove(start);
         }
 
         resetMap();
@@ -2414,7 +2408,7 @@ public class DijkstraMap implements Serializable {
 
 
     private double cachedLongerPaths = 1.2;
-    private UnorderedSet<Coord> cachedImpassable = new UnorderedSet<>(CrossHash.mildHasher);
+    private Collection<Coord> cachedImpassable = new OrderedSet<>();
     private Coord[] cachedFearSources;
     private double[][] cachedFleeMap;
     private int cachedSize = 1;
@@ -2537,10 +2531,8 @@ public class DijkstraMap implements Serializable {
         if (impassable == null)
             impassable2.clear();
         else
-        {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+            impassable2.empty().addAll(impassable);
+
         if (fearSources == null || fearSources.length < 1) {
             cutShort = true;
             if(buffer == null)
@@ -2555,8 +2547,7 @@ public class DijkstraMap implements Serializable {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable.clear();
-            cachedImpassable.addAll(impassable2);
+            cachedImpassable = new OrderedSet<>(impassable2);
             cachedFearSources = new Coord[fearSources.length];
             System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);
             cachedSize = 1;
@@ -2688,13 +2679,11 @@ public class DijkstraMap implements Serializable {
 
         if (!initialized) return null;
         path.clear();
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2.clear();
+            impassable2 = Collections.emptySet();
         else
-        {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         resetMap();
         for (Coord goal : targets) {
@@ -2804,13 +2793,11 @@ public class DijkstraMap implements Serializable {
             }
         }
         path.clear();
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2.clear();
+            impassable2 = Collections.emptySet();
         else
-        {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (onlyPassable == null)
             onlyPassable = Collections.emptySet();
@@ -2949,13 +2936,11 @@ public class DijkstraMap implements Serializable {
             }
         }
         path.clear();
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2.clear();
+            impassable2 = Collections.emptySet();
         else
-        {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+            impassable2 = new GreasedRegion(width, height, impassable);
 
         if (onlyPassable == null)
             onlyPassable = Collections.emptySet();
@@ -3086,12 +3071,12 @@ public class DijkstraMap implements Serializable {
                                               Collection<Coord> onlyPassable, Coord start, Coord... fearSources) {
         if (!initialized) return null;
         path.clear();
+        Collection<Coord> impassable2;
         if (impassable == null)
-            impassable2.clear();
-        else {
-            impassable2.clear();
-            impassable2.addAll(impassable);
-        }
+            impassable2 = Collections.emptySet();
+        else
+            impassable2 = new GreasedRegion(width, height, impassable);
+
         if (onlyPassable == null)
             onlyPassable = Collections.emptySet();
         if (fearSources == null || fearSources.length < 1) {
@@ -3104,8 +3089,7 @@ public class DijkstraMap implements Serializable {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
-            cachedImpassable.clear();
-            cachedImpassable.addAll(impassable2);
+            cachedImpassable = new OrderedSet<>(impassable2);
             cachedFearSources = new Coord[fearSources.length];
             System.arraycopy(fearSources, 0, cachedFearSources, 0, fearSources.length);
             cachedSize = size;
@@ -3293,7 +3277,7 @@ public class DijkstraMap implements Serializable {
      * @param starts a vararg group of Points to step outward from; this often will only need to be one Coord.
      * @return A OrderedMap of Coord keys to Double values; the starts are included in this with the value 0.0.
      */
-    public OrderedMap<Coord, Double> floodFill(int radius, Coord... starts) {
+    public Map<Coord, Double> floodFill(int radius, Coord... starts) {
         if (!initialized) return null;
         OrderedMap<Coord, Double> fill = new OrderedMap<>();
 

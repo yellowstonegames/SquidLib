@@ -109,7 +109,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected CrossHash.IHasher hasher;
 
     /**
      * Creates a new hash map.

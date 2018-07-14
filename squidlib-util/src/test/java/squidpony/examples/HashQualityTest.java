@@ -7,6 +7,7 @@ import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Created by Tommy Ettinger on 8/15/2016.
@@ -609,6 +610,90 @@ public class HashQualityTest {
         return (h2 + (h1 << 24 | h1 >>> 8)) ^ h1;
     }
 
+    
+    public static int oldCoord(long x, long y)
+    {
+        x *= 0x9E3779B97F4A7C15L;
+        y *= 0x632BE59BD9B4E019L;
+        return (int) (((x ^ y) >>> ((x & 15) + (y & 15))) * 0x85157AF5L);
+
+    }
+
+    public static int latheCoord(int x, int y)
+    {
+        y ^= x;
+        y ^= (x << 13 | x >>> 19) ^ (y << 5) ^ (y << 28 | y >>> 4);
+        return (x ^= (y << 11 | y >>> 21)) ^ x >>> 8;
+    }
+
+    public static int latheCoordConfig(int x, int y, int rot)
+    {
+//        y ^= x;
+//        y = (((x << 13 | x >>> 19) ^ y ^ (y << 5)) + (y << 28 | y >>> 4));
+//        return Integer.rotateLeft(y, rot) + x;
+        y ^= x;
+        y ^= (x << 13 | x >>> 19) ^ (y << 5) ^ (y << 28 | y >>> 4);
+        return (x ^= (y << 11 | y >>> 21)) ^ x >>> rot;
+
+    }
+
+    public static int buzzCoord(int x, int y) { 
+        int result = 0xF369B, z = 0xEF17B;
+        result ^= (z += (x ^ 0xC74EAD55) * 0xA5CB3);
+        result ^= (z += (y ^ 0xC74EAD55) * 0xA5CB3);
+        result += (z ^ z >>> 13) * 0x62BD5;
+        return (result ^ result >>> 11 ^ z ^ z >>> 15);
+    }
+    
+    @Test
+    public void testCoord()
+    {
+        final int WIDTH = 256, HEIGHT = 256;
+        int SIZE = WIDTH * HEIGHT;
+        final int restrict = SIZE - 1;
+        
+        IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
+                colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
+                colliderLath = new IntDoubleOrderedMap(SIZE, 0.5f),
+                colliderBuzz = new IntDoubleOrderedMap(SIZE, 0.5f);
+        IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
+        for (int i = 0; i < 31; i++) {
+            colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
+        }
+        LinnormRNG rng = new LinnormRNG(0x1234567890ABCDEFL);
+        for (int x = 0; x < WIDTH; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+//                if(rng.next(4) > 2)
+//                {
+//                    --SIZE;
+//                    continue;
+//                }
+                colliderBase.put(oldCoord(x, y) & restrict, 0.0);
+                colliderLath.put(latheCoord(x, y) & restrict, 0.0);
+                colliderBuzz.put(buzzCoord(x, y) & restrict, 0.0);
+                colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
+                for (int i = 0; i < 31; i++) {
+                    colliders[i].put(latheCoordConfig(x, y, i+1) & restrict, 0.0);
+                }
+            }
+        }
+        System.out.println("Base collisions, 16-bit: " + (SIZE - colliderBase.size()));
+        System.out.println("Lath collisions, 16-bit: " + (SIZE - colliderLath.size()));
+        System.out.println("Buzz collisions, 16-bit: " + (SIZE - colliderBuzz.size()));
+        System.out.println("Obje collisions, 16-bit: " + (SIZE - colliderObje.size()));
+        for (int i = 0; i < 31; i++) {
+            System.out.println("Lathe " + (i+1) + ": " + (SIZE - colliders[i].size()));
+        }
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
     @Test
     public void testLimited()
     {

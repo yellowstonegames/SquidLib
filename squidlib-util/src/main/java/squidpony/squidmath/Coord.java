@@ -438,23 +438,26 @@ public class Coord implements Serializable {
 
     /**
      * Gets the hash code for this Coord; does not use the standard "auto-complete" style of hash that most IDEs will
-     * generate, but instead uses bit mixing (differently for x and y, with each multiplied by a different large long),
-     * a XOR of the mixed x and y, a seemingly-random right shift, and an overflowing multiplication by a large prime.
-     * This uses long math so it will be replicable on desktop, Android, and GWT, where GWT would normally have issues
-     * with overflow when using ints.
+     * generate, but instead uses a highly-specific technique based on {@link Lathe32RNG}'s random int generation, which
+     * also has two independent ints it uses like a Coord's x and y. Unlike Lathe32RNG, this uses only bitwise
+     * operations (not even addition). This guarantees it will behave correctly on GWT (Lathe32RNG uses an alternate
+     * source file on GWT).  It also manages to get extremely low collision rates under many circumstances, especially
+     * if the Coords being hashed are very dense.
      * <br>
-     * This changed at least three times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
+     * This changed at least four times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
      * same across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
      * unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
      * {@link OrderedSet} and {@link OrderedMap}; if you use the ordered kinds, then the only things that matter about
      * this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
-     * accurate than in the last version of this method).
+     * accurate than in earlier versions of this method).
      * @return an int that should, for most different Coord values, be significantly different from the other hash codes
      */
     @Override
     public int hashCode() {
-        long x2 = 0x9E3779B97F4A7C15L * x, y2 = 0x632BE59BD9B4E019L * y;
-        return (int) (((x2 ^ y2) >>> ((x2 & 15) + (y2 & 15))) * 0x85157AF5L);
+        int r = x ^ y;
+        r ^= (x << 13 | x >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
+        r = x ^ (r << 11 | r >>> 21);
+        return r ^ r >>> 8;
     }
 
     /**

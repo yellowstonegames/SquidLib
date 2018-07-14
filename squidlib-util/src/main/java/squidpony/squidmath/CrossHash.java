@@ -1017,6 +1017,31 @@ public class CrossHash {
 
     public static final IHasher defaultHasher = new DefaultHasher();
 
+    private static class MildHasher implements IHasher, Serializable {
+        private static final long serialVersionUID = 4L;
+
+        MildHasher() {
+        }
+
+        @Override
+        public int hash(final Object data) {
+            return data != null ? data.hashCode() : 0;
+        }
+
+        @Override
+        public boolean areEqual(final Object left, final Object right) {
+            return (left == right) || (left != null && left.equals(right));
+        }
+    }
+
+    /**
+     * The most basic IHasher type; effectively delegates to {@link Objects#hashCode(Object)} and
+     * {@link Objects#equals(Object, Object)}. Might not scramble the bits of a hash well enough to have good
+     * performance in a hash table lke {@link OrderedMap} or {@link UnorderedSet}, unless the objects being hashed have
+     * good hashCode() implementations already.
+     */
+    public static final IHasher mildHasher = new MildHasher();
+
     private static class IdentityHasher implements IHasher, Serializable
     {
         private static final long serialVersionUID = 4L;
@@ -1024,8 +1049,7 @@ public class CrossHash {
 
         @Override
         public int hash(Object data) {
-            final int x = System.identityHashCode(data) * 0x62BD5;
-            return x ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
+            return System.identityHashCode(data);
         }
 
         @Override
