@@ -36,12 +36,14 @@ import java.util.*;
  *     <li>get several random points from it with random sampling (use {@link #randomPortion(IRNG, int)}),</li>
  *     <li>mutate the current GreasedRegion to keep random points from it with random sampling (use {@link #randomRegion(IRNG, int)}),</li>
  *     <li>get random points that are likely to be separated (use {@link #mixedRandomSeparated(double, int, long)} with
- *     a random long for the last parameter, or either {@link #quasiRandomSeparated(double)} or
- *     {@link #separatedZCurve(double)} if you don't want a random seed),</li>
+ *     a random long for the last parameter, or {@link #quasiRandomSeparated(double)} if you don't want a random seed),</li>
  *     <li>do what any of the above "separated" methods can do, but mutate the current GreasedRegion (use
- *     {@link #mixedRandomRegion(double, int, long)}, {@link #separatedRegionZCurve(double, int)}, or 
- *     {@link #quasiRandomRegion(double, int)}),</li>
- *     <li>get all points from it (use {@link #asCoords()}).</li>
+ *     {@link #mixedRandomRegion(double, int, long)} or {@link #quasiRandomRegion(double, int)}),</li>
+ *     <li>get all points from it (use {@link #asCoords()} to get a Coord array, or produce a 2D array of the contents
+ *     with {@link #decode()} or {@link #toChars(char, char)}),</li>
+ *     <li>use it to modify other 2D data, such as with {@link #mask(char[][], char)},
+ *     {@link #inverseMask(char[][], char)}, {@link #writeDoubles(double[][], double)}, or
+ *     {@link #writeIntsInto(int[][], int)}, along with variations on those.</li>
  * </ul>
  * <br>
  * You may also want to produce some 2D data from one or more GreasedRegions, as with {@link #sum(GreasedRegion...)} or
@@ -4649,37 +4651,34 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @param seed a long seed to change the points; the most significant 21 bits (except the sign bit) and least significant bit are ignored
      * @return a freshly-allocated Coord array containing the pseudo-random cells
      */
-    public Coord[] mixedRandomSeparated(double fraction, int limit, long seed)
-    {
-        if(fraction < 0)
+    public Coord[] mixedRandomSeparated(double fraction, int limit, long seed) {
+        if (fraction < 0)
             return new Coord[0];
-        if(fraction > 1)
+        if (fraction > 1)
             fraction = 1;
         int tmp, ic;
         long t, w;
         seed |= 1L;
         final int total = size();
-        int ct = (int)(total * fraction);
-        if(limit >= 0 && limit < ct)
+        int ct = (int) (total * fraction);
+        if (limit >= 0 && limit < ct)
             ct = limit;
         Coord[] vl = new Coord[ct];
         EACH_QUASI:
-        for (int i = 0; i < ct; i++)
-        {
-            tmp = (int)(VanDerCorputQRNG.altDetermine(seed, i+1) * total);
-            
+        for (int i = 0; i < ct; i++) {
+            tmp = (int) (VanDerCorputQRNG.altDetermine(seed, i + 1) * total);
+
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
                     if ((ic = counts[x * ySections + s]) > tmp) {
                         t = data[x * ySections + s];
-                        w = NumberTools.lowestOneBit(t);
-                        for (--ic; w != 0; ic--) {
+                        for (--ic; t != 0; ic--) {
+                            w = t & -t;
                             if (ic == tmp) {
-                                vl[i] = Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                                vl[i] = Coord.get(x, (s << 6) | Long.bitCount(w - 1));
                                 continue EACH_QUASI;
                             }
                             t ^= w;
-                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }
@@ -4915,13 +4914,13 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(limit <= 0)
             return empty();
         int[] order = new int[limit];
-        for (int i = 0, m = 0; i < limit; i++, m++) {
-            idx = (int) (VanDerCorputQRNG.determine2(m ^ m >>> 1) * ct);
+        for (int i = 0, m = 1; i < limit; i++, m++) {
+            idx = (int) (VanDerCorputQRNG.determine2(m) * ct);
             BIG:
             while (true) {
                 for (int j = 0; j < i; j++) {
                     if (order[j] == idx) {
-                        idx = (int) (VanDerCorputQRNG.determine2(++m ^ m >>> 1) * ct);
+                        idx = (int) (VanDerCorputQRNG.determine2(++m) * ct);
                         continue BIG;
                     }
                 }
@@ -5353,7 +5352,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     /**
      * Gets a single random Coord from the "on" positions in this GreasedRegion, or the Coord (-1,-1) if this is empty.
-     * Uses the given IRNG to generate one random int, which is used as an index.
+     * Uses the given IRNG to generate one random int, which is used as an index. The technique this uses to iterate
+     * over bits can be credited to Erling Ellingsen and Daniel Lemire, found
+     * <a href="https://lemire.me/blog/2013/12/23/even-faster-bitmap-decoding/">here</a>, and seems to be a little
+     * faster than the previous method. The fastest way to get a random Coord from a GreasedRegion is to avoid iterating
+     * over the bits at all, so if your region data doesn't change you should get it as a Coord array with
+     * {@link #asCoords()} and call {@link IRNG#getRandomElement(Object[])} with that array as the parameter. If you
+     * take the asCoords() call out of consideration, getting random elements out of an array (especially a large one)
+     * can be hundreds of times faster.
      * @param rng an IRNG such as an {@link RNG} or {@link GWTRNG}
      * @return a single randomly-chosen Coord from the "on" positions in this GreasedRegion, or (-1,-1) if empty
      */
@@ -5365,12 +5371,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int x = 0; x < width; x++) {
                 if ((ct = counts[x * ySections + s]) > tmp) {
                     t = data[x * ySections + s];
-                    w = NumberTools.lowestOneBit(t);
-                    for (--ct; w != 0; ct--) {
+                    for (--ct; t != 0; ct--) {
+                        w = t & -t;
                         if (ct == tmp)
-                            return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
+                            return Coord.get(x, (s << 6) | Long.bitCount(w-1));
                         t ^= w;
-                        w = NumberTools.lowestOneBit(t);
                     }
                 }
             }
@@ -5464,9 +5469,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 continue;
             s = d >>> 22;
             t = data[x * ySections + s];
-            if(t == 0)
-                continue;
-            if((ct += (t & (1L << (y & 63))) == 0 ? 0 : 1) == index)
+            if((ct += (t >>> (y & 63) & 1L)) == index)
                 return Coord.get(x, y);
         }
         return Coord.get(-1, -1);
@@ -5484,7 +5487,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     public int nthZCurveTight(final int index)
     {
         int ct = -1, x, y, s, d, max = nextPowerOfTwo(width) * nextPowerOfTwo(height);
-        long t, w;
+        long t;
         for (int o = 0; o < max; o++) {
             d = disperseBits(o);
             x = d & 0xffff;
@@ -5497,9 +5500,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 continue;
             s = d >>> 22;
             t = data[x * ySections + s];
-            if(t == 0)
-                continue;
-            if((ct += (t & (1L << (y & 63))) == 0 ? 0 : 1) == index)
+            if((ct += (t >>> (y & 63) & 1L)) == index)
                 return y * width + x;
         }
         return -1;
@@ -6516,33 +6517,57 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
     }
 
     /**
-     * Should produce similar, if not identical, output to {@link #singleRandom(IRNG)}, but uses a different internal
-     * technique to iterate over bits in a block of bits. This technique can be credited to Erling Ellingsen and Daniel
-     * Lemire, found <a href="https://lemire.me/blog/2013/12/23/even-faster-bitmap-decoding/">here</a>, and seems to be
-     * a little faster than singleRandom. More benchmarks are underway to figure out if other methods will benefit more.
-     * @param rng an IRNG such as an {@link RNG} or {@link GWTRNG}
-     * @return a single randomly-chosen Coord from the "on" positions in this GreasedRegion, or (-1,-1) if empty
+     * Gets a Coord array from the "on" contents of this GreasedRegion, using a deterministic but random-seeming
+     * scattering of chosen cells with a count that matches the given {@code fraction} of the total amount of "on" cells
+     * in this. This is pseudo-random with the given seed (which will be made into an odd number if it is not one
+     * already), and is very good at avoiding overlap (just as good as {@link #separatedZCurve(double, int)}, and
+     * much faster). If you request too many cells (too high of a value for fraction), it will start to overlap, but
+     * a fraction value of 0.4 reliably has had no overlap in testing. Restricts the total size of the returned array to
+     * a maximum of {@code limit} (minimum is 0 if no cells are "on"). If limit is negative, this will not restrict the
+     * size.
+     * @param fraction the fraction of "on" cells to randomly select, between 0.0 and 1.0
+     * @param limit the maximum size of the array to return
+     * @param seed a long seed to change the points; the most significant 21 bits (except the sign bit) and least significant bit are ignored
+     * @return a freshly-allocated Coord array containing the pseudo-random cells
      */
-    public Coord singleRandomAlt(IRNG rng)
+    public Coord[] mixedRandomSeparatedAlt(double fraction, int limit, long seed)
     {
-        int ct = size(), tmp = rng.nextInt(ct);
+        if(fraction < 0)
+            return new Coord[0];
+        if(fraction > 1)
+            fraction = 1;
+        int tmp, ic;
         long t, w;
-        for (int s = 0; s < ySections; s++) {
-            for (int x = 0; x < width; x++) {
-                if ((ct = counts[x * ySections + s]) > tmp) {
-                    t = data[x * ySections + s];
-                    for (--ct; t != 0; ct--) {
-                        w = t & -t;
-                        if (ct == tmp)
-                            return Coord.get(x, (s << 6) | Long.bitCount(w-1));
-                        t ^= w;
+        seed |= 1L;
+        final int total = size();
+        int ct = (int)(total * fraction);
+        if(limit >= 0 && limit < ct)
+            ct = limit;
+        Coord[] vl = new Coord[ct];
+        EACH_QUASI:
+        for (int i = 0; i < ct; i++)
+        {
+            tmp = (int)(VanDerCorputQRNG.altDetermine(seed, i+1) * total);
+
+            for (int s = 0; s < ySections; s++) {
+                for (int x = 0; x < width; x++) {
+                    if ((ic = counts[x * ySections + s]) > tmp) {
+                        t = data[x * ySections + s];
+                        for (--ic; t != 0; ic--) {
+                            w = t & -t;
+                            if (ic == tmp)
+                            {
+                                vl[i] = Coord.get(x, (s << 6) | Long.bitCount(w-1));
+                                continue EACH_QUASI;
+                            }
+                            t ^= w;
+                        }
                     }
                 }
             }
         }
-        return Coord.get(-1, -1);
+        return vl;
     }
-
 
 
     public class GRIterator implements Iterator<Coord>
@@ -6568,17 +6593,14 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 for (int x = 0; x < width; x++) {
                     if ((c = counts[x * ySections + s]) > index) {
                         t = data[x * ySections + s];
-                        w = NumberTools.lowestOneBit(t);
-                        for (--c; w != 0; c--) {
+                        for (--c; t != 0; c--) {
+                            w = t & -t;
                             if (c == index)
                             {
-                                if(index++ < ct)
-                                    return Coord.get(x, (s << 6) | Long.numberOfTrailingZeros(w));
-                                else
-                                    return null;
+                                index++;
+                                return Coord.get(x, (s << 6) | Long.bitCount(w-1));
                             }
                             t ^= w;
-                            w = NumberTools.lowestOneBit(t);
                         }
                     }
                 }

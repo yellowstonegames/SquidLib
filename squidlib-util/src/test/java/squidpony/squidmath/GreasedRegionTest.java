@@ -163,11 +163,11 @@ public class GreasedRegionTest {
         GreasedRegion g = new GreasedRegion(box);
         GreasedRegion g2 = new GreasedRegion(64, 64);
         g2.insertRectangle(24, 24, 16, 16);
-        assertTrue(g.equals(g2));
+        assertEquals(g, g2);
         GreasedRegion grr = new GreasedRegion(box3);
         GreasedRegion grr2 = new GreasedRegion(240, 240);
         grr2.insertRectangle(30, 30, 180, 180);
-        assertTrue(grr.equals(grr2));
+        assertEquals(grr, grr2);
 //        GreasedRegion gri = new GreasedRegion(grr).insertRectangle(24, 52, 16, 16);
 //        GreasedRegion gri2 = new GreasedRegion(grr).insert(0, 28, box);
 //        printRegion(box);
@@ -180,8 +180,14 @@ public class GreasedRegionTest {
 //        printRegion(box);
 //        printRegion(gri);
 //        printRegion(gri2);
-        assertTrue(gri.equals(gri2));
-
+        assertEquals(gri, gri2);
+//        StatefulRNG srng2 = new StatefulRNG(12345L);
+//        srng.setState(12345L);
+//        gr.remake(dataDungeon);
+//        gr2.remake(dataDungeon);
+//        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
+//        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
+//        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
     }
 
     public static int FOV_RANGE = 12;

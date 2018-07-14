@@ -32,6 +32,7 @@
 package squidpony.performance;
 
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
@@ -340,10 +341,44 @@ public class CoordPackerBenchmark {
     }
 
     @Benchmark
-    public int doRandomAltG(BenchmarkState state)
+    public void measureMixedSeparatedG(BenchmarkState state, Blackhole blackhole)
     {
-        return state.floorsG[state.counter = state.counter + 1 & 0xFF].singleRandomAlt(state.srng).hashCode();
+        blackhole.consume(state.floorsG[state.counter = state.counter + 1 & 0xFF].mixedRandomSeparated(0.1, 64, 123L));
     }
+
+
+    @Benchmark
+    public void measureMixedSeparatedAltG(BenchmarkState state, Blackhole blackhole)
+    {
+        blackhole.consume(state.floorsG[state.counter = state.counter + 1 & 0xFF].mixedRandomSeparatedAlt(0.1, 64, 123L));
+    }
+
+
+    @Benchmark
+    public long measureMixedRegionG(BenchmarkState state)
+    {
+        return state.tmp.remake(state.floorsG[state.counter = state.counter + 1 & 0xFF]).mixedRandomRegion(0.1, 64, 123L).hash64();
+    }
+
+    @Benchmark
+    public long measureZCurveRegionG(BenchmarkState state)
+    {
+        return state.tmp.remake(state.floorsG[state.counter = state.counter + 1 & 0xFF]).separatedRegionZCurve(0.1, 64).hash64();
+    }
+
+    @Benchmark
+    public long measureQuasiRegionG(BenchmarkState state)
+    {
+        return state.tmp.remake(state.floorsG[state.counter = state.counter + 1 & 0xFF]).quasiRandomRegion(0.1, 64).hash64();
+    }
+
+    @Benchmark
+    public long measureQuasiRegionAltG(BenchmarkState state)
+    {
+        return state.tmp.remake(state.floorsG[state.counter = state.counter + 1 & 0xFF]).quasiRandomRegionAlt(0.1, 64).hash64();
+    }
+
+
 
     @Benchmark
     public int doRandomA(BenchmarkState state)
