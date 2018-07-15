@@ -379,7 +379,8 @@ public class DungeonGenerator implements IDungeonGenerator {
                                 blocked.clear();
                                 blocked.add(Coord.get(x, y));
                                 blocked.add(Coord.get(x + 1, y));
-                                if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                                dm.partialScan(null, 16, blocked);
+                                if(dm.gradientMap[x][y-1] < DijkstraMap.FLOOR)
                                     continue;
                                 doors.add(Coord.get(x, y));
                                 doors.add(Coord.get(x + 1, y));
@@ -397,7 +398,8 @@ public class DungeonGenerator implements IDungeonGenerator {
                                 blocked.clear();
                                 blocked.add(Coord.get(x, y));
                                 blocked.add(Coord.get(x, y+1));
-                                if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                                dm.partialScan(null, 16, blocked);
+                                if(dm.gradientMap[x-1][y] < DijkstraMap.FLOOR)
                                     continue;
                                 doors.add(Coord.get(x, y));
                                 doors.add(Coord.get(x, y+1));
@@ -414,7 +416,8 @@ public class DungeonGenerator implements IDungeonGenerator {
                         dm.setGoal(x, y+1);
                         blocked.clear();
                         blocked.add(Coord.get(x, y));
-                        if(dm.partialScan(16, blocked)[x][y-1] < DijkstraMap.FLOOR)
+                        dm.partialScan(null, 16, blocked);
+                        if(dm.gradientMap[x][y-1] < DijkstraMap.FLOOR)
                             continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
@@ -426,7 +429,8 @@ public class DungeonGenerator implements IDungeonGenerator {
                         dm.setGoal(x+1, y);
                         blocked.clear();
                         blocked.add(Coord.get(x, y));
-                        if(dm.partialScan(16, blocked)[x-1][y] < DijkstraMap.FLOOR)
+                        dm.partialScan(null, 16, blocked);
+                        if(dm.gradientMap[x-1][y] < DijkstraMap.FLOOR)
                             continue;
                         doors.add(Coord.get(x, y));
                         doors = removeAdjacent(doors, Coord.get(x, y));
@@ -511,7 +515,7 @@ public class DungeonGenerator implements IDungeonGenerator {
                 }
             }
             dijkstra.setGoal(stairsUp);
-            dijkstra.scan(null);
+            dijkstra.scan(null, null);
             frustrated++;
         }while (dijkstra.getMappedCount() < width + height && frustrated < 8);
         if(frustrated >= 8)
@@ -566,7 +570,7 @@ public class DungeonGenerator implements IDungeonGenerator {
         for (int j = 0; j < stairs.size(); j++) {
             dijkstra.setGoal(stairs.get(j));
         }
-        dijkstra.scan(null);
+        dijkstra.scan(null, null);
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 if (dijkstra.gradientMap[i][j] >= DijkstraMap.FLOOR) {

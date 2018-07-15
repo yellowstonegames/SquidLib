@@ -77,7 +77,7 @@ final class DijkstraPerformanceTest extends AbstractPerformanceTest {
 					r = utility.randomFloor(map);
 					dijkstra.setGoal(x, y);
 					dijkstra.setGoal(r);
-					dijkstra.scan(null);
+					dijkstra.scan(null, null);
 					dijkstra.clearGoals();
 					dijkstra.findPath(PATH_LENGTH, null, null, Coord.get(x, y), r);
 				}

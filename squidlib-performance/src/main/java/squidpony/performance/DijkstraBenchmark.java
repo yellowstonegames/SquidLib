@@ -51,6 +51,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.StatefulRNG;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
@@ -118,6 +119,22 @@ import static squidpony.squidai.DijkstraMap.Measurement.CHEBYSHEV;
  * DijkstraBenchmark.doTinyPathDijkstra        avgt    5    379.848 ±   2.214  ms/op
  * DijkstraBenchmark.doTinyPathGDXAStar        avgt    5     18.619 ±   2.698  ms/op
  *
+ * ... Testing changes made on and around July 14, 2018...
+ * 
+ * Map size: 64x64, 2264 paths (slower because the computer was under heavy load)
+ * Benchmark                                   Mode  Cnt     Score    Error  Units
+ * DijkstraBenchmark.doPathCustomDijkstra      avgt    3   642.238 ± 67.942  ms/op
+ * DijkstraBenchmark.doPathDijkstra            avgt    3   318.874 ± 46.723  ms/op // currently in squidlib-util
+ * DijkstraBenchmark.doPathGDXAStar            avgt    3   142.955 ± 29.477  ms/op
+ * DijkstraBenchmark.doPathOtherDijkstra       avgt    3   378.071 ± 52.248  ms/op // previously in squidlib-util
+ * DijkstraBenchmark.doScanCustomDijkstra      avgt    3  1042.841 ± 95.942  ms/op
+ * DijkstraBenchmark.doScanDijkstra            avgt    3   647.943 ± 72.479  ms/op
+ * DijkstraBenchmark.doScanOtherDijkstra       avgt    3   690.908 ± 55.090  ms/op
+ * DijkstraBenchmark.doTinyPathCustomDijkstra  avgt    3    27.699 ±  4.254  ms/op
+ * DijkstraBenchmark.doTinyPathDijkstra        avgt    3    14.740 ±  1.510  ms/op
+ * DijkstraBenchmark.doTinyPathGDXAStar        avgt    3     3.892 ±  0.447  ms/op
+ * DijkstraBenchmark.doTinyPathOtherDijkstra   avgt    3    17.411 ±  3.890  ms/op
+ *
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
@@ -128,7 +145,7 @@ public class DijkstraBenchmark {
 
     @State(Scope.Thread)
     public static class BenchmarkState {
-        public int DIMENSION = 128;
+        public int DIMENSION = 64;
         public DungeonGenerator dungeonGen = new DungeonGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
         //public SerpentMapGenerator serpent = new SerpentMapGenerator(DIMENSION, DIMENSION, new StatefulRNG(0x1337BEEFDEAL));
         public char[][] map;
@@ -140,12 +157,13 @@ public class DijkstraBenchmark {
         public int[] customNearbyMap;
         public Adjacency adj;
         public DijkstraMap dijkstra;
-        public squidpony.performance.other.DijkstraMap otherDijkstra;
+        public squidpony.performance.alternate.other.DijkstraMap otherDijkstra;
         public CustomDijkstraMap customDijkstra;
         public StatefulRNG srng;
         public GridGraph gg;
         public IndexedAStarPathFinder<Coord> astar;
         public GraphPath<Coord> dgp;
+        public ArrayList<Coord> path;
         @Setup(Level.Trial)
         public void setup() {
             Coord.expandPoolTo(DIMENSION, DIMENSION);
@@ -176,15 +194,16 @@ public class DijkstraBenchmark {
             }
             dijkstra = new DijkstraMap(
                     map, CHEBYSHEV, new StatefulRNG(0x1337BEEF));
-            otherDijkstra = new squidpony.performance.other.DijkstraMap(map, 
-                    squidpony.performance.other.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
+            otherDijkstra = new squidpony.performance.alternate.other.DijkstraMap(map, 
+                    squidpony.performance.alternate.other.DijkstraMap.Measurement.CHEBYSHEV, new StatefulRNG(0x1337BEEF));
             dijkstra.setBlockingRequirement(0);
             otherDijkstra.setBlockingRequirement(0);
             customDijkstra = new CustomDijkstraMap(
                     map, adj, new StatefulRNG(0x1337BEEF));
             gg = new GridGraph(floors, map);
             astar = new IndexedAStarPathFinder<>(gg);
-            dgp = new DefaultGraphPath<>(128 * 128);
+            dgp = new DefaultGraphPath<>(DIMENSION << 2);
+            path = new ArrayList<>(DIMENSION << 2);
         }
 
     }
@@ -199,7 +218,7 @@ public class DijkstraBenchmark {
                 if (state.map[x][y] == '#')
                     continue;
                 dijkstra.setGoal(x, y);
-                dijkstra.scan(null);
+                dijkstra.scan(null, null);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
                 scanned++;
@@ -212,13 +231,13 @@ public class DijkstraBenchmark {
     public long doScanOtherDijkstra(BenchmarkState state)
     {
         long scanned = 0;
-        final squidpony.performance.other.DijkstraMap dijkstra = state.otherDijkstra;
+        final squidpony.performance.alternate.other.DijkstraMap dijkstra = state.otherDijkstra;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
                 if (state.map[x][y] == '#')
                     continue;
                 dijkstra.setGoal(x, y);
-                dijkstra.scan(null);
+                dijkstra.scan(null, null);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
                 scanned++;
@@ -279,10 +298,11 @@ public class DijkstraBenchmark {
                 //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
                 r = state.srng.getRandomElement(state.floorArray);
                 tgts[0] = Coord.get(x, y);
-                dijkstra.findPath(PATH_LENGTH, null, null, r, tgts);
+                state.path.clear();
+                dijkstra.findPath(state.path, PATH_LENGTH, -1, null, null, r, tgts);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
-                scanned += dijkstra.path.size();
+                scanned += state.path.size();
             }
         }
         return scanned;
@@ -293,7 +313,7 @@ public class DijkstraBenchmark {
         Coord r;
         final Coord[] tgts = new Coord[1];
         long scanned = 0;
-        final squidpony.performance.other.DijkstraMap dijkstra = state.otherDijkstra;
+        final squidpony.performance.alternate.other.DijkstraMap dijkstra = state.otherDijkstra;
         final int PATH_LENGTH = state.DIMENSION * state.DIMENSION;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
@@ -304,10 +324,11 @@ public class DijkstraBenchmark {
                 //((StatefulRNG) dijkstra.rng).setState(((x << 20) | (y << 14)) ^ (x * y));
                 r = state.srng.getRandomElement(state.floorArray);
                 tgts[0] = Coord.get(x, y);
-                dijkstra.findPath(PATH_LENGTH, null, null, r, tgts);
+                state.path.clear();
+                dijkstra.findPath(state.path, PATH_LENGTH, -1, null, null, r, tgts);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
-                scanned += dijkstra.path.size();
+                scanned += state.path.size();
             }
         }
         return scanned;
@@ -330,10 +351,11 @@ public class DijkstraBenchmark {
                 r = state.nearbyMap[x][y];
                 tgts[0] = Coord.get(x, y);
                 //dijkstra.partialScan(r,9, null);
-                dijkstra.findPath(9, 9, null, null, r, tgts);
+                state.path.clear();
+                dijkstra.findPath(state.path, 9, 9, null, null, r, tgts);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
-                scanned += dijkstra.path.size();
+                scanned += state.path.size();
             }
         }
         return scanned;
@@ -345,7 +367,7 @@ public class DijkstraBenchmark {
         Coord r;
         long scanned = 0;
         final Coord[] tgts = new Coord[1];
-        final squidpony.performance.other.DijkstraMap dijkstra = state.otherDijkstra;
+        final squidpony.performance.alternate.other.DijkstraMap dijkstra = state.otherDijkstra;
         for (int x = 1; x < state.DIMENSION - 1; x++) {
             for (int y = 1; y < state.DIMENSION - 1; y++) {
                 if (state.map[x][y] == '#')
@@ -356,10 +378,11 @@ public class DijkstraBenchmark {
                 r = state.nearbyMap[x][y];
                 tgts[0] = Coord.get(x, y);
                 //dijkstra.partialScan(r,9, null);
-                dijkstra.findPath(9, 9, null, null, r, tgts);
+                state.path.clear();
+                dijkstra.findPath(state.path, 9, 9, null, null, r, tgts);
                 dijkstra.clearGoals();
                 dijkstra.resetMap();
-                scanned += dijkstra.path.size();
+                scanned += state.path.size();
             }
         }
         return scanned;

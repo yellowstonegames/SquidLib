@@ -345,7 +345,7 @@ public class LineAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][ts[i].x][ts[i].y] > DijkstraMap.FLOOR)
+            if(compositeMap[i][ts[i].x][ts[i].y] >= DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++) {
                     Arrays.fill(compositeMap[i][x], 99999.0);
@@ -356,7 +356,7 @@ public class LineAOE implements AOE, Serializable {
 
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
-            dm.scan(null);
+            dm.scan(null, null);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
@@ -493,7 +493,7 @@ public class LineAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][pts[i].x][pts[i].y] > DijkstraMap.FLOOR)
+            if(compositeMap[i][pts[i].x][pts[i].y] >= DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++) {
                     Arrays.fill(compositeMap[i][x], 399999.0);
@@ -504,7 +504,7 @@ public class LineAOE implements AOE, Serializable {
 
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
-            dm.scan(null);
+            dm.scan(null, null);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 399999.0;
@@ -544,7 +544,7 @@ public class LineAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] > DijkstraMap.FLOOR)
+            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] >= DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++)
                 {
@@ -556,7 +556,7 @@ public class LineAOE implements AOE, Serializable {
 
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
-            dm.scan(null);
+            dm.scan(null, null);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!' && dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;

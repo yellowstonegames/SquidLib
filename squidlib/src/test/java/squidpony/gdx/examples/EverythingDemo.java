@@ -372,7 +372,7 @@ public class EverythingDemo extends ApplicationAdapter {
         getToPlayer = new DijkstraMap(decoDungeon, DijkstraMap.Measurement.CHEBYSHEV);
         getToPlayer.rng = rng;
         getToPlayer.setGoal(playerPos);
-        getToPlayer.scan(null);
+        getToPlayer.scan(null, null);
 
         player = display.animateActor(playerPos.x, playerPos.y, '@',
                 fgCenter.loopingGradient(SColor.CAPE_JASMINE, SColor.HAN_PURPLE, 45), 1.5f, false);

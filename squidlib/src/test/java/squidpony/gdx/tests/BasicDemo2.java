@@ -211,7 +211,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         //These next two lines mark the player as something we want paths to go to or from, and get the distances to the
         // player from all walkable cells in the dungeon.
         playerToCursor.setGoal(playerPosition);
-        playerToCursor.scan(blockage);
+        playerToCursor.scan(null, blockage);
 
         //The next three lines set the background color for anything we don't draw on, but also create 2D arrays of the
         //same size as decoDungeon that store simple indexes into a common list of colors, using the colors that looks
@@ -488,7 +488,7 @@ public class BasicDemo2 extends ApplicationAdapter {
                     // player's position, and the "target" of a pathfinding method like DijkstraMap.findPathPreScanned() is the
                     // currently-moused-over cell, which we only need to set where the mouse is being handled.
                     playerToCursor.setGoal(playerPosition);
-                    playerToCursor.scan(blockage);
+                    playerToCursor.scan(null, blockage);
                 }
             }
         }

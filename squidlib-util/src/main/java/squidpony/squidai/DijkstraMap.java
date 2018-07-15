@@ -46,7 +46,7 @@ public class DijkstraMap implements Serializable {
     /**
      * The type of heuristic to use.
      */
-    public enum Measurement {
+    public static enum Measurement {
 
         /**
          * The distance it takes when only the four primary directions can be
@@ -176,7 +176,7 @@ public class DijkstraMap implements Serializable {
      * cell; only steps that require movement will be included, and so if the path has not been found or a valid
      * path toward a goal is impossible, this ArrayList will be empty.
      */
-    public ArrayList<Coord> path = new ArrayList<>();
+    public ArrayList<Coord> path;
 
     private Set<Coord> impassable2, friends;
     
@@ -859,6 +859,36 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      */
     public void scan(final Coord start, final Collection<Coord> impassable) {
+        scan(start, impassable, false);
+    }
+
+    /**
+     * Recalculate the Dijkstra map and return it. Cells in {@link #gradientMap} that had the lowest value
+     * will be treated as goals if {@code nonZeroOptimum} is true; otherwise, only cells marked as goals with
+     * {@link #setGoal(Coord)} will be considered goals and some overhead will be saved. The cells adjacent
+     * to goals will have a value of 1, and cells progressively further from goals will have a value equal to
+     * the distance from the nearest goal. The exceptions are walls, which will have a value defined by the
+     * {@link #WALL} constant in this class, and areas that the scan was unable to reach, which will have a
+     * value defined by the {@link #DARK} constant in this class (typically, these areas should not be used to
+     * place NPCs or items and should be filled with walls). This uses the current {@link #measurement}. The
+     * result is stored in the {@link #gradientMap} field, and nothing is returned. If you want the data
+     * returned, you can use {@link #scan(Collection)} (which calls this method with null for the start
+     * parameter, then modifies the gradientMap field and returns a copy), or you can
+     * just retrieve the gradientMap (maybe copying it; {@link squidpony.ArrayTools#copy(double[][])} is a
+     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
+     * finding a single path, then cells that didn't need to be explored (because they were further than the
+     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
+     * different value to these cells in some cases (especially if start is null, which means any cells that
+     * are still FLOOR could not be reached from any goal), and the overloads of scan that return 2D double
+     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
+     *
+     * @param start a Coord representing the location of the pathfinder; may be null, which has this scan the whole map
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param nonZeroOptimum if the cell to pathfind toward should have a value of {@link #GOAL} (0.0), this should be
+     *                       false; if it should have a different value or if you don't know, it should be true 
+     */
+    public void scan(final Coord start, final Collection<Coord> impassable, final boolean nonZeroOptimum) {
 
         if (!initialized) return;
         if (impassable != null && !impassable.isEmpty()) {
@@ -868,22 +898,25 @@ public class DijkstraMap implements Serializable {
             }
         }
         int dec, adjX, adjY, cen, cenX, cenY;
-
+        fresh.clear();
+        fresh.addAll(goals);
         for (int i = 0; i < goals.size; i++) {
             dec = goals.get(i);
             gradientMap[decodeX(dec)][decodeY(dec)] = GOAL;
         }
-        double currentLowest = 999000, cs, dist;
-        fresh.clear();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (gradientMap[x][y] <= FLOOR) {
-                    if (gradientMap[x][y] < currentLowest) {
-                        currentLowest = gradientMap[x][y];
-                        fresh.clear();
-                        fresh.add(encode(x, y));
-                    } else if (gradientMap[x][y] == currentLowest) {
-                        fresh.add(encode(x, y));
+        double cs, dist;
+        if(nonZeroOptimum) {
+            double currentLowest = 999000.0;
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    if (gradientMap[x][y] <= FLOOR) {
+                        if (gradientMap[x][y] < currentLowest) {
+                            currentLowest = gradientMap[x][y];
+                            fresh.clear();
+                            fresh.add(encode(x, y));
+                        } else if (gradientMap[x][y] == currentLowest) {
+                            fresh.add(encode(x, y));
+                        }
                     }
                 }
             }
@@ -993,19 +1026,20 @@ public class DijkstraMap implements Serializable {
      * Recalculate the Dijkstra map up to a limit and return it. Cells that were marked as goals with setGoal will have
      * a value of 0, the cells adjacent to goals will have a value of 1, and cells progressively further
      * from goals will have a value equal to the distance from the nearest goal. If a cell would take more steps to
-     * reach than the given limit, it will have a value of DARK if it was passable instead of the distance. The
-     * exceptions are walls, which will have a value defined by the WALL constant in this class, and areas that the scan
-     * was unable to reach, which will have a value defined by the DARK constant in this class. This uses the
-     * current measurement. The result is stored in the {@link #gradientMap} field, and nothing is returned.
-     * If you want the data returned, you can use {@link #partialScan(int, Collection)} (which calls this method with
-     * null for the start parameter, then modifies the gradientMap field and returns a copy), or you can
-     * just retrieve the gradientMap (maybe copying it; {@link squidpony.ArrayTools#copy(double[][])} is a
-     * convenient option for copying a 2D double array). If start is non-null, which is usually used when
-     * finding a single path, then cells that didn't need to be explored (because they were further than the
-     * path needed to go from start to goal) will have the value {@link #FLOOR}. You may wish to assign a
-     * different value to these cells in some cases (especially if start is null, which means any cells that
-     * are still FLOOR could not be reached from any goal), and the overloads of partialScan that return 2D double
-     * arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to {@link #WALL}.
+     * reach than the given limit, or if it was otherwise unreachable, it will have a value of {@link #FLOOR} or greater
+     * if it was passable instead of the distance. The exceptions are walls, which will have a value defined by the
+     * {@link #WALL} constant in this class. This uses the current {@link #measurement}. The result is stored in the
+     * {@link #gradientMap} field, and nothing is returned.If you want the data returned, you can use
+     * {@link #partialScan(int, Collection)} (which calls this method with null for the start parameter, then modifies
+     * the gradientMap field and returns a copy), or you can just retrieve the gradientMap (maybe copying it;
+     * {@link squidpony.ArrayTools#copy(double[][])} is a convenient option for copying a 2D double array).
+     * <br>
+     * If start is non-null, which is usually used when finding a single path, then cells that didn't need to be
+     * explored (because they were further than the path needed to go from start to goal) will have the value
+     * {@link #FLOOR}. You may wish to assign a different value to these cells in some cases (especially if start is
+     * null, which means any cells that are still FLOOR could not be reached from any goal), and the overloads of
+     * partialScan that return 2D double arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to
+     * {@link #WALL}.
      *
      * @param start a Coord representing the location of the pathfinder; may be null to have this scan more of the map
      * @param limit      The maximum number of steps to scan outward from a goal.
@@ -1013,6 +1047,36 @@ public class DijkstraMap implements Serializable {
      *                   path that cannot be moved through; this can be null if there are no such obstacles.
      */
     public void partialScan(final Coord start, final int limit, final Collection<Coord> impassable) {
+        partialScan(start, limit, impassable, false);
+    }
+
+    /**
+     * Recalculate the Dijkstra map up to a limit and return it. Cells in {@link #gradientMap} that had the lowest value
+     * will be treated as goals if {@code nonZeroOptimum} is true; otherwise, only cells marked as goals with
+     * {@link #setGoal(Coord)} will be considered goals and some overhead will be saved. If a cell would take more steps
+     * to reach than the given limit, or if it was otherwise unreachable, it will have a value of {@link #FLOOR} or
+     * greater if it was passable instead of the distance. The exceptions are walls, which will have a value defined by
+     * the {@link #WALL} constant in this class. This uses the current {@link #measurement}. The result is stored in the
+     * {@link #gradientMap} field, and nothing is returned.If you want the data returned, you can use
+     * {@link #partialScan(int, Collection)} (which calls this method with null for the start parameter, then modifies
+     * the gradientMap field and returns a copy), or you can just retrieve the gradientMap (maybe copying it;
+     * {@link squidpony.ArrayTools#copy(double[][])} is a convenient option for copying a 2D double array).
+     * <br>
+     * If start is non-null, which is usually used when finding a single path, then cells that didn't need to be
+     * explored (because they were further than the path needed to go from start to goal) will have the value
+     * {@link #FLOOR}. You may wish to assign a different value to these cells in some cases (especially if start is
+     * null, which means any cells that are still FLOOR could not be reached from any goal), and the overloads of
+     * partialScan that return 2D double arrays do change FLOOR to {@link #DARK}, which is usually treated similarly to
+     * {@link #WALL}.
+     *
+     * @param start a Coord representing the location of the pathfinder; may be null to have this scan more of the map
+     * @param limit      The maximum number of steps to scan outward from a goal.
+     * @param impassable A Collection of Coord keys representing the locations of enemies or other moving obstacles to a
+     *                   path that cannot be moved through; this can be null if there are no such obstacles.
+     * @param nonZeroOptimum if the cell to pathfind toward should have a value of {@link #GOAL} (0.0), this should be
+     *                       false; if it should have a different value or if you don't know, it should be true
+     */
+    public void partialScan(final Coord start, final int limit, final Collection<Coord> impassable, final boolean nonZeroOptimum) {
 
         if (!initialized || limit <= 0) return;
         if (impassable != null && !impassable.isEmpty()) {
@@ -1022,7 +1086,8 @@ public class DijkstraMap implements Serializable {
             }
         }
         int dec, adjX, adjY, cen, cenX, cenY;
-
+        fresh.clear();
+        fresh.addAll(goals);
         for (int i = 0; i < goals.size; i++) {
             //if (closed.containsKey(entry.getIntKey()))
             //    continue;
@@ -1030,34 +1095,36 @@ public class DijkstraMap implements Serializable {
             dec = goals.get(i);
             gradientMap[decodeX(dec)][decodeY(dec)] = GOAL;
         }
-        double currentLowest = 999000, cs, dist;
-        fresh.clear();
-        if(start == null) {
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    if (gradientMap[x][y] <= FLOOR) {
-                        if (gradientMap[x][y] < currentLowest) {
-                            currentLowest = gradientMap[x][y];
-                            fresh.clear();
-                            fresh.add(encode(x, y));
-                        } else if (gradientMap[x][y] == currentLowest) {
-                            fresh.add(encode(x, y));
+        double cs, dist;
+        if(nonZeroOptimum) {
+            double currentLowest = 999000;
+            if (start == null) {
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        if (gradientMap[x][y] <= FLOOR) {
+                            if (gradientMap[x][y] < currentLowest) {
+                                currentLowest = gradientMap[x][y];
+                                fresh.clear();
+                                fresh.add(encode(x, y));
+                            } else if (gradientMap[x][y] == currentLowest) {
+                                fresh.add(encode(x, y));
+                            }
                         }
                     }
                 }
-            }
-        } else{
-            final int x0 = Math.max(0, start.x - limit), x1 = Math.min(start.x + limit + 1, width),
-                    y0 = Math.max(0, start.y - limit), y1 = Math.min(start.y + limit + 1, height);
-            for (int x = x0; x < x1; x++) {
-                for (int y = y0; y < y1; y++) {
-                    if (gradientMap[x][y] <= FLOOR) {
-                        if (gradientMap[x][y] < currentLowest) {
-                            currentLowest = gradientMap[x][y];
-                            fresh.clear();
-                            fresh.add(encode(x, y));
-                        } else if (gradientMap[x][y] == currentLowest) {
-                            fresh.add(encode(x, y));
+            } else {
+                final int x0 = Math.max(0, start.x - limit), x1 = Math.min(start.x + limit + 1, width),
+                        y0 = Math.max(0, start.y - limit), y1 = Math.min(start.y + limit + 1, height);
+                for (int x = x0; x < x1; x++) {
+                    for (int y = y0; y < y1; y++) {
+                        if (gradientMap[x][y] <= FLOOR) {
+                            if (gradientMap[x][y] < currentLowest) {
+                                currentLowest = gradientMap[x][y];
+                                fresh.clear();
+                                fresh.add(encode(x, y));
+                            } else if (gradientMap[x][y] == currentLowest) {
+                                fresh.add(encode(x, y));
+                            }
                         }
                     }
                 }
@@ -2022,7 +2089,14 @@ public class DijkstraMap implements Serializable {
         if (measurement == Measurement.EUCLIDEAN) {
             measurement = Measurement.CHEBYSHEV;
         }
-        scan(impassable2);
+        scan(null, impassable2);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
         goals.clear();
 
         for (int x = 0; x < width; x++) {
@@ -2045,7 +2119,14 @@ public class DijkstraMap implements Serializable {
             }
         }
         measurement = mess;
-        scan(impassable2);
+        scan(null, impassable2);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
 
         Coord currentPos = start;
         double paidLength = 0.0;
@@ -2278,10 +2359,18 @@ public class DijkstraMap implements Serializable {
             measurement = Measurement.CHEBYSHEV;
         }
         */
-        scan(impassable2);
+        scan(null, impassable2);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (gradientMap[x][y] == FLOOR) {
+                    gradientMap[x][y] = DARK;
+                }
+            }
+        }
+
         clearGoals();
 
-        Coord tempPt = Coord.get(0, 0);
+        Coord tempPt;
         OrderedMap<Coord, ArrayList<Coord>> ideal;
         // generate an array of the single best location to attack when you are in a given cell.
         for (int x = 0; x < width; x++) {
@@ -2308,7 +2397,7 @@ public class DijkstraMap implements Serializable {
                     gradientMap[x][y] = FLOOR;
             }
         }
-        scan(impassable2);
+        scan(null,impassable2);
 
         double currentDistance = gradientMap[start.x][start.y];
         if (currentDistance <= moveLength) {
@@ -2316,7 +2405,7 @@ public class DijkstraMap implements Serializable {
 
             goals.clear();
             setGoal(start);
-            scan(impassable2);
+            scan(null, impassable2, false);
             gradientMap[start.x][start.y] = moveLength;
             int decX, decY;
             double bestWorth = 0.0;
@@ -2587,7 +2676,17 @@ public class DijkstraMap implements Serializable {
             }
 
             if(scanLimit <= 0 || scanLimit < length)
-                cachedFleeMap = scan(impassable2);
+            {
+                scan(null, impassable2, true);
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        if (gradientMap[x][y] == FLOOR) {
+                            gradientMap[x][y] = DARK;
+                        }
+                    }
+                    System.arraycopy(gradientMap[x], 0, cachedFleeMap[x], 0, height);
+                }
+            }
             else
                 cachedFleeMap = partialScan(scanLimit, impassable2);
         }

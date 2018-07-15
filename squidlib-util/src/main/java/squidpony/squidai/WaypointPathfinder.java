@@ -53,7 +53,7 @@ public class WaypointPathfinder {
             dm.clearGoals();
             dm.resetMap();
             dm.setGoal(center);
-            dm.scan(null);
+            dm.scan(null, null);
             double current;
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
@@ -114,7 +114,7 @@ public class WaypointPathfinder {
             dm.clearGoals();
             dm.resetMap();
             dm.setGoal(n.getKey());
-            dm.scan(null);
+            dm.scan(null, null);
             for(Coord c : chokes)
             {
                 n.getValue().put(c, new Edge(n.getKey(), c, dm.findPathPreScanned(c), dm.gradientMap[c.x][c.y]));
@@ -167,7 +167,7 @@ public class WaypointPathfinder {
                 dm.clearGoals();
                 dm.resetMap();
                 dm.setGoal(center);
-                dm.scan(null);
+                dm.scan(null, null);
                 double current;
                 for (int i = 0; i < width; i++) {
                     for (int j = 0; j < height; j++) {
@@ -229,7 +229,7 @@ public class WaypointPathfinder {
             dm.clearGoals();
             dm.resetMap();
             dm.setGoal(n.getKey());
-            dm.scan(null);
+            dm.scan(null, null);
             for(Coord c : chokes)
             {
                 n.getValue().put(c, new Edge(n.getKey(), c, dm.findPathPreScanned(c), dm.gradientMap[c.x][c.y]));
@@ -284,7 +284,7 @@ public class WaypointPathfinder {
             dm.clearGoals();
             dm.resetMap();
             dm.setGoal(n.getKey());
-            dm.scan(null);
+            dm.scan(null, null);
             for(Coord c : chokes)
             {
                 n.getValue().put(c, new Edge(n.getKey(), c, dm.findPathPreScanned(c), dm.gradientMap[c.x][c.y]));
@@ -323,7 +323,7 @@ public class WaypointPathfinder {
             dm.clearGoals();
             dm.resetMap();
             dm.setGoal(center);
-            dm.scan(null);
+            dm.scan(null, null);
             double current;
             for (int i = 0; i < width; i++) {
                 for (int j = 0; j < height; j++) {
@@ -382,7 +382,7 @@ public class WaypointPathfinder {
             dm.clearGoals();
             dm.resetMap();
             dm.setGoal(n.getKey());
-            dm.scan(null);
+            dm.scan(null, null);
             for(Coord c : chokes)
             {
                 n.getValue().put(c, new Edge(n.getKey(), c, dm.findPathPreScanned(c), dm.gradientMap[c.x][c.y]));

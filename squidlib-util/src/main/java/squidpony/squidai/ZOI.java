@@ -104,7 +104,8 @@ public class ZOI implements Serializable {
                 dijkstra.setGoal(influences[i][j]);
             }
         }
-        double[][] scannedAll = dijkstra.scan(null);
+        dijkstra.scan(null, null);
+        final double[][] scannedAll = dijkstra.gradientMap;
 
         for (int i = 0; i < influences.length; i++) {
 

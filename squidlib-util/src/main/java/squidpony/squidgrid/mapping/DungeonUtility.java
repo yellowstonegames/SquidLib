@@ -1327,7 +1327,7 @@ public class DungeonUtility {
         double[][] astar = new double[dijkstra.length][dijkstra[0].length];
         for (int x = 0; x < dijkstra.length; x++) {
             for (int y = 0; y < dijkstra[x].length; y++) {
-                if (dijkstra[x][y] > DijkstraMap.FLOOR)
+                if (dijkstra[x][y] >  DijkstraMap.FLOOR)
                     astar[x][y] = -1;
                 else
                     astar[x][y] = 1;

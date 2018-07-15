@@ -1,4 +1,4 @@
-package squidpony.performance.other;
+package squidpony.performance.alternate.other;
 
 import squidpony.ArrayTools;
 import squidpony.squidai.Technique;
@@ -47,7 +47,7 @@ public class DijkstraMap implements Serializable {
     /**
      * The type of heuristic to use.
      */
-    public enum Measurement {
+    public static enum Measurement {
 
         /**
          * The distance it takes when only the four primary directions can be
