@@ -270,7 +270,7 @@ public class CloudAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][ts[i].x][ts[i].y] >= DijkstraMap.FLOOR)
+            if(compositeMap[i][ts[i].x][ts[i].y] > DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++) {
                     Arrays.fill(compositeMap[i][x], 99999.0);
@@ -421,7 +421,7 @@ public class CloudAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][pts[i].x][pts[i].y] >= DijkstraMap.FLOOR)
+            if(compositeMap[i][pts[i].x][pts[i].y] > DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++) {
                     Arrays.fill(compositeMap[i][x], 399999.0);
@@ -467,7 +467,7 @@ public class CloudAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] >= DijkstraMap.FLOOR)
+            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] > DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++)
                 {

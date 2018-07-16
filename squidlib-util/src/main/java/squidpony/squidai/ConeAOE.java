@@ -40,7 +40,8 @@ public class ConeAOE implements AOE, Serializable {
         fov = new FOV(FOV.RIPPLE_LOOSE);
         this.origin = origin;
         radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
-        angle = (Math.toDegrees(NumberTools.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
+
+        angle = NumberTools.atan2_(endCenter.y - origin.y, endCenter.x - origin.x) * 360.0;
 //        this.startAngle = Math.abs((angle - span / 2.0) % 360.0);
 //        this.endAngle = Math.abs((angle + span / 2.0) % 360.0);
         this.span = span;
@@ -59,12 +60,12 @@ public class ConeAOE implements AOE, Serializable {
     }
 
     @Override
-	public Coord getOrigin() {
+    public Coord getOrigin() {
         return origin;
     }
 
     @Override
-	public void setOrigin(Coord origin) {
+    public void setOrigin(Coord origin) {
         this.origin = origin;
     }
 
@@ -158,7 +159,7 @@ public class ConeAOE implements AOE, Serializable {
     public void setEndCenter(Coord endCenter) {
 //        radius = radiusType.radius(origin.x, origin.y, endCenter.x, endCenter.y);
         if (AreaUtils.verifyLimit(reach.limit, origin, endCenter)) {
-            angle = (Math.toDegrees(NumberTools.atan2(endCenter.y - origin.y, endCenter.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            angle = NumberTools.atan2_(endCenter.y - origin.y, endCenter.x - origin.x) * 360.0;
 //            startAngle = Math.abs((angle - span / 2.0) % 360.0);
 //            endAngle = Math.abs((angle + span / 2.0) % 360.0);
         }
@@ -191,10 +192,10 @@ public class ConeAOE implements AOE, Serializable {
     public boolean mayContainTarget(Collection<Coord> targets) {
         for (Coord p : targets) {
             if (radiusType.radius(origin.x, origin.y, p.x, p.y) <= radius) {
-                double d = (angle - Math.toDegrees(NumberTools.atan2(p.y - origin.y, p.x - origin.x)) % 360.0 + 360.0) % 360.0;
+                double d = (angle - NumberTools.atan2_(p.y - origin.y, p.x - origin.x) * 360.0);
                 if(d > 180)
                     d = 360 - d;
-                if(d < span / 2.0)
+                if(d < span * 0.5)
                     return true;
             }
         }
@@ -232,7 +233,7 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = 0; i < exs.length; i++) {
             t = exs[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
-            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
@@ -254,7 +255,7 @@ public class ConeAOE implements AOE, Serializable {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = ts[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
-            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
@@ -270,7 +271,7 @@ public class ConeAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][t.x][t.y] >= DijkstraMap.FLOOR)
+            if(compositeMap[i][t.x][t.y] > DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++) {
                     Arrays.fill(compositeMap[i][x], 99999.0);
@@ -284,7 +285,10 @@ public class ConeAOE implements AOE, Serializable {
             dm.scan(null, null);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 99999.0;
+                    if(dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!')
+                        compositeMap[i][x][y] = dm.gradientMap[x][y];
+                    else
+                        compositeMap[i][x][y] = 99999.0;
                 }
             }
         }
@@ -363,8 +367,9 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
 
-            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
-//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+
+            tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
+            //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
             for (int x = 0; x < dungeon.length; x++) {
@@ -384,7 +389,7 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = 0; i < pts.length; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = pts[i];
-            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
+            tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
 //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
@@ -399,7 +404,7 @@ public class ConeAOE implements AOE, Serializable {
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][pts[i].x][pts[i].y] >= DijkstraMap.FLOOR)
+            if(compositeMap[i][pts[i].x][pts[i].y] > DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++) {
                     Arrays.fill(compositeMap[i][x], 399999.0);
@@ -424,8 +429,9 @@ public class ConeAOE implements AOE, Serializable {
         for (int i = pts.length; i < totalTargets; ++i) {
             DijkstraMap dm = new DijkstraMap(dungeon, dmm);
             t = lts[i - pts.length];
-            tAngle = (Math.toDegrees(NumberTools.atan2(t.y - origin.y, t.x - origin.x)) % 360.0 + 360.0) % 360.0;
-//            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
+
+            tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
+            //            tStartAngle = Math.abs((tAngle - span / 2.0) % 360.0);
 //            tEndAngle = Math.abs((tAngle + span / 2.0) % 360.0);
 
             tmpfov = fov.calculateFOV(map, origin.x, origin.y, radius, radiusType, tAngle, span);
@@ -433,12 +439,12 @@ public class ConeAOE implements AOE, Serializable {
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     if (tmpfov[x][y] > 0.0){
-                         compositeMap[i][x][y] = dm.physicalMap[x][y];
+                        compositeMap[i][x][y] = dm.physicalMap[x][y];
                     }
                     else compositeMap[i][x][y] = DijkstraMap.WALL;
                 }
             }
-            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] >= DijkstraMap.FLOOR)
+            if(compositeMap[i][lts[i - pts.length].x][lts[i - pts.length].y] > DijkstraMap.FLOOR)
             {
                 for (int x = 0; x < dungeon.length; x++)
                 {
@@ -453,7 +459,7 @@ public class ConeAOE implements AOE, Serializable {
             dm.scan(null, null);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
-                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!' && dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;
+                    compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR && dungeonCopy[x][y] != '!' && dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;
                 }
             }
         }
@@ -545,11 +551,11 @@ public class ConeAOE implements AOE, Serializable {
         for (int x = 1; x < dungeon.length - 1; x += radius) {
             BY_POINT:
             for (int y = 1; y < dungeon[x].length - 1; y += radius) {
-                ang = NumberTools.atan2(y - origin.y, x - origin.x); // between -pi and pi
+                ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
 
                 for(Coord ex : requiredExclusions) {
                     if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
-                        tmpAngle = Math.abs(ang - NumberTools.atan2(ex.y - origin.y, ex.x - origin.x));
+                        tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
                         if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                         if(tmpAngle < allowed)
                             continue BY_POINT;
@@ -558,7 +564,7 @@ public class ConeAOE implements AOE, Serializable {
                 ctr = 0;
                 for(Coord tgt : targets) {
                     if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
-                        tmpAngle = Math.abs(ang - NumberTools.atan2(tgt.y - origin.y, tgt.x - origin.x));
+                        tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
                         if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                         if(tmpAngle < allowed)
                             ctr++;
@@ -582,10 +588,10 @@ public class ConeAOE implements AOE, Serializable {
                             if(tested[x][y])
                                 continue;
                             tested[x][y] = true;
-                            ang = NumberTools.atan2(y - origin.y, x - origin.x); // between -pi and pi
+                            ang = Math.atan2(y - origin.y, x - origin.x); // between -pi and pi
                             for(Coord ex : requiredExclusions) {
                                 if (radiusType.radius(x, y, ex.x, ex.y) <= radius) {
-                                    tmpAngle = Math.abs(ang - NumberTools.atan2(ex.y - origin.y, ex.x - origin.x));
+                                    tmpAngle = Math.abs(ang - Math.atan2(ex.y - origin.y, ex.x - origin.x));
                                     if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                                     if(tmpAngle < allowed)
                                         continue BY_POINT;
@@ -595,7 +601,7 @@ public class ConeAOE implements AOE, Serializable {
                             ctr = 0;
                             for(Coord tgt : targets) {
                                 if (radiusType.radius(x, y, tgt.x, tgt.y) <= radius) {
-                                    tmpAngle = Math.abs(ang - NumberTools.atan2(tgt.y - origin.y, tgt.x - origin.x));
+                                    tmpAngle = Math.abs(ang - Math.atan2(tgt.y - origin.y, tgt.x - origin.x));
                                     if(tmpAngle > Math.PI) tmpAngle = PI2 - tmpAngle;
                                     if(tmpAngle < allowed)
                                         ctr++;

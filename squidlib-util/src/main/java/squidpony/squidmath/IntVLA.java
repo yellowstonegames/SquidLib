@@ -95,7 +95,7 @@ public class IntVLA implements Serializable, Cloneable {
     public void addAll (int[] array, int offset, int length) {
         int[] items = this.items;
         int sizeNeeded = size + length;
-        if (sizeNeeded > items.length) items = resize(size << 1 | 8);
+        if (sizeNeeded > items.length) items = resize(sizeNeeded << 1 | 8);
         System.arraycopy(array, offset, items, size, length);
         size += length;
     }
@@ -103,7 +103,7 @@ public class IntVLA implements Serializable, Cloneable {
     public void addRange (int start, int end) {
         int[] items = this.items;
         int sizeNeeded = size + end - start;
-        if (sizeNeeded > items.length) items = resize(size << 1 | 8);
+        if (sizeNeeded > items.length) items = resize(sizeNeeded << 1 | 8);
         for(int r = start, i = size; r < end; r++, i++)
         {
             items[i] = r;
@@ -114,7 +114,7 @@ public class IntVLA implements Serializable, Cloneable {
     public void addFractionRange (int start, int end, int fraction) {
         int[] items = this.items;
         int sizeNeeded = size + (end - start) / fraction + 2;
-        if (sizeNeeded > items.length) items = resize(size << 1 | 8);
+        if (sizeNeeded > items.length) items = resize(sizeNeeded << 1 | 8);
         for(int r = start, i = size; r < end; r = fraction * ((r / fraction) + 1), i++, size++)
         {
             items[i] = r;
