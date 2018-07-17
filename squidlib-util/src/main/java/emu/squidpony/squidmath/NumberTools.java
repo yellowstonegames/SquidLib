@@ -374,6 +374,39 @@ public class NumberTools {
         if(y < 0f) r = -r;
         return r;
     }
+    public static double atan2Rough(final double y, final double x)
+    {
+        if(y == 0f && x >= 0f) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
+        {
+            final double a = ax / ay,
+                    r = 1.57079637 - (a * (0.7853981633974483 + 0.273 * (1.0 - a)));
+            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
+        }
+        else {
+            final double a = ay / ax,
+                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a)));
+            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
+        }
+    }
+    public static float atan2Rough(final float y, final float x)
+    {
+        if(y == 0f && x >= 0f) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
+        {
+            final float a = ax / ay,
+                    r = 1.57079637f - (a * (0.7853981633974483f + 0.273f * (1f - a)));
+            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
+        }
+        else {
+            final float a = ay / ax,
+                    r = (a * (0.7853981633974483f + 0.273f * (1f - a)));
+            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
+        }
+    }
+
     public static double atan2_(final double y, final double x)
     {
         if(y == 0.0 && x == 0.0) return 0.0;
