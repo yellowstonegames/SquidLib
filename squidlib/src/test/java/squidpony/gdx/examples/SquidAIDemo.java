@@ -112,7 +112,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
         ConeAOE cone = new ConeAOE(Coord.get(0, 0), 9, 0, 60, Radius.CIRCLE);
         cone.setMinRange(1);
-        cone.setMaxRange(2);
+        cone.setMaxRange(3);
         cone.setMetric(Radius.SQUARE);
 
         redCone = new Technique("Burning Breath", cone);

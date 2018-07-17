@@ -219,16 +219,13 @@ public class ConeAOE implements AOE, Serializable {
         Coord[] exs = requiredExclusions.toArray(new Coord[requiredExclusions.size()]);
         Coord t;
 
-        double[][][] compositeMap = new double[ts.length][dungeon.length][dungeon[0].length];
+        double[][][] compositeMap = new double[totalTargets][dungeon.length][dungeon[0].length];
         double tAngle; //, tStartAngle, tEndAngle;
 
 
         char[][] dungeonCopy = new char[dungeon.length][dungeon[0].length];
-        for (int i = 0; i < dungeon.length; i++) {
-            System.arraycopy(dungeon[i], 0, dungeonCopy[i], 0, dungeon[i].length);
-        }
-        double[][] tmpfov;
-        Coord tempPt = Coord.get(0, 0);
+        double[][] tmpfov = new double[dungeon.length][dungeon[0].length];
+        Coord tempPt;
 
         for (int i = 0; i < exs.length; i++) {
             t = exs[i];
@@ -240,19 +237,17 @@ public class ConeAOE implements AOE, Serializable {
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     tempPt = Coord.get(x, y);
-                    dungeonCopy[x][y] = (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(reach.limit, origin, tempPt)) ? '!' : dungeonCopy[x][y];
+                    dungeonCopy[x][y] = !(origin.x == x && origin.y == y) && (tmpfov[x][y] > 0.0 || !AreaUtils.verifyLimit(reach.limit, origin, tempPt)) ? '!' : dungeon[x][y];
                 }
             }
         }
-
-        t = ts[0];
-
+        
         DijkstraMap.Measurement dmm = DijkstraMap.Measurement.MANHATTAN;
         if(radiusType == Radius.SQUARE || radiusType == Radius.CUBE) dmm = DijkstraMap.Measurement.CHEBYSHEV;
         else if(radiusType == Radius.CIRCLE || radiusType == Radius.SPHERE) dmm = DijkstraMap.Measurement.EUCLIDEAN;
-
+        DijkstraMap dm = new DijkstraMap(dungeon, dmm);
         for (int i = 0; i < ts.length; ++i) {
-            DijkstraMap dm = new DijkstraMap(dungeon, dmm);
+            dm.initialize(dungeon);
             t = ts[i];
 //            tRadius = radiusType.radius(origin.x, origin.y, t.x, t.y);
             tAngle = NumberTools.atan2_(t.y - origin.y, t.x - origin.x) * 360.0;
@@ -282,10 +277,10 @@ public class ConeAOE implements AOE, Serializable {
 
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
-            dm.scan(null, null);
-            for (int x = 0; x < dungeon.length; x++) {
-                for (int y = 0; y < dungeon[x].length; y++) {
-                    if(dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!')
+            dm.scan(null, null, true);
+            for (int x = 0; x < dungeon.length; x++) { 
+                for (int y = 0; y < dungeon[0].length; y++) { 
+                    if(dm.gradientMap[x][y] < DijkstraMap.FLOOR && dungeonCopy[x][y] != '!')
                         compositeMap[i][x][y] = dm.gradientMap[x][y];
                     else
                         compositeMap[i][x][y] = 99999.0;
@@ -416,7 +411,7 @@ public class ConeAOE implements AOE, Serializable {
 
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
-            dm.scan(null, null);
+            dm.scan(null, null, true);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR  && dungeonCopy[x][y] != '!') ? dm.gradientMap[x][y] : 399999.0;
@@ -456,7 +451,7 @@ public class ConeAOE implements AOE, Serializable {
 
             dm.initialize(compositeMap[i]);
             dm.setGoal(t);
-            dm.scan(null, null);
+            dm.scan(null, null, true);
             for (int x = 0; x < dungeon.length; x++) {
                 for (int y = 0; y < dungeon[x].length; y++) {
                     compositeMap[i][x][y] = (dm.gradientMap[x][y] < DijkstraMap.FLOOR && dungeonCopy[x][y] != '!' && dungeonPriorities[x][y] != '#') ? dm.gradientMap[x][y] : 99999.0;
