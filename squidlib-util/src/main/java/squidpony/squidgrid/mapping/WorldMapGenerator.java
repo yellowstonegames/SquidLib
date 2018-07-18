@@ -3128,7 +3128,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     // ... later ...
                     // NumberTools is better now, it seems good visually, but is there a speed difference?
                     //lon = (centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th)) + (3.0 * Math.PI)) % (Math.PI * 2.0) - Math.PI;
-                    lon = centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th));
+                    lon = centerLongitude + NumberTools.atan2Rough(ixPos * ps, rho * NumberTools.cos(th));
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);

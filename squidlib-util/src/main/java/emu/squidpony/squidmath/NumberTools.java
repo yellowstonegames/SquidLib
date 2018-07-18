@@ -354,25 +354,35 @@ public class NumberTools {
     }
     public static double atan2(final double y, final double x)
     {
-        if(y == 0.0 && x == 0.0) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y),
-                a = (ax < ay) ? ax / ay : ay / ax, s = a * a;
-        double r = ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a;
-        if(ay > ax) r = 1.57079637 - r;
-        if(x < 0.0) r = 3.14159274 - r;
-        if(y < 0.0) r = -r;
-        return r;
+        if(y == 0.0 && x >= 0.0) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
+            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
+        }
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);
+            return (x < 0.0) ? (y < 0.0) ? -3.14159274 + r : 3.14159274 - r : (y < 0.0) ? -r : r;
+        }
     }
     public static float atan2(final float y, final float x)
     {
-        if(y == 0f && x == 0f) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y),
-                a = (ax < ay) ? ax / ay : ay / ax, s = a * a;
-        float r = ((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a;
-        if(ay > ax) r = 1.57079637f - r;
-        if(x < 0f) r = 3.14159274f - r;
-        if(y < 0f) r = -r;
-        return r;
+        if(y == 0f && x >= 0f) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
+            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
+        }
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);
+            return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
+        }
     }
     public static double atan2Rough(final double y, final double x)
     {
@@ -406,48 +416,68 @@ public class NumberTools {
             return (x < 0f) ? (y < 0f) ? -3.14159274f + r : 3.14159274f - r : (y < 0f) ? -r : r;
         }
     }
-
     public static double atan2_(final double y, final double x)
     {
-        if(y == 0.0 && x == 0.0) return 0.0;
-        final double ax = Math.abs(x), ay = Math.abs(y), a, s;
-        double r;
-        if(ay > ax)
+        if(y == 0.0 && x >= 0.0) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
         {
-            a = ax / ay;
-            s = a * a;
-            r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
         }
-        else
-        {
-            a = ay / ax;
-            s = a * a;
-            r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
         }
-        if(x < 0.0) r = 0.5 - r;
-        if(y < 0.0) r = 1 - r;
-        return r;
     }
     public static float atan2_(final float y, final float x)
     {
-        if(y == 0f && x == 0f) return 0f;
-        final float ax = Math.abs(x), ay = Math.abs(y), a, s;
-        float r;
-        if(ay > ax)
+        if(y == 0.0 && x >= 0.0) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
         {
-            a = ax / ay;
-            s = a * a;
-            r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (x < 0.0f) ? (y < 0.0f) ? 0.5f + r : 0.5f - r : (y < 0.0f) ? 1f - r : r;
         }
-        else
-        {
-            a = ay / ax;
-            s = a * a;
-            r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (x < 0.0f) ? (y < 0.0f) ? 0.5f + r : 0.5f - r : (y < 0.0f) ? 1f - r : r;
         }
-        if(x < 0f) r = 0.5f - r;
-        if(y < 0f) r = 1f - r;
-        return r;
     }
-
+    public static double atan2Rough_(final double y, final double x)
+    {
+        if(y == 0f && x >= 0f) return 0.0;
+        final double ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
+        {
+            final double a = ax / ay,
+                    r = 0.25 - (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;
+            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
+        }
+        else {
+            final double a = ay / ax,
+                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;
+            return (x < 0.0) ? (y < 0.0) ? 0.5 + r : 0.5 - r : (y < 0.0) ? 1.0 - r : r;
+        }
+    }
+    public static float atan2Rough_(final float y, final float x)
+    {
+        if(y == 0f && x >= 0f) return 0f;
+        final float ax = Math.abs(x), ay = Math.abs(y);
+        if(ax < ay)
+        {
+            final float a = ax / ay,
+                    r = 0.25f - (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;
+            return (x < 0f) ? (y < 0f) ? 0.5f + r : 0.5f - r : (y < 0f) ? 1f - r : r;
+        }
+        else {
+            final float a = ay / ax,
+                    r = (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;
+            return (x < 0f) ? (y < 0f) ? 0.5f + r : 0.5f - r : (y < 0f) ? 1f - r : r;
+        }
+    }
 }
