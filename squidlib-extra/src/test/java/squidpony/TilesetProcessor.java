@@ -2,12 +2,15 @@ package squidpony;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import squidpony.squidgrid.mapping.styled.*;
+import squidpony.squidgrid.mapping.styled.Maximums;
+import squidpony.squidgrid.mapping.styled.OldConfig;
+import squidpony.squidgrid.mapping.styled.OldTile;
+import squidpony.squidgrid.mapping.styled.OldTileset;
 import squidpony.squidmath.GreasedRegion;
 
 import java.io.FileNotFoundException;
@@ -70,11 +73,8 @@ public class TilesetProcessor extends ApplicationAdapter {
     }
 
     public static void main(String[] args) {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Utility: TilesetProcessor";
-        config.width = 512;
-        config.height = 128;
-        new LwjglApplication(new squidpony.TilesetProcessor(), config);
+        HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
+        new HeadlessApplication(new squidpony.TilesetProcessor(), config);
     }
 
     private static void initializeTileArray(StringBuilder java, String fieldName, OldTile[] ts_tiles) {

@@ -105,21 +105,23 @@ public class MarkovText implements Serializable {
             {
                 v.add(1);
             }
-            int vv;
-            final long vs = v.size;
+            int vv, sum = 0;
+            final int vs = v.size;
             OUTER:
-            for (int i = 0; i < v.size; ++i) {
+            for (int i = 0; i < vs; ++i) {
                 vv = v.get(i);
                 for (int j = 0; j < w.size; j++) {
                     if (w.get(j) == vv) {
-                        probabilities.incr(j, 1);
+                        probabilities.incr(j, 0x10000);
+                        sum += 0x10000;
                         continue OUTER;
                     }
                 }
                 w.add(vv);
-                probabilities.add(1);
+                probabilities.add(0x10000);
+                sum += 0x10000;
             }
-            final int iAverage = (int)((0x7FFFFFFFL * w.size) / v.size);
+            int iAverage = (sum / w.size);
 
             small.clear();
             large.clear();
@@ -128,7 +130,7 @@ public class MarkovText implements Serializable {
                 /* If the probability is below the average probability, then we add
                  * it to the small list; otherwise we add it to the large list.
                  */
-                if (probabilities.get(i) * 0x7FFFFFFFL >= iAverage * vs)
+                if (probabilities.get(i) >= iAverage)
                     large.add(i);
                 else
                     small.add(i);
@@ -144,12 +146,11 @@ public class MarkovText implements Serializable {
                 /* These probabilities have not yet been scaled up to be such that
                  * sum/n is given weight 1.0.  We do this here instead.
                  */
-                processed[iv][less2] = iAverage * probabilities.get(less);
+                processed[iv][less2] = (probabilities.size * probabilities.get(less)) / (sum >> 16);
                 processed[iv][less2+1] = w.get(less);
                 processed[iv][less2+2] = w.get(more);
-
-                probabilities.incr(more, probabilities.get(less) - iAverage);
-
+                vv = probabilities.get(less) - iAverage;
+                probabilities.incr(more, vv);
                 if (probabilities.get(more) >= iAverage)
                     large.add(more);
                 else
@@ -158,12 +159,12 @@ public class MarkovText implements Serializable {
             int t;
             while (!small.isEmpty())
             {
-                processed[iv][(t = small.pop()) * 3] = 0x7FFFFFFF;
+                processed[iv][(t = small.pop()) * 3] = 0xFFFF;
                 processed[iv][t * 3 + 1] = processed[iv][t * 3 + 2] = w.get(t);
             }
             while (!large.isEmpty())
             {
-                processed[iv][(t = large.pop()) * 3] = 0x7FFFFFFF;
+                processed[iv][(t = large.pop()) * 3] = 0xFFFF;
                 processed[iv][t * 3 + 1] = processed[iv][t * 3 + 2] = w.get(t);
             }
         }
@@ -237,7 +238,11 @@ public class MarkovText implements Serializable {
             int column = (int) ((rf.length * (state & 0xFFFFFFFFL)) / 0x300000000L) * 3; // divide by 2^32, round down to multiple of 3
             // use the other half of the bits of state to get a double, compare to probability and choose either the
             // current column or the alias for that column based on that probability
-            before = ((state >>> 33) <= rf[column]) ? rf[column + 1] : rf[column + 2];
+            //before = ((state >>> 33) > rf[column]) ? rf[column + 1] : rf[column + 2];
+            if((state >>> 48) <= rf[column])
+                before = rf[column + 1];
+            else
+                before = rf[column + 2];
             if(before >= 5)
             {
                 if(sb.length() + words[before].length() + 1 < maxLength)

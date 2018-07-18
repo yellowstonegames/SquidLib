@@ -2,8 +2,8 @@ package squidpony;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
+import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.SpillWorldMap;
@@ -161,10 +161,7 @@ public class SquidStorageTest extends ApplicationAdapter {
 
     public static void main(String[] args)
     {
-        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Test: SquidStorage";
-        config.width = 512;
-        config.height = 128;
-        new LwjglApplication(new SquidStorageTest(), config);
+        HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
+        new HeadlessApplication(new SquidStorageTest(), config);
     }
 }
