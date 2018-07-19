@@ -441,15 +441,25 @@ public class Coord implements Serializable {
      * generate, but instead uses a highly-specific technique based on {@link Lathe32RNG}'s random int generation, which
      * also has two independent ints it uses like a Coord's x and y. Unlike Lathe32RNG, this uses only bitwise
      * operations (not even addition). This guarantees it will behave correctly on GWT (Lathe32RNG uses an alternate
-     * source file on GWT).  It also manages to get extremely low collision rates under many circumstances, especially
-     * if the Coords being hashed are very dense.
+     * source file on GWT).  It also manages to get extremely low collision rates under many circumstances, and very
+     * frequently manages to avoid colliding on more than 25% of Coords (making the load factor of most hash-based
+     * collections fine at a default of 0.75) while often having 0 collisions with some data sets.
      * <br>
-     * This changed at least four times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
+     * For reference, this was tested on several rectangular sections of Coords of varying density, with sizes from 64
+     * to 512 for x and y separately. On a total of 7,830,980 Coords, an older hashCode() this used got 2,159,553
+     * collisions (27.6% rate), the previous similar hashCode() this used got 1,514,191 collisions (19.3% rate), a naive
+     * {@link java.util.Objects#hash(Object...)} approach on x and y got 6,163,604 collisions (78.7% rate), and this
+     * method gets 179,922 collisions (2.3% rate). A perfect general hashCode isn't possible, but for the common usage
+     * of Coords (usually x and y are no greater than 511 and are rarely negative, etc.) we can do better than
+     * {@code return x * 31 + y;} (which is close to the high-collision Objects.hash way).
+     * <br>
+     * This changed at least five times in SquidLib's history. In general, you shouldn't rely on hashCodes to stay the
      * same across platforms and versions, whether for the JDK or this library. SquidLib (tries to) never depend on the
      * unpredictable ordering of some hash-based collections like HashSet and HashMap, instead using its own
      * {@link OrderedSet} and {@link OrderedMap}; if you use the ordered kinds, then the only things that matter about
-     * this hash code are that it is fast (it's fast enough) and that it doesn't collide often (which is now much more
-     * accurate than in earlier versions of this method).
+     * this hash code are that it's fast (it's fast enough), it's cross-platform compatible (this version avoids using
+     * long values, which are slow on GWT, and is carefully written to behave the same on GWT as desktop) and that it
+     * doesn't collide often (which is now much more accurate than in earlier versions of this method).
      * @return an int that should, for most different Coord values, be significantly different from the other hash codes
      */
     @Override
@@ -457,7 +467,7 @@ public class Coord implements Serializable {
         int r = x ^ y;
         r ^= (x << 13 | x >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
         r = x ^ (r << 11 | r >>> 21);
-        return r ^ r >>> 8;
+        return r ^ (r << 25 | r >>> 7);
     }
 
     /**

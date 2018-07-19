@@ -619,11 +619,20 @@ public class HashQualityTest {
 
     }
 
+    //179922 with (r << 25 | r >>> 7)
     public static int latheCoord(int x, int y)
     {
-        y ^= x;
-        y ^= (x << 13 | x >>> 19) ^ (y << 5) ^ (y << 28 | y >>> 4);
-        return (x ^= (y << 11 | y >>> 21)) ^ x >>> 8;
+        int r = x ^ y;
+        r ^= (x << 13 | x >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
+        r = x ^ (r << 11 | r >>> 21);
+        return r ^ (r << 25 | r >>> 7);
+    }
+    public static int olderLatheCoord(int x, int y)
+    {
+        int r = x ^ y;
+        r ^= (x << 13 | x >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
+        r = x ^ (r << 11 | r >>> 21);
+        return r ^ r >>> 8;
     }
 
     public static int latheCoordConfig(int x, int y, int rot)
@@ -631,10 +640,14 @@ public class HashQualityTest {
 //        y ^= x;
 //        y = (((x << 13 | x >>> 19) ^ y ^ (y << 5)) + (y << 28 | y >>> 4));
 //        return Integer.rotateLeft(y, rot) + x;
-        y ^= x;
-        y ^= (x << 13 | x >>> 19) ^ (y << 5) ^ (y << 28 | y >>> 4);
-        return (x ^= (y << 11 | y >>> 21)) ^ x >>> rot;
-
+        
+//        y ^= x;
+//        y ^= (x << 13 | x >>> 19) ^ (y << 5) ^ (y << 28 | y >>> 4);
+//        return (x ^= (y << 11 | y >>> 21)) ^ x >>> rot;
+        int r = x ^ y;
+        r ^= (x << 13 | x >>> 19) ^ (r << 5) ^ (r << 28 | r >>> 4);
+        r = x ^ (r << 11 | r >>> 21);
+        return r ^ (r << rot | r >>> -rot);
     }
 
     public static int buzzCoord(int x, int y) { 
@@ -646,47 +659,67 @@ public class HashQualityTest {
     }
     
     @Test
-    public void testCoord()
-    {
-        final int WIDTH = 256, HEIGHT = 256;
-        int SIZE = WIDTH * HEIGHT;
-        final int restrict = SIZE - 1;
-        
-        IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
-                colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
-                colliderLath = new IntDoubleOrderedMap(SIZE, 0.5f),
-                colliderBuzz = new IntDoubleOrderedMap(SIZE, 0.5f);
-        IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
-        for (int i = 0; i < 31; i++) {
-            colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
-        }
-        LinnormRNG rng = new LinnormRNG(0x1234567890ABCDEFL);
-        for (int x = 0; x < WIDTH; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-//                if(rng.next(4) > 2)
-//                {
-//                    --SIZE;
-//                    continue;
-//                }
-                colliderBase.put(oldCoord(x, y) & restrict, 0.0);
-                colliderLath.put(latheCoord(x, y) & restrict, 0.0);
-                colliderBuzz.put(buzzCoord(x, y) & restrict, 0.0);
-                colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
-                for (int i = 0; i < 31; i++) {
-                    colliders[i].put(latheCoordConfig(x, y, i+1) & restrict, 0.0);
+    public void testCoord() {
+        final int[] params = new int[]{64, 128, 256, 512};
+        long baseTotal = 0, objeTotal = 0, lathTotal = 0, buzzTotal = 0, total = 0;
+//        long[] confTotals = new long[31];
+        for (int reduction = 15; reduction >= 0; reduction--) {
+
+            for (int WIDTH : params) {
+                for (int HEIGHT : params) {
+                    int SIZE = WIDTH * HEIGHT;
+                    int restrict = SIZE - 1;
+
+                    IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
+                            colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
+                            colliderLath = new IntDoubleOrderedMap(SIZE, 0.5f),
+                            colliderBuzz = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
+//                    for (int i = 0; i < 31; i++) {
+//                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                    }
+                    LinnormRNG rng = new LinnormRNG(1L);
+                    for (int x = 0; x < WIDTH; x++) {
+                        for (int y = 0; y < HEIGHT; y++) {
+                            if (rng.next(4) > reduction) {
+                                --SIZE;
+                                continue;
+                            }
+                            colliderBase.put(oldCoord(x, y) & restrict, 0.0);
+                            colliderLath.put(latheCoord(x, y) & restrict, 0.0);
+                            colliderBuzz.put(buzzCoord(x, y) & restrict, 0.0);
+                            colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
+//                            for (int i = 0; i < 31; i++) {
+//                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
+//                            }
+                        }
+                    }
+                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
+                    System.out.println("Base collisions: " + (SIZE - colliderBase.size()));
+                    System.out.println("Lath collisions: " + (SIZE - colliderLath.size()));
+                    System.out.println("Buzz collisions: " + (SIZE - colliderBuzz.size()));
+                    System.out.println("Obje collisions: " + (SIZE - colliderObje.size()));
+//                    for (int i = 0; i < 31; i++) {
+//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
+//                        confTotals[i] += (SIZE - colliders[i].size());
+//                    }
+                    baseTotal += (SIZE - colliderBase.size());
+                    lathTotal += (SIZE - colliderLath.size());
+                    buzzTotal += (SIZE - colliderBuzz.size());
+                    objeTotal += (SIZE - colliderObje.size());
+                    total += SIZE;
                 }
             }
         }
-        System.out.println("Base collisions, 16-bit: " + (SIZE - colliderBase.size()));
-        System.out.println("Lath collisions, 16-bit: " + (SIZE - colliderLath.size()));
-        System.out.println("Buzz collisions, 16-bit: " + (SIZE - colliderBuzz.size()));
-        System.out.println("Obje collisions, 16-bit: " + (SIZE - colliderObje.size()));
-        for (int i = 0; i < 31; i++) {
-            System.out.println("Lathe " + (i+1) + ": " + (SIZE - colliders[i].size()));
-        }
-
+        System.out.println("Number of Coords added: " + total);
+        System.out.println("TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL Lath collisions: " + lathTotal + " (" + (lathTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL Buzz collisions: " + buzzTotal + " (" + (buzzTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%)");
+//        for (int i = 0; i < 31; i++) {
+//            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
+//        }
     }
-    
     
     
     
