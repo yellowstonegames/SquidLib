@@ -181,17 +181,23 @@ public class HashBenchmark {
     {
         return HashCommon.mix(state.words[state.idx = state.idx + 1 & 4095].hashCode());
     }
-    
+
     @Benchmark
     public long doJolt64(BenchmarkState state)
     {
         return CrossHash.Jolt.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
-
+    
     @Benchmark
     public int doJolt32(BenchmarkState state)
     {
         return CrossHash.Jolt.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doMetro64(BenchmarkState state)
+    {
+        return CrossHash.Metro.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
 
@@ -268,6 +274,12 @@ public class HashBenchmark {
         return CrossHash.Jolt.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
+    @Benchmark
+    public long doCharMetro64(BenchmarkState state)
+    {
+        return CrossHash.Metro.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
 
 
 
@@ -342,6 +354,12 @@ public class HashBenchmark {
     public int doLongJolt32(BenchmarkState state)
     {
         return CrossHash.Jolt.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doLongMetro64(BenchmarkState state)
+    {
+        return CrossHash.Metro.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     /*
