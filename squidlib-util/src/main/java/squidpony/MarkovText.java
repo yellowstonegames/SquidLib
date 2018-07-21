@@ -5,6 +5,7 @@ import regexodus.Matcher;
 import regexodus.Pattern;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.Arrangement;
+import squidpony.squidmath.IntIntOrderedMap;
 import squidpony.squidmath.IntVLA;
 
 import java.io.Serializable;
@@ -23,16 +24,23 @@ import java.util.ArrayList;
  */
 @Beta
 public class MarkovText implements Serializable {
-    private static final long serialVersionUID = 0L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * All words (case-sensitive and counting some punctuation as part of words) that this encountered during the latest
      * call to {@link #analyze(CharSequence)}. Will be null if analyze() was never called.
      */
     public String[] words;
+
     /**
-     * Complicated data that mixes probabilities and the indices of words in {@link #words}, generated during the latest
-     * call to {@link #analyze(CharSequence)}. This is a jagged 2D array. Will be null if analyze() was never called.
+     * All pairs of words encountered, stored using their 16-bit indices in {@link #words} placed into the
+     * most-significant bits for the first word and the least-significant bits for the second word. 
+     */
+    public IntIntOrderedMap pairs;
+    /**
+     * Complicated data that mixes probabilities of words using their indices in {@link #words} and the indices of word
+     * pairs in {@link #pairs}, generated during the latest call to {@link #analyze(CharSequence)}. This is a jagged 2D
+     * array. Will be null if analyze() was never called.
      */
     public int[][] processed;
 
@@ -54,49 +62,53 @@ public class MarkovText implements Serializable {
      */
     public void analyze(CharSequence corpus)
     {
-        Arrangement<String> body = new Arrangement<>(corpus.length() / 5 + 5);
+        Arrangement<String> body = new Arrangement<>((corpus.length() >> 4) + 5);
+        pairs = new IntIntOrderedMap(corpus.length() / 5 + 5);
+        ArrayList<IntVLA> working = new ArrayList<>(corpus.length() / 5 + 5);
         body.add(INITIAL);
+        working.add(new IntVLA(128));
+        pairs.put(0, 0);
         body.add(FULL_STOP);
         body.add(EXCLAMATION);
         body.add(QUESTION);
         body.add(ELLIPSIS);
-        ArrayList<IntVLA> working = new ArrayList<>(corpus.length() / 5 + 5);
-        working.add(new IntVLA(128));
-        int[] links = {0};
-        working.add(new IntVLA(links));
-        working.add(new IntVLA(links));
-        working.add(new IntVLA(links));
-        working.add(new IntVLA(links));
+//        working.add(new IntVLA(links));
 
         matcher.setTarget(corpus);
-        int previous = 0, current;
+        int current = 0, pair = 0, pre = 0, post;
         while (matcher.find())
         {
             current = body.addOrIndex(matcher.group());
-            if(working.size() != body.size())
+            pair = pair << 16 | (current & 0xFFFF);
+            post = pairs.putIfAbsent(pair, pairs.size());
+            if(working.size() != pairs.size())
             {
                 working.add(new IntVLA(16));
             }
-            working.get(previous).add(current);
+            working.get(pre).add(current);
             if(current > 0 && current < 5)
             {
-                working.get(current).add(0);
-                previous = 0;
+                working.get(post).add(0);
+                pair = 0;
+                pre = 0;
             }
             else
-                previous = current;
+            {
+                pre = post;
+            }
         }
-        IntVLA w = working.get(previous), v;
+        IntVLA w = working.get(pre), v;
         if(w.size == 0) w.add(0);
-        final int len = working.size();
+        final int len = body.size(), pairLen = working.size();
         words = new String[len];
         body.keySet().toArray(words);
-        processed = new int[len][];
+
+        processed = new int[pairLen][];
         w = new IntVLA(128);
         IntVLA small = new IntVLA(128);
         IntVLA large = new IntVLA(128);
         IntVLA probabilities = new IntVLA(128);
-        for(int iv = 0; iv < len; iv++ )
+        for(int iv = 0; iv < pairLen; iv++ )
         {
             v = working.get(iv);
             w.clear();
@@ -219,7 +231,7 @@ public class MarkovText implements Serializable {
      * @return a String generated from the analyzed corpus text's word placement, usually a small sentence
      */
     public String chain(long seed, int maxLength) {
-        int before = 0;
+        int before = 0, pair = 0;
         boolean later;
         long state;
         StringBuilder sb = new StringBuilder(1000);
@@ -230,8 +242,8 @@ public class MarkovText implements Serializable {
                 sb.append('.');
                 break;
             }
-            later = (before != 0);
-            rf = processed[before];
+            later = (pair != 0);
+            rf = processed[pairs.get(pair)];
             // This is LightRNG's algorithm to generate a random long given sequential states
             state = ((state = ((state = ((seed += 0x9E3779B97F4A7C15L) ^ seed >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31);
             // get a random int (using half the bits of our previously-calculated state) that is less than size
@@ -250,6 +262,7 @@ public class MarkovText implements Serializable {
                     if(later)
                         sb.append(' ');
                     sb.append(words[before]);
+                    pair = pair << 16 | (before & 0xFFFF);
                 }
                 else
                 {
@@ -278,7 +291,7 @@ public class MarkovText implements Serializable {
      */
     public String serializeToString()
     {
-        return StringKit.join(" ", words) + "\t" + Converters.convertArrayInt2D.stringify(processed);
+        return StringKit.join(" ", words) + "\t" + StringKit.join(",", pairs.keysAsArray()) + "\t" + Converters.convertArrayInt2D.stringify(processed);
     }
 
     /**
@@ -291,6 +304,8 @@ public class MarkovText implements Serializable {
         int split = data.indexOf('\t');
         MarkovText markov = new MarkovText();
         markov.words = StringKit.split(data.substring(0, split), " ");
+        int[] arr = Converters.convertArrayInt.restore(data.substring(split+1, split = data.indexOf('\t', split + 1)));
+        markov.pairs = new IntIntOrderedMap(arr, ArrayTools.range(arr.length));
         markov.processed = Converters.convertArrayInt2D.restore(data.substring(split + 1));
         return markov;
     }

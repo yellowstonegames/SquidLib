@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A simple Markov chain generator that works with Lists of some type instead of text like {@link MarkovText}.
+ * A simple Markov chain generator that works with Lists of some type instead of text like {@link MarkovTextLimited}.
  * Call {@link #analyze(Iterable)} or {@link #analyze(Object[])} once on a large sample Iterable or array where
  * sequences of items matter (this is called a corpus, and could be e.g. a List or an array), then you can call
  * {@link #chain(long)} many times to get "remixes" of the sample Iterable/array as a List. This is meant to allow easy
@@ -52,7 +52,7 @@ public class MarkovObject<T> implements Serializable {
      * {@link #processed}, which allows other methods to be called (they will throw a {@link NullPointerException} if
      * analyze() hasn't been called).
      * <br>
-     * Unlike in {@link MarkovText}, you can analyze multiple corpus Iterables by calling this method more than once.
+     * Unlike in {@link MarkovTextLimited}, you can analyze multiple corpus Iterables by calling this method more than once.
      *
      * @param corpus a typically-large sample Iterable in the style that should be mimicked
      */
@@ -178,7 +178,7 @@ public class MarkovObject<T> implements Serializable {
      * {@link #processed}, which allows other methods to be called (they will throw a {@link NullPointerException} if
      * analyze() hasn't been called).
      * <br>
-     * Unlike in {@link MarkovText}, you can analyze multiple corpus arrays by calling this method more than once.
+     * Unlike in {@link MarkovTextLimited}, you can analyze multiple corpus arrays by calling this method more than once.
      *
      * @param corpus a typically-large sample array of T in the style that should be mimicked
      */

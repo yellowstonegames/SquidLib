@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 
 /**
- * Reads in an edited copy of Project Gutenberg's King James Bible and produces a compressed MarkovText file. This file
+ * Reads in an edited copy of Project Gutenberg's King James Bible and produces a compressed MarkovTextLimited file. This file
  * can be read back in MarkovReadTest in the same package.
  * <br>
  * Created by Tommy Ettinger on 7/17/2018.
@@ -21,7 +21,7 @@ public class MarkovStorageTest extends ApplicationAdapter {
         mt.analyze(text.replace("\n\n", "\n."));
         String data = mt.serializeToString();
         //Gdx.files.local("bible_markov.dat").writeString(data, false, "UTF8");
-        Gdx.files.local("bible_markov_compressed.dat").writeString(LZSPlus.compress(data), false, "UTF16");
+        Gdx.files.local("bible_markov_order_2_compressed.dat").writeString(LZSPlus.compress(data), false, "UTF16");
         System.out.print((System.currentTimeMillis() - time));
         System.out.println(" ms");
         Gdx.app.exit();

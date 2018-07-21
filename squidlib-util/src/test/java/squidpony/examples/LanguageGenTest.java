@@ -469,7 +469,7 @@ public class LanguageGenTest {
                 "were the same gray color to be seen everywhere. Once the house had been painted, but the sun " +
                 "blistered the paint and the rains washed it away, and now the house was as dull and gray as " +
                 "everything else.";
-        MarkovText markovText = new MarkovText();
+        MarkovTextLimited markovText = new MarkovTextLimited();
         markovText.analyze(oz);
         for (int i = 0; i < 40; i++) {
             System.out.println(markovText.chain(++seed, 100 + (i * 2)));

@@ -653,7 +653,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
     public boolean isEmpty() {
         return size == 0;
     }
-
+    
     /**
      * The entry class for a OrderedMap does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
      * {@link MapEntry#setValue(int)} are reflected in the map
@@ -1235,6 +1235,9 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         private static final long serialVersionUID = 0L;
         public Integer previous() {
             return key[previousEntry()];
+        }        
+        public int previousInt() {
+            return key[previousEntry()];
         }
         public void set(Integer k) {
             throw new UnsupportedOperationException();
@@ -1244,6 +1247,9 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         }
         public KeyIterator() {}
         public Integer next() {
+            return key[nextEntry()];
+        }
+        public int nextInt() {
             return key[nextEntry()];
         }
         public void remove() { super.remove(); }
@@ -1411,6 +1417,51 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
          * @param max    the maximum number of elements to unwrap.
          * @return the number of elements unwrapped.
          */
+        public int unwrap(final KeyIterator i, final int array[], int offset, final int max) {
+            if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
+            if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
+            int j = max;
+            while (j-- != 0 && i.hasNext())
+                array[offset++] = i.nextInt();
+            return max - j - 1;
+        }
+        /**
+         * Unwraps an iterator into an array.
+         * <p>
+         * <P>This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end
+         * of the array has been reached.
+         *
+         * @param i     a type-specific iterator.
+         * @param array an array to contain the output of the iterator.
+         * @return the number of elements unwrapped.
+         */
+        public int unwrap(final KeyIterator i, final int array[]) {
+            return unwrap(i, array, 0, array.length);
+        }
+        public int[] toIntArray() {
+            int[] a = new int[size()];
+            unwrap(iterator(), a);
+            return a;
+        }
+
+        public int[] toIntArray(int a[]) {
+            if (a == null || a.length < size()) a = new int[size()];
+            unwrap(iterator(), a);
+            return a;
+        }
+
+        /**
+         * Unwraps an iterator into an array starting at a given offset for a given number of elements.
+         * <p>
+         * <P>This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of <code>length</code>, in the given array starting at <code>offset</code>. The
+         * number of actually unwrapped elements is returned (it may be less than <code>max</code> if the iterator emits less than <code>max</code> elements).
+         *
+         * @param i      a type-specific iterator.
+         * @param array  an array to contain the output of the iterator.
+         * @param offset the first element of the array to be returned.
+         * @param max    the maximum number of elements to unwrap.
+         * @return the number of elements unwrapped.
+         */
         public int unwrap(final KeyIterator i, final Object[] array, int offset, final int max) {
             if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
             if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
@@ -1467,6 +1518,9 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
             os.add(keyAt(i));
         }
         return os;
+    }
+    public int[] keysAsArray() {
+        return keySet().toIntArray();
     }
 
     /**
@@ -2197,22 +2251,19 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
     }
 
     /**
-     * If the specified key is not already associated with a value (or is mapped
-     * to {@code null}) associates it with the given value and returns
-     * {@code null}, else returns the current value.
+     * If the specified key is not already associated with a value, associates it with the given value
+     * and returns that value, else returns the current value without changing anything.
      *
      * @param key   key with which the specified value is to be associated
      * @param value value to be associated with the specified key
      * @return the previous value associated with the specified key, or
-     * {@code null} if there was no mapping for the key.
-     * (A {@code null} return can also indicate that the map
-     * previously associated {@code null} with the key.)
+     * {@code value} if there was no mapping for the key.
      */
     public int putIfAbsent(int key, int value) {
         if(containsKey(key))
             return get(key);         
-        else
-            return put(key, value);
+        put(key, value);
+        return value;
     }
 
     /**

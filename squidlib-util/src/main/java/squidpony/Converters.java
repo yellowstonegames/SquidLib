@@ -577,16 +577,16 @@ public class Converters {
         }
     };
 
-    public static final StringConvert<MarkovText> convertMarkovText = new StringConvert<MarkovText>("MarkovText")
+    public static final StringConvert<MarkovTextLimited> convertMarkovText = new StringConvert<MarkovTextLimited>("MarkovTextLimited")
     {
         @Override
-        public String stringify(MarkovText item) {
+        public String stringify(MarkovTextLimited item) {
             return item.serializeToString();
         }
 
         @Override
-        public MarkovText restore(String text) {
-            return MarkovText.deserializeFromString(text);
+        public MarkovTextLimited restore(String text) {
+            return MarkovTextLimited.deserializeFromString(text);
         }
     };
 

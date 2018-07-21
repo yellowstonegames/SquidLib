@@ -2,7 +2,7 @@ package squidpony.examples;
 
 import org.junit.Test;
 import squidpony.FakeLanguageGen;
-import squidpony.MarkovText;
+import squidpony.MarkovTextLimited;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.*;
 
@@ -731,7 +731,7 @@ public class HashQualityTest {
     public void testLimited()
     {
         int restrict = 0xFFFFF;
-        MarkovText markovText = new MarkovText();
+        MarkovTextLimited markovText = new MarkovTextLimited();
         String theme = "dun dun dun, dun dundun, dun dundun, dun dun dun dun dundun dun dundun.";
         String party = "party party party, I wanna have a party, we're gonna have a party, you better have a party!";
         //markovText.analyze(party);//theme.replace("dun", "wiggle")
