@@ -1181,7 +1181,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
     public static int maxFill(final int n, final float f) {
         /* We must guarantee that there is always at least
 		 * one free entry (even with pathological load factors). */
-        return Math.min((int)(n * f + 99999994f), n - 1);
+        return Math.min((int)(n * f + 0.99999994f), n - 1);
     }
 
     /**
@@ -1402,7 +1402,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @return {@code true} if the value was replaced
      */
     public boolean replace(K key, V oldValue, V newValue) {
-        if (containsKey(key) && Objects.equals(get(key), value)) {
+        if (containsKey(key) && Objects.equals(get(key), newValue)) {
             put(key, newValue);
             return true;
         } else
