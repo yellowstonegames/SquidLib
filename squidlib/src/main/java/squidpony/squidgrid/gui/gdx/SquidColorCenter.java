@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 /**
  * A concrete implementation of {@link IColorCenter} for libgdx's {@link com.badlogic.gdx.graphics.Color}.
- * Supports filtering any colors that this creates using a {@link Filter}, such as one from {@link Filters}.
+ * Supports filtering any colors that this creates using an {@link IFilter}, such as one from {@link Filters}.
  * This class largely supersedes the earlier {@link SColorFactory} class, and supports similar operations
  * while also allowing filters to modify the returned colors. Some things use different terms between the
  * two classes; {@link SColorFactory#blend(SColor, SColor, double)} is {@link #lerp(Color, Color, double)}

@@ -41,8 +41,8 @@ public class SColorFactory {
      * written for earlier versions of SquidLib may use static methods on SColorFactory; most
      * code written in SquidLib 3.0.0 beta 2 and newer prefers the IColorCenter implementations
      * such as SquidColorCenter when SColor features such as color names aren't required. Since
-     * beta 4, SquidColorCenter implements most of SColorFactory's API, and also supports a
-     * Filter for automatic changes to requested colors.
+     * beta 4, SquidColorCenter implements most of SColorFactory's API, and also supports an
+     * IFilter for automatic changes to requested colors.
      */
     public SColorFactory() {
 
