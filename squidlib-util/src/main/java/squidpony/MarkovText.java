@@ -28,19 +28,22 @@ public class MarkovText implements Serializable {
 
     /**
      * All words (case-sensitive and counting some punctuation as part of words) that this encountered during the latest
-     * call to {@link #analyze(CharSequence)}. Will be null if analyze() was never called.
+     * call to {@link #analyze(CharSequence)}. Will be null if {@link #analyze(CharSequence)} was never called.
      */
     public String[] words;
 
     /**
-     * All pairs of words encountered, stored using their 16-bit indices in {@link #words} placed into the
-     * most-significant bits for the first word and the least-significant bits for the second word. 
+     * Map of all pairs of words encountered to the position in the order they were encountered. Pairs are stored using
+     * their 16-bit {@link #words} indices placed into the most-significant bits for the first word and the
+     * least-significant bits for the second word. The size of this IntIntOrderedMap is likely to be larger than the
+     * String array {@link #words}, but should be equal to {@code processed.length}. Will be null if
+     * {@link #analyze(CharSequence)} was never called.
      */
     public IntIntOrderedMap pairs;
     /**
      * Complicated data that mixes probabilities of words using their indices in {@link #words} and the indices of word
      * pairs in {@link #pairs}, generated during the latest call to {@link #analyze(CharSequence)}. This is a jagged 2D
-     * array. Will be null if analyze() was never called.
+     * array. Will be null if {@link #analyze(CharSequence)} was never called.
      */
     public int[][] processed;
 
@@ -251,7 +254,7 @@ public class MarkovText implements Serializable {
             // use the other half of the bits of state to get a double, compare to probability and choose either the
             // current column or the alias for that column based on that probability
             //before = ((state >>> 33) > rf[column]) ? rf[column + 1] : rf[column + 2];
-            if((state >>> 48) <= rf[column])
+            if((state >>> 48) > rf[column])
                 before = rf[column + 1];
             else
                 before = rf[column + 2];

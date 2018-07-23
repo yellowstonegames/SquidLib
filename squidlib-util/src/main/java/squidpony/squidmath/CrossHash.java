@@ -997,7 +997,7 @@ public class CrossHash {
     public static final IHasher objectArrayHasher = new ObjectArrayHasher();
 
     private static class DefaultHasher implements IHasher, Serializable {
-        private static final long serialVersionUID = 4L;
+        private static final long serialVersionUID = 5L;
 
         DefaultHasher() {
         }
@@ -1005,8 +1005,8 @@ public class CrossHash {
         @Override
         public int hash(final Object data) {
             if(data == null) return 0;
-            final int x = data.hashCode() * 0x62BD5;
-            return x ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
+            final int x = data.hashCode() * 0x9E375;
+            return x ^ x >>> 16;
         }
 
         @Override

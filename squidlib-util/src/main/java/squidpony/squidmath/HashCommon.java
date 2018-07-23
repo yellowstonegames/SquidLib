@@ -64,16 +64,41 @@ public class HashCommon {
      * two different rotations of the earlier product; it should work well even on GWT, where overflow can't be relied
      * on without bitwise operations being used. The previous mix(int) method would lose precision rather than
      * overflowing on GWT, which could have serious effects on the performance of a hash table (where lost precision
-     * means more collisions).
+     * means more collisions). This is a little slower than {@link #mix(int)}, and does almost exactly as well at
+     * avoiding collisions on most input, so mix() is preferred.
      *
      * @param x an integer.
      * @return a hash value obtained by mixing the bits of {@code x}.
      */
-    public static int mix(int x)
+    public static int mixOther(int x)
     {
 //        x = ((x *= 0x62BD5) ^ x >>> 13) * ((x & 0xFFFF8) ^ 0xCD7B5);
 //        return ((x << 21) | (x >>> 11)) ^ (((x << 7) | (x >>> 25)) * 0x62BD5);
         return (x *= 0x62BD5) ^ ((x << 17) | (x >>> 15)) ^ ((x << 9) | (x >>> 23));
+    }
+    /**
+     * Thoroughly mixes the bits of an integer.
+     * <br>
+     * This method acts like {@link #mixOriginal(int)} (which is used by Koloboke and Fastutil), but doesn't multiply by
+     * any too-large numbers to ease compatibility with GWT. Specifically, it multiplies {@code n} by {@code 0x9E375}
+     * (found using the golden ratio times 2 to the 20, minus 2 to improve quality slightly) then xors that with itself
+     * unsigned-right-shifted by 16 before returning. It tends to have less pathologically-bad cases than using an
+     * unmixed integer in a hash table, but will still often have more collisions than an unmixed integer if that hash
+     * table is filled with numbers that vary in their lower bits. The value of this is that when ints are given that
+     * only differ in their upper bits, if you didn't mix a hash code you would have 95% or higher collision rates in
+     * some cases. This acts as a safeguard for that kind of scenario.
+     * <br>
+     * This replaces {@link #mixOther(int)}, which is also GWT-compatible but is a little slower without offering any
+     * improvement in collision rates.
+     * <br>
+     * This is used in {@link IntDoubleOrderedMap} and {@link IntIntOrderedMap}, at the least. The algorithm this uses
+     * is also used by {@link CrossHash#defaultHasher}.
+     * @param n an integer.
+     * @return a hash value obtained by mixing the bits of {@code x}.
+     */
+    public static int mix(final int n){
+        final int h = n * 0x9E375;
+        return h ^ (h >>> 16);
     }
 
 //    /**

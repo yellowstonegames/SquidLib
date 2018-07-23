@@ -558,8 +558,8 @@ public class HashQualityTest {
         }
         result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
         result ^= result >>> 25 ^ z ^ z >>> 29;
-        result = (result ^ result >>> 33) * 0XFF51AFD7ED558CCDL;
-        result = (result ^ result >>> 33) * 0XC4CEB9FE1A85EC53L;
+        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+        result = (result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L;
         return (int)(result ^ result >>> 33);
     }
     
@@ -588,7 +588,20 @@ public class HashQualityTest {
     public static int lantern(int state)
     {
         //return (state = ((state = (((state * 0x62BD5) ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13) * 0xAF2D9) ^ state >>> 10;
-        return ((state = ((state = ((state ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13) * 0x62BD5) << 22 | state >>> 10);
+//        return ((state = ((state = ((state ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13) * 0x62BD5) << 22 | state >>> 10);
+//        return ((state = (state ^ 0xC74EAD55) * 0xA5CB3) ^ ((state << 20) | (state >>> 12)) ^ ((state << 9) | (state >>> 23)));
+        return (state = (state ^ (state << 20 | state >>> 12) ^ (state << 9 | state >>> 23) ^ 0xC74EAD55) * 0xA5CB3) + (state >>> 16);
+    }
+    public static int xlxs(int state)
+    {
+//        return ((state = ((state ^ 0xC74EAD55) * 0xA5CB3)) ^ state >>> 13);
+        return (state *= 0x9E375) ^ state >>> 16;
+    }
+    public static int xs3(int state)
+    {
+        state ^= state >>> 14;
+        state ^= state >>> 15;
+        return state ^ state << 13;
     }
     public static int yuraHash(final CharSequence data, final int seed)
     {
@@ -842,4 +855,68 @@ public class HashQualityTest {
     0x000284FD, 0x0008F853 : 6787
     0x00056F55, 0x00021219 : 6789
      */
+
+    @Test
+    public void testMix() {
+        final int[] params = new int[]{64, 128, 256, 512, 1024}, increases = {0,1,2};
+        long baseTotal = 0, hacoTotal = 0, lantTotal = 0, xlxsTotal = 0, total = 0;
+//        long[] confTotals = new long[31];
+        NLFSR gen = new NLFSR(1234567);
+        int mul = gen.nextInt() << 1 | 1;
+        for (int r = 1; r < 32; r++) {
+
+            for (int m = 1; m < 0x1000; m++) {
+                mul = gen.nextInt() << 1 | 1;
+                for (int INCREASE : increases) {
+                    for (int SIZE : params) {
+                        int restrict = (SIZE << INCREASE) - 1;
+
+                        IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderHaCo = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderLant = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderXLXS = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
+//                    for (int i = 0; i < 31; i++) {
+//                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                    }
+                        for (int y = 1; y <= SIZE; y++) {
+//                        int x = (Light32RNG.determine(y));
+//                        int x = xs3(y*0x1FFFFFFF);
+                            int x = Integer.rotateLeft(y * mul, r);
+//                        x = x << 16 | x >>> 16;
+                            colliderBase.put(x & restrict, 0.0);
+                            colliderLant.put(xs3(x) & restrict, 0.0);
+                            colliderXLXS.put(xlxs(x) & restrict, 0.0);
+                            colliderHaCo.put(HashCommon.mix(x) & restrict, 0.0);
+//                            for (int i = 0; i < 31; i++) {
+//                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
+//                            }
+                        }
+//                    System.out.println("INCREASE: " + INCREASE + ", SIZE: " + SIZE);
+//                    System.out.println("Base collisions: " + (SIZE - colliderBase.size()));
+//                    System.out.println("Lant collisions: " + (SIZE - colliderLant.size()));
+//                    System.out.println("XLXS collisions: " + (SIZE - colliderXLXS.size()));
+//                    System.out.println("HaCo collisions: " + (SIZE - colliderHaCo.size()));
+//                    for (int i = 0; i < 31; i++) {
+//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
+//                        confTotals[i] += (SIZE - colliders[i].size());
+//                    }
+                        baseTotal += (SIZE - colliderBase.size());
+                        lantTotal += (SIZE - colliderLant.size());
+                        xlxsTotal += (SIZE - colliderXLXS.size());
+                        hacoTotal += (SIZE - colliderHaCo.size());
+                        total += SIZE;
+                    }
+                }
+            }
+        }
+        System.out.println("Number of ints added: " + total);
+        System.out.println("TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL Lant collisions: " + lantTotal + " (" + (lantTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL XLXS collisions: " + xlxsTotal + " (" + (xlxsTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL HaCo collisions: " + hacoTotal + " (" + (hacoTotal * 100.0 / total) + "%)");
+//        for (int i = 0; i < 31; i++) {
+//            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
+//        }
+    }
 }
