@@ -47,6 +47,9 @@ import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <pre>
+ * Earlier benchmark, doesn't have Hive
+ * 
  * Benchmark                        Mode  Cnt   Score   Error  Units
  * HashBenchmark.doCharFalcon32     avgt    2  32.171          ns/op
  * HashBenchmark.doCharFalcon64     avgt    2  34.606          ns/op
@@ -63,10 +66,10 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.doFalcon32         avgt    2   5.648          ns/op // uses String.hashCode(), collision issues
  * HashBenchmark.doFalcon64         avgt    2   6.025          ns/op
  * HashBenchmark.doJDK32            avgt    2   4.611          ns/op // built-in, uses native code, vulnerable
- * HashBenchmark.doJDK32Mixed       avgt    2   5.363          ns/op
- * HashBenchmark.doJolt32           avgt    2  39.895          ns/op // strongest quality, passes all of SMHasher
+ * HashBenchmark.doJDK32Mixed       avgt    2   5.363          ns/op // still has poor collision rates
+ * HashBenchmark.doJolt32           avgt    2  39.895          ns/op // decent quality, passes SMHasher on bytes
  * HashBenchmark.doJolt64           avgt    2  37.076          ns/op
- * HashBenchmark.doLightning32      avgt    2  40.284          ns/op // probably decent quality, but not as fast...
+ * HashBenchmark.doLightning32      avgt    2  40.284          ns/op // probably OK quality, but not as fast...
  * HashBenchmark.doLightning64      avgt    2  41.025          ns/op // ...or as high-quality as Jolt
  * HashBenchmark.doLongFalcon32     avgt    2  59.824          ns/op
  * HashBenchmark.doLongFalcon64     avgt    2  61.595          ns/op
@@ -84,6 +87,53 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.doMist64           avgt    2  38.838          ns/op
  * HashBenchmark.doWisp32           avgt    2  36.223          ns/op // has collision properties between JDK and Jolt 
  * HashBenchmark.doWisp64           avgt    2  33.515          ns/op // tends to do relatively badly on cramped tables
+ * 
+ * Later benchmark, adding Hive
+ * 
+ * Benchmark                        Mode  Cnt   Score    Error  Units
+ * HashBenchmark.doCharFalcon32     avgt    3  32.103 ±  1.852  ns/op
+ * HashBenchmark.doCharFalcon64     avgt    3  33.103 ±  0.616  ns/op
+ * HashBenchmark.doCharHive32       avgt    3  33.759 ±  2.330  ns/op
+ * HashBenchmark.doCharHive64       avgt    3  32.721 ±  2.190  ns/op
+ * HashBenchmark.doCharJDK32        avgt    3  27.323 ±  0.933  ns/op
+ * HashBenchmark.doCharJDK32Mixed   avgt    3  28.166 ±  1.365  ns/op
+ * HashBenchmark.doCharJolt32       avgt    3  33.811 ±  1.733  ns/op
+ * HashBenchmark.doCharJolt64       avgt    3  31.215 ±  1.198  ns/op
+ * HashBenchmark.doCharLightning32  avgt    3  34.610 ±  1.201  ns/op
+ * HashBenchmark.doCharLightning64  avgt    3  38.527 ±  1.033  ns/op
+ * HashBenchmark.doCharMist32       avgt    3  35.108 ±  1.093  ns/op
+ * HashBenchmark.doCharMist64       avgt    3  33.587 ±  0.818  ns/op
+ * HashBenchmark.doCharWisp32       avgt    3  30.725 ±  4.333  ns/op
+ * HashBenchmark.doCharWisp64       avgt    3  30.279 ± 10.238  ns/op
+ * HashBenchmark.doFalcon32         avgt    3   5.313 ±  0.232  ns/op // uses String.hashCode(), collision issues
+ * HashBenchmark.doFalcon64         avgt    3   5.581 ±  0.342  ns/op
+ * HashBenchmark.doHive32           avgt    3  41.309 ±  4.635  ns/op // passes all of SMHasher, even on longs
+ * HashBenchmark.doHive64           avgt    3  39.676 ±  1.762  ns/op // 20% slower than Wisp but no major failure cases
+ * HashBenchmark.doJDK32            avgt    3   4.346 ±  0.088  ns/op // built-in, uses native code, vulnerable   
+ * HashBenchmark.doJDK32Mixed       avgt    3   4.703 ±  0.340  ns/op // still has poor collision rates           
+ * HashBenchmark.doJolt32           avgt    3  38.139 ±  1.391  ns/op // decent quality, passes SMHasher on bytes 
+ * HashBenchmark.doJolt64           avgt    3  36.132 ±  0.943  ns/op // does not pass SMHasher on chars, ints, longs...
+ * HashBenchmark.doLightning32      avgt    3  40.116 ±  1.045  ns/op // probably OK quality, but not as fast...
+ * HashBenchmark.doLightning64      avgt    3  39.314 ±  1.150  ns/op // ... as Jolt or as high-quality as Hive
+ * HashBenchmark.doLongFalcon32     avgt    3  58.298 ±  3.065  ns/op
+ * HashBenchmark.doLongFalcon64     avgt    3  56.623 ±  5.100  ns/op
+ * HashBenchmark.doLongHive32       avgt    3  61.675 ±  4.431  ns/op
+ * HashBenchmark.doLongHive64       avgt    3  61.317 ±  3.192  ns/op
+ * HashBenchmark.doLongJDK32        avgt    3  64.978 ±  5.369  ns/op
+ * HashBenchmark.doLongJDK32Mixed   avgt    3  64.259 ± 23.908  ns/op
+ * HashBenchmark.doLongJolt32       avgt    3  57.426 ±  7.412  ns/op
+ * HashBenchmark.doLongJolt64       avgt    3  57.814 ±  4.278  ns/op
+ * HashBenchmark.doLongLightning32  avgt    3  70.000 ±  2.104  ns/op
+ * HashBenchmark.doLongLightning64  avgt    3  71.063 ±  2.261  ns/op
+ * HashBenchmark.doLongMist32       avgt    3  69.608 ±  7.269  ns/op
+ * HashBenchmark.doLongMist64       avgt    3  69.899 ±  2.901  ns/op
+ * HashBenchmark.doLongWisp32       avgt    3  51.467 ±  5.783  ns/op
+ * HashBenchmark.doLongWisp64       avgt    3  51.904 ±  4.352  ns/op
+ * HashBenchmark.doMist32           avgt    3  36.884 ±  0.482  ns/op // allows salting the hash, not cryptographically
+ * HashBenchmark.doMist64           avgt    3  36.927 ±  0.881  ns/op
+ * HashBenchmark.doWisp32           avgt    3  34.424 ±  2.186  ns/op // has collision properties between JDK and Hive
+ * HashBenchmark.doWisp64           avgt    3  33.002 ±  2.128  ns/op // tends to do relatively badly on cramped tables
+ * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -187,16 +237,29 @@ public class HashBenchmark {
     {
         return CrossHash.Jolt.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
-    
+
     @Benchmark
     public int doJolt32(BenchmarkState state)
     {
         return CrossHash.Jolt.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
-    
-    
-    
-    
+
+    @Benchmark
+    public long doHive64(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doHive32(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+
+
+
+
 
     @Benchmark
     public long doCharWisp64(BenchmarkState state)
@@ -268,6 +331,19 @@ public class HashBenchmark {
     public int doCharJolt32(BenchmarkState state)
     {
         return CrossHash.Jolt.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+
+    @Benchmark
+    public long doCharHive64(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharHive32(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
 
@@ -344,6 +420,18 @@ public class HashBenchmark {
     public int doLongJolt32(BenchmarkState state)
     {
         return CrossHash.Jolt.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doLongHive64(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doLongHive32(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     /*
