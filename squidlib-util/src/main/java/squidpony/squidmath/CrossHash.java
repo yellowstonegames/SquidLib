@@ -4692,4 +4692,238 @@ public class CrossHash {
             return (int)(result ^ result >>> 33);
         }
     }
+    // CrossHash.Metro (static nested class)
+//
+// The MIT License (MIT)
+//
+// Copyright (c) 2015 J. Andrew Rogers
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+//
+
+    /**
+     * Google's MetroHash algorithm, ported in a somewhat rudimentary way to Java.
+     * While it should be fast on large inputs, this implementation seems to be all-around slower than {@link Hive},
+     * while both pass SMHasher's battery of tests. Not complete, and due to disappointing performance, it will soon be
+     * deleted.
+     */
+    @Beta
+    public static final class Metro
+    {
+        private static final long k0 = 0xD6D018F5L;
+        private static final long k1 = 0xA2AA033BL;
+        private static final long k2 = 0x62992FC1L;
+        private static final long k3 = 0x30BC5B29L;
+        public static long hash64(final char[] data) {
+            if (data == null)
+                return 0L;
+
+            final int len = data.length;
+            long hash = 0x52BC33FEDBE4CBB5L + len;
+            int i = 0;
+            if (len >= 4)
+            {
+                long v0 = hash;
+                long v1 = hash;
+                long v2 = hash;
+                long v3 = hash;
+
+                for (; i < len - 3;) {
+                    v0 += data[i++] * k0; v0 = (v0 << 35 | v0 >>> 29) + v2;
+                    v1 += data[i++] * k1; v1 = (v1 << 35 | v1 >>> 29) + v3;
+                    v2 += data[i++] * k2; v2 = (v2 << 35 | v2 >>> 29) + v0;
+                    v3 += data[i++] * k3; v3 = (v3 << 35 | v3 >>> 29) + v1;
+                }
+
+                v2 ^= Long.rotateRight(((v0 + v3) * k0) + v1, 30) * k1;
+                v3 ^= Long.rotateRight(((v1 + v2) * k1) + v0, 30) * k0;
+                v0 ^= Long.rotateRight(((v0 + v2) * k0) + v3, 30) * k1;
+                v1 ^= Long.rotateRight(((v1 + v3) * k1) + v2, 30) * k0;
+                hash += v0 ^ v1;
+            }
+
+            if (i + 1 < len)
+            {
+                long v0 = hash + (data[i++] * k2); v0 = (v0 << 35 | v0 >>> 29) * k3;
+                long v1 = hash + (data[i++] * k2); v1 = (v1 << 35 | v1 >>> 29) * k3;
+                v0 ^= Long.rotateRight(v0 * k0, 34) + v1;
+                v1 ^= Long.rotateRight(v1 * k3, 34) + v0;
+                hash += v1;
+            }
+
+            if (i < len)
+            {
+                hash += data[i] * k3;
+                hash ^= (hash << 28 | hash >>> 36) * k1;
+            }
+
+            hash ^= (hash << 36 | hash >>> 28);
+            hash *= k0;
+            hash ^= (hash << 35 | hash >>> 29);
+            return hash;
+        }
+        public static long hash64(final int[] data) {
+            if (data == null)
+                return 0L;
+
+            final int len = data.length;
+            long hash = 0x52BC33FEDBE4CBB5L + len;
+            int i = 0;
+            if (len >= 4)
+            {
+                long v0 = hash;
+                long v1 = hash;
+                long v2 = hash;
+                long v3 = hash;
+
+                for (; i < len - 3;) {
+                    v0 += data[i++] * k0; v0 = (v0 << 35 | v0 >>> 29) + v2;
+                    v1 += data[i++] * k1; v1 = (v1 << 35 | v1 >>> 29) + v3;
+                    v2 += data[i++] * k2; v2 = (v2 << 35 | v2 >>> 29) + v0;
+                    v3 += data[i++] * k3; v3 = (v3 << 35 | v3 >>> 29) + v1;
+                }
+
+                v2 ^= Long.rotateRight(((v0 + v3) * k0) + v1, 30) * k1;
+                v3 ^= Long.rotateRight(((v1 + v2) * k1) + v0, 30) * k0;
+                v0 ^= Long.rotateRight(((v0 + v2) * k0) + v3, 30) * k1;
+                v1 ^= Long.rotateRight(((v1 + v3) * k1) + v2, 30) * k0;
+                hash += v0 ^ v1;
+            }
+
+            if (i + 1 < len)
+            {
+                long v0 = hash + (data[i++] * k2); v0 = (v0 << 35 | v0 >>> 29) * k3;
+                long v1 = hash + (data[i++] * k2); v1 = (v1 << 35 | v1 >>> 29) * k3;
+                v0 ^= Long.rotateRight(v0 * k0, 34) + v1;
+                v1 ^= Long.rotateRight(v1 * k3, 34) + v0;
+                hash += v1;
+            }
+
+            if (i < len)
+            {
+                hash += data[i] * k3;
+                hash ^= (hash << 28 | hash >>> 36) * k1;
+            }
+
+            hash ^= (hash << 36 | hash >>> 28);
+            hash *= k0;
+            hash ^= (hash << 35 | hash >>> 29);
+            return hash;
+        }
+
+        public static long hash64(final long[] data) {
+            if (data == null)
+                return 0L;
+
+            final int len = data.length;
+            long hash = 0x52BC33FEDBE4CBB5L + len;
+            int i = 0;
+            if (len >= 4)
+            {
+                long v0 = hash;
+                long v1 = hash;
+                long v2 = hash;
+                long v3 = hash;
+
+                for (; i < len - 3;) {
+                    v0 += data[i++] * k0; v0 = (v0 << 35 | v0 >>> 29) + v2;
+                    v1 += data[i++] * k1; v1 = (v1 << 35 | v1 >>> 29) + v3;
+                    v2 += data[i++] * k2; v2 = (v2 << 35 | v2 >>> 29) + v0;
+                    v3 += data[i++] * k3; v3 = (v3 << 35 | v3 >>> 29) + v1;
+                }
+
+                v2 ^= Long.rotateRight(((v0 + v3) * k0) + v1, 30) * k1;
+                v3 ^= Long.rotateRight(((v1 + v2) * k1) + v0, 30) * k0;
+                v0 ^= Long.rotateRight(((v0 + v2) * k0) + v3, 30) * k1;
+                v1 ^= Long.rotateRight(((v1 + v3) * k1) + v2, 30) * k0;
+                hash += v0 ^ v1;
+            }
+
+            if (i + 1 < len)
+            {
+                long v0 = hash + (data[i++] * k2); v0 = (v0 << 35 | v0 >>> 29) * k3;
+                long v1 = hash + (data[i++] * k2); v1 = (v1 << 35 | v1 >>> 29) * k3;
+                v0 ^= Long.rotateRight(v0 * k0, 34) + v1;
+                v1 ^= Long.rotateRight(v1 * k3, 34) + v0;
+                hash += v1;
+            }
+
+            if (i < len)
+            {
+                hash += data[i] * k3;
+                hash ^= (hash << 28 | hash >>> 36) * k1;
+            }
+
+            hash ^= (hash << 36 | hash >>> 28);
+            hash *= k0;
+            hash ^= (hash << 35 | hash >>> 29);
+            return hash;
+        }
+        public static long hash64(final CharSequence data) {
+            if (data == null)
+                return 0L;
+
+            final int len = data.length();
+            long hash = 0x52BC33FEDBE4CBB5L + len;
+            int i = 0;
+            if (len >= 4)
+            {
+                long v0 = hash;
+                long v1 = hash;
+                long v2 = hash;
+                long v3 = hash;
+
+                for (; i < len - 3;) {
+                    v0 += data.charAt(i++) * k0; v0 = (v0 << 35 | v0 >>> 29) + v2;
+                    v1 += data.charAt(i++) * k1; v1 = (v1 << 35 | v1 >>> 29) + v3;
+                    v2 += data.charAt(i++) * k2; v2 = (v2 << 35 | v2 >>> 29) + v0;
+                    v3 += data.charAt(i++) * k3; v3 = (v3 << 35 | v3 >>> 29) + v1;
+                }
+
+                v2 ^= Long.rotateRight(((v0 + v3) * k0) + v1, 30) * k1;
+                v3 ^= Long.rotateRight(((v1 + v2) * k1) + v0, 30) * k0;
+                v0 ^= Long.rotateRight(((v0 + v2) * k0) + v3, 30) * k1;
+                v1 ^= Long.rotateRight(((v1 + v3) * k1) + v2, 30) * k0;
+                hash += v0 ^ v1;
+            }
+
+            if (i + 1 < len)
+            {
+                long v0 = hash + (data.charAt(i++) * k2); v0 = (v0 << 35 | v0 >>> 29) * k3;
+                long v1 = hash + (data.charAt(i++) * k2); v1 = (v1 << 35 | v1 >>> 29) * k3;
+                v0 ^= Long.rotateRight(v0 * k0, 34) + v1;
+                v1 ^= Long.rotateRight(v1 * k3, 34) + v0;
+                hash += v1;
+            }
+
+            if (i < len)
+            {
+                hash += data.charAt(i) * k3;
+                hash ^= (hash << 28 | hash >>> 36) * k1;
+            }
+
+            hash ^= (hash << 36 | hash >>> 28);
+            hash *= k0;
+            hash ^= (hash << 35 | hash >>> 29);
+            return hash;
+        }
+
+    }
+
 }

@@ -133,6 +133,16 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.doMist64           avgt    3  36.927 ±  0.881  ns/op
  * HashBenchmark.doWisp32           avgt    3  34.424 ±  2.186  ns/op // has collision properties between JDK and Hive
  * HashBenchmark.doWisp64           avgt    3  33.002 ±  2.128  ns/op // tends to do relatively badly on cramped tables
+ * 
+ * Subset that compares Hive with MetroHash, or at least SquidLib's implementation. Metro will be removed.
+ * 
+ * Benchmark                    Mode  Cnt   Score   Error  Units
+ * HashBenchmark.doCharHive64   avgt    3  33.247 ± 2.049  ns/op
+ * HashBenchmark.doCharMetro64  avgt    3  37.730 ± 0.866  ns/op
+ * HashBenchmark.doHive64       avgt    3  38.920 ± 1.364  ns/op
+ * HashBenchmark.doLongHive64   avgt    3  64.345 ± 2.985  ns/op
+ * HashBenchmark.doLongMetro64  avgt    3  66.551 ± 5.205  ns/op
+ * HashBenchmark.doMetro64      avgt    3  47.327 ± 2.836  ns/op
  * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
@@ -432,6 +442,24 @@ public class HashBenchmark {
     public int doLongHive32(BenchmarkState state)
     {
         return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+
+
+    @Benchmark
+    public long doMetro64(BenchmarkState state)
+    {
+        return CrossHash.Metro.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+    @Benchmark
+    public long doCharMetro64(BenchmarkState state)
+    {
+        return CrossHash.Metro.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+    @Benchmark
+    public long doLongMetro64(BenchmarkState state)
+    {
+        return CrossHash.Metro.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     /*
