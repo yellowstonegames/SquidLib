@@ -173,4 +173,45 @@ public final class FloatFilters {
         }
     }
 
+    /**
+     * A FloatFilter that makes no changes to the colors given to it; useful as a default for when no filter is wanted.
+     */
+    public static class IdentityFilter extends FloatFilter
+    {
+        /**
+         * Takes a packed float color and returns it un-edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            return color;
+        }
+    }
+
+    /**
+     * A FloatFilter that makes all colors given to it grayscale, using only their luma as calculated by
+     * {@link SColor#lumaOfFloat(float)} as the lightness (it does also preserve alpha transparency).
+     */
+    public static class GrayscaleFilter extends FloatFilter
+    {
+        /**
+         * Takes a packed float color and produces a grayscale packed float color that this FloatFilter edited.
+         * Uses the luma calculation from {@link SColor#lumaOfFloat(float)} instead of the value calculation from
+         * {@link SColor#valueOfFloat(float)}; luma tends to be more visually-accurate on modern monitors.
+         * 
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            final int bits = NumberTools.floatToIntBits(color);
+            color = (bits & 0x000000ff) * (0x1.010102p-8f  * 0.299f) +
+                    (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
+                    (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f);
+            return floatGet(color, color, color, (bits >>> 24 & 0xFE)*0.003937008f);
+        }
+    }
+
 }
