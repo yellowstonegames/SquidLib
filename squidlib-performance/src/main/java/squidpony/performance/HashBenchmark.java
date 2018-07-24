@@ -185,13 +185,13 @@ public class HashBenchmark {
     @Benchmark
     public long doWisp64(BenchmarkState state)
     {
-        return CrossHash.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Wisp.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
     public int doWisp32(BenchmarkState state)
     {
-        return CrossHash.hash(state.words[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Wisp.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
@@ -274,13 +274,13 @@ public class HashBenchmark {
     @Benchmark
     public long doCharWisp64(BenchmarkState state)
     {
-        return CrossHash.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Wisp.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
     public int doCharWisp32(BenchmarkState state)
     {
-        return CrossHash.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Wisp.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
@@ -363,13 +363,13 @@ public class HashBenchmark {
     @Benchmark
     public long doLongWisp64(BenchmarkState state)
     {
-        return CrossHash.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Wisp.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
     public int doLongWisp32(BenchmarkState state)
     {
-        return CrossHash.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Wisp.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
@@ -446,21 +446,21 @@ public class HashBenchmark {
 
 
 
-    @Benchmark
-    public long doMetro64(BenchmarkState state)
-    {
-        return CrossHash.Metro.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-    @Benchmark
-    public long doCharMetro64(BenchmarkState state)
-    {
-        return CrossHash.Metro.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-    @Benchmark
-    public long doLongMetro64(BenchmarkState state)
-    {
-        return CrossHash.Metro.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
+//    @Benchmark
+//    public long doMetro64(BenchmarkState state)
+//    {
+//        return CrossHash.Metro.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+//    }
+//    @Benchmark
+//    public long doCharMetro64(BenchmarkState state)
+//    {
+//        return CrossHash.Metro.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+//    }
+//    @Benchmark
+//    public long doLongMetro64(BenchmarkState state)
+//    {
+//        return CrossHash.Metro.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+//    }
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================

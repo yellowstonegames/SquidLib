@@ -755,7 +755,7 @@ public class HashQualityTest {
             //strings.add(markovText.chain(LinnormRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 100));
             // try changing length
             //strings.add(markovText.chain(LinnormRNG.determine(i + 0x1234567890L), 190));
-            strings.add(String.format("FooBar%06d", i));
+            strings.add(String.format("       %16s       ", Integer.toString(i, 5)));
             //strings.add(FakeLanguageGen.JAPANESE_ROMANIZED.sentence(LinnormRNG.determine(i + 0x12345678), 10, 10));
         }
         int stringHashLength = strings.size();
@@ -765,7 +765,7 @@ public class HashQualityTest {
                 colliderSli = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderWis = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderJol = new IntDoubleOrderedMap(stringHashLength, 0.5f),
-                colliderSer = new IntDoubleOrderedMap(stringHashLength, 0.5f),
+                colliderHiv = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderSpl = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderYur = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderBuz = new IntDoubleOrderedMap(stringHashLength, 0.5f);
@@ -787,7 +787,7 @@ public class HashQualityTest {
             colliderSli.put(slitherHash(s) & restrict, 1.0);
             colliderWis.put(CrossHash.hash(s) & restrict, 1.0);
             colliderJol.put(joltHash(s) & restrict, 1.0);
-            colliderSer.put((int)LinnormRNG.determine(s.hashCode()) & restrict, 1.0);
+            colliderHiv.put(CrossHash.Hive.hash(s) & restrict, 1.0);
             colliderSpl.put(lantern(s.hashCode()) & restrict, 1.0);
             colliderYur.put(yuraHash(s, 0xC74EAD55) & restrict, 1.0);
             colliderBuz.put(buzzHash(s) & restrict, 1.0);
@@ -806,10 +806,10 @@ public class HashQualityTest {
         System.out.println("Sli collisions, 16-bit: " + (stringHashLength - colliderSli.size()));
         System.out.println("Wis collisions, 16-bit: " + (stringHashLength - colliderWis.size()));
         System.out.println("Jol collisions, 16-bit: " + (stringHashLength - colliderJol.size()));
-        System.out.println("Ser collisions, 16-bit: " + (stringHashLength - colliderSer.size()));
         System.out.println("Lan collisions, 16-bit: " + (stringHashLength - colliderSpl.size()));
         System.out.println("Yur collisions, 16-bit: " + (stringHashLength - colliderYur.size()));
         System.out.println("Buz collisions, 16-bit: " + (stringHashLength - colliderBuz.size()));
+        System.out.println("Hiv collisions, 16-bit: " + (stringHashLength - colliderHiv.size()));
 //        Arrays.sort(colliders, new Comparator<IntDoubleOrderedMap>() {
 //            @Override
 //            public int compare(IntDoubleOrderedMap o1, IntDoubleOrderedMap o2) {
@@ -831,7 +831,7 @@ public class HashQualityTest {
         colliderSli.clear();
         colliderWis.clear();
         colliderJol.clear();
-        colliderSer.clear();
+        colliderHiv.clear();
         colliderSpl.clear();
         colliderYur.clear();
         colliderBuz.clear();
