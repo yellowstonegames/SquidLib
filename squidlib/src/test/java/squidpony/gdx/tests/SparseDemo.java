@@ -21,10 +21,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.LineKit;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.IRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +142,26 @@ public class SparseDemo extends ApplicationAdapter {
     // mention what color it is in a line comment, which is a good habit so you can see a preview if needed.
     private static final float FLOAT_LIGHTING = -0x1.cff1fep126F, // same result as SColor.COSMIC_LATTE.toFloatBits()
             GRAY_FLOAT = -0x1.7e7e7ep125F; // same result as SColor.CW_GRAY_BLACK.toFloatBits()
+    private FloatFilters.YCbCrFilter filter;
 
+    /**
+     * Briefly named because we may use it a lot; filters a packed float color with a FloatFilter and does no caching.
+     * @param color a packed float color
+     * @return a packed float color, filtered
+     */
+    private float f(float color)
+    {
+        return filter.alter(color);
+    }
+    /**
+     * Briefly named because we may use it a lot; filters a libGDX Color with a FloatFilter and does no caching.
+     * @param color a libGDX Color or a subclass like SColor
+     * @return a packed float color, filtered
+     */
+    private float f(Color color)
+    {
+        return filter.alter(color);
+    }
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -154,6 +170,8 @@ public class SparseDemo extends ApplicationAdapter {
         // just removing the String seed, making the line "rng = new RNG();" . Keeping the seed as a default allows
         // changes to be more easily reproducible, and using a fixed seed is strongly recommended for tests. 
         rng = new RNG(artOfWar);
+        // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
+        filter = new FloatFilters.YCbCrFilter(0.875f, 0.6f, 0.6f);
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         batch = new SpriteBatch();
@@ -329,9 +347,14 @@ public class SparseDemo extends ApplicationAdapter {
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
         colors = MapUtility.generateDefaultColorsFloat(decoDungeon);
         bgColors = MapUtility.generateDefaultBGColorsFloat(decoDungeon);
-
+//        for (int x = 0; x < bigWidth; x++) {
+//            for (int y = 0; y < bigHeight; y++) {
+//                colors[x][y] = f(colors[x][y]);
+//                bgColors[x][y] = f(bgColors[x][y]);
+//            }
+//        }
         //places the player as an '@' at his position in orange.
-        pg = display.glyph('@', SColor.SAFETY_ORANGE.toFloatBits(), player.x, player.y);
+        pg = display.glyph('@', f(SColor.SAFETY_ORANGE), player.x, player.y);
 
         // here we build up a List of IColoredString values formed by formatting the artOfWar text (this colors the
         // whole thing dark gray and puts the name at the start in italic/oblique face) and wrapping it to fit within
@@ -544,18 +567,18 @@ public class SparseDemo extends ApplicationAdapter {
             // This particular kind of PanelEffect creates a purple glow around the player when he bumps into a wall.
             // Other kinds can make explosions or projectiles appear.
             display.addAction(new PanelEffect.PulseEffect(display, 1f, currentlySeen, player, 3
-                    , new float[]{SColor.CW_FADED_PURPLE.toFloatBits()}
+                    , new float[]{f(SColor.CW_FADED_PURPLE)}
                     ));
             // recolor() will change the color of a cell over time from what it is currently to a target color, which is
             // DB_BLOOD here from a DawnBringer palette. We give it a Runnable to run after the effect finishes, which
             // permanently sets the color of the cell you bumped into to the color of your bloody nose. Without such a 
             // Runnable, the cell would get drawn over with its normal wall color.
-            display.recolor(0f, player.x + xmod, player.y + ymod, 0, SColor.DB_BLOOD.toFloatBits(), 0.4f, new Runnable() {
+            display.recolor(0f, player.x + xmod, player.y + ymod, 0, f(SColor.DB_BLOOD), 0.4f, new Runnable() {
                 int x = player.x + xmod;
                 int y = player.y + ymod;
                 @Override
                 public void run() {
-                    colors[x][y] = SColor.DB_BLOOD.toFloatBits();
+                    colors[x][y] = f(SColor.DB_BLOOD);
                 }
             });
             //display.addAction(new PanelEffect.ExplosionEffect(display, 1f, floors, player, 6));
@@ -581,7 +604,9 @@ public class SparseDemo extends ApplicationAdapter {
         //past from affecting the current frame. This isn't a problem here, but would probably be an issue if we had
         //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
         //display.clear();
-
+        filter.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
+        filter.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+        pg.setPackedColor(f(SColor.SAFETY_ORANGE));
         // The loop here only will draw tiles if they are potentially in the visible part of the map.
         // It starts at an x,y position equal to the player's position minus half of the shown gridWidth and gridHeight,
         // minus one extra cell to allow the camera some freedom to move. This position won't go lower than 0. The
@@ -599,19 +624,19 @@ public class SparseDemo extends ApplicationAdapter {
                     // cells around the player and dimmer ones near the edge of vision. This lighting is "consistent"
                     // because all cells at the same distance will have the same amount of lighting applied.
                     // We use prunedDungeon here so segments of walls that the player isn't aware of won't be shown.
-                    display.putWithConsistentLight(x, y, prunedDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, visible[x][y]);
+                    display.putWithConsistentLight(x, y, prunedDungeon[x][y], f(colors[x][y]), f(bgColors[x][y]), FLOAT_LIGHTING, visible[x][y]);
                 } else if (seen.contains(x, y))
-                    display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
+                    display.put(x, y, prunedDungeon[x][y], f(colors[x][y]), SColor.lerpFloatColors(f(bgColors[x][y]), GRAY_FLOAT, 0.45f));
             }
         }
         Coord pt;
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, mixing the background color with mostly white.
-            display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], SColor.FLOAT_WHITE, 0.85f));
+            display.put(pt.x, pt.y, SColor.lerpFloatColors(f(bgColors[pt.x][pt.y]), SColor.FLOAT_WHITE, 0.85f));
         }
         languageDisplay.clear(0);
-        languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);
+        languageDisplay.fillBackground(f(languageDisplay.defaultPackedBackground));
         for (int i = 0; i < 6; i++) {
             languageDisplay.put(1, i, lang.get(i));
         }
