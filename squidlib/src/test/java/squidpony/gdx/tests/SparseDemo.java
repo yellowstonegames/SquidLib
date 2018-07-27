@@ -145,7 +145,7 @@ public class SparseDemo extends ApplicationAdapter {
     private FloatFilters.YCbCrFilter filter;
 
     /**
-     * Briefly named because we may use it a lot; filters a packed float color with a FloatFilter and does no caching.
+     * Briefly named because we use it a lot; filters a packed float color with a FloatFilter and does no caching.
      * @param color a packed float color
      * @return a packed float color, filtered
      */

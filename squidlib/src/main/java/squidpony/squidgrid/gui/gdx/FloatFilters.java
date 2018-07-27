@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.NumberTools;
 
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
+import static squidpony.squidgrid.gui.gdx.SColor.lerpFloatColors;
 
 /**
  * Pre-made FloatFilter classes that you can use to filter colors without producing extra Color objects.
@@ -278,5 +279,81 @@ public final class FloatFilters {
         }
     }
 
+    /**
+     * A FloatFilter that chains together one or more FloatFilters one after the next, passing the float output of one
+     * as input to the next until the chain has all been called.
+     */
+    public static class ChainFilter extends FloatFilter {
+        public FloatFilter[] filters;
+
+        /**
+         * Takes a vararg or array of FloatFilter objects and produces a ChainFilter that will call all of them in order
+         * on any color given to this to alter.
+         * @param filters an array or vararg of FloatFilter objects; none can be null
+         */
+        public ChainFilter(FloatFilter... filters)
+        {
+            if(filters == null || filters.length == 0)
+                this.filters = new FloatFilter[]{new IdentityFilter()};
+            this.filters = filters;
+        }
+
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            for (int i = 0; i < filters.length; i++) {
+                color = filters[i].alter(color);
+            }
+            return color;
+        }
+    }
+
+    /**
+     * A FloatFilter that linearly interpolates (lerps) any color it is given toward a specified color by a specified
+     * amount.
+     */
+    public static class LerpFilter extends FloatFilter {
+        public float target, amount;
+
+        /**
+         * Builds a LerpFilter with a Color (which will be converted to a packed float color) and an amount as a float.
+         * The amount is how much the target color will affect input colors, from 0f to 1f.
+         * @param target a libGDX color; must not be null
+         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f
+         */
+        public LerpFilter(Color target, float amount) {
+            this.target = target.toFloatBits();
+            this.amount = MathUtils.clamp(amount, 0f, 1f);
+        }
+
+        /**
+         * Builds a LerpFilter with a packed float color and an amount as a float.
+         * The amount is how much the target color will affect input colors, from 0f to 1f.
+         * @param target a packed float color; must not be null
+         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f
+         */
+
+        public LerpFilter(float target, float amount)
+        {
+            this.target = target;
+            this.amount = MathUtils.clamp(amount, 0f, 1f);
+        }
+
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            return lerpFloatColors(color, target, amount);
+        }
+    }
 
 }
