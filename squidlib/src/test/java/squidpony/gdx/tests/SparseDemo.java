@@ -92,11 +92,11 @@ public class SparseDemo extends ApplicationAdapter {
     // a passage from the ancient text The Art of War, which remains relevant in any era but is mostly used as a basis
     // for translation to imaginary languages using the NaturalLanguageCipher and FakeLanguageGen classes.
     private final String artOfWar =
-            "[@ 0.8 0.06329113 0.30980393][/]Sun Tzu[/] said: In the practical art of war, the best thing of all is " +
+            "[@ 0.8 0.06329113 0.30980393][/]Sun Tzu[/] said: In the [!]practical[!] art of war, the best thing of all is " +
                     "to take the enemy's country whole and intact; to shatter and destroy it is not so good. So, " +
                     "too, it is better to recapture an army entire than to destroy it, to capture " +
                     "a regiment, a detachment or a company entire than to destroy them. Hence to fight " +
-                    "and conquer in all your battles is not supreme excellence; supreme excellence " +
+                    "and conquer in all your battles is not [!]supreme[,] excellence; [!]supreme[=] EXCELLENCE[,] " +
                     "consists in breaking the enemy's resistance without fighting.[]";
     // A translation dictionary for going back and forth between English and an imaginary language that this generates
     // words for, using some of the rules that the English language tends to follow to determine if two words should

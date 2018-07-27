@@ -30,12 +30,15 @@ import squidpony.panel.IMarkup;
  * saturation, and value, with opacity implicitly 1) or {@code [@ 0 0.7 0.96 0.8]} (0.8 opacity is a bit translucent).
  * The HSV markup option is an addition to libGDX's syntax; any number of spaces/tabs can be used between HSV components
  * and the space between @ and the first component is optional. You can use {@code [[} to escape an opening bracket, and
- * {@code []} to reset formatting. As an addition to GDX color markup, if using a TextFamily you can toggle the font
- * style as bold with {@code [*]} and as italic with {@code [/]}. If bold is on when this encounters another bold tag,
- * it will turn bold off; the same is true for italic. These formatting styles can overlap and do not need to be nested
- * as in HTML; this notation is valid: {@code [*]bold, [/]bold and italic, [*] just italic,[] plain}. While {@code []}
- * resets both color and style to white color and regular style, there is also {@code [,]} to reset only style, or
- * {@code [WHITE]} to reset only color (to white).
+ * {@code []} to reset formatting. As an addition to GDX color markup, you can change case with {@code [!]} to make text
+ * ALL CAPS or {@code [=]} to make it lower-case (encountering a tag toggles it, so {@code [!]yelling[!] are we?} would
+ * become {@code YELLING are we?}), using {@code []} to reset all markup or {@code [,]} to reset just case and font
+ * style (see next) markup. If using a TextFamily such as {@link DefaultResources#getLeanFamily()}, you can toggle the
+ * font style as bold with {@code [*]} and as italic with {@code [/]}. If bold is on when this encounters another bold
+ * tag, it will turn bold off; the same is true for italic. These formatting styles can overlap and do not need to be
+ * nested as in HTML; this notation is valid: {@code [*]bold, [/]bold and italic, [*] just italic,[] plain}. While
+ * {@code []} resets both color, case, and style to white color, normal case, and regular style, there is also
+ * {@code [,]} to reset only style/case, or {@code [WHITE]} to reset only color (to white).
  * <br>
  * Created by Tommy Ettinger on 1/23/2016.
  */
@@ -63,7 +66,7 @@ public class GDXMarkup implements IMarkup<Color>{
         return "[]";
     }
 
-    private final Matcher markupMatcher = Pattern.compile("({=p}[^\\[]+)|(?:\\[({=e}\\[))|(?:\\[#({=h}[0-9A-Fa-f]{6,8})\\])|(?:\\[@\\s*({=q}({=qh}[0-9]*\\.?[0-9]+)\\s+({=qs}[0-9]*\\.?[0-9]+)\\s+({=qv}[0-9]*\\.?[0-9]+)(?:\\s+({=qo}[0-9]*\\.?[0-9]+))?)\\])|(?:\\[({=b}\\*)\\])|(?:\\[({=i}/)\\])|(?:\\[({=u},)\\])|(?:\\[({=n}[^\\]]+?)\\])|(?:\\[({=r}\\]))").matcher();
+    private final Matcher markupMatcher = Pattern.compile("({=p}[^\\[]+)|(?:\\[({=e}\\[))|(?:\\[#({=h}[0-9A-Fa-f]{6,8})\\])|(?:\\[@\\s*({=q}({=qh}[0-9]*\\.?[0-9]+)\\s+({=qs}[0-9]*\\.?[0-9]+)\\s+({=qv}[0-9]*\\.?[0-9]+)(?:\\s+({=qo}[0-9]*\\.?[0-9]+))?)\\])|(?:\\[({=b}\\*)\\])|(?:\\[({=i}/)\\])|(?:\\[({=U}!)\\])|(?:\\[({=L}=)\\])|(?:\\[({=u},)\\])|(?:\\[({=n}[^\\]]+?)\\])|(?:\\[({=r}\\]))").matcher();
     private static final char BOLD = '\u4000', ITALIC = '\u8000', REGULAR = '\0';
     private final StringBuilder sb = new StringBuilder(128);
 
@@ -81,12 +84,27 @@ public class GDXMarkup implements IMarkup<Color>{
         IColoredString<Color> cs = new IColoredString.Impl<>();
         Color current = Color.WHITE;
         char mod = REGULAR;
+        int casing = 0;
         while (markupMatcher.find())
         {
             if(markupMatcher.getGroup("p", sb))
             {
-                for (int i = 0; i < sb.length(); i++) {
-                    sb.setCharAt(i, (char)(sb.charAt(i) | mod));
+                switch (casing) {
+                    case -1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toLowerCase((char) (sb.charAt(i) | mod)));
+                        }
+                        break;
+                    case 1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toUpperCase((char) (sb.charAt(i) | mod)));
+                        }
+                        break;
+                    default:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, (char) (sb.charAt(i) | mod));
+                        }
+                        break;
                 }
                 cs.append(sb.toString(), current);
             }
@@ -98,10 +116,12 @@ public class GDXMarkup implements IMarkup<Color>{
             {
                 current = Color.WHITE;
                 mod = REGULAR;
+                casing = 0;
             }
             else if(markupMatcher.isCaptured("u"))
             {
                 mod = REGULAR;
+                casing = 0;
             }
             else if(markupMatcher.getGroup("h", sb))
             {
@@ -135,35 +155,58 @@ public class GDXMarkup implements IMarkup<Color>{
             {
                 mod ^= ITALIC;
             }
+            else if(markupMatcher.isCaptured("U"))
+            {
+                casing = casing == 1 ? 0 : 1;
+            }
+            else if(markupMatcher.isCaptured("L"))
+            {
+                casing = casing == -1 ? 0 : -1;
+            }
             sb.setLength(0);
         }
         return cs;
     }
 
     /**
-     * Similar to {@link #colorString(CharSequence)}, but leaves color tags as they are and only uses style tags, like
-     * {@code [*]} for bold and {@code [/]} for italic. The StringBuilder this returns can be converted to a String or
-     * used directly for further modification, but styles will probably only render correctly if using a TextFamily.
-     * You should be aware that if {@code []} is used to reset both color and style in the given markupString, then only
-     * the style will be reset here but the {@code []} will be removed, which may affect colors if the result is later
-     * given to something that expects color markup to also have been closed. A solution for this is to use {@code [,]}
-     * to reset only styles, and to avoid using {@code []} to change color by explicitly using {@code [WHITE]} to set
-     * the text color back to pure white. This way is only necessary if you have color markup in the markupString you
-     * pass to this method.
-     * @param markupString a String containing color markup (which is left as-is) and/or style markup (which is used)
-     * @return a StringBuilder based on markupString that has the style markup applied and other markup left there.
+     * Similar to {@link #colorString(CharSequence)}, but leaves color tags as they are and only uses case and style
+     * tags, like {@code [*]} for bold, {@code [/]} for italic, {@code [!]} for ALL CAPS and {@code [=]} for lower-case.
+     * The StringBuilder this returns can be converted to a String or used directly for further modification, but styles
+     * will probably only render correctly if using a TextFamily. You should be aware that if {@code []} is used to
+     * reset both color and style in the given markupString, then only the style will be reset here but the {@code []}
+     * will be removed, which may affect colors if the result is later given to something that expects color markup to
+     * also have been closed. A solution for this is to use {@code [,]} to reset only styles, and to avoid using
+     * {@code []} to change color by explicitly using {@code [WHITE]} to set the text color back to pure white. This way
+     * is only necessary if you have color markup in the markupString you pass to this method.
+     * @param markupString a String containing color markup (which is left as-is) and/or case/style markup (which is used)
+     * @return a StringBuilder based on markupString that has the case/style markup applied and other markup left there
      */
     public StringBuilder styleString(final CharSequence markupString)
     {
         markupMatcher.setTarget(markupString);
         char mod = REGULAR;
+        int casing = 0;
         StringBuilder fsb = new StringBuilder(markupString.length());
         while (markupMatcher.find())
         {
             if(markupMatcher.getGroup("p", sb))
             {
-                for (int i = 0; i < sb.length(); i++) {
-                    sb.setCharAt(i, (char)(sb.charAt(i) | mod));
+                switch (casing) {
+                    case -1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toLowerCase((char) (sb.charAt(i) | mod)));
+                        }
+                        break;
+                    case 1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toUpperCase((char) (sb.charAt(i) | mod)));
+                        }
+                        break;
+                    default:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, (char) (sb.charAt(i) | mod));
+                        }
+                        break;
                 }
                 fsb.append(sb);
             }
@@ -186,6 +229,14 @@ public class GDXMarkup implements IMarkup<Color>{
             else if(markupMatcher.isCaptured("i"))
             {
                 mod ^= ITALIC;
+            }
+            else if(markupMatcher.isCaptured("U"))
+            {
+                casing = casing == 1 ? 0 : 1;
+            }
+            else if(markupMatcher.isCaptured("L"))
+            {
+                casing = casing == -1 ? 0 : -1;
             }
             sb.setLength(0);
 
