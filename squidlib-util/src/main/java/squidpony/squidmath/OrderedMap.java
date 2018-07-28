@@ -524,7 +524,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
         key[pos] = k;
         value[pos] = v;
-        //fixOrder(pos);
         order.insert(idx, pos);
         if (size++ >= maxFill)
             rehash(arraySize(size + 1, f));
@@ -539,10 +538,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         return oldValue;
     }
     public V putAt(final K k, final V v, final int idx) {
-//        if(idx <= 0)
-//            return putAndMoveToFirst(k, v);
-//        else if(idx >= size)
-//            return putAndMoveToLast(k, v);
         final int pos = insertAt(k, v, idx);
         if (pos < 0)
             return defRetValue;
@@ -1048,7 +1043,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     }
 
     /**
-     * Modifies the ordering so that the given entry is removed. This method will complete in logarithmic time.
+     * Modifies the ordering so that the given entry is removed. This method will complete in linear time.
      *
      * @param i the index of an entry.
      * @return the iteration-order index of the removed entry
@@ -1064,7 +1059,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     /**
      * Modifies the ordering for a shift from s to d.
      * <br>
-     * This method will complete in logarithmic time or better.
+     * This method will complete in linear time unless the source position is first or last.
      *
      * @param s the source position.
      * @param d the destination position.
@@ -1970,7 +1965,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     protected void rehash(final int newN) {
         final K key[] = this.key;
         final V value[] = this.value;
-        final int mask = newN - 1; // Note that this is used by the hashing macro
+        final int mask = newN - 1;
         final K newKey[] = (K[]) new Object[newN + 1];
         final V newValue[] = (V[]) new Object[newN + 1];
         final int sz = order.size;
@@ -2392,92 +2387,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         order.reorder(ordering);
         return this;
     }
-    private V alterEntry(final int pos, final K replacement) {
-        shiftKeys(pos);
-        final V[] value = this.value;
-        V v = value[pos];
-        value[pos] = null;
-
-        int rep;
-        if (replacement == null) {
-            if (containsNullKey)
-                return v;
-            rep = n;
-            containsNullKey = true;
-        } else {
-            K curr;
-            final K[] key = this.key;
-
-            // The starting point.
-            if (!((curr = key[rep = (hasher.hash(replacement)) & mask]) == null)) {
-                if (hasher.areEqual(curr, replacement))
-                    return v;
-                while (!((curr = key[rep = (rep + 1) & mask]) == null))
-                    if (hasher.areEqual(curr, replacement))
-                        return v;
-            }
-            key[rep] = replacement;
-            value[rep] = v;
-        }
-        fixOrder(pos, rep);
-        return v;
-    }
-    private V alterNullEntry(final K replacement) {
-        containsNullKey = false;
-        key[n] = null;
-        final V[] value = this.value;
-        V v = value[n];
-        value[n] = null;
-
-        int rep;
-        if (replacement == null) {
-            rep = n;
-            containsNullKey = true;
-        } else {
-            K curr;
-            final K[] key = this.key;
-            // The starting point.
-            if ((curr = key[rep = (hasher.hash(replacement)) & mask]) != null) {
-                if (hasher.areEqual(curr, replacement))
-                    return v;
-                while ((curr = key[rep = (rep + 1) & mask]) != null)
-                    if (hasher.areEqual(curr, replacement))
-                        return v;
-            }
-            key[rep] = replacement;
-            value[rep] = v;
-
-        }
-        fixOrder(n, rep);
-        return v;
-    }
-    /*
-        public V alter(final K original, final K replacement) {
-            if (original == null) {
-                if (containsNullKey) {
-                    return alterNullEntry(replacement);
-                }
-                else
-                    return put(replacement, null);
-            }
-            else if(hasher.areEqual(original, replacement))
-                return get(original);
-            K curr;
-            final K[] key = this.key;
-            int pos;
-    
-            if ((curr = key[pos = (hasher.hash(original)) & mask]) == null)
-                return put(replacement, null);
-            if (hasher.areEqual(original, curr))
-                return alterEntry(pos, replacement);
-            while (true) {
-                if ((curr = key[pos = (pos + 1) & mask]) == null)
-                    return put(replacement, null);
-                if (hasher.areEqual(original, curr))
-                    return alterEntry(pos, replacement);
-            }
-        }
-        */
     private int alterEntry(final int pos) {
         value[pos] = null;
         size--;
@@ -2490,8 +2399,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         key[n] = null;
         value[n] = null;
         size--;
-        int idx = fixOrder(n);
-        return idx;
+        return fixOrder(n);
     }
     /**
      * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
@@ -2649,11 +2557,14 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @return {@code true} if the value was replaced
      */
     public boolean replace(K key, V oldValue, V newValue) {
-        if (containsKey(key) && Objects.equals(get(key), newValue)) {
-            put(key, newValue);
-            return true;
-        } else
-            return false;
+        if (containsKey(key)) {
+            V v = get(key);
+            if (v == oldValue || (oldValue != null && oldValue.equals(v))) {
+                put(key, newValue);
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

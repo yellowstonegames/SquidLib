@@ -1186,7 +1186,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
 
     /**
      * Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.
-     *
+     *re
      * @param expected the expected number of elements in a hash table.
      * @param f        the load factor.
      * @return the minimum possible size for a backing array.
@@ -1402,7 +1402,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @return {@code true} if the value was replaced
      */
     public boolean replace(K key, V oldValue, V newValue) {
-        if (containsKey(key) && Objects.equals(get(key), newValue)) {
+        if (containsKey(key) && Objects.equals(get(key), oldValue)) {
             put(key, newValue);
             return true;
         } else

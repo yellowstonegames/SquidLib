@@ -2050,85 +2050,6 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         order.reorder(ordering);
         return this;
     }
-    private int alterEntry(final int pos, final int replacement) {
-        shiftKeys(pos);
-        final int[] value = this.value;
-        int v = value[pos];
-
-        int rep;
-        if (replacement == 0) {
-            if (containsNullKey)
-                return v;
-            rep = n;
-            containsNullKey = true;
-        } else {
-            int curr;
-            final int[] key = this.key;
-
-            // The starting point.
-            if (!((curr = key[rep = (HashCommon.mix(replacement)) & mask]) == 0)) {
-                if (curr == replacement)
-                    return v;
-                while (!((curr = key[rep = (rep + 1) & mask]) == 0))
-                    if (curr == replacement)
-                        return v;
-            }
-            key[rep] = replacement;
-            value[rep] = v;
-        }
-        fixOrder(pos, rep);
-        return v;
-    }
-    private int alterNullEntry(final int replacement) {
-        if (replacement == 0)
-            return value[n];
-        containsNullKey = false;
-        final int[] value = this.value;
-        int v = value[n];
-
-        int rep;
-        int curr;
-        final int[] key = this.key;
-        // The starting point.
-        if ((curr = key[rep = (HashCommon.mix(replacement)) & mask]) != 0) {
-            if (curr == replacement)
-                return v;
-            while ((curr = key[rep = (rep + 1) & mask]) != 0)
-                if (curr == replacement)
-                    return v;
-        }
-        key[rep] = replacement;
-        value[rep] = v;
-        fixOrder(n, rep);
-        return v;
-    }
-    /*
-        public V alter(final K original, final K replacement) {
-            if (original == null) {
-                if (containsNullKey) {
-                    return alterNullEntry(replacement);
-                }
-                else
-                    return put(replacement, null);
-            }
-            else if(original == replacement)
-                return get(original);
-            K curr;
-            final K[] key = this.key;
-            int pos;
-    
-            if ((curr = key[pos = (HashCommon.mix(original)) & mask]) == null)
-                return put(replacement, null);
-            if (original == curr)
-                return alterEntry(pos, replacement);
-            while (true) {
-                if ((curr = key[pos = (pos + 1) & mask]) == null)
-                    return put(replacement, null);
-                if (original == curr)
-                    return alterEntry(pos, replacement);
-            }
-        }
-        */
     private int alterEntry(final int pos) {
         size--;
         int idx = fixOrder(pos);
@@ -2293,7 +2214,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      * @return {@code true} if the value was replaced
      */
     public boolean replace(int key, int oldValue, int newValue) {
-        if (containsKey(key) && get(key) == newValue) {
+        if (containsKey(key) && get(key) == oldValue) {
             put(key, newValue);
             return true;
         } else
