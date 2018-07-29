@@ -21,7 +21,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 23;
+    private int mode = 13;
     private int modes = 24;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -42,6 +42,103 @@ public class MathVisualizer extends ApplicationAdapter {
         final double mixed = NumberTools.setExponent((base * index >>> 12 ^ index) * 1.6180339887498948482, 0x400); // 2.0 to 4.0
         return NumberTools.setExponent(Math.pow((mixed + index), mixed * 2.6180339887498948482), 0x3ff) - 1.0;
 //        return ((Long.rotateLeft((base *= index), 31) ^ Long.rotateLeft(base, 17) ^ Long.rotateLeft(base, 42)) >>> 11) * 0x1p-53;
+    }
+    private static class XSP {
+        private long state0;//, state1;
+        public XSP()
+        {
+            state0 = (long) ((Math.random() - 0.5) * 0x10000000000000L)
+                    ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L);
+//            state1 = ~LightRNG.determine(state0);
+        }
+        public long nextLong()
+        {
+//            long s1 = this.state0;
+//            final long s0 = this.state1;
+//            this.state0 = s0;
+//            s1 ^= s1 << 23;
+//            return (this.state1 = (s1 ^ s0 ^ (s1 >>> 17) ^ (s0 >>> 26))) + s0;
+
+            long z = (state0 = state0 * 0x41C64E6DL + 1L);
+            z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
+            return (z ^ z >>> 25);
+
+//            final long s0 = state0;
+//            long s1 = state1;
+//            final long result = s0 + s1;
+//            s1 ^= s0;
+//            state0 = (s0 << 55 | s0 >>> 9) ^ s1 ^ (s1 << 14);
+//            state1 = (s1 << 36 | s1 >>> 28);
+//            return (result << 23 | result >>> 41) + s0;
+
+        }
+        public long nextLong (final long n) {
+            if (n <= 0) return 0L;
+            for (;;) {
+                final long bits = nextLong() >>> 1;
+                final long value = bits % n;
+                if (bits - value + n - 1L >= 0L) return value;
+            }
+        }
+        public long nextLongMult(long bound)
+        {
+            long rand = nextLong();
+            if (bound <= 0) return 0;
+            final long randLow = rand & 0xFFFFFFFFL;
+            final long boundLow = bound & 0xFFFFFFFFL;
+            rand >>>= 32;
+            bound >>>= 32;
+            final long z = (randLow * boundLow >>> 32);
+            long t = rand * boundLow + z;
+            final long tLow = t & 0xFFFFFFFFL;
+            t >>>= 32;
+            return rand * bound + t + (tLow + randLow * bound >> 32);
+        }
+        public long nextLongBit(long bound)
+        {
+            final long mask = -1L >>> Long.numberOfLeadingZeros(--bound|1L);
+            long x;
+            do {
+                x = nextLong() & mask;
+            } while (x > bound);
+            return x;
+
+        }
+    }
+    private final XoRoRNG r0 = new XoRoRNG(1234567890L),
+            r1 = new XoRoRNG(1234567890L),
+            r2 = new XoRoRNG(1234567890L);
+    public final long mult128(long bound)
+    {
+        long rand = r0.nextLong();
+        if (bound <= 0) return 0;
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long boundLow = bound & 0xFFFFFFFFL;
+        rand >>>= 32;
+        bound >>>= 32;
+        final long z = (randLow * boundLow >>> 32);
+        long t = rand * boundLow + z;
+        final long tLow = t & 0xFFFFFFFFL;
+        t >>>= 32;
+        return rand * bound + t + (tLow + randLow * bound >> 32);
+    }
+    public final long bitmask(long bound)
+    {
+        final long mask = -1L >>> Long.numberOfLeadingZeros(--bound|1L);
+        long x;
+        do {
+            x = r2.nextLong() & mask;
+        } while (x > bound);
+        return x;
+    }
+    public final long traditional(final long bound)
+    {
+        if (bound <= 0) return 0L;
+        for (;;) {
+            final long bits = r1.nextLong() & 0x7FFFFFFFFFFFFFFFL;
+            final long value = bits % bound;
+            if (bits - value + bound - 1L >= 0L) return value;
+        }
     }
 
     @Override
@@ -377,9 +474,10 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 14: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " MathUtils.random(0x1FF)");
+                        " XSP, mult128 & 0x1FFL");
+                XSP random = new XSP();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[MathUtils.random(0x1FF)]++;
+                    amounts[(int) ((random.nextLongMult(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -394,14 +492,33 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.put(i, j, -0x1.7677e8p125F);
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " MathUtils.random(0x1FF)");
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[MathUtils.random(0x1FF)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.put(i, j, color);
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.put(i, j, -0x1.7677e8p125F);
+//                    }
+//                }
             }
             break;
             case 15: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, random.nextInt(0x200)");
-                RandomXS128 random = new RandomXS128();
+                        " XSP, bitBased & 0x1FFL");
+                XSP random = new XSP();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[random.nextInt(512)]++;
+                    amounts[(int) ((random.nextLongBit(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -416,14 +533,33 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.put(i, j, -0x1.7677e8p125F);
                     }
                 }
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " RandomXS128, random.nextInt(0x200)");
+//                RandomXS128 random = new RandomXS128();
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[random.nextInt(512)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.put(i, j, color);
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.put(i, j, -0x1.7677e8p125F);
+//                    }
+//                }
             }
             break;
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " LinnormRNG, random.nextLong(0x1000000000000000L) & 0x1FFL");
-                LinnormRNG random = new LinnormRNG();
+                        " XSP, traditional & 0x1FFL");
+                XSP random = new XSP();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((random.nextLong(0x1000000000000000L)) & 0x1FFL)]++;
+                    amounts[(int) ((random.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -438,6 +574,25 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.put(i, j, -0x1.7677e8p125F);
                     }
                 }
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " LinnormRNG, random.nextLong(0x1000000000000000L) & 0x1FFL");
+//                LinnormRNG random = new LinnormRNG();
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) ((random.nextLong(0x1000000000000000L)) & 0x1FFL)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.put(i, j, color);
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.put(i, j, -0x1.7677e8p125F);
+//                    }
+//                }
             }
             break;
             case 17: {
@@ -463,10 +618,10 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 18: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " RandomXS128, random.nextLong(0x1000000000000000L) & 0x1FFL");
+                        " RandomXS128, random.nextLong(0x1800000000000000L) & 0x1FFL");
                 RandomXS128 random = new RandomXS128();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((random.nextLong(0x1000000000000000L)) & 0x1FFL)]++;
+                    amounts[(int) ((random.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0

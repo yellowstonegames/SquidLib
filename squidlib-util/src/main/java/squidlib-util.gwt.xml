@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit trunk//EN"
-        "https://gwt.googlesource.com/gwt/+/master/./distro-source/core/src/gwt-module.dtd">
+        "http://www.gwtproject.org/doctype/2.8.0/gwt-module.dtd">
 <!-- To compile to Gwt, you need to reference this file in your master .gwt.xml
      file (usually called GdxDefinition.gwt.xml) as follows:
      <inherits name='squidlib-util' />

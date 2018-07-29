@@ -93,20 +93,6 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  */
 public class RNG implements Serializable, IRNG {
 
-    /**
-     * A very small multiplier used to reduce random numbers to from the {@code [0.0,9007199254740991.0)} range to the
-     * {@code [0.0,1.0)} range. Equivalent to {@code 1.0 / (1 << 53)}, if that number makes more sense to you, but the
-     * source uses the hexadecimal double literal {@code 0x1p-53}. The hex literals are a nice "hidden feature" of Java
-     * 5 onward, and allow exact declaration of floating-point numbers without precision loss from decimal conversion.
-     */
-	protected static final double DOUBLE_UNIT = 0x1p-53; // more people should know about hex double literals!
-    /**
-     * A very small multiplier used to reduce random numbers to from the {@code [0.0,16777216.0)} range to the
-     * {@code [0.0,1.0)} range. Equivalent to {@code 1.0f / (1 << 24)}, if that number makes more sense to you, but the
-     * source uses the hexadecimal double literal {@code 0x1p-24f}. The hex literals are a nice "hidden feature" of Java
-     * 5 onward, and allow exact declaration of floating-point numbers without precision loss from decimal conversion.
-     */
-	protected static final float FLOAT_UNIT = 0x1p-24f;
 	protected RandomnessSource random;
 	protected double nextNextGaussian;
 	protected boolean haveNextNextGaussian = false;

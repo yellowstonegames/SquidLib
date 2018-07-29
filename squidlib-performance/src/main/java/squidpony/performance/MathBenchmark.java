@@ -38,8 +38,8 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
+import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.LightRNG;
 
 import java.util.concurrent.TimeUnit;
 
@@ -83,7 +83,7 @@ public class MathBenchmark {
         for (int i = 0; i < 65536; i++) {
             floatInputs[i] = (float) (inputs[i] =
                     //-2.0 + (i * 0.0625)
-                    NumberTools.randomDouble(i + 107) * 4096.0
+                    NumberTools.randomSignedDouble(i + 107) * 4096.0
             );
             arcInputs[i] = NumberTools.randomSignedDouble(i + 421L);
         }
@@ -563,13 +563,24 @@ public class MathBenchmark {
     @Benchmark
     public double measureApproxAtan2Alt()
     {
-        return atan2_alt(inputs[atan2ApproxAY++ & 0xFFFF], inputs[atan2ApproxAX++ & 0xFFFF]);
+        return NumberTools.atan2Rough(inputs[atan2ApproxAY++ & 0xFFFF], inputs[atan2ApproxAX++ & 0xFFFF]);
     }
 
     @Benchmark
     public float measureApproxAtan2AltFloat()
     {
-        return atan2_alt(floatInputs[atan2ApproxAYF++ & 0xFFFF], floatInputs[atan2ApproxAXF++ & 0xFFFF]);
+        return NumberTools.atan2Rough(floatInputs[atan2ApproxAYF++ & 0xFFFF], floatInputs[atan2ApproxAXF++ & 0xFFFF]);
+    }
+
+    @Benchmark
+    public double measureAtan2Baseline()
+    {
+        return inputs[atan2ApproxAY++ & 0xFFFF] + inputs[atan2ApproxAX++ & 0xFFFF];
+    }
+    @Benchmark
+    public float measureAtan2BaselineFloat()
+    {
+        return floatInputs[atan2ApproxAYF++ & 0xFFFF] + floatInputs[atan2ApproxAXF++ & 0xFFFF];
     }
 
     /*
@@ -603,9 +614,9 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
 //        System.out.println("float approx     : " + u.measureCosApproxFloat());
 //        System.out.println("Climatiano       : " + u.measureCosApproxClimatiano());
 //        System.out.println("ClimatianoLP     : " + u.measureCosApproxClimatianoLP());
-        for (long r = 100L; r < 4197; r++) {
+        for (int r = 0; r < 0x1000; r++) {
             //margin += 0.0001;
-            short i = (short) (LightRNG.determine(r) & 0xFFFF);
+            short i = (short) (LinnormRNG.determine(r) & 0xFFFF);
             u.mathCos = i;
             u.mathSin = i;
             u.cosOld = i;
@@ -666,17 +677,18 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
         System.out.println("cos GDX deg      : " + cosDegGdxError);
         System.out.println("asin approx      : " + asinChristensenError);
         double atan2ApproxError = 0, atan2GDXError = 0, atan2AltError = 0, at;
-        for(int r = 0x100; r < 0x10100; r++)
+        for(int r = 0; r < 0x10000; r++)
         {
-            short i = (short) (LightRNG.determine(r) & 0xFFFF);
+            short i = (short) (LinnormRNG.determine(r) & 0xFFFF);
+            short j = (short) (LinnormRNG.determine(-0x20000 - r - i) & 0xFFFF);
             u.mathAtan2X = i;
-            u.mathAtan2Y = (short)~i;
+            u.mathAtan2Y = j;
             u.atan2ApproxX = i;
-            u.atan2ApproxY = (short)~i;
+            u.atan2ApproxY = j;
             u.atan2ApproxAX = i;
-            u.atan2ApproxAY = (short)~i;
+            u.atan2ApproxAY = j;
             u.atan2GdxX = i;
-            u.atan2GdxY = (short)~i;
+            u.atan2GdxY = j;
             at = u.measureMathAtan2();
             atan2ApproxError += Math.abs(u.measureApproxAtan2() - at);
             atan2AltError += Math.abs(u.measureApproxAtan2Alt() - at);
