@@ -851,12 +851,10 @@ public class RNG implements Serializable, IRNG {
         final long randLow = rand & 0xFFFFFFFFL;
         final long boundLow = bound & 0xFFFFFFFFL;
         rand >>>= 32;
-        bound >>>= 32;
-        final long z = (randLow * boundLow >>> 32);
-        long t = rand * boundLow + z;
-        final long tLow = t & 0xFFFFFFFFL;
-        t >>>= 32;
-        return rand * bound + t + (tLow + randLow * bound >> 32);
+        bound >>= 32;
+        final long z = (randLow * boundLow >> 32);
+        final long t = rand * boundLow + z;
+        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
     }
 
     /**

@@ -2098,12 +2098,12 @@ public class CustomDijkstraMap implements Serializable {
             return new IntVLA(1);
         }
         if (cachedSize == 1 && preferLongerPaths == cachedLongerPaths && impassable2.hash64() == cachedImpassable &&
-                CrossHash.Wisp.hash64(fearSources) == cachedFearSources) {
+                CrossHash.hash64(fearSources) == cachedFearSources) {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
             cachedImpassable = impassable2.hash64();
-            cachedFearSources = CrossHash.Wisp.hash64(fearSources);
+            cachedFearSources = CrossHash.hash64(fearSources);
             cachedSize = 1;
             resetMap();
             for (int g = 0; g < fearSources.length; g++) {
@@ -2723,12 +2723,12 @@ public class CustomDijkstraMap implements Serializable {
             return new IntVLA(1);
         }
         if (cachedSize == size && preferLongerPaths == cachedLongerPaths && impassable2.hash64() == cachedImpassable &&
-                CrossHash.Wisp.hash64(fearSources) == cachedFearSources) {
+                CrossHash.hash64(fearSources) == cachedFearSources) {
             gradientMap = cachedFleeMap;
         } else {
             cachedLongerPaths = preferLongerPaths;
             cachedImpassable = impassable2.hash64();
-            cachedFearSources = CrossHash.Wisp.hash64(fearSources);
+            cachedFearSources = CrossHash.hash64(fearSources);
             cachedSize = size;
             resetMap();
             for (int g = 0; g < fearSources.length; g++) {

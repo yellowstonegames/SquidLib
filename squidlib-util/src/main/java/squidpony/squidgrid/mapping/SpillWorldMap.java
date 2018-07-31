@@ -35,7 +35,7 @@ public class SpillWorldMap {
         width = 20;
         height = 20;
         name = "Permadeath Island";
-        rng = new StatefulRNG(CrossHash.Lightning.hash64(name));
+        rng = new StatefulRNG(CrossHash.hash64(name));
     }
     /**
      * Constructs a SpillWorldMap using the given width, height, and world name, and uses the world name as the
@@ -49,7 +49,7 @@ public class SpillWorldMap {
         this.width = Math.max(width, 20);
         this.height = Math.max(height, 20);
         name = worldName;
-        rng = new StatefulRNG(CrossHash.Lightning.hash64(name));
+        rng = new StatefulRNG(CrossHash.hash64(name));
     }
 
     /**

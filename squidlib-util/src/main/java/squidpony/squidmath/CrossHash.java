@@ -3398,7 +3398,10 @@ public class CrossHash {
     /**
      * A mid-quality hashing function that has been tested with SMHasher and has passed all of it when running on
      * {@code byte[]} data, not larger items like {@code char[]} or {@code long[]}. The code to hash bytes is identical
-     * in {@link Hive}, but Hive has better behavior on chars, ints, longs, and so on.
+     * in {@link Hive}, but Hive has better behavior on chars, ints, longs, and so on. You should prefer Hive, which is
+     * now the default algorithm for {@link CrossHash#hash(CharSequence)} (as well as all overloads of hash() and
+     * hash64() ), in place of Jolt unless you can tolerate mediocre quality when hashing ints, longs, objects, etc.
+     * (better than Wisp, though) but do want closer speed to Wisp than Hive offers on those types.
      * <br>
      * Its design is similar to Lightning or Wisp, but it doesn't use bitwise rotations and runs what would otherwise be
      * the output through MurmurHash3's finalization step (its {@code fmix64()} function) at the very end. Parts of the
