@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import static squidpony.squidgrid.gui.gdx.SColor.colorFromFloat;
-
 /**
  * Class for creating text blocks.
  *
@@ -893,7 +891,8 @@ public class TextCellFactory implements Disposable {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
-            bmpFont.setColor(1f,1f,1f,1f);
+            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
+            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -921,7 +920,8 @@ public class TextCellFactory implements Disposable {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
-            bmpFont.setColor(1f,1f,1f,1f);
+            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
+            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
@@ -955,6 +955,8 @@ public class TextCellFactory implements Disposable {
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
             batch.setColor(orig);
         } else {
+            batch.setColor(r, g, b, a); // round trip so FilterBatch can filter BitmapFontCache
+            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.setColor(r, g, b, a);
             bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
@@ -986,7 +988,8 @@ public class TextCellFactory implements Disposable {
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
             batch.setColor(orig);
         } else {
-            bmpFont.setColor(color);
+            batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
+            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -1017,7 +1020,8 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else
         {
-            colorFromFloat(bmpFont.getColor(), encodedColor);
+            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
+            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
     }
@@ -1043,7 +1047,8 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else
         {
-            bmpFont.getColor().set(color);
+            batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
+            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
@@ -1070,7 +1075,8 @@ public class TextCellFactory implements Disposable {
             batch.setColor(orig);
         } else
         {
-            colorFromFloat(bmpFont.getColor(), encodedColor);
+            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
+            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
@@ -1317,6 +1323,8 @@ public class TextCellFactory implements Disposable {
         for (int i = 0; i < w; i++, wm += actualCellWidth) {
             hm = y + (h - 1) * actualCellHeight;
             for (int j = 0; j < h; j++, hm -= actualCellHeight) {
+                if(encodedColors[i][j] == 0f)
+                    continue;
                 batch.setColor(encodedColors[i][j]);
                 batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f
             }
