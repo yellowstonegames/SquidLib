@@ -219,7 +219,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // you can use granularity = 2 without much difference (it may perform better), but granularity starts to
         // take a toll on visual quality at 3 or higher.
         for (int i = 0; i < colorCenters.length; i++) {
-            colorCenters[i].granularity = 2;
+            colorCenters[i].setGranularity(2);
         }
         //DefaultResources.getSCC().granularity = 3;
 

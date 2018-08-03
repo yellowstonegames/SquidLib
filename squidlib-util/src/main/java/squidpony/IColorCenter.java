@@ -373,9 +373,7 @@ public interface IColorCenter<T> {
 			this.filter = filter;
 			return this;
 		}
-
-		protected transient Long tempValue;
-
+		
         @SuppressWarnings("SuspiciousMethodCalls")
 		@Override
         public T get(int red, int green, int blue, int opacity) {
@@ -404,7 +402,7 @@ public interface IColorCenter<T> {
 
         @Override
         public T getHSV(float hue, float saturation, float value, float opacity) {
-            if ( saturation < 0.0001 )                       //HSV from 0 to 1
+            if ( saturation < 0.0001f )                       //HSV from 0 to 1
             {
                 return get(Math.round(value * 255), Math.round(value * 255), Math.round(value * 255),
                         Math.round(opacity * 255));

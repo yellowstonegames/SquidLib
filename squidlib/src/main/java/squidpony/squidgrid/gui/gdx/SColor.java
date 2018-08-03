@@ -12062,7 +12062,24 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
-     * The "luma," or lightness, of the given packed float in YCbCr format; ranges from 0.0f to 1.0f .
+     * The "luma" of the given Color, which is like its lightness, in YCbCr format; ranges from 0.0f to 1.0f .
+     * You can go back to an RGB color as a packed float with {@link #floatGetYCbCr(float, float, float, float)}.
+     * YCbCr is useful for modifications to colors because you can get a grayscale version of a color by setting Cb and
+     * Cr to 0, you can desaturate by multiplying Cb and Cr by a number between 0 and 1, you can oversaturate by
+     * multiplying Cb and Cr by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth.
+     * @param color a libGDX Color or SColor; will not be modified
+     * @return the luma as a float from 0.0f to 1.0f
+     */
+    public static float luma(final Color color)
+    {
+        return (color.r * 0.299f) +
+               (color.g * 0.587f) +
+               (color.r * 0.114f);
+    }
+
+    /**
+     * The "luma" of the given packed float, which is like its lightness, in YCbCr format; ranges from 0.0f to 1.0f .
      * You can go back to an RGB color as a packed float with {@link #floatGetYCbCr(float, float, float, float)}.
      * YCbCr is useful for modifications to colors because you can get a grayscale version of a color by setting Cb and
      * Cr to 0, you can desaturate by multiplying Cb and Cr by a number between 0 and 1, you can oversaturate by

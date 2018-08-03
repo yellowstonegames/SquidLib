@@ -3,9 +3,12 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.IntMap;
 import squidpony.IColorCenter;
 import squidpony.IFilter;
+import squidpony.panel.IColoredString;
 import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.StatefulRNG;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ import java.util.ArrayList;
  * @author Tommy Ettinger
  * @see SColor Another way to obtain colors by using pre-allocated (and named) instances.
  */
-public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
+public class SquidColorCenter implements IColorCenter<Color> {
 
     /**
      * How different requested colors need to be to make a new color; should range from 0 to at most 6.
@@ -30,7 +33,8 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      * many requests at granularity 1 (2 raised to the granularity), four times as many at granularity 2, and so on.
      * Defaults to 1, which seems to help ensure visually-identical colors are not created more than once.
      */
-    public int granularity = 1;
+    private int granularity = 1;
+    private int granularityMask = 0xFE;
 
     /**
      * Gets the granularity, which is how different requested colors need to be to make a new color; can be from 0 to 6.
@@ -54,8 +58,11 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
      */
     public void setGranularity(int granularity) {
         this.granularity = MathUtils.clamp(granularity, 0, 6);
+        granularityMask = 0xFF << this.granularity & 0xFF;
     }
 
+    public IFilter<Color> filter;
+    protected IntMap<Color> cache;
     /**
      * A fresh filter-less color center.
      */
@@ -72,53 +79,219 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
 	 */
     public SquidColorCenter(/*Nullable*/IFilter<Color> filterEffect)
     {
-    	super(filterEffect);
+        cache = new IntMap<>(256);
+    	filter = filterEffect;
     }
 
     @Override
-    protected Color create(int red, int green, int blue, int opacity) {
-        if (filter == null)
-			/* No filtering */
-            return new Color(red / 255f, green / 255f, blue / 255f, opacity / 255f);
-        else
-			/* Some filtering */
-            return filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 255f);
+    public Color get(int red, int green, int blue, int opacity) {
+        int abgr = (opacity &= granularityMask & 0xFE) << 24
+                | (blue &= granularityMask) << 16
+                | (green &= granularityMask) << 8
+                | (red &= granularityMask);
+        Color result;
+        if ((result = cache.get(abgr)) != null)
+            return result;
+        if (filter == null) {    /* No filtering */
+            result = new Color(red / 255f, green / 255f, blue / 255f, opacity / 254f);
+        }
+        else {                   /* Some filtering */
+            result = filter.alter(red / 255f, green / 255f, blue / 255f, opacity / 254f);
+        }
+        cache.put(abgr, result);
+        return result;
     }
+
+    /**
+     * @param red   The red component. For screen colors, in-between 0 (inclusive)
+     *              and 256 (exclusive).
+     * @param green The green component. For screen colors, in-between 0 (inclusive)
+     *              and 256 (exclusive).
+     * @param blue  The blue component. For screen colors, in-between 0 (inclusive)
+     *              and 256 (exclusive).
+     * @return An opaque color.
+     */
+    @Override
+    public Color get(int red, int green, int blue) {
+        return get(red, green, blue, 255);
+    }
+
+    /**
+     * @param hue        The hue of the desired color from 0.0 (red, inclusive) towards orange, then
+     *                   yellow, and eventually to purple before looping back to almost the same red
+     *                   (1.0, exclusive). Values outside this range should be treated as wrapping
+     *                   around, so 1.1f and -0.9f would be the same as 0.1f .
+     * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)
+     *                   to 1.0 (a bright color, inclusive)
+     * @param value      the value (essentially lightness) of the color from 0.0 (black,
+     *                   inclusive) to 1.0 (very bright, inclusive).
+     * @param opacity    the alpha component as a float; 0.0f is clear, 1.0f is opaque.
+     * @return a possibly transparent color
+     */
+    @Override
+    public Color getHSV(float hue, float saturation, float value, float opacity) {
+        if ( saturation < 0.0001f )                       //HSV from 0 to 1
+        {
+            return get(Math.round(value * 255), Math.round(value * 255), Math.round(value * 255),
+                    Math.round(opacity * 255));
+        }
+        else
+        {
+            float h = ((hue + 6f) % 1f) * 6f; // allows negative hue to wrap
+            int i = (int)h;
+            float a = value * (1 - saturation);
+            float b = value * (1 - saturation * (h - i));
+            float c = value * (1 - saturation * (1 - (h - i)));
+
+            switch (i)
+            {
+                case 0: return get(Math.round(value * 255), Math.round(c * 255), Math.round(a * 255),
+                        Math.round(opacity * 255));
+                case 1: return get(Math.round(b * 255), Math.round(value * 255), Math.round(a * 255),
+                        Math.round(opacity * 255));
+                case 2: return get(Math.round(a * 255), Math.round(value * 255), Math.round(c * 255),
+                        Math.round(opacity * 255));
+                case 3: return get(Math.round(a * 255), Math.round(b * 255), Math.round(value * 255),
+                        Math.round(opacity * 255));
+                case 4: return get(Math.round(c * 255), Math.round(a * 255), Math.round(value * 255),
+                        Math.round(opacity * 255));
+                default: return get(Math.round(value * 255), Math.round(a * 255), Math.round(b * 255),
+                        Math.round(opacity * 255));
+            }
+        }
+    }
+
+    /**
+     * @param hue        The hue of the desired color from 0.0 (red, inclusive) towards orange, then
+     *                   yellow, and eventually to purple before looping back to almost the same red
+     *                   (1.0, exclusive)
+     * @param saturation the saturation of the color from 0.0 (a grayscale color; inclusive)
+     *                   to 1.0 (a bright color, exclusive)
+     * @param value      the value (essentially lightness) of the color from 0.0 (black,
+     *                   inclusive) to 1.0 (very bright, inclusive).
+     * @return an opaque color
+     */
+    @Override
+    public Color getHSV(float hue, float saturation, float value) {
+        return getHSV(hue, saturation, value, 1f);
+    }
+
+    /**
+     * @return Opaque white.
+     */
+    @Override
+    public Color getWhite() {
+        return SColor.WHITE;
+    }
+
+    /**
+     * @return Opaque black.
+     */
+    @Override
+    public Color getBlack() {
+        return SColor.BLACK;
+    }
+
+    /**
+     * @return The fully transparent color.
+     */
+    @Override
+    public Color getTransparent() {
+        return SColor.TRANSPARENT;
+    }
+
+    /**
+     * @param rng     any IRNG from SquidLib, such as an RNG, StatefulRNG, or GWTRNG.
+     * @param opacity The alpha component. In-between 0 (inclusive) and 256
+     *                (exclusive). Larger values mean more opacity; 0 is clear.
+     * @return A random color, except for the alpha component.
+     */
+    @Override
+    public Color getRandom(IRNG rng, int opacity) {
+        return get((rng.nextInt() & 0xFFFFFF00) | (opacity & 0xFF));
+    }
+
     @Override
     public Color filter(Color c)
     {
         if(c == null)
             return Color.CLEAR;
         else
-            return super.filter(c);
+            return filter == null ? c : filter.alter(c.r, c.g, c.b, c.a);
+    }
+
+    /**
+     * @param ics
+     * @return {@code ics} filtered according to {@link #filter(Object)}. May be
+     * {@code ics} itself if unchanged.
+     */
+    @Override
+    public IColoredString<Color> filter(IColoredString<Color> ics) {
+        /*
+         * It is common not to have a filter or to have the identity one. To
+         * avoid always copying strings in this case, we first roll over the
+         * string to see if there'll be a change.
+         *
+         * This is clearly a subjective design choice but my industry
+         * experience is that minimizing allocations is the thing to do for
+         * performances, hence I prefer iterating twice to do that.
+         */
+        boolean change = false;
+        for (IColoredString.Bucket<Color> bucket : ics) {
+            final Color in = bucket.getColor();
+            if (in == null)
+                continue;
+            final Color out = filter(in);
+            if (in != out) {
+                change = true;
+                break;
+            }
+        }
+
+        if (change) {
+            final IColoredString<Color> result = IColoredString.Impl.create();
+            for (IColoredString.Bucket<Color> bucket : ics)
+                result.append(bucket.getText(), filter(bucket.getColor()));
+            return result;
+        } else
+            /* Only one allocation: the iterator, yay \o/ */
+            return ics;
+    }
+
+    /**
+     * Gets a copy of t and modifies it to make a shade of gray with the same brightness.
+     * The doAlpha parameter causes the alpha to be considered in the calculation of brightness and also changes the
+     * returned alpha of the color, so translucent colors are considered darker and fully clear ones are black (and
+     * still fully clear).
+     * <br>
+     * This uses a perceptual calculation of brightness that matches the luma calculation used in the YCbCr color space.
+     * It does not necessarily match other brightness calculations, such as value as used in HSV.
+     * <br>
+     * Not related to reified types or any usage of "reify."
+     *
+     * @param color   a T to copy; only the copy will be modified
+     * @param doAlpha Whether to include (and hereby change) the alpha component; if false alpha is kept as-is
+     * @return A monochromatic variation of {@code t}.
+     */
+    @Override
+    public Color greify(Color color, boolean doAlpha) {
+        float luma = SColor.luma(color);
+        if(doAlpha) {
+            luma *= color.a;
+            return get(luma, luma, luma, luma);
+        }
+        return get(luma, luma, luma, color.a);
+
     }
 
     public Color get(long c)
     {
-        return get((int)((c >> 24) & 0xff), (int)((c >> 16) & 0xff), (int)((c >> 8) & 0xff), (int)(c & 0xff));
+        return get((int)((c >>> 24) & 0xff), (int)((c >>> 16) & 0xff), (int)((c >>> 8) & 0xff), (int)(c & 0xff));
     }
     public Color get(float r, float g, float b, float a)
     {
         return get((int)(255.9999f * r), (int)(255.9999f * g), (int)(255.9999f * b), (int)(255.9999f * a));
     }
-
-    @Override
-    protected long getUniqueIdentifier(int r, int g, int b, int a) {
-        return super.getUniqueIdentifier(
-                r & 0xff << granularity,
-                g & 0xff << granularity,
-                b & 0xff << granularity,
-                a & 0xff << granularity);
-    }
-    @Override
-    protected long getUniqueIdentifier(Color c) {
-        return super.getUniqueIdentifier(
-                (int)(c.r * 255) & 0xff << granularity,
-                (int)(c.g * 255) & 0xff << granularity,
-                (int)(c.b * 255) & 0xff << granularity,
-                (int)(c.a * 255) & 0xff << granularity);
-    }
-
     /**
      * Gets the linear interpolation from Color start to Color end, changing by the fraction given by change.
      * @param start the initial Color
@@ -169,13 +342,110 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
 		return Math.round(c.a * 255f);
 	}
 
+    /**
+     * @param c a concrete color
+     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
+     * eventually to purple before looping back to almost the same red (1.0, exclusive)
+     */
+    @Override
+    public float getHue(Color c) {
+        return SColor.hue(c);
+    }
+
+    /**
+     * @param c a concrete color
+     * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
+     * bright color, exclusive)
+     */
+    @Override
+    public float getSaturation(Color c) {
+        return SColor.saturation(c);
+    }
+    /**
+     * @param r the red component in 0.0 to 1.0 range, typically
+     * @param g the green component in 0.0 to 1.0 range, typically
+     * @param b the blue component in 0.0 to 1.0 range, typically
+     * @return the saturation of the color from 0.0 (a grayscale color; inclusive) to 1.0 (a
+     * bright color, exclusive)
+     */
+    public float getSaturation(float r, float g, float b) {
+        float min = Math.min(Math.min(r, g ), b);    //Min. value of RGB
+        float max = Math.max(Math.max(r, g), b);    //Min. value of RGB
+        float delta = max - min;                     //Delta RGB value
+
+        float saturation;
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            saturation = 0;
+        }
+        else                                    //Chromatic data...
+        {
+            saturation = delta / max;
+        }
+        return saturation;
+    }
+
+    /**
+     * @param r the red component in 0.0 to 1.0 range, typically
+     * @param g the green component in 0.0 to 1.0 range, typically
+     * @param b the blue component in 0.0 to 1.0 range, typically
+     * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to
+     * 1.0 (very bright, inclusive).
+     */
+    public float getValue(float r, float g, float b)
+    {
+        return Math.max(Math.max(r, g), b);
+    }
+
+    /**
+     * @param r the red component in 0.0 to 1.0 range, typically
+     * @param g the green component in 0.0 to 1.0 range, typically
+     * @param b the blue component in 0.0 to 1.0 range, typically
+     * @return The hue of the color from 0.0 (red, inclusive) towards orange, then yellow, and
+     * eventually to purple before looping back to almost the same red (1.0, exclusive)
+     */
+    public float getHue(float r, float g, float b) {
+        float min = Math.min(Math.min(r, g ), b);    //Min. value of RGB
+        float max = Math.max(Math.max(r, g), b);    //Min. value of RGB
+        float delta = max - min;                     //Delta RGB value
+
+        float hue;
+
+        if ( delta < 0.0001f )                     //This is a gray, no chroma...
+        {
+            hue = 0;                                //HSV results from 0 to 1
+        }
+        else                                    //Chromatic data...
+        {
+            float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;
+            float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;
+            float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;
+
+            if       (r == max) hue = bDelta - gDelta;
+            else if (g == max) hue = (1f / 3f) + rDelta - bDelta;
+            else                 hue = (2f / 3f) + gDelta - rDelta;
+
+            if (hue < 0) hue += 1f;
+            else if (hue > 1) hue -= 1;
+        }
+        return hue;
+    }
+
+    /**
+     * @param c a concrete color
+     * @return the value (essentially lightness) of the color from 0.0 (black, inclusive) to
+     * 1.0 (very bright, inclusive).
+     */
+    @Override
+    public float getValue(Color c) {
+        return SColor.value(c);
+    }
+
     public static int encode (Color color) {
         if (color == null)
             return 0;
-        return (Math.round(color.r * 255.0f) << 24)
-                | (Math.round(color.g * 255.0f) << 16)
-                | (Math.round(color.b * 255.0f) << 8)
-                | Math.round(color.a * 255.0f);
+        return color.toIntBits();
     }
 
     /**
@@ -634,4 +904,37 @@ public class SquidColorCenter extends IColorCenter.Skeleton<Color> {
                 ",granularity=" + granularity +
                 '}';
     }
+    /**
+     * It clears the cache. You may need to do this to limit the cache to the colors used in a specific section.
+     * This is also useful if a Filter changes what colors it should return on a frame-by-frame basis; in that case,
+     * you can call clearCache() at the start or end of a frame to ensure the next frame gets different colors.
+     */
+    public void clearCache()
+    {
+        cache.clear();
+    }
+
+    /**
+     * The actual cache is not public, but there are cases where you may want to know how many different colors are
+     * actually used in a frame or a section of the game. If the cache was emptied (which might be from calling
+     * {@link #clearCache()}), some colors were requested, then this is called, the returned int should be the
+     * count of distinct colors this IColorCenter had created and cached; duplicates won't be counted twice.
+     * @return
+     */
+    public int cacheSize()
+    {
+        return cache.size;
+    }
+
+    /**
+     * You may want to copy colors between IColorCenter instances that have different create() methods -- and as
+     * such, will have different values for the same keys in the cache. This allows you to copy the cache from other
+     * into this Skeleton, but using this Skeleton's create() method.
+     * @param other another Skeleton of the same type that will have its cache copied into this Skeleton
+     */
+    public void copyCache(SquidColorCenter other)
+    {
+        cache.putAll(other.cache);
+    }
+
 }

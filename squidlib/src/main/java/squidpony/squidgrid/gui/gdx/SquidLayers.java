@@ -594,7 +594,7 @@ public class SquidLayers extends Group {
      */
     public SquidLayers put(int x, int y, char c, Color foreground, Color background, int backgroundLightness) {
         foregroundPanel.put(x, y, c, foreground);
-        backgroundPanel.put(x, y, background, (lightnesses[x][y] + 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+        backgroundPanel.put(x, y, background, (clamp(lightnesses[x][y] + 256 + backgroundLightness, 1, 511)) * 0.001953125f);
         return this;
     }
 
@@ -616,7 +616,7 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, Color foreground, Color background, int mixAmount, Color mixBackground) {
         foregroundPanel.put(x, y, c, foreground);
         backgroundPanel.put(x, y, background,
-                (lightnesses[x][y] + 256 + clamp(mixAmount, -255, 255)) * 0.001953125f,
+                (clamp(lightnesses[x][y] + 256 + mixAmount, 1, 511)) * 0.001953125f,
                 mixBackground);
         return this;
     }
@@ -638,7 +638,7 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness) {
         foregroundPanel.put(x, y, c, encodedForeground);
         backgroundPanel.put(x, y, encodedBackground,
-                (lightnesses[x][y] + 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f);
+                (clamp(lightnesses[x][y] + 256 + backgroundLightness, 1, 511)) * 0.001953125f);
         return this;
     }
 
@@ -660,7 +660,7 @@ public class SquidLayers extends Group {
     public SquidLayers put(int x, int y, char c, float encodedForeground, float encodedBackground, int backgroundLightness, float mixBackground) {
         foregroundPanel.put(x, y, c, encodedForeground);
         backgroundPanel.put(x, y, encodedBackground,
-                (lightnesses[x][y] + 256 + clamp(backgroundLightness, -255, 255)) * 0.001953125f, mixBackground);
+                (clamp(lightnesses[x][y] + 256 + backgroundLightness, 1, 511)) * 0.001953125f, mixBackground);
         return this;
     }
 
@@ -718,7 +718,7 @@ public class SquidLayers extends Group {
         for (int i = x; i < getTotalWidth() && i - x < backgroundLightness.length; i++) {
             for (int j = y; j < getTotalHeight() && j - y < backgroundLightness[i].length; j++) {
                 backgroundPanel.put(i, j, backgrounds[i - x][j - y],
-                        (lightnesses[i][j] + 256 + clamp(backgroundLightness[i - x][j - y], -255, 255)) * 0.001953125f);
+                        (clamp(lightnesses[i][j] + 256 + backgroundLightness[i - x][j - y], 1, 511)) * 0.001953125f);
             }
         }
         return this;
@@ -865,7 +865,7 @@ public class SquidLayers extends Group {
     public SquidLayers highlight(int x, int y, int lightness) {
         backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
                 backgroundPanel.getColorAt(x, y),
-                (lightnesses[x][y] + 256 + clamp(lightness, -255, 255)) * 0.001953125f);
+                (clamp(lightnesses[x][y] + 256 + lightness, 1, 511)) * 0.001953125f);
         return this;
     }
 
@@ -881,7 +881,7 @@ public class SquidLayers extends Group {
         for (int i = 0; i < lightness.length && x + i < getTotalWidth(); i++) {
             for (int j = 0; j < lightness[i].length && y + j < getTotalHeight(); j++) {
                 backgroundPanel.put(x, y, backgroundPanel.getAt(x, y),
-                        backgroundPanel.getColorAt(x, y), (lightnesses[x + i][y + j] + 256 + clamp(lightness[i][j], -255, 255)) * 0.001953125f);
+                        backgroundPanel.getColorAt(x, y), (clamp(lightnesses[x + i][y + j] + 256 + lightness[i][j], 1, 511)) * 0.001953125f);
             }
         }
         return this;
