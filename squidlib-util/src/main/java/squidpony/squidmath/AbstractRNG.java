@@ -150,6 +150,48 @@ public abstract class AbstractRNG implements IRNG {
     public float nextFloat(float outer) {
         return nextFloat() * outer;
     }
+    /**
+     * Exclusive on bound (which may be positive or negative), with an inner bound of 0.
+     * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
+     * can even be 0, which will cause this to return 0L every time. This uses a biased technique to get numbers from
+     * large ranges, but the amount of bias is incredibly small (expected to be under 1/1000 if enough random ranged
+     * numbers are requested, which is about the same as an unbiased method that was also considered). It may have
+     * noticeable bias if the generator's period is exhausted by only calls to this method. Unlike all unbiased methods,
+     * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling
+     * would sometimes advance by one call, but other times by arbitrarily many more.
+     * <br>
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
+     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
+     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at
+     * most one random number, so it advances the state as much as {@link #nextInt(int)} or {@link #nextLong()}.
+     * @param bound the outer exclusive bound; can be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
+     */
+    @Override
+    public long nextSignedLong(long bound) {
+        long rand = nextLong();
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long boundLow = bound & 0xFFFFFFFFL;
+        rand >>>= 32;
+        bound >>= 32;
+        final long z = (randLow * boundLow >> 32);
+        final long t = rand * boundLow + z;
+        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+    }
+
+    /**
+     * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
+     * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     *
+     * @param bound the outer bound (exclusive), can be negative or positive
+     * @return the found number
+     */
+    @Override
+    public int nextSignedInt(final int bound) {
+        return (int) ((bound * (nextInt() & 0xFFFFFFFFL)) >> 32);
+    }
 
     /**
      * Returns a value between min (inclusive) and max (exclusive) as ints.

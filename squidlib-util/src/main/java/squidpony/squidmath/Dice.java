@@ -272,18 +272,6 @@ public class Dice implements Serializable {
     }
 
     /**
-     * Replicate the behavior of {@link RNG#nextIntHasty(int)} using the more broadly-implemented {@link IRNG#next(int)}
-     * method, that is, this produces a pseudo-random int between 0 (inclusive) and bound (exclusive), where bound may
-     * be positive or negative.
-     * @param bound an outer exclusive bound, positive or negative; should be under a billion or so
-     * @return an int between 0 (inclusive) and bound (exclusive)
-     */
-    protected int nextIntHasty(int bound)
-    {
-        return (int) ((bound * (long)rng.next(31)) >>> 31);
-    }
-
-    /**
      * Evaluate the String {@code rollCode} as dice roll notation and roll to get a random result of that dice roll.
      * This is the main way of using the Dice class. This effectively allows rolling one or more dice and performing
      * certain operations on the dice and their result. One of the more frequent uses is rolling some amount of dice and
@@ -382,11 +370,11 @@ public class Dice implements Serializable {
                     // dice roll or other range. This can be negative, easily, if the random upper bound is negative
                     {
                         if ("d".equals(mode)) {
-                            ret = a + nextIntHasty(rollDice(w, b) + 1 - a);
+                            ret = a + rng.nextSignedInt(rollDice(w, b) + 1 - a);
                         } else if ("!".equals(mode)) {
-                            ret = a + nextIntHasty(rollExplodingDice(w, b) + 1 - a);
+                            ret = a + rng.nextSignedInt(rollExplodingDice(w, b) + 1 - a);
                         } else if (":".equals(mode)) {
-                            ret = a + nextIntHasty(w + nextIntHasty(b + 1 - w) + 1 - a);
+                            ret = a + rng.nextSignedInt(w + rng.nextSignedInt(b + 1 - w) + 1 - a);
                         }
                     }
                 } else if ("d".equals(mode)) {
@@ -394,11 +382,11 @@ public class Dice implements Serializable {
                 } else if ("!".equals(mode)) {
                     ret = rollExplodingDice(a, b);
                 } else if (":".equals(mode)) {
-                    ret = a + nextIntHasty(b + 1 - a);
+                    ret = a + rng.nextSignedInt(b + 1 - a);
                 }
             } else if (num1 != null) {
                 if (":".equals(wmode)) {
-                    ret = a + nextIntHasty(w + 1 - a);
+                    ret = a + rng.nextSignedInt(w + 1 - a);
                 } else {
                     ret = a;
                 }
@@ -412,7 +400,7 @@ public class Dice implements Serializable {
                             ret = rollExplodingDice(1, b);
                             break;
                         case ":":
-                            ret = nextIntHasty(b + 1);
+                            ret = rng.nextSignedInt(b + 1);
                             break;
                     }
                 }

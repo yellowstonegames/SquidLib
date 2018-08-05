@@ -856,6 +856,51 @@ public class RNG implements Serializable, IRNG {
         final long t = rand * boundLow + z;
         return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
     }
+    /**
+     * Exclusive on bound (which may be positive or negative), with an inner bound of 0.
+     * If bound is negative this returns a negative long; if bound is positive this returns a positive long. The bound
+     * can even be 0, which will cause this to return 0L every time. This uses a biased technique to get numbers from
+     * large ranges, but the amount of bias is incredibly small (expected to be under 1/1000 if enough random ranged
+     * numbers are requested, which is about the same as an unbiased method that was also considered).It may have
+     * noticeable bias if the generator's period is exhausted by only calls to this method. Unlike all unbiased methods,
+     * this advances the state by an equivalent to exactly one call to {@link #nextLong()}, where rejection sampling
+     * would sometimes advance by one call, but other times by arbitrarily many more.
+     * <br>
+     * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
+     * with some adaptation for signed long values and a 64-bit generator. This method is drastically faster than the
+     * previous implementation when the bound varies often (roughly 4x faster, possibly more). It also always gets at
+     * most one random number, so it advances the state as much as {@link #nextInt(int)} or {@link #nextLong()}.
+     * @param bound the outer exclusive bound; can be positive or negative
+     * @return a random long between 0 (inclusive) and bound (exclusive)
+     */
+    public long nextSignedLong(long bound) {
+        long rand = random.nextLong();
+        final long randLow = rand & 0xFFFFFFFFL;
+        final long boundLow = bound & 0xFFFFFFFFL;
+        rand >>>= 32;
+        bound >>= 32;
+        final long z = (randLow * boundLow >> 32);
+        final long t = rand * boundLow + z;
+        return rand * bound + (t >> 32) + ((t & 0xFFFFFFFFL) + randLow * bound >> 32) - (z >> 63);
+    }
+
+    /**
+     * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
+     * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
+     * This is almost identical to the earlier {@link #nextIntHasty(int)} except that it will perform better when the
+     * RandomnessSource this uses natively produces 32-bit output. It was added to the existing nextIntHasty() so
+     * existing code using nextIntHasty would produce the same results, but new code matches the API with
+     * {@link #nextSignedLong(long)}. This is implemented slightly differently in {@link AbstractRNG}, and different
+     * results should be expected when using code based on that abstract class.
+     * <br>
+     * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
+     *
+     * @param bound the outer bound (exclusive), can be negative or positive
+     * @return the found number
+     */
+    public int nextSignedInt(final int bound) {
+        return (int) ((bound * (long)random.next(31)) >> 31);
+    }
 
     /**
      * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
@@ -868,7 +913,9 @@ public class RNG implements Serializable, IRNG {
      * slower nextLong() method, such as {@link Lathe32RNG}, and to avoid branching/irregular state advancement/modulus
      * operations. It is now almost identical to {@link #nextIntHasty(int)}, but won't return negative results if bound
      * is negative (matching its previous behavior). This may have statistical issues (small ones) if bound is very
-     * large (the estimate is still at least a bound of a billion or more before issues are observable).
+     * large (the estimate is still at least a bound of a billion or more before issues are observable). Consider
+     * {@link #nextSignedInt(int)} if the bound should be allowed to be negative; {@link #nextIntHasty(int)} is here for
+     * compatibility with earlier versions, but the two methods are very similar.
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
@@ -890,8 +937,8 @@ public class RNG implements Serializable, IRNG {
      * Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
      * or 0 if the bound is 0. The bound can be negative, which will produce 0 or a negative result.
      * Uses an aggressively optimized technique that has some bias, but mostly for values of
-     * bound over 1 billion. This method is considered "hasty" since it should be faster than
-     * {@link #nextInt(int)} but gives up some statistical quality to do so.
+     * bound over 1 billion. This method is no more "hasty" than {@link #nextInt(int)}, but it is a little
+     * faster than that method because this avoids special behavior for when bound is negative.
      * <br>
      * Credit goes to Daniel Lemire, http://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/
      *
@@ -1034,15 +1081,15 @@ public class RNG implements Serializable, IRNG {
      * Gets the minimum random long between 0 and {@code bound} generated out of {@code trials} generated numbers.
      * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
      * and bound, exclusive.
-     * @param bound the outer exclusive bound
+     * @param bound the outer exclusive bound; may be negative or positive
      * @param trials how many numbers to generate and get the minimum of
      * @return the minimum generated long between 0 and bound out of the specified amount of trials
      */
     public long minLongOf(final long bound, final int trials)
     {
-        long value = nextLong(bound);
+        long value = nextSignedLong(bound);
         for (int i = 1; i < trials; i++) {
-            value = Math.min(value, nextLong(bound));
+            value = Math.min(value, nextSignedLong(bound));
         }
         return value;
     }
@@ -1050,15 +1097,15 @@ public class RNG implements Serializable, IRNG {
      * Gets the maximum random long between 0 and {@code bound} generated out of {@code trials} generated numbers.
      * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
      * inclusive, and bound, exclusive.
-     * @param bound the outer exclusive bound
+     * @param bound the outer exclusive bound; may be negative or positive
      * @param trials how many numbers to generate and get the maximum of
      * @return the maximum generated long between 0 and bound out of the specified amount of trials
      */
     public long maxLongOf(final long bound, final int trials)
     {
-        long value = nextLong(bound);
+        long value = nextSignedLong(bound);
         for (int i = 1; i < trials; i++) {
-            value = Math.max(value, nextLong(bound));
+            value = Math.max(value, nextSignedLong(bound));
         }
         return value;
     }
@@ -1067,15 +1114,15 @@ public class RNG implements Serializable, IRNG {
      * Gets the minimum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
      * Useful for when numbers should have a strong bias toward zero, but all possible values are between 0, inclusive,
      * and bound, exclusive.
-     * @param bound the outer exclusive bound
+     * @param bound the outer exclusive bound; may be negative or positive
      * @param trials how many numbers to generate and get the minimum of
      * @return the minimum generated int between 0 and bound out of the specified amount of trials
      */
     public int minIntOf(final int bound, final int trials)
     {
-        int value = nextIntHasty(bound);
+        int value = nextSignedInt(bound);
         for (int i = 1; i < trials; i++) {
-            value = Math.min(value, nextIntHasty(bound));
+            value = Math.min(value, nextSignedInt(bound));
         }
         return value;
     }
@@ -1083,15 +1130,15 @@ public class RNG implements Serializable, IRNG {
      * Gets the maximum random int between 0 and {@code bound} generated out of {@code trials} generated numbers.
      * Useful for when numbers should have a strong bias away from zero, but all possible values are between 0,
      * inclusive, and bound, exclusive.
-     * @param bound the outer exclusive bound
+     * @param bound the outer exclusive bound; may be negative or positive
      * @param trials how many numbers to generate and get the maximum of
      * @return the maximum generated int between 0 and bound out of the specified amount of trials
      */
     public int maxIntOf(final int bound, final int trials)
     {
-        int value = nextIntHasty(bound);
+        int value = nextSignedInt(bound);
         for (int i = 1; i < trials; i++) {
-            value = Math.max(value, nextIntHasty(bound));
+            value = Math.max(value, nextSignedInt(bound));
         }
         return value;
     }
@@ -1241,7 +1288,7 @@ public class RNG implements Serializable, IRNG {
      * @return a float between 0f (inclusive) and 1f (inclusive)
      */
     public float nextFloatInclusive() {
-        return (random.nextLong() & 0xFFFFFF) * 0x1.000002p-24f;
+        return random.next(24) * 0x1.000002p-24f;
     }
 
     /**
@@ -1253,7 +1300,7 @@ public class RNG implements Serializable, IRNG {
      * @return a float between 0f (inclusive) and outer (inclusive)
      */
     public float nextFloatInclusive(final float outer) {
-        return (random.nextLong() & 0xFFFFFF) * 0x1.000002p-24f * outer;
+        return random.next(24) * 0x1.000002p-24f * outer;
     }
 
 
