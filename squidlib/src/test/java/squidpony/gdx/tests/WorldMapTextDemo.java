@@ -125,7 +125,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     private static float deepColor = SColor.floatGetI(0, 42, 88);
     private static float mediumColor = SColor.floatGetI(0, 89, 159);
     private static float shallowColor = SColor.floatGetI(0, 73, 137);
-    private static float coastalColor = SColor.lerpFloatColors(shallowColor, white, 0.3f);
+    private static float coastalColor = SColor.lightenFloat(shallowColor, 0.3f);
     private static float foamColor = SColor.floatGetI(61,  162, 215);
 
     private static float[] biomeColors = {
@@ -169,9 +169,9 @@ public class WorldMapTextDemo extends ApplicationAdapter {
             BIOME_CHARS[i] = terrainChars[(int)b];
             diff = ((b % 1.0f) - 0.48f) * 0.27f;
             BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
-                    ? SColor.lerpFloatColors(biomeColors[(int)b], white, diff)
-                    : SColor.lerpFloatColors(biomeColors[(int)b], black, -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, black, 0.08f);
+                    ? SColor.lightenFloat(biomeColors[(int)b], diff)
+                    : SColor.darkenFloat(biomeColors[(int)b], -diff));
+            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
         }
         BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
         BIOME_CHARS[60] = ' ';
@@ -328,14 +328,14 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                                     (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
 //                            if(cloud > 0.0)
 //                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                            display.put(x, y, '~', SColor.lerpFloatColors(ice, black, 0.35f), shown);
+                            display.put(x, y, '~', SColor.darkenFloat(ice, 0.35f), shown);
                             continue PER_CELL;
                         case 4:
                             shown = SColor.lerpFloatColors(lightIce, ice,
                                     (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));
 //                            if(cloud > 0.0)
 //                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                            display.put(x, y, '¤', SColor.lerpFloatColors(ice, black, 0.25f), shown);
+                            display.put(x, y, '¤', SColor.darkenFloat(ice, 0.25f), shown);
                             continue PER_CELL;
                     }
                 }
@@ -345,12 +345,12 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                     case 2:
                         shown = SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
-                        display.put(x, y, '≈', SColor.lerpFloatColors(foamColor, white, 0.3f), shown);
+                        display.put(x, y, '≈', SColor.lightenFloat(foamColor, 0.3f), shown);
                         break;
                     case 3:
                         shown = SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
-                        display.put(x, y, '~', SColor.lerpFloatColors(foamColor, white, 0.3f), shown);
+                        display.put(x, y, '~', SColor.lightenFloat(foamColor, 0.3f), shown);
                         break;
                     default:
                         /*
@@ -367,9 +367,9 @@ public class WorldMapTextDemo extends ApplicationAdapter {
 //                        if(cloud > 0.0)
 //                            shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
                         if(mix >= 0.5) 
-                            display.put(x, y, BIOME_CHARS[codeA], SColor.lerpFloatColors(BIOME_COLOR_TABLE[codeB], black, 0.3f), shown);
+                            display.put(x, y, BIOME_CHARS[codeA], SColor.darkenFloat(BIOME_COLOR_TABLE[codeB], 0.3f), shown);
                         else
-                            display.put(x, y, BIOME_CHARS[codeB], SColor.lerpFloatColors(BIOME_COLOR_TABLE[codeA], black, 0.3f), shown);
+                            display.put(x, y, BIOME_CHARS[codeB], SColor.darkenFloat(BIOME_COLOR_TABLE[codeA], 0.3f), shown);
 
                         //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
                 }

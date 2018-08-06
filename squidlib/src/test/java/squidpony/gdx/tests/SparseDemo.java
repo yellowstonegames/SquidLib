@@ -618,7 +618,7 @@ public class SparseDemo extends ApplicationAdapter {
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, mixing the background color with mostly white.
-            display.put(pt.x, pt.y, SColor.lerpFloatColors(bgColors[pt.x][pt.y], SColor.FLOAT_WHITE, 0.85f));
+            display.put(pt.x, pt.y, SColor.lightenFloat(bgColors[pt.x][pt.y], 0.85f));
         }
         languageDisplay.clear(0);
         languageDisplay.fillBackground(languageDisplay.defaultPackedBackground);

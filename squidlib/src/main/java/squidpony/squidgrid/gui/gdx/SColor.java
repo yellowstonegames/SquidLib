@@ -13157,7 +13157,7 @@ public class SColor extends Color implements Serializable {
                 rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = (s >>> 24) & 254,
                 re = (e & 0xFF), ge = (e >>> 8) & 0xFF, be = (e >>> 16) & 0xFF, ae = (e >>> 24) & 254;
         return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) & 0xFF)
-                | ((int) (gs + change * (ge - gs)) & 0xFF) << 8
+                | (((int) (gs + change * (ge - gs)) & 0xFF) << 8)
                 | (((int) (bs + change * (be - bs)) & 0xFF) << 16)
                 | (((int) (as + change * (ae - as)) & 0xFE) << 24));
     }
@@ -13178,10 +13178,50 @@ public class SColor extends Color implements Serializable {
                 re = (e & 0xFF), ge = (e >>> 8) & 0xFF, be = (e >>> 16) & 0xFF, ae = (e >>> 25);
         change *= ae * 0.007874016f;
         return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) & 0xFF)
-                | ((int) (gs + change * (ge - gs)) & 0xFF) << 8
+                | (((int) (gs + change * (ge - gs)) & 0xFF) << 8)
                 | (((int) (bs + change * (be - bs)) & 0xFF) << 16)
                 | as);
     }
+
+    /**
+     * Interpolates from the packed float color start towards white by change. While change should be between 0f (return
+     * start as-is) and 1f (return white), start should be a packed color, as from {@link #toFloatBits()} or
+     * {@link #floatGet(float, float, float, float)}. This is a good way to reduce allocations of temporary Colors, and
+     * is a little more efficient and clear than using {@link #lerpFloatColors(float, float, float)} to lerp towards
+     * white. Unlike {@link #lerpFloatColors(float, float, float)}, this keeps the alpha of start as-is.
+     * @param start the starting color as a packed float
+     * @param change how much to go from start toward white, as a float between 0 and 1; higher means closer to end
+     * @return a packed float that represents a color between start and white
+     */
+    public static float lightenFloat(final float start, final float change) {
+        final int s = NumberTools.floatToIntBits(start),
+                rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = s & 0xFE000000;
+        return NumberTools.intBitsToFloat(((int) (rs + change * (0xFF - rs)) & 0xFF)
+                | (((int) (gs + change * (0xFF - gs)) & 0xFF) << 8)
+                | (((int) (bs + change * (0xFF - bs)) & 0xFF) << 16)
+                | as);
+    }
+
+    /**
+     * Interpolates from the packed float color start towards black by change. While change should be between 0f (return
+     * start as-is) and 1f (return black), start should be a packed color, as from {@link #toFloatBits()} or
+     * {@link #floatGet(float, float, float, float)}. This is a good way to reduce allocations of temporary Colors, and
+     * is a little more efficient and clear than using {@link #lerpFloatColors(float, float, float)} to lerp towards
+     * black. Unlike {@link #lerpFloatColors(float, float, float)}, this keeps the alpha of start as-is.
+     * @param start the starting color as a packed float
+     * @param change how much to go from start toward black, as a float between 0 and 1; higher means closer to end
+     * @return a packed float that represents a color between start and black
+     */
+    public static float darkenFloat(final float start, float change) {
+        final int s = NumberTools.floatToIntBits(start),
+                rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = s & 0xFE000000;
+        change = 1f - change;
+        return NumberTools.intBitsToFloat(((int) (rs * change) & 0xFF)
+                | (((int) (gs * change) & 0xFF) << 8)
+                | (((int) (bs * change) & 0xFF) << 16)
+                | as);
+    }
+
 
     /**
      * Similar to {@link #colorLighting(double[][], float)}, but meant for an initial state before you have FOV or color

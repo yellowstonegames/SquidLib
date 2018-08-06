@@ -102,7 +102,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     // water colors
     private static float baseDeepColor = SColor.floatGetI(0, 42, 88);
     private static float baseShallowColor = SColor.floatGetI(0, 73, 137);
-    private static float baseCoastalColor = SColor.lerpFloatColors(baseShallowColor, SColor.FLOAT_WHITE, 0.3f);
+    private static float baseCoastalColor = SColor.lightenFloat(baseShallowColor, 0.3f);
     private static float baseFoamColor = SColor.floatGetI(61,  162, 215);
 
     private static float deepColor = baseDeepColor;
@@ -159,9 +159,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     0f);
             diff = ((b % 1.0f) - 0.48f) * 0.27f;
             BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
-                    ? SColor.lerpFloatColors(alt, SColor.FLOAT_WHITE, diff)
-                    : SColor.lerpFloatColors(alt, SColor.FLOAT_BLACK, -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, SColor.FLOAT_BLACK, 0.08f);
+                    ? SColor.lightenFloat(alt, diff)
+                    : SColor.darkenFloat(alt, -diff));
+            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
         }
         float sat = NumberTools.randomSignedFloat(seed * 3L - 1L) * 0.4f, 
                 value = NumberTools.randomSignedFloat(seed * 5L - 1L) * 0.3f;
@@ -178,9 +178,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             b = BIOME_TABLE[i];
             diff = ((b % 1.0f) - 0.48f) * 0.27f;
             BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
-                    ? SColor.lerpFloatColors(biomeColors[(int)b], SColor.FLOAT_WHITE, diff)
-                    : SColor.lerpFloatColors(biomeColors[(int)b], SColor.FLOAT_BLACK, -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.lerpFloatColors(b, SColor.FLOAT_BLACK, 0.08f);
+                    ? SColor.lightenFloat(biomeColors[(int)b], diff)
+                    : SColor.darkenFloat(biomeColors[(int)b], -diff));
+            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
         }
         BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
         for (int i = 0; i < 144; i++) {
@@ -571,8 +571,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 1:
                     case 2:
                     case 3:
-                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
-                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
+                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(
+                                BIOME_COLOR_TABLE[56], coastalColor,
+                                (MathUtils.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f))));
+//                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
+//                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
 //                    pm.setColor(tempColor);
 //                    pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                         pm.drawPixel(x, y, quantize(tempColor));//Color.rgba8888(tempColor));

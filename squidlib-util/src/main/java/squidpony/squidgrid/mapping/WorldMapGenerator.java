@@ -3128,7 +3128,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     // ... later ...
                     // NumberTools is better now, it seems good visually, but is there a speed difference?
                     //lon = (centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th)) + (3.0 * Math.PI)) % (Math.PI * 2.0) - Math.PI;
-                    lon = centerLongitude + NumberTools.atan2Rough(ixPos * ps, rho * NumberTools.cos(th));
+                    lon = centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th));
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);
@@ -3762,7 +3762,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier){
-            this(initialSeed, mapWidth, mapHeight, noiseGenerator, octaveMultiplier, 0.1, 3.25);
+            this(initialSeed, mapWidth, mapHeight, noiseGenerator, octaveMultiplier, 0.125, 2.5);
         }
 
         /**
@@ -3786,8 +3786,8 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
-         * @param alpha one of the Tobler parameters;  0.1 is the default and this can range from 0.0 to 1.0 at least
-         * @param kappa one of the Tobler parameters; 3.25 is the default but 2.0-5.0 range values are also often used
+         * @param alpha one of the Tobler parameters;  0.125 is the default and this can range from 0.0 to 1.0 at least
+         * @param kappa one of the Tobler parameters; 2.5 is the default but 2.0-5.0 range values are also often used
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator,
                                   double octaveMultiplier, double alpha, double kappa){
