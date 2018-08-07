@@ -1480,10 +1480,8 @@ public class TextCellFactory implements Disposable {
         } else {
             mut.setCharAt(0, getOrDefault(c));
             Label lb = new Label(mut, style);
-            //lb.setFontScale(bmpFont.getData().scaleX, bmpFont.getData().scaleY);
             lb.setSize(width, height - descent); //+ lineTweak * 1f
             lb.setColor(scc.filter(color));
-            // lb.setPosition(x - width * 0.5f, y - height * 0.5f, Align.center);
             return lb;
         }
     }

@@ -145,7 +145,8 @@ public class SparseDemo extends ApplicationAdapter {
     // This filters colors in a way we adjust over time, producing a sort of hue shift effect.
     // It can also be used to over- or under-saturate colors, change their brightness, or any combination of these. 
     private FloatFilters.YCbCrFilter filter;
-
+    
+//    private FloatFilter sepia;
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -156,6 +157,7 @@ public class SparseDemo extends ApplicationAdapter {
         rng = new RNG(artOfWar);
         // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
         filter = new FloatFilters.YCbCrFilter(0.875f, 0.6f, 0.6f);
+//        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or

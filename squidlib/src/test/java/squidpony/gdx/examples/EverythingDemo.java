@@ -65,14 +65,14 @@ public class EverythingDemo extends ApplicationAdapter {
         }
     }
 
-    SpriteBatch batch;
+    private SpriteBatch batch;
 
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
     private SquidLayers display;
     //private SquidPanel subCell;
 
-    // for more convenient access to some methods
+    // for more convenient access to some methods that affect the foreground
     private SquidPanel fg;
     private SquidMessageBox messages;
     /**
@@ -85,7 +85,6 @@ public class EverythingDemo extends ApplicationAdapter {
     private Color[][] colors, bgColors;
     private double[][] fovmap;
     private AnimatedEntity player;
-    private FOV fov;
     /**
      * In number of cells
      */
@@ -359,8 +358,6 @@ public class EverythingDemo extends ApplicationAdapter {
             monsters.put(monPos, i, new Monster(display.animateActor(monPos.x, monPos.y, 'Я',
                     fgCenter.filter(SColor.LIMITED_PALETTE[11])), 0));
         }
-        // your choice of FOV matters here.
-        fov = new FOV(FOV.RIPPLE_TIGHT);
         res = DungeonUtility.generateResistances(decoDungeon);
         floors = new GreasedRegion(res, 0.99);
         fovmap = new double[totalWidth][totalHeight];

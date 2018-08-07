@@ -53,7 +53,7 @@ public final class FloatFilters {
      * {@code new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f)}.
      */
     public static class ColorizeFilter extends FloatFilter {
-        public float targetHue, targetSaturation, saturationMultiplier, valueAddend;
+        public float targetCb, targetCr, lumaAddend;
 
         public ColorizeFilter(float color) {
             this(color, 1f, 0f);
@@ -63,15 +63,14 @@ public final class FloatFilters {
             this(color.toFloatBits(), 1f, 0f);
         }
 
-        public ColorizeFilter(Color color, float saturationMul, float valueAdd) {
-            this(color.toFloatBits(), saturationMul, valueAdd);
+        public ColorizeFilter(Color color, float chromaMul, float lumaAdd) {
+            this(color.toFloatBits(), chromaMul, lumaAdd);
         }
 
-        public ColorizeFilter(float color, float saturationMul, float valueAdd) {
-            targetHue = SColor.hueOfFloat(color);
-            targetSaturation = SColor.saturationOfFloat(color);
-            saturationMultiplier = saturationMul;
-            valueAddend = valueAdd;
+        public ColorizeFilter(float color, float chromaMul, float lumaAdd) {
+            targetCb = SColor.chromaBOfFloat(color) * chromaMul;
+            targetCr = SColor.chromaROfFloat(color) * chromaMul;
+            lumaAddend = lumaAdd;
         }
 
         /**
@@ -82,52 +81,12 @@ public final class FloatFilters {
          */
         @Override
         public float alter(float color) {
-            float saturation = saturationMultiplier, value = valueAddend;
             final int bits = NumberTools.floatToIntBits(color);
-            final float s,
-                    r = (bits & 0x000000ff) * 0x1.010102p-8f,
-                    g = (bits & 0x0000ff00) * 0x1.010102p-16f,
-                    b = (bits & 0x00ff0000) * 0x1.010102p-24f;
-            final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB
-            final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value
-            final float delta = max - min;                   //Delta RGB value
-            if (delta < 0.0039f)                           //This is a gray, no chroma...
-            {
-                s = targetSaturation * 0.5f;
-            } else                                             //Chromatic data...
-            {
-                s = ((delta / max) + targetSaturation) * 0.5f;
-            }
-            saturation = MathUtils.clamp(s * saturation, 0f, 1f);
-            value = MathUtils.clamp(max + value, 0f, 1f);
-            float opacity = MathUtils.clamp(((bits & 0xfe000000) >>> 24) * 0x1.020408p-8f, 0f, 1f);
-
-            if (saturation <= 0.0039f) {
-                return floatGet(value, value, value, opacity);
-            } else if (value <= 0.0039f) {
-                return NumberTools.intBitsToFloat((int) (opacity * 254f) << 24 & 0xFE000000);
-            } else {
-                final float hu = targetHue * 6f;
-                final int i = (int) hu;
-                final float x = value * (1 - saturation);
-                final float y = value * (1 - saturation * (hu - i));
-                final float z = value * (1 - saturation * (1 - (hu - i)));
-
-                switch (i) {
-                    case 0:
-                        return floatGet(value, z, x, opacity);
-                    case 1:
-                        return floatGet(y, value, x, opacity);
-                    case 2:
-                        return floatGet(x, value, z, opacity);
-                    case 3:
-                        return floatGet(x, y, value, opacity);
-                    case 4:
-                        return floatGet(z, x, value, opacity);
-                    default:
-                        return floatGet(value, x, y, opacity);
-                }
-            }
+            return SColor.floatGetYCbCr((bits & 0x000000ff) * (0x1.010102p-8f  * 0.299f) +
+                    (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
+                    (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f),
+                    targetCb, targetCr,
+                    ((bits & 0xfe000000) >>> 24) * 0x1.020408p-8f);
         }
     }
 
