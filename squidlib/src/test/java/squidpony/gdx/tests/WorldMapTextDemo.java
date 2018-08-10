@@ -43,32 +43,53 @@ public class WorldMapTextDemo extends ApplicationAdapter {
             Ocean                  = 13,
             Empty                  = 14;
     
-    public static final char[]  terrainChars = {
-            '¿', //sand
-            '„', //lush grass
-            '♣', //jungle
-            '‚', //barren grass
-            '¥', //forest
-            '¥', //forest
-            '♣', //jungle
-            '¥', //forest
-            '‚', //barren grass
-            '¤', //ice
-            '.', //sand
-            '∆', //rocky
-            '~', //shallow
-            '≈', //ocean
-            ' ', //empty space
-            //'■', //active city
-            '□', //empty city
-            
-            
-    };
+//    public static final char[]  terrainChars = {
+//            '¿', //sand
+//            '„', //lush grass
+//            '♣', //jungle
+//            '‚', //barren grass
+//            '¥', //forest
+//            '¥', //forest
+//            '♣', //jungle
+//            '¥', //forest
+//            '‚', //barren grass
+//            '¤', //ice
+//            '.', //sand
+//            '∆', //rocky
+//            '~', //shallow
+//            '≈', //ocean
+//            ' ', //empty space
+//            //'■', //active city
+//            '□', //empty city
+//            
+//            
+//    };
+public static final char[]  terrainChars = {
+        '.', //sand
+        '"', //lush grass
+        '?', //jungle
+        '\'', //barren grass
+        '$', //forest
+        '$', //forest
+        '?', //jungle
+        '$', //forest
+        '‚', //barren grass
+        '*', //ice
+        '.', //sand
+        '^', //rocky
+        '~', //shallow
+        '~', //ocean
+        ' ', //empty space
+        //'■', //active city
+        '#', //empty city
+
+
+};
     //private static final int bigWidth = 314 * 3, bigHeight = 300;
     //private static final int bigWidth = 1024, bigHeight = 512;
     private static final int bigWidth = 512, bigHeight = 256;
     //private static final int bigWidth = 400, bigHeight = 400;
-    private static final int cellWidth = 17, cellHeight = 17;
+    private static final int cellWidth = 16, cellHeight = 16;
     private static final int shownWidth = 96, shownHeight = 48;
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -183,8 +204,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispLeanFont());
-        display.font.tweakHeight(18f).tweakWidth(15f);
+        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispCurvySquareFont());
+        display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
         stage = new Stage(view, batch);
         seed = 0xDEBACL;
@@ -281,7 +302,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
         atlas = new OrderedMap<>(80);
         atlas.clear();
         for (int i = 0; i < 64; i++) {
-            atlas.put(ArrayTools.letterAt(i), rng.getRandomElement(FakeLanguageGen.romanizedHumanLanguages));
+            atlas.put(ArrayTools.letterAt(i), FakeLanguageGen.randomLanguage(rng).removeAccents());
         }
         political = pm.generate(world, atlas, 1.0);
         cities.clear();
@@ -293,7 +314,7 @@ public class WorldMapTextDemo extends ApplicationAdapter {
             FakeLanguageGen lang = atlas.get(p);
             if(lang != null)
             {
-                cities.put(points[i], lang.word(rng, true));
+                cities.put(points[i], lang.word(rng, false).toUpperCase());
             }
         }
         //counter = 0L;
@@ -335,7 +356,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                                     (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)));
 //                            if(cloud > 0.0)
 //                                shown = SColor.lerpFloatColors(shown, cloudLight, cloud);
-                            display.put(x, y, '¤', SColor.darkenFloat(ice, 0.25f), shown);
+                            //display.put(x, y, '¤', SColor.darkenFloat(ice, 0.25f), shown);
+                            display.put(x, y, '*', SColor.darkenFloat(ice, 0.25f), shown);
                             continue PER_CELL;
                     }
                 }
@@ -345,7 +367,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
                     case 2:
                         shown = SColor.lerpFloatColors(deepColor, coastalColor,
                                 (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)));
-                        display.put(x, y, '≈', SColor.lightenFloat(foamColor, 0.3f), shown);
+                        //display.put(x, y, '≈', SColor.lightenFloat(foamColor, 0.3f), shown);
+                        display.put(x, y, '~', SColor.lightenFloat(foamColor, 0.3f), shown);
                         break;
                     case 3:
                         shown = SColor.lerpFloatColors(deepColor, coastalColor,
@@ -378,7 +401,8 @@ public class WorldMapTextDemo extends ApplicationAdapter {
         for (int i = 0; i < cities.size(); i++) {
             Coord ct = cities.keyAt(i);
             String cname = cities.getAt(i);
-            display.put(ct.x, ct.y, '□', SColor.SOOTY_WILLOW_BAMBOO);
+            //display.put(ct.x, ct.y, '□', SColor.SOOTY_WILLOW_BAMBOO);
+            display.put(ct.x, ct.y, '#', SColor.SOOTY_WILLOW_BAMBOO);
             display.put(ct.x - (cname.length() >> 1), ct.y - 1, cname, SColor.WHITE, SColor.SOOTY_WILLOW_BAMBOO);
         }
     }

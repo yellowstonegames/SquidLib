@@ -76,7 +76,7 @@ public class DefaultResources implements LifecycleListener {
             distanceSlab = null, distanceSlabLight = null, distanceWideSlab = null,  distanceWideSlabLight = null,
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
-            msdfDejaVu = null;
+            msdfDejaVu = null, msdfCurvySquare = null;
     private TextFamily familyLean = null, familySlab = null, familyGo = null,
             familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
     private TextureAtlas iconAtlas = null;
@@ -139,7 +139,9 @@ public class DefaultResources implements LifecycleListener {
             crispDejaVuItalic = "DejaVuSansMono-Oblique-msdf.fnt",
             crispDejaVuItalicTexture = "DejaVuSansMono-Oblique-msdf.png",
             crispNotoSerif = "NotoSerif-Family-msdf.fnt",
-            crispNotoSerifTexture = "NotoSerif-Family-msdf.png"
+            crispNotoSerifTexture = "NotoSerif-Family-msdf.png",
+            crispCurvySquare = "square-msdf.fnt",
+            crispCurvySquareTexture = "square-msdf.png"
                     ;
     public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
@@ -643,6 +645,48 @@ public class DefaultResources implements LifecycleListener {
         }
         if(instance.distanceHeavySquare != null)
             return instance.distanceHeavySquare.copy();
+        return null;
+    }
+
+    /**
+     * Returns a TextCellFactory already configured to use an all-caps (with lighter-weight versions of upper-case
+     * letters for the lower-case glyphs) square font that should scale cleanly to many sizes.
+     * Unlike {@link #getStretchableSquareFont()}, the font this uses was made to be square initially, and is not a
+     * distorted/stretched version of an existing font. This font only supports ASCII, and as said before, it doesn't
+     * have separate lower-case letters. Note: if you use this font as-is, most characters will overlap slightly with
+     * each other, which can be an aesthetic benefit in some styles but can also be hard to read, at least if the colors
+     * aren't different between overlapping characters. For that reason, you may want to tweak the width and height of
+     * this font after passing it to a SquidLayers or SparseLayers; often you would pass 0.875 times the original
+     * width and height to {@link TextCellFactory#tweakWidth(float)} and {@link TextCellFactory#tweakHeight(float)}.
+     * Caches the result for later calls. The font is "square" by Wouter van Oortmerssen; it is available under a
+     * CC-BY-3.0 license, which requires attribution to Wouter van Oortmerssen if you use it.
+     * <br>
+     * <a href="https://i.imgur.com/nvHl64v.png">Preview at large size</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/square-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/square-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/square-License.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font square.ttf
+     */
+    public static TextCellFactory getCrispCurvySquareFont()
+    {
+        initialize();
+        if(instance.msdfCurvySquare == null)
+        {
+            try {
+                instance.msdfCurvySquare = new TextCellFactory()
+                        .fontMultiDistanceField(crispCurvySquare, crispCurvySquareTexture).setSmoothingMultiplier(4f);
+            } catch (Exception e) {
+            }
+        }
+        if(instance.msdfCurvySquare != null)
+            return instance.msdfCurvySquare.copy();
         return null;
     }
 
