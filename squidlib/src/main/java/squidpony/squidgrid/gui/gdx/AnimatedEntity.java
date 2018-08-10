@@ -49,7 +49,7 @@ public class AnimatedEntity {
     public void setDirection(Direction dir) {
         actor.setRotation(directionToDegrees(dir));
     }
-    static float directionToDegrees(Direction d)
+    private static float directionToDegrees(Direction d)
     {
         switch (d)
         {
