@@ -184,4 +184,54 @@ public final class TangleRNG implements RandomnessSource, SkippingRandomness, Se
         final long z = (s ^ (s >>> 25)) * (stateB += 0x9E3779B97F4A7C16L * advance);
         return z ^ (z >>> 22);
     }
+
+    public static long determine(final long state)
+    {
+        long s = (state * 0x6C8E9CF570932BD5L);
+        s = (s ^ s >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L);
+        return s ^ s >>> 24;
+    }
+    public static int determineBounded(final long state, final int bound)
+    {
+        long s = (state * 0x6C8E9CF570932BD5L);
+        s = (s ^ s >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L);
+        return (int)((bound * ((s ^ s >>> 24) & 0x7FFFFFFFL)) >> 31);
+    }
+    public static float determineFloat(final long state)
+    {
+        long s = (state * 0x6C8E9CF570932BD5L);
+        s = (s ^ s >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L);
+        return (s >>> 40) * 0x1p-24f;
+    }
+    public static double determineDouble(final long state)
+    {
+        long s = (state * 0x6C8E9CF570932BD5L);
+        s = (s ^ s >>> 26) * (state * 0x9E3779B97F4A7C15L | 1L);
+        return ((s ^ s >>> 24) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+    }
+
+    public static long determine(long stateA, final long stateB)
+    {
+        stateA *= 0x6C8E9CF570932BD5L;
+        stateA = (stateA ^ stateA >>> 26) * (stateB * 0x9E3779B97F4A7C15L | 1L);
+        return stateA ^ stateA >>> 24;
+    }
+    public static int determineBounded(long stateA, final long stateB, final int bound)
+    {
+        stateA *= 0x6C8E9CF570932BD5L;
+        stateA = (stateA ^ stateA >>> 26) * (stateB * 0x9E3779B97F4A7C15L | 1L);
+        return (int)((bound * ((stateA ^ stateA >>> 24) & 0x7FFFFFFFL)) >> 31);
+    }
+    public static float determineFloat(long stateA, final long stateB)
+    {
+        stateA *= 0x6C8E9CF570932BD5L;
+        stateA = (stateA ^ stateA >>> 26) * (stateB * 0x9E3779B97F4A7C15L | 1L);
+        return (stateA >>> 40) * 0x1p-24f;
+    }
+    public static double determineDouble(long stateA, final long stateB)
+    {
+        stateA *= 0x6C8E9CF570932BD5L;
+        stateA = (stateA ^ stateA >>> 26) * (stateB * 0x9E3779B97F4A7C15L | 1L);
+        return ((stateA ^ stateA >>> 24) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+    }
 }

@@ -141,7 +141,7 @@ public class Noise {
     /**
      * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
      * a long for state. This is organized how it is so it can be statically imported without also importing the rest
-     * of Noise. Internally, all of the methods here are based on {@link LightRNG}, but some steps are altered to
+     * of Noise. Internally, all of the methods here are based on {@link LinnormRNG}, but some steps are altered to
      * better mix the point coordinates, and for hash32() and hash256() methods, some small steps can be omitted because
      * they would have no effect on the result.
      */
@@ -583,7 +583,7 @@ public class Noise {
          */
         public static long hashAll(final int x, final int y, final int state)
         {
-            return LightRNG.determine((y + perm_x[x + state & 255])
+            return LinnormRNG.determine((y + perm_x[x + state & 255])
                     ^ (x + perm_y[y + (state >>> 8) & 255]) ^ state);
         }
 
@@ -597,7 +597,7 @@ public class Noise {
          */
         public static long hashAll(final int x, final int y, final int z, final int state)
         {
-            return LightRNG.determine(
+            return LinnormRNG.determine(
                     (z + perm_x[x + state & 255])
                     ^ (x + perm_y[y + (state >>> 8) & 255])
                     ^ (y + perm_z[z + (state >>> 16) & 255]) ^ state);
@@ -614,7 +614,7 @@ public class Noise {
          */
         public static long hashAll(final int x, final int y, final int z, final int w, final int state)
         {
-            return LightRNG.determine(
+            return LinnormRNG.determine(
                     (w + perm_x[x + state & 255])
                             ^ (x + perm_y[y + (state >>> 8) & 255])
                             ^ (y + perm_z[z + (state >>> 16) & 255])
@@ -634,7 +634,7 @@ public class Noise {
          */
         public static long hashAll(final int x, final int y, final int z, final int w, final int u, final int v, final int state)
         {
-            return LightRNG.determine(
+            return LinnormRNG.determine(
                     (v + perm_x[x + state & 255])
                             ^ (x + perm_y[y + (state >>> 8) & 255])
                             ^ (y + perm_z[z + (state >>> 16) & 255])
@@ -2744,10 +2744,10 @@ public class Noise {
         public Basic1D(long seed)
         {
             lastSeed = seed;
-            alter1 = (LightRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-            alter2 = (LightRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-            alter3 = (LightRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-            alter4 = (LightRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+            alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+            alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+            alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+            alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
         }
         @Override
         public double getNoise(double x) {
@@ -2763,10 +2763,10 @@ public class Noise {
             if(lastSeed != seed)
             {
                 lastSeed = seed;
-                alter1 = (LightRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-                alter2 = (LightRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-                alter3 = (LightRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-                alter4 = (LightRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+                alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+                alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+                alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+                alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
             }
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
@@ -2782,10 +2782,10 @@ public class Noise {
         }
 
         public static double noise(double x, long seed) {
-            final double alter1 = (LightRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter2 = (LightRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter3 = (LightRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
-                    alter4 = (LightRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
+            final double alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
+                    alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
                     cubicSway(alter4 + x * alter3) +
