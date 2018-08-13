@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 46, noiseMode = 79;//118;//82;
+    private int hashMode = 0, rngMode = 46, noiseMode = 57;//118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -144,7 +144,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Layered3D layeredWhirling = new Noise.Layered3D(WhirlingNoise.instance,1);
     private final Noise.Layered3D layeredSeeded = new Noise.Layered3D(SeededNoise.instance,1);
     private final FastNoise layeredFN = FastNoise.instance;
-
+    private final GlitchNoise glitch = GlitchNoise.instance;
     private final Noise.Noise1D basic1D = new Noise.Basic1D();
     private final Noise.Noise1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
 
@@ -3485,7 +3485,25 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     }
                     break;
                     case 58:
+                        Gdx.graphics.setTitle("Glitch 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = (float)(
+                                        glitch.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                                123456) * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
                     case 59:
+                        Gdx.graphics.setTitle("Glitch 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, 123456));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
                     case 68:
                         Gdx.graphics.setTitle("Turing Pattern at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         TuringPattern.distort(turingActivate, width, height, stretchScaled3D, ctr * 5, 778899);

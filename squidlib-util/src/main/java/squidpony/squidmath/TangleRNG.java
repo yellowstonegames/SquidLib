@@ -212,9 +212,7 @@ public final class TangleRNG implements RandomnessSource, SkippingRandomness, Se
 
     public static long determine(long stateA, final long stateB)
     {
-        stateA *= 0x6C8E9CF570932BD5L;
-        stateA = (stateA ^ stateA >>> 26) * (stateB * 0x9E3779B97F4A7C15L | 1L);
-        return stateA ^ stateA >>> 24;
+        return (stateA = ((stateA *= 0x6C8E9CF570932BD5L) ^ stateA >>> 26) * (stateB * 0x9E3779B97F4A7C15L | 1L)) ^ stateA >>> 24;
     }
     public static int determineBounded(long stateA, final long stateB, final int bound)
     {

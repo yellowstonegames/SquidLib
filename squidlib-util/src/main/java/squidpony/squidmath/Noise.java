@@ -141,9 +141,9 @@ public class Noise {
     /**
      * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
      * a long for state. This is organized how it is so it can be statically imported without also importing the rest
-     * of Noise. Internally, all of the methods here are based on {@link LinnormRNG}, but some steps are altered to
-     * better mix the point coordinates, and for hash32() and hash256() methods, some small steps can be omitted because
-     * they would have no effect on the result.
+     * of Noise. Internally, all of the methods here are based on {@link TangleRNG}, but some steps are altered to
+     * better mix the point coordinates, plus some small steps can be omitted from the hash32(), hash64(), and hash256()
+     * methods because they would have no effect on the result.
      */
     public static final class PointHash
     {
@@ -154,10 +154,12 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y point with the given state
          */
-        public static long hashAll(final long x, final long y, long state)
+        public static long hashAll(long x, long y, long state)
         {
-            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31);
+            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x >>> 24
+                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state) ^ y >>> 24;
+//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31);
             //state *= 0x352E9CF570932BDDL;
 //            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
 //                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((x ^ state) | 0xA529L)) ^ (state >>> 22)));
@@ -171,12 +173,16 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y,z point with the given state
          */
-        public static long hashAll(final long x, final long y, final long z, long state)
+        public static long hashAll(long x, long y, long z, long state)
         {
-            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ;
+            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x >>> 24
+                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state) ^ y >>> 24
+                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state) ^ z >>> 24;
+
+//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ;
 
             //state *= 0x352E9CF570932BDDL;
 //            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -193,13 +199,18 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y,z,w point with the given state
          */
-        public static long hashAll(final long x, final long y, final long z, final long w, long state)
+        public static long hashAll(long x, long y, long z, long w, long state)
         {
-            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ;
+            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x >>> 24
+                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state) ^ y >>> 24
+                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state) ^ z >>> 24
+                    ^ (w = ((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state) ^ w >>> 24;
+
+//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ;
 
             //state *= 0x352E9CF570932BDDL;
 //            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -219,15 +230,22 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static long hashAll(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        public static long hashAll(long x, long y, long z, long w, long u, long v, long state)
         {
-            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ^ ((state = ((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
-                    ;
+            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x >>> 24
+                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state) ^ y >>> 24
+                    ^ (z = ((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state) ^ z >>> 24
+                    ^ (w = ((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state) ^ w >>> 24
+                    ^ (u = ((u *= 0xBF58476D1CE4E5B9L) ^ u >>> 26) * state) ^ u >>> 24
+                    ^ (v = ((v *= 0xC6BC279692B5CC85L) ^ v >>> 26) * state) ^ v >>> 24;
+
+//            return ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ^ ((state = ((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31)
+//                    ;
 
             //state *= 0x352E9CF570932BDDL;
 //            return (((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -243,13 +261,15 @@ public class Noise {
          * @param y
          * @param state
          * @return 8-bit hash of the x,y point with the given state
-         */
-        public static int hash256(final long x, final long y, long state)
-        {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                    ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-            ) >>> 56);
+         */         
+        public static long hash256(long x, long y, long state) {
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)) >>> 56);
+
+//                return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                    ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 56);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((y ^ state) | 0xA529L)) ^ (state >>> 22)) ^
@@ -263,13 +283,18 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y,z point with the given state
          */
-        public static int hash256(final long x, final long y, final long z, long state)
+        public static int hash256(long x, long y, long z, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
             ) >>> 56);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 56);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -285,15 +310,19 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y,z,w point with the given state
          */
-        public static int hash256(final long x, final long y, final long z, final long w, long state)
+        public static int hash256(long x, long y, long z, long w, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
+                    ^ (((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state)
             ) >>> 56);
 
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
 //                    ((state = ((state += 0x6C8E9CD570932BD5L ^ y) ^ (state >>> 25)) * ((state ^ z) | 0xA529L)) ^ (state >>> 22)) ^
@@ -311,16 +340,24 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static int hash256(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        public static int hash256(long x, long y, long z, long w, long u, long v, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
+                    ^ (((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state)
+                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u >>> 26) * state)
+                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v >>> 26) * state)
             ) >>> 56);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 56);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -337,12 +374,16 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y point with the given state
          */
-        public static int hash32(final long x, final long y, long state)
+        public static int hash32(long x, long y, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
             ) >>> 59);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 59);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -356,13 +397,18 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y,z point with the given state
          */
-        public static int hash32(final long x, final long y, final long z, long state)
+        public static int hash32(long x, long y, long z, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
             ) >>> 59);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 59);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y - z) | 0xA529L)) ^ (state >>> 22)) ^
@@ -378,14 +424,20 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y,z,w point with the given state
          */
-        public static int hash32(final long x, final long y, final long z, final long w, long state)
+        public static int hash32(long x, long y, long z, long w, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
+                    ^ (((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state)
             ) >>> 59);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 59);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -404,16 +456,24 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static int hash32(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        public static int hash32(long x, long y, long z, long w, long u, long v, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
+                    ^ (((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state)
+                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u >>> 26) * state)
+                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v >>> 26) * state)
             ) >>> 59);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 59);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -431,12 +491,16 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y point with the given state
          */
-        public static int hash64(final long x, final long y, long state)
+        public static int hash64(long x, long y, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
             ) >>> 58);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 58);
 
 
             //state *= 0x352E9CF570932BDDL;
@@ -451,13 +515,21 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y,z point with the given state
          */
-        public static int hash64(final long x, final long y, final long z, long state)
+        public static int hash64(long x, long y, long z, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
+//                    ^ (((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state)
+//                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u >>> 26) * state)
+//                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v >>> 26) * state)
             ) >>> 58);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 58);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y - z) | 0xA529L)) ^ (state >>> 22)) ^
@@ -473,14 +545,20 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y,z,w point with the given state
          */
-        public static int hash64(final long x, final long y, final long z, final long w, long state)
+        public static int hash64(long x, long y, long z, long w, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
+                    ^ (((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state)
             ) >>> 58);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 58);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
@@ -499,16 +577,24 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static int hash64(final long x, final long y, final long z, final long w, final long u, final long v, long state)
+        public static int hash64(long x, long y, long z, long w, long u, long v, long state)
         {
-            return (int) ((
-                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
-                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+            return (int) (((((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L))
+                    ^ (((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state)
+                    ^ (((z *= 0xAEF17502108EF2D9L) ^ z >>> 26) * state)
+                    ^ (((w *= 0x94D049BB133111EBL) ^ w >>> 26) * state)
+                    ^ (((u *= 0xBF58476D1CE4E5B9L) ^ u >>> 26) * state)
+                    ^ (((v *= 0xC6BC279692B5CC85L) ^ v >>> 26) * state)
             ) >>> 58);
+
+//            return (int) ((
+//                    ((state = ((state = x ^ ((state += 0x9E3779B97F4A7C15L ^ y) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = y ^ ((state += 0x9E3779B97F4A7C15L ^ z) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = z ^ ((state += 0x9E3779B97F4A7C15L ^ w) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = w ^ ((state += 0x9E3779B97F4A7C15L ^ u) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((state = ((state = u ^ ((state += 0x9E3779B97F4A7C15L ^ v) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//                            ^ ((((state = v ^ ((state += 0x9E3779B97F4A7C15L ^ x) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL))
+//            ) >>> 58);
 
             //state *= 0x352E9CF570932BDDL;
 //            return (int) ((((state = ((state += 0x6C8E9CD570932BD5L ^ x) ^ (state >>> 25)) * ((state ^ y) | 0xA529L)) ^ (state >>> 22)) ^
