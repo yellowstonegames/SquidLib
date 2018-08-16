@@ -642,7 +642,7 @@ public abstract class PanelEffect extends TemporalAction{
          */
         public char shown = '·';
         /**
-         * The color used for the projectile as a packed float.
+         * The color used for the projectile as a packed float; defaults to white.
          */
         public float color = SColor.FLOAT_WHITE;
         /**
@@ -772,6 +772,90 @@ public abstract class PanelEffect extends TemporalAction{
             }
         }
     }
+
+    /**
+     * Almost exactly lke {@link ProjectileEffect}, but its duration specifies the amount of time to spend crossing each
+     * cell (in seconds), not the duration of the entire effect. For ranged weapons like arrows, a fixed duration for
+     * the effect (as in ProjectileEffect) would mean an arrow shot at a close-by target travels slowly and an arrow
+     * shot at a far-away target travels very quickly; this class avoids that issue. Note that the time spent by the
+     * whole effect will vary based on the Chebyshev distance between the start and end points. The speed the projectile
+     * travels at is also dependent on the size and aspect ratio of cells it travels over.
+     */
+    @Beta
+    public static class SteadyProjectileEffect extends ProjectileEffect
+    {
+
+        /**
+         * Constructs a SteadyProjectileEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel. The duration will be 0.05 seconds per cell crossed.
+         *
+         * @param targeting  the IPackedColorPanel to affect
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint   the point to try to hit with the projectile; this should always succeed with no obstructions
+         */
+        public SteadyProjectileEffect(IPackedColorPanel targeting, Coord startPoint, Coord endPoint) {
+            this(targeting, 0.05f, startPoint, endPoint);
+        }
+
+        /**
+         * Constructs a SteadyProjectileEffect with explicit settings for some fields. The valid cells this can affect will be
+         * the full expanse of the IPackedColorPanel.
+         *
+         * @param targeting  the IPackedColorPanel to affect
+         * @param duration   the time the projectile will take to cross one cell, in seconds as a float
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint   the point to try to hit with the projectile; this should always succeed with no obstructions
+         */
+        public SteadyProjectileEffect(IPackedColorPanel targeting, float duration, Coord startPoint, Coord endPoint) {
+            super(targeting, (float) Radius.SQUARE.radius(startPoint, endPoint) * duration, startPoint, endPoint);
+        }
+
+        /**
+         * Constructs a SteadyProjectileEffect with explicit settings for most fields.
+         *
+         * @param targeting  the IPackedColorPanel to affect
+         * @param duration   the duration of this PanelEffect in seconds, as a float
+         * @param valid      the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint   the point to try to hit with the projectile; this may not be reached if the path crosses a cell not in valid
+         */
+        public SteadyProjectileEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord startPoint, Coord endPoint) {
+            super(targeting, (float) Radius.SQUARE.radius(startPoint, endPoint) * duration, valid, startPoint, endPoint);
+        }
+
+        /**
+         * Constructs a SteadyProjectileEffect with explicit settings for most fields but also an alternate Color
+         * object for the projectile instead of the default white color.
+         *
+         * @param targeting  the IPackedColorPanel to affect
+         * @param duration   the time the projectile will take to cross one cell, in seconds as a float
+         * @param valid      the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint   the point to try to hit with the projectile; this may not be reached if the path crosses a cell not in valid
+         * @param shown      the char to show at each step of the projectile's path as it advances
+         * @param coloring   a Color or subclass thereof that will replace the default white color here
+         */
+        public SteadyProjectileEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord startPoint, Coord endPoint, char shown, Color coloring) {
+            super(targeting, (float) Radius.SQUARE.radius(startPoint, endPoint) * duration, valid, startPoint, endPoint, shown, coloring);
+        }
+
+        /**
+         * Constructs a SteadyProjectileEffect with explicit settings for most fields but also an alternate Color
+         * object for the projectile instead of the default white color.
+         *
+         * @param targeting  the IPackedColorPanel to affect
+         * @param duration   the time the projectile will take to cross one cell, in seconds as a float
+         * @param valid      the valid cells that can be changed by this PanelEffect, as a GreasedRegion
+         * @param startPoint the starting point of the projectile; may be best if it is adjacent to whatever fires it
+         * @param endPoint   the point to try to hit with the projectile; this may not be reached if the path crosses a cell not in valid
+         * @param shown      the char to show at each step of the projectile's path as it advances
+         * @param coloring   an array of colors as packed floats that will replace the default white color here
+         */
+        public SteadyProjectileEffect(IPackedColorPanel targeting, float duration, GreasedRegion valid, Coord startPoint, Coord endPoint, char shown, float coloring) {
+            super(targeting, (float) Radius.SQUARE.radius(startPoint, endPoint) * duration, valid, startPoint, endPoint, shown, coloring);
+        }
+    }
+    
     @Beta
     public static class GlowBallEffect extends PanelEffect
     {
@@ -957,11 +1041,11 @@ public abstract class PanelEffect extends TemporalAction{
     };
 
     /**
-     * Convenience method to make a ProjectileEffect take an "arc-like" path toward the target, where it is fast at the
-     * beginning and end of its motion and is reaching the height of its arc at the center, before triggering another
-     * Action when the projectile stops (often this might be an {@link PanelEffect.ExplosionEffect}, but could be any
-     * scene2d Action).
-     * @param projectile a {@link PanelEffect.ProjectileEffect} to run as the first step
+     * Convenience method to make a ProjectileEffect or SteadyProjectileEffect take an "arc-like" path toward the
+     * target, where it is fast at the beginning and end of its motion and is reaching the height of its arc at the
+     * center, before triggering another Action when the projectile stops (often this might be an
+     * {@link PanelEffect.ExplosionEffect}, but could be any scene2d Action).
+     * @param projectile a {@link PanelEffect.ProjectileEffect} (or a subclass of it) to run as the first step
      * @param result an {@link Action} to run after the ProjectileEffect completes
      * @return an Action that can be added to a scene2d Actor, such as a SquidLayers or SparseLayers
      */

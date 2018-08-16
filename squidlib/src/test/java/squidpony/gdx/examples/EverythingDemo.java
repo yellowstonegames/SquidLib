@@ -721,8 +721,10 @@ public class EverythingDemo extends ApplicationAdapter {
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
 //                    display.addAction(PanelEffect.makeGrenadeEffect(new PanelEffect.ProjectileEffect(display.getForegroundLayer(), 0.6f, floors, pos, playerArray[0], '*', SColor.DB_GRAPHITE),
 //                            new PanelEffect.ExplosionEffect(display.getForegroundLayer(), 0.8f, floors, playerArray[0], 6)));
-                    display.addAction(new PanelEffect.GlowBallEffect(display.getBackgroundLayer(), 0.5f,
-                            floors, pos, playerArray[0], 1, SColor.CW_BRIGHT_RED));
+//                    display.addAction(new PanelEffect.GlowBallEffect(display.getBackgroundLayer(), 0.5f,
+//                            floors, pos, playerArray[0], 1, SColor.CW_BRIGHT_RED));
+                    display.addAction(new PanelEffect.SteadyProjectileEffect(display.getForegroundLayer(), 0.05f, floors,
+                            pos, playerArray[0],'!', SColor.CW_BRIGHT_RED));
                 }
                 getToPlayer.clearGoals();
                 nextMovePositions = getToPlayer.findPath(1, monplaces, null, pos, playerArray);
