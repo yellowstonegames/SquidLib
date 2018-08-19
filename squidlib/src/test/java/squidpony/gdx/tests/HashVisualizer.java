@@ -1282,23 +1282,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("Mist_ (beta) on length 2, low bits");
+                        Gdx.graphics.setTitle("PointHash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Mist_B.hash(coordinates) << 8 | 255L;
+                                code = Noise.PointHash.hashAll(x, y, 123L) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 3:
-                        Gdx.graphics.setTitle("Mist_ (chi) on length 2, low bits");
+                        Gdx.graphics.setTitle("HastyPointHash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Mist_C.hash(coordinates) << 8 | 255L;
+                                code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1333,21 +1329,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 6:
-                        Gdx.graphics.setTitle("Mist_ (beta) on length 1, low bits");
+                        Gdx.graphics.setTitle("PointHash on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Mist_B.hash(coordinate) << 8 | 255L;
+                                code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 7:
-                        Gdx.graphics.setTitle("Mist_ (chi) on length 1, low bits");
+                        Gdx.graphics.setTitle("HastyPointHash on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Mist_C.hash(coordinate) << 8 | 255L;
+                                code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1373,12 +1367,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 9:
-                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 2, low bits");
+                        Gdx.graphics.setTitle("PointHash 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Mist_B.hash64(coordinates) << 8 | 255L;
+                                code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1413,11 +1405,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 12:
-                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 1, low bits");
+                        Gdx.graphics.setTitle("PointHash 64 on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Mist_B.hash64(coordinate) << 8 | 255L;
+                                code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) >>> 24 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1464,23 +1455,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 16:
-                        Gdx.graphics.setTitle("Mist_ (beta) on length 2, high bits");
+                        Gdx.graphics.setTitle("PointHash on length 2, high bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Mist_B.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Noise.PointHash.hashAll(x, y, 123L) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 17:
-                        Gdx.graphics.setTitle("Mist_ (chi) on length 2, high bits");
+                        Gdx.graphics.setTitle("HastyPointHash on length 2, high bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Mist_C.hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Noise.HastyPointHash.hashAll(x, y, 123) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1514,21 +1501,19 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 20:
-                        Gdx.graphics.setTitle("Mist_ (beta) on length 1, high bits");
+                        Gdx.graphics.setTitle("PointHash on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Mist_B.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
                         break;
                     case 21:
-                        Gdx.graphics.setTitle("Mist_ (chi) on length 1, high bits");
+                        Gdx.graphics.setTitle("HastyPointHash on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Mist_C.hash(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1554,12 +1539,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 23:
-                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 2, high bits");
+                        Gdx.graphics.setTitle("PointHash 64 on length 2, high bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Mist_B.hash64(coordinates) & 0xFFFFFF00L | 255L;
+                                code = Noise.PointHash.hashAll(x, y, 123L) >>> 32 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1594,11 +1577,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 26:
-                        Gdx.graphics.setTitle("Mist_ (beta) 64 on length 1, high bits");
+                        Gdx.graphics.setTitle("PointHash 64 on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Mist_B.hash64(coordinate) & 0xFFFFFF00L | 255L;
+                                code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) >>> 32 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
