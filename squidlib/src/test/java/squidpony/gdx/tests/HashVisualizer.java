@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 46, noiseMode = 57;//118;//82;
+    private int hashMode = 0, rngMode = 46, noiseMode = 76;//118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -613,7 +613,16 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
     }
-
+    public static float ectoNoise(float xin, float yin, final long seed)
+    {
+        return NumberTools.swayRandomized(seed ^ 0x9E3779B97F4A7C15L,
+                ((
+                        NumberTools.swayRandomized(seed, yin + NumberTools.cos(xin)) -
+                        NumberTools.swayRandomized(~seed, xin - NumberTools.sin(yin))
+//                        NumberTools.swayRandomized(seed, yin + 0.3f * NumberTools.swayRandomized(seed ^ 0x9E3779B97F4A7C15L, 1.3f * xin)),
+//                        NumberTools.swayRandomized(~seed, xin - 0.35f * NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, 1.2f * yin))
+                ) + 2.5f) * (3.456789f + NumberTools.swayRandomized(seed ^ 0x6C8E9CF570932BD5L, xin - yin)));// + (yin + xin)
+    }
     public static float beachNoise(final long seed, final float xin, final float yin)
     {
         return NumberTools.swayRandomized(seed, (NumberTools.swayRandomized(seed + 0x9E3779B97F4A7C15L, xin + NumberTools.swayRandomized(0xD0E89D2D311E289FL + seed, yin + xin * 0.375f)) + NumberTools.swayRandomized(seed - 0x9E3779B97F4A7C15L, yin + NumberTools.swayRandomized(seed - 0xD0E89D2D311E289FL, xin + yin * 0.375f))) * 2.25f);
@@ -3638,6 +3647,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 75:
                     case 76:
                     case 77:
+                        Gdx.graphics.setTitle("Ecto Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = ectoNoise((x + ctr) * 0.0625f, (y + ctr) * 0.0625f, -999999L) * 0.5f + 0.5f; //0.61803398875
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
                     case 78:
                         Gdx.graphics.setTitle("Merlin Noise 3D, x4 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
@@ -3659,12 +3676,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                     case 80:
                         Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = MathUtils.sinDeg(ctr * 0.625f + 11f) * 0.015f;
-                        c0 = MathUtils.cosDeg(ctr * 0.625f + 11f) * 0.015f;
-                        s1 = MathUtils.sinDeg(ctr * 0.625f + 141f) * 0.015f;
-                        c1 = MathUtils.cosDeg(ctr * 0.625f + 141f) * 0.015f;
-                        s2 = MathUtils.sinDeg(ctr * 0.625f + 261f) * 0.015f;
-                        c2 = MathUtils.cosDeg(ctr * 0.625f + 261f) * 0.015f;
+                        s0 = MathUtils.sin(ctr * 0.625f + 1.1f) * 0.015f;
+                        c0 = MathUtils.cos(ctr * 0.625f + 1.1f) * 0.015f;
+                        s1 = MathUtils.sin(ctr * 0.625f + 1.41f) * 0.015f;
+                        c1 = MathUtils.cos(ctr * 0.625f + 1.41f) * 0.015f;
+                        s2 = MathUtils.sin(ctr * 0.625f + 2.61f) * 0.015f;
+                        c2 = MathUtils.cos(ctr * 0.625f + 2.61f) * 0.015f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 connections[0] = ctr * 0.007 + x * c0 - y * s0;
@@ -3684,12 +3701,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 81:
                         Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = MathUtils.sinDeg(ctr * 0.625f + 11f) * 0.015f;
-                        c0 = MathUtils.cosDeg(ctr * 0.625f + 11f) * 0.015f;
-                        s1 = MathUtils.sinDeg(ctr * 0.625f + 141f) * 0.015f;
-                        c1 = MathUtils.cosDeg(ctr * 0.625f + 141f) * 0.015f;
-                        s2 = MathUtils.sinDeg(ctr * 0.625f + 261f) * 0.015f;
-                        c2 = MathUtils.cosDeg(ctr * 0.625f + 261f) * 0.015f;
+                        s0 = MathUtils.sin(ctr * 0.625f + 1.1f) * 0.015f;
+                        c0 = MathUtils.cos(ctr * 0.625f + 1.1f) * 0.015f;
+                        s1 = MathUtils.sin(ctr * 0.625f + 1.41f) * 0.015f;
+                        c1 = MathUtils.cos(ctr * 0.625f + 1.41f) * 0.015f;
+                        s2 = MathUtils.sin(ctr * 0.625f + 2.61f) * 0.015f;
+                        c2 = MathUtils.cos(ctr * 0.625f + 2.61f) * 0.015f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 connections[0] = ctr * 0.007 + x * c0 - y * s0;
