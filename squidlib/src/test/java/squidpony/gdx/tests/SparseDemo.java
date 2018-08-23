@@ -144,8 +144,8 @@ public class SparseDemo extends ApplicationAdapter {
             GRAY_FLOAT = -0x1.7e7e7ep125F; // same result as SColor.CW_GRAY_BLACK.toFloatBits()
     // This filters colors in a way we adjust over time, producing a sort of hue shift effect.
     // It can also be used to over- or under-saturate colors, change their brightness, or any combination of these. 
-    private FloatFilters.YCbCrFilter filter;
-    
+    private FloatFilters.MultiLerpFilter mlerp;
+//    private FloatFilters.YCbCrFilter ycbcr;
 //    private FloatFilter sepia;
     @Override
     public void create () {
@@ -155,14 +155,20 @@ public class SparseDemo extends ApplicationAdapter {
         // just removing the String seed, making the line "rng = new RNG();" . Keeping the seed as a default allows
         // changes to be more easily reproducible, and using a fixed seed is strongly recommended for tests. 
         rng = new RNG(artOfWar);
+        mlerp = new FloatFilters.MultiLerpFilter(1f, SColor.DAWNBRINGER_32
+//                SColor.translucentColor(SColor.CW_RICH_GREEN, 0.6f),
+//                SColor.translucentColor(SColor.CW_LIGHT_AZURE, 0.4f),
+//                SColor.translucentColor(SColor.CW_ROSE, 0.8f),
+//                SColor.translucentColor(SColor.CW_LIGHT_BROWN, 0.5f)
+        );
         // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
-        filter = new FloatFilters.YCbCrFilter(0.875f, 0.6f, 0.6f);
+        //ycbcr = new FloatFilters.YCbCrFilter(0.875f, 0.6f, 0.6f);
 //        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or
         // for tinting images.
-        batch = new FilterBatch(filter);
+        batch = new FilterBatch(mlerp);
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -592,8 +598,8 @@ public class SparseDemo extends ApplicationAdapter {
         //past from affecting the current frame. This isn't a problem here, but would probably be an issue if we had
         //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
         //display.clear();
-        filter.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
-        filter.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+//        ycbcr.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
+//        ycbcr.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
         // The loop here only will draw tiles if they are potentially in the visible part of the map.
         // It starts at an x,y position equal to the player's position minus half of the shown gridWidth and gridHeight,
         // minus one extra cell to allow the camera some freedom to move. This position won't go lower than 0. The

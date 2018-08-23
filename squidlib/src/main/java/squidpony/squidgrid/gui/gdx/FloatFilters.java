@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.NumberTools;
 
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
-import static squidpony.squidgrid.gui.gdx.SColor.lerpFloatColors;
+import static squidpony.squidgrid.gui.gdx.SColor.lerpFloatColorsBlended;
 
 /**
  * Pre-made FloatFilter classes that you can use to filter colors without producing extra Color objects.
@@ -274,14 +274,16 @@ public final class FloatFilters {
 
     /**
      * A FloatFilter that linearly interpolates (lerps) any color it is given toward a specified color by a specified
-     * amount.
+     * amount. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the target
+     * color, and this means the alpha of the target color affects the amount of change instead of the resulting alpha. 
      */
     public static class LerpFilter extends FloatFilter {
         public float target, amount;
 
         /**
          * Builds a LerpFilter with a Color (which will be converted to a packed float color) and an amount as a float.
-         * The amount is how much the target color will affect input colors, from 0f to 1f.
+         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an
+         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.
          * @param target a libGDX color; must not be null
          * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f
          */
@@ -292,7 +294,8 @@ public final class FloatFilters {
 
         /**
          * Builds a LerpFilter with a packed float color and an amount as a float.
-         * The amount is how much the target color will affect input colors, from 0f to 1f.
+         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an
+         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.
          * @param target a packed float color; must not be null
          * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f
          */
@@ -311,7 +314,66 @@ public final class FloatFilters {
          */
         @Override
         public float alter(float color) {
-            return lerpFloatColors(color, target, amount);
+            return lerpFloatColorsBlended(color, target, amount);
+        }
+    }
+
+    /**
+     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of
+     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the
+     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the
+     * resulting alpha. Changing the alpha of the colors this is given can be done easily with
+     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.
+     */
+    public static class MultiLerpFilter extends FloatFilter {
+        public float[] targets;
+        public float amount;
+        /**
+         * Builds a MultiLerpFilter with an array of Color objects (which will be converted to an array of packed float
+         * colors) and an amount as a float. The amount is how much the target colors will affect input colors, from 0f
+         * to 1f. If a target color has an alpha component that is less than 1, then amount is effectively multiplied by
+         * that alpha. If you want to edit the alpha without duplicating Color objects, you can use
+         * {@link SColor#translucentColor(Color, float)} to make a float array to pass to
+         *{@link #MultiLerpFilter(float, float...)}.
+         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f
+         * @param targets an array of libGDX Color objects; must not be null or empty
+         */
+        public MultiLerpFilter(float amount, Color[] targets) {
+            this.targets = new float[targets.length];
+            for (int i = 0; i < targets.length; i++) {
+                this.targets[i] = targets[i].toFloatBits();
+            }
+            this.amount = MathUtils.clamp(amount, 0f, 1f);
+        }
+
+        /**
+         * Builds a MultiLerpFilter with an array of packed float colors and an amount as a float.
+         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an
+         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.
+         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f
+         * @param targets an array or vararg of packed float colors; must not be null or empty
+         */
+
+        public MultiLerpFilter(float amount, float... targets)
+        {
+            this.targets = targets;
+            this.amount = MathUtils.clamp(amount, 0f, 1f);
+        }
+
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            int choice = 0, diff = SColor.difference2(targets[0], color);
+            for (int i = 1; i < targets.length; i++) {
+                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))
+                    choice = i;
+            }
+            return lerpFloatColorsBlended(color, targets[choice], amount);
         }
     }
 

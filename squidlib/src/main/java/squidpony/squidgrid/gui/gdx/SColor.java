@@ -12230,9 +12230,6 @@ public class SColor extends Color implements Serializable {
 
     public static float differenceYCbCr(final int color1, int r2, int g2, int b2)
     {
-        r2 = (r2 << 3 | r2 >>> 2);
-        g2 = (g2 << 3 | g2 >>> 2);
-        b2 = (b2 << 3 | b2 >>> 2);
         final int r1 = color1 >>> 24,
                 g1 = color1 >>> 16 & 255,
                 b1 = color1 >>> 8 & 255;
@@ -12269,6 +12266,20 @@ public class SColor extends Color implements Serializable {
      * A constant that stores opaque black color as a packed float, for convenience when using the float-based APIs.
      */
     public static final float FLOAT_BLACK = -0x1.0p125f;
+
+    /**
+     * Given a Color or SColor object and a desired alpha to set for that color (between 0f and 1f, inclusive and
+     * clamped in that range), this makes a packed float color that has the same red, green, and blue channels but has
+     * been set to the given alpha, without constructing any objects along the way.
+     *
+     * @param color  a libGDX Color (or SColor); will not be modified
+     * @param alpha  between 0.0 and 1.0 inclusive, the alpha to set into the returned packed color
+     * @return a color encoded as a packed float, using color's RGB channels and the given alpha
+     */
+    public static float translucentColor(Color color, float alpha) {
+        return NumberTools.intBitsToFloat(color.toIntBits() & 0xFFFFFF
+                | (MathUtils.clamp((int) (255f * alpha), 0, 255) << 24 & 0xFE000000));
+    }
 
     /**
      * Given a color stored as a packed float, and a desired alpha to set for that color (between 0.0 and 1.0, inclusive
