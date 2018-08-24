@@ -174,7 +174,7 @@ public class Noise {
             state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
             state = (state << 54 | state >>> 10);
             state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-            return ((state << 54 | state >>> 10) + (other ^ other >>> 26)) * 0x632BE59BD9B4E019L;
+            return ((state << 54 | state >>> 10) + (other ^ other >>> 26) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
             
 //            return ((x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26 ^ 0x9183A1F4F348E683L) * (
 //                    ((y = ((y *= 0x6C8E9CF570932BD5L) ^ y >>> 26 ^ 0x9183A1F4F348E683L) * (
@@ -219,7 +219,7 @@ public class Noise {
             state ^= (other += (y ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
             state = (state << 54 | state >>> 10);
             state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-            return ((state << 54 | state >>> 10) + (other ^ other >>> 26)) * 0x632BE59BD9B4E019L;
+            return ((state << 54 | state >>> 10) + (other ^ other >>> 26) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
 
 //            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x >>> 24
 //                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state) ^ y >>> 24
@@ -256,7 +256,7 @@ public class Noise {
             state ^= (other += (z ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
             state = (state << 54 | state >>> 10);
             state ^= (other += (w ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-            return ((state << 54 | state >>> 10) + (other ^ other >>> 26)) * 0x632BE59BD9B4E019L;
+            return ((state << 54 | state >>> 10) + (other ^ other >>> 26) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
 
 //            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x >>> 24
 //                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state) ^ y >>> 24
@@ -302,7 +302,7 @@ public class Noise {
             state ^= (other += (u ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
             state = (state << 54 | state >>> 10);
             state ^= (other += (v ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
-            return ((state << 54 | state >>> 10) + (other ^ other >>> 26)) * 0x632BE59BD9B4E019L;
+            return ((state << 54 | state >>> 10) + (other ^ other >>> 26) ^ 0x9E3779B97F4A7C15L) * 0x94D049BB133111EBL;
 
 //            return (x = ((x *= 0x6C8E9CF570932BD5L) ^ x >>> 26) * (state = state * 0x9E3779B97F4A7C15L | 1L)) ^ x >>> 24
 //                    ^ (y = ((y *= 0x5851F42D4C957F2DL) ^ y >>> 26) * state) ^ y >>> 24

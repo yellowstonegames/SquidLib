@@ -377,4 +377,55 @@ public final class FloatFilters {
         }
     }
 
+    /**
+     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of
+     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the
+     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the
+     * resulting alpha. Changing the alpha of the colors this is given can be done easily with
+     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.
+     */
+    public static class PaletteFilter extends FloatFilter {
+        public float[] targets;
+        /**
+         * Builds a PaletteFilter with an array of Color objects that this will choose from. The array will be converted
+         * to an array of packed float colors, and not referenced directly.
+         * @param targets an array of libGDX Color objects; must not be null or empty
+         */
+        public PaletteFilter(final Color[] targets) {
+            this.targets = new float[targets.length];
+            for (int i = 0; i < targets.length; i++) {
+                this.targets[i] = targets[i].toFloatBits();
+            }
+        }
+
+        /**
+         * Builds a PaletteFilter with an array of packed float colors that this will choose from. The array will be
+         * referenced directly, not copied, so if you change the contents of targets, it will be reflected here.
+         * @param targets an array or vararg of packed float colors; must not be null or empty
+         */
+
+        public PaletteFilter(final float... targets)
+        {
+            this.targets = targets;
+        }
+
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            if(color >= 0f) //if color is halfway-transparent or closer to transparent...
+                return 0f; // return fully transparent
+            int choice = 0, diff = SColor.difference2(targets[0], color);
+            for (int i = 1; i < targets.length; i++) {
+                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))
+                    choice = i;
+            }
+            return targets[choice];
+        }
+    }
+
 }
