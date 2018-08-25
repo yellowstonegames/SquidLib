@@ -2867,7 +2867,7 @@ public class FakeLanguageGen implements Serializable {
                 Replacer rep = pat.replacer("$1$2$3 $1" + ac + "$3"), repLess = pat.replacer("$1" + ac + "$3");
                 for (int j = 0; j < p0s; j++) {
                     String k = parts0.keyAt(j);
-                    if (uas.equals(k))
+                    if (uas.equals(k)) // uas is never null, always length 1
                         v = parts0.getAt(j);
                     else {
                         String current = parts0.getAt(j);

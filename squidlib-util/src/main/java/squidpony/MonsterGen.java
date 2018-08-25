@@ -106,7 +106,7 @@ public class MonsterGen {
             ArrayList<String> selfParts = new ArrayList<>();
             int t = 0;
             for (; t < terms.length; t++) {
-                if(terms[t].equals(";"))
+                if(";".equals(terms[t]))
                 {
                     t++;
                     break;
@@ -115,14 +115,14 @@ public class MonsterGen {
             }
             parts.put(name, selfParts);
             for (; t < terms.length; t++) {
-                if (terms[t].equals(";")) {
+                if (";".equals(terms[t])) {
                     t++;
                     break;
                 }
                 unsaidAdjectives.add(terms[t]);
             }
             for (; t < terms.length; t++) {
-                if (terms[t].equals(";")) {
+                if (";".equals(terms[t])) {
                     t++;
                     break;
                 }
@@ -130,14 +130,14 @@ public class MonsterGen {
             }
             wholeAdjectives.removeAll(unsaidAdjectives);
             for (; t < terms.length; t++) {
-                if (terms[t].equals(";")) {
+                if (";".equals(terms[t])) {
                     t++;
                     break;
                 }
                 powerAdjectives.add(terms[t]);
             }
             for (; t < terms.length; t++) {
-                if (terms[t].equals(";")) {
+                if (";".equals(terms[t])) {
                     break;
                 }
                 powerPhrases.add(terms[t]);
@@ -228,7 +228,7 @@ public class MonsterGen {
                 i = 1;
                 for(Map.Entry<String, List<String>> ent : parts.entrySet())
                 {
-                    if(ent.getKey().equals(name))
+                    if(name != null && name.equals(ent.getKey()))
                         continue;
                     if(ent.getValue().isEmpty())
                         sb.append(" feel");
@@ -308,7 +308,7 @@ public class MonsterGen {
                 i = 1;
                 for(Map.Entry<String, List<String>> ent : parts.entrySet())
                 {
-                    if(ent.getKey().equals(name))
+                    if(name != null && name.equals(ent.getKey()))
                         continue;
                     if(ent.getValue().isEmpty())
                         sb.append(" feel");

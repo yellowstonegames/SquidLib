@@ -251,7 +251,7 @@ public class Condition {
             result += Symbol.toString(keyLevel-1);
         }
         if (switchState != SwitchState.EITHER) {
-            if (!result.equals("")) result += ",";
+            if (!"".equals(result)) result += ",";
             result += Symbol.toString(switchState.toSymbol());
         }
         return result;
