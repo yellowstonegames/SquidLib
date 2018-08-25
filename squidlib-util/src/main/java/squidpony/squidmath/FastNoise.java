@@ -31,7 +31,7 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.HastyPointHash.hash256;
+import static squidpony.squidmath.Noise.PointHash.hash256;
 
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
@@ -443,17 +443,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private static float valCoord2D(int seed, int x, int y) {
         final int n = seed ^ X_PRIME * x ^ Y_PRIME * y;
-        return (n * n * n * 60493) / (float) 2147483648.0;
+        return (n * n * n * 60493) / 2147483648f;
     }
 
     private static float valCoord3D(int seed, int x, int y, int z) {
         final int n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z;
-        return (n * n * n * 60493) / (float) 2147483648.0;
+        return (n * n * n * 60493) / 2147483648f;
     }
 
     private static float valCoord4D(int seed, int x, int y, int z, int w) {
         final int n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w;
-        return (n * n * n * 60493) / (float) 2147483648.0;
+        return (n * n * n * 60493) / 2147483648f;
     }
 
     private static float gradCoord2D(int seed, int x, int y, float xd, float yd) {

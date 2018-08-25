@@ -334,7 +334,7 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y point with the given state
          */         
-        public static long hash256(long x, long y, long state) {
+        public static int hash256(long x, long y, long state) {
             state *= 0x9E3779B97F4A7C15L;
             long other = 0x60642E2A34326F15L;
             state ^= (other += (x ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
