@@ -38,10 +38,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.CrossHash;
-import squidpony.squidmath.HashCommon;
-import squidpony.squidmath.LinnormRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -197,7 +194,6 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 @Warmup(iterations = 5)
 @Measurement(iterations = 5)
-
 public class HashBenchmark {
     @State(Scope.Thread)
     public static class BenchmarkState {
@@ -205,6 +201,57 @@ public class HashBenchmark {
         public char[][] chars;
         public long[][] longs;
         public int idx;
+        private final int[] intInputs = new int[65536];
+        private final long[] longInputs = new long[65536];
+
+        @Benchmark
+        public long measurePointHash2D()
+        {
+            return Noise.PointHash.hashAll(longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)]);
+        }
+
+        @Benchmark
+        public long measurePointHash3D()
+        {
+            return Noise.PointHash.hashAll(longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)]);
+        }
+
+        @Benchmark
+        public long measurePointHash4D()
+        {
+            return Noise.PointHash.hashAll(longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)]);
+        }
+
+        @Benchmark
+        public long measurePointHash6D()
+        {
+            return Noise.PointHash.hashAll(longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)], longInputs[(idx++ & 0xFFFF)]);
+        }
+
+        @Benchmark
+        public long measureHastyPointHash2D()
+        {
+            return Noise.HastyPointHash.hashAll(intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)]);
+        }
+
+        @Benchmark
+        public long measureHastyPointHash3D()
+        {
+            return Noise.HastyPointHash.hashAll(intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)]);
+        }
+
+        @Benchmark
+        public long measureHastyPointHash4D()
+        {
+            return Noise.HastyPointHash.hashAll(intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)]);
+        }
+
+        @Benchmark
+        public long measureHastyPointHash6D()
+        {
+            return Noise.HastyPointHash.hashAll(intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)], intInputs[(idx++ & 0xFFFF)]);
+        }
+
         @Setup(Level.Trial)
         public void setup() {
             FakeLanguageGen[] languages = new FakeLanguageGen[16];
@@ -215,6 +262,9 @@ public class HashBenchmark {
             words = new String[4096];
             chars = new char[4096][];
             longs = new long[4096][];
+            for (int i = 0; i < 65536; i++) {
+                intInputs[i] = (int)(longInputs[i] = LinnormRNG.determine(i));
+            }
             for (int i = 0; i < 4096; i++) {
                 chars[i] = (words[i] = languages[i & 15].word(random, random.nextBoolean(), random.next(3)+1)).toCharArray();
                 final int len = (random.next(6)+9);
