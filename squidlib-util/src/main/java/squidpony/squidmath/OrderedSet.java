@@ -1534,7 +1534,8 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         while (i < n) {
             if (first) first = false;
             else s.append(", ");
-            s.append(getAt(i++));
+            K k = getAt(i++);
+            s.append(k == this ? "(this collection)" : String.valueOf(k));
         }
         s.append("}");
         return s.toString();

@@ -1038,7 +1038,9 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         }
         @Override
         public String toString() {
-            return key[index] + "=>" + value[index];
+            return (key[index] == OrderedMap.this ? "(this collection)" : String.valueOf(key[index]))
+                    + "=>"
+                    + (value[index] == OrderedMap.this ? "(this collection)" : String.valueOf(value[index]));
         }
     }
 
@@ -1575,7 +1577,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
             final StringBuilder s = new StringBuilder();
             final EntryIterator i = iterator();
             int n = size();
-            Object k;
+            MapEntry k;
             boolean first = true;
             s.append("{");
             while (n-- != 0) {
@@ -1584,10 +1586,9 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
                 else
                     s.append(", ");
                 k = i.next();
-                if (this == k)
-                    s.append("(this collection)");
-                else
-                    s.append(String.valueOf(k));
+                s.append(key[k.index] == OrderedMap.this ? "(this collection)" : String.valueOf(key[k.index]))
+                        .append("=>")
+                        .append(value[k.index] == OrderedMap.this ? "(this collection)" : String.valueOf(value[k.index]));
             }
             s.append("}");
             return s.toString();
@@ -1821,14 +1822,14 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         @Override
         public String toString() {
             final StringBuilder s = new StringBuilder();
-            final KeyIterator i = iterator();
             int n = size();
             boolean first = true;
             s.append("{");
-            while (n-- != 0) {
+            for (int i = 0; i < n; i++) {
                 if (first) first = false;
                 else s.append(", ");
-                s.append(i.next());
+                K k = keyAt(i);
+                s.append(k == OrderedMap.this ? "(this collection)" : String.valueOf(k));
             }
             s.append("}");
             return s.toString();
@@ -2199,11 +2200,17 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final StringBuilder s = new StringBuilder();
         int n = size(), i = 0;
         boolean first = true;
+        K k;
+        V v;
         s.append("OrderedMap{");
         while (i < n) {
             if (first) first = false;
             else s.append(", ");
-            s.append(entryAt(i++));
+            k = keyAt(i);
+            v = getAt(i++);
+            s.append(k == this ? "(this collection)" : String.valueOf(k))
+                    .append("=>")
+                    .append(v == this ? "(this collection)" : String.valueOf(v));
         }
         s.append("}");
         return s.toString();

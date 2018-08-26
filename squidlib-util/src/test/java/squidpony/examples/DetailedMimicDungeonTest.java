@@ -199,9 +199,7 @@ public class DetailedMimicDungeonTest {
                         case '.':
                             sb.append("<div class=\"isotile\"><img src=\"dungeon/palette48_Floor_Huge_face" + rng.nextInt(4) + "_0.png\" />");
                             if(rng.nextInt(120) == 0) {
-                                sb.append("<img class=\"ppl\" src=\"dungeon/");
-                                sb.append(rng.getRandomElement(people));
-                                sb.append("\" />");
+                                sb.append("<img class=\"ppl\" src=\"dungeon/").append(rng.getRandomElement(people)).append("\" />");
                             }
                             sb.append("</div>\n");
                             break;

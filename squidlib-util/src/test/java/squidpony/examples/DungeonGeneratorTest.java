@@ -576,9 +576,7 @@ public class DungeonGeneratorTest {
                     case '.':
                         sb.append("<img src=\"dungeon/palette13_Floor_Ortho_face").append(rng.nextInt(4)).append("_0.png\" />");
                         if (rng.nextInt(15) == 0) {
-                            sb.append("<img class=\"ppl\" src=\"dungeon/");
-                            sb.append(rng.getRandomElement(people));
-                            sb.append("\" />");
+                            sb.append("<img class=\"ppl\" src=\"dungeon/").append(rng.getRandomElement(people)).append("\" />");
                         }
                         break;
                     case '"':

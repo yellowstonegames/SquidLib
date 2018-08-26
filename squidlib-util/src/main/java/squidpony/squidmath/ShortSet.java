@@ -473,11 +473,9 @@ public class ShortSet implements Serializable{
         while (i-- > 0) {
             int key = keyTable[i];
             if (key == EMPTY) continue;
-            buffer.append(", ");
-            buffer.append(key);
+            buffer.append(", ").append(key);
         }
-        buffer.append(']');
-        return buffer.toString();
+        return buffer.append(']').toString();
     }
 
     /**

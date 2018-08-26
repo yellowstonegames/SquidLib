@@ -292,7 +292,6 @@ public class AStarSearch implements Serializable{
 					maxLen = locLen;
 			}
 		}
-		final String eol = System.getProperty("line.separator");
 		for (int y = 0; y < height; y++) {
 			for (int x = 0; x < width; x++) {
 				final long v = Math.round(map[x][y]);
@@ -307,7 +306,7 @@ public class AStarSearch implements Serializable{
 				result.append(s);
 			}
 			if (y < height - 1)
-				result.append(eol);
+				result.append('\n');
 		}
 		return result.toString();
 	}

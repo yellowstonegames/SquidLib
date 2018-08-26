@@ -1592,7 +1592,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
             final StringBuilder s = new StringBuilder();
             final EntryIterator i = iterator();
             int n = size();
-            Object k;
+            MapEntry k;
             boolean first = true;
             s.append("{");
             while (n-- != 0) {
@@ -1600,11 +1600,11 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
                     first = false;
                 else
                     s.append(", ");
-                k = i.next();
-                if (this == k)
-                    s.append("(this collection)");
-                else
-                    s.append(String.valueOf(k));
+                k = i.next();                 
+                s.append(this == key[k.index] 
+                        ? "(this Arrangement)" 
+                        : String.valueOf(key[k.index]))
+                        .append("=>").append(value[k.index]);
             }
             s.append("}");
             return s.toString();
@@ -1818,14 +1818,14 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         @Override
         public String toString() {
             final StringBuilder s = new StringBuilder();
-            final KeyIterator i = iterator();
-            int n = size();
             boolean first = true;
+            K k;
             s.append("{");
-            while (n-- != 0) {
+            for (int i = 0; i < size; i++) {
                 if (first) first = false;
                 else s.append(", ");
-                s.append(i.next());
+                k = keyAt(i);
+                s.append(k == Arrangement.this ? "(this collection)" : String.valueOf(k));
             }
             s.append("}");
             return s.toString();
@@ -2173,13 +2173,16 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     @Override
     public String toString() {
         final StringBuilder s = new StringBuilder();
-        int n = size(), i = 0;
         boolean first = true;
+        K k;
         s.append("Arrangement{");
-        while (i < n) {
+        for (int i = 0; i < size; i++) {
             if (first) first = false;
             else s.append(", ");
-            s.append(entryAt(i++));
+            k = keyAt(i);
+            s.append(k == Arrangement.this ? "(this collection)" : String.valueOf(k))
+                    .append("=>")
+                    .append(getAt(i));
         }
         s.append("}");
         return s.toString();

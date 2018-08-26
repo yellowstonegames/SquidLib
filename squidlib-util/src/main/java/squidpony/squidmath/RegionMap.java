@@ -162,20 +162,20 @@ public class RegionMap<V> extends OrderedMap<short[], V> implements Serializable
         while (i-- > 0) {
             short[] key = keyTable[i];
             if (key == null) continue;
-            buffer.append("Packed Region:");
-            buffer.append(CoordPacker.encodeASCII(key));
-            buffer.append('=');
-            buffer.append(valueTable[i]);
+            buffer.append("Packed Region:")
+                    .append(CoordPacker.encodeASCII(key))
+                    .append('=')
+                    .append(valueTable[i]);
             break;
         }
         while (i-- > 0) {
             short[] key = keyTable[i];
             if (key == null) continue;
-            buffer.append(separator);
-            buffer.append("Packed Region:");
-            buffer.append(CoordPacker.encodeASCII(key));
-            buffer.append('=');
-            buffer.append(valueTable[i]);
+            buffer.append(separator)
+                    .append("Packed Region:")
+                    .append(CoordPacker.encodeASCII(key))
+                    .append('=')
+                    .append(valueTable[i]);
         }
         if (braces) buffer.append('}');
         return buffer.toString();

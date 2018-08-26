@@ -523,8 +523,9 @@ public final class LZSPlus {
                     break;
                 case 2:
                     StringBuilder sb = new StringBuilder(result.size());
-                    for (String s : result)
-                        sb.append(s);
+                    for (int i = 0; i < result.size(); i++) {
+                        sb.append(result.get(i));
+                    }
                     return sb.toString();
             }
 

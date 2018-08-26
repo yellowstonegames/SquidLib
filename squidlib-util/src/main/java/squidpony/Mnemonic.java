@@ -242,7 +242,7 @@ public class Mnemonic {
     public int fromWordMnemonic(String mnemonic)
     {
         final int adjectiveCount = allAdjectives.size(), nounCount = allNouns.size();
-        int idx = mnemonic.indexOf(' ', 0), factor = adjectiveCount;
+        int idx = mnemonic.indexOf(' '), factor = adjectiveCount;
         boolean negative;
         int result = allAdjectives.getInt(StringKit.safeSubstring(mnemonic, 0, idx));
         result += factor * allNouns.getInt(StringKit.safeSubstring(mnemonic, idx + 1, idx = mnemonic.indexOf(' ', idx + 1)));

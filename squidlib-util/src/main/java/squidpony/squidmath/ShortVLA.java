@@ -385,11 +385,11 @@ public class ShortVLA implements Serializable{
         if (size == 0) return "[]";
         short[] items = this.items;
         StringBuilder buffer = new StringBuilder(32);
-        buffer.append('[');
-        buffer.append(items[0]);
+        buffer.append('[')
+                .append(items[0]);
         for (int i = 1; i < size; i++) {
-            buffer.append(", ");
-            buffer.append(items[i]);
+            buffer.append(", ")
+                    .append(items[i]);
         }
         buffer.append(']');
         return buffer.toString();
@@ -401,8 +401,8 @@ public class ShortVLA implements Serializable{
         StringBuilder buffer = new StringBuilder(32);
         buffer.append(items[0]);
         for (int i = 1; i < size; i++) {
-            buffer.append(separator);
-            buffer.append(items[i]);
+            buffer.append(separator)
+                    .append(items[i]);
         }
         return buffer.toString();
     }

@@ -1200,7 +1200,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
             final StringBuilder s = new StringBuilder();
             final EntryIterator i = iterator();
             int n = size();
-            Object k;
+            MapEntry k;
             boolean first = true;
             s.append("{");
             while (n-- != 0) {
@@ -1208,11 +1208,8 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
                     first = false;
                 else
                     s.append(", ");
-                k = i.next();
-                if (this == k)
-                    s.append("(this collection)");
-                else
-                    s.append(String.valueOf(k));
+                k = i.next();                 
+                s.append(key[k.index]).append("=>").append(value[k.index]);
             }
             s.append("}");
             return s.toString();

@@ -340,7 +340,7 @@ public class Thesaurus implements Serializable{
                 return nx.toUpperCase();
             if(Category.Lu.contains(word.charAt(0)))
             {
-                return Character.toUpperCase(nx.charAt(0)) + nx.substring(1, nx.length());
+                return Character.toUpperCase(nx.charAt(0)) + nx.substring(1);
             }
             return nx;
         }
@@ -385,7 +385,7 @@ public class Thesaurus implements Serializable{
             if(Category.Lu.contains(word.charAt(0)))
             {
                 dest.append(Character.toUpperCase(nx.charAt(0)));
-                dest.append(nx.substring(1, nx.length()));
+                dest.append(nx.substring(1));
                 return;
             }
             dest.append(nx);

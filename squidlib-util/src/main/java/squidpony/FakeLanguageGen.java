@@ -3063,15 +3063,15 @@ public class FakeLanguageGen implements Serializable {
                     else if (rng.nextDouble() < vowelEndFrequency) {
                         ender.append(rng.getRandomElement(midVowels));
                         if (rng.nextDouble() < vowelSplitFrequency) {
-                            ender.append(rng.getRandomElement(vowelSplitters));
-                            ender.append(rng.getRandomElement(midVowels));
+                            ender.append(rng.getRandomElement(vowelSplitters))
+                                    .append(rng.getRandomElement(midVowels));
                         }
                     }
                 } else {
                     ender.append(rng.getRandomElement(midVowels));
                     if (rng.nextDouble() < vowelSplitFrequency) {
-                        ender.append(rng.getRandomElement(vowelSplitters));
-                        ender.append(rng.getRandomElement(midVowels));
+                        ender.append(rng.getRandomElement(vowelSplitters))
+                                .append(rng.getRandomElement(midVowels));
                     }
                     if (rng.nextDouble() >= vowelEndFrequency) {
                         ender.append(rng.getRandomElement(closingConsonants));
@@ -3095,8 +3095,8 @@ public class FakeLanguageGen implements Serializable {
             for (; i < syllables; i++) {
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
-                    sb.append(rng.getRandomElement(vowelSplitters));
-                    sb.append(rng.getRandomElement(midVowels));
+                    sb.append(rng.getRandomElement(vowelSplitters))
+                            .append(rng.getRandomElement(midVowels));
                 }
                 sb.append(rng.getRandomElement(midConsonants));
             }
@@ -3216,15 +3216,15 @@ public class FakeLanguageGen implements Serializable {
                     else if (redouble && rng.nextDouble() < vowelEndFrequency) {
                         ender.append(rng.getRandomElement(midVowels));
                         if (vowelSplitters.length > 0 && rng.nextDouble() < vowelSplitFrequency) {
-                            ender.append(rng.getRandomElement(vowelSplitters));
-                            ender.append(rng.getRandomElement(midVowels));
+                            ender.append(rng.getRandomElement(vowelSplitters))
+                                    .append(rng.getRandomElement(midVowels));
                         }
                     }
                 } else {
                     ender.append(rng.getRandomElement(midVowels));
                     if (rng.nextDouble() < vowelSplitFrequency) {
-                        ender.append(rng.getRandomElement(vowelSplitters));
-                        ender.append(rng.getRandomElement(midVowels));
+                        ender.append(rng.getRandomElement(vowelSplitters))
+                                .append(rng.getRandomElement(midVowels));
                     }
                     if (rng.nextDouble() >= vowelEndFrequency) {
                         ender.append(rng.getRandomElement(closingConsonants));
@@ -3247,8 +3247,8 @@ public class FakeLanguageGen implements Serializable {
             for (; i < approxSyllables; i++) {
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
-                    sb.append(rng.getRandomElement(vowelSplitters));
-                    sb.append(rng.getRandomElement(midVowels));
+                    sb.append(rng.getRandomElement(vowelSplitters))
+                            .append(rng.getRandomElement(midVowels));
                 }
                 sb.append(rng.getRandomElement(midConsonants));
             }
@@ -3331,15 +3331,15 @@ public class FakeLanguageGen implements Serializable {
                     else if (rng.nextDouble() < vowelEndFrequency) {
                         ender.append(rng.getRandomElement(midVowels));
                         if (rng.nextDouble() < vowelSplitFrequency) {
-                            ender.append(rng.getRandomElement(vowelSplitters));
-                            ender.append(rng.getRandomElement(midVowels));
+                            ender.append(rng.getRandomElement(vowelSplitters))
+                                    .append(rng.getRandomElement(midVowels));
                         }
                     }
                 } else {
                     ender.append(rng.getRandomElement(midVowels));
                     if (rng.nextDouble() < vowelSplitFrequency) {
-                        ender.append(rng.getRandomElement(vowelSplitters));
-                        ender.append(rng.getRandomElement(midVowels));
+                        ender.append(rng.getRandomElement(vowelSplitters))
+                                .append(rng.getRandomElement(midVowels));
                     }
                     if (rng.nextDouble() >= vowelEndFrequency) {
                         ender.append(rng.getRandomElement(closingConsonants));
@@ -3364,8 +3364,8 @@ public class FakeLanguageGen implements Serializable {
                     rng.setState(reseeds[fraction++ - 1]);
                 sb.append(rng.getRandomElement(midVowels));
                 if (rng.nextDouble() < vowelSplitFrequency) {
-                    sb.append(rng.getRandomElement(vowelSplitters));
-                    sb.append(rng.getRandomElement(midVowels));
+                    sb.append(rng.getRandomElement(vowelSplitters))
+                            .append(rng.getRandomElement(midVowels));
                 }
                 sb.append(rng.getRandomElement(midConsonants));
             }
@@ -3511,15 +3511,13 @@ public class FakeLanguageGen implements Serializable {
             if (rng.nextDouble() < midPunctuationFrequency) {
                 sb.append(rng.getRandomElement(midPunctuation));
             }
-            sb.append(' ');
-            sb.append(word(rng, false));
+            sb.append(' ').append(word(rng, false));
         }
         for (int i = minWords; i < maxWords && rng.nextInt(2 * maxWords) > i; i++) {
             if (rng.nextDouble() < midPunctuationFrequency) {
                 sb.append(rng.getRandomElement(midPunctuation));
             }
-            sb.append(' ');
-            sb.append(word(rng, false));
+            sb.append(' ').append(word(rng, false));
         }
         if (endPunctuation != null && endPunctuation.length > 0)
             sb.append(rng.getRandomElement(endPunctuation));
@@ -3629,8 +3627,7 @@ public class FakeLanguageGen implements Serializable {
                 frustration++;
             }
             if (frustration >= 50) break;
-            sb.append(' ');
-            sb.append(next);
+            sb.append(' ').append(next);
         }
         for (int i = minWords; i < maxWords && sb.length() < maxChars - 7 && rng.nextInt(2 * maxWords) > i && frustration < 50; i++) {
             if (rng.nextDouble() < midPunctuationFrequency && sb.length() < maxChars - 3) {
@@ -3974,7 +3971,7 @@ public class FakeLanguageGen implements Serializable {
                 c = summaries[i];
                 idx = c.indexOf('@');
                 if (idx >= 0) {
-                    brief.append(c.substring(0, idx + 1)).append(weights[i]);
+                    brief.append(c, 0, idx + 1).append(weights[i]);
                     if (i < summaries.length - 1)
                         brief.append('~');
                 }

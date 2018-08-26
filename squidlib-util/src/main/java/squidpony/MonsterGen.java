@@ -218,8 +218,7 @@ public class MonsterGen {
             String ts = tmp.toString();
             if(ts.matches("^[aeiouAEIOU].*"))
                 sb.append('n');
-            sb.append(' ');
-            sb.append(ts);
+            sb.append(' ').append(ts);
             if(!(powerPhrases.isEmpty() && parts.size() == 1))
                 sb.append(' ');
             if(parts.size() > 1)
@@ -237,16 +236,14 @@ public class MonsterGen {
                         int j = 1;
                         for(String p : ent.getValue())
                         {
-                            sb.append(' ');
-                            sb.append(p);
+                            sb.append(' ').append(p);
                             if(j++ < ent.getValue().size() && ent.getValue().size() > 2)
                                 sb.append(',');
                             if(j == ent.getValue().size() && ent.getValue().size() >= 2)
                                 sb.append(" and");
                         }
                     }
-                    sb.append(" of a ");
-                    sb.append(ent.getKey());
+                    sb.append(" of a ").append(ent.getKey());
 
 
                     if(i++ < parts.size() && parts.size() > 3)
@@ -262,8 +259,7 @@ public class MonsterGen {
             i = 1;
             for(String phr : powerPhrases)
             {
-                sb.append(' ');
-                sb.append(phr);
+                sb.append(' ').append(phr);
                 if(i++ < powerPhrases.size() && powerPhrases.size() > 2)
                     sb.append(',');
                 if(i == powerPhrases.size() && powerPhrases.size() >= 2)
@@ -300,8 +296,7 @@ public class MonsterGen {
             String ts = tmp.toString();
             if(ts.matches("^[aeiouAEIOU].*"))
                 sb.append('n');
-            sb.append(' ');
-            sb.append(ts);
+            sb.append(' ').append(ts);
             if(parts.size() > 1)
             {
                 sb.append(" with the");
@@ -317,16 +312,14 @@ public class MonsterGen {
                         int j = 1;
                         for(String p : ent.getValue())
                         {
-                            sb.append(' ');
-                            sb.append(p);
+                            sb.append(' ').append(p);
                             if(j++ < ent.getValue().size() && ent.getValue().size() > 2)
                                 sb.append(',');
                             if(j == ent.getValue().size() && ent.getValue().size() >= 2)
                                 sb.append(" and");
                         }
                     }
-                    sb.append(" of a ");
-                    sb.append(ent.getKey());
+                    sb.append(" of a ").append(ent.getKey());
 
 
                     if(i++ < parts.size() && parts.size() > 3)

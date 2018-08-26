@@ -1479,7 +1479,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             final StringBuilder s = new StringBuilder();
             final EntryIterator i = iterator();
             int n = size();
-            Object k;
+            MapEntry k;
             boolean first = true;
             s.append("{");
             while (n-- != 0) {
@@ -1488,10 +1488,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
                 else
                     s.append(", ");
                 k = i.next();
-                if (this == k)
-                    s.append("(this collection)");
-                else
-                    s.append(String.valueOf(k));
+                s.append(key[k.index]).append("=>").append(value[k.index]);
             }
             s.append("}");
             return s.toString();
@@ -1813,14 +1810,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             final StringBuilder s = new StringBuilder();
             final KeyIterator i = iterator();
             int n = size();
-            int k;
             boolean first = true;
             s.append("{");
             while (n-- != 0) {
                 if (first) first = false;
                 else s.append(", ");
-                k = i.nextInt();
-                s.append(String.valueOf(k));
+                s.append(i.nextInt());
             }
             s.append("}");
             return s.toString();
@@ -2298,14 +2293,12 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             final StringBuilder s = new StringBuilder();
             final DoubleIterator i = iterator();
             int n = size();
-            double k;
             boolean first = true;
             s.append("{");
             while (n-- != 0) {
                 if (first) first = false;
                 else s.append(", ");
-                k = i.nextDouble();
-                s.append(String.valueOf(k));
+                s.append(i.nextDouble());
             }
             s.append("}");
             return s.toString();

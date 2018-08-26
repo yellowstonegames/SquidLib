@@ -764,7 +764,7 @@ public class Messaging {
         {
             dest.append(Character.toUpperCase(s.charAt(0)));
             if(s.length() > 1)
-                dest.append(s.substring(1, s.length()));
+                dest.append(s.substring(1));
         }
         @Override
         public void appendSubstitution(MatchResult match, TextBuffer dest) {

@@ -49,20 +49,19 @@ public class Maker {
             try {
                 lhm.put((K) rest[i], (V) rest[i + 1]);
             }catch (ClassCastException cce) {
-                issueLog.append("makeLHM call had a casting problem with pair at rest[");
-                issueLog.append(i);
-                issueLog.append("] and/or rest[");
-                issueLog.append(i + 1);
-                issueLog.append("], with contents: ");
-                issueLog.append(rest[i]);
-                issueLog.append(", ");
-                issueLog.append(rest[i+1]);
-                issueLog.append(".\n\nException messages:\n");
-                issueLog.append(cce);
+                issueLog.append("makeLHM call had a casting problem with pair at rest[")
+                        .append(i)
+                        .append("] and/or rest[")
+                        .append(i + 1)
+                        .append("], with contents: ")
+                        .append(rest[i])
+                        .append(", ")
+                        .append(rest[i + 1])
+                        .append(".\n\nException messages:\n")
+                        .append(cce);
                 String msg = cce.getMessage();
                 if (msg != null) {
-                    issueLog.append('\n');
-                    issueLog.append(msg);
+                    issueLog.append('\n').append(msg);
                 }
                 issueLog.append('\n');
             }
@@ -162,20 +161,19 @@ public class Maker {
             try {
                 om.put((K) rest[i], (V) rest[i + 1]);
             }catch (ClassCastException cce) {
-                issueLog.append("makeOM call had a casting problem with pair at rest[");
-                issueLog.append(i);
-                issueLog.append("] and/or rest[");
-                issueLog.append(i + 1);
-                issueLog.append("], with contents: ");
-                issueLog.append(rest[i]);
-                issueLog.append(", ");
-                issueLog.append(rest[i+1]);
-                issueLog.append(".\n\nException messages:\n");
-                issueLog.append(cce);
+                issueLog.append("makeOM call had a casting problem with pair at rest[")
+                          .append(i)
+                          .append("] and/or rest[")
+                          .append(i + 1)
+                          .append("], with contents: ")
+                          .append(rest[i])
+                          .append(", ")
+                          .append(rest[i+1])
+                          .append(".\n\nException messages:\n")
+                          .append(cce);
                 String msg = cce.getMessage();
                 if (msg != null) {
-                    issueLog.append('\n');
-                    issueLog.append(msg);
+                    issueLog.append('\n').append(msg);
                 }
                 issueLog.append('\n');
             }
@@ -316,20 +314,19 @@ public class Maker {
             try {
                 k2.put((A) rest[i], (B) rest[i + 1]);
             }catch (ClassCastException cce) {
-                issueLog.append("makeK2 call had a casting problem with pair at rest[");
-                issueLog.append(i);
-                issueLog.append("] and/or rest[");
-                issueLog.append(i + 1);
-                issueLog.append("], with contents: ");
-                issueLog.append(rest[i]);
-                issueLog.append(", ");
-                issueLog.append(rest[i+1]);
-                issueLog.append(".\n\nException messages:\n");
-                issueLog.append(cce);
+                issueLog.append("makeK2 call had a casting problem with pair at rest[")
+                          .append(i)
+                          .append("] and/or rest[")
+                          .append(i + 1)
+                          .append("], with contents: ")
+                          .append(rest[i])
+                          .append(", ")
+                          .append(rest[i+1])
+                          .append(".\n\nException messages:\n")
+                          .append(cce);
                 String msg = cce.getMessage();
                 if (msg != null) {
-                    issueLog.append('\n');
-                    issueLog.append(msg);
+                    issueLog.append('\n').append(msg);
                 }
                 issueLog.append('\n');
             }
@@ -382,20 +379,19 @@ public class Maker {
             try {
                 eom.put((K) rest[i], (V) rest[i + 1]);
             }catch (ClassCastException cce) {
-                issueLog.append("makeEOM call had a casting problem with pair at rest[");
-                issueLog.append(i);
-                issueLog.append("] and/or rest[");
-                issueLog.append(i + 1);
-                issueLog.append("], with contents: ");
-                issueLog.append(rest[i]);
-                issueLog.append(", ");
-                issueLog.append(rest[i+1]);
-                issueLog.append(".\n\nException messages:\n");
-                issueLog.append(cce);
+                issueLog.append("makeEOM call had a casting problem with pair at rest[")
+                          .append(i)
+                          .append("] and/or rest[")
+                          .append(i + 1)
+                          .append("], with contents: ")
+                          .append(rest[i])
+                          .append(", ")
+                          .append(rest[i+1])
+                          .append(".\n\nException messages:\n")
+                          .append(cce);
                 String msg = cce.getMessage();
                 if (msg != null) {
-                    issueLog.append('\n');
-                    issueLog.append(msg);
+                    issueLog.append('\n').append(msg);
                 }
                 issueLog.append('\n');
             }

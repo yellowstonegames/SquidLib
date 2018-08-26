@@ -907,12 +907,10 @@ se$->z
         sb.append("(?:");
         for(String k : vocabulary.keySet())
         {
-            sb.append("(?:\\Q");
-            sb.append(k);
-            sb.append("\\E)|");
+            sb.append("(?:\\Q").append(k).append("\\E)|");
         }
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append(')');
+        sb.deleteCharAt(sb.length() - 1)
+                .append(')');
 
         pat = Pattern.compile("(?<![\\pL\\&-])(?=[\\pL\\&-])" + sb + "(?![\\pL\\&-])", "ui");
 
