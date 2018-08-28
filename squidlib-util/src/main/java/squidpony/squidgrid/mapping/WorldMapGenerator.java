@@ -91,21 +91,17 @@ public abstract class WorldMapGenerator implements Serializable {
                 (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
     }
 
-    /**
-     * Arc tangent approximation with low error (maximum absolute error is 0.0038 radians). Only well-behaved for inputs
-     * between -1 and 1, inclusive.
-     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal, who wrote
-     * <a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition">this useful article</a>
-     * on atan and atan2 approximation. This uses approximation 7 from that article.
-     * @param a must be between -1 and 1, inclusive
-     * @return the arc tangent of a, from -pi/4 to pi/4
-     */
-    protected static double atan(double a)
+    protected static double removeExcess(double radians)
     {
-        return 0.7853981633974483 * a + 0.273 * (
-                (a < 0)
-                ? (1 - a)
-                : (1 + a));
+        radians = radians * 0.6366197723675814;
+        final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1);
+        radians = (radians - (floor & -2) - ((floor & 1) << 1)) * (Math.PI);
+//        if(radians < -Math.PI || radians > Math.PI)
+//            System.out.println("UH OH, radians produced: " + radians);
+//        if(Math.random() < 0.00001)
+//            System.out.println(radians);
+        return radians;
+
     }
     /**
      * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
@@ -3113,7 +3109,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
                     th, lon, lat, rho,
-                    rx = width * 0.5, irx = i_uw / rx, hw = width * 0.5,
+                    rx = width * 0.5, irx = i_uw / rx,
                     ry = height * 0.5, iry = i_uh / ry;
 
             yPos = startY - ry;
@@ -3137,14 +3133,8 @@ public abstract class WorldMapGenerator implements Serializable {
                     }
                     edges[y << 1 | 1] = x;
                     th = asin(rho); // c
-                    ps = NumberTools.sin(th);
-                    lat = rho == 0.0 ? 0.0 : asin((iyPos * ps) / rho); // check for uncommon case where rho == 0.0
-                    // need Math.atan2(), not NumberTools.atan2(), since approximate isn't good enough here
-                    // approximate seems fine for everything else here though.
-                    // ... later ...
-                    // NumberTools is better now, it seems good visually, but is there a speed difference?
-                    //lon = (centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th)) + (3.0 * Math.PI)) % (Math.PI * 2.0) - Math.PI;
-                    lon = centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th));
+                    lat = asin(iyPos);
+                    lon = centerLongitude + NumberTools.atan2(ixPos * rho, rho * NumberTools.cos(th));
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);
@@ -4429,14 +4419,19 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that imitates an infinite-distance perspective view of a
      * world, showing only one hemisphere, that should be as wide as it is tall (its outline is a circle). It should
      * look as a world would when viewed from space, and implements rotation differently to allow the planet to be
-     * rotated without recalculating all the data, though it cannot zoom. This uses an
+     * rotated without recalculating all the data, though it cannot zoom. Note that calling
+     * {@link #setCenterLongitude(double)} does a lot more work than in other classes, but less than fully calling
+     * {@link #generate()} in those classes, since it doesn't remake the map data at a slightly different rotation and
+     * instead keeps a single map in use the whole time, using sections of it. This uses an
      * <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
-     * the latitude always at the equator.
-     * <a href="https://tommyettinger.github.io/DorpBorx/worlds7/index.html">Example views of 50 planets</a>.
+     * the latitude always at the equator, though some aspects of the projection may be slightly "off" because the
+     * map this stores internally (which doesn't rotate) uses the Hammer projection (an {@link EllipticalHammerMap}).
+     * They haven't been noticeable so far, so that concern may be unfounded.
+     * <br>
+     * <a href="https://i.imgur.com/WNa5nQ1.gifv">Example view of a planet rotating</a>.
      */
     @Beta
     public static class RotatingSpaceMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -4564,40 +4559,19 @@ public abstract class WorldMapGenerator implements Serializable {
             return Math.max(0, Math.min(y, height - 1));
         }
 
-        //private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;
-
-        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
-        {
-            storedMap.regenerate(0, 0, width, height, landMod, coolMod, state);
-            boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
-            {
-                minHeight = Double.POSITIVE_INFINITY;
-                maxHeight = Double.NEGATIVE_INFINITY;
-                minHeightActual = Double.POSITIVE_INFINITY;
-                maxHeightActual = Double.NEGATIVE_INFINITY;
-                minHeat0 = Double.POSITIVE_INFINITY;
-                maxHeat0 = Double.NEGATIVE_INFINITY;
-                minHeat1 = Double.POSITIVE_INFINITY;
-                maxHeat1 = Double.NEGATIVE_INFINITY;
-                minHeat = Double.POSITIVE_INFINITY;
-                maxHeat = Double.NEGATIVE_INFINITY;
-                minWet0 = Double.POSITIVE_INFINITY;
-                maxWet0 = Double.NEGATIVE_INFINITY;
-                minWet = Double.POSITIVE_INFINITY;
-                maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
-                fresh = true;
-            }
-            double 
+        @Override
+        public void setCenterLongitude(double centerLongitude) {
+            super.setCenterLongitude(centerLongitude);
+            int ax, ay;
+            double
                     ps, pc,
                     qs, qc,
                     h, yPos, xPos, iyPos, ixPos,
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
                     th, lon, lat, rho,
-                    rx = width * 0.5, irx = i_uw / rx, hw = width * 0.5,
+                    z,
+                    rx = width * 0.5, irx = i_uw / rx,
                     ry = height * 0.5, iry = i_uh / ry;
 
             yPos = startY - ry;
@@ -4620,50 +4594,80 @@ public abstract class WorldMapGenerator implements Serializable {
                     }
                     edges[y << 1 | 1] = x;
                     th = asin(rho); // c
-                    ps = NumberTools.sin(th);
-                    lat = rho == 0.0 ? 0.0 : asin((iyPos * ps) / rho); // check for uncommon case where rho == 0.0
-                    lon = centerLongitude + NumberTools.atan2(ixPos * ps, rho * NumberTools.cos(th));
+                    lat = asin(iyPos);
+                    lon = removeExcess((centerLongitude + (NumberTools.atan2(ixPos * rho, rho * NumberTools.cos(th)))) * 0.5);
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);
 
-                    pc = NumberTools.cos(lon) * qc;
-                    ps = NumberTools.sin(lon) * qc;
-
-                    xPositions[x][y] = pc;
-                    yPositions[x][y] = ps;
-                    zPositions[x][y] = qs;
-                    heightData[x][y] = h = storedMap.heightData[x][y];
-                    heightCodeData[x][y] = codeHeight(h);
-                    heatData[x][y] = storedMap.heatData[x][y];
-                    moistureData[x][y] = storedMap.moistureData[x][y];
-                    freshwaterData[x][y] = storedMap.freshwaterData[x][y];
+                    pc = NumberTools.cos(lon);
+                    ps = NumberTools.sin(lon);
                     
+                    // Hammer projection, not an inverse projection like we usually use
+                    z = 1.0 / Math.sqrt(1 + qc * NumberTools.cos(lon * 0.5));
+                    ax = (int)((qc * NumberTools.sin(lon * 0.5) * z + 1.0) * width);
+                    ay = (int)((qs * z + 1.0) * height * 0.5);
+
+                    if(ax >= storedMap.width || ax < 0 || ay >= storedMap.height || ay < 0)
+                    {
+                        heightCodeData[x][y] = 1000;
+                        continue;
+                    }
+                    if(storedMap.heightCodeData[ax][ay] >= 1000) // for the seam we get when looping around
+                    {
+                        ay = storedMap.wrapY(ax, ay);
+                        ax = storedMap.wrapX(ax, ay);
+                    }
+
+                    xPositions[x][y] = pc * qc;
+                    yPositions[x][y] = ps * qc;
+                    zPositions[x][y] = qs;
+                    
+                    heightData[x][y] = h = storedMap.heightData[ax][ay];
+                    heightCodeData[x][y] = codeHeight(h);
+                    heatData[x][y] = storedMap.heatData[ax][ay];
+                    moistureData[x][y] = storedMap.moistureData[ax][ay];
+                    freshwaterData[x][y] = storedMap.freshwaterData[ax][ay];
+
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                 }
                 minHeightActual = Math.min(minHeightActual, minHeight);
                 maxHeightActual = Math.max(maxHeightActual, maxHeight);
             }
-            if(fresh) {
+
+        }
+
+        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                                  double landMod, double coolMod, long state)
+        {
+            if(cachedState != state)// || landMod != storedMap.landModifier || coolMod != storedMap.coolingModifier)
+            {
+                storedMap.regenerate(0, 0, width << 1, height, landMod, coolMod, state);
+                minHeightActual = Double.POSITIVE_INFINITY;
+                maxHeightActual = Double.NEGATIVE_INFINITY;
+                
                 minHeight = storedMap.minHeight;
                 maxHeight = storedMap.maxHeight;
 
                 minHeat0 = storedMap.minHeat0;
                 maxHeat0 = storedMap.maxHeat0;
 
-                minHeat0 = storedMap.minHeat1;
-                maxHeat0 = storedMap.maxHeat1;
+                minHeat1 = storedMap.minHeat1;
+                maxHeat1 = storedMap.maxHeat1;
 
                 minWet0 = storedMap.minWet0;
                 maxWet0 = storedMap.maxWet0;
-                
+
                 minHeat = storedMap.minHeat;
                 maxHeat = storedMap.maxHeat;
 
                 minWet = storedMap.minWet;
                 maxWet = storedMap.maxWet;
+                
+                cachedState = state;
             }
+            setCenterLongitude(centerLongitude);
             landData.refill(heightCodeData, 4, 999);
         }
     }
