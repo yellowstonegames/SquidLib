@@ -47,7 +47,7 @@ public class SparseDemo2 extends ApplicationAdapter {
     // lineDungeon stores the whole map the same as decoDungeon except for walls, which are box-drawing characters here.
     // prunedDungeon takes lineDungeon and adjusts it so unseen segments of wall (represented by box-drawing characters)
     //   are removed from rendering; unlike the others, it is frequently changed.
-    private char[][] decoDungeon, bareDungeon, lineDungeon, prunedDungeon;
+    private char[][] decoDungeon, bareDungeon, lineDungeon, prunedDungeon, triDungeon;
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
@@ -68,9 +68,9 @@ public class SparseDemo2 extends ApplicationAdapter {
     private static final int gridHeight = 25;
 
     /** In number of cells */
-    private static final int bigWidth = gridWidth * 2;
+    private static final int bigWidth = gridWidth, triWidth = bigWidth * 3;
     /** In number of cells */
-    private static final int bigHeight = gridHeight * 2;
+    private static final int bigHeight = gridHeight, triHeight = bigHeight * 3;
 
     /** In number of cells */
     private static final int bonusHeight = 7;
@@ -110,8 +110,8 @@ public class SparseDemo2 extends ApplicationAdapter {
     // languages appended after the plain-English version. The contents have the first item removed with each step, and
     // have new translations added whenever the line count is too low.
     private ArrayList<IColoredString<Color>> lang;
-    private double[][] resistance;
-    private double[][] visible;
+    private double[][] resistance, triResistance;
+    private double[][] visible, triVisible;
     // GreasedRegion is a hard-to-explain class, but it's an incredibly useful one for map generation and many other
     // tasks; it stores a region of "on" cells where everything not in that region is considered "off," and can be used
     // as a Collection of Coord points. However, it's more than that! Because of how it is implemented, it can perform
@@ -252,9 +252,24 @@ public class SparseDemo2 extends ApplicationAdapter {
         //this is also good to compare against if the map looks incorrect, and you need an example of a correct map when
         //no parameters are given to generate().
         lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
-
+        triDungeon = new char[triWidth][triHeight];
+        for (int x = 0, tx = 0; x < bigWidth; x++, tx+=3) {
+            for (int y = 0, ty = 0; y < bigHeight; y++, ty+=3) {
+                triDungeon[tx+0][ty+0] = decoDungeon[x][y];
+                triDungeon[tx+1][ty+0] = decoDungeon[x][y];
+                triDungeon[tx+2][ty+0] = decoDungeon[x][y];
+                triDungeon[tx+0][ty+1] = decoDungeon[x][y];
+                triDungeon[tx+1][ty+1] = decoDungeon[x][y];
+                triDungeon[tx+2][ty+1] = decoDungeon[x][y];
+                triDungeon[tx+0][ty+2] = decoDungeon[x][y];
+                triDungeon[tx+1][ty+2] = decoDungeon[x][y];
+                triDungeon[tx+2][ty+2] = decoDungeon[x][y];
+            }
+        }
         resistance = DungeonUtility.generateResistances(decoDungeon);
         visible = new double[bigWidth][bigHeight];
+        triResistance = DungeonUtility.generateResistances(triDungeon);
+        triVisible = new double[triWidth][triHeight];
 
         //Coord is the type we use as a general 2D point, usually in a dungeon.
         //Because we know dungeons won't be incredibly huge, Coord performs best for x and y values less than 256, but
@@ -296,7 +311,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         display.setPosition(0f, 0f);
         // Uses shadowcasting FOV and reuses the visible array without creating new arrays constantly.
         FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);//, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
-        
+        FOV.reuseFOV(triResistance, triVisible, player.x * 3 + 1, player.y * 3 + 1, 27.0, Radius.CIRCLE);
         // 0.01 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.01 will _not_ be in
         // the blockage Collection, but anything 0.01 or less will be in it. This lets us use blockage to prevent access
         // to cells we can't see from the start of the move.
@@ -543,7 +558,8 @@ public class SparseDemo2 extends ApplicationAdapter {
         {
             display.slide(pg, player.x, player.y, newX, newY, 0.12f, null);
             player = player.translate(xmod, ymod);
-            FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);//, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
+            FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);
+            FOV.reuseFOV(triResistance, triVisible, player.x * 3 + 1, player.y * 3 + 1, 27.0, Radius.CIRCLE);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
             // a new one just for this movement.
             blockage.refill(visible, 0.0);
@@ -602,13 +618,14 @@ public class SparseDemo2 extends ApplicationAdapter {
         //display.clear();
         ycbcr.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
         ycbcr.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+        float modifier = display.calculateConsistentLightModifier();
         // The loop here only will draw tiles if they are potentially in the visible part of the map.
         // It starts at an x,y position equal to the player's position minus half of the shown gridWidth and gridHeight,
         // minus one extra cell to allow the camera some freedom to move. This position won't go lower than 0. The
         // rendering in each direction ends when the edge of the map (bigWidth or bigHeight) is reached, or if
         // gridWidth/gridHeight + 2 cells have been rendered (the + 2 is also for the camera movement).
-        for (int x = Math.max(0, player.x - (gridWidth >> 1) - 1), i = 0; x < bigWidth && i < gridWidth + 2; x++, i++) {
-            for (int y = Math.max(0, player.y - (gridHeight >> 1) - 1), j = 0; y < bigHeight && j < gridHeight + 2; y++, j++) {
+        for (int x = Math.max(0, player.x - (gridWidth >> 1) - 1), i = 0, x3 = x * 3; x < bigWidth && i < gridWidth + 2; x++, i++, x3+=3) {
+            for (int y = Math.max(0, player.y - (gridHeight >> 1) - 1), j = 0, y3 = y * 3; y < bigHeight && j < gridHeight + 2; y++, j++, y3+=3) {
                 if (visible[x][y] > 0.0) {
                     // Here we use a convenience method in SparseLayers that puts a char at a specified position (the
                     // first three parameters), with a foreground color for that char (fourth parameter), as well as
@@ -619,7 +636,16 @@ public class SparseDemo2 extends ApplicationAdapter {
                     // cells around the player and dimmer ones near the edge of vision. This lighting is "consistent"
                     // because all cells at the same distance will have the same amount of lighting applied.
                     // We use prunedDungeon here so segments of walls that the player isn't aware of won't be shown.
-                    display.putWithConsistentLight(x, y, prunedDungeon[x][y], colors[x][y], bgColors[x][y], FLOAT_LIGHTING, visible[x][y]);
+                    display.put(x, y, prunedDungeon[x][y], colors[x][y]);
+                    display.putWithLight(x3+0, y3+0, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+0][y3+0], modifier));
+                    display.putWithLight(x3+1, y3+0, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+1][y3+0], modifier));
+                    display.putWithLight(x3+2, y3+0, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+2][y3+0], modifier));
+                    display.putWithLight(x3+0, y3+1, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+0][y3+1], modifier));
+                    display.putWithLight(x3+1, y3+1, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+1][y3+1], modifier));
+                    display.putWithLight(x3+2, y3+1, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+2][y3+1], modifier));
+                    display.putWithLight(x3+0, y3+2, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+0][y3+2], modifier));
+                    display.putWithLight(x3+1, y3+2, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+1][y3+2], modifier));
+                    display.putWithLight(x3+2, y3+2, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+2][y3+2], modifier));
                 } else if (seen.contains(x, y))
                     display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
             }

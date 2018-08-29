@@ -32,7 +32,7 @@ import java.util.ArrayList;
  * Created by Tommy Ettinger on 7/28/2017.
  */
 public class SparseLayers extends Actor implements IPackedColorPanel {
-    public final int gridWidth, gridHeight;
+    public int gridWidth, gridHeight;
     /**
      * A 2D float array of background colors as packed floats. Must have dimensions matching {@link #gridWidth} and
      * {@link #gridHeight}, and must be non-null with non-null interior arrays, but can otherwise be assigned 2D float
@@ -90,6 +90,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public IColorCenter<Color> scc;
 
+    protected SparseLayers()
+    {
+    }
     public SparseLayers(int gridWidth, int gridHeight)
     {
         this(gridWidth, gridHeight, 10, 16, DefaultResources.getStretchableFont());
@@ -323,6 +326,68 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         put(null, colors);
     }
     /**
+     * Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0.
+     * @param chars a 2D char array to place without affecting background colors; these chars will use the default foreground color
+     */
+    public void putChars(char[][] chars) {
+        if(chars == null)
+            return;
+        SparseTextMap layer = layers.get(0);
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] != null) {
+                for (int j = 0; j < chars[i].length; j++) {
+                    layer.place(i, j, chars[i][j], defaultPackedForeground);
+                }
+            }
+        }
+    }
+    /**
+     * Places the given char 2D array, if-non-null, in the foreground starting at x=0, y=0. Each char will be drawn in 
+     * the corresponding foreground color from foregrounds.
+     * @param chars a 2D char array to place without affecting background colors
+     * @param foregrounds a 2D float array of encoded colors as produced by {@link Color#toFloatBits()}; applies to char foregrounds
+     */
+    public void putChars(char[][] chars, float[][] foregrounds) {
+        if(chars == null)
+            return;
+        if(foregrounds == null)
+        {
+            putChars(chars);
+            return;
+        }
+        SparseTextMap layer = layers.get(0);
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] != null) {
+                for (int j = 0; j < chars[i].length; j++) {
+                    layer.place(i, j, chars[i][j], foregrounds[i][j]);
+                }
+            }
+        }
+    }
+    /**
+     * Places the given char 2D array, if-non-null, in the foreground starting at x=0, y=0. Each char will be drawn in 
+     * the corresponding foreground color from foregrounds.
+     * @param chars a 2D char array to place without affecting background colors
+     * @param foregrounds a 2D array of libGDX colors (any may also be an SColor or other subclass); applies to char foregrounds
+     */
+    public void putChars(char[][] chars, Color[][] foregrounds) {
+        if(chars == null)
+            return;
+        if(foregrounds == null)
+        {
+            putChars(chars);
+            return;
+        }
+        SparseTextMap layer = layers.get(0);
+        for (int i = 0; i < chars.length; i++) {
+            if (chars[i] != null) {
+                for (int j = 0; j < chars[i].length; j++) {
+                    layer.place(i, j, chars[i][j], scc.filter(foregrounds[i][j]).toFloatBits());
+                }
+            }
+        }
+    }
+    /**
      * Places the given char 2D array, if-non-null, in the default foreground color starting at x=0, y=0, while also
      * setting the background colors to match the given Color 2D array. If the colors argument is null, does nothing. If
      * the chars argument is null, only affects the background colors. This will filter each Color in colors if the
@@ -347,13 +412,14 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         }
         else
         {
+            SparseTextMap layer = layers.get(0);
             if(colors == null)
             {
                 for (int i = 0; i < chars.length; i++) {
                     if(chars[i] == null)
                         continue;
                     for (int j = 0; j < chars[i].length; j++) {
-                        put(i, j, chars[i][j], defaultPackedForeground, 0f);
+                        layer.place(i, j, chars[i][j], defaultPackedForeground);
                     }
                 }
             }
@@ -364,7 +430,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
                         continue;
                     for (int j = 0; j < chars[i].length && j < colors[i].length; j++) {
                         if(colors[i][j] == null)
-                            put(i, j, chars[i][j], defaultPackedForeground, 0f);
+                            layer.place(i, j, chars[i][j], defaultPackedForeground);
                         else
                             put(i, j, chars[i][j], defaultPackedForeground, scc.filter(colors[i][j]).toFloatBits());
                     }
@@ -958,12 +1024,49 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      * @param flickerSpeed a small float multiplier applied to the time in milliseconds; often between 0.0005f and 0.005f
      */
     public void putWithConsistentLight(int x, int y, float background, float lightColor, float lightAmount, float flickerSpeed) {
-        final float time = (System.currentTimeMillis() & 0xffffffL) * flickerSpeed; // if you want to adjust the speed of flicker, change the multiplier
+        final float time = (System.currentTimeMillis() & 0xffffffL) * flickerSpeed;
         final long time0 = Noise.longFloor(time);
         final float noise = Noise.querp(NumberTools.randomFloatCurved(time0), NumberTools.randomFloatCurved(time0 + 1L), time - time0);
-        lightAmount = Math.max(lightAmount * 0.15f, Math.min(lightAmount - NumberTools.swayTight(noise * 3.141592f) * 0.15f - 0.1f + 0.25f * noise, lightAmount)); // 0.1f * noise for light theme, 0.2f * noise for dark theme
+        lightAmount = Math.max(lightAmount * 0.15f, Math.min(lightAmount - NumberTools.swayTight(noise * 3.141592f) * 0.15f - 0.1f + 0.25f * noise, lightAmount));
         putWithLight(x, y, '\0', 0f, background, lightColor, lightAmount);
     }
+
+    /**
+     * Gets a modifier that should be given to {@link #calculateConsistentLightAmount(float, float)}; this only needs to
+     * be called at most once per frame. It uses a flickerSpeed of 0.0015f, if you want to compare it to
+     * {@link #calculateConsistentLightModifier(float)}.
+     * @return a modifier to pass to {@link #calculateConsistentLightAmount(float, float)}
+     */
+    public float calculateConsistentLightModifier()
+    {
+        return calculateConsistentLightModifier(0.0015f);
+    }
+    /**
+     * Gets a modifier that should be given to {@link #calculateConsistentLightAmount(float, float)}; this only needs to
+     * be called at most once per frame. It uses the given flickerSpeed; a common example value is 0.0015f.
+     * @return a modifier to pass to {@link #calculateConsistentLightAmount(float, float)}
+     */
+    public float calculateConsistentLightModifier(float flickerSpeed)
+    {
+        final float time = (System.currentTimeMillis() & 0xffffffL) * flickerSpeed;
+        final long time0 = Noise.longFloor(time);
+        return Noise.querp(NumberTools.randomFloatCurved(time0), NumberTools.randomFloatCurved(time0 + 1L), time - time0);
+    }
+
+    /**
+     * Allows you to reproduce the effects of {@link #putWithConsistentLight(int, int, char, float, float, float, double, float)}
+     * without recalculating the modifier many times per frame. You should typically calculate the modifier once per
+     * frame using {@link #calculateConsistentLightModifier()}. This method should usually be called once per cell that
+     * needs consistent lighting that flickers the same in all directions.
+     * @param lightAmount typically from FOV or some other way of generating a float with lower values further from a position (such as a light)
+     * @param modifier calculated previously by {@link #calculateConsistentLightModifier()}, which should be done per-frame
+     * @return the adjusted light amount to mimic the appearance of {@link #putWithConsistentLight(int, int, char, float, float, float, double, float)}
+     */
+    public float calculateConsistentLightAmount(float lightAmount, float modifier)
+    {
+        return Math.max(lightAmount * 0.15f, Math.min(lightAmount - NumberTools.swayTight(modifier * 3.141592f) * 0.15f - 0.1f + 0.25f * modifier, lightAmount));
+    }
+    
     /**
      * A convenience method that handles blending the background color with a specified light color, by a specific
      * amount, without putting a char on the screen; as a whole this affects one x,y position. This will use the same

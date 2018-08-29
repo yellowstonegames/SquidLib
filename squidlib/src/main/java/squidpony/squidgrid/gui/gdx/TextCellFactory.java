@@ -1317,6 +1317,14 @@ public class TextCellFactory implements Disposable {
         }
     }
 
+    /**
+     * Draws a 2D array of floats that represent encoded colors, with each float used for a block of color the size of
+     * one character cell (it will be {@link #actualCellWidth} by {@link #actualCellHeight} in size, using world units).
+     * @param batch the LibGDX Batch to do the drawing
+     * @param encodedColors a 2D float array of encoded colors, each usually produced by {@link Color#toFloatBits()} or an SColor method
+     * @param x the x-position where this should render the block of many colors 
+     * @param y the y-position where this should render the block of many colors
+     */
     public void draw(Batch batch, float[][] encodedColors, float x, float y)
     {
         float orig = batch.getPackedColor();
@@ -1329,6 +1337,37 @@ public class TextCellFactory implements Disposable {
                     continue;
                 batch.setColor(encodedColors[i][j]);
                 batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            }
+        }
+        batch.setColor(orig);
+    }
+
+    /**
+     * Draws a 2D array of floats that represent encoded colors, with each float used for a block of color that will be
+     * a fraction of the size of one character cell (it will be {@link #actualCellWidth} divided by {@code xSubCells} by
+     * {@link #actualCellHeight} divided by {@code ySubCells} in size, using world units). Typically the 2D float array
+     * should be larger than the 2D storage for text drawn over the colorful blocks (such as a 2D char array), since
+     * more than one subcell may be drawn in the space of one character cell.
+     * @param batch the LibGDX Batch to do the drawing
+     * @param encodedColors a 2D float array of encoded colors, each usually produced by {@link Color#toFloatBits()} or an SColor method
+     * @param x the x-position where this should render the block of many colors 
+     * @param y the y-position where this should render the block of many colors
+     * @param xSubCells how many blocks of color should fit across the span of {@link #actualCellWidth}, each one float; must not be 0
+     * @param ySubCells how many blocks of color should fit across the span of {@link #actualCellHeight}, each one float; must not be 0
+     */
+    public void draw(Batch batch, float[][] encodedColors, float x, float y, int xSubCells, int ySubCells)
+    {
+        float orig = batch.getPackedColor();
+        final int w = encodedColors.length, h = encodedColors[0].length;
+        final float subW = actualCellWidth / xSubCells, subH = actualCellHeight / ySubCells;
+        float wm = x, hm;
+        for (int i = 0; i < w; i++, wm += subW) {
+            hm = y + (h - 1) * subH;
+            for (int j = 0; j < h; j++, hm -= subH) {
+                if(encodedColors[i][j] == 0f)
+                    continue;
+                batch.setColor(encodedColors[i][j]);
+                batch.draw(block, wm, hm, subW, subH);
             }
         }
         batch.setColor(orig);
