@@ -34,12 +34,12 @@ import java.util.List;
  * changing gridHeight and gridWidth to affect the visible area or bigWidth and bigHeight to adjust the size of the
  * dungeon you can move through, with the camera following your '@' symbol.
  */
-public class SparseDemo extends ApplicationAdapter {
+public class SparseDemo2 extends ApplicationAdapter {
     // FilterBatch is almost the same as SpriteBatch
     private FilterBatch batch;
 
     private IRNG rng;
-    private SparseLayers display, languageDisplay;
+    private SparseLayersExperiment display, languageDisplay;
     private DungeonGenerator dungeonGen;
     // decoDungeon stores the dungeon map with features like grass and water, if present, as chars like '"' and '~'.
     // bareDungeon stores the dungeon map with just walls as '#' and anything not a wall as '.'.
@@ -147,7 +147,7 @@ public class SparseDemo extends ApplicationAdapter {
 //    private FloatFilters.PaletteFilter pal;
 //    private FloatFilters.MultiLerpFilter mlerp;
     private FloatFilters.YCbCrFilter ycbcr;
-//    private FloatFilter sepia;
+    //    private FloatFilter sepia;
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -186,7 +186,7 @@ public class SparseDemo extends ApplicationAdapter {
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         // it also includes 4 text faces (regular, bold, oblique, and bold oblique) so methods in GDXMarkup can make
         // italic or bold text without switching fonts (they can color sections of text too).
-        display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
+        display = new SparseLayersExperiment(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
                 DefaultResources.getCrispSlabFamily());
 
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
@@ -194,7 +194,7 @@ public class SparseDemo extends ApplicationAdapter {
         // if you use '#' for walls instead of box drawing chars, you don't need this.
         display.font.tweakWidth(cellWidth * 1.075f).tweakHeight(cellHeight * 1.1f).initBySize();
 
-        languageDisplay = new SparseLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
+        languageDisplay = new SparseLayersExperiment(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
         // set the background colors directly as floats with the SparseDisplay.backgrounds field, and it can be handy
         // to hold onto the current color we want to fill that with in the defaultPackedBackground field.
@@ -736,7 +736,7 @@ public class SparseDemo extends ApplicationAdapter {
         config.addIcon("Tentacle-16.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-32.png", Files.FileType.Classpath);
         config.addIcon("Tentacle-128.png", Files.FileType.Classpath);
-        new LwjglApplication(new SparseDemo(), config);
+        new LwjglApplication(new SparseDemo2(), config);
     }
 
 }

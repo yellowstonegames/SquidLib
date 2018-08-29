@@ -19,6 +19,8 @@ import com.badlogic.gdx.utils.Disposable;
 import regexodus.ds.CharCharMap;
 import squidpony.IColorCenter;
 import squidpony.StringKit;
+import squidpony.annotation.Beta;
+import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
@@ -1330,7 +1332,30 @@ public class TextCellFactory implements Disposable {
             }
         }
         batch.setColor(orig);
+    }
 
+    /**
+     * Given a Pixmap and a 2D float array, uses each float in the array as an encoded color for a pixel in the Pixmap
+     * at a location determined by the float's position in the array. This is meant to be used to draw backgrounds that
+     * will be stretched by the {@link #actualCellWidth} and {@link #actualCellHeight} of this TextCellFactory.
+     * <br>
+     * Oddly, this doesn't seem to be very fast compared to {@link #draw(Batch, float[][], float, float)}, so if you
+     * need to draw backgrounds then prefer that method (as SparseLayers does). It also doesn't work with a FilterBatch,
+     * so if you want to use FloatFilter to adjust colors, you would need to use the other draw method for backgrounds.
+     * @param pixmap a non-null Pixmap that will be modified
+     * @param encodedColors a 2D float array that must be non-null and non-empty, and contains packed colors
+     */
+    @Beta
+    public void draw(Pixmap pixmap, float[][] encodedColors)
+    {
+        final int w = Math.min(pixmap.getWidth(), encodedColors.length), h = Math.min(pixmap.getHeight(), encodedColors[0].length);
+        for (int i = 0; i < w; i++) {
+            for (int j = h - 1; j >= 0; j--) {
+                if (encodedColors[i][j] == 0f)
+                    continue;
+                pixmap.drawPixel(i, j, NumberTools.floatToReversedIntBits(encodedColors[i][j]));
+            }
+        }
     }
 
     /**

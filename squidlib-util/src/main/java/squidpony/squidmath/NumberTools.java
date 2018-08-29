@@ -402,6 +402,18 @@ public final class NumberTools {
         return Float.floatToIntBits(value);
     }
 
+
+    /**
+     * Gets the bit representation of the given float {@code value}, but with reversed byte order. On desktop, this is
+     * equivalent to calling {@code Integer.reverseBytes(Float.floatToIntBits(value))}, but it is implemented using
+     * typed arrays on GWT.
+     * @param value a floating-point number
+     * @return the bits that represent the floating-point number, with their byte order reversed from normal.
+     */
+    public static int floatToReversedIntBits(final float value) {
+        return Integer.reverseBytes(Float.floatToIntBits(value));
+    }
+
     /**
      * Identical to {@link Float#intBitsToFloat(int)} on desktop; optimized on GWT. Uses JS typed arrays on GWT, which
      * are well-supported now across all recent browsers and have fallbacks in GWT in the unlikely event of a browser

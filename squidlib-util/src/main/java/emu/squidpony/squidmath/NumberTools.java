@@ -19,6 +19,7 @@ public class NumberTools {
     private static final Int32Array wia = Int32ArrayNative.create(wba.buffer(), 0, 2);
     private static final Float32Array wfa = Float32ArrayNative.create(wba.buffer(), 0, 2);
     private static final Float64Array wda = Float64ArrayNative.create(wba.buffer(), 0, 1);
+    private static final DataView dv = DataViewNative.create(wba.buffer()); 
 
     public static long doubleToLongBits(final double value) {
         wda.set(0, value);
@@ -167,6 +168,11 @@ public class NumberTools {
     public static int floatToRawIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
+    }
+
+    public static int floatToReversedIntBits(final float value) {
+        dv.setFloat32(0, value, true);
+        return dv.getInt32(0, false);
     }
 
     public static float intBitsToFloat(final int bits) {
