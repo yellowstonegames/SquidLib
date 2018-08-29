@@ -45,13 +45,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     //private static final int width = 314 * 3, height = 300;
     //private static final int width = 1024, height = 512;
-//    private static final int width = 512, height = 256;
+    //private static final int width = 512, height = 256;
 //    private static final int width = 400, height = 400;
 //    private static final int width = 300, height = 300;
     //private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
-//    private static final int width = 700, height = 700;
-private static final int width = 512, height = 512;
+    //private static final int width = 700, height = 700;
+    private static final int width = 512, height = 512;
+    
     private SpriteBatch batch;
 //    private SquidPanel display;//, overlay;
     private static final int cellWidth = 1, cellHeight = 1;
@@ -61,11 +62,11 @@ private static final int width = 512, height = 512;
     private StatefulRNG rng;
     private long seed;
     private int mode = 3, maxModes = 4;
-//    private WorldMapGenerator.SpaceViewMap world;
+    //private WorldMapGenerator.SpaceViewMap world;
     private WorldMapGenerator.RotatingSpaceMap world;
     //private WorldMapGenerator.MimicMap world;
     //private WorldMapGenerator.EllipticalMap world;
-//    private WorldMapGenerator.EllipticalHammerMap world;
+    //private WorldMapGenerator.EllipticalHammerMap world;
     //private WorldMapGenerator.RoundSideMap world;
     //private WorldMapGenerator.HyperellipticalMap world;
     //private Noise.Noise4D cloudNoise;
@@ -298,16 +299,16 @@ private static final int width = 512, height = 512;
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
         pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-
+        
 //        stage = new Stage(view, batch);
         seed = 0x0c415cf07774ab2eL;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.8);
+        //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.7);
+        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
         //world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7, 0.1, 3.25);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);

@@ -4246,7 +4246,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     lat = asin(th);
                     qc = NumberTools.cos(lat);
                     qs = th;
-                    th = lon + centerLongitude;
+                    th = Math.PI - lon + centerLongitude;
                     if(inSpace)
                     {
                         inSpace = false;

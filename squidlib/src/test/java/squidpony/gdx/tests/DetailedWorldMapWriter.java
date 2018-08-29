@@ -215,8 +215,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Dump " + date + "/";
         //path = "out/worlds/SpaceView " + date + "/";
         //path = "out/worlds/RoundSide " + date + "/";
-        path = "out/worlds/Hyperellipse " + date + "/";
-
+        //path = "out/worlds/Hyperellipse " + date + "/";
+        path = "out/worlds/EllipseHammer " + date + "/";
+        
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
         //Gdx.files.local(path + "Earth.txt").writeString(StringKit.hex(earthHash), false);
@@ -240,7 +241,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.75);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.75, 0.125, 2.5);
+        //world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.75, 0.125, 2.5);
+        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
+        //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.75);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
