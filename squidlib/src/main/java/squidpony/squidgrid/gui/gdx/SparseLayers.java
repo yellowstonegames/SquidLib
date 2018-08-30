@@ -1064,7 +1064,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public float calculateConsistentLightAmount(float lightAmount, float modifier)
     {
-        return Math.max(lightAmount * 0.15f, Math.min(lightAmount - NumberTools.swayTight(modifier * 3.141592f) * 0.15f - 0.1f + 0.25f * modifier, lightAmount));
+        return lightAmount <= 0f ? -1024f : Math.max(
+                lightAmount * 0.15f,
+                Math.min(lightAmount - NumberTools.swayTight(modifier * 3.141592f) * 0.15f - 0.1f + 0.25f * modifier, lightAmount));
     }
     
     /**

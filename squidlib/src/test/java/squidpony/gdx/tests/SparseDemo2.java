@@ -252,23 +252,9 @@ public class SparseDemo2 extends ApplicationAdapter {
         //this is also good to compare against if the map looks incorrect, and you need an example of a correct map when
         //no parameters are given to generate().
         lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
-        triDungeon = new char[triWidth][triHeight];
-        for (int x = 0, tx = 0; x < bigWidth; x++, tx+=3) {
-            for (int y = 0, ty = 0; y < bigHeight; y++, ty+=3) {
-                triDungeon[tx+0][ty+0] = decoDungeon[x][y];
-                triDungeon[tx+1][ty+0] = decoDungeon[x][y];
-                triDungeon[tx+2][ty+0] = decoDungeon[x][y];
-                triDungeon[tx+0][ty+1] = decoDungeon[x][y];
-                triDungeon[tx+1][ty+1] = decoDungeon[x][y];
-                triDungeon[tx+2][ty+1] = decoDungeon[x][y];
-                triDungeon[tx+0][ty+2] = decoDungeon[x][y];
-                triDungeon[tx+1][ty+2] = decoDungeon[x][y];
-                triDungeon[tx+2][ty+2] = decoDungeon[x][y];
-            }
-        }
         resistance = DungeonUtility.generateResistances(decoDungeon);
         visible = new double[bigWidth][bigHeight];
-        triResistance = DungeonUtility.generateResistances(triDungeon);
+        triResistance = DungeonUtility.generateResistances3x3(lineDungeon);
         triVisible = new double[triWidth][triHeight];
 
         //Coord is the type we use as a general 2D point, usually in a dungeon.
@@ -618,7 +604,8 @@ public class SparseDemo2 extends ApplicationAdapter {
         //display.clear();
         ycbcr.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
         ycbcr.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
-        float modifier = display.calculateConsistentLightModifier();
+        float modifier = display.calculateConsistentLightModifier(), la, seenColor = GRAY_FLOAT;
+        boolean isSeen;
         // The loop here only will draw tiles if they are potentially in the visible part of the map.
         // It starts at an x,y position equal to the player's position minus half of the shown gridWidth and gridHeight,
         // minus one extra cell to allow the camera some freedom to move. This position won't go lower than 0. The
@@ -626,7 +613,24 @@ public class SparseDemo2 extends ApplicationAdapter {
         // gridWidth/gridHeight + 2 cells have been rendered (the + 2 is also for the camera movement).
         for (int x = Math.max(0, player.x - (gridWidth >> 1) - 1), i = 0, x3 = x * 3; x < bigWidth && i < gridWidth + 2; x++, i++, x3+=3) {
             for (int y = Math.max(0, player.y - (gridHeight >> 1) - 1), j = 0, y3 = y * 3; y < bigHeight && j < gridHeight + 2; y++, j++, y3+=3) {
-                if (visible[x][y] > 0.0) {
+                isSeen = seen.contains(x, y);
+                if (isSeen)
+                    seenColor = SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f);
+                for (int xx = 0; xx < 3; xx++) {
+                    for (int yy = 0; yy < 3; yy++) {
+                        la = display.calculateConsistentLightAmount((float) triVisible[x3 + xx][y3 + yy], modifier);
+                        if (la > -1000f)
+                        {
+                            display.putWithLight(x3 + xx, y3 + yy, bgColors[x][y], FLOAT_LIGHTING, la);
+                            if(!isSeen)
+                                seen.insert(x, y);
+                        }
+                        else if (isSeen) {
+                            display.putSingle(x3 + xx, y3 + yy, seenColor);
+                        }
+                    }
+                }
+                if (isSeen || triVisible[x3 + 1][y3 + 1] > 0.0) {
                     // Here we use a convenience method in SparseLayers that puts a char at a specified position (the
                     // first three parameters), with a foreground color for that char (fourth parameter), as well as
                     // placing a background tile made of a one base color (fifth parameter) that is adjusted to bring it
@@ -637,17 +641,7 @@ public class SparseDemo2 extends ApplicationAdapter {
                     // because all cells at the same distance will have the same amount of lighting applied.
                     // We use prunedDungeon here so segments of walls that the player isn't aware of won't be shown.
                     display.put(x, y, prunedDungeon[x][y], colors[x][y]);
-                    display.putWithLight(x3+0, y3+0, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+0][y3+0], modifier));
-                    display.putWithLight(x3+1, y3+0, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+1][y3+0], modifier));
-                    display.putWithLight(x3+2, y3+0, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+2][y3+0], modifier));
-                    display.putWithLight(x3+0, y3+1, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+0][y3+1], modifier));
-                    display.putWithLight(x3+1, y3+1, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+1][y3+1], modifier));
-                    display.putWithLight(x3+2, y3+1, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+2][y3+1], modifier));
-                    display.putWithLight(x3+0, y3+2, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+0][y3+2], modifier));
-                    display.putWithLight(x3+1, y3+2, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+1][y3+2], modifier));
-                    display.putWithLight(x3+2, y3+2, bgColors[x][y], FLOAT_LIGHTING, display.calculateConsistentLightAmount((float) triVisible[x3+2][y3+2], modifier));
-                } else if (seen.contains(x, y))
-                    display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
+                }
             }
         }
         Coord pt;

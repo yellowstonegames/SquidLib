@@ -364,10 +364,11 @@ public class SparseLayersExperiment extends SparseLayers {
      * @param lightAmount a float that determines how much lightColor should affect background by; not strictly limited
      */
     @Override
-    public void putWithLight(int x, int y, float background, float lightColor, float lightAmount) {
+    public void putWithLight(int x, int y, float background, float lightColor, float lightAmount) {         
         putSingle(x, y,
                 SColor.lerpFloatColors(background, lightColor,
-                        MathUtils.clamp(0xAAp-9f + (0xC8p-9f * lightAmount), 0f, 1f)));
+                        MathUtils.clamp(0xAAp-9f + (0xC8p-9f * lightAmount), 0f, 1f)) 
+                        );
 
     }
 
@@ -375,7 +376,7 @@ public class SparseLayersExperiment extends SparseLayers {
      * A convenience method that handles blending the background color with a specified light color, by a specific
      * amount, without putting a char on the screen; as a whole this affects one x,y position. This will use the same
      * brightness for all cells given identical lightAmount values when this is called; this differentiates it from
-     * {@link #putWithLight(int, int, float, float, float, Noise.Noise3D)}, which would light "splotches" of map with
+     * the putWithLight methods that take a Noise3D argument, which would light "splotches" of map with
      * brighter or darker color. Instead, if lightAmount is obtained via SquidLib's {@code FOV} class, then all cells
      * at a short distance from an FOV center will be lit brightly and cells far away will flicker in and out of view.
      *
@@ -396,7 +397,7 @@ public class SparseLayersExperiment extends SparseLayers {
      * A convenience method that handles blending the background color with a specified light color, by a specific
      * amount, without putting a char on the screen; as a whole this affects one x,y position. This will use the same
      * brightness for all cells given identical lightAmount values when this is called; this differentiates it from
-     * {@link #putWithLight(int, int, float, float, float, Noise.Noise3D)}, which would light "splotches" of map with
+     * the putWithLight methods that take a Noise3D argument, which would light "splotches" of map with
      * brighter or darker color. Instead, if lightAmount is obtained via SquidLib's {@code FOV} class, then all cells
      * at a short distance from an FOV center will be lit brightly and cells far away will flicker in and out of view.
      *
