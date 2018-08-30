@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 46, noiseMode = 76;//118;//82;
+    private int hashMode = 0, rngMode = 46, noiseMode = 74;//76;//118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -263,6 +263,20 @@ public class HashVisualizer extends ApplicationAdapter {
         hash = 113 * hash + x;
         hash = 113 * hash + y;
         return hash;
+    }
+    public static int weirdPointHash(int x, int y)
+    {         
+        return (x = ((x = x * 0xFACED + y) ^ x >>> 13) * ((y * 0x9E375 - x >> 12 | 1))) ^ (x << 21 | x >>> 11) ^ (x << 12 | x >>> 20);
+//        return (int)(TangleRNG.determine(x, y));
+//        y ^= 0x9E3779B5;
+//        x ^= (y/* ^ 0xB531A935 */) * 0x9E373;
+//        y ^= (x/* ^ 0x41C64E6D */) * 0xACEDB;
+//        x ^= (y/* ^ 0xB531A935 */) * 0x9E373;
+//        y ^= (x/* ^ 0x41C64E6D */) * 0xACEDB;
+//        return (x ^ (y << 21 | y >>> 11));
+//        x = (x << 13 | x >>> 19) ^ y ^ (y << 5); // a, b
+//        y = (y << 28 | y >>> 4) + x; // c
+//        return (y << 21 | y >>> 11) ^ x;
     }
 
     /**
@@ -1261,12 +1275,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 1:
-                        Gdx.graphics.setTitle("Ion 32 on length 2, low bits");
+                        Gdx.graphics.setTitle("Weird Hash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = ion32(coordinates) << 8 | 255L;
+                                code = weirdPointHash(x, y) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1435,12 +1447,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("Ion 32 on length 2, high bits");
+                        Gdx.graphics.setTitle("Weird Hash on length 2, high bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = ion32(coordinates) & 0xFFFFFF00L | 255L;
+                                code = weirdPointHash(x, y) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -3475,22 +3485,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                     }
                     break;
-                    case 58:
-                        Gdx.graphics.setTitle("Glitch 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                bright = (float)(
-                                        glitch.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
-                                                123456) * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
-                            }
-                        }
-                        break;
                     case 59:
-                        Gdx.graphics.setTitle("Glitch 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Ecto Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, 123456));
+                                bright = ectoNoise((x + ctr) * 0.0625f, (y + ctr) * 0.0625f, -999999L) * 0.5f + 0.5f; //0.61803398875
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
@@ -3625,14 +3624,41 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
+                    case 58:
                     case 74:
-                    case 75:
-                    case 76:
-                    case 77:
-                        Gdx.graphics.setTitle("Ecto Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Glitch 2D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = ectoNoise((x + ctr) * 0.0625f, (y + ctr) * 0.0625f, -999999L) * 0.5f + 0.5f; //0.61803398875
+                                bright = (float)(
+                                        glitch.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
+                                                123456) * 0.5 + 0.5);
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 75:
+                        Gdx.graphics.setTitle("Glitch 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, 123456));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 76:
+                        Gdx.graphics.setTitle("Glitch 4D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, ctr * -0.0375, 123456));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                        break;
+                    case 77:
+                        Gdx.graphics.setTitle("Glitch 6D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, (x + y) * -0.025, (x - ctr) * -0.025, (y - ctr) * -0.025, 123456));
                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                             }
                         }
