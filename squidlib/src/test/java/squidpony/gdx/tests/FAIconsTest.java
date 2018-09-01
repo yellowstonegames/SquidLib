@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
@@ -55,6 +56,7 @@ public class FAIconsTest extends ApplicationAdapter{
         layers = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight,
                 DefaultResources.getCrispSlabFont());
         SquidPanel fore = new SquidPanel(gridWidth, gridHeight, atlas);
+        ArrayTools.fill(fore.colors, 0f);
         layers.setExtraPanel(fore, 0);
         layers.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
         layers.setAnimationDuration(0.35f);
