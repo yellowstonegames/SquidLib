@@ -66,7 +66,7 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getCrispLeanFamily().width(14).height(28).initBySize(),
                 //DefaultResources.getCrispLeanItalicFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispDejaVuFont().width(ZOOM * 15).height(18).initBySize(),
-                DefaultResources.getCrispCurvySquareFont().width(32).height(32).initBySize(),
+                DefaultResources.getCrispIconFont().width(32).height(32).initBySize(),
                 DefaultResources.getStretchableHeavySquareFont().width(ZOOM * 32).height(32).initBySize(),
 
                 DefaultResources.getStretchableFont().width(ZOOM * 13).height(30).initBySize(),

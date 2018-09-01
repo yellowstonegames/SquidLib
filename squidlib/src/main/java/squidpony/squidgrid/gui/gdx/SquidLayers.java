@@ -1273,12 +1273,12 @@ public class SquidLayers extends Group {
     public void setExtraPanel(SquidPanel panel, int index) {
         if (index < 0 || panel == null || extraPanels == null)
             return;
-        if (index - 3 >= extraPanels.size()) {
+        if (index >= extraPanels.size()) {
             extraPanels.add(panel);
             addActor(panel);
         } else {
-            removeActor(extraPanels.get(index - 3));
-            extraPanels.set(index - 3, panel);
+            removeActor(extraPanels.get(index));
+            extraPanels.set(index, panel);
             addActorAt(index, panel);
         }
     }

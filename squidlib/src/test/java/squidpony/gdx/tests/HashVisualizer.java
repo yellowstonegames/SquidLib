@@ -265,8 +265,22 @@ public class HashVisualizer extends ApplicationAdapter {
         return hash;
     }
     public static int weirdPointHash(int x, int y)
-    {         
-        return (x = ((x = x * 0xFACED + y) ^ x >>> 13) * ((y * 0x9E375 - x >> 12 | 1))) ^ (x << 21 | x >>> 11) ^ (x << 12 | x >>> 20);
+    {
+        //return (y += ((x = (x ^ 0x41C64E6D) * ((y << 3 & 0xFFFF8) ^ 0x9E373)) ^ x >>> 15 ^ 0x9E3779B5) * 0xACEDB) ^ y >>> 13;
+//        x *= 0x9E375;
+//        y *= 0xACEDB;
+//        x *= 0x3FFF;
+//        y *= 0x3FFF;
+        x -= (x << 14) - 0xB531A935;
+        y -= (y << 14) - 0x41C64E6D;
+        x += (y << 7) - (x >>> 8);//x += (y << 20 | y >>> 12);// + 0xB531A935;
+        y -= (x << 8) + (y >>> 7);//y -= (x << 5 | x >>> 27);// + 0x41C64E6D;
+        x += (y << 21 | y >>> 11) ^ (y << 6 | y >>> 26) ^ y;
+        y += (x << 13 | x >>> 19) ^ (x << 22 | x >>> 10) ^ x;
+        return x ^ y;
+//        return (y << 9 | y >>> 23) ^ (x << 25 | x >>> 7);
+        
+//        return (x = ((x = x * 0xFACED + y) ^ x >>> 13) * ((y * 0x9E375 - x >> 12 | 1))) ^ (x << 21 | x >>> 11) ^ (x << 12 | x >>> 20);
 //        return (int)(TangleRNG.determine(x, y));
 //        y ^= 0x9E3779B5;
 //        x ^= (y/* ^ 0xB531A935 */) * 0x9E373;
@@ -1294,10 +1308,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        }
                         break;
                     case 2:
-                        Gdx.graphics.setTitle("PointHash on length 2, low bits");
+                        Gdx.graphics.setTitle("Weird Hash on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll(x, y, 123L) << 8 | 255L;
+                                code = weirdPointHash(x, y) & 0xFFFFFF00L | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
@@ -1447,22 +1461,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 15:
-                        Gdx.graphics.setTitle("Weird Hash on length 2, high bits");
+                        Gdx.graphics.setTitle("PointHash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = weirdPointHash(x, y) & 0xFFFFFF00L | 255L;
+                                code = Noise.PointHash.hashAll(x, y, 123L) << 8 | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-//                        Gdx.graphics.setTitle("Mist_ (alpha) on length 2, high bits");
-//                        for (int x = 0; x < width; x++) {
-//                            coordinates[0] = x;
-//                            for (int y = 0; y < height; y++) {
-//                                coordinates[1] = y;
-//                                code = Mist_A.hash(coordinates) & 0xFFFFFF00L | 255L;
-//                                display.put(x, y, floatGet(code));
-//                            }
-//                        }
                         break;
                     case 16:
                         Gdx.graphics.setTitle("PointHash on length 2, high bits");

@@ -76,7 +76,8 @@ public class DefaultResources implements LifecycleListener {
             distanceSlab = null, distanceSlabLight = null, distanceWideSlab = null,  distanceWideSlabLight = null,
             distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
-            msdfDejaVu = null, msdfCurvySquare = null;
+            msdfDejaVu = null, msdfCurvySquare = null,
+            msdfIcons = null;
     private TextFamily familyLean = null, familySlab = null, familyGo = null,
             familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
     private TextureAtlas iconAtlas = null;
@@ -141,7 +142,9 @@ public class DefaultResources implements LifecycleListener {
             crispNotoSerif = "NotoSerif-Family-msdf.fnt",
             crispNotoSerifTexture = "NotoSerif-Family-msdf.png",
             crispCurvySquare = "square-msdf.fnt",
-            crispCurvySquareTexture = "square-msdf.png"
+            crispCurvySquareTexture = "square-msdf.png",
+            crispIcons = "awesome-solid-msdf.fnt",
+            crispIconsTexture = "awesome-solid-msdf.png"
                     ;
     public static final String vertexShader = "attribute vec4 " + ShaderProgram.POSITION_ATTRIBUTE + ";\n"
             + "attribute vec4 " + ShaderProgram.COLOR_ATTRIBUTE + ";\n"
@@ -1819,6 +1822,47 @@ public class DefaultResources implements LifecycleListener {
             return instance.familyPrintMSDF.copy();
         return null;
     }
+    /**
+     * Returns a TextCellFactory already configured to use a fixed-width icon font (no letters are supported) using the
+     * Font-Awesome icon set, that should scale cleanly to even very large sizes. Caches the result for later calls.
+     * The icon font used is the popular Font-Awesome free set (solid style), an open-source (SIL Open Font License)
+     * typeface that is often used online. You will probably want to consult the cheatsheet for what chars are actually
+     * supported; <a href="https://fontawesome.com/cheatsheet">the cheatsheet is here</a>. This uses the Multi-channel
+     * Signed Distance Field technique as opposed to the normal Signed Distance Field technique, which should allow
+     * sharper edges. You may also want the list of all chars in this icon font; {@link #iconFontAll} has that.
+     * <br>
+     * Preview: <a href="">Image link</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/awesome-solid-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/awesome-solid-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Font-Awesome-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of Font Awesome Free (solid) with an MSDF effect
+     */
+    public static TextCellFactory getCrispIconFont()
+    {
+        initialize();
+        if(instance.msdfIcons == null)
+        {
+            try {
+                instance.msdfIcons = new TextCellFactory()
+                        .fontMultiDistanceField(crispIcons, crispIconsTexture);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfIcons != null)
+            return instance.msdfIcons.copy();
+        return null;
+
+    }
+    
+    
 
     /**
      * Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.
@@ -1909,8 +1953,8 @@ public class DefaultResources implements LifecycleListener {
     /**
      * Special symbols that can be used as icons if you use the narrow default font.
      */
-    public static final String narrowFontSymbols = "ሀሁሂሃሄህሆሇለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማሜ",
-                                  narrowFontAll = " !\"#$%&'()*+,-./0123\n" +
+    public static final String narrowFontSymbols = "ሀሁሂሃሄህሆሇለሉሊላሌልሎሏሐሑሒሓሔሕሖሗመሙሚማሜ";
+    public static final String narrowFontAll = " !\"#$%&'()*+,-./0123\n" +
                                           "456789:;<=>?@ABCDEFG\n" +
                                           "HIJKLMNOPQRSTUVWXYZ[\n" +
                                           "\\]^_`abcdefghijklmno\n" +
@@ -1933,7 +1977,11 @@ public class DefaultResources implements LifecycleListener {
                                           "╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹\n" +
                                           "╺╻╼╽╾╿▁▄▅▆▇█▌▐░▒▓▔▖▗\n" +
                                           "▘▙▚▛▜▝▞▟";
-
+    /**
+     * All of the Font-Awesome Free (solid style) characters in {@link #getCrispIconFont()}, as a String.
+     */
+    public static final String iconFontAll = "\u200E\uF000\uF001\uF002\uF004\uF005\uF007\uF008\uF009\uF00A\uF00B\uF00C\uF00D\uF00E\uF010\uF011\uF012\uF013\uF015\uF017\uF018\uF019\uF01C\uF01E\uF021\uF022\uF023\uF024\uF025\uF026\uF027\uF028\uF029\uF02A\uF02B\uF02C\uF02D\uF02E\uF02F\uF030\uF031\uF032\uF033\uF034\uF035\uF036\uF037\uF038\uF039\uF03A\uF03B\uF03C\uF03D\uF03E\uF041\uF042\uF043\uF044\uF048\uF049\uF04A\uF04B\uF04C\uF04D\uF04E\uF050\uF051\uF052\uF053\uF054\uF055\uF056\uF057\uF058\uF059\uF05A\uF05B\uF05E\uF060\uF061\uF062\uF063\uF064\uF065\uF066\uF067\uF068\uF069\uF06A\uF06B\uF06C\uF06D\uF06E\uF070\uF071\uF072\uF073\uF074\uF075\uF076\uF077\uF078\uF079\uF07A\uF07B\uF07C\uF080\uF083\uF084\uF085\uF086\uF089\uF08D\uF091\uF093\uF094\uF095\uF098\uF09C\uF09D\uF09E\uF0A0\uF0A1\uF0A3\uF0A4\uF0A5\uF0A6\uF0A7\uF0A8\uF0A9\uF0AA\uF0AB\uF0AC\uF0AD\uF0AE\uF0B0\uF0B1\uF0B2\uF0C0\uF0C1\uF0C2\uF0C3\uF0C4\uF0C5\uF0C6\uF0C7\uF0C8\uF0C9\uF0CA\uF0CB\uF0CC\uF0CD\uF0CE\uF0D0\uF0D1\uF0D6\uF0D7\uF0D8\uF0D9\uF0DA\uF0DB\uF0DC\uF0DD\uF0DE\uF0E0\uF0E2\uF0E3\uF0E7\uF0E8\uF0E9\uF0EA\uF0EB\uF0F0\uF0F1\uF0F2\uF0F3\uF0F4\uF0F8\uF0F9\uF0FA\uF0FB\uF0FC\uF0FD\uF0FE\uF100\uF101\uF102\uF103\uF104\uF105\uF106\uF107\uF108\uF109\uF10A\uF10B\uF10D\uF10E\uF110\uF111\uF118\uF119\uF11A\uF11B\uF11C\uF11E\uF120\uF121\uF122\uF124\uF125\uF126\uF127\uF128\uF129\uF12A\uF12B\uF12C\uF12D\uF12E\uF130\uF131\uF133\uF134\uF135\uF137\uF138\uF139\uF13A\uF13D\uF13E\uF140\uF141\uF142\uF143\uF144\uF146\uF14A\uF14B\uF14D\uF14E\uF150\uF151\uF152\uF153\uF154\uF155\uF156\uF157\uF158\uF159\uF15B\uF15C\uF15D\uF15E\uF160\uF161\uF162\uF163\uF164\uF165\uF182\uF183\uF185\uF186\uF187\uF188\uF191\uF192\uF193\uF195\uF197\uF199\uF19C\uF19D\uF1AB\uF1AC\uF1AD\uF1AE\uF1B0\uF1B2\uF1B3\uF1B8\uF1B9\uF1BA\uF1BB\uF1C0\uF1C1\uF1C2\uF1C3\uF1C4\uF1C5\uF1C6\uF1C7\uF1C8\uF1C9\uF1CD\uF1CE\uF1D8\uF1DA\uF1DC\uF1DD\uF1DE\uF1E0\uF1E1\uF1E2\uF1E3\uF1E4\uF1E5\uF1E6\uF1EA\uF1EB\uF1EC\uF1F6\uF1F8\uF1F9\uF1FA\uF1FB\uF1FC\uF1FD\uF1FE\uF200\uF201\uF204\uF205\uF206\uF207\uF20A\uF20B\uF217\uF218\uF21A\uF21B\uF21C\uF21D\uF21E\uF221\uF222\uF223\uF224\uF225\uF226\uF227\uF228\uF229\uF22A\uF22B\uF22C\uF22D\uF233\uF234\uF235\uF236\uF238\uF239\uF240\uF241\uF242\uF243\uF244\uF245\uF246\uF247\uF248\uF249\uF24D\uF24E\uF251\uF252\uF253\uF254\uF255\uF256\uF257\uF258\uF259\uF25A\uF25B\uF25C\uF25D\uF26C\uF271\uF272\uF273\uF274\uF275\uF276\uF277\uF279\uF27A\uF28B\uF28D\uF290\uF291\uF292\uF295\uF29A\uF29D\uF29E\uF2A0\uF2A1\uF2A2\uF2A3\uF2A4\uF2A7\uF2A8\uF2B5\uF2B6\uF2B9\uF2BB\uF2BD\uF2C1\uF2C2\uF2C7\uF2C8\uF2C9\uF2CA\uF2CB\uF2CC\uF2CD\uF2CE\uF2D0\uF2D1\uF2D2\uF2DB\uF2DC\uF2E5\uF2E7\uF2EA\uF2ED\uF2F1\uF2F2\uF2F5\uF2F6\uF2F9\uF2FE\uF302\uF303\uF304\uF305\uF309\uF30A\uF30B\uF30C\uF31E\uF328\uF337\uF338\uF358\uF359\uF35A\uF35B\uF35D\uF360\uF362\uF381\uF382\uF3A5\uF3BE\uF3BF\uF3C1\uF3C5\uF3C9\uF3CD\uF3D1\uF3DD\uF3E0\uF3E5\uF3ED\uF3FA\uF3FD\uF3FF\uF406\uF410\uF433\uF434\uF436\uF439\uF43A\uF43C\uF43F\uF441\uF443\uF445\uF447\uF44B\uF44E\uF450\uF453\uF458\uF45C\uF45D\uF45F\uF461\uF462\uF466\uF468\uF469\uF46A\uF46B\uF46C\uF46D\uF470\uF471\uF472\uF474\uF477\uF478\uF479\uF47D\uF47E\uF47F\uF481\uF482\uF484\uF485\uF486\uF487\uF48B\uF48D\uF48E\uF490\uF491\uF492\uF493\uF494\uF496\uF497\uF49E\uF4AD\uF4B3\uF4B8\uF4B9\uF4BA\uF4BD\uF4BE\uF4C0\uF4C2\uF4C4\uF4CD\uF4CE\uF4D3\uF4D6\uF4D7\uF4D8\uF4D9\uF4DA\uF4DB\uF4DE\uF4DF\uF4E2\uF4E3\uF4FA\uF4FB\uF4FC\uF4FD\uF4FE\uF4FF\uF500\uF501\uF502\uF503\uF504\uF505\uF506\uF507\uF508\uF509\uF517\uF518\uF519\uF51A\uF51B\uF51C\uF51D\uF51E\uF51F\uF520\uF521\uF522\uF523\uF524\uF525\uF526\uF527\uF528\uF529\uF52A\uF52B\uF52C\uF52D\uF52E\uF52F\uF530\uF531\uF532\uF533\uF534\uF535\uF536\uF537\uF538\uF539\uF53A\uF53B\uF53C\uF53D\uF53E\uF53F\uF540\uF541\uF542\uF543\uF544\uF545\uF546\uF547\uF548\uF549\uF54A\uF54B\uF54C\uF54D\uF54E\uF54F\uF550\uF551\uF552\uF553\uF554\uF555\uF556\uF557\uF558\uF559\uF55A\uF55B\uF55C\uF55D\uF55E\uF55F\uF560\uF561\uF562\uF563\uF564\uF565\uF566\uF567\uF568\uF569\uF56A\uF56B\uF56C\uF56D\uF56E\uF56F\uF570\uF571\uF572\uF573\uF574\uF575\uF576\uF577\uF578\uF579\uF57A\uF57B\uF57C\uF57D\uF57E\uF57F\uF580\uF581\uF582\uF583\uF584\uF585\uF586\uF587\uF588\uF589\uF58A\uF58B\uF58C\uF58D\uF58E\uF58F\uF590\uF591\uF593\uF594\uF595\uF596\uF597\uF598\uF599\uF59A\uF59B\uF59C\uF59D\uF59F\uF5A0\uF5A1\uF5A2\uF5A4\uF5A5\uF5A6\uF5A7\uF5AA\uF5AB\uF5AC\uF5AD\uF5AE\uF5AF\uF5B0\uF5B1\uF5B3\uF5B4\uF5B6\uF5B7\uF5B8\uF5BA\uF5BB\uF5BC\uF5BD\uF5BF\uF5C0\uF5C1\uF5C2\uF5C3\uF5C4\uF5C5\uF5C7\uF5C8\uF5C9\uF5CA\uF5CB\uF5CD\uF5CE\uF5D0\uF5D1\uF5D2\uF5D7\uF5DA\uF5DC\uF5DE\uF5DF\uF5E1\uF5E4\uF5E7\uF5EB\uF5EE\uF5FC\uF5FD\uF610\uF613\uF619\uF61F\uF621\uF62E\uF62F\uF630\uF637\uF63B\uF63C\uF641\uF644\uF647\uF64A\uF64F\uF651\uF653\uF654\uF655\uF658\uF65D\uF65E\uF662\uF664\uF665\uF666\uF669\uF66A\uF66B\uF66D\uF66F\uF674\uF676\uF678\uF679\uF67B\uF67C\uF67F\uF681\uF682\uF683\uF684\uF687\uF688\uF689\uF696\uF698\uF699\uF69A\uF69B\uF6A0\uF6A1\uF6A7\uF6AD";
+    
     /**
      * Called when the {@link Application} is about to pause
      */
@@ -2084,6 +2132,14 @@ public class DefaultResources implements LifecycleListener {
         if(msdfDejaVu != null) {
             msdfDejaVu.dispose();
             msdfDejaVu = null;
+        }
+        if(msdfCurvySquare != null) {
+            msdfCurvySquare.dispose();
+            msdfCurvySquare = null;
+        }
+        if(msdfIcons != null) {
+            msdfIcons.dispose();
+            msdfIcons = null;
         }
         if (unicode1 != null) {
             unicode1.dispose();

@@ -208,7 +208,7 @@ public class PaletteReducer {
                     c2 = r << 10 | g << 5 | b;
                     if (paletteMapping[c2] == 0) {
                         dist = 0x7FFFFFFF;
-                        for (int i = 1; i < 256; i++) {
+                        for (int i = 1; i < plen; i++) {
                             if (dist > (dist = Math.min(dist, difference(paletteArray[i], r, g, b))))
                                 paletteMapping[c2] = (byte) i;
                         }
@@ -262,7 +262,7 @@ public class PaletteReducer {
                     c2 = r << 10 | g << 5 | b;
                     if (paletteMapping[c2] == 0) {
                         dist = 0x7FFFFFFF;
-                        for (int i = 1; i < 256; i++) {
+                        for (int i = 1; i < plen; i++) {
                             if (dist > (dist = Math.min(dist, difference(paletteArray[i], r, g, b))))
                                 paletteMapping[c2] = (byte) i;
                         }
@@ -510,7 +510,7 @@ public class PaletteReducer {
                     pixmap.drawPixel(px, y, paletteArray[
                             paletteMapping[((rr << 7) & 0x7C00)
                             | ((gg << 2) & 0x3E0)
-                            | ((bb >>> 3))] & 0xFF]);
+                            | ((bb >>> 3))] & 0x1F]);
                 }
             }
 

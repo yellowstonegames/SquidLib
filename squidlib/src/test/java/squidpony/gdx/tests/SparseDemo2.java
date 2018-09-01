@@ -623,14 +623,17 @@ public class SparseDemo2 extends ApplicationAdapter {
                         {
                             display.putWithLight(x3 + xx, y3 + yy, bgColors[x][y], FLOAT_LIGHTING, la);
                             if(!isSeen)
+                            {
                                 seen.insert(x, y);
+                                isSeen = true;
+                            }
                         }
                         else if (isSeen) {
                             display.putSingle(x3 + xx, y3 + yy, seenColor);
                         }
                     }
                 }
-                if (isSeen || triVisible[x3 + 1][y3 + 1] > 0.0) {
+                if (isSeen) {
                     // Here we use a convenience method in SparseLayers that puts a char at a specified position (the
                     // first three parameters), with a foreground color for that char (fourth parameter), as well as
                     // placing a background tile made of a one base color (fifth parameter) that is adjusted to bring it
