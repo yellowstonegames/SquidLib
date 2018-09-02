@@ -68,7 +68,7 @@ public class DefaultResources implements LifecycleListener {
             smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null,
-            arial15 = null;
+            arial15 = null, tiny = null;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceCodeJP = null,
@@ -88,6 +88,7 @@ public class DefaultResources implements LifecycleListener {
             narrowNameLarge = "Rogue-Zodiac-12x24.fnt", narrowTextureLarge = "Rogue-Zodiac-12x24_0.png",
             unicodeNameLarge = "Mandrill-12x32.fnt", unicodeTextureLarge = "Mandrill-12x32.png",
             narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt", narrowTextureExtraLarge = "Rogue-Zodiac-18x36_0.png",
+            tinyName = "Monty-4x10.fnt", tinyTexture = "Monty-4x10.png", 
             smoothName = "Inconsolata-LGC-8x18.fnt", smoothTexture = "Inconsolata-LGC-8x18.png",
             smoothNameLarge = "Inconsolata-LGC-12x24.fnt", smoothTextureLarge = "Inconsolata-LGC-12x24.png",
             smoothSquareName = "Inconsolata-LGC-Square-25x25.fnt", smoothSquareTexture = "Inconsolata-LGC-Square-25x25.png",
@@ -583,6 +584,34 @@ public class DefaultResources implements LifecycleListener {
             }
         }
         return copyFont(instance.smoothSquare);
+    }
+    /**
+     * Returns a 4x10px, extremely thin font (that may be barely legible) as an embedded resource.
+     * The font builds on work by Christian Munk in his font called Monotwist, making some changes for legibility.
+     * This font has the lowest width of any font asset distributed with SquidLib. Caches the font for later calls.
+     * Attribution to Christian Munk (or the username he used, CMunk) is required to use this font; this is in the
+     * license file linked below.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-4x10.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-4x10.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-license.txt</li>
+     * </ul>
+     * @return the BitmapFont object representing Monty.ttf at size 8 pt
+     */
+    public static BitmapFont getTinyFont()
+    {
+        initialize();
+        if(instance.tiny == null)
+        {
+            try {
+                instance.tiny = new BitmapFont(Gdx.files.internal(tinyName), Gdx.files.internal(tinyTexture), false);
+                //instance.narrow1.getData().padBottom = instance.narrow1.getDescent();
+            } catch (Exception e) {
+            }
+        }
+        return copyFont(instance.tiny);
     }
 
     /**
