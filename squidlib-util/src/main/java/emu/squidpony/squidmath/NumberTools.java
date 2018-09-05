@@ -4,10 +4,12 @@ import com.google.gwt.typedarrays.client.Float64ArrayNative;
 import com.google.gwt.typedarrays.client.Float32ArrayNative;
 import com.google.gwt.typedarrays.client.Int32ArrayNative;
 import com.google.gwt.typedarrays.client.Int8ArrayNative;
+import com.google.gwt.typedarrays.client.DataViewNative;
 import com.google.gwt.typedarrays.shared.Float64Array;
 import com.google.gwt.typedarrays.shared.Float32Array;
 import com.google.gwt.typedarrays.shared.Int32Array;
 import com.google.gwt.typedarrays.shared.Int8Array;
+import com.google.gwt.typedarrays.shared.DataView;
 
 /**
  * Various numeric functions that are important to performance but need alternate implementations on GWT to obtain it.
