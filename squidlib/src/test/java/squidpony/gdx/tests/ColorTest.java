@@ -314,7 +314,7 @@ public class ColorTest extends ApplicationAdapter {
 //            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>\n" +
             "*/\n" +
         "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
-        String data = Gdx.files.classpath("ColorData.txt").readString();
+        String data = Gdx.files.classpath("special/ColorData.txt").readString();
         String[] lines = StringKit.split(data, "\n"), rec = new String[3];
         Color c = new Color();
         StringBuilder sb = new StringBuilder(100000);

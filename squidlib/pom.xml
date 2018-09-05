@@ -19,6 +19,9 @@
             <testResource>
                 <directory>src/test/resources</directory>
             </testResource>
+            <testResource>
+                <directory>../assets</directory>
+            </testResource>
         </testResources>
         <testOutputDirectory>target/test-classes</testOutputDirectory>
         <plugins>
