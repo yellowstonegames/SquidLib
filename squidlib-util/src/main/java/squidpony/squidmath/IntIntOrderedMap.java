@@ -653,12 +653,62 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
     public boolean isEmpty() {
         return size == 0;
     }
-    
+
+    /**
+     * Looks up the key {@code k} in this map, remembers the associated value (which will be
+     * {@link #defaultReturnValue()} if k wasn't found), adds {@code increment} to the actual associated value in the
+     * map, and returns the remembered value.
+     * @param k a key to look up
+     * @param increment an int to add to the value associated with {@code k}
+     * @return the previous value associated with k, or {@link #defaultReturnValue()} if k wasn't found
+     */
+    public int getAndIncrement(int k, int increment) {
+        if (k == 0) {
+            if (containsNullKey) {
+                int got = value[n];
+                value[n] += increment;
+                return got;
+            } else {
+                value[n] = defRetValue + increment;
+                return defRetValue;
+            }
+        }
+        int curr;
+        final int[] key = this.key;
+        int pos;
+        // The starting point.
+        if ((curr = key[pos = (HashCommon.mix(k)) & mask]) == 0)
+        {
+            put(k, defRetValue + increment);
+            return defRetValue;
+        }
+        if (k == curr)
+        {
+            int got = value[pos];
+            value[pos] += increment;
+            return got;
+        }
+        // There's always an unused entry.
+        while (true) {
+            if ((curr = key[pos = (pos + 1) & mask]) == 0)
+            {
+                put(k, defRetValue + increment);
+                return defRetValue;
+            }
+            if (k == curr)
+            {
+                int got = value[pos];
+                value[pos] += increment;
+                return got;
+            }
+        }
+    }
+
     /**
      * The entry class for a OrderedMap does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
      * {@link MapEntry#setValue(int)} are reflected in the map
      */
-    final class MapEntry {
+    public final class MapEntry {
         // The table index this entry refers to, or -1 if this entry has been
         // deleted.
         int index;

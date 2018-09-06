@@ -18,9 +18,7 @@ import squidpony.squidgrid.gui.gdx.SquidInput;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import static squidpony.squidgrid.gui.gdx.SColor.blueLUT;
-import static squidpony.squidgrid.gui.gdx.SColor.greenLUT;
-import static squidpony.squidgrid.gui.gdx.SColor.redLUT;
+import static squidpony.squidgrid.gui.gdx.SColor.*;
 
 /**
  * Demo for various ways to quantize images to fit in fewer bits per pixel.
@@ -34,30 +32,39 @@ import static squidpony.squidgrid.gui.gdx.SColor.redLUT;
  * Shows all of the Biva variations before showing the da Vinci variations.
  */
 public class QuantizeDemo extends ApplicationAdapter {
-    private static int width = 574, width1 = width, width2 = 345, height = 512, height1 = 480, height2 = 512;
+    private static final int width = 574, width1 = width, width2 = 404, height = 600, height1 = 480;
     private SpriteBatch batch;
-    private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
     private Viewport view;
-    private int mode = 0, maxModes = 10;
-    private Pixmap edit, bivaOriginal, monaOriginal;
+    private int mode = 0, maxModes = 27;
+    private Pixmap edit, bivaOriginal, monaOriginal, colors;
     private ByteBuffer pixels;
     private Texture pt;
     private PNG8 png8;
     private PixmapIO.PNG png;
-    private PaletteReducer auroraPalette, monaPalette, bivaPalette;
+    private PaletteReducer auroraPalette, monaPalette, bivaPalette, colorsPalette;
     @Override
     public void create() {
         batch = new SpriteBatch();
         view = new StretchViewport(width, height);
         bivaOriginal = new Pixmap(Gdx.files.internal("special/Painting_by_Henri_Biva.jpg"));
         bivaOriginal.setBlending(Pixmap.Blending.None);
-        monaOriginal = new Pixmap(Gdx.files.internal("special/Mona_Lisa.jpg"));
+        monaOriginal = new Pixmap(Gdx.files.internal("special/Mona_Lisa_404x600.jpg"));
         monaOriginal.setBlending(Pixmap.Blending.None);
-        edit = new Pixmap(width << 1, height << 1, Pixmap.Format.RGBA8888);
+        colors = new Pixmap(width, height, Pixmap.Format.RGBA8888);
+//        RNG shuffler = new RNG(1337);
+        SColor[] full = SColor.FULL_PALETTE;
+        int idx = 0, len = full.length;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                colors.drawPixel(x, y, Color.rgba8888(full[idx++]));
+                idx %= len;
+            }
+        }
+        edit = new Pixmap(width, height, Pixmap.Format.RGBA8888);
         edit.setBlending(Pixmap.Blending.None);
         edit.setFilter(Pixmap.Filter.NearestNeighbour);
-        edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+        edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
         pixels = edit.getPixels();
         pt = new Texture(edit);
         pt.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
@@ -90,8 +97,9 @@ public class QuantizeDemo extends ApplicationAdapter {
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG32.png", ex);
         }
-        bivaPalette = new PaletteReducer(bivaOriginal);
-        monaPalette = new PaletteReducer(monaOriginal);
+        bivaPalette = new PaletteReducer(bivaOriginal, 400);
+        monaPalette = new PaletteReducer(monaOriginal, 400);
+        colorsPalette = new PaletteReducer(colors, 400);
         png8.palette = bivaPalette;
         try {
             png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
@@ -149,11 +157,11 @@ public class QuantizeDemo extends ApplicationAdapter {
         {
             case 0:
                 Gdx.graphics.setTitle("(Original) Étang en Ile de France by Henri Biva");
-                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
                 break;
             case 1:
                 Gdx.graphics.setTitle("(64-value channels) Étang en Ile de France by Henri Biva");
-                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
                 while (pixels.remaining() >= 4)
                 {
                     color = (pixels.getInt() & 0xFCFCFCFF);
@@ -163,32 +171,38 @@ public class QuantizeDemo extends ApplicationAdapter {
                 pixels.rewind();
                 break;
             case 2:
-                Gdx.graphics.setTitle("(DawnBringer Aurora)  Étang en Ile de France by Henri Biva");
-                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
-//                while (pixels.remaining() >= 4)
-//                {
-//                    color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
-//                    color |= color >>> 5 & 0x07070700;
-//                    pixels.putInt(pixels.position() - 4, color);
-//                }
-//                pixels.rewind();
-                auroraPalette.reduce(edit);
-                break;
-            case 3:
-                Gdx.graphics.setTitle("(Adaptive Palette) Étang en Ile de France by Henri Biva");
-                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
-//                while (pixels.remaining() >= 4) {
-//                    pos = pixels.position();
-//                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
-//                    pixels.putInt(pos, color);
-//                    pixels.position(pos+4);
-//                }
-//                pixels.rewind();
+                Gdx.graphics.setTitle("(Adaptive Palette, Sierra Lite dither) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
                 bivaPalette.reduce(edit);
                 break;
+            case 3:
+                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
+                bivaPalette.reduceBurkes(edit);
+                break;
             case 4:
+                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
+                bivaPalette.reduceWithNoise(edit);
+                break;
+            case 5:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Sierra Lite dither)  Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
+                auroraPalette.reduce(edit);
+                break;
+            case 6:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
+                auroraPalette.reduce(edit);
+                break;
+            case 7:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based Lite dither)  Étang en Ile de France by Henri Biva");
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
+                auroraPalette.reduceWithNoise(edit);
+                break;
+            case 8:
                 Gdx.graphics.setTitle("(6-value channels) Étang en Ile de France by Henri Biva");
-                edit.drawPixmap(bivaOriginal, 0, 0,  width1, height1, 0, height - height1, width1 << 1, height1 << 1);
+                edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
                 switch (edit.getFormat()) {
                     case RGBA8888: {
                         while (pixels.remaining() >= 4) {
@@ -215,13 +229,13 @@ public class QuantizeDemo extends ApplicationAdapter {
                 }
                 pixels.rewind();
                 break;
-            case 5:
+            case 9:
                 Gdx.graphics.setTitle("(Original) Mona Lisa by Leonardo da Vinci (remastered)");
-                edit.drawPixmap(monaOriginal, width - width2, 0);
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
                 break;
-            case 6:
+            case 10:
                 Gdx.graphics.setTitle("(64-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
-                edit.drawPixmap(monaOriginal, width - width2, 0);
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
                 while (pixels.remaining() >= 4)
                 {
                     color = (pixels.getInt() & 0xFCFCFCFF);
@@ -230,33 +244,113 @@ public class QuantizeDemo extends ApplicationAdapter {
                 }
                 pixels.rewind();
                 break;
-            case 7:
-                Gdx.graphics.setTitle("(DawnBringer Aurora) Mona Lisa by Leonardo da Vinci (remastered)");
-                edit.drawPixmap(monaOriginal, width - width2, 0);
-//                while (pixels.remaining() >= 4)
-//                {
-//                    color = (pixels.getInt() & 0xF8F8F8FF) | 0xFF;
-//                    color |= color >>> 5 & 0x07070700;
-//                    pixels.putInt(pixels.position() - 4, color);
-//                }
-//                pixels.rewind();
-                auroraPalette.reduce(edit);
-                break;
-            case 8:
-                Gdx.graphics.setTitle("(Adaptive Palette) Mona Lisa by Leonardo da Vinci (remastered)");
-                edit.drawPixmap(monaOriginal, width - width2, 0);
-//                while (pixels.remaining() >= 4) {
-//                    pos = pixels.position();
-//                    color = Integer.reverseBytes((redLUT[pixels.get() >>> 3 & 31] | greenLUT[pixels.get() >>> 3 & 31] | blueLUT[pixels.get() >>> 3 & 31]) & (pixels.get() >> 31));
-//                    pixels.putInt(pos, color);
-//                    pixels.position(pos+4);
-//                }
-//                pixels.rewind();
+            case 11:
+                Gdx.graphics.setTitle("(Adaptive Palette, Sierra Lite dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
                 monaPalette.reduce(edit);
                 break;
-            case 9:
+            case 12:
+                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
+                monaPalette.reduceBurkes(edit);
+                break;
+            case 13:
+                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
+                monaPalette.reduce(edit);
+                break;
+            case 14:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Sierra Lite dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
+                auroraPalette.reduce(edit);
+                break;
+            case 15:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
+                auroraPalette.reduceBurkes(edit);
+                break;
+            case 16:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither) Mona Lisa by Leonardo da Vinci (remastered)");
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
+                auroraPalette.reduceWithNoise(edit);
+                break;
+            case 17:
                 Gdx.graphics.setTitle("(6-value channels) Mona Lisa by Leonardo da Vinci (remastered)");
-                edit.drawPixmap(monaOriginal, width - width2, 0);
+                edit.drawPixmap(monaOriginal, width - width2 >> 1, 0);
+                switch (edit.getFormat()) {
+                    case RGBA8888: {
+                        while (pixels.remaining() >= 4) {
+                            pos = pixels.position();
+                            color = (((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAAAA & 0xFF000000)
+                                    | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAAAA & 0xFF0000)
+                                    | ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA & 0xFF00)
+                                    | 255) & (pixels.get() >> 31);
+                            pixels.putInt(pos, color);
+                            pixels.position(pos + 4);
+                        }
+                    }
+                    break;
+                    case RGB888: {
+                        while (pixels.remaining() >= 3) {
+                            pos = pixels.position();
+                            pixels.put(pos, (byte) ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.put(pos + 1, (byte)((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.put(pos + 2, (byte) ((((pixels.get() & 0xFF) + 21) * 6 >>> 8) * 0x2AAA >>> 8));
+                            pixels.position(pos + 3);
+                        }
+                    }
+                    break;
+                }
+                pixels.rewind();
+                break;
+            case 18:
+                Gdx.graphics.setTitle("(Original) SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                break;
+            case 19:
+                Gdx.graphics.setTitle("(64-value channels) SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                while (pixels.remaining() >= 4)
+                {
+                    color = (pixels.getInt() & 0xFCFCFCFF);
+                    color |= color >>> 6 & 0x03030300;
+                    pixels.putInt(pixels.position() - 4, color);
+                }
+                pixels.rewind();
+                break;
+            case 20:
+                Gdx.graphics.setTitle("(Adaptive Palette, Sierra Lite dither) SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                colorsPalette.reduce(edit);
+                break;
+            case 21:
+                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                colorsPalette.reduceBurkes(edit);
+                break;
+            case 22:
+                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                colorsPalette.reduceWithNoise(edit);
+                break;
+            case 23:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Sierra Lite dither)  SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                auroraPalette.reduce(edit);
+                break;
+            case 24:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                auroraPalette.reduce(edit);
+                break;
+            case 25:
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based Lite dither)  SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
+                auroraPalette.reduceWithNoise(edit);
+                break;
+            case 26:
+                Gdx.graphics.setTitle("(6-value channels) SColor Full Palette");
+                edit.drawPixmap(colors, 0, 0);
                 switch (edit.getFormat()) {
                     case RGBA8888: {
                         while (pixels.remaining() >= 4) {
