@@ -48,12 +48,12 @@ public class OrderedDataTest {
                 {
                     String s = om.alterAtCarefully(i, r.translateCapped(rn.nextIntHasty(3) - 1, rn.nextIntHasty(3) - 1, 100, 100));
                     if(s == null)
-                        System.out.println("ISSUE IN RUN " + n + " AT i " + i);
+                        System.out.println("CORRECTLY BLOCKED REPLACEMENT BY DUPLICATE IN RUN " + n + " AT i " + i);
                     else
                         break;
                 }
                 // Try commenting out the above line and uncommenting below to see the difference.
-                om.alterAtCarefully(i, r.translateCapped(rn.nextIntHasty(3) - 1, rn.nextIntHasty(3) - 1, 100, 100));
+                //om.alterAtCarefully(i, r.translateCapped(rn.nextIntHasty(3) - 1, rn.nextIntHasty(3) - 1, 100, 100));
                 //om.alterAt(i, r.translateCapped(rn.nextIntHasty(3) - 1, rn.nextIntHasty(3) - 1, 100, 100));
             }
             for (int i = 0; i < om.size(); i++) {
