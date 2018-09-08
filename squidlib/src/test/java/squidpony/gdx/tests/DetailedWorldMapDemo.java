@@ -45,13 +45,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 
     //private static final int width = 314 * 3, height = 300;
     //private static final int width = 1024, height = 512;
-    //private static final int width = 512, height = 256;
-//    private static final int width = 400, height = 400;
+//    private static final int width = 512, height = 256;
+    private static final int width = 400, height = 400;
 //    private static final int width = 300, height = 300;
     //private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
     //private static final int width = 700, height = 700;
-    private static final int width = 512, height = 512;
+//    private static final int width = 512, height = 512;
     
     private SpriteBatch batch;
 //    private SquidPanel display;//, overlay;
@@ -69,6 +69,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private WorldMapGenerator.EllipticalHammerMap world;
     //private WorldMapGenerator.RoundSideMap world;
     //private WorldMapGenerator.HyperellipticalMap world;
+//    private WorldMapGenerator.SphereMapAlt world;
     //private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
 
@@ -304,6 +305,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0x0c415cf07774ab2eL;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
+//        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 0.8);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.8);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
@@ -773,7 +775,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             break;
         }
         ++counter;//nation = NumberTools.swayTight(++counter * 0.0125f);
-        Gdx.graphics.setTitle("Map! Took " + ttg + " ms to generate");
+        Gdx.graphics.setTitle("Took " + ttg + " ms to generate");
 
         // if we are waiting for the player's input and get input, process it.
         if (input.hasNext()) {

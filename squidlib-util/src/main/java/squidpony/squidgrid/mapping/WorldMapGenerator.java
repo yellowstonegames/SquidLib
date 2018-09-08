@@ -93,14 +93,14 @@ public abstract class WorldMapGenerator implements Serializable {
 
     protected static double removeExcess(double radians)
     {
-        radians = radians * 0.6366197723675814;
+        radians *= 0.6366197723675814;
         final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1);
-        radians = (radians - (floor & -2) - ((floor & 1) << 1)) * (Math.PI);
+        return (radians - (floor & -2) - ((floor & 1) << 1)) * (Math.PI);
 //        if(radians < -Math.PI || radians > Math.PI)
 //            System.out.println("UH OH, radians produced: " + radians);
 //        if(Math.random() < 0.00001)
 //            System.out.println(radians);
-        return radians;
+//        return radians;
 
     }
     /**
@@ -1468,10 +1468,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator.
      * This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch this does.
      * You might also want to produce an oval map that more-accurately represents the changes in the diameter of a
-     * latitude line on a spherical world; this could be done by using one of the maps this class makes and removing a
-     * portion of each non-equator row, arranging the removal so if the map is n units wide at the equator, the height
-     * should be n divided by {@link Math#PI}, and progressively more cells are removed from rows as you move away from
-     * the equator (down to empty space or 1 cell left at the poles).
+     * latitude line on a spherical world; you should use {@link EllipticalMap} or {@link EllipticalHammerMap} for this.
      * <a href="https://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
      */
     public static class SphereMap extends WorldMapGenerator {
@@ -1490,13 +1487,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
-         * Always makes a 256x256 map.
+         * Always makes a 512x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 512, 256, SeededNoise.instance, 1.0}.
          */
         public SphereMap() {
-            this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 512, 256, SeededNoise.instance, 1.0);
         }
 
         /**
@@ -1806,14 +1803,11 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that distorts the map as it nears the poles, expanding the
      * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
      * this is an alternative implementation to WorldMapGenerator.SphereMap that is meant to avoid certain artifacts
-     * commonly produced by that generator. This generator does not permit a choice of {@link Noise3D}, since it uses a
-     * mix of 3D and 4D noise.
+     * commonly produced by that generator. This generator does not permit a choice of {@link Noise4D}, but does allow
+     * choosing a {@link Noise3D}, which is used for most of the generation.
      * This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch this does.
      * You might also want to produce an oval map that more-accurately represents the changes in the diameter of a
-     * latitude line on a spherical world; this could be done by using one of the maps this class makes and removing a
-     * portion of each non-equator row, arranging the removal so if the map is n units wide at the equator, the height
-     * should be n divided by {@link Math#PI}, and progressively more cells are removed from rows as you move away from
-     * the equator (down to empty space or 1 cell left at the poles).
+     * latitude line on a spherical world; you should use {@link EllipticalMap} or {@link EllipticalHammerMap} for this.
      * <a href="http://i.imgur.com/wth01QD.png" >Example map, showing distortion</a>
      */
     @Beta
@@ -1834,13 +1828,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
-         * Always makes a 314x100 map.
+         * Always makes a 256x128 map.
          * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link SphereMapAlt#SphereMapAlt(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 314, 100, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, WhirlingNoise.instance, 1.0}.
          */
         public SphereMapAlt() {
-            this(0x1337BABE1337D00DL, 314, 100, WhirlingNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 256, 128, WhirlingNoise.instance, 1.0);
         }
 
         /**
@@ -1984,19 +1978,19 @@ public abstract class WorldMapGenerator implements Serializable {
                     ps, pc,
                     qs, qc,
                     h, temp,
-                    i_w = 6.283185307179586 / width, i_h = (3.141592653589793) / (height+2.0),
-                    xPos = startX, yPos, i_uw = usedWidth / (double)width, i_uh = usedHeight / (height+2.0);
+                    i_w = 6.283185307179586 / width, i_h = 2.0 / (height+2.0),//(3.141592653589793) / (height+2.0),
+                    xPos = startX, yPos, i_uw = usedWidth / (double)width, i_uh = usedHeight * i_h / (height+2.0);
             final double[] trigTable = new double[width << 1];
             for (int x = 0; x < width; x++, xPos += i_uw) {
-                p = xPos * i_w;
+                p = xPos * i_w + centerLongitude;
                 trigTable[x<<1]   = NumberTools.sin(p);
                 trigTable[x<<1|1] = NumberTools.cos(p);
             }
-            yPos = startY + i_uh;
+            yPos = startY * i_h + i_uh;
             for (int y = 0; y < height; y++, yPos += i_uh) {
-                qs = -1.5707963267948966 + yPos * i_h;
-                qc = NumberTools.cos(qs);
-                qs = NumberTools.sin(qs);
+                qs = -1 + yPos;//-1.5707963267948966 + yPos;
+                qc = NumberTools.cos(asin(qs));
+                //qs = qs;
                 //qs = NumberTools.sin(qs);
                 for (int x = 0, xt = 0; x < width; x++) {
                     ps = trigTable[xt++] * qc;//NumberTools.sin(p);
@@ -2042,12 +2036,12 @@ public abstract class WorldMapGenerator implements Serializable {
                     halfHeight = (height - 1) * 0.5, i_half = 1.0 / halfHeight;
             double minHeightActual0 = minHeightActual;
             double maxHeightActual0 = maxHeightActual;
-            yPos = startY + i_uh;
+            //yPos = startY * i_h + i_uh;
             ps = Double.POSITIVE_INFINITY;
             pc = Double.NEGATIVE_INFINITY;
 
-            for (int y = 0; y < height; y++, yPos += i_uh) {
-                temp = Math.abs(yPos - halfHeight) * i_half;
+            for (int y = 0; y < height; y++) {//, yPos += i_uh
+                temp = Math.abs(y - halfHeight) * i_half;
                 temp *= (2.4 - temp);
                 temp = 2.2 - temp;
                 for (int x = 0; x < width; x++) {
@@ -4424,11 +4418,12 @@ public abstract class WorldMapGenerator implements Serializable {
      * {@link #generate()} in those classes, since it doesn't remake the map data at a slightly different rotation and
      * instead keeps a single map in use the whole time, using sections of it. This uses an
      * <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
-     * the latitude always at the equator, though some aspects of the projection may be slightly "off" because the
-     * map this stores internally (which doesn't rotate) uses the Hammer projection (an {@link EllipticalHammerMap}).
-     * They haven't been noticeable so far, so that concern may be unfounded.
+     * the latitude always at the equator; the internal map is stored as a {@link SphereMapAlt}, which uses a
+     * <a href="https://en.wikipedia.org/wiki/Cylindrical_equal-area_projection#Discussion">cylindrical equal-area
+     * projection</a>, specifically the Smyth equal-surface projection.
      * <br>
      * <a href="https://i.imgur.com/WNa5nQ1.gifv">Example view of a planet rotating</a>.
+     * <a href="https://i.imgur.com/NV5IMd6.gifv">Another example</a>.
      */
     @Beta
     public static class RotatingSpaceMap extends WorldMapGenerator {
@@ -4440,7 +4435,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 yPositions,
                 zPositions;
         protected final int[] edges;
-        public final EllipticalHammerMap storedMap;
+        public final SphereMapAlt storedMap;
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
@@ -4545,7 +4540,7 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[mapWidth][mapHeight];
             zPositions = new double[mapWidth][mapHeight];
             edges = new int[height << 1];
-            storedMap = new EllipticalHammerMap(initialSeed, mapWidth << 1, mapHeight, noiseGenerator, octaveMultiplier);
+            storedMap = new SphereMapAlt(initialSeed, mapWidth << 1, mapHeight, noiseGenerator, octaveMultiplier);
         }
 
         @Override
@@ -4570,7 +4565,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
                     th, lon, lat, rho,
-                    z,
+                    i_pi = 1.0 / Math.PI,
                     rx = width * 0.5, irx = i_uw / rx,
                     ry = height * 0.5, iry = i_uh / ry;
 
@@ -4603,10 +4598,12 @@ public abstract class WorldMapGenerator implements Serializable {
                     pc = NumberTools.cos(lon);
                     ps = NumberTools.sin(lon);
                     
-                    // Hammer projection, not an inverse projection like we usually use
-                    z = 1.0 / Math.sqrt(1 + qc * NumberTools.cos(lon * 0.5));
-                    ax = (int)((qc * NumberTools.sin(lon * 0.5) * z + 1.0) * width);
-                    ay = (int)((qs * z + 1.0) * height * 0.5);
+                    ax = (int)((lon * i_pi + 1.0) * width);
+                    ay = (int)((qs + 1.0) * ry);
+//                    // Hammer projection, not an inverse projection like we usually use
+//                    z = 1.0 / Math.sqrt(1 + qc * NumberTools.cos(lon * 0.5));
+//                    ax = (int)((qc * NumberTools.sin(lon * 0.5) * z + 1.0) * width);
+//                    ay = (int)((qs * z + 1.0) * height * 0.5);
 
                     if(ax >= storedMap.width || ax < 0 || ay >= storedMap.height || ay < 0)
                     {
