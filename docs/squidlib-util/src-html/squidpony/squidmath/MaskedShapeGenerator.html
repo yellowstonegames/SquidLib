@@ -1,0 +1,234 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>/**<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * Generates procedural shapes based on a mask that determines what values can exist at a location.<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * Currently, this generates spaceship-like shapes, which &lt;a href="https://i.imgur.com/O4q1a2I.png"&gt;look like this&lt;/a&gt;.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * The technique used here is derived from &lt;a href="https://github.com/zfedoran/pixel-sprite-generator"&gt;this repo&lt;/a&gt;,<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * which is an adaptation of<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * &lt;a href="http://web.archive.org/web/20080228054410/http://www.davebollinger.com/works/pixelspaceships/"&gt; Dave<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Bollinger's work&lt;/a&gt;.<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * Created by Tommy Ettinger on 10/12/2017.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> */<a name="line.11"></a>
+<span class="sourceLineNo">012</span>public class MaskedShapeGenerator {<a name="line.12"></a>
+<span class="sourceLineNo">013</span>    public static final int[][] spaceship = {<a name="line.13"></a>
+<span class="sourceLineNo">014</span>            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},<a name="line.14"></a>
+<span class="sourceLineNo">015</span>            {0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0},<a name="line.15"></a>
+<span class="sourceLineNo">016</span>            {0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0},<a name="line.16"></a>
+<span class="sourceLineNo">017</span>            {0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0},<a name="line.17"></a>
+<span class="sourceLineNo">018</span>            {0, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 0},<a name="line.18"></a>
+<span class="sourceLineNo">019</span>            {0, 1, 3, 3, 3, 3, 2, 2, 2, 3, 1, 0}<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    };<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    public static final GreasedRegion potentialBody = new GreasedRegion(spaceship, 1), // can be body or empty<a name="line.21"></a>
+<span class="sourceLineNo">022</span>            potentialSolid = new GreasedRegion(spaceship, 2, 4), // can be solid or body, never empty<a name="line.22"></a>
+<span class="sourceLineNo">023</span>            alwaysSolid = new GreasedRegion(spaceship, 3); // must be solid<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    public LinnormRNG randomness = new LinnormRNG(123456789L);<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    public RNG rng = new RNG(randomness);<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    public final GreasedRegion randomRegion = new GreasedRegion(randomness, 6, 12);<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    private final GreasedRegion workingBody = new GreasedRegion(6, 12),<a name="line.27"></a>
+<span class="sourceLineNo">028</span>            workingSolid = new GreasedRegion(6, 12),<a name="line.28"></a>
+<span class="sourceLineNo">029</span>            workingShade = new GreasedRegion(6, 12),<a name="line.29"></a>
+<span class="sourceLineNo">030</span>            workingShine = new GreasedRegion(6, 12);<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>    public MaskedShapeGenerator()<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    {<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    }<a name="line.34"></a>
+<span class="sourceLineNo">035</span><a name="line.35"></a>
+<span class="sourceLineNo">036</span>    /**<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * Returns a modified version of changing where 0 represents empty space, 1 represents border, and 2 represents<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * "body." Only a 12x12 area will be changed by this call, with its minimum x and y determined by xPos and yPos.<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     * The seed will change each time this runs, producing different shapes each time.<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * The technique used here is derived from https://github.com/zfedoran/pixel-sprite-generator .<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * @param changing an int array that will be altered if possible<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * @param xPos the minimum x to modify; the maximum will be xPos + 12, exclusive<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * @param yPos the minimum y to modify; the maximum will be yPos + 12, exclusive<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * @return changing, after modifications<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public int[][] generateInto(int[][] changing, int xPos, int yPos)<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        int w = workingBody.width, h = workingBody.height, ys = (h + 63) &gt;&gt; 6;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        if(changing.length &lt; w * 2 || changing[0].length &lt; h<a name="line.49"></a>
+<span class="sourceLineNo">050</span>                || xPos + w * 2 &gt;= changing.length || yPos + h &gt;= changing[0].length)<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            return changing;<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        randomRegion.refill(rng, 0.75, w, h);<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        workingSolid.remake(potentialSolid);<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);<a name="line.54"></a>
+<span class="sourceLineNo">055</span>        workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe());<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        for (int x = 0, o = w*2-1; x &lt; w; x++, o--) {<a name="line.56"></a>
+<span class="sourceLineNo">057</span>            for (int y = 0; y &lt; h; y++) {<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                changing[xPos + x][yPos + y] = ((workingBody.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 2 : 0)<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                        | ((workingSolid.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 1 : 0);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>            }<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            System.arraycopy(changing[xPos + x], yPos, changing[xPos + o], yPos, h);<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        }<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        return changing;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    }<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>    /**<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * Returns an int array (12x12) where 0 represents empty space, 1 represents border, and 2 represents "body."<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * The seed will change each time this runs, producing different shapes each time.<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * The technique used here is derived from https://github.com/zfedoran/pixel-sprite-generator .<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * @return an int array with the randomly generated shape.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     */<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public int[][] generate()<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    {<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        return generateInto(new int[workingSolid.width][workingSolid.height], 0, 0);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    }<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    /**<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * Returns an int array (12x12) where 0 represents empty space, 1 represents border, and 2 represents "body."<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * Will use the specified seed for this generation.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     * The technique used here is derived from https://github.com/zfedoran/pixel-sprite-generator .<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * @param seed a long to use as the seed for this random shape.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     * @return an int array with the randomly generated shape.<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     */<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    public int[][] generate(long seed)<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        randomness.setState(seed);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        return generateInto(new int[workingSolid.width][workingSolid.height], 0, 0);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    }<a name="line.87"></a>
+<span class="sourceLineNo">088</span><a name="line.88"></a>
+<span class="sourceLineNo">089</span>    /**<a name="line.89"></a>
+<span class="sourceLineNo">090</span>     * Returns a modified version of changing where 0 represents empty space, 1 represents border, 2 represents shaded<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * "body,", 3 represents normal body, and 4 represents lit body. Only a 12x12 area will be changed by this call,<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * with its minimum x and y determined by xPos and yPos.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * The seed will change each time this runs, producing different shapes each time.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * The technique used here is derived from https://github.com/zfedoran/pixel-sprite-generator .<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @param changing an int array that will be altered if possible<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * @param xPos the minimum x to modify; the maximum will be xPos + 12, exclusive<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * @param yPos the minimum y to modify; the maximum will be yPos + 12, exclusive<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * @return changing, after modifications<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    public int[][] generateIntoShaded(int[][] changing, int xPos, int yPos)<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        int w = workingBody.width, h = workingBody.height, ys = (h + 63) &gt;&gt; 6;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        if(changing.length &lt; w * 2 || changing[0].length &lt; h<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                || xPos + w * 2 &gt;= changing.length || yPos + h &gt;= changing[0].length)<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            return changing;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        randomRegion.refill(rng, 0.75, w, h);<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        workingSolid.remake(potentialSolid);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>        workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe());<a name="line.109"></a>
+<span class="sourceLineNo">110</span>        workingShade.remake(workingBody).neighborDown().not().and(workingBody);<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        workingShine.remake(workingBody).neighborUp().not().and(workingBody).andNot(workingShade);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        workingBody.andNot(workingShade).andNot(workingShine);<a name="line.112"></a>
+<span class="sourceLineNo">113</span>        for (int x = 0, o = w*2-1; x &lt; w; x++, o--) {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            for (int y = 0; y &lt; h; y++) {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                changing[xPos + x][yPos + y] = ((workingShine.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 4 : 0)<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                        | ((workingBody.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 3 : 0)<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                        | ((workingShade.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 2 : 0)<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                        | ((workingSolid.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 1 : 0);<a name="line.118"></a>
+<span class="sourceLineNo">119</span>            }<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            System.arraycopy(changing[xPos + x], yPos, changing[xPos + o], yPos, h);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        }<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        return changing;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>    /**<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * Returns a modified version of changing where 0 represents empty space, 1 represents border, 2 represents shaded<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * "body,", 3 represents normal body, and 4 represents lit body. Only a 12x12 area will be changed by this call,<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * with its minimum x and y determined by xPos and yPos. Ensures that borders drawn around the shape cover all cells<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * that are 8-way adjacent to any cells in the shape.<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * The seed will change each time this runs, producing different shapes each time.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * The technique used here is derived from https://github.com/zfedoran/pixel-sprite-generator .<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * @param changing an int array that will be altered if possible<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * @param xPos the minimum x to modify; the maximum will be xPos + 12, exclusive<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * @param yPos the minimum y to modify; the maximum will be yPos + 12, exclusive<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * @return changing, after modifications<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     */<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    public int[][] generateIntoShaded8way(int[][] changing, int xPos, int yPos)<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        int w = workingBody.width, h = workingBody.height, ys = (h + 63) &gt;&gt; 6;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        if(changing.length &lt; w * 2 || changing[0].length &lt; h<a name="line.140"></a>
+<span class="sourceLineNo">141</span>                || xPos + w * 2 &gt;= changing.length || yPos + h &gt;= changing[0].length)<a name="line.141"></a>
+<span class="sourceLineNo">142</span>            return changing;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        randomRegion.refill(rng, 0.75, w, h);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        workingSolid.remake(potentialSolid);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe8way());<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        workingShade.remake(workingBody).neighborDown().not().and(workingBody);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        workingShine.remake(workingBody).neighborUp().not().and(workingBody).andNot(workingShade);<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        workingBody.andNot(workingShade).andNot(workingShine);<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        for (int x = 0, o = w*2-1; x &lt; w; x++, o--) {<a name="line.150"></a>
+<span class="sourceLineNo">151</span>            for (int y = 0; y &lt; h; y++) {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                changing[xPos + x][yPos + y] = ((workingShine.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 4 : 0)<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                        | ((workingBody.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 3 : 0)<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                        | ((workingShade.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 2 : 0)<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                        | ((workingSolid.data[x * ys + (y &gt;&gt; 6)] &amp; (1L &lt;&lt; (y &amp; 63))) != 0 ? 1 : 0);<a name="line.155"></a>
+<span class="sourceLineNo">156</span>            }<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            System.arraycopy(changing[xPos + x], yPos, changing[xPos + o], yPos, h);<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        }<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        return changing;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    }<a name="line.160"></a>
+<span class="sourceLineNo">161</span><a name="line.161"></a>
+<span class="sourceLineNo">162</span>}<a name="line.162"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

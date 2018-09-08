@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/* File generated automatically by TilesetsGenerator.java. Do not edit. This file is committed for convenience. */<a name="line.1"></a>
+<span class="sourceLineNo">002</span>package squidpony.tileset;<a name="line.2"></a>
+<span class="sourceLineNo">003</span><a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.squidgrid.mapping.styled.*;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>/** @author TilesetsGenerator.java */<a name="line.6"></a>
+<span class="sourceLineNo">007</span>public class SquareRoomsWithRandomRects {<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>  public static final Tileset INSTANCE = new Tileset();<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>  static {<a name="line.11"></a>
+<span class="sourceLineNo">012</span>    /* Initialize #INSTANCE */ <a name="line.12"></a>
+<span class="sourceLineNo">013</span>    INSTANCE.config.is_corner=false;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>    INSTANCE.config.num_x_variants=4;<a name="line.14"></a>
+<span class="sourceLineNo">015</span>    INSTANCE.config.num_y_variants=4;<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    INSTANCE.config.short_side_length=12;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    INSTANCE.config.num_colors[0]=1;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    INSTANCE.config.num_colors[1]=1;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>    INSTANCE.config.num_colors[2]=1;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    INSTANCE.config.num_colors[3]=1;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    INSTANCE.max_tiles.h=16;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    INSTANCE.max_tiles.v=16;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>    INSTANCE.h_tiles = new Tile[16];<a name="line.23"></a>
+<span class="sourceLineNo">024</span>    /* Build h_tiles #0 */<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    INSTANCE.h_tiles[0] = new Tile(0,0,0,0,0,0<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    ,24,12,112,248L,508L,1022L,2047L,2047L,2047L,1022L,508L,248L,112L,112L,2047L,2047L,2047L,2047L,2047L,2015L,2047L,2047L,2047L,2047L,2047L,112L);<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    /* Build h_tiles #1 */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    INSTANCE.h_tiles[1] = new Tile(0,0,0,0,0,0<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    ,24,12,2047,2047L,2047L,1935L,1799L,1799L,1799L,1935L,2047L,2047L,2047L,112L,2047L,2047L,2047L,1935L,1799L,1799L,1799L,1935L,2047L,2047L,2047L,112L);<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    /* Build h_tiles #2 */<a name="line.30"></a>
+<span class="sourceLineNo">031</span>    INSTANCE.h_tiles[2] = new Tile(0,0,0,0,0,0<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    ,24,12,2047,2047L,2047L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,1799L,2047L,2047L,2047L,112L);<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    /* Build h_tiles #3 */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    INSTANCE.h_tiles[3] = new Tile(0,0,0,0,0,0<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    ,24,12,2047,2015L,1755L,2015L,2015L,1025L,2015L,2015L,1755L,2015L,2047L,112L,112L,2047L,1533L,2047L,4095L,4095L,4095L,2047L,1533L,2047L,112L,112L);<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    /* Build h_tiles #4 */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    INSTANCE.h_tiles[4] = new Tile(0,0,0,0,0,0<a name="line.37"></a>
+<span class="sourceLineNo">038</span>    ,24,12,2047,2047L,2047L,2015L,2015L,1799L,2015L,2015L,2047L,2047L,2047L,112L,1022L,1533L,1787L,1911L,4095L,4095L,4095L,1911L,1787L,1533L,1022L,112L);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /* Build h_tiles #5 */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    INSTANCE.h_tiles[5] = new Tile(0,0,0,0,0,0<a name="line.40"></a>
+<span class="sourceLineNo">041</span>    ,24,12,508,990L,1967L,1911L,3755L,3549L,3755L,1911L,1967L,990L,508L,112L,112L,1023L,1023L,1023L,1023L,1023L,1023L,1023L,1023L,1023L,112L,112L);<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    /* Build h_tiles #6 */<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    INSTANCE.h_tiles[6] = new Tile(0,0,0,0,0,0<a name="line.43"></a>
+<span class="sourceLineNo">044</span>    ,24,12,112,112L,112L,112L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,112L,112L,112L,112L,112L);<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    /* Build h_tiles #7 */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    INSTANCE.h_tiles[7] = new Tile(0,0,0,0,0,0<a name="line.46"></a>
+<span class="sourceLineNo">047</span>    ,24,12,2047,2047L,1543L,1791L,1791L,1791L,1791L,1791L,1791L,2047L,2047L,112L,508L,1022L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,1022L,508L,112L);<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    /* Build h_tiles #8 */<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    INSTANCE.h_tiles[8] = new Tile(0,0,0,0,0,0<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    ,24,12,1651,1911L,1022L,508L,4095L,4095L,4095L,508L,1022L,1911L,1651L,112L,1022L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,1022L,112L);<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    /* Build h_tiles #9 */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    INSTANCE.h_tiles[9] = new Tile(0,0,0,0,0,0<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    ,24,12,2047,2047L,1755L,1879L,2047L,1651L,2047L,1879L,1755L,2047L,2047L,112L,508L,1022L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,1022L,508L,112L);<a name="line.53"></a>
+<span class="sourceLineNo">054</span>    /* Build h_tiles #10 */<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    INSTANCE.h_tiles[10] = new Tile(0,0,0,0,0,0<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    ,24,12,2047,2047L,2035L,2045L,1597L,1501L,1507L,1535L,1663L,2047L,2047L,112L,2047L,2047L,2047L,1935L,3847L,3847L,3847L,1935L,2047L,2047L,2047L,112L);<a name="line.56"></a>
+<span class="sourceLineNo">057</span>    /* Build h_tiles #11 */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    INSTANCE.h_tiles[11] = new Tile(0,0,0,0,0,0<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    ,24,12,112,510L,1023L,1023L,4095L,4095L,4095L,1023L,1023L,510L,112L,112L,2047L,1241L,1241L,2047L,2047L,1273L,2047L,2047L,1241L,1241L,2047L,112L);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    /* Build h_tiles #12 */<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    INSTANCE.h_tiles[12] = new Tile(0,0,0,0,0,0<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    ,24,12,508,1022L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,1022L,508L,112L,112L,1023L,1023L,1023L,855L,943L,855L,1023L,1023L,1023L,112L,112L);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>    /* Build h_tiles #13 */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    INSTANCE.h_tiles[13] = new Tile(0,0,0,0,0,0<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    ,24,12,511,511L,511L,511L,511L,511L,511L,56L,511L,511L,511L,511L,511L,511L,511L,56L,511L,511L,511L,511L,511L,511L,511L,112L);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>    /* Build h_tiles #14 */<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    INSTANCE.h_tiles[14] = new Tile(0,0,0,0,0,0<a name="line.67"></a>
+<span class="sourceLineNo">068</span>    ,24,12,112,112L,508L,1022L,2047L,2015L,1935L,1935L,1935L,1935L,1799L,1799L,1799L,1799L,1935L,1935L,1935L,1935L,2015L,2047L,1022L,508L,112L,112L);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    /* Build h_tiles #15 */<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    INSTANCE.h_tiles[15] = new Tile(0,0,0,0,0,0<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    ,24,12,2047,2047L,2015L,1935L,2015L,2047L,2047L,112L,2047L,2047L,2015L,1935L,2015L,2047L,2047L,112L,2047L,2047L,2047L,2047L,2047L,2047L,2047L,112L);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    INSTANCE.v_tiles = new Tile[16];<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    /* Build v_tiles #0 */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    INSTANCE.v_tiles[0] = new Tile(0,0,0,0,0,0<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    ,12,24,8384624,8385535L,8385535L,62463L,65535L,65535L,65535L,62463L,8385535L,8385535L,8384624L,458864L);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    /* Build v_tiles #1 */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    INSTANCE.v_tiles[1] = new Tile(0,0,0,0,0,0<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    ,12,24,8381439,8388607L,8388607L,8388607L,16711935L,16711935L,16711935L,8388607L,8388607L,8388607L,8381439L,458864L);<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    /* Build v_tiles #2 */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    INSTANCE.v_tiles[2] = new Tile(0,0,0,0,0,0<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    ,12,24,462847,2084863L,2084863L,2084863L,2097071L,2097119L,2097071L,2084863L,2084863L,2084863L,462847L,458864L);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    /* Build v_tiles #3 */<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    INSTANCE.v_tiles[3] = new Tile(0,0,0,0,0,0<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    ,12,24,4186360,4186620L,4187134L,4188159L,16646143L,16318463L,16646143L,4188159L,4187134L,4186620L,4186360L,458864L);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    /* Build v_tiles #4 */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    INSTANCE.v_tiles[4] = new Tile(0,0,0,0,0,0<a name="line.86"></a>
+<span class="sourceLineNo">087</span>    ,12,24,460799,460799L,4179887L,4194135L,16776875L,16762711L,16776875L,4194135L,4179887L,460799L,460799L,458864L);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    /* Build v_tiles #5 */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    INSTANCE.v_tiles[5] = new Tile(0,0,0,0,0,0<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    ,12,24,459000,4186620L,4187134L,4188159L,4194303L,4194303L,4194303L,4188159L,4187134L,4186620L,459000L,458864L);<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    /* Build v_tiles #6 */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>    INSTANCE.v_tiles[6] = new Tile(0,0,0,0,0,0<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    ,12,24,458864,4194302L,4194302L,3672078L,4192255L,4192255L,4192255L,3672078L,4194302L,4194302L,458864L,458864L);<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    /* Build v_tiles #7 */<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    INSTANCE.v_tiles[7] = new Tile(0,0,0,0,0,0<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    ,12,24,8384624,8385535L,8385535L,7926783L,16220159L,16220159L,16220159L,7926783L,8385535L,8385535L,8384624L,458864L);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    /* Build v_tiles #8 */<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    INSTANCE.v_tiles[8] = new Tile(0,0,0,0,0,0<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    ,12,24,8386559,8386559L,8386559L,7927807L,7372799L,7372799L,7372799L,7927807L,8386559L,8386559L,8386559L,458864L);<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    /* Build v_tiles #9 */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    INSTANCE.v_tiles[9] = new Tile(0,0,0,0,0,0<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    ,12,24,8384624,8384624L,8384624L,8384624L,16777215L,16777215L,16777215L,8384624L,8384624L,8384624L,8384624L,458864L);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    /* Build v_tiles #10 */<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    INSTANCE.v_tiles[10] = new Tile(0,0,0,0,0,0<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    ,12,24,460799,4188159L,4188159L,4188047L,4194055L,4194055L,4194055L,4188047L,4188159L,4188159L,460799L,458864L);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    /* Build v_tiles #11 */<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    INSTANCE.v_tiles[11] = new Tile(0,0,0,0,0,0<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    ,12,24,1015920,2081791L,4187135L,8385535L,16777215L,16777215L,16777215L,8385535L,4187135L,2081791L,1015920L,458864L);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    /* Build v_tiles #12 */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    INSTANCE.v_tiles[12] = new Tile(0,0,0,0,0,0<a name="line.110"></a>
+<span class="sourceLineNo">111</span>    ,12,24,8388607,8388607L,8388607L,8388607L,8255455L,8255455L,8255455L,8388607L,8388607L,8388607L,8388607L,458864L);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>    /* Build v_tiles #13 */<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    INSTANCE.v_tiles[13] = new Tile(0,0,0,0,0,0<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    ,12,24,524272,524272L,4128894L,8362495L,16777215L,16777215L,16777215L,8375551L,4128894L,524272L,524272L,458864L);<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    /* Build v_tiles #14 */<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    INSTANCE.v_tiles[14] = new Tile(0,0,0,0,0,0<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    ,12,24,1048572,2097150L,4194303L,4063199L,3932191L,3932191L,4063199L,4194303L,2097150L,1048572L,458864L,458864L);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    /* Build v_tiles #15 */<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    INSTANCE.v_tiles[15] = new Tile(0,0,0,0,0,0<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    ,12,24,460799,460799L,4179967L,4194303L,16777215L,16762879L,16777215L,4194303L,4179967L,460799L,460799L,458864L);<a name="line.120"></a>
+<span class="sourceLineNo">121</span>  }<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>}<a name="line.123"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

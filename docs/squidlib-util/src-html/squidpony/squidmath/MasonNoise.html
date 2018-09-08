@@ -1,0 +1,557 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>/*<a name="line.1"></a>
+<span class="sourceLineNo">002</span> * Derived from Joise, which is derived from the Accidental Noise Library.<a name="line.2"></a>
+<span class="sourceLineNo">003</span> * Licenses for these projects are as follows<a name="line.3"></a>
+<span class="sourceLineNo">004</span> *<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * ============================================================================<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * | Joise<a name="line.6"></a>
+<span class="sourceLineNo">007</span> * ============================================================================<a name="line.7"></a>
+<span class="sourceLineNo">008</span> *<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * Copyright (C) 2016 Jason Taylor<a name="line.9"></a>
+<span class="sourceLineNo">010</span> *<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Licensed under the Apache License, Version 2.0 (the "License");<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * you may not use this file except in compliance with the License.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * You may obtain a copy of the License at<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *<a name="line.14"></a>
+<span class="sourceLineNo">015</span> *      http://www.apache.org/licenses/LICENSE-2.0<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Unless required by applicable law or agreed to in writing, software<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * distributed under the License is distributed on an "AS IS" BASIS,<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * See the License for the specific language governing permissions and<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * limitations under the License.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> *<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * ============================================================================<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * | Accidental Noise Library<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * | --------------------------------------------------------------------------<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * | Joise is a derivative work based on Josua Tippetts' C++ library:<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * | http://accidentalnoise.sourceforge.net/index.html<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * ============================================================================<a name="line.28"></a>
+<span class="sourceLineNo">029</span> *<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Copyright (C) 2011 Joshua Tippetts<a name="line.30"></a>
+<span class="sourceLineNo">031</span> *<a name="line.31"></a>
+<span class="sourceLineNo">032</span> *   This software is provided 'as-is', without any express or implied<a name="line.32"></a>
+<span class="sourceLineNo">033</span> *   warranty.  In no event will the authors be held liable for any damages<a name="line.33"></a>
+<span class="sourceLineNo">034</span> *   arising from the use of this software.<a name="line.34"></a>
+<span class="sourceLineNo">035</span> *<a name="line.35"></a>
+<span class="sourceLineNo">036</span> *   Permission is granted to anyone to use this software for any purpose,<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *   including commercial applications, and to alter it and redistribute it<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *   freely, subject to the following restrictions:<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *   1. The origin of this software must not be misrepresented; you must not<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *      claim that you wrote the original software. If you use this software<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *      in a product, an acknowledgment in the product documentation would be<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *      appreciated but is not required.<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *   2. Altered source versions must be plainly marked as such, and must not be<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *      misrepresented as being the original software.<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *   3. This notice may not be removed or altered from any source distribution.<a name="line.46"></a>
+<span class="sourceLineNo">047</span> */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>package squidpony.squidmath;<a name="line.48"></a>
+<span class="sourceLineNo">049</span><a name="line.49"></a>
+<span class="sourceLineNo">050</span>import static squidpony.squidmath.Noise.fastFloor;<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>/**<a name="line.52"></a>
+<span class="sourceLineNo">053</span> * Noise functions that delegate work to the best-suited noise type for the requested dimensionality, plus some extra<a name="line.53"></a>
+<span class="sourceLineNo">054</span> * functions that affect a large multi-dimensional area at once. This will use {@link FastNoise} for 2D and 3D noise,<a name="line.54"></a>
+<span class="sourceLineNo">055</span> * {@link WhirlingNoise} for 4D noise, and {@link SeededNoise} for 6D noise. It uses its own, possibly sub-par<a name="line.55"></a>
+<span class="sourceLineNo">056</span> * implementation for {@link #addNoiseField(float[][], float, float, float, float, long, float, float)} and<a name="line.56"></a>
+<span class="sourceLineNo">057</span> * {@link #addNoiseField(float[][][], float, float, float, float, float, float, long, float, float)}.<a name="line.57"></a>
+<span class="sourceLineNo">058</span> * &lt;br&gt;<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * The name comes from the Freemasons, who as a secret society, are very good at behind-the-scenes work. MasonNoise also<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * sounds a lot like MerlinNoise, which sounds a lot like PerlinNoise and WhirlingNoise.<a name="line.60"></a>
+<span class="sourceLineNo">061</span> */<a name="line.61"></a>
+<span class="sourceLineNo">062</span>public class MasonNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    protected final long defaultSeed;<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    public static final MasonNoise instance = new MasonNoise();<a name="line.65"></a>
+<span class="sourceLineNo">066</span><a name="line.66"></a>
+<span class="sourceLineNo">067</span>    public MasonNoise() {<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        this(0x1337BEEFBE2A22L);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    public MasonNoise(long seed)<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        defaultSeed = seed;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    public double getNoise(final double x, final double y) {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        return noise(x, y, defaultSeed);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
+<span class="sourceLineNo">078</span>    public double getNoise(final double x, final double y, final double z) {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        return noise(x, y, z, defaultSeed);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    }<a name="line.80"></a>
+<span class="sourceLineNo">081</span>    public double getNoise(final double x, final double y, final double z, final double w) {<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        return noise(x, y, z, w, defaultSeed);<a name="line.82"></a>
+<span class="sourceLineNo">083</span>    }<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        return noise(x, y, z, w, u, v, defaultSeed);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    }<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>    public double getNoiseWithSeed(final double x, final double y, final long seed) {<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        return noise(x, y, seed);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        return noise(x, y, z, seed);<a name="line.92"></a>
+<span class="sourceLineNo">093</span>    }<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>        return noise(x, y, z, w, seed);<a name="line.95"></a>
+<span class="sourceLineNo">096</span>    }<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {<a name="line.97"></a>
+<span class="sourceLineNo">098</span>        return noise(x, y, z, w, u, v, seed);<a name="line.98"></a>
+<span class="sourceLineNo">099</span>    }<a name="line.99"></a>
+<span class="sourceLineNo">100</span><a name="line.100"></a>
+<span class="sourceLineNo">101</span>    /*<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    protected static final float F2 = 0.36602540378443864676372317075294f,<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            G2 = 0.21132486540518711774542560974902f,<a name="line.103"></a>
+<span class="sourceLineNo">104</span>            F3 = 1f / 3f,<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            G3 = 1f / 6f,<a name="line.105"></a>
+<span class="sourceLineNo">106</span>            F4 = (float) (Math.sqrt(5.0) - 1.0) / 4f,<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            G4 = (float)(5.0 - Math.sqrt(5.0)) / 20f,<a name="line.107"></a>
+<span class="sourceLineNo">108</span>            F6 = (float)(Math.sqrt(7.0) - 1.0) / 6f,<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            G6 = F6 / (float)(1.0 + 6.0 * F6),<a name="line.109"></a>
+<span class="sourceLineNo">110</span>            LIMIT4 = 0.62f,<a name="line.110"></a>
+<span class="sourceLineNo">111</span>            LIMIT6 = 0.86f;*/<a name="line.111"></a>
+<span class="sourceLineNo">112</span>            /*<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            a6 = (float)(Math.sqrt((sideLength * sideLength)<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                    - ((sideLength * 0.5) * (sideLength * 0.5f)))),<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            cornerFace = (float)Math.sqrt(a6 * a6 + (a6 * 0.5) * (a6 * 0.5)),<a name="line.116"></a>
+<span class="sourceLineNo">117</span>            cornerFaceSq = cornerFace * cornerFace,<a name="line.117"></a>
+<span class="sourceLineNo">118</span>            valueScaler = 9.5f<a name="line.118"></a>
+<span class="sourceLineNo">119</span>             */<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>    //Math.pow(5.0, -0.5) * (Math.pow(5.0, -3.5) * 100 + 13),<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>    /**<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * Delegates to {@link FastNoise#getNoiseWithSeed(double, double, long)}.<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * &lt;br&gt;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * @param x X input<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * @param y Y input<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * @param seed any long; will be used to completely alter the noise<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     */<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    public static double noise(final double x, final double y, final long seed) {<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        return FastNoise.instance.getNoiseWithSeed(x, y, seed);<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    }<a name="line.133"></a>
+<span class="sourceLineNo">134</span>//<a name="line.134"></a>
+<span class="sourceLineNo">135</span>//    public static double noiseAlt(final double x, final double y, final long seed) {<a name="line.135"></a>
+<span class="sourceLineNo">136</span>//        return noiseAlt((float)x, (float)y, seed);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>//    }<a name="line.137"></a>
+<span class="sourceLineNo">138</span><a name="line.138"></a>
+<span class="sourceLineNo">139</span>    public static float randomize(long state, final long jump)<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    {<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        state = (((state = (state - jump) * jump) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        return NumberTools.intBitsToFloat(((int)(state ^ (state &gt;&gt;&gt; 31)) &gt;&gt;&gt; 9) | 0x40000000) - 3f;<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>        /*<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        state = (state - jump) * jump;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        return NumberTools.intBitsToFloat(((((state *= 277803737) &gt;&gt;&gt; 22) ^ state) &gt;&gt;&gt; 9) | 0x40000000) - 3f;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        */<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    }<a name="line.150"></a>
+<span class="sourceLineNo">151</span><a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public static int randomInt(long state, final long jump) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        state = (((state = (state - jump) * jump) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        return (int) (state ^ (state &gt;&gt;&gt; 31));<a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span>        /*<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        state = (state - jump) * jump;<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        */<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    public static int randomInt(long state) {<a name="line.163"></a>
+<span class="sourceLineNo">164</span>        state = (((state += 0x9E3779B97F4A7C15L) &gt;&gt;&gt; 30) ^ state) * 0xBF58476D1CE4E5B9L;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        state = (state ^ (state &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>        return (int) (state ^ (state &gt;&gt;&gt; 31));<a name="line.166"></a>
+<span class="sourceLineNo">167</span>        /*<a name="line.167"></a>
+<span class="sourceLineNo">168</span>        state ^= state &gt;&gt;&gt; (4 + (state &gt;&gt;&gt; 28));<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        return ((state *= 277803737) &gt;&gt;&gt; 22) ^ state;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        */<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    /**<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * Pair of Cubic (Hermite) Flat Interpolations; for x from 0 to 1, returns results from 0 to 0 on an S-curve, with<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * crests and valleys no more than 0.097f above or below 0.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * @param x a float from 0 to 1<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @return a float from 0 to 0.97, easing in to 0 at the endpoints on a curve<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     */<a name="line.177"></a>
+<span class="sourceLineNo">178</span>    private static float carp(final float x) { return x * (x * (x - 1) + (1 - x) * (1 - x)); }<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    /**<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * Pair of Cubic (Hermite) Flat Interpolations plus linear interpolation; for x from 0 to 1, returns results from 0<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * to 1 on an S-curve.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * @param x a float from 0 to 1<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * @return a float from 0 to 1, easing in to 0 or 1 at those endpoints on a curve<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     */<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    private static float carp2(final float x) { return x - x * (x * (x - 1) + (1 - x) * (1 - x)); }<a name="line.185"></a>
+<span class="sourceLineNo">186</span><a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>    private static float arclerp(final float x)<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    {<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        //(fn [x] (let [inv (bit-or 1 (int (* x -1.9999999999999998))) ix (- (* inv x) (bit-shift-right inv 1))] (- 0.5 (* inv (sqrt (- 0.25 (* ix ix)))))))<a name="line.190"></a>
+<span class="sourceLineNo">191</span>        return (x &gt; 0.5f) ? 0.5f + (float) Math.sqrt(0.25f - (1f - x) * (1f - x)) : 0.5f - (float) Math.sqrt(0.25f - x * x);<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        //(+ 0.5 (sqrt (- 0.25 (* (- 1.0 x) (- 1.0 x)))))<a name="line.192"></a>
+<span class="sourceLineNo">193</span>        //(- 0.5 (sqrt (- 0.25 (* x x))))<a name="line.193"></a>
+<span class="sourceLineNo">194</span>    }<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    /*<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     * Linearly interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * @param start a valid float<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * @param end a valid float<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * @param a a float between 0 and 1 inclusive<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * @return a float between x and y inclusive<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     */<a name="line.201"></a>
+<span class="sourceLineNo">202</span>    private static float interpolate(final float start, final float end, final float a)<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    {<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        return (1f - a) * start + a * end;<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    }<a name="line.205"></a>
+<span class="sourceLineNo">206</span><a name="line.206"></a>
+<span class="sourceLineNo">207</span><a name="line.207"></a>
+<span class="sourceLineNo">208</span>    private static final long xJump = 0x9E3779BE3779B9L, yJump = 0xBFDAE4FFDAE4F7L, zJump = 0xF35692B35692B5L;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>//    public static float noise(final float xPos, final float yPos, final long seed) {<a name="line.209"></a>
+<span class="sourceLineNo">210</span>//        float x = xPos * (NumberTools.randomFloatCurved(seed - 1) + 1f) + yPos * (NumberTools.randomSignedFloat(seed &amp; 0xA5A5A5A5A5A5A5A5L)),<a name="line.210"></a>
+<span class="sourceLineNo">211</span>//                y = yPos * (NumberTools.randomFloatCurved(seed - 2) + 1f) + xPos * (NumberTools.randomSignedFloat(seed &amp; 0x5A5A5A5A5A5A5A5AL));<a name="line.211"></a>
+<span class="sourceLineNo">212</span>//        final long<a name="line.212"></a>
+<span class="sourceLineNo">213</span>//                xx0 = longFloor(x),<a name="line.213"></a>
+<span class="sourceLineNo">214</span>//                yy0 = longFloor(y),<a name="line.214"></a>
+<span class="sourceLineNo">215</span>//                ry0 = LightRNG.determine(yy0 + seed), ry1 = LightRNG.determine(yy0 + 1 + seed);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>//        final float<a name="line.216"></a>
+<span class="sourceLineNo">217</span>//                dx = carp2(x - xx0), dy = carp2(y - yy0),<a name="line.217"></a>
+<span class="sourceLineNo">218</span>//                rx0y0 = LightRNG.determineFloat(xx0 + ry0),<a name="line.218"></a>
+<span class="sourceLineNo">219</span>//                rx0y1 = LightRNG.determineFloat(xx0 + ry1),<a name="line.219"></a>
+<span class="sourceLineNo">220</span>//                rx1y0 = LightRNG.determineFloat(xx0 + 1 + ry0),<a name="line.220"></a>
+<span class="sourceLineNo">221</span>//                rx1y1 = LightRNG.determineFloat(xx0 + 1 + ry1);<a name="line.221"></a>
+<span class="sourceLineNo">222</span>//        return Noise.lerp(Noise.lerp(rx0y0, rx1y0, dx), Noise.lerp(rx0y1, rx1y1, dx), dy) * 2f - 1f;<a name="line.222"></a>
+<span class="sourceLineNo">223</span>//    }<a name="line.223"></a>
+<span class="sourceLineNo">224</span>//    public static float noiseAlt(final float x, final float y, final long seed) {<a name="line.224"></a>
+<span class="sourceLineNo">225</span>//        final long<a name="line.225"></a>
+<span class="sourceLineNo">226</span>//                xx0 = longFloor(x), yy0 = longFloor(y),<a name="line.226"></a>
+<span class="sourceLineNo">227</span>//                ry0 = LightRNG.determine(yy0 + seed), ry1 = LightRNG.determine(yy0 + 1 + seed);<a name="line.227"></a>
+<span class="sourceLineNo">228</span>//        final float<a name="line.228"></a>
+<span class="sourceLineNo">229</span>//                dx = carp2(x - xx0), dy = carp2(y - yy0),<a name="line.229"></a>
+<span class="sourceLineNo">230</span>//                rx0y0 = LightRNG.determineFloat(xx0 + ry0),<a name="line.230"></a>
+<span class="sourceLineNo">231</span>//                rx0y1 = LightRNG.determineFloat(xx0 + ry1),<a name="line.231"></a>
+<span class="sourceLineNo">232</span>//                rx1y0 = LightRNG.determineFloat(xx0 + 1 + ry0),<a name="line.232"></a>
+<span class="sourceLineNo">233</span>//                rx1y1 = LightRNG.determineFloat(xx0 + 1 + ry1);<a name="line.233"></a>
+<span class="sourceLineNo">234</span>//        return Noise.cerp(Noise.cerp(rx0y0, rx1y0, dx), Noise.cerp(rx0y1, rx1y1, dx), dy) * 2f - 1f;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>//    }<a name="line.235"></a>
+<span class="sourceLineNo">236</span><a name="line.236"></a>
+<span class="sourceLineNo">237</span>    private static final IntVLA columns = new IntVLA(128), // x<a name="line.237"></a>
+<span class="sourceLineNo">238</span>            rows = new IntVLA(128), // y<a name="line.238"></a>
+<span class="sourceLineNo">239</span>            layers = new IntVLA(128); // z<a name="line.239"></a>
+<span class="sourceLineNo">240</span>            //wos = new IntVLA(128), // w<a name="line.240"></a>
+<span class="sourceLineNo">241</span>            //ubs = new IntVLA(128), // u<a name="line.241"></a>
+<span class="sourceLineNo">242</span>            //vys = new IntVLA(128); // v<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    public static void addNoiseField(final float[][] target, final float startX, final float startY,<a name="line.243"></a>
+<span class="sourceLineNo">244</span>                                     final float endX, final float endY, final long seed, final float multiplier, final float shrink) {<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        int callWidth = target.length, callHeight = target[0].length,<a name="line.245"></a>
+<span class="sourceLineNo">246</span>                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump),<a name="line.246"></a>
+<span class="sourceLineNo">247</span>                xx0, yy0, rxx0, ryy0, rxx1, ryy1, cx, cy;<a name="line.247"></a>
+<span class="sourceLineNo">248</span>        final float startX2 = startX * shrink, startY2 = startY * shrink, endX2 = endX * shrink, endY2 = endY * shrink,<a name="line.248"></a>
+<span class="sourceLineNo">249</span>                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter2 &gt;&gt; 31 | 1),<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                stretchY = (1f + randomize(alter2, xJump) * 0.25f) * (alter &gt;&gt; 31 | 1),<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight,<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.25f,<a name="line.252"></a>
+<span class="sourceLineNo">253</span>                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.25f,<a name="line.253"></a>
+<span class="sourceLineNo">254</span>                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),<a name="line.254"></a>
+<span class="sourceLineNo">255</span>                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.25f,<a name="line.255"></a>
+<span class="sourceLineNo">256</span>                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.25f,<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.25f, endX2 * stretchX - endY2 * stretchY * 0.25f))),<a name="line.257"></a>
+<span class="sourceLineNo">258</span>                minimumY = Math.min(startY2 * stretchX - startX2 * stretchY * 0.25f,<a name="line.258"></a>
+<span class="sourceLineNo">259</span>                        Math.min(startY2 * stretchX - endX2 * stretchY * 0.25f,<a name="line.259"></a>
+<span class="sourceLineNo">260</span>                                Math.min(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f))),<a name="line.260"></a>
+<span class="sourceLineNo">261</span>                maximumY = Math.max(startY2 * stretchX - startX2 * stretchY * 0.25f,<a name="line.261"></a>
+<span class="sourceLineNo">262</span>                        Math.max(startY2 * stretchX - endX2 * stretchY * 0.25f,<a name="line.262"></a>
+<span class="sourceLineNo">263</span>                                Math.max(endY2 * stretchX - startX2 * stretchY * 0.25f, endY2 * stretchX - endX2 * stretchY * 0.25f)));<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        float dx, dy, ax, ay;<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        final int startFloorX = fastFloor(minimumX),<a name="line.265"></a>
+<span class="sourceLineNo">266</span>                startFloorY = fastFloor(minimumY),<a name="line.266"></a>
+<span class="sourceLineNo">267</span>                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,<a name="line.267"></a>
+<span class="sourceLineNo">268</span>                spaceWidth = fastFloor(maximumX - minimumX) + 4, spaceHeight = fastFloor(maximumY - minimumY) + 4<a name="line.268"></a>
+<span class="sourceLineNo">269</span>                ;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));<a name="line.269"></a>
+<span class="sourceLineNo">270</span><a name="line.270"></a>
+<span class="sourceLineNo">271</span>        columns.clear();<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        rows.clear();<a name="line.272"></a>
+<span class="sourceLineNo">273</span>        columns.ensureCapacity(spaceWidth);<a name="line.273"></a>
+<span class="sourceLineNo">274</span>        rows.ensureCapacity(spaceHeight);<a name="line.274"></a>
+<span class="sourceLineNo">275</span>        for (int x = 0, r = startFloorX * alter; x &lt; spaceWidth; x++, r += alter) {<a name="line.275"></a>
+<span class="sourceLineNo">276</span>            columns.add(randomInt(r));<a name="line.276"></a>
+<span class="sourceLineNo">277</span>        }<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        for (int y = 0, r = startFloorY * alter2; y &lt; spaceHeight; y++, r += alter2) {<a name="line.278"></a>
+<span class="sourceLineNo">279</span>            rows.add(randomInt(r));<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        }<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        cx = 0;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        for (float x = startX2; cx &lt; callWidth; x += stepX, cx++) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>            cy = 0;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>            for (float y = startY2; cy &lt; callHeight; y += stepY, cy++) {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                ax = x * stretchX - y * stretchY * 0.25f;<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                ay = y * stretchX - x * stretchY * 0.25f;<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                xx0 = fastFloor(ax);<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                yy0 = fastFloor(ay);<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                rxx0 = columns.get(xx0 - startFloorX+1);<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                ryy0 = rows.get(yy0 - startFloorY+1);<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                rxx1 = columns.get(xx0 + 1 - startFloorX+1);<a name="line.291"></a>
+<span class="sourceLineNo">292</span>                ryy1 = rows.get(yy0 + 1 - startFloorY+1);<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                dx = carp2(ax - xx0);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                dy = carp2(ay - yy0);<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                target[cx][cy] += NumberTools.bounce(<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                        (rxx0 * ryy0 &gt;&gt; 16) * (1f - dx) * (1f - dy)<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                                + (rxx0 * ryy1 &gt;&gt; 16) * (1f - dx) * dy<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                                + (rxx1 * ryy0 &gt;&gt; 16) * dx * (1f - dy)<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                                + (rxx1 * ryy1 &gt;&gt; 16) * dx * dy<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                                + 163840f) * multiplier;<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            }<a name="line.301"></a>
+<span class="sourceLineNo">302</span>        }<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    }<a name="line.303"></a>
+<span class="sourceLineNo">304</span>    public static void addNoiseField(final float[][][] target,<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                                     final float startX, final float startY, final float startZ,<a name="line.305"></a>
+<span class="sourceLineNo">306</span>                                     final float endX, final float endY, final float endZ,<a name="line.306"></a>
+<span class="sourceLineNo">307</span>                                     final long seed, final float multiplier, final float shrink) {<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        int callWidth = target[0].length, callHeight = target[0][0].length, callDepth = target.length,<a name="line.308"></a>
+<span class="sourceLineNo">309</span>                alter = randomInt(seed, xJump), alter2 = randomInt(~seed, yJump), alter3 = randomInt(alter + alter2, zJump),<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                xx0, yy0, zz0, rxx0, ryy0, rzz0, rxx1, ryy1, rzz1, cx, cy, cz, vx0y0, vx1y0, vx0y1, vx1y1;<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        final float startX2 = startX * shrink, startY2 = startY * shrink, startZ2 = startZ * shrink,<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                endX2 = endX * shrink, endY2 = endY * shrink, endZ2 = endZ * shrink,<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                stretchX = (1f + randomize(alter, yJump) * 0.25f) * (alter3 &gt;&gt; 31 | 1),<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                stretchY = (1f + randomize(alter2, zJump) * 0.25f) * (alter &gt;&gt; 31 | 1),<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                stretchZ = (1f + randomize(alter3, xJump) * 0.25f) * (alter2 &gt;&gt; 31 | 1),<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                stepX = (endX2 - startX2) / callWidth, stepY = (endY2 - startY2) / callHeight, stepZ = (endZ2 - startZ2) / callDepth,<a name="line.316"></a>
+<span class="sourceLineNo">317</span>                minimumX = Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.317"></a>
+<span class="sourceLineNo">318</span>                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.318"></a>
+<span class="sourceLineNo">319</span>                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 *stretchZ * 0.09375f,<a name="line.319"></a>
+<span class="sourceLineNo">320</span>                                        Math.min(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.320"></a>
+<span class="sourceLineNo">321</span>                                                Math.min(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.321"></a>
+<span class="sourceLineNo">322</span>                                                        Math.min(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.322"></a>
+<span class="sourceLineNo">323</span>                                                                Math.min(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 *stretchZ * 0.09375f,<a name="line.323"></a>
+<span class="sourceLineNo">324</span>                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),<a name="line.324"></a>
+<span class="sourceLineNo">325</span>                maximumX = Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.326"></a>
+<span class="sourceLineNo">327</span>                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + startZ2 *stretchZ * 0.09375f,<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                                        Math.max(endX2 * stretchX - endY2 * stretchY * 0.15625f + startZ2 * stretchZ * 0.09375f,<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                                                Math.max(startX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.329"></a>
+<span class="sourceLineNo">330</span>                                                        Math.max(startX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f,<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                                                                Math.max(endX2 * stretchX - startY2 * stretchY * 0.15625f + endZ2 *stretchZ * 0.09375f,<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                                                                        endX2 * stretchX - endY2 * stretchY * 0.15625f + endZ2 * stretchZ * 0.09375f))))))),<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                minimumY = Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.334"></a>
+<span class="sourceLineNo">335</span>                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 *stretchZ * 0.09375f,<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                                        Math.min(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                                                Math.min(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                                                        Math.min(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.338"></a>
+<span class="sourceLineNo">339</span>                                                                Math.min(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 *stretchZ * 0.09375f,<a name="line.339"></a>
+<span class="sourceLineNo">340</span>                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),<a name="line.340"></a>
+<span class="sourceLineNo">341</span>                maximumY = Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.341"></a>
+<span class="sourceLineNo">342</span>                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + startX2 *stretchZ * 0.09375f,<a name="line.343"></a>
+<span class="sourceLineNo">344</span>                                        Math.max(endY2 * stretchX - endZ2 * stretchY * 0.15625f + startX2 * stretchZ * 0.09375f,<a name="line.344"></a>
+<span class="sourceLineNo">345</span>                                                Math.max(startY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.345"></a>
+<span class="sourceLineNo">346</span>                                                        Math.max(startY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f,<a name="line.346"></a>
+<span class="sourceLineNo">347</span>                                                                Math.max(endY2 * stretchX - startZ2 * stretchY * 0.15625f + endX2 *stretchZ * 0.09375f,<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                                                                        endY2 * stretchX - endZ2 * stretchY * 0.15625f + endX2 * stretchZ * 0.09375f))))))),<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                minimumZ = Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 *stretchZ * 0.09375f,<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                                        Math.min(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                                                Math.min(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                                                        Math.min(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.354"></a>
+<span class="sourceLineNo">355</span>                                                                Math.min(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 *stretchZ * 0.09375f,<a name="line.355"></a>
+<span class="sourceLineNo">356</span>                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f))))))),<a name="line.356"></a>
+<span class="sourceLineNo">357</span>                maximumZ = Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.357"></a>
+<span class="sourceLineNo">358</span>                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + startY2 *stretchZ * 0.09375f,<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                                        Math.max(endZ2 * stretchX - endX2 * stretchY * 0.15625f + startY2 * stretchZ * 0.09375f,<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                                                Math.max(startZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.361"></a>
+<span class="sourceLineNo">362</span>                                                        Math.max(startZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f,<a name="line.362"></a>
+<span class="sourceLineNo">363</span>                                                                Math.max(endZ2 * stretchX - startX2 * stretchY * 0.15625f + endY2 *stretchZ * 0.09375f,<a name="line.363"></a>
+<span class="sourceLineNo">364</span>                                                                        endZ2 * stretchX - endX2 * stretchY * 0.15625f + endY2 * stretchZ * 0.09375f)))))));<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
+<span class="sourceLineNo">366</span><a name="line.366"></a>
+<span class="sourceLineNo">367</span>        float dx, dy, dz, ax, ay, az, mx0y0, mx1y0, mx0y1, mx1y1;<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        final int startFloorX = fastFloor(minimumX),<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                startFloorY = fastFloor(minimumY),<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                startFloorZ = fastFloor(minimumZ),<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                //bonusWidth = fastFloor(adjEndX - adjX) + 3, bonusHeight = fastFloor(adjEndY - adjY) + 3,<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                spaceWidth = fastFloor(maximumX - minimumX) + 4,<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                spaceHeight = fastFloor(maximumY - minimumY) + 4,<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                spaceDepth = fastFloor(maximumZ - minimumZ) + 4;//bonusWidth = Math.abs(startFloorX - fastFloor(minimumX)), bonusHeight = Math.abs(startFloorY - fastFloor(minimumY));<a name="line.374"></a>
+<span class="sourceLineNo">375</span><a name="line.375"></a>
+<span class="sourceLineNo">376</span>        columns.clear();<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        rows.clear();<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        layers.clear();<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        columns.ensureCapacity(spaceWidth);<a name="line.379"></a>
+<span class="sourceLineNo">380</span>        rows.ensureCapacity(spaceHeight);<a name="line.380"></a>
+<span class="sourceLineNo">381</span>        layers.ensureCapacity(spaceDepth);<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        for (int x = 0, r = startFloorX * alter; x &lt; spaceWidth; x++, r += alter) {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            columns.add(randomInt(r));<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        }<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        for (int y = 0, r = startFloorY * alter2; y &lt; spaceHeight; y++, r += alter2) {<a name="line.385"></a>
+<span class="sourceLineNo">386</span>            rows.add(randomInt(r));<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        }<a name="line.387"></a>
+<span class="sourceLineNo">388</span>        for (int z = 0, r = startFloorZ * alter3; z &lt; spaceDepth; z++, r += alter3) {<a name="line.388"></a>
+<span class="sourceLineNo">389</span>            layers.add(randomInt(r));<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        }<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        cz = 0;<a name="line.391"></a>
+<span class="sourceLineNo">392</span>        float[][] tt;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>        float[] t;<a name="line.393"></a>
+<span class="sourceLineNo">394</span>        for (float z = startZ2; cz &lt; callDepth; z+= stepZ, cz++) {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>            tt = target[cz];<a name="line.395"></a>
+<span class="sourceLineNo">396</span>            cx = 0;<a name="line.396"></a>
+<span class="sourceLineNo">397</span>            for (float x = startX2; cx &lt; callWidth; x += stepX, cx++) {<a name="line.397"></a>
+<span class="sourceLineNo">398</span>                cy = 0;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>                t = tt[cx];<a name="line.399"></a>
+<span class="sourceLineNo">400</span>                for (float y = startY2; cy &lt; callHeight; y += stepY, cy++) {<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                    ax = x * stretchX - y * stretchY * 0.15625f + z * stretchZ * 0.09375f;<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                    ay = y * stretchX - z * stretchY * 0.15625f + x * stretchZ * 0.09375f;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                    az = z * stretchX - x * stretchY * 0.15625f + y * stretchZ * 0.09375f;<a name="line.403"></a>
+<span class="sourceLineNo">404</span>                    xx0 = fastFloor(ax);<a name="line.404"></a>
+<span class="sourceLineNo">405</span>                    yy0 = fastFloor(ay);<a name="line.405"></a>
+<span class="sourceLineNo">406</span>                    zz0 = fastFloor(az);<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                    rxx0 = columns.get(xx0 - startFloorX + 1);<a name="line.407"></a>
+<span class="sourceLineNo">408</span>                    ryy0 = rows.get(yy0 - startFloorY + 1);<a name="line.408"></a>
+<span class="sourceLineNo">409</span>                    rzz0 = layers.get(zz0 - startFloorZ + 1);<a name="line.409"></a>
+<span class="sourceLineNo">410</span>                    rxx1 = columns.get(xx0 + 1 - startFloorX + 1);<a name="line.410"></a>
+<span class="sourceLineNo">411</span>                    ryy1 = rows.get(yy0 + 1 - startFloorY + 1);<a name="line.411"></a>
+<span class="sourceLineNo">412</span>                    rzz1 = layers.get(zz0 + 1 - startFloorZ + 1);<a name="line.412"></a>
+<span class="sourceLineNo">413</span>                    dx = carp2(ax - xx0);<a name="line.413"></a>
+<span class="sourceLineNo">414</span>                    dy = carp2(ay - yy0);<a name="line.414"></a>
+<span class="sourceLineNo">415</span>                    dz = carp2(az - zz0);<a name="line.415"></a>
+<span class="sourceLineNo">416</span>                    vx0y0 = rxx0 * ryy0;<a name="line.416"></a>
+<span class="sourceLineNo">417</span>                    vx0y1 = rxx0 * ryy1;<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                    vx1y0 = rxx1 * ryy0;<a name="line.418"></a>
+<span class="sourceLineNo">419</span>                    vx1y1 = rxx1 * ryy1;<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                    mx0y0 = (1f - dx) * (1f - dy);<a name="line.420"></a>
+<span class="sourceLineNo">421</span>                    mx0y1 = (1f - dx) * dy;<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                    mx1y0 = dx * (1f - dy);<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                    mx1y1 = dx * dy;<a name="line.423"></a>
+<span class="sourceLineNo">424</span>                    t[cy] += NumberTools.bounce(<a name="line.424"></a>
+<span class="sourceLineNo">425</span>                            (vx0y0 * rzz0 &gt;&gt; 16) * mx0y0 * (1f - dz)<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                                    + (vx0y0 * rzz1 &gt;&gt; 16) * mx0y0 * dz<a name="line.426"></a>
+<span class="sourceLineNo">427</span>                                    + (vx0y1 * rzz0 &gt;&gt; 16) * mx0y1 * (1f - dz)<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                                    + (vx0y1 * rzz1 &gt;&gt; 16) * mx0y1 * dz<a name="line.428"></a>
+<span class="sourceLineNo">429</span>                                    + (vx1y0 * rzz0 &gt;&gt; 16) * mx1y0 * (1f - dz)<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                                    + (vx1y0 * rzz1 &gt;&gt; 16) * mx1y0 * dz<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                                    + (vx1y1 * rzz0 &gt;&gt; 16) * mx1y1 * (1f - dz)<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                                    + (vx1y1 * rzz1 &gt;&gt; 16) * mx1y1 * dz<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                                    + 163840f) * multiplier;<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                }<a name="line.434"></a>
+<span class="sourceLineNo">435</span>            }<a name="line.435"></a>
+<span class="sourceLineNo">436</span>        }<a name="line.436"></a>
+<span class="sourceLineNo">437</span>    }<a name="line.437"></a>
+<span class="sourceLineNo">438</span><a name="line.438"></a>
+<span class="sourceLineNo">439</span>    /**<a name="line.439"></a>
+<span class="sourceLineNo">440</span>     * Delegates to {@link FastNoise#getNoiseWithSeed(double, double, double, long)}.<a name="line.440"></a>
+<span class="sourceLineNo">441</span>     * &lt;br&gt;<a name="line.441"></a>
+<span class="sourceLineNo">442</span>     * @param x X input<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * @param y Y input<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     * @param z Z input<a name="line.444"></a>
+<span class="sourceLineNo">445</span>     * @param seed any long; will be used to completely alter the noise<a name="line.445"></a>
+<span class="sourceLineNo">446</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.446"></a>
+<span class="sourceLineNo">447</span>     */<a name="line.447"></a>
+<span class="sourceLineNo">448</span>    public static double noise(final double x, final double y, final double z, final long seed) {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>        return FastNoise.instance.getNoiseWithSeed(x, y, z, seed);<a name="line.449"></a>
+<span class="sourceLineNo">450</span>    }<a name="line.450"></a>
+<span class="sourceLineNo">451</span><a name="line.451"></a>
+<span class="sourceLineNo">452</span>    /**<a name="line.452"></a>
+<span class="sourceLineNo">453</span>     * Delegates to {@link WhirlingNoise#noise(double, double, double, double, long)}.<a name="line.453"></a>
+<span class="sourceLineNo">454</span>     * &lt;br&gt;<a name="line.454"></a>
+<span class="sourceLineNo">455</span>     * 4D simplex noise. Unlike {@link PerlinNoise}, uses its parameters verbatim, so the scale of the result will be<a name="line.455"></a>
+<span class="sourceLineNo">456</span>     * different when passing the same arguments to {@link PerlinNoise#noise(double, double, double, double)} and this<a name="line.456"></a>
+<span class="sourceLineNo">457</span>     * method. Roughly 20-25% faster than the equivalent method in PerlinNoise.<a name="line.457"></a>
+<span class="sourceLineNo">458</span>     * @param x X input<a name="line.458"></a>
+<span class="sourceLineNo">459</span>     * @param y Y input<a name="line.459"></a>
+<span class="sourceLineNo">460</span>     * @param z Z input<a name="line.460"></a>
+<span class="sourceLineNo">461</span>     * @param w W input (fourth-dimensional)<a name="line.461"></a>
+<span class="sourceLineNo">462</span>     * @param seed any long; will be used to completely alter the noise<a name="line.462"></a>
+<span class="sourceLineNo">463</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.463"></a>
+<span class="sourceLineNo">464</span>     */<a name="line.464"></a>
+<span class="sourceLineNo">465</span>    public static double noise(final double x, final double y, final double z, final double w, final long seed) {<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        return WhirlingNoise.noise(x, y, z, w, seed); <a name="line.466"></a>
+<span class="sourceLineNo">467</span>    }<a name="line.467"></a>
+<span class="sourceLineNo">468</span><a name="line.468"></a>
+<span class="sourceLineNo">469</span>    /**<a name="line.469"></a>
+<span class="sourceLineNo">470</span>     * Delegates to {@link SeededNoise#noise(double, double, double, double, double, double, long)}.<a name="line.470"></a>
+<span class="sourceLineNo">471</span>     * &lt;br&gt;<a name="line.471"></a>
+<span class="sourceLineNo">472</span>     * @param x X input<a name="line.472"></a>
+<span class="sourceLineNo">473</span>     * @param y Y input<a name="line.473"></a>
+<span class="sourceLineNo">474</span>     * @param z Z input<a name="line.474"></a>
+<span class="sourceLineNo">475</span>     * @param w W input (fourth-dimensional)<a name="line.475"></a>
+<span class="sourceLineNo">476</span>     * @param u U input (fifth-dimensional)<a name="line.476"></a>
+<span class="sourceLineNo">477</span>     * @param v V input (sixth-dimensional)<a name="line.477"></a>
+<span class="sourceLineNo">478</span>     * @param seed any long; will be used to completely alter the noise<a name="line.478"></a>
+<span class="sourceLineNo">479</span>     * @return noise from -1.0 to 1.0, inclusive<a name="line.479"></a>
+<span class="sourceLineNo">480</span>     */<a name="line.480"></a>
+<span class="sourceLineNo">481</span>    public static double noise(final double x, final double y, final double z,<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                               final double w, final double u, final double v, final long seed) {<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        return SeededNoise.noise(x, y, z, w, u, v, seed);<a name="line.483"></a>
+<span class="sourceLineNo">484</span>    }<a name="line.484"></a>
+<span class="sourceLineNo">485</span>}<a name="line.485"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

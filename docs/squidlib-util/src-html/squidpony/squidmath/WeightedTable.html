@@ -1,0 +1,236 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * A different approach to the same task {@link ProbabilityTable} solves, though this only looks up an appropriate index<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * instead of also storing items it can choose; allows positive doubles for weights but does not allow nested tables for<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * simplicity. This doesn't store an RNG (or RandomnessSource) in this class, and instead expects a long to be given for<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * each random draw from the table (these long parameters can be random, sequential, or in some other way different<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * every time). Uses &lt;a href="http://www.keithschwarz.com/darts-dice-coins/"&gt;Vose's Alias Method&lt;/a&gt;, and is based<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * fairly-closely on the code given by Keith Schwarz at that link. Because Vose's Alias Method is remarkably fast (O(1)<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * generation time in use, and O(n) time to construct a WeightedTable instance), this may be useful to consider if you<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * don't need all the features of ProbabilityTable or if you want deeper control over the random aspects of it.<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * &lt;br&gt;<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Internally, this uses LightRNG's algorithm as found in {@link LightRNG#determineBounded(long, int)} and<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * {@link LightRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * and the other used to determine the chosen column, which is bounded to an arbitrary positive int. It does thsi with<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * just one randomized 64-bit value, allowing the state given to {@link #random(long)} to be just one long.<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * &lt;br&gt;<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * Created by Tommy Ettinger on 1/5/2018.<a name="line.22"></a>
+<span class="sourceLineNo">023</span> */<a name="line.23"></a>
+<span class="sourceLineNo">024</span>public class WeightedTable implements Serializable {<a name="line.24"></a>
+<span class="sourceLineNo">025</span>    private static final long serialVersionUID = 101L;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>//    protected final int[] alias;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>//    protected final int[] probability;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    protected final int[] mixed;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    public final int size;<a name="line.29"></a>
+<span class="sourceLineNo">030</span><a name="line.30"></a>
+<span class="sourceLineNo">031</span>    /**<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     * Constructs a useless WeightedTable that always returns the index 0.<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     */<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    public WeightedTable()<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        this(1);<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    }<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * Constructs a WeightedTable with the given array of weights for each index. The array can also be a varargs for<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     * convenience. The weights can be any positive non-zero doubles, but should usually not be so large or small that<a name="line.41"></a>
+<span class="sourceLineNo">042</span>     * precision loss is risked. Each weight will be used to determine the likelihood of that weight's index being<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * returned by {@link #random(long)}.<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     * @param prob an array or varargs of positive doubles representing the weights for their own indices<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     */<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    public WeightedTable(double... prob) {<a name="line.46"></a>
+<span class="sourceLineNo">047</span>        /* Begin by doing basic structural checks on the inputs. */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        if (prob == null)<a name="line.48"></a>
+<span class="sourceLineNo">049</span>            throw new NullPointerException("Array 'probabilities' given to WeightedTable cannot be null");<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        if ((size = prob.length) == 0)<a name="line.50"></a>
+<span class="sourceLineNo">051</span>            throw new IllegalArgumentException("Array 'probabilities' given to WeightedTable must be nonempty.");<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>        /* Allocate space for the probability and alias tables. */<a name="line.53"></a>
+<span class="sourceLineNo">054</span>//        probability = new int[size];<a name="line.54"></a>
+<span class="sourceLineNo">055</span>//        alias = new int[size];<a name="line.55"></a>
+<span class="sourceLineNo">056</span>        mixed = new int[size&lt;&lt;1];<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>        /* Compute the average probability and cache it for later use. */<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        double sum = 0.0;<a name="line.59"></a>
+<span class="sourceLineNo">060</span><a name="line.60"></a>
+<span class="sourceLineNo">061</span>        /* Make a copy of the probabilities list, since we will be making<a name="line.61"></a>
+<span class="sourceLineNo">062</span>         * changes to it.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>         */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>        double[] probabilities = new double[size];<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        for (int i = 0; i &lt; size; ++i) {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>            if(prob[i] &lt;= 0) continue;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>            sum += (probabilities[i] = prob[i]);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        }<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        if(sum &lt;= 0)<a name="line.69"></a>
+<span class="sourceLineNo">070</span>            throw new IllegalArgumentException("At least one probability must be positive");<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        final double average = sum / size;<a name="line.71"></a>
+<span class="sourceLineNo">072</span><a name="line.72"></a>
+<span class="sourceLineNo">073</span>        /* Create two stacks to act as worklists as we populate the tables. */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        IntVLA small = new IntVLA(size);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        IntVLA large = new IntVLA(size);<a name="line.75"></a>
+<span class="sourceLineNo">076</span><a name="line.76"></a>
+<span class="sourceLineNo">077</span>        /* Populate the stacks with the input probabilities. */<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        for (int i = 0; i &lt; size; ++i) {<a name="line.78"></a>
+<span class="sourceLineNo">079</span>            /* If the probability is below the average probability, then we add<a name="line.79"></a>
+<span class="sourceLineNo">080</span>             * it to the small list; otherwise we add it to the large list.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>             */<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            if (probabilities[i] &gt;= average)<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                large.add(i);<a name="line.83"></a>
+<span class="sourceLineNo">084</span>            else<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                small.add(i);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        }<a name="line.86"></a>
+<span class="sourceLineNo">087</span><a name="line.87"></a>
+<span class="sourceLineNo">088</span>        /* As a note: in the mathematical specification of the algorithm, we<a name="line.88"></a>
+<span class="sourceLineNo">089</span>         * will always exhaust the small list before the big list.  However,<a name="line.89"></a>
+<span class="sourceLineNo">090</span>         * due to floating point inaccuracies, this is not necessarily true.<a name="line.90"></a>
+<span class="sourceLineNo">091</span>         * Consequently, this inner loop (which tries to pair small and large<a name="line.91"></a>
+<span class="sourceLineNo">092</span>         * elements) will have to check that both lists aren't empty.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>         */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>        while (!small.isEmpty() &amp;&amp; !large.isEmpty()) {<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            /* Get the index of the small and the large probabilities. */<a name="line.95"></a>
+<span class="sourceLineNo">096</span>            int less = small.pop(), less2 = less &lt;&lt; 1;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>            int more = large.pop();<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>            /* These probabilities have not yet been scaled up to be such that<a name="line.99"></a>
+<span class="sourceLineNo">100</span>             * sum/n is given weight 1.0.  We do this here instead.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>             */<a name="line.101"></a>
+<span class="sourceLineNo">102</span>            mixed[less2] = (int)(0x7FFFFFFF * (probabilities[less] / average));<a name="line.102"></a>
+<span class="sourceLineNo">103</span>            mixed[less2|1] = more;<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>            probabilities[more] += probabilities[less] - average;<a name="line.105"></a>
+<span class="sourceLineNo">106</span><a name="line.106"></a>
+<span class="sourceLineNo">107</span>            if (probabilities[more] &gt;= average)<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                large.add(more);<a name="line.108"></a>
+<span class="sourceLineNo">109</span>            else<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                small.add(more);<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        }<a name="line.111"></a>
+<span class="sourceLineNo">112</span><a name="line.112"></a>
+<span class="sourceLineNo">113</span>        while (!small.isEmpty())<a name="line.113"></a>
+<span class="sourceLineNo">114</span>            mixed[small.pop()&lt;&lt;1] = 0x7FFFFFFF;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        while (!large.isEmpty())<a name="line.115"></a>
+<span class="sourceLineNo">116</span>            mixed[large.pop()&lt;&lt;1] = 0x7FFFFFFF;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    }<a name="line.117"></a>
+<span class="sourceLineNo">118</span><a name="line.118"></a>
+<span class="sourceLineNo">119</span>    private WeightedTable(int[] mixed, boolean ignored)<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    {<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        size = mixed.length &gt;&gt; 1;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        this.mixed = mixed;<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    /**<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * Gets an index of one of the weights in this WeightedTable, with the choice determined deterministically by the<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * given long, but higher weights will be returned by more possible inputs than lower weights. The state parameter<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * can be from a random source, but this will randomize it again anyway, so it is also fine to just give sequential<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * longs. The important thing is that each state input this is given will produce the same result for this<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * WeightedTable every time, so you should give different state values when you want random-seeming results. You may<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     * want to call this like {@code weightedTable.random(++state)}, where state is a long, to ensure the inputs change.<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * This will always return an int between 0 (inclusive) and {@link #size} (exclusive).<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     * @param state a long that should be different every time; consider calling with {@code ++state}<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * @return a random-seeming index from 0 to {@link #size} - 1, determined by weights and the given state<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     */<a name="line.134"></a>
+<span class="sourceLineNo">135</span>    public int random(long state)<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    {<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        // This is ThrustAltRNG's algorithm to generate a random long given sequential states<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        state = ((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state &gt;&gt;&gt; 30) * 0xBF58476D1CE4E5B9L) ^ state &gt;&gt;&gt; 27) * 0x94D049BB133111EBL) ^ state &gt;&gt;&gt; 31);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        // get a random int (using half the bits of our previously-calculated state) that is less than size<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        int column = (int)((size * (state &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        // use the other half of the bits of state to get a double, compare to probability and choose either the<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        // current column or the alias for that column based on that probability<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        return ((state &gt;&gt;&gt; 33) &lt;= mixed[column &lt;&lt; 1]) ? column : mixed[column &lt;&lt; 1 | 1];<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    }<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    <a name="line.145"></a>
+<span class="sourceLineNo">146</span>    public String serializeToString()<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    {<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        return size + ":" + StringKit.join(",", mixed);<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    }<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    public static WeightedTable deserializeFromString(String data)<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        if(data == null || data.isEmpty())<a name="line.152"></a>
+<span class="sourceLineNo">153</span>            return null;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>        int pos = data.indexOf(':');<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        int size = StringKit.intFromDec(data, 0, pos);<a name="line.155"></a>
+<span class="sourceLineNo">156</span>        int count = StringKit.count(data, ',') + 1;<a name="line.156"></a>
+<span class="sourceLineNo">157</span>        int[] mixed = new int[count];<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        for (int i = 0; i &lt; count; i++) {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>            mixed[i] = StringKit.intFromDec(data, pos+1, pos = data.indexOf(',', pos+1));<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        }<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        return new WeightedTable(mixed, true);<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
+<span class="sourceLineNo">163</span><a name="line.163"></a>
+<span class="sourceLineNo">164</span>}<a name="line.164"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

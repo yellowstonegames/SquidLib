@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>/**<a name="line.3"></a>
+<span class="sourceLineNo">004</span> * A simple interface for RandomnessSources that have the additional capability to skip forward or backward in their<a name="line.4"></a>
+<span class="sourceLineNo">005</span> * generated number stream.<a name="line.5"></a>
+<span class="sourceLineNo">006</span> * Created by Tommy Ettinger on 9/15/2015.<a name="line.6"></a>
+<span class="sourceLineNo">007</span> */<a name="line.7"></a>
+<span class="sourceLineNo">008</span>public interface SkippingRandomness extends RandomnessSource {<a name="line.8"></a>
+<span class="sourceLineNo">009</span>    /**<a name="line.9"></a>
+<span class="sourceLineNo">010</span>     * Advances or rolls back the SkippingRandomness' state without actually generating each number. Skips forward<a name="line.10"></a>
+<span class="sourceLineNo">011</span>     * or backward a number of steps specified by advance, where a step is equal to one call to {@link #nextLong()},<a name="line.11"></a>
+<span class="sourceLineNo">012</span>     * and returns the random number produced at that step. Negative numbers can be used to step backward, or 0 can be<a name="line.12"></a>
+<span class="sourceLineNo">013</span>     * given to get the most-recently-generated long from {@link #nextLong()}.<a name="line.13"></a>
+<span class="sourceLineNo">014</span>     *<a name="line.14"></a>
+<span class="sourceLineNo">015</span>     * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number<a name="line.15"></a>
+<span class="sourceLineNo">016</span>     * @return the random long generated after skipping forward or backwards by {@code advance} numbers<a name="line.16"></a>
+<span class="sourceLineNo">017</span>     */<a name="line.17"></a>
+<span class="sourceLineNo">018</span>    long skip(long advance);<a name="line.18"></a>
+<span class="sourceLineNo">019</span>}<a name="line.19"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

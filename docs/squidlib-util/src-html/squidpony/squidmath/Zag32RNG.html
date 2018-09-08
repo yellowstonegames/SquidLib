@@ -1,0 +1,344 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * A 32-bit generator that needs no math on 64-bit values to calculate high-quality pseudo-random numbers, and has been<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * adapted to meet the needs of GWT while maintaining compatibility with other JDK platforms. It won't ever multiply an<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * int by a number with more than 20 bits, and along with bitwise operations used frequently, this prevents precision<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * loss on GWT from when an int fails to overflow and exceeds 2 to the 53. The only other generator in this library that<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * avoids GWT precision loss like that is {@link ThrustAlt32RNG}, but that generator isn't capable of producing all int<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * results and has a small bias toward other results. All generators that perform their internal operations with long<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * values, such as {@link LightRNG}, aren't affected by the lack of overflow on ints with GWT. {@link LongPeriodRNG} and<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * {@link MersenneTwister} use an int counter with long values for state, but they manually wrap the counter long before<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * overflow would occur. However, all the math on longs has a hefty performance penalty on GWT, even for normally very<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * fast generators like LightRNG, while Zag32RNG is able to safely use ints with much higher performance.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * &lt;br&gt;<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * Zag32RNG has extremely good speed on GWT, though how good depends on the browser being used and whether 32-bit or<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * 64-bit results are needed. In Opera 51 on a  Windows 7 laptop (64-bit), it takes roughly 43 microseconds to <a name="line.20"></a>
+<span class="sourceLineNo">021</span> * generate 10,000 int values with Zag32RNG; ThrustAlt32RNG takes roughly 37 microseconds, and LightRNG takes roughly<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * 1929 microseconds (yes, math on long values does have a speed penalty to make up for its better accuracy). To<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * generate 10,000 long values with Zag32RNG, it takes roughly 891 microseconds; ThrustAlt32RNG takes 1368 microseconds<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * (an odd slowdown for a normally-faster generator), and LightRNG takes roughly 2480 microseconds. The total period of<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * Zag32RNG is 0xFFFFFFFF00000000 (18446744069414584320). Quality is very good here, and this passes PractRand without<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * failures and with 3 minor anomalies (classified as "unusual" and all different kinds) on 32TB of testing; this is<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * probably enough to confirm a generator as high-quality. It's still possible that tests not present in PractRand can<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * detect errors in Zag32RNG.<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;br&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * For the specific structure of Zag32RNG, it is a combination of a Marsaglia-style XorShift generator with an "XLCG"<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * generator (like a linear congruential generator but using XOR instead of addition). It has 2 ints for state, stateA<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * and stateB, where stateA is modified by the XorShift and cannot be given 0, and stateB is modified by the XLCG and<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * can be assigned any int. stateA will never be 0, but will be every non-0 int with equal frequency; it repeats every<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * {@code Math.pow(2, 32) - 1} generated numbers. stateB goes through every int over the course of the XLCG's period; it<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * naturally has a period of {@code Math.pow(2, 32)}. Just adding an XLCG to a XorShift generator isn't enough to ensure<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * quality; the XLCG's result (not the actual stateB) is xorshifted right twice, as in {@code tempB ^= tempB &gt;&gt;&gt; 13},<a name="line.36"></a>
+<span class="sourceLineNo">037</span> * before adding the XorShift result of stateA and then xorshifting right once more to get the final value. The XorShift<a name="line.37"></a>
+<span class="sourceLineNo">038</span> * that stateA uses is a normal kind that involves two rightward shifts and one leftward shift, but because stateB is<a name="line.38"></a>
+<span class="sourceLineNo">039</span> * updated by an XLCG (which has a higher period on its more-significant bits and a very low period on its<a name="line.39"></a>
+<span class="sourceLineNo">040</span> * least-significant bits), the numbers using stateB's value need only rightward shifts by varying amounts. This<a name="line.40"></a>
+<span class="sourceLineNo">041</span> * generator is not reversible given the output of {@link #nextInt()}, though the update steps for stateA and stateB are<a name="line.41"></a>
+<span class="sourceLineNo">042</span> * both individually reversible.<a name="line.42"></a>
+<span class="sourceLineNo">043</span> * &lt;br&gt;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> * Although Zag32RNG has a {@link #determine(int, int)} method, calling it is considerably more complex than other<a name="line.44"></a>
+<span class="sourceLineNo">045</span> * RandomnessSources that provide determine() methods. It also doesn't allow skipping through the state, and a moderate<a name="line.45"></a>
+<span class="sourceLineNo">046</span> * amount of the possible values that can be provided with {@link #setState(long)} will be changed before this can use<a name="line.46"></a>
+<span class="sourceLineNo">047</span> * them (there are fewer than 2 to the 64 possible states, but only somewhat).<a name="line.47"></a>
+<span class="sourceLineNo">048</span> * &lt;br&gt;<a name="line.48"></a>
+<span class="sourceLineNo">049</span> * Created by Tommy Ettinger on 3/13/2018.<a name="line.49"></a>
+<span class="sourceLineNo">050</span> */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>public final class Zag32RNG implements StatefulRandomness, Serializable {<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    private int a, b;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    private static final long serialVersionUID = 178316585712476930L;<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    /**<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * Constructs a Zag32RNG with a random state, using two calls to Math.random().<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     */<a name="line.57"></a>
+<span class="sourceLineNo">058</span>    public Zag32RNG()<a name="line.58"></a>
+<span class="sourceLineNo">059</span>    {<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        this((int)((Math.random() * 2.0 - 1.0) * 0x80000000), (int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.60"></a>
+<span class="sourceLineNo">061</span>    }<a name="line.61"></a>
+<span class="sourceLineNo">062</span><a name="line.62"></a>
+<span class="sourceLineNo">063</span>    /**<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * Constructs a Zag32RNG with a stateA equal to the given stateA unless 0 was given, in which case stateA will be 1,<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * and a stateB exactly equal to the given stateB. <a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * @param stateA any int except 0 (0 will be treated as 1 instead)<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * @param stateB any int<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     */<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    public Zag32RNG(int stateA, int stateB)<a name="line.69"></a>
+<span class="sourceLineNo">070</span>    {<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        a = stateA == 0 ? 1 : stateA;<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        b = stateB;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    /**<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * Takes 32 bits of state and uses it to randomly fill the 64 bits of state this uses.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     * @param statePart any int<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     */<a name="line.78"></a>
+<span class="sourceLineNo">079</span>    public Zag32RNG(int statePart)<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        b = statePart;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        a = ~statePart;<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        a ^= a &gt;&gt;&gt; 5;<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        a ^= a &lt;&lt; 17;<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        a ^= a &gt;&gt;&gt; 13;<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        a ^= statePart;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        if(a == 0) a = 1; // not sure if this is possible<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>    /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * Constructs a Zag32RNG using a long that combines the two parts of state, as from {@link #getState()}.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * @param stateCombined a long that combines state A and state B, with state A in the less significant 32 bits<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     */<a name="line.93"></a>
+<span class="sourceLineNo">094</span>    public Zag32RNG(long stateCombined)<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        this((int)stateCombined, (int)(stateCombined &gt;&gt;&gt; 32));<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    }<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>    public final int nextInt() {<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        int z = (b = (b ^ 0xC74EAD55) * 0xA5CB3);<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        a ^= a &gt;&gt;&gt; 14;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        z ^= z &gt;&gt;&gt; 13;<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        a ^= a &gt;&gt;&gt; 15;<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        z = (z ^ z &gt;&gt;&gt; 11) + (a ^= a &lt;&lt; 13);<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        return (z ^ z &gt;&gt;&gt; 7);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>    /**<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * Using this method, any algorithm that might use the built-in Java Random<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * can interface with this randomness source.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     *<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * @param bits the number of bits to be returned<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * @return the integer containing the appropriate number of bits<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     */<a name="line.114"></a>
+<span class="sourceLineNo">115</span>    @Override<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    public final int next(int bits) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        int z = (b = (b ^ 0xC74EAD55) * 0xA5CB3);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        a ^= a &gt;&gt;&gt; 14;<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        z ^= z &gt;&gt;&gt; 13;<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        a ^= a &gt;&gt;&gt; 15;<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        z = (z ^ z &gt;&gt;&gt; 11) + (a ^= a &lt;&lt; 13);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        return (z ^ z &gt;&gt;&gt; 7) &gt;&gt;&gt; (32 - bits);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>    /**<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     * Using this method, any algorithm that needs to efficiently generate more<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * than 32 bits of random data can interface with this randomness source.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * &lt;p&gt;<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    @Override<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public final long nextLong() {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        int z = (b ^ 0xC74EAD55) * 0xA5CB3, y = (b = (z ^ 0xC74EAD55) * 0xA5CB3);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        a ^= a &gt;&gt;&gt; 14;<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        z ^= z &gt;&gt;&gt; 13;<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        a ^= a &gt;&gt;&gt; 15;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        z = (z ^ z &gt;&gt;&gt; 11) + (a ^= a &lt;&lt; 13);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        a ^= a &gt;&gt;&gt; 14;<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        y ^= y &gt;&gt;&gt; 13;<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        a ^= a &gt;&gt;&gt; 15;<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        y = (y ^ y &gt;&gt;&gt; 11) + (a ^= a &lt;&lt; 13);<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        return (long)(y ^ y &gt;&gt;&gt; 7) &lt;&lt; 32 ^ (z ^ z &gt;&gt;&gt; 7);<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    }<a name="line.145"></a>
+<span class="sourceLineNo">146</span><a name="line.146"></a>
+<span class="sourceLineNo">147</span>    /**<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.149"></a>
+<span class="sourceLineNo">150</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.150"></a>
+<span class="sourceLineNo">151</span>     *<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * @return a copy of this RandomnessSource<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     */<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    @Override<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    public Zag32RNG copy() {<a name="line.155"></a>
+<span class="sourceLineNo">156</span>        return new Zag32RNG(a, b);<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    }<a name="line.157"></a>
+<span class="sourceLineNo">158</span><a name="line.158"></a>
+<span class="sourceLineNo">159</span>    public int getStateA()<a name="line.159"></a>
+<span class="sourceLineNo">160</span>    {<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        return a;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>    }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    public void setStateA(int stateA)<a name="line.163"></a>
+<span class="sourceLineNo">164</span>    {<a name="line.164"></a>
+<span class="sourceLineNo">165</span>        a = stateA == 0 ? 1 : stateA;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    }<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    public int getStateB()<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        return b;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>    }<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    public void setStateB(int stateB)<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        b = stateB;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>    }<a name="line.174"></a>
+<span class="sourceLineNo">175</span><a name="line.175"></a>
+<span class="sourceLineNo">176</span>    /**<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * Get the current internal state of the StatefulRandomness as a long.<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     *<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     * @return the current internal state of this object.<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     */<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    @Override<a name="line.181"></a>
+<span class="sourceLineNo">182</span>    public long getState() {<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        return (long) b &lt;&lt; 32 | (a &amp; 0xFFFFFFFFL);<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    }<a name="line.184"></a>
+<span class="sourceLineNo">185</span><a name="line.185"></a>
+<span class="sourceLineNo">186</span>    /**<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     * Set the current internal state of this StatefulRandomness with a long.<a name="line.187"></a>
+<span class="sourceLineNo">188</span>     * If the bottom 32 bits of the given state are all 0, then this will set stateA to 1, otherwise it sets stateA to<a name="line.188"></a>
+<span class="sourceLineNo">189</span>     * those bottom 32 bits. This always sets stateB to the upper 32 bits of the given state.<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * @param state a 64-bit long; the bottom 32 bits should not be all 0, but this is tolerated<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     */<a name="line.191"></a>
+<span class="sourceLineNo">192</span>    @Override<a name="line.192"></a>
+<span class="sourceLineNo">193</span>    public void setState(long state) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        a = (int)(state &amp; 0xFFFFFFFFL);<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        if(a == 0) a = 1;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>        b = (int) (state &gt;&gt;&gt; 32);<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    }<a name="line.197"></a>
+<span class="sourceLineNo">198</span><a name="line.198"></a>
+<span class="sourceLineNo">199</span>    /**<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * Sets the current internal state of this Zag32RNG with two ints, where stateA can be any int except 0, and stateB<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * can be any int.<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * @param stateA any int except 0 (0 will be treated as 1 instead)<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * @param stateB any int<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     */<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    public void setState(int stateA, int stateB)<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    {<a name="line.206"></a>
+<span class="sourceLineNo">207</span>        a = stateA == 0 ? 1 : stateA;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        b = stateB;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>    }<a name="line.209"></a>
+<span class="sourceLineNo">210</span><a name="line.210"></a>
+<span class="sourceLineNo">211</span>    @Override<a name="line.211"></a>
+<span class="sourceLineNo">212</span>    public String toString() {<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        return "Zag32RNG with stateA 0x" + StringKit.hex(a) + " and stateB 0x" + StringKit.hex(b);<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    }<a name="line.214"></a>
+<span class="sourceLineNo">215</span><a name="line.215"></a>
+<span class="sourceLineNo">216</span>    @Override<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    public boolean equals(Object o) {<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        if (this == o) return true;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.219"></a>
+<span class="sourceLineNo">220</span><a name="line.220"></a>
+<span class="sourceLineNo">221</span>        Zag32RNG that = (Zag32RNG) o;<a name="line.221"></a>
+<span class="sourceLineNo">222</span><a name="line.222"></a>
+<span class="sourceLineNo">223</span>        return a == that.a &amp;&amp; b == that.b;<a name="line.223"></a>
+<span class="sourceLineNo">224</span>    }<a name="line.224"></a>
+<span class="sourceLineNo">225</span><a name="line.225"></a>
+<span class="sourceLineNo">226</span>    @Override<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    public int hashCode() {<a name="line.227"></a>
+<span class="sourceLineNo">228</span>        return 31 * a + b;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>    }<a name="line.229"></a>
+<span class="sourceLineNo">230</span><a name="line.230"></a>
+<span class="sourceLineNo">231</span>    /**<a name="line.231"></a>
+<span class="sourceLineNo">232</span>     * Gets a pseudo-random int determined wholly by the given state variables a and b, which should change every call.<a name="line.232"></a>
+<span class="sourceLineNo">233</span>     * Call with {@code determine((a = (a = (a ^= a &gt;&gt;&gt; 14) ^ a &gt;&gt;&gt; 15) ^ a &lt;&lt; 13), b = (b ^ 0xC74EAD55) * 0xA5CB3 | 0)},<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     * where a and b are int variables used as state. The complex call to this method allows it to remain static. In the<a name="line.234"></a>
+<span class="sourceLineNo">235</span>     * update for b, the bitwise OR with 0 is only needed for GWT in order to force overflow to wrap instead of losing<a name="line.235"></a>
+<span class="sourceLineNo">236</span>     * precision (a quirk of the JS numbers GWT uses). If you know you won't target GWT you can use<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     * {@code b = (b ^ 0xC74EAD55) * 0xA5CB3}. This should be fairly fast on GWT because most PRNGs (that can pass any<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * decent statistical quality tests) use either 64-bit long values or many int variables for state, while this can<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     * get by with just two int variables. Using long on GWT is usually the only reasonable option if you expect<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * arithmetic overflow (because long is emulated by GWT to imitate the behavior of a JDK, but is considerably slower<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * as a result), but by some careful development for this generator, it should have identical results on GWT and on<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * desktop/Android JVMs with only int math.<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * &lt;br&gt;<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * You may find it more convenient to just instantiate a Zag32RNG object rather than using the complex state update;<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * using the methods on a Zag32RNG object may also be more efficient because some operations can be performed with<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * bit-parallel optimizations on the same (modern) processor.<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     * @param a must be non-zero and updated with each call, using {@code a = (a = (a ^= a &gt;&gt;&gt; 14) ^ a &gt;&gt;&gt; 15) ^ a &lt;&lt; 13}<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * @param b must be updated with each call, using {@code b = (b ^ 0xC74EAD55) * 0xA5CB3 | 0}, with {@code | 0} needed for GWT<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * @return a pseudo-random int, equidistributed over a period of 0xFFFFFFFF00000000; can be any int<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     */<a name="line.250"></a>
+<span class="sourceLineNo">251</span>    public static int determine(int a, int b) {<a name="line.251"></a>
+<span class="sourceLineNo">252</span>        return ((b = ((b ^= b &gt;&gt;&gt; 13) ^ b &gt;&gt;&gt; 11) + a) ^ b &gt;&gt;&gt; 7);<a name="line.252"></a>
+<span class="sourceLineNo">253</span>    }<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    /**<a name="line.254"></a>
+<span class="sourceLineNo">255</span>     * Gets a pseudo-random int between 0 and the given bound, using the given ints a and b as the state; these state<a name="line.255"></a>
+<span class="sourceLineNo">256</span>     * variables a and b should change with each call. The exclusive bound can be negative or positive, and can be<a name="line.256"></a>
+<span class="sourceLineNo">257</span>     * between -32768 and 32767 (both inclusive); the small limits allow using just 32-bit math. Call with<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     * {@code determineBounded((a = (a = (a ^= a &gt;&gt;&gt; 14) ^ a &gt;&gt;&gt; 15) ^ a &lt;&lt; 13), b = (b ^ 0xC74EAD55) * 0xA5CB3 | 0), bound},<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     * where a and b are int variables used as state and bound is the exclusive outer bound. The complex call to this<a name="line.259"></a>
+<span class="sourceLineNo">260</span>     * method allows it to remain static. In the update for b, the bitwise OR with 0 is only needed for GWT in order to<a name="line.260"></a>
+<span class="sourceLineNo">261</span>     * force overflow to wrap instead of losing precision (a quirk of the JS numbers GWT uses). If you know you won't<a name="line.261"></a>
+<span class="sourceLineNo">262</span>     * target GWT you can use {@code b = (b ^ 0xC74EAD55) * 0xA5CB3}.<a name="line.262"></a>
+<span class="sourceLineNo">263</span>     * @param a must be non-zero and updated with each call, using {@code a = (a = (a ^= a &gt;&gt;&gt; 14) ^ a &gt;&gt;&gt; 15) ^ a &lt;&lt; 13}<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     * @param b must be updated with each call, using {@code b = (b ^ 0xC74EAD55) * 0xA5CB3 | 0}, with {@code | 0} needed for GWT<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * @param bound the outer exclusive limit on the random number; should be between -32768 and 32767 (both inclusive)<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * @return a pseudo-random int, between 0 (inclusive) and bound (exclusive)<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     */<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    public static int determineBounded(int a, int b, int bound)<a name="line.268"></a>
+<span class="sourceLineNo">269</span>    {<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        return ((bound * (((b = ((b ^= b &gt;&gt;&gt; 13) ^ b &gt;&gt;&gt; 11) + a) ^ b &gt;&gt;&gt; 7) &amp; 0x7FFF)) &gt;&gt; 15);<a name="line.270"></a>
+<span class="sourceLineNo">271</span>    }<a name="line.271"></a>
+<span class="sourceLineNo">272</span>}<a name="line.272"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

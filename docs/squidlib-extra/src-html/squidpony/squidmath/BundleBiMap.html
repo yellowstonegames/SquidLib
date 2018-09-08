@@ -1,0 +1,747 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import squidpony.annotation.Beta;<a name="line.4"></a>
+<span class="sourceLineNo">005</span><a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.util.ArrayList;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.util.Collection;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.util.Iterator;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.util.SortedSet;<a name="line.9"></a>
+<span class="sourceLineNo">010</span><a name="line.10"></a>
+<span class="sourceLineNo">011</span>/**<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * An ordered bidirectional map-like data structure, with "bundles" of unique E (for Element) keys and unique S (for<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * Single) keys updated together like a map that can be queried by E key bundles, S keys, or int indices, as well as<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * like a multimap that can be queried by lone E keys. A bundle can be specified as a Collection of E values, an array<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * of E values, or in two parts as either of the above given to a BundleBiMap method along with an int array that can<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * represent variations on E keys (e.g. some quantity for an E value that permits different amounts to be passed with<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * the unique E values to getS and have it yield a different S for a, say, 1 Foo and 1 Bar vs. 2 Foo and 3 Bar). This<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * allows an intended purpose for this class as a way to describe crafting recipes that may need various amounts of an<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * item to be mixed in, and since the quantities are optional, it can still be used to group multiple E keys with S<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * keys. The multimap property allows you to use an E element key to get all of the S keys that are associated with a<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * bundle that contains that E key (you can also get the ordering indices for those S keys, which you can use to get the<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * full bundle if you want).<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * &lt;br&gt;<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * Does not implement any interfaces that you would expect for a data structure, because almost every method it has<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * needs to specify whether it applies to E or S items, or otherwise doesn't fit a normal Collection-like interface's<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * requirements.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * &lt;br&gt;<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * Closely related to Arrangement, K2, and K2V1 in implementation.<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * &lt;br&gt;<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * Created by Tommy Ettinger on 4/26/2017.<a name="line.30"></a>
+<span class="sourceLineNo">031</span> */<a name="line.31"></a>
+<span class="sourceLineNo">032</span>@Beta<a name="line.32"></a>
+<span class="sourceLineNo">033</span>public class BundleBiMap&lt;E, S&gt;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>{<a name="line.34"></a>
+<span class="sourceLineNo">035</span>    private Arrangement&lt;E&gt; elements;<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    private K2&lt;int[][], S&gt; bm;<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    private ArrayList&lt;IntVLA&gt; mm;<a name="line.37"></a>
+<span class="sourceLineNo">038</span><a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * Constructs an empty BundleBiMap.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     */<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    public BundleBiMap()<a name="line.42"></a>
+<span class="sourceLineNo">043</span>    {<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        this(Arrangement.DEFAULT_INITIAL_SIZE, Arrangement.DEFAULT_LOAD_FACTOR);<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * Constructs a BundleBiMap with the expected number of indices to hold (the number of bundles and number of S items<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * is always the same, and this will be more efficient if expected is greater than that number).<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     * @param expected how many bundle-to-single pairings this is expected to hold<a name="line.50"></a>
+<span class="sourceLineNo">051</span>     */<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    public BundleBiMap(int expected)<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    {<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        this(expected, Arrangement.DEFAULT_LOAD_FACTOR);<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>    /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * Constructs a BundleBiMap with the expected number of indices to hold (the number of bundles and number of S items<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * is always the same, and this will be more efficient if expected is greater than that number) and the load factor<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * to use, between 0.1f and 0.8f usually (using load factors higher than 0.8f can cause problems).<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * @param expected the amount of indices (the count of bundles is the same as the count of S items) this should hold<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * @param f the load factor, probably between 0.1f and 0.8f<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    public BundleBiMap(int expected, float f)<a name="line.64"></a>
+<span class="sourceLineNo">065</span>    {<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        elements = new Arrangement&lt;&gt;(expected, f);<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        bm = new K2&lt;&gt;(expected, f, CrossHash.int2DHasher, CrossHash.defaultHasher);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        mm = new ArrayList&lt;&gt;(expected * 4);<a name="line.68"></a>
+<span class="sourceLineNo">069</span>    }<a name="line.69"></a>
+<span class="sourceLineNo">070</span><a name="line.70"></a>
+<span class="sourceLineNo">071</span><a name="line.71"></a>
+<span class="sourceLineNo">072</span>    /**<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     * Constructs a BundleBiMap using another BundleBiMap to copy.<a name="line.73"></a>
+<span class="sourceLineNo">074</span>     * @param other the other BundleBiMap to copy<a name="line.74"></a>
+<span class="sourceLineNo">075</span>     */<a name="line.75"></a>
+<span class="sourceLineNo">076</span>    public BundleBiMap(BundleBiMap&lt;? extends E, ? extends S&gt; other)<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    {<a name="line.77"></a>
+<span class="sourceLineNo">078</span>        if(other == null)<a name="line.78"></a>
+<span class="sourceLineNo">079</span>        {<a name="line.79"></a>
+<span class="sourceLineNo">080</span>            elements = new Arrangement&lt;&gt;(64, 0.75f);<a name="line.80"></a>
+<span class="sourceLineNo">081</span>            bm = new K2&lt;&gt;(16, 0.75f, CrossHash.int2DHasher, CrossHash.defaultHasher);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>            mm = new ArrayList&lt;&gt;(64);<a name="line.82"></a>
+<span class="sourceLineNo">083</span>        }<a name="line.83"></a>
+<span class="sourceLineNo">084</span>        else<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>            elements = new Arrangement&lt;&gt;(other.elements);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>            bm = new K2&lt;&gt;(other.bm);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>            mm = new ArrayList&lt;&gt;(other.mm);<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        }<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>    /**<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * Returns true if this contains the E, element, in any of its bundles of E keys.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * @param element the E to check the presence of in all bundles<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @return true if element is present in this; false otherwise<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     */<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    public boolean containsElement(E element) { return elements.containsKey(element); }<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    /**<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * Returns true if this contains the S, single, in its collection of S items.<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * @param single the S to check the presence of<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * @return true if single is present in this; false otherwise<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     */<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    public boolean containsSingle(S single) { return bm.containsB(single); }<a name="line.103"></a>
+<span class="sourceLineNo">104</span><a name="line.104"></a>
+<span class="sourceLineNo">105</span>    /**<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * Returns true if index is between 0 (inclusive) and {@link #size()} (exclusive), or false otherwise.<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * @param index the index to check<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * @return true if index is a valid index in the ordering of this BundleBiMap<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     */<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    public boolean containsIndex(int index) { return index &gt;= 0 &amp;&amp; index &lt; bm.size(); }<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>    /**<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * Given an int index, finds the associated S key (using index as a point in the ordering).<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * @param index an int index into this BundleBiMap<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @return the S object with index for its position in the ordering, or null if index was invalid<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     */<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    public S getSingleAt(int index)<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        return bm.getBAt(index);<a name="line.119"></a>
+<span class="sourceLineNo">120</span>    }<a name="line.120"></a>
+<span class="sourceLineNo">121</span><a name="line.121"></a>
+<span class="sourceLineNo">122</span>    /**<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * Gets a random E from this BundleBiMap's individual elements using the given IRNG.<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * @param random generates a random index to get an E with<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * @return a randomly chosen E, or null if this is empty<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     */<a name="line.126"></a>
+<span class="sourceLineNo">127</span>    public E randomElement(IRNG random)<a name="line.127"></a>
+<span class="sourceLineNo">128</span>    {<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        return elements.randomKey(random);<a name="line.129"></a>
+<span class="sourceLineNo">130</span>    }<a name="line.130"></a>
+<span class="sourceLineNo">131</span><a name="line.131"></a>
+<span class="sourceLineNo">132</span>    /**<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     * Gets a random S from this BundleBiMap using the given IRNG.<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * @param random generates a random index to get a S with<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     * @return a randomly chosen S, or null if this is empty<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     */<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    public S randomSingle(IRNG random)<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        return bm.randomB(random);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    }<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>    /**<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * Changes an existing S key, {@code past}, to another S key, {@code future}, if past exists in this BundleBiMap<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * and future does not yet exist in this BundleBiMap. This will retain past's point in the ordering for future, so<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     * the associated other key(s) will still be associated in the same way.<a name="line.145"></a>
+<span class="sourceLineNo">146</span>     * @param past a S key, that must exist in this BundleBiMap's S keys, and will be changed<a name="line.146"></a>
+<span class="sourceLineNo">147</span>     * @param future a S key, that cannot currently exist in this BundleBiMap's S keys, but will if this succeeds<a name="line.147"></a>
+<span class="sourceLineNo">148</span>     * @return this for chaining<a name="line.148"></a>
+<span class="sourceLineNo">149</span>     */<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    public BundleBiMap&lt;E, S&gt; alterB(S past, S future)<a name="line.150"></a>
+<span class="sourceLineNo">151</span>    {<a name="line.151"></a>
+<span class="sourceLineNo">152</span>        bm.alterB(past, future);<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        return this;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>    }<a name="line.154"></a>
+<span class="sourceLineNo">155</span><a name="line.155"></a>
+<span class="sourceLineNo">156</span><a name="line.156"></a>
+<span class="sourceLineNo">157</span><a name="line.157"></a>
+<span class="sourceLineNo">158</span>    /**<a name="line.158"></a>
+<span class="sourceLineNo">159</span>     * Changes the S key at {@code index} to another S key, {@code future}, if index is valid and future does not<a name="line.159"></a>
+<span class="sourceLineNo">160</span>     * yet exist in this K2. The position in the ordering for future will be the same as index, and the same<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * as the key this replaced, if this succeeds, so the other key(s) at that position will still be associated in<a name="line.161"></a>
+<span class="sourceLineNo">162</span>     * the same way.<a name="line.162"></a>
+<span class="sourceLineNo">163</span>     * @param index a position in the ordering to change; must be at least 0 and less than {@link #size()}<a name="line.163"></a>
+<span class="sourceLineNo">164</span>     * @param future a S key, that cannot currently exist in this BundleBiMap's S keys, but will if this succeeds<a name="line.164"></a>
+<span class="sourceLineNo">165</span>     * @return this for chaining<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     */<a name="line.166"></a>
+<span class="sourceLineNo">167</span>    public BundleBiMap&lt;E, S&gt; alterSingleAt(int index, S future)<a name="line.167"></a>
+<span class="sourceLineNo">168</span>    {<a name="line.168"></a>
+<span class="sourceLineNo">169</span>        bm.alterBAt(index, future);<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        return this;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    /**<a name="line.172"></a>
+<span class="sourceLineNo">173</span>     * Adds a bundle of E keys and a S key at the same point in the ordering (the end) to this BundleBiMap. Neither<a name="line.173"></a>
+<span class="sourceLineNo">174</span>     * parameter can be present in this collection before this is called.<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * @param e an array of E keys to add; the array cannot already be present, nor can it be null<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * @param s e S key to add; cannot already be present<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @return true if this collection changed as e result of this call<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     */<a name="line.178"></a>
+<span class="sourceLineNo">179</span>    public boolean put(E[] e, S s)<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    {<a name="line.180"></a>
+<span class="sourceLineNo">181</span>        if(e == null) return false;<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        int len = elements.size;<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        elements.putAll(e);<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.184"></a>
+<span class="sourceLineNo">185</span>            mm.add(new IntVLA(e.length));<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        }<a name="line.186"></a>
+<span class="sourceLineNo">187</span><a name="line.187"></a>
+<span class="sourceLineNo">188</span>        elements.putAll(e);<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        int[][] bundle = new int[][]{elements.getArray(e)};<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        if(!bm.put(bundle, s))<a name="line.190"></a>
+<span class="sourceLineNo">191</span>            return false;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>        for (int i = 0; i &lt; e.length; i++) {<a name="line.192"></a>
+<span class="sourceLineNo">193</span>            mm.get(bundle[0][i]).add(bm.size()-1);<a name="line.193"></a>
+<span class="sourceLineNo">194</span>        }<a name="line.194"></a>
+<span class="sourceLineNo">195</span>        return true;<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    }<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    /**<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * Adds a bundle of E keys, mixed with an int array of variations, and a S key at the same point in the ordering<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     * (the end) to this BundleBiMap. Neither the S key nor the bundle (effectively, the pair of e and variation) can be<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     * present in this collection before this is called.<a name="line.200"></a>
+<span class="sourceLineNo">201</span>     * @param e an array of E keys to add; the array cannot already have been inserted with an equivalent variation, nor can it be null<a name="line.201"></a>
+<span class="sourceLineNo">202</span>     * @param variation an int array that can be used to make a different version of e, i.e. the same things at different quantities; cannot be null<a name="line.202"></a>
+<span class="sourceLineNo">203</span>     * @param s e S key to add; cannot already be present<a name="line.203"></a>
+<span class="sourceLineNo">204</span>     * @return true if this collection changed as e result of this call<a name="line.204"></a>
+<span class="sourceLineNo">205</span>     */<a name="line.205"></a>
+<span class="sourceLineNo">206</span>    public boolean put(E[] e, int[] variation, S s)<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    {<a name="line.207"></a>
+<span class="sourceLineNo">208</span>        if(e == null || variation == null) return false;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>        int len = elements.size;<a name="line.209"></a>
+<span class="sourceLineNo">210</span>        elements.putAll(e);<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.211"></a>
+<span class="sourceLineNo">212</span>            mm.add(new IntVLA(e.length));<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        }<a name="line.213"></a>
+<span class="sourceLineNo">214</span><a name="line.214"></a>
+<span class="sourceLineNo">215</span>        int[][] bundle = new int[][]{elements.getArray(e), variation};<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        if(!bm.put(bundle, s))<a name="line.216"></a>
+<span class="sourceLineNo">217</span>            return false;<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        for (int i = 0; i &lt; e.length; i++) {<a name="line.218"></a>
+<span class="sourceLineNo">219</span>            mm.get(bundle[0][i]).add(bm.size()-1);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>        }<a name="line.220"></a>
+<span class="sourceLineNo">221</span>        return true;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>    }<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    /**<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * Adds a bundle of E keys and a S key at the same point in the ordering (the end) to this BundleBiMap. Neither<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * parameter can be present in this collection before this is called.<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     * @param e an array of E keys to add; the array cannot already be present, nor can it be null<a name="line.226"></a>
+<span class="sourceLineNo">227</span>     * @param s e S key to add; cannot already be present<a name="line.227"></a>
+<span class="sourceLineNo">228</span>     * @return true if this collection changed as e result of this call<a name="line.228"></a>
+<span class="sourceLineNo">229</span>     */<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    public boolean put(Collection&lt;? extends E&gt; e, S s)<a name="line.230"></a>
+<span class="sourceLineNo">231</span>    {<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        if(e == null) return false;<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        int len = elements.size;<a name="line.233"></a>
+<span class="sourceLineNo">234</span>        elements.putAll(e);<a name="line.234"></a>
+<span class="sourceLineNo">235</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.235"></a>
+<span class="sourceLineNo">236</span>            mm.add(new IntVLA(e.size()));<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        }<a name="line.237"></a>
+<span class="sourceLineNo">238</span>        int[][] bundle = new int[][]{elements.getArray(e)};<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        if(!bm.put(bundle, s))<a name="line.239"></a>
+<span class="sourceLineNo">240</span>            return false;<a name="line.240"></a>
+<span class="sourceLineNo">241</span>        len = bundle[0].length;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>        for (int i = 0; i &lt; len; i++) {<a name="line.242"></a>
+<span class="sourceLineNo">243</span>            mm.get(bundle[0][i]).add(bm.size()-1);<a name="line.243"></a>
+<span class="sourceLineNo">244</span>        }<a name="line.244"></a>
+<span class="sourceLineNo">245</span>        return true;<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    }<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    /**<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * Adds a bundle of E keys, mixed with an int array of variations, and a S key at the same point in the ordering<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * (the end) to this BundleBiMap. Neither the S key nor the bundle (effectively, the pair of e and variation) can be<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     * present in this collection before this is called.<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     * @param e an array of E keys to add; the array cannot already have been inserted with an equivalent variation, nor can it be null<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     * @param variation an int array that can be used to make a different version of e, i.e. the same things at different quantities; cannot be null<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     * @param s e S key to add; cannot already be present<a name="line.253"></a>
+<span class="sourceLineNo">254</span>     * @return true if this collection changed as e result of this call<a name="line.254"></a>
+<span class="sourceLineNo">255</span>     */<a name="line.255"></a>
+<span class="sourceLineNo">256</span>    public boolean put(Collection&lt;? extends E&gt; e, int[] variation, S s)<a name="line.256"></a>
+<span class="sourceLineNo">257</span>    {<a name="line.257"></a>
+<span class="sourceLineNo">258</span>        if(e == null || variation == null) return false;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        int len = elements.size;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>        elements.putAll(e);<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        for (int i = len; i &lt; elements.size; i++) {<a name="line.261"></a>
+<span class="sourceLineNo">262</span>            mm.add(new IntVLA(e.size()));<a name="line.262"></a>
+<span class="sourceLineNo">263</span>        }<a name="line.263"></a>
+<span class="sourceLineNo">264</span>        int[][] bundle = new int[][]{elements.getArray(e), variation};<a name="line.264"></a>
+<span class="sourceLineNo">265</span>        if(!bm.put(bundle, s))<a name="line.265"></a>
+<span class="sourceLineNo">266</span>            return false;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>        len = bundle[0].length;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        for (int i = 0; i &lt; len; i++) {<a name="line.268"></a>
+<span class="sourceLineNo">269</span>            mm.get(bundle[0][i]).add(bm.size()-1);<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        }<a name="line.270"></a>
+<span class="sourceLineNo">271</span>        return true;<a name="line.271"></a>
+<span class="sourceLineNo">272</span>    }<a name="line.272"></a>
+<span class="sourceLineNo">273</span><a name="line.273"></a>
+<span class="sourceLineNo">274</span>    /**<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * Puts all unique E and S keys in {@code aKeys} and {@code bKeys} into this K2 at the end. If an E in aKeys or a S<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * in bKeys is already present when this would add one, this will not put the E and S keys at that point in the<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     * iteration order, and will place the next unique E and S it finds in the arguments at that position instead.<a name="line.277"></a>
+<span class="sourceLineNo">278</span>     * @param aKeys an Iterable or Collection of E keys to add; should all be unique (like a Set)<a name="line.278"></a>
+<span class="sourceLineNo">279</span>     * @param bKeys an Iterable or Collection of S keys to add; should all be unique (like a Set)<a name="line.279"></a>
+<span class="sourceLineNo">280</span>     * @return true if this collection changed as a result of this call<a name="line.280"></a>
+<span class="sourceLineNo">281</span>     */<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    public boolean putAll(Iterable&lt;? extends Collection&lt;? extends E&gt;&gt; aKeys, Iterable&lt;? extends S&gt; bKeys)<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    {<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        if(aKeys == null || bKeys == null) return false;<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        Iterator&lt;? extends Collection&lt;? extends E&gt;&gt; aIt = aKeys.iterator();<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        Iterator&lt;? extends S&gt; bIt = bKeys.iterator();<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        boolean changed = false;<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        while (aIt.hasNext() &amp;&amp; bIt.hasNext())<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>            changed = put(aIt.next(), bIt.next()) || changed;<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        }<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        return changed;<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    }<a name="line.293"></a>
+<span class="sourceLineNo">294</span>    /**<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     * Puts all unique E and S keys in {@code other} into this K2, respecting other's ordering. If an E or a S in other<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * is already present when this would add one, this will not put the E and S keys at that point in the iteration<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     * order, and will place the next unique E and S it finds in the arguments at that position instead.<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     * @param other another K2 collection with the same E and S types<a name="line.298"></a>
+<span class="sourceLineNo">299</span>     * @return true if this collection changed as a result of this call<a name="line.299"></a>
+<span class="sourceLineNo">300</span>     */<a name="line.300"></a>
+<span class="sourceLineNo">301</span>    public boolean putAll(BundleBiMap&lt;? extends E, ? extends S&gt; other)<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    {<a name="line.302"></a>
+<span class="sourceLineNo">303</span>        if(other == null) return false;<a name="line.303"></a>
+<span class="sourceLineNo">304</span>        boolean changed = false;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        int sz = other.size();<a name="line.305"></a>
+<span class="sourceLineNo">306</span>        for (int i = 0; i &lt; sz; i++) {<a name="line.306"></a>
+<span class="sourceLineNo">307</span>            int[][] bundle = other.bm.getAAt(i);<a name="line.307"></a>
+<span class="sourceLineNo">308</span>            if(bundle == null || bundle.length == 0) continue;<a name="line.308"></a>
+<span class="sourceLineNo">309</span>            if(bundle.length == 1)<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                changed |= put(elements.keysAt(bundle[0]), other.bm.getBAt(i));<a name="line.310"></a>
+<span class="sourceLineNo">311</span>            else<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                changed |= put(elements.keysAt(bundle[0]), bundle[1], other.bm.getBAt(i));<a name="line.312"></a>
+<span class="sourceLineNo">313</span>        }<a name="line.313"></a>
+<span class="sourceLineNo">314</span>        return changed;<a name="line.314"></a>
+<span class="sourceLineNo">315</span>    }<a name="line.315"></a>
+<span class="sourceLineNo">316</span><a name="line.316"></a>
+<span class="sourceLineNo">317</span>    /**<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     * Given an S key to look up, gets a 2D int array representing the key's matching bundle. The bundle is likely to<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * use a representation for the first sub-array that will be meaningless without internal information from this<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * BundleBiMap, but the second sub-array, if present, should match the variation supplied with that bundle<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * to {@link #put(Object[], int[], Object)} or {@link #put(Collection, int[], Object)}.<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * &lt;br&gt;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     * This method copies the 2D int array it returns, so modifying it won't affect the original BundleBiMap.<a name="line.323"></a>
+<span class="sourceLineNo">324</span>     * @param single a S key to look up<a name="line.324"></a>
+<span class="sourceLineNo">325</span>     * @return a copied 2D int array that represents a bundle, or null if single is not present in this<a name="line.325"></a>
+<span class="sourceLineNo">326</span>     */<a name="line.326"></a>
+<span class="sourceLineNo">327</span>    public int[][] getCode(S single)<a name="line.327"></a>
+<span class="sourceLineNo">328</span>    {<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        if(single == null) return null;<a name="line.329"></a>
+<span class="sourceLineNo">330</span>        return ArrayTools.copy(bm.getAFromB(single));<a name="line.330"></a>
+<span class="sourceLineNo">331</span>    }<a name="line.331"></a>
+<span class="sourceLineNo">332</span>    /**<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * Given an index to look up, gets a 2D int array representing the bundle at that index. The bundle is likely to<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * use a representation for the first sub-array that will be meaningless without internal information from this<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     * BundleBiMap, but the second sub-array, if present, should match the variation supplied with that bundle<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     * to {@link #put(Object[], int[], Object)} or {@link #put(Collection, int[], Object)}.<a name="line.336"></a>
+<span class="sourceLineNo">337</span>     * &lt;br&gt;<a name="line.337"></a>
+<span class="sourceLineNo">338</span>     * This method copies the 2D int array it returns, so modifying it won't affect the original BundleBiMap.<a name="line.338"></a>
+<span class="sourceLineNo">339</span>     * @param index an int index to look up<a name="line.339"></a>
+<span class="sourceLineNo">340</span>     * @return a 2D int array that represents a bundle, or null if index is out of bounds<a name="line.340"></a>
+<span class="sourceLineNo">341</span>     */<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    public int[][] getCodeAt(int index)<a name="line.342"></a>
+<span class="sourceLineNo">343</span>    {<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        return ArrayTools.copy(bm.getAAt(index));<a name="line.344"></a>
+<span class="sourceLineNo">345</span>    }<a name="line.345"></a>
+<span class="sourceLineNo">346</span>    /**<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * Given an index to look up, gets the S key present at that position in the ordering.<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     * @param index an int index to look up<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     * @return a 2D int array that represents a bundle, or null if index is out of bounds<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     */<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    public S singleAt(int index)<a name="line.351"></a>
+<span class="sourceLineNo">352</span>    {<a name="line.352"></a>
+<span class="sourceLineNo">353</span>        return bm.getBAt(index);<a name="line.353"></a>
+<span class="sourceLineNo">354</span>    }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>    /**<a name="line.356"></a>
+<span class="sourceLineNo">357</span>     * Given a bundle of E keys as an array with no variation, gets the matching S key for that bundle, or null if there<a name="line.357"></a>
+<span class="sourceLineNo">358</span>     * is none.<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * @param e an array of E<a name="line.359"></a>
+<span class="sourceLineNo">360</span>     * @return the S key that corresponds to the given bundle, e<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     */<a name="line.361"></a>
+<span class="sourceLineNo">362</span>    public S getSingle(E[] e)<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    {<a name="line.363"></a>
+<span class="sourceLineNo">364</span>        if(e == null) return null;<a name="line.364"></a>
+<span class="sourceLineNo">365</span>        return bm.getBFromA(new int[][]{elements.getArray(e)});<a name="line.365"></a>
+<span class="sourceLineNo">366</span>    }<a name="line.366"></a>
+<span class="sourceLineNo">367</span><a name="line.367"></a>
+<span class="sourceLineNo">368</span>    /**<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     * Given a bundle of E keys as an array with an int array variation, gets the matching S key for that bundle, or<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     * null if there is none.<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     * @param e an array of E element keys<a name="line.371"></a>
+<span class="sourceLineNo">372</span>     * @param variations an int array that should match an int array used as a variation parameter to put<a name="line.372"></a>
+<span class="sourceLineNo">373</span>     * @return the S key that corresponds to the given bundle, e combined with variations<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     */<a name="line.374"></a>
+<span class="sourceLineNo">375</span>    public S getSingle(E[] e, int[] variations)<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    {<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        if(e == null || variations == null) return null;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        return bm.getBFromA(new int[][]{elements.getArray(e), variations});<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    }<a name="line.379"></a>
+<span class="sourceLineNo">380</span><a name="line.380"></a>
+<span class="sourceLineNo">381</span>    /**<a name="line.381"></a>
+<span class="sourceLineNo">382</span>     * Given a bundle of E keys as a Collection with no variation, gets the matching S key for that bundle, or<a name="line.382"></a>
+<span class="sourceLineNo">383</span>     * null if there is none.<a name="line.383"></a>
+<span class="sourceLineNo">384</span>     * @param e a Collection of E element keys (each key can be an E or an instance of any subclass of E)<a name="line.384"></a>
+<span class="sourceLineNo">385</span>     * @return the S key that corresponds to the given bundle, e<a name="line.385"></a>
+<span class="sourceLineNo">386</span>     */<a name="line.386"></a>
+<span class="sourceLineNo">387</span>    public S getSingle(Collection&lt;? extends E&gt; e)<a name="line.387"></a>
+<span class="sourceLineNo">388</span>    {<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        if(e == null) return null;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        return bm.getBFromA(new int[][]{elements.getArray(e)});<a name="line.390"></a>
+<span class="sourceLineNo">391</span>    }<a name="line.391"></a>
+<span class="sourceLineNo">392</span><a name="line.392"></a>
+<span class="sourceLineNo">393</span>    /**<a name="line.393"></a>
+<span class="sourceLineNo">394</span>     * Given a bundle of E keys as a Collection with an int array variation, gets the matching S key for that bundle, or<a name="line.394"></a>
+<span class="sourceLineNo">395</span>     * null if there is none.<a name="line.395"></a>
+<span class="sourceLineNo">396</span>     * @param e a Collection of E element keys (each key can be an E or an instance of any subclass of E)<a name="line.396"></a>
+<span class="sourceLineNo">397</span>     * @param variations an int array that should match an int array used as a variation parameter to put<a name="line.397"></a>
+<span class="sourceLineNo">398</span>     * @return the S key that corresponds to the given bundle, e combined with variations<a name="line.398"></a>
+<span class="sourceLineNo">399</span>     */<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    public S getSingle(Collection&lt;? extends E&gt; e, int[] variations)<a name="line.400"></a>
+<span class="sourceLineNo">401</span>    {<a name="line.401"></a>
+<span class="sourceLineNo">402</span>        if(e == null || variations == null) return null;<a name="line.402"></a>
+<span class="sourceLineNo">403</span>        return bm.getBFromA(new int[][]{elements.getArray(e), variations});<a name="line.403"></a>
+<span class="sourceLineNo">404</span>    }<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    /**<a name="line.405"></a>
+<span class="sourceLineNo">406</span>     * Given a bundle as a coded 2D int array, gets the matching S key for that bundle, or null if there is none.<a name="line.406"></a>
+<span class="sourceLineNo">407</span>     * The code parameter should be obtained from one of the methods that specifically returns that kind of 2D array,<a name="line.407"></a>
+<span class="sourceLineNo">408</span>     * since the code uses internal information to efficiently represent a bundle.<a name="line.408"></a>
+<span class="sourceLineNo">409</span>     * @param code a 2D int array representing a bundle that should have been obtained directly from this object<a name="line.409"></a>
+<span class="sourceLineNo">410</span>     * @return the S key that corresponds to the given coded bundle<a name="line.410"></a>
+<span class="sourceLineNo">411</span>     */<a name="line.411"></a>
+<span class="sourceLineNo">412</span>    public S getSingleCoded(int[][] code)<a name="line.412"></a>
+<span class="sourceLineNo">413</span>    {<a name="line.413"></a>
+<span class="sourceLineNo">414</span>        if(code == null) return null;<a name="line.414"></a>
+<span class="sourceLineNo">415</span>        return bm.getBFromA(code);<a name="line.415"></a>
+<span class="sourceLineNo">416</span>    }<a name="line.416"></a>
+<span class="sourceLineNo">417</span><a name="line.417"></a>
+<span class="sourceLineNo">418</span>    /**<a name="line.418"></a>
+<span class="sourceLineNo">419</span>     * Gets (in near-constant time) the index of the given S single key in the ordering.<a name="line.419"></a>
+<span class="sourceLineNo">420</span>     * @param single a S single key to look up<a name="line.420"></a>
+<span class="sourceLineNo">421</span>     * @return the position in the ordering of single<a name="line.421"></a>
+<span class="sourceLineNo">422</span>     */<a name="line.422"></a>
+<span class="sourceLineNo">423</span>    public int indexOfSingle(S single)<a name="line.423"></a>
+<span class="sourceLineNo">424</span>    {<a name="line.424"></a>
+<span class="sourceLineNo">425</span>        return bm.indexOfB(single);<a name="line.425"></a>
+<span class="sourceLineNo">426</span>    }<a name="line.426"></a>
+<span class="sourceLineNo">427</span><a name="line.427"></a>
+<span class="sourceLineNo">428</span>    /**<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     * Given a coded bundle as produced by some methods in this class, decodes the elements part of the bundle and<a name="line.429"></a>
+<span class="sourceLineNo">430</span>     * returns it as a newly-allocated OrderedSet of E element keys.<a name="line.430"></a>
+<span class="sourceLineNo">431</span>     * @param bundle a coded bundle as a 2D int array<a name="line.431"></a>
+<span class="sourceLineNo">432</span>     * @return an OrderedSet of E element keys corresponding to the data coded into bundle<a name="line.432"></a>
+<span class="sourceLineNo">433</span>     */<a name="line.433"></a>
+<span class="sourceLineNo">434</span>    public OrderedSet&lt;E&gt; elementsFromCode(int[][] bundle)<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    {<a name="line.435"></a>
+<span class="sourceLineNo">436</span>        if(bundle == null || bundle.length &lt; 1 || bundle[0] == null) return null;<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        return elements.keysAt(bundle[0]);<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    }<a name="line.438"></a>
+<span class="sourceLineNo">439</span><a name="line.439"></a>
+<span class="sourceLineNo">440</span>    /**<a name="line.440"></a>
+<span class="sourceLineNo">441</span>     * Given a coded bundle as produced by some methods in this class, decodes the variation part of the bundle, if<a name="line.441"></a>
+<span class="sourceLineNo">442</span>     * present, and returns it as a newly-allocated 1D int array. If there is no variation in the given coded bundle,<a name="line.442"></a>
+<span class="sourceLineNo">443</span>     * this returns null.<a name="line.443"></a>
+<span class="sourceLineNo">444</span>     * @param bundle a coded bundle as a 2D int array<a name="line.444"></a>
+<span class="sourceLineNo">445</span>     * @return an OrderedSet of E element keys corresponding to the data coded into bundle<a name="line.445"></a>
+<span class="sourceLineNo">446</span>     */<a name="line.446"></a>
+<span class="sourceLineNo">447</span>    public int[] variationFromCode(int[][] bundle)<a name="line.447"></a>
+<span class="sourceLineNo">448</span>    {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>        if(bundle == null || bundle.length &lt; 2 || bundle[1] == null) return null;<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        int[] ret = new int[bundle[1].length];<a name="line.450"></a>
+<span class="sourceLineNo">451</span>        System.arraycopy(bundle[1], 0, ret, 0, ret.length);<a name="line.451"></a>
+<span class="sourceLineNo">452</span>        return ret;<a name="line.452"></a>
+<span class="sourceLineNo">453</span>    }<a name="line.453"></a>
+<span class="sourceLineNo">454</span><a name="line.454"></a>
+<span class="sourceLineNo">455</span>    /**<a name="line.455"></a>
+<span class="sourceLineNo">456</span>     * Given an S key to look up, gets a (newly-allocated) OrderedSet of E element keys corresponding to that S key.<a name="line.456"></a>
+<span class="sourceLineNo">457</span>     * If a variation is part of the bundle, it will not be present in this, but a copy can be retrieved with<a name="line.457"></a>
+<span class="sourceLineNo">458</span>     * {@link #getBundleVariation(Object)}.<a name="line.458"></a>
+<span class="sourceLineNo">459</span>     * @param single a S key to look up<a name="line.459"></a>
+<span class="sourceLineNo">460</span>     * @return an OrderedSet of the E elements used in the bundle that corresponds to single, or null if invalid<a name="line.460"></a>
+<span class="sourceLineNo">461</span>     */<a name="line.461"></a>
+<span class="sourceLineNo">462</span>    public OrderedSet&lt;E&gt; getBundleElements(S single)<a name="line.462"></a>
+<span class="sourceLineNo">463</span>    {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>        int[][] bundle;<a name="line.464"></a>
+<span class="sourceLineNo">465</span>        if(single == null || (bundle = bm.getAFromB(single)) == null || bundle.length &lt; 1 || bundle[0] == null) return null;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        return elements.keysAt(bundle[0]);<a name="line.466"></a>
+<span class="sourceLineNo">467</span>    }<a name="line.467"></a>
+<span class="sourceLineNo">468</span><a name="line.468"></a>
+<span class="sourceLineNo">469</span>    /**<a name="line.469"></a>
+<span class="sourceLineNo">470</span>     * Given an S key to look up, gets a (newly-allocated) int array that is equivalent to the variation part of the<a name="line.470"></a>
+<span class="sourceLineNo">471</span>     * bundle corresponding to single. If there is no variation in the corresponding bundle, then this returns null.<a name="line.471"></a>
+<span class="sourceLineNo">472</span>     * To get the E elements that are the main part of a bundle, you can use {@link #getBundleElements(Object)}.<a name="line.472"></a>
+<span class="sourceLineNo">473</span>     * @param single a S key to look up<a name="line.473"></a>
+<span class="sourceLineNo">474</span>     * @return an int array copied from the variation part of the bundle that corresponds to single, or null if invalid<a name="line.474"></a>
+<span class="sourceLineNo">475</span>     */<a name="line.475"></a>
+<span class="sourceLineNo">476</span>    public int[] getBundleVariation(S single)<a name="line.476"></a>
+<span class="sourceLineNo">477</span>    {<a name="line.477"></a>
+<span class="sourceLineNo">478</span>        int[][] bundle;<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        if(single == null || (bundle = bm.getAFromB(single)) == null || bundle.length &lt; 2 || bundle[1] == null) return null;<a name="line.479"></a>
+<span class="sourceLineNo">480</span>        int[] ret = new int[bundle[1].length];<a name="line.480"></a>
+<span class="sourceLineNo">481</span>        System.arraycopy(bundle[1], 0, ret, 0, ret.length);<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        return ret;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>    }<a name="line.483"></a>
+<span class="sourceLineNo">484</span><a name="line.484"></a>
+<span class="sourceLineNo">485</span>    /**<a name="line.485"></a>
+<span class="sourceLineNo">486</span>     * Given an index to look up, gets a (newly-allocated) OrderedSet of E element keys in the bundle at that index.<a name="line.486"></a>
+<span class="sourceLineNo">487</span>     * If a variation is part of the bundle, it will not be present in this, but a copy can be retrieved with<a name="line.487"></a>
+<span class="sourceLineNo">488</span>     * {@link #getBundleVariationAt(int)}.<a name="line.488"></a>
+<span class="sourceLineNo">489</span>     * @param index an int position in the ordering to look up<a name="line.489"></a>
+<span class="sourceLineNo">490</span>     * @return an OrderedSet of the E elements used in the bundle present at index, or null if invalid<a name="line.490"></a>
+<span class="sourceLineNo">491</span>     */<a name="line.491"></a>
+<span class="sourceLineNo">492</span>    public OrderedSet&lt;E&gt; getBundleElementsAt(int index)<a name="line.492"></a>
+<span class="sourceLineNo">493</span>    {<a name="line.493"></a>
+<span class="sourceLineNo">494</span>        int[][] bundle;<a name="line.494"></a>
+<span class="sourceLineNo">495</span>        if((bundle = bm.getAAt(index)) == null || bundle.length &lt; 1) return null;<a name="line.495"></a>
+<span class="sourceLineNo">496</span>        return elements.keysAt(bundle[0]);<a name="line.496"></a>
+<span class="sourceLineNo">497</span>    }<a name="line.497"></a>
+<span class="sourceLineNo">498</span>    /**<a name="line.498"></a>
+<span class="sourceLineNo">499</span>     * Given an index to look up, gets a (newly-allocated) int array that is equivalent to the variation part of the<a name="line.499"></a>
+<span class="sourceLineNo">500</span>     * bundle present at that index. If there is no variation in the corresponding bundle, then this returns null.<a name="line.500"></a>
+<span class="sourceLineNo">501</span>     * To get the E elements that are the main part of a bundle, you can use {@link #getBundleElementsAt(int)}.<a name="line.501"></a>
+<span class="sourceLineNo">502</span>     * @param index an int position in the ordering to look up<a name="line.502"></a>
+<span class="sourceLineNo">503</span>     * @return an int array copied from the variation part of the bundle present at index, or null if invalid<a name="line.503"></a>
+<span class="sourceLineNo">504</span>     */<a name="line.504"></a>
+<span class="sourceLineNo">505</span>    public int[] getBundleVariationAt(int index)<a name="line.505"></a>
+<span class="sourceLineNo">506</span>    {<a name="line.506"></a>
+<span class="sourceLineNo">507</span>        int[][] bundle;<a name="line.507"></a>
+<span class="sourceLineNo">508</span>        if((bundle = bm.getAAt(index)) == null || bundle.length &lt; 2 || bundle[1] == null) return null;<a name="line.508"></a>
+<span class="sourceLineNo">509</span>        int[] ret = new int[bundle[1].length];<a name="line.509"></a>
+<span class="sourceLineNo">510</span>        System.arraycopy(bundle[1], 0, ret, 0, ret.length);<a name="line.510"></a>
+<span class="sourceLineNo">511</span>        return ret;<a name="line.511"></a>
+<span class="sourceLineNo">512</span>    }<a name="line.512"></a>
+<span class="sourceLineNo">513</span><a name="line.513"></a>
+<span class="sourceLineNo">514</span>    /**<a name="line.514"></a>
+<span class="sourceLineNo">515</span>     * Given an E element key that could be used in one or more bundles this uses, finds all S single keys corresponding<a name="line.515"></a>
+<span class="sourceLineNo">516</span>     * to bundles that contain the given element. Thus, if E was String and this BundleBiMap contained ["Copper", "Tin"]<a name="line.516"></a>
+<span class="sourceLineNo">517</span>     * mapped to "Bronze" and ["Zinc", "Copper"] mapped to "Brass", then calling this method with "Copper" would get an<a name="line.517"></a>
+<span class="sourceLineNo">518</span>     * OrderedSet that contains ["Bronze", "Brass"].<a name="line.518"></a>
+<span class="sourceLineNo">519</span>     * @param element an E element key to look up (probably a component of one or more bundles)<a name="line.519"></a>
+<span class="sourceLineNo">520</span>     * @return an OrderedSet of all S keys where the given element is part of the bundle corresponding to that S key, or null if E does not match anything<a name="line.520"></a>
+<span class="sourceLineNo">521</span>     */<a name="line.521"></a>
+<span class="sourceLineNo">522</span>    public OrderedSet&lt;S&gt; getManySingles(E element)<a name="line.522"></a>
+<span class="sourceLineNo">523</span>    {<a name="line.523"></a>
+<span class="sourceLineNo">524</span>        if(element == null) return null;<a name="line.524"></a>
+<span class="sourceLineNo">525</span>        int pos;<a name="line.525"></a>
+<span class="sourceLineNo">526</span>        if((pos = elements.getInt(element)) &lt; 0) return null;<a name="line.526"></a>
+<span class="sourceLineNo">527</span>        return bm.keysB.keysAt(mm.get(pos));<a name="line.527"></a>
+<span class="sourceLineNo">528</span>    }<a name="line.528"></a>
+<span class="sourceLineNo">529</span>    /**<a name="line.529"></a>
+<span class="sourceLineNo">530</span>     * Given an E element key that could be used in one or more bundles this uses, gets all bundles in this object that<a name="line.530"></a>
+<span class="sourceLineNo">531</span>     * contain the given element, as coded 2D int arrays. These coded bundles can be given to<a name="line.531"></a>
+<span class="sourceLineNo">532</span>     * {@link #elementsFromCode(int[][])} and {@link #variationFromCode(int[][])} to get usable information from them.<a name="line.532"></a>
+<span class="sourceLineNo">533</span>     * @param element an E element key to look up (probably a component of one or more bundles)<a name="line.533"></a>
+<span class="sourceLineNo">534</span>     * @return an OrderedSet of all coded 2D int array bundles that contain the given element, or null if E is not in any bundles<a name="line.534"></a>
+<span class="sourceLineNo">535</span>     */<a name="line.535"></a>
+<span class="sourceLineNo">536</span>    public OrderedSet&lt;int[][]&gt; getManyCoded(E element)<a name="line.536"></a>
+<span class="sourceLineNo">537</span>    {<a name="line.537"></a>
+<span class="sourceLineNo">538</span>        if(element == null) return null;<a name="line.538"></a>
+<span class="sourceLineNo">539</span>        int pos;<a name="line.539"></a>
+<span class="sourceLineNo">540</span>        if((pos = elements.getInt(element)) &lt; 0) return null;<a name="line.540"></a>
+<span class="sourceLineNo">541</span>        return bm.keysA.keysAt(mm.get(pos));<a name="line.541"></a>
+<span class="sourceLineNo">542</span>    }<a name="line.542"></a>
+<span class="sourceLineNo">543</span><a name="line.543"></a>
+<span class="sourceLineNo">544</span>    /**<a name="line.544"></a>
+<span class="sourceLineNo">545</span>     * Given an E element key that could be used in one or more bundles this uses, gets all indices in the ordering<a name="line.545"></a>
+<span class="sourceLineNo">546</span>     * that contain a bundle with that element.  From such an index, you can use {@link #getSingleAt(int)} to get the<a name="line.546"></a>
+<span class="sourceLineNo">547</span>     * S key at that position, {@link #getBundleElementsAt(int)} to get the E element keys at that position,<a name="line.547"></a>
+<span class="sourceLineNo">548</span>     * {@link #getBundleVariationAt(int)} to get the possible variation at that position, or {@link #getCodeAt(int)} to<a name="line.548"></a>
+<span class="sourceLineNo">549</span>     * get the coded bundle at that position.<a name="line.549"></a>
+<span class="sourceLineNo">550</span>     * @return an OrderedSet of all coded 2D int array bundles that contain the given element, or null if E is not in any bundles<a name="line.550"></a>
+<span class="sourceLineNo">551</span>     */<a name="line.551"></a>
+<span class="sourceLineNo">552</span>    public int[] getManyIndices(E element)<a name="line.552"></a>
+<span class="sourceLineNo">553</span>    {<a name="line.553"></a>
+<span class="sourceLineNo">554</span>        if(element == null) return null;<a name="line.554"></a>
+<span class="sourceLineNo">555</span>        int pos;<a name="line.555"></a>
+<span class="sourceLineNo">556</span>        if((pos = elements.getInt(element)) &lt; 0) return null;<a name="line.556"></a>
+<span class="sourceLineNo">557</span>        return mm.get(pos).toArray();<a name="line.557"></a>
+<span class="sourceLineNo">558</span>    }<a name="line.558"></a>
+<span class="sourceLineNo">559</span><a name="line.559"></a>
+<span class="sourceLineNo">560</span>    /**<a name="line.560"></a>
+<span class="sourceLineNo">561</span>     * Reorders this BundleBiMap using {@code ordering}, which has the same length as this object's {@link #size()}<a name="line.561"></a>
+<span class="sourceLineNo">562</span>     * and can be generated with {@link ArrayTools#range(int)} (which, if applied, would produce no<a name="line.562"></a>
+<span class="sourceLineNo">563</span>     * change to the current ordering), {@link IRNG#randomOrdering(int)} (which gives a random ordering, and if<a name="line.563"></a>
+<span class="sourceLineNo">564</span>     * applied immediately would be the same as calling {@link #shuffle(IRNG)}), or made in some other way. If you<a name="line.564"></a>
+<span class="sourceLineNo">565</span>     * already have an ordering and want to make a different ordering that can undo the change, you can use<a name="line.565"></a>
+<span class="sourceLineNo">566</span>     * {@link ArrayTools#invertOrdering(int[])} called on the original ordering. The effects of this method, if called<a name="line.566"></a>
+<span class="sourceLineNo">567</span>     * with an ordering that has repeat occurrences of an int or contains ints that are larger than its size should<a name="line.567"></a>
+<span class="sourceLineNo">568</span>     * permit, are undefined other than the vague definition of "probably bad, unless you like crashes."<a name="line.568"></a>
+<span class="sourceLineNo">569</span>     * @param ordering an int array or vararg that must contain each int from 0 to {@link #size()}<a name="line.569"></a>
+<span class="sourceLineNo">570</span>     * @return this for chaining<a name="line.570"></a>
+<span class="sourceLineNo">571</span>     */<a name="line.571"></a>
+<span class="sourceLineNo">572</span>    public BundleBiMap&lt;E, S&gt; reorder(int... ordering)<a name="line.572"></a>
+<span class="sourceLineNo">573</span>    {<a name="line.573"></a>
+<span class="sourceLineNo">574</span>        if(ordering == null || ordering.length != bm.size()) return this;<a name="line.574"></a>
+<span class="sourceLineNo">575</span>        bm.reorder(ordering);<a name="line.575"></a>
+<span class="sourceLineNo">576</span>        int len = mm.size();<a name="line.576"></a>
+<span class="sourceLineNo">577</span>        for (int i = 0; i &lt; len; i++) {<a name="line.577"></a>
+<span class="sourceLineNo">578</span>            IntVLA iv = mm.get(i);<a name="line.578"></a>
+<span class="sourceLineNo">579</span>            for (int j = 0; j &lt; iv.size; j++) {<a name="line.579"></a>
+<span class="sourceLineNo">580</span>                iv.set(i, ordering[iv.get(i)]);<a name="line.580"></a>
+<span class="sourceLineNo">581</span>            }<a name="line.581"></a>
+<span class="sourceLineNo">582</span>        }<a name="line.582"></a>
+<span class="sourceLineNo">583</span>        return this;<a name="line.583"></a>
+<span class="sourceLineNo">584</span>    }<a name="line.584"></a>
+<span class="sourceLineNo">585</span><a name="line.585"></a>
+<span class="sourceLineNo">586</span>    /**<a name="line.586"></a>
+<span class="sourceLineNo">587</span>     * Generates a random ordering with rng and applies the same ordering to all kinds of keys this has; they will<a name="line.587"></a>
+<span class="sourceLineNo">588</span>     * maintain their current association to other keys but their ordering/indices will change.<a name="line.588"></a>
+<span class="sourceLineNo">589</span>     * @param rng an IRNG to produce the random ordering this will use<a name="line.589"></a>
+<span class="sourceLineNo">590</span>     * @return this for chaining<a name="line.590"></a>
+<span class="sourceLineNo">591</span>     */<a name="line.591"></a>
+<span class="sourceLineNo">592</span>    public BundleBiMap&lt;E, S&gt; shuffle(IRNG rng)<a name="line.592"></a>
+<span class="sourceLineNo">593</span>    {<a name="line.593"></a>
+<span class="sourceLineNo">594</span>        return reorder(rng.randomOrdering(bm.size()));<a name="line.594"></a>
+<span class="sourceLineNo">595</span>    }<a name="line.595"></a>
+<span class="sourceLineNo">596</span><a name="line.596"></a>
+<span class="sourceLineNo">597</span>    /**<a name="line.597"></a>
+<span class="sourceLineNo">598</span>     * Creates a new iterator over the individual E element keys this holds, with a larger total count the iterator may<a name="line.598"></a>
+<span class="sourceLineNo">599</span>     * yield than {@link #size()} in most cases (it should be equal to {@link #elementSize()}), and in no particular<a name="line.599"></a>
+<span class="sourceLineNo">600</span>     * order (though the order should be stable across versions and platforms, no special means are provided to further<a name="line.600"></a>
+<span class="sourceLineNo">601</span>     * control the order). The E keys are individual, not bundled, and duplicate keys should never be encountered even<a name="line.601"></a>
+<span class="sourceLineNo">602</span>     * if an E key appears in many bundles.<a name="line.602"></a>
+<span class="sourceLineNo">603</span>     * @return a newly-created iterator over this BundleBiMap's individual (non-bundled) E keys<a name="line.603"></a>
+<span class="sourceLineNo">604</span>     */<a name="line.604"></a>
+<span class="sourceLineNo">605</span>    public Iterator&lt;E&gt; iteratorElements()<a name="line.605"></a>
+<span class="sourceLineNo">606</span>    {<a name="line.606"></a>
+<span class="sourceLineNo">607</span>        return elements.iterator();<a name="line.607"></a>
+<span class="sourceLineNo">608</span>    }<a name="line.608"></a>
+<span class="sourceLineNo">609</span>    /**<a name="line.609"></a>
+<span class="sourceLineNo">610</span>     * Creates a new iterator over the S single keys this holds. The total number of items this yields should be equal<a name="line.610"></a>
+<span class="sourceLineNo">611</span>     * to {@link #size()}. This method can be problematic for garbage collection if called very frequently; it may be<a name="line.611"></a>
+<span class="sourceLineNo">612</span>     * better to access items by index (which also lets you access other keys associated with that index) using<a name="line.612"></a>
+<span class="sourceLineNo">613</span>     * {@link #getSingleAt(int)} in a for(int i=0...) loop.<a name="line.613"></a>
+<span class="sourceLineNo">614</span>     * @return a newly-created iterator over this BundleBiMap's S keys<a name="line.614"></a>
+<span class="sourceLineNo">615</span>     */<a name="line.615"></a>
+<span class="sourceLineNo">616</span>    public Iterator&lt;S&gt; iteratorSingles()<a name="line.616"></a>
+<span class="sourceLineNo">617</span>    {<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        return bm.iteratorB();<a name="line.618"></a>
+<span class="sourceLineNo">619</span>    }<a name="line.619"></a>
+<span class="sourceLineNo">620</span><a name="line.620"></a>
+<span class="sourceLineNo">621</span>    /**<a name="line.621"></a>
+<span class="sourceLineNo">622</span>     * Gets and caches the individual E keys as a Collection that implements SortedSet (and so also implements Set).<a name="line.622"></a>
+<span class="sourceLineNo">623</span>     * @return the E keys as a SortedSet<a name="line.623"></a>
+<span class="sourceLineNo">624</span>     */<a name="line.624"></a>
+<span class="sourceLineNo">625</span>    public SortedSet&lt;E&gt; getElementSet() {<a name="line.625"></a>
+<span class="sourceLineNo">626</span>        return elements.keySet();<a name="line.626"></a>
+<span class="sourceLineNo">627</span>    }<a name="line.627"></a>
+<span class="sourceLineNo">628</span><a name="line.628"></a>
+<span class="sourceLineNo">629</span>    /**<a name="line.629"></a>
+<span class="sourceLineNo">630</span>     * Gets and caches the S single keys as a Collection that implements SortedSet (and so also implements Set).<a name="line.630"></a>
+<span class="sourceLineNo">631</span>     * @return the S keys as a SortedSet<a name="line.631"></a>
+<span class="sourceLineNo">632</span>     */<a name="line.632"></a>
+<span class="sourceLineNo">633</span>    public SortedSet&lt;S&gt; getSingleSet() {<a name="line.633"></a>
+<span class="sourceLineNo">634</span>        return bm.getSetB();<a name="line.634"></a>
+<span class="sourceLineNo">635</span>    }<a name="line.635"></a>
+<span class="sourceLineNo">636</span><a name="line.636"></a>
+<span class="sourceLineNo">637</span>    /**<a name="line.637"></a>
+<span class="sourceLineNo">638</span>     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one.<a name="line.638"></a>
+<span class="sourceLineNo">639</span>     * @return the E keys as an OrderedSet<a name="line.639"></a>
+<span class="sourceLineNo">640</span>     */<a name="line.640"></a>
+<span class="sourceLineNo">641</span>    public OrderedSet&lt;E&gt; getElementOrderedSet() {<a name="line.641"></a>
+<span class="sourceLineNo">642</span>        return elements.keysAsOrderedSet();<a name="line.642"></a>
+<span class="sourceLineNo">643</span>    }<a name="line.643"></a>
+<span class="sourceLineNo">644</span><a name="line.644"></a>
+<span class="sourceLineNo">645</span>    /**<a name="line.645"></a>
+<span class="sourceLineNo">646</span>     * To be called sparingly, since this allocates a new OrderedSet instead of reusing one.<a name="line.646"></a>
+<span class="sourceLineNo">647</span>     * @return the S keys as an OrderedSet<a name="line.647"></a>
+<span class="sourceLineNo">648</span>     */<a name="line.648"></a>
+<span class="sourceLineNo">649</span>    public OrderedSet&lt;S&gt; getSingleOrderedSet() {<a name="line.649"></a>
+<span class="sourceLineNo">650</span>        return bm.getOrderedSetB();<a name="line.650"></a>
+<span class="sourceLineNo">651</span>    }<a name="line.651"></a>
+<span class="sourceLineNo">652</span><a name="line.652"></a>
+<span class="sourceLineNo">653</span>    /**<a name="line.653"></a>
+<span class="sourceLineNo">654</span>     * Gets the total number of bundle-to-single pairs in this BundleBiMap.<a name="line.654"></a>
+<span class="sourceLineNo">655</span>     * @return the total number of bundle keys (equivalently, the number of single keys) in this object<a name="line.655"></a>
+<span class="sourceLineNo">656</span>     */<a name="line.656"></a>
+<span class="sourceLineNo">657</span>    public int size() {<a name="line.657"></a>
+<span class="sourceLineNo">658</span>        return bm.size();<a name="line.658"></a>
+<span class="sourceLineNo">659</span>    }<a name="line.659"></a>
+<span class="sourceLineNo">660</span><a name="line.660"></a>
+<span class="sourceLineNo">661</span>    /**<a name="line.661"></a>
+<span class="sourceLineNo">662</span>     * Gets the total number of unique E element keys across all bundles in this BundleBiMap. Usually not the same as<a name="line.662"></a>
+<span class="sourceLineNo">663</span>     * {@link #size()}, and ordinarily a fair amount larger, though this can also be smaller.<a name="line.663"></a>
+<span class="sourceLineNo">664</span>     * @return the total number of unique E element keys in all bundles this contains<a name="line.664"></a>
+<span class="sourceLineNo">665</span>     */<a name="line.665"></a>
+<span class="sourceLineNo">666</span>    public int elementSize() {<a name="line.666"></a>
+<span class="sourceLineNo">667</span>        return elements.size();<a name="line.667"></a>
+<span class="sourceLineNo">668</span>    }<a name="line.668"></a>
+<span class="sourceLineNo">669</span><a name="line.669"></a>
+<span class="sourceLineNo">670</span>    public boolean isEmpty()<a name="line.670"></a>
+<span class="sourceLineNo">671</span>    {<a name="line.671"></a>
+<span class="sourceLineNo">672</span>        return bm.isEmpty();<a name="line.672"></a>
+<span class="sourceLineNo">673</span>    }<a name="line.673"></a>
+<span class="sourceLineNo">674</span><a name="line.674"></a>
+<span class="sourceLineNo">675</span>}<a name="line.675"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

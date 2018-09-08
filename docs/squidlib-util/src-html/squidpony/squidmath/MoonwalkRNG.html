@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * An IRNG implementation that allows the extra functionality of a StatefulRandomness and a SkippingRandomness, as well<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * as allowing reverse-lookup of the state that produced a long using the static {@link #inverseNextLong(long)} method,<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * and distance checks between two generated numbers with the static {@link #distance(long, long)} method. A task this<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * might be useful for could be simple obfuscation that is hard to undo unless you know the starting state, like this:<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * &lt;ol&gt;<a name="line.12"></a>
+<span class="sourceLineNo">013</span> *     &lt;li&gt;take a sequence of numbers or characters and a MoonwalkRNG with a given starting state,&lt;/li&gt;<a name="line.13"></a>
+<span class="sourceLineNo">014</span> *     &lt;li&gt;modify each item in the sequence with a random but reversible change such as a bitwise XOR<a name="line.14"></a>
+<span class="sourceLineNo">015</span> *     with a number produced by the MoonwalkRNG (such as by {@link #nextInt()}),&lt;/li&gt;<a name="line.15"></a>
+<span class="sourceLineNo">016</span> *     &lt;li&gt;on a later run, take the modified sequence and a MoonwalkRNG with the same starting state (but no direct<a name="line.16"></a>
+<span class="sourceLineNo">017</span> *     access to the starting sequence), and skip ahead by the length of the sequence with {@link #skip(long)},&lt;/li&gt;<a name="line.17"></a>
+<span class="sourceLineNo">018</span> *     &lt;li&gt;starting at the end of the sequence, apply the reverse change to the items with numbers generated<a name="line.18"></a>
+<span class="sourceLineNo">019</span> *     &lt;b&gt;backwards&lt;/b&gt; by MoonwalkRNG with {@link #previousInt()} (such as a XOR if the number was originally modified<a name="line.19"></a>
+<span class="sourceLineNo">020</span> *     with a XOR or an addition if it was originally modified with a subtraction),&lt;/li&gt;<a name="line.20"></a>
+<span class="sourceLineNo">021</span> *     &lt;li&gt;when the full sequence has been reversed, you now have the original sequence again./li&gt;<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * &lt;/ol&gt;<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * This is also possible with determine() methods in various RandomnessSource implementations, but those require some<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * extra work to allow them to use sequential inputs instead of inputs that have a large difference between generations.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * Internally, this is like {@link StatefulRNG} if it always used {@link LightRNG} and allowed access to LightRNG's<a name="line.26"></a>
+<span class="sourceLineNo">027</span> * skip() method as well as the reverse lookup and distance methods that aren't in LightRNG but are allowed by it.<a name="line.27"></a>
+<span class="sourceLineNo">028</span> * &lt;br&gt;<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * The name comes from the ability of this generator to easily go in reverse, like the moonwalk dance move, including<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * {@link #previousLong()} and {@link #skip(long)} for advancing backwards, but also {@link #inverseNextLong(long)} to<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * go from output back to state.<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;br&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * Created by Tommy Ettinger on 4/14/2018.<a name="line.33"></a>
+<span class="sourceLineNo">034</span> */<a name="line.34"></a>
+<span class="sourceLineNo">035</span>public class MoonwalkRNG extends AbstractRNG implements StatefulRandomness, SkippingRandomness, Serializable {<a name="line.35"></a>
+<span class="sourceLineNo">036</span>    private static final long serialVersionUID = 1L;<a name="line.36"></a>
+<span class="sourceLineNo">037</span><a name="line.37"></a>
+<span class="sourceLineNo">038</span>    private long state;<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    /**<a name="line.39"></a>
+<span class="sourceLineNo">040</span>     * Default constructor; uses a random seed.<a name="line.40"></a>
+<span class="sourceLineNo">041</span>     */<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    public MoonwalkRNG() {<a name="line.42"></a>
+<span class="sourceLineNo">043</span>        this((long) ((Math.random() - 0.5) * 0x10000000000000L)<a name="line.43"></a>
+<span class="sourceLineNo">044</span>                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    /**<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     * Constructs a MoonwalkRNG with the given seed as-is; any seed can be given.<a name="line.48"></a>
+<span class="sourceLineNo">049</span>     * @param seed any long<a name="line.49"></a>
+<span class="sourceLineNo">050</span>     */<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    public MoonwalkRNG(long seed) {<a name="line.51"></a>
+<span class="sourceLineNo">052</span>        state = seed;<a name="line.52"></a>
+<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
+<span class="sourceLineNo">054</span><a name="line.54"></a>
+<span class="sourceLineNo">055</span>    /**<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * seed for this RNG.<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * @param seedString any CharSequence, such as a String or StringBuilder; if null this will use the seed 0<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
+<span class="sourceLineNo">060</span>    public MoonwalkRNG(CharSequence seedString) {<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        this(CrossHash.hash64(seedString));<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    }<a name="line.62"></a>
+<span class="sourceLineNo">063</span><a name="line.63"></a>
+<span class="sourceLineNo">064</span>    /**<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * Get up to 32 bits (inclusive) of random output; the int this produces<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * will not require more than {@code bits} bits to represent.<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     *<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * @param bits an int between 1 and 32, both inclusive<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @return a random number that fits in the specified number of bits<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    @Override<a name="line.71"></a>
+<span class="sourceLineNo">072</span>    public int next(int bits) {<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        return (int)(z ^ (z &gt;&gt;&gt; 31)) &gt;&gt;&gt; (32 - bits);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>    /**<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     *<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * @return a 32-bit random int.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     */<a name="line.83"></a>
+<span class="sourceLineNo">084</span>    @Override<a name="line.84"></a>
+<span class="sourceLineNo">085</span>    public int nextInt() {<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        return (int)(z ^ (z &gt;&gt;&gt; 31));<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>    /**<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     *<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * @return a 64-bit random long.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     */<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    @Override<a name="line.97"></a>
+<span class="sourceLineNo">098</span>    public long nextLong() {<a name="line.98"></a>
+<span class="sourceLineNo">099</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.100"></a>
+<span class="sourceLineNo">101</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        return z ^ (z &gt;&gt;&gt; 31);<a name="line.102"></a>
+<span class="sourceLineNo">103</span>    }<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    /**<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     * Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive), but advances the state<a name="line.105"></a>
+<span class="sourceLineNo">106</span>     * "backwards," such that calling {@link #nextInt()} alternating with this method will return the same pair of<a name="line.106"></a>
+<span class="sourceLineNo">107</span>     * numbers for as long as you keep alternating those two calls. This can be useful with {@link #skip(long)} when it<a name="line.107"></a>
+<span class="sourceLineNo">108</span>     * advances ahead by a large amount and you want to step backward to reverse another set of forward-advancing number<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * generations that had been done by other code.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     *<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * @return a 32-bit random int.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     */<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    public int previousInt() {<a name="line.113"></a>
+<span class="sourceLineNo">114</span>        long z = state -= 0x9E3779B97F4A7C15L;<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        return (int)(z ^ (z &gt;&gt;&gt; 31));<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    }<a name="line.118"></a>
+<span class="sourceLineNo">119</span><a name="line.119"></a>
+<span class="sourceLineNo">120</span>    /**<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive), but advances the state<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     * "backwards," such that calling {@link #nextLong()} alternating with this method will return the same pair of<a name="line.122"></a>
+<span class="sourceLineNo">123</span>     * numbers for as long as you keep alternating those two calls. This can be useful with {@link #skip(long)} when it<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * advances ahead by a large amount and you want to step backward to reverse another set of forward-advancing number<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * generations that had been done by other code.<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     *<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * @return a 64-bit random long.<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     */<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    public long previousLong() {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        long z = state -= 0x9E3779B97F4A7C15L;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.131"></a>
+<span class="sourceLineNo">132</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        return (z ^ (z &gt;&gt;&gt; 31));<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    }<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span><a name="line.136"></a>
+<span class="sourceLineNo">137</span>    /**<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * Get a random bit of state, interpreted as true or false with approximately equal likelihood.<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * &lt;br&gt;<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * This implementation uses a sign check and is able to avoid some calculations needed to get a full int or long.<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     *<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @return a random boolean.<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     */<a name="line.143"></a>
+<span class="sourceLineNo">144</span>    @Override<a name="line.144"></a>
+<span class="sourceLineNo">145</span>    public boolean nextBoolean() {<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        return ((z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL) &lt; 0;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>    }<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>    /**<a name="line.151"></a>
+<span class="sourceLineNo">152</span>     * Gets a random double between 0.0 inclusive and 1.0 exclusive.<a name="line.152"></a>
+<span class="sourceLineNo">153</span>     * This returns a maximum of 0.9999999999999999 because that is the largest double value that is less than 1.0 .<a name="line.153"></a>
+<span class="sourceLineNo">154</span>     *<a name="line.154"></a>
+<span class="sourceLineNo">155</span>     * @return a double between 0.0 (inclusive) and 0.9999999999999999 (inclusive)<a name="line.155"></a>
+<span class="sourceLineNo">156</span>     */<a name="line.156"></a>
+<span class="sourceLineNo">157</span>    @Override<a name="line.157"></a>
+<span class="sourceLineNo">158</span>    public double nextDouble() {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.159"></a>
+<span class="sourceLineNo">160</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.160"></a>
+<span class="sourceLineNo">161</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>        return ((z ^ (z &gt;&gt;&gt; 31)) &amp; 0x1fffffffffffffL) * 0x1p-53;<a name="line.162"></a>
+<span class="sourceLineNo">163</span>    }<a name="line.163"></a>
+<span class="sourceLineNo">164</span><a name="line.164"></a>
+<span class="sourceLineNo">165</span>    /**<a name="line.165"></a>
+<span class="sourceLineNo">166</span>     * Gets a random float between 0.0f inclusive and 1.0f exclusive.<a name="line.166"></a>
+<span class="sourceLineNo">167</span>     * This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .<a name="line.167"></a>
+<span class="sourceLineNo">168</span>     *<a name="line.168"></a>
+<span class="sourceLineNo">169</span>     * @return a float between 0f (inclusive) and 0.99999994f (inclusive)<a name="line.169"></a>
+<span class="sourceLineNo">170</span>     */<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    @Override<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    public float nextFloat() {<a name="line.172"></a>
+<span class="sourceLineNo">173</span>        long z = state += 0x9E3779B97F4A7C15L;<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.174"></a>
+<span class="sourceLineNo">175</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        return ((z ^ (z &gt;&gt;&gt; 31)) &amp; 0xffffffL) * 0x1p-24f;<a name="line.176"></a>
+<span class="sourceLineNo">177</span>    }<a name="line.177"></a>
+<span class="sourceLineNo">178</span><a name="line.178"></a>
+<span class="sourceLineNo">179</span>    /**<a name="line.179"></a>
+<span class="sourceLineNo">180</span>     * Creates a copy of this MoonwalkRNG; it will generate the same random numbers, given the same calls in order, as<a name="line.180"></a>
+<span class="sourceLineNo">181</span>     * this MoonwalkRNG at the point copy() is called. The copy will not share references with this MoonwalkRNG.<a name="line.181"></a>
+<span class="sourceLineNo">182</span>     * @return a copy of this IRNG<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     */<a name="line.183"></a>
+<span class="sourceLineNo">184</span>    @Override<a name="line.184"></a>
+<span class="sourceLineNo">185</span>    public MoonwalkRNG copy() {<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        return new MoonwalkRNG(state);<a name="line.186"></a>
+<span class="sourceLineNo">187</span>    }<a name="line.187"></a>
+<span class="sourceLineNo">188</span><a name="line.188"></a>
+<span class="sourceLineNo">189</span>    /**<a name="line.189"></a>
+<span class="sourceLineNo">190</span>     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * implements Serializable as well as IRNG.<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     * &lt;br&gt;<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * For implementors: It is suggested to return an {@link RNG} initialized by calling<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the<a name="line.194"></a>
+<span class="sourceLineNo">195</span>     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     * however, so it is simply a last resort in case you don't want to throw an exception.<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     *<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     */<a name="line.199"></a>
+<span class="sourceLineNo">200</span>    @Override<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    public Serializable toSerializable() {<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        return this;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
+<span class="sourceLineNo">204</span><a name="line.204"></a>
+<span class="sourceLineNo">205</span>    /**<a name="line.205"></a>
+<span class="sourceLineNo">206</span>     * Advances or rolls back the SkippingRandomness' state without actually generating each number. Skips forward<a name="line.206"></a>
+<span class="sourceLineNo">207</span>     * or backward a number of steps specified by advance, where a step is equal to one call to {@link #nextLong()},<a name="line.207"></a>
+<span class="sourceLineNo">208</span>     * and returns the random number produced at that step. Negative numbers can be used to step backward, or 0 can be<a name="line.208"></a>
+<span class="sourceLineNo">209</span>     * given to get the most-recently-generated long from {@link #nextLong()}.<a name="line.209"></a>
+<span class="sourceLineNo">210</span>     *<a name="line.210"></a>
+<span class="sourceLineNo">211</span>     * @param advance Number of future generations to skip over; can be negative to backtrack, 0 gets the most-recently-generated number<a name="line.211"></a>
+<span class="sourceLineNo">212</span>     * @return the random long generated after skipping forward or backwards by {@code advance} numbers<a name="line.212"></a>
+<span class="sourceLineNo">213</span>     */<a name="line.213"></a>
+<span class="sourceLineNo">214</span>    @Override<a name="line.214"></a>
+<span class="sourceLineNo">215</span>    public long skip(long advance) {<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        long z = (state += 0x9E3779B97F4A7C15L * advance);<a name="line.216"></a>
+<span class="sourceLineNo">217</span>        z = (z ^ (z &gt;&gt;&gt; 30)) * 0xBF58476D1CE4E5B9L;<a name="line.217"></a>
+<span class="sourceLineNo">218</span>        z = (z ^ (z &gt;&gt;&gt; 27)) * 0x94D049BB133111EBL;<a name="line.218"></a>
+<span class="sourceLineNo">219</span>        return z ^ (z &gt;&gt;&gt; 31);<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    }<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>    /**<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * Get the current internal state of the StatefulRandomness as a long.<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     *<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     * @return the current internal state of this object as a long<a name="line.225"></a>
+<span class="sourceLineNo">226</span>     */<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    @Override<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    public long getState() {<a name="line.228"></a>
+<span class="sourceLineNo">229</span>        return state;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>    }<a name="line.230"></a>
+<span class="sourceLineNo">231</span><a name="line.231"></a>
+<span class="sourceLineNo">232</span>    /**<a name="line.232"></a>
+<span class="sourceLineNo">233</span>     * Set the current internal state of this StatefulRandomness with a long; all longs are allowed.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>     *<a name="line.234"></a>
+<span class="sourceLineNo">235</span>     * @param state a 64-bit long; this can be any long, even 0<a name="line.235"></a>
+<span class="sourceLineNo">236</span>     */<a name="line.236"></a>
+<span class="sourceLineNo">237</span>    @Override<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    public void setState(long state) {<a name="line.238"></a>
+<span class="sourceLineNo">239</span>        this.state = state;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>    }<a name="line.240"></a>
+<span class="sourceLineNo">241</span><a name="line.241"></a>
+<span class="sourceLineNo">242</span>    @Override<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    public String toString() {<a name="line.243"></a>
+<span class="sourceLineNo">244</span>        return "MoonwalkRNG with state 0x" + StringKit.hex(state) + 'L';<a name="line.244"></a>
+<span class="sourceLineNo">245</span>    }<a name="line.245"></a>
+<span class="sourceLineNo">246</span><a name="line.246"></a>
+<span class="sourceLineNo">247</span>    @Override<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    public boolean equals(Object o) {<a name="line.248"></a>
+<span class="sourceLineNo">249</span>        if (this == o) return true;<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.250"></a>
+<span class="sourceLineNo">251</span><a name="line.251"></a>
+<span class="sourceLineNo">252</span>        MoonwalkRNG moonwalkRNG = (MoonwalkRNG) o;<a name="line.252"></a>
+<span class="sourceLineNo">253</span><a name="line.253"></a>
+<span class="sourceLineNo">254</span>        return state == moonwalkRNG.state;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    }<a name="line.255"></a>
+<span class="sourceLineNo">256</span><a name="line.256"></a>
+<span class="sourceLineNo">257</span>    @Override<a name="line.257"></a>
+<span class="sourceLineNo">258</span>    public int hashCode() {<a name="line.258"></a>
+<span class="sourceLineNo">259</span>        return (int) (state ^ (state &gt;&gt;&gt; 32));<a name="line.259"></a>
+<span class="sourceLineNo">260</span>    }<a name="line.260"></a>
+<span class="sourceLineNo">261</span><a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>    /**<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     * Given the output of a call to {@link #nextLong()} as {@code out}, this finds the state of the MoonwalkRNG that<a name="line.264"></a>
+<span class="sourceLineNo">265</span>     * produce that output. If you set the state of a MoonwalkRNG with {@link #setState(long)} to the result of this<a name="line.265"></a>
+<span class="sourceLineNo">266</span>     * method and then call {@link #nextLong()} on it, you should get back {@code out}.<a name="line.266"></a>
+<span class="sourceLineNo">267</span>     * &lt;br&gt;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>     * This isn't as fast as {@link #nextLong()}, but both run in constant time. Some random number generators take more<a name="line.268"></a>
+<span class="sourceLineNo">269</span>     * than constant time to reverse, so one was chosen for this class that would still be efficient ({@link LightRNG}).<a name="line.269"></a>
+<span class="sourceLineNo">270</span>     * &lt;br&gt;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>     * This will not necessarily work if out was produced by a generator other than a MoonwalkRNG, or if it was produced<a name="line.271"></a>
+<span class="sourceLineNo">272</span>     * with the bounded {@link #nextLong(long)} method by any generator.<a name="line.272"></a>
+<span class="sourceLineNo">273</span>     * @param out a long as produced by {@link #nextLong()}, without changes<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * @return the state of the RNG that will produce the given long<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     */<a name="line.275"></a>
+<span class="sourceLineNo">276</span>    public static long inverseNextLong(long out)<a name="line.276"></a>
+<span class="sourceLineNo">277</span>    {<a name="line.277"></a>
+<span class="sourceLineNo">278</span>        out ^= out &gt;&gt;&gt; 31;<a name="line.278"></a>
+<span class="sourceLineNo">279</span>        out ^= out &gt;&gt;&gt; 62;<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        out *= 0x319642B2D24D8EC3L;<a name="line.280"></a>
+<span class="sourceLineNo">281</span>        out ^= out &gt;&gt;&gt; 27;<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        out ^= out &gt;&gt;&gt; 54;<a name="line.282"></a>
+<span class="sourceLineNo">283</span>        out *= 0x96DE1B173F119089L;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        out ^= out &gt;&gt;&gt; 30;<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        return (out ^ out &gt;&gt;&gt; 60) - 0x9E3779B97F4A7C15L;<a name="line.285"></a>
+<span class="sourceLineNo">286</span>        //0x96DE1B173F119089L 0x319642B2D24D8EC3L 0xF1DE83E19937733DL<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    }<a name="line.287"></a>
+<span class="sourceLineNo">288</span><a name="line.288"></a>
+<span class="sourceLineNo">289</span>    /**<a name="line.289"></a>
+<span class="sourceLineNo">290</span>     * Returns the number of steps (where a step is equal to one call to most random number methods in this class)<a name="line.290"></a>
+<span class="sourceLineNo">291</span>     * needed to go from receiving out1 from a MoonwalkRNG's {@link #nextLong()} method to receiving out2 from another<a name="line.291"></a>
+<span class="sourceLineNo">292</span>     * call. This number can be used with {@link #skip(long)} to move a MoonwalkRNG forward or backward by the desired<a name="line.292"></a>
+<span class="sourceLineNo">293</span>     * distance.<a name="line.293"></a>
+<span class="sourceLineNo">294</span>     * @param out1 a long as produced by {@link #nextLong()}, without changes<a name="line.294"></a>
+<span class="sourceLineNo">295</span>     * @param out2 a long as produced by {@link #nextLong()}, without changes<a name="line.295"></a>
+<span class="sourceLineNo">296</span>     * @return the number of calls to {@link #nextLong()} that would be required to go from producing out1 to producing<a name="line.296"></a>
+<span class="sourceLineNo">297</span>     *         out2; can be positive or negative, and can be passed to {@link #skip(long)}<a name="line.297"></a>
+<span class="sourceLineNo">298</span>     */<a name="line.298"></a>
+<span class="sourceLineNo">299</span>    public static long distance(final long out1, final long out2)<a name="line.299"></a>
+<span class="sourceLineNo">300</span>    {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        return (inverseNextLong(out2) - inverseNextLong(out1)) * 0xF1DE83E19937733DL;<a name="line.301"></a>
+<span class="sourceLineNo">302</span>    }<a name="line.302"></a>
+<span class="sourceLineNo">303</span>}<a name="line.303"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

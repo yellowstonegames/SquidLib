@@ -1,0 +1,244 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package squidpony.squidmath;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import squidpony.StringKit;<a name="line.3"></a>
+<span class="sourceLineNo">004</span><a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.io.Serializable;<a name="line.5"></a>
+<span class="sourceLineNo">006</span><a name="line.6"></a>
+<span class="sourceLineNo">007</span>/**<a name="line.7"></a>
+<span class="sourceLineNo">008</span> * A variant on {@link ThrustAltRNG} that gives up some speed to gain a much better period and the ability to produce<a name="line.8"></a>
+<span class="sourceLineNo">009</span> * all possible long values over that period. Its period is 2 to the 128, and it produces all long outputs with equal<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * likelihood. OrbitRNG is close to ThrustAltRNG in implementation, and ThrustAltRNG passes PractRand and TestU01 just<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * fine, but OrbitRNG should actually be more robust. For some purposes you may want to instead consider<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * {@link TangleRNG}, which also has two states and uses a very similar algorithm, but it skips some work Orbit does and<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * in doing so speeds up a lot and drops its period down to 2 to the 64. An individual TangleRNG can't produce all<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * possible long outputs and can produce some duplicates, but each pair of states for a TangleRNG has a different set of<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * which outputs will be skipped and which will be duplicated. Since it would require months of solid number generation<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * to exhaust the period of a TangleRNG, and that's the only time an output can be confirmed as skipped, it's probably<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * fine for some usage to use many different TangleRNGs, all seeded differently. In other cases you could use just one<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * OrbitRNG; its period is large enough not to worry about exhausting it in a game, though it isn't quite as fast as<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * TangleRNG. Orbit is extremely close in speed to a 64-bit variant on {@link Lathe32RNG}, and should have similarly<a name="line.19"></a>
+<span class="sourceLineNo">020</span> * high quality; it should be slightly slower than {@link XoRoRNG} but doesn't fail the statistical tests that XoRo<a name="line.20"></a>
+<span class="sourceLineNo">021</span> * fails rather badly.<a name="line.21"></a>
+<span class="sourceLineNo">022</span> * &lt;br&gt;<a name="line.22"></a>
+<span class="sourceLineNo">023</span> * The name comes from how the pair of states act like two planets orbiting a star at different rates, and also evokes<a name="line.23"></a>
+<span class="sourceLineNo">024</span> * the larger-scale period relative to {@link TangleRNG}.<a name="line.24"></a>
+<span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * Created by Tommy Ettinger on 7/9/2018.<a name="line.26"></a>
+<span class="sourceLineNo">027</span> */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>public final class OrbitRNG implements RandomnessSource, Serializable {<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    private static final long serialVersionUID = 4L;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    /**<a name="line.30"></a>
+<span class="sourceLineNo">031</span>     * Can be any long value.<a name="line.31"></a>
+<span class="sourceLineNo">032</span>     */<a name="line.32"></a>
+<span class="sourceLineNo">033</span>    public long stateA;<a name="line.33"></a>
+<span class="sourceLineNo">034</span>    <a name="line.34"></a>
+<span class="sourceLineNo">035</span>    public long stateB;<a name="line.35"></a>
+<span class="sourceLineNo">036</span><a name="line.36"></a>
+<span class="sourceLineNo">037</span>    /**<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     * Creates a new generator seeded using Math.random.<a name="line.38"></a>
+<span class="sourceLineNo">039</span>     */<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    public OrbitRNG() {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        this((long) ((Math.random() - 0.5) * 0x10000000000000L)<a name="line.41"></a>
+<span class="sourceLineNo">042</span>                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),<a name="line.42"></a>
+<span class="sourceLineNo">043</span>                (long) ((Math.random() - 0.5) * 0x10000000000000L)<a name="line.43"></a>
+<span class="sourceLineNo">044</span>                ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));<a name="line.44"></a>
+<span class="sourceLineNo">045</span>    }<a name="line.45"></a>
+<span class="sourceLineNo">046</span><a name="line.46"></a>
+<span class="sourceLineNo">047</span>    public OrbitRNG(long seed) {<a name="line.47"></a>
+<span class="sourceLineNo">048</span>        stateA = (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ seed &gt;&gt;&gt; 25;<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        stateB = (seed = ((seed = (((seed * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ seed &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ seed &gt;&gt;&gt; 25;<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>    public OrbitRNG(final long seedA, final long seedB) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        stateA = seedA;<a name="line.53"></a>
+<span class="sourceLineNo">054</span>        stateB = seedB;<a name="line.54"></a>
+<span class="sourceLineNo">055</span>    }<a name="line.55"></a>
+<span class="sourceLineNo">056</span><a name="line.56"></a>
+<span class="sourceLineNo">057</span>    /**<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * Get the "A" part of the internal state as a long.<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     *<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * @return the current internal state of this object.<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     */<a name="line.61"></a>
+<span class="sourceLineNo">062</span>    public long getStateA() {<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        return stateA;<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    }<a name="line.64"></a>
+<span class="sourceLineNo">065</span><a name="line.65"></a>
+<span class="sourceLineNo">066</span>    /**<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * Set the "A" part of the internal state with a long.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     *<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * @param stateA any 64-bit long<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     */<a name="line.70"></a>
+<span class="sourceLineNo">071</span>    public void setStateA(long stateA) {<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        this.stateA = stateA;<a name="line.72"></a>
+<span class="sourceLineNo">073</span>    }<a name="line.73"></a>
+<span class="sourceLineNo">074</span><a name="line.74"></a>
+<span class="sourceLineNo">075</span>    /**<a name="line.75"></a>
+<span class="sourceLineNo">076</span>     * Get the "B" part of the internal state as a long.<a name="line.76"></a>
+<span class="sourceLineNo">077</span>     *<a name="line.77"></a>
+<span class="sourceLineNo">078</span>     * @return the current internal "B" state of this object.<a name="line.78"></a>
+<span class="sourceLineNo">079</span>     */<a name="line.79"></a>
+<span class="sourceLineNo">080</span>    public long getStateB() {<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        return stateB;<a name="line.81"></a>
+<span class="sourceLineNo">082</span>    }<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>    /**<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     * Set the "B" part of the internal state with a long.<a name="line.85"></a>
+<span class="sourceLineNo">086</span>     *<a name="line.86"></a>
+<span class="sourceLineNo">087</span>     * @param stateB any 64-bit long<a name="line.87"></a>
+<span class="sourceLineNo">088</span>     */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    public void setStateB(long stateB) {<a name="line.89"></a>
+<span class="sourceLineNo">090</span>        this.stateB = stateB;<a name="line.90"></a>
+<span class="sourceLineNo">091</span>    }<a name="line.91"></a>
+<span class="sourceLineNo">092</span><a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>    /**<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * Using this method, any algorithm that might use the built-in Java Random<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * can interface with this randomness source.<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     *<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * @param bits the number of bits to be returned<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     * @return the integer containing the appropriate number of bits<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     */<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    @Override<a name="line.101"></a>
+<span class="sourceLineNo">102</span>    public final int next(final int bits) {<a name="line.102"></a>
+<span class="sourceLineNo">103</span>        final long s = (stateA += 0x6C8E9CF570932BD5L);<a name="line.103"></a>
+<span class="sourceLineNo">104</span>        if(s == 0L)<a name="line.104"></a>
+<span class="sourceLineNo">105</span>            stateB += 0x9E3779B97F4A7C15L;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        final long z = (s ^ (s &gt;&gt;&gt; 25)) * ((stateB += 0x9E3779B97F4A7C15L) | 1L);<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        return (int)(z ^ (z &gt;&gt;&gt; 22)) &gt;&gt;&gt; (32 - bits);<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    }<a name="line.108"></a>
+<span class="sourceLineNo">109</span>    /**<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * Using this method, any algorithm that needs to efficiently generate more<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * than 32 bits of random data can interface with this randomness source.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     * &lt;p&gt;<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * Get a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive).<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     *<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @return a random long between Long.MIN_VALUE and Long.MAX_VALUE (both inclusive)<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     */<a name="line.116"></a>
+<span class="sourceLineNo">117</span>    @Override<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    public final long nextLong() {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        final long s = (stateA += 0x6C8E9CF570932BD5L);<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        if(s == 0L)<a name="line.120"></a>
+<span class="sourceLineNo">121</span>            stateB += 0x9E3779B97F4A7C15L;<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        final long z = (s ^ (s &gt;&gt;&gt; 25)) * ((stateB += 0x9E3779B97F4A7C15L) | 1L);<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        return z ^ (z &gt;&gt;&gt; 22);<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    }<a name="line.124"></a>
+<span class="sourceLineNo">125</span><a name="line.125"></a>
+<span class="sourceLineNo">126</span>    /**<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     * copy, both will generate the same sequence of random numbers from the point copy() was called. This just need to<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * copy the state so it isn't shared, usually, and produce a new value with the same exact state.<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     * @return a copy of this RandomnessSource<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     */<a name="line.132"></a>
+<span class="sourceLineNo">133</span>    @Override<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public OrbitRNG copy() {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        return new OrbitRNG(stateA, stateB);<a name="line.135"></a>
+<span class="sourceLineNo">136</span>    }<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    @Override<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    public String toString() {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        return "OrbitRNG with stateA 0x" + StringKit.hex(stateA) + "L and stateB 0x" + StringKit.hex(stateB) + 'L';<a name="line.139"></a>
+<span class="sourceLineNo">140</span>    }<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>    @Override<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    public boolean equals(Object o) {<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        if (this == o) return true;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.145"></a>
+<span class="sourceLineNo">146</span><a name="line.146"></a>
+<span class="sourceLineNo">147</span>        OrbitRNG orbitRNG = (OrbitRNG) o;<a name="line.147"></a>
+<span class="sourceLineNo">148</span><a name="line.148"></a>
+<span class="sourceLineNo">149</span>        return stateA == orbitRNG.stateA &amp;&amp; stateB == orbitRNG.stateB;<a name="line.149"></a>
+<span class="sourceLineNo">150</span>    }<a name="line.150"></a>
+<span class="sourceLineNo">151</span><a name="line.151"></a>
+<span class="sourceLineNo">152</span>    @Override<a name="line.152"></a>
+<span class="sourceLineNo">153</span>    public int hashCode() {<a name="line.153"></a>
+<span class="sourceLineNo">154</span>        return (int) (31L * (stateA ^ (stateA &gt;&gt;&gt; 32)) + (stateB ^ stateB &gt;&gt;&gt; 32));<a name="line.154"></a>
+<span class="sourceLineNo">155</span>    }<a name="line.155"></a>
+<span class="sourceLineNo">156</span>    <a name="line.156"></a>
+<span class="sourceLineNo">157</span>//    public static void main(String[] args)<a name="line.157"></a>
+<span class="sourceLineNo">158</span>//    {<a name="line.158"></a>
+<span class="sourceLineNo">159</span>//        /*<a name="line.159"></a>
+<span class="sourceLineNo">160</span>//        cd target/classes<a name="line.160"></a>
+<span class="sourceLineNo">161</span>//        java -XX:+UnlockDiagnosticVMOptions -XX:+PrintAssembly sarong/ThrustAltRNG &gt; ../../thrustalt_asm.txt<a name="line.161"></a>
+<span class="sourceLineNo">162</span>//         */<a name="line.162"></a>
+<span class="sourceLineNo">163</span>//        long seed = 1L;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>//        ThrustAltRNG rng = new ThrustAltRNG(seed);<a name="line.164"></a>
+<span class="sourceLineNo">165</span>//<a name="line.165"></a>
+<span class="sourceLineNo">166</span>//        for (int i = 0; i &lt; 1000000007; i++) {<a name="line.166"></a>
+<span class="sourceLineNo">167</span>//            seed += rng.nextLong();<a name="line.167"></a>
+<span class="sourceLineNo">168</span>//        }<a name="line.168"></a>
+<span class="sourceLineNo">169</span>//        System.out.println(seed);<a name="line.169"></a>
+<span class="sourceLineNo">170</span>//    }<a name="line.170"></a>
+<span class="sourceLineNo">171</span><a name="line.171"></a>
+<span class="sourceLineNo">172</span>}<a name="line.172"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>
