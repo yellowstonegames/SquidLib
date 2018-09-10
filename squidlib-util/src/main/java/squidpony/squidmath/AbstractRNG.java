@@ -58,14 +58,6 @@ public abstract class AbstractRNG implements IRNG {
     public abstract long nextLong();
 
     /**
-     * Returns a random long below the given bound, or 0 if the bound is 0 or
-     * negative.
-     *
-     * @param bound the upper bound (exclusive)
-     * @return the found number
-     */
-    @Override
-    /**
      * Exclusive on bound (which must be positive), with an inner bound of 0.
      * If bound is negative or 0 this always returns 0.
      * <br>
@@ -76,6 +68,7 @@ public abstract class AbstractRNG implements IRNG {
      * @param bound the outer exclusive bound; should be positive, otherwise this always returns 0L
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
+    @Override
     public long nextLong(long bound) {
         long rand = nextLong();
         if (bound <= 0) return 0;
