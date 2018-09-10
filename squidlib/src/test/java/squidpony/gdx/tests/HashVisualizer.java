@@ -70,9 +70,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 5;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 46, noiseMode = 74;//76;//118;//82;
+    private int hashMode = 0, rngMode = 22, noiseMode = 74;//76;//118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -171,7 +171,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
     private RandomXS128 gdxRandom = new RandomXS128(0xFEDCBA987654321L);
-    private MicroRandom mr = new MicroRandom(0xFEDCBA987654321L);
+    private SloppyRandom mr = new SloppyRandom();
     private CellularAutomaton ca = new CellularAutomaton(512, 512);
     private int ctr = 0;
     private boolean keepGoing = true;
@@ -271,13 +271,22 @@ public class HashVisualizer extends ApplicationAdapter {
 //        y *= 0xACEDB;
 //        x *= 0x3FFF;
 //        y *= 0x3FFF;
-        x -= (x << 14) - 0xB531A935;
-        y -= (y << 14) - 0x41C64E6D;
-        x += (y << 7) - (x >>> 8);//x += (y << 20 | y >>> 12);// + 0xB531A935;
-        y -= (x << 8) + (y >>> 7);//y -= (x << 5 | x >>> 27);// + 0x41C64E6D;
-        x += (y << 21 | y >>> 11) ^ (y << 6 | y >>> 26) ^ y;
-        y += (x << 13 | x >>> 19) ^ (x << 22 | x >>> 10) ^ x;
-        return x ^ y;
+        y ^= x * 0x89A7; // + 0xB531A935;
+        x ^= y * 0xBCFD; // + 0x41C64E6D;
+        y ^= (x << 17 | x >>> 15);
+        x ^= (y << 13 | y >>> 19);
+        return (x - y << 13) - (y << 7 | y >>> 25) ^ (y - x << 11) - (x << 5 | x >>> 27);
+//        y ^= x * 0xBCFD;
+//        x ^= y * 0x89A7;
+//        return (y << 13 | y >>> 19) ^ (x << 17 | x >>> 15);
+
+//        x -= (x << 14) - 0xB531A935;
+//        y -= (y << 14) - 0x41C64E6D;
+//        x += (y << 7) - (x >>> 8);//x += (y << 20 | y >>> 12);// + 0xB531A935;
+//        y -= (x << 8) + (y >>> 7);//y -= (x << 5 | x >>> 27);// + 0x41C64E6D;
+//        x += (y << 21 | y >>> 11) ^ (y << 6 | y >>> 26) ^ y;
+//        y += (x << 13 | x >>> 19) ^ (x << 22 | x >>> 10) ^ x;
+        
 //        return (y << 9 | y >>> 23) ^ (x << 25 | x >>> 7);
         
 //        return (x = ((x = x * 0xFACED + y) ^ x >>> 13) * ((y * 0x9E375 - x >> 12 | 1))) ^ (x << 21 | x >>> 11) ^ (x << 12 | x >>> 20);
@@ -383,59 +392,48 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         }
         return seed;
     }
-    /**
-     * A miniature version of LapRNG that can be quickly copied into a project.
-     * Sometimes used here to prototype changes to LapRNG's algorithm.
-     */
-    public static class MicroRandom implements RandomnessSource {
-        public long state0, state1, inc = 0x9E3779B97F4A7C15L, mul = 0x632AE59B69B3C209L;
-
-        public MicroRandom()
-        {
-            this((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
-                    ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
-        }
-
-        public MicroRandom(final long seed) {
-            state0 = seed * 0x62E2AC0DL + 0x85157AF5;
-            state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
-        }
-
-        public void setState(final long seed)
-        {
-            state0 = seed * 0x62E2AC0DL + 0x85157AF5;
-            state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
-        }
-
-        @Override
-        public final long nextLong() {
-            //good one
-            //return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
-            return (state1 += ((state0 += inc) >> 24) * mul);
-        }
-
-        @Override
-        public final int next(final int bits) {
-            return (int) (nextLong() >>> (64 - bits));
-        }
-
-        /**
-         * Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
-         * copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
-         * copy the state so it isn't shared, usually, and produce a new value with the same exact state.
-         *
-         * @return a copy of this RandomnessSource
-         */
-        @Override
-        public MicroRandom copy() {
-            MicroRandom mr = new MicroRandom(1L);
-            mr.state0 = state0;
-            mr.state1 = state1;
-            mr.mul = mul;
-            mr.inc = inc;
-            return mr;
-        }
-    }
+    //    public static class MicroRandom implements RandomnessSource {
+//        public long state0, state1, inc = 0x9E3779B97F4A7C15L, mul = 0x632AE59B69B3C209L;
+//
+//        public MicroRandom()
+//        {
+//            this((long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000L)
+//                    ^ (long) ((Math.random() * 2.0 - 1.0) * 0x8000000000000000L));
+//        }
+//
+//        public MicroRandom(final long seed) {
+//            state0 = seed * 0x62E2AC0DL + 0x85157AF5;
+//            state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
+//        }
+//
+//        public void setState(final long seed)
+//        {
+//            state0 = seed * 0x62E2AC0DL + 0x85157AF5;
+//            state1 = seed * 0x85157AF5L - 0x62E2AC0DL;
+//        }
+//
+//        @Override
+//        public final long nextLong() {
+//            //good one
+//            //return (state1 += ((state0 += 0x9E3779B97F4A7C15L) >> 24) * 0x632AE59B69B3C209L);
+//            return (state1 += ((state0 += inc) >> 24) * mul);
+//        }
+//
+//        @Override
+//        public final int next(final int bits) {
+//            return (int) (nextLong() >>> (64 - bits));
+//        }
+//
+//        @Override
+//        public MicroRandom copy() {
+//            MicroRandom mr = new MicroRandom(1L);
+//            mr.state0 = state0;
+//            mr.state1 = state1;
+//            mr.mul = mul;
+//            mr.inc = inc;
+//            return mr;
+//        }
+//    }
 
         /*
         public static float determine(float alpha, float beta)
@@ -1173,7 +1171,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 }
                                 break;
                             case 5:
-                                mr.mul = 0x632AE59B69B3C209L;
+                                //mr.mul = 0x632AE59B69B3C209L;
                                 rngMode++;
                                 rngMode %= 50;
                                 break;
@@ -1239,7 +1237,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 'K': // sKip
                     case 'k':
                         ctr += 1000;
-                        mr.mul -= 2;
+                        //mr.mul -= 2;
                         putMap();
                         //Gdx.graphics.requestRendering();
                         break;
@@ -4613,7 +4611,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 24:
-                        mr.setState(System.nanoTime());
+                        //mr.setState(System.nanoTime());
                         //mr.mul += 2;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -4624,7 +4622,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 25:
-                        mr.setState(System.nanoTime());
+                        //mr.setState(System.nanoTime());
                         //mr.mul += 2;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {

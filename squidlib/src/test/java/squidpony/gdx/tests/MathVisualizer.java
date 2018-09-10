@@ -44,12 +44,11 @@ public class MathVisualizer extends ApplicationAdapter {
 //        return ((Long.rotateLeft((base *= index), 31) ^ Long.rotateLeft(base, 17) ^ Long.rotateLeft(base, 42)) >>> 11) * 0x1p-53;
     }
     private static class XSP {
-        private long state0;//, state1;
+        private long state0;
         public XSP()
         {
             state0 = (long) ((Math.random() - 0.5) * 0x10000000000000L)
                     ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L);
-//            state1 = ~LightRNG.determine(state0);
         }
         public long nextLong()
         {
