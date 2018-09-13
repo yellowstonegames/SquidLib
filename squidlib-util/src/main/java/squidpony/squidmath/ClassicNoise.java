@@ -86,9 +86,9 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 y0 = fastFloor(y);         
 //        final double res =
         return 
-                cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),
+                Noise.emphasizeSigned(cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),
                                 cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),
-                                y - y0) * 1.4142;//* 0.875;// * 1.4142;
+                                y - y0) * 1.4142);//* 0.875;// * 1.4142;
 //        if(res < -1.0 || res > 1.0) System.out.println(res);
 //        return res;
     }
@@ -109,12 +109,12 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 z0 = fastFloor(z);
 //        final double res =
          return 
-                 cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),
+                 Noise.emphasizeSigned(cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),
                 cerp(gradCoord3D(seed, x0, y0+1, z0, x - x0, y - y0-1, z - z0), gradCoord3D(seed, x0+1, y0+1, z0, x - x0 - 1, y - y0 - 1, z - z0), x - x0),
                 y - y0),
                 cerp(cerp(gradCoord3D(seed, x0, y0, z0+1, x - x0, y - y0, z - z0-1), gradCoord3D(seed, x0+1, y0, z0+1, x - x0 - 1, y - y0, z - z0-1), x - x0),
                         cerp(gradCoord3D(seed, x0, y0+1, z0+1, x - x0, y - y0-1, z - z0-1), gradCoord3D(seed, x0+1, y0+1, z0+1, x - x0 - 1, y - y0 - 1, z - z0-1), x - x0),
-                        y - y0), z - z0) * 1.0625;
+                        y - y0), z - z0) * 1.0625);
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }
@@ -136,8 +136,8 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 z0 = fastFloor(z),
                 w0 = fastFloor(w);
 //        final double res =
-        return 
-                cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),
+        return
+                Noise.emphasizeSigned(cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),
                         cerp(gradCoord4D(seed, x0, y0+1, z0, w0, x - x0, y - y0-1, z - z0, w - w0), gradCoord4D(seed, x0+1, y0+1, z0, w0, x - x0 - 1, y - y0 - 1, z - z0, w - w0), x - x0),
                         y - y0),
                         cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0, x - x0, y - y0, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0, z0+1, w0, x - x0 - 1, y - y0, z - z0-1, w - w0), x - x0),
@@ -151,7 +151,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                         cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0+1, x - x0, y - y0-1, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0+1, w0+1, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0 - 1), x - x0),
                                         y - y0),
                                 z - z0),
-                        w - w0) * 0.555;
+                        w - w0) * 0.555);
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }
@@ -179,7 +179,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                 v0 = fastFloor(v);
         final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0, vd = v - v0; 
 //        final double res =
-        return 
+        return Noise.emphasizeSigned(
         cerp(cerp(cerp(
                 cerp(
                         cerp(
@@ -303,7 +303,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
                                         zd),
                                 wd),
                         ud),
-                vd) * 1.875;
+                vd) * 1.875);
 //        if(res < -1 || res > 1) System.out.println(res);
 //        return res;
     }

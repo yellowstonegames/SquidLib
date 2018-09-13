@@ -48,7 +48,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 //    private static final int width = 512, height = 256;
     private static final int width = 400, height = 400;
 //    private static final int width = 300, height = 300;
-    //private static final int width = 1600, height = 800;
+//    private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
     //private static final int width = 700, height = 700;
 //    private static final int width = 512, height = 512;
@@ -61,14 +61,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Viewport view;
     private StatefulRNG rng;
     private long seed;
-    private int mode = 3, maxModes = 4;
+    private int mode = 1, maxModes = 4;
     //private WorldMapGenerator.SpaceViewMap world;
     private WorldMapGenerator.RotatingSpaceMap world;
     //private WorldMapGenerator.MimicMap world;
     //private WorldMapGenerator.EllipticalMap world;
     //private WorldMapGenerator.EllipticalHammerMap world;
     //private WorldMapGenerator.RoundSideMap world;
-    //private WorldMapGenerator.HyperellipticalMap world;
+//    private WorldMapGenerator.HyperellipticalMap world;
 //    private WorldMapGenerator.SphereMapAlt world;
     //private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
@@ -78,7 +78,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private int counter = 0;
     private Color tempColor = Color.WHITE.cpy();
     
-    private boolean spinning = true;
+    private boolean spinning = false;
     
     private boolean cloudy = false;
     private float nation = 0f;
@@ -302,7 +302,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         
 //        stage = new Stage(view, batch);
-        seed = 0x0c415cf07774ab2eL;//0x9987a26d1e4d187dL;//0xDEBACL;
+        seed = 0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
 //        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 0.8);
@@ -312,7 +312,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
         world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-        //world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7, 0.1, 3.25);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
@@ -416,7 +416,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
         //world.setCenterLongitude(++counter * 0.02);
         world.generate(1.0 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
-                LinnormRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.2 + 0.9, seed);
+                LinnormRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.35 + 0.9, seed);
         dbm.makeBiomes(world);
         //randomizeColors(seed);
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);

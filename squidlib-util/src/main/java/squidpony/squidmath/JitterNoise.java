@@ -86,13 +86,10 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         final int
                 x0 = fastFloor(x),
                 y0 = fastFloor(y);         
-        final double res =
-//        return 
+        return Noise.emphasizeSigned(
                 cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),
                                 cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),
-                                y - y0) * 0.875;// * 1.4142;
-        if(res < -1.0 || res > 1.0) System.out.println(res);
-        return res;
+                                y - y0) * 0.875);// * 1.4142;
     }
 
     @Override
@@ -109,16 +106,13 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 x0 = fastFloor(x),
                 y0 = fastFloor(y),
                 z0 = fastFloor(z);
-        final double res =
-//         return 
+         return Noise.emphasizeSigned(
                  cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),
                 cerp(gradCoord3D(seed, x0, y0+1, z0, x - x0, y - y0-1, z - z0), gradCoord3D(seed, x0+1, y0+1, z0, x - x0 - 1, y - y0 - 1, z - z0), x - x0),
                 y - y0),
                 cerp(cerp(gradCoord3D(seed, x0, y0, z0+1, x - x0, y - y0, z - z0-1), gradCoord3D(seed, x0+1, y0, z0+1, x - x0 - 1, y - y0, z - z0-1), x - x0),
                         cerp(gradCoord3D(seed, x0, y0+1, z0+1, x - x0, y - y0-1, z - z0-1), gradCoord3D(seed, x0+1, y0+1, z0+1, x - x0 - 1, y - y0 - 1, z - z0-1), x - x0),
-                        y - y0), z - z0) * 0.666;//1.0625;
-        if(res < -1 || res > 1) System.out.println(res);
-        return res;
+                        y - y0), z - z0) * 0.666);//1.0625;
     }
 
     @Override
@@ -137,9 +131,8 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 y0 = fastFloor(y),
                 z0 = fastFloor(z),
                 w0 = fastFloor(w);
-        final double res =
-//        return 
-                cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),
+        return 
+                Noise.emphasizeSigned(cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),
                         cerp(gradCoord4D(seed, x0, y0+1, z0, w0, x - x0, y - y0-1, z - z0, w - w0), gradCoord4D(seed, x0+1, y0+1, z0, w0, x - x0 - 1, y - y0 - 1, z - z0, w - w0), x - x0),
                         y - y0),
                         cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0, x - x0, y - y0, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0, z0+1, w0, x - x0 - 1, y - y0, z - z0-1, w - w0), x - x0),
@@ -153,9 +146,7 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                                         cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0+1, x - x0, y - y0-1, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0+1, w0+1, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0 - 1), x - x0),
                                         y - y0),
                                 z - z0),
-                        w - w0) * 0.3666;//0.555;
-        if(res < -1 || res > 1) System.out.println(res);
-        return res;
+                        w - w0) * 0.3666);//0.555;
     }
 
 
@@ -180,9 +171,8 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 u0 = fastFloor(u),
                 v0 = fastFloor(v);
         final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0, vd = v - v0; 
-        final double res =
-//        return 
-        cerp(cerp(cerp(
+        return Noise.emphasizeSigned(
+                cerp(cerp(cerp(
                 cerp(
                         cerp(
                                 cerp(gradCoord6D(seed, x0, y0, z0, w0, u0, v0, xd, yd, zd, wd, ud, vd),
@@ -305,8 +295,6 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                                         zd),
                                 wd),
                         ud),
-                vd) * 1.5;//1.875;
-        if(res < -1 || res > 1) System.out.println(res);
-        return res;
+                vd) * 1.5);//1.875;
     }
 }
