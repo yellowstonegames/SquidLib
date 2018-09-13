@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 5;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 22, noiseMode = 74;//76;//118;//82;
+    private int hashMode = 0, rngMode = 22, noiseMode = 74, otherMode = 0;//76;//118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -147,6 +147,31 @@ public class HashVisualizer extends ApplicationAdapter {
     private final GlitchNoise glitch = GlitchNoise.instance;
     private final Noise.Noise1D basic1D = new Noise.Basic1D();
     private final Noise.Noise1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
+
+    private final Noise.Ridged2D classic2_2D = new Noise.Ridged2D(JitterNoise.instance, 3, 2f);
+    private final Noise.Ridged2D classic3_2D = new Noise.Ridged2D(JitterNoise.instance, 4, 2f);
+
+    private final Noise.Ridged2D whirling2_2D = new Noise.Ridged2D(WhirlingNoise.instance, 3, 2f);
+    private final Noise.Ridged2D whirling3_2D = new Noise.Ridged2D(WhirlingNoise.instance, 4, 2f);
+
+    private final Noise.Ridged2D classic2_lf_2D = new Noise.Ridged2D(JitterNoise.instance, 3, 1.3f);
+    private final Noise.Ridged2D classic3_lf_2D = new Noise.Ridged2D(JitterNoise.instance, 4, 1.3f);
+
+    private final Noise.Ridged2D whirling2_lf_2D = new Noise.Ridged2D(WhirlingNoise.instance, 3, 1.3f);
+    private final Noise.Ridged2D whirling3_lf_2D = new Noise.Ridged2D(WhirlingNoise.instance, 4, 1.3f);
+
+    private final Noise.Ridged3D classic2_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 2);
+    private final Noise.Ridged3D classic3_3D = new Noise.Ridged3D(ClassicNoise.instance, 4, 2);
+
+    private final Noise.Ridged3D whirling2_3D = new Noise.Ridged3D(WhirlingNoise.instance, 3, 2f);
+    private final Noise.Ridged3D whirling3_3D = new Noise.Ridged3D(WhirlingNoise.instance, 4, 2f);
+
+    private final Noise.Ridged3D classic2_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 1.3);
+    private final Noise.Ridged3D classic3_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 4, 1.3);
+
+    private final Noise.Ridged3D whirling2_lf_3D = new Noise.Ridged3D(WhirlingNoise.instance, 3, 1.3f);
+    private final Noise.Ridged3D whirling3_lf_3D = new Noise.Ridged3D(WhirlingNoise.instance, 4, 1.3f);
+
 
     private final long
             seedX0 = thrust.nextLong(), seedX1 = thrust.nextLong(), seedX2 = thrust.nextLong(), seedX3 = thrust.nextLong(),
@@ -981,15 +1006,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 'u':
                     case 'U':
                     case SquidInput.ENTER:
-                        switch (testType)
-                        {
+                        switch (testType) {
                             case 4:
-                                if(key == SquidInput.ENTER) {
+                                if (key == SquidInput.ENTER) {
                                     noiseMode++;
                                     noiseMode %= NOISE_LIMIT;
                                 }
-                                switch (noiseMode)
-                                {
+                                switch (noiseMode) {
                                     case 16:
                                     case 60:
                                         ArrayTools.fill(seamless[0], 0.0);
@@ -1127,40 +1150,40 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         TuringPattern.initializeInto(turing, width, height, stretchScaled2D, ctr);
                                         break;
                                     case 100:
-                                        Gdx.graphics.setTitle("Mummy 5D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                                        Gdx.graphics.setTitle("Mummy 5D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
                                                 display.put(x, y, floatGet(
-                                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX0, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX1, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX2, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
                                                         1.0f));
                                             }
                                         }
                                         break;
                                     case 101:
-                                        Gdx.graphics.setTitle("Mummy 5D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                                        Gdx.graphics.setTitle("Mummy 5D Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
-                                                bright = (float)(MummyNoise.instance.arbitraryNoise(seedX3, alter5D(x, y, ctr)) * 0.50f) + 0.50f;
+                                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter5D(x, y, ctr)) * 0.50f) + 0.50f;
                                                 display.put(x, y, floatGet(bright, bright, bright, 1f));
                                             }
                                         }
                                         break;
                                     case 102:
-                                        Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                                        Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
                                                 display.put(x, y, floatGet(
-                                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
+                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
                                                         1.0f));
                                             }
                                         }
                                         break;
                                     case 103:
-                                        Gdx.graphics.setTitle("Mummy 7D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                                        Gdx.graphics.setTitle("Mummy 7D Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
                                                 bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr)) * 0.50f) + 0.50f;
@@ -1187,19 +1210,23 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 hashMode++;
                                 hashMode %= 28;
                             default:
-                                ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
-                                ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
-                                        .insert(250, 249).insert(251, 249)
-                                        .insert(125, 125).insert(125, 126).insert(124, 125)
-                                        .insert(125, 124).insert(126, 124)
-                                        .insert(375, 375).insert(375, 376).insert(374, 375)
-                                        .insert(375, 374).insert(376, 374)
-                                        .insert(125, 375).insert(125, 376).insert(124, 375)
-                                        .insert(125, 374).insert(126, 374)
-                                        .insert(375, 125).insert(375, 126).insert(374, 125)
-                                        .insert(375, 124).insert(376, 124);
-                                //hashMode++;
-                                //hashMode %= 29;
+                                otherMode++;
+                                otherMode %= 17;
+                                if (otherMode == 0) {
+                                    ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
+                                    ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
+                                            .insert(250, 249).insert(251, 249)
+                                            .insert(125, 125).insert(125, 126).insert(124, 125)
+                                            .insert(125, 124).insert(126, 124)
+                                            .insert(375, 375).insert(375, 376).insert(374, 375)
+                                            .insert(375, 374).insert(376, 374)
+                                            .insert(125, 375).insert(125, 376).insert(124, 375)
+                                            .insert(125, 374).insert(126, 374)
+                                            .insert(375, 125).insert(375, 126).insert(374, 125)
+                                            .insert(375, 124).insert(376, 124);
+                                    //hashMode++;
+                                    //hashMode %= 29;
+                                }
                         }
                         putMap();
                         //Gdx.graphics.requestRendering();
@@ -5200,15 +5227,223 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 }
             }
             break;
-            default: // artistic, just one
-            {
-                Gdx.graphics.setTitle("Conway's Game Of Life at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                display.clear();
-                for(Coord c : ca.current)
-                {
-                    display.put(c.x, c.y, FLOAT_WHITE);
+            default: {
+                switch (otherMode) {
+                    case 0: {
+                        Gdx.graphics.setTitle("Conway's Game Of Life at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                        display.clear();
+                        for (Coord c : ca.current) {
+                            display.put(c.x, c.y, FLOAT_WHITE);
+                        }
+                        ca.runGameOfLife();
+                    }
+                    break;
+                    case 1:
+                    {
+                        Gdx.graphics.setTitle("Classic 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(classic2_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 2:
+                    {
+                        Gdx.graphics.setTitle("Classic 2D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(classic2_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 3:
+                    {
+                        Gdx.graphics.setTitle("Classic 2D Noise, 4 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(classic3_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 4:
+                    {
+                        Gdx.graphics.setTitle("Classic 2D Noise, 4 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(classic3_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+
+                    case 5:
+                    {
+                        Gdx.graphics.setTitle("Whirling 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(whirling2_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 6:
+                    {
+                        Gdx.graphics.setTitle("Whirling 2D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(whirling2_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 7:
+                    {
+                        Gdx.graphics.setTitle("Whirling 2D Noise, 4 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(whirling3_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 8:
+                    {
+                        Gdx.graphics.setTitle("Whirling 2D Noise, 4 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(whirling3_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 9:
+                    {
+                        Gdx.graphics.setTitle("Classic 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(classic2_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 10:
+                    {
+                        Gdx.graphics.setTitle("Classic 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(classic2_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 11:
+                    {
+                        Gdx.graphics.setTitle("Classic 3D Noise, 4 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(classic3_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 12:
+                    {
+                        Gdx.graphics.setTitle("Classic 3D Noise, 4 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(classic3_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+
+                    case 13:
+                    {
+                        Gdx.graphics.setTitle("Whirling 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(whirling2_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 14:
+                    {
+                        Gdx.graphics.setTitle("Whirling 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(whirling2_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 15:
+                    {
+                        Gdx.graphics.setTitle("Whirling 3D Noise, 4 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            xx = x + ctr;
+                            for (int y = 0; y < height; y++) {
+                                yy = y + ctr;
+                                bright = basicPrepare(whirling3_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+                    case 16:
+                    {
+                        Gdx.graphics.setTitle("Whirling 3D Noise, 4 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                bright = basicPrepare(whirling3_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                            }
+                        }
+                    }
+                    break;
+
                 }
-                ca.runGameOfLife();
             }
         }
     }

@@ -139,6 +139,31 @@ public class Noise {
     }
 
     /**
+     * Given a float {@code a} from 0.0 to 1.0 (both inclusive), this gets a float that adjusts a to be closer to the
+     * end points of that range (if less than 0.5, it gets closer to 0.0, otherwise it gets closer to 1.0).
+     * @param a a float between 0.0f and 1.0f inclusive
+     * @return a float between 0.0f and 1.0f inclusive that is more likely to be near the extremes
+     */
+    public static double emphasize(final double a)
+    {
+        return a * a * (3.0 - 2.0 * a);
+    }
+    /**
+     * Given a float {@code a} from -1.0 to 1.0 (both inclusive), this gets a float that adjusts a to be closer to the
+     * end points of that range (if less than 0, it gets closer to -1.0, otherwise it gets closer to 1.0).
+     * <br>
+     * Used by {@link ClassicNoise} and {@link  JitterNoise} to increase the frequency of high and low results, which
+     * improves the behavior of {@link Ridged2D} and other Ridged noise when it uses those noise algorithms.
+     * @param a a float between -1.0f and 1.0f inclusive
+     * @return a float between -1.0f and 1.0f inclusive that is more likely to be near the extremes
+     */
+    public static double emphasizeSigned(double a)
+    {         
+        a = a * 0.5 + 0.5;
+        return a * a * (6.0 - 4.0 * a) - 1.0;
+    }
+
+    /**
      * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
      * a long for state. This is organized how it is so it can be statically imported without also importing the rest
      * of Noise. Internally, all of the methods here are based on a simplified version of Hive from {@link CrossHash}
@@ -1155,7 +1180,7 @@ public class Noise {
         protected int octaves;
         protected Noise1D basis;
         public double frequency;
-        public double lacunarity = 0.5;
+        public double lacunarity;
         public Layered1D() {
             this(Basic1D.instance);
         }
@@ -1205,7 +1230,7 @@ public class Noise {
         protected int octaves;
         protected Noise2D basis;
         public double frequency;
-        public double lacunarity = 0.5;
+        public double lacunarity;
         public Layered2D() {
             this(SeededNoise.instance);
         }
@@ -1255,7 +1280,7 @@ public class Noise {
         protected int octaves;
         protected Noise3D basis;
         public double frequency;
-        public double lacunarity = 0.5;
+        public double lacunarity;
         public Layered3D() {
             this(SeededNoise.instance);
         }
@@ -1307,7 +1332,7 @@ public class Noise {
         protected int octaves;
         protected Noise4D basis;
         public double frequency;
-        public double lacunarity = 0.5;
+        public double lacunarity;
         public Layered4D() {
             this(SeededNoise.instance);
         }
@@ -1361,7 +1386,7 @@ public class Noise {
         protected int octaves;
         protected Noise6D basis;
         public double frequency;
-        public double lacunarity = 0.5;
+        public double lacunarity;
         public Layered6D() {
             this(SeededNoise.instance);
         }
@@ -1890,10 +1915,11 @@ public class Noise {
         public void setOctaves(int octaves)
         {
             this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            for (int o = 0; o < octaves; o++) {
+            correct = 1.0;
+            for (int o = 1; o < octaves; o++) {
                 correct += Math.pow(2.0, -o);
             }
-            correct = 1.9 / correct;
+            correct = 2.0 / correct;
         }
 
 
@@ -1935,7 +1961,6 @@ public class Noise {
         public double frequency;
         protected double correct;
         protected Noise3D basis;
-
         public Ridged3D() {
             this(SeededNoise.instance, 2, 1.25);
         }
@@ -1944,6 +1969,9 @@ public class Noise {
             this(basis, 2, 1.25);
         }
 
+        public Ridged3D(Noise3D basis, int octaves) {
+            this(basis, octaves, 1.25);
+        }
         public Ridged3D(Noise3D basis, int octaves, double frequency) {
             this.basis = basis;
             this.frequency = frequency;
@@ -1952,10 +1980,11 @@ public class Noise {
         public void setOctaves(int octaves)
         {
             this.octaves = (octaves = Math.max(1, Math.min(63, octaves)));
-            for (int o = 0; o < octaves; o++) {
+            correct = 1.0;
+            for (int o = 1; o < octaves; o++) {
                 correct += Math.pow(2.0, -o);
             }
-            correct = 1.45 / correct;
+            correct = 2.0 / correct;
         }
 
         @Override
@@ -2021,9 +2050,9 @@ public class Noise {
             exp = new double[octaves];
             double maxvalue = 0.0;
             for (int i = 0; i < octaves; ++i) {
-                maxvalue += (exp[i] = Math.pow(2.0, -0.9 * i));
+                maxvalue += (exp[i] = Math.pow(2.0, -i));
             }
-            correct = 1.41 / maxvalue;
+            correct = 2.0 / maxvalue;
         }
 
         @Override
@@ -2092,9 +2121,9 @@ public class Noise {
             exp = new double[octaves];
             double maxvalue = 0.0;
             for (int i = 0; i < octaves; ++i) {
-                maxvalue += (exp[i] = Math.pow(2.0, -0.9 * i));
+                maxvalue += (exp[i] = Math.pow(2.0, -i));
             }
-            correct = 1.28 / maxvalue;
+            correct = 2.0 / maxvalue;
         }
 
         @Override
@@ -2115,6 +2144,8 @@ public class Noise {
                 y *= 2.0;
                 z *= 2.0;
                 w *= 2.0;
+                u *= 2.0;
+                v *= 2.0;
             }
             return sum * correct - 1.0;
         }
@@ -2147,7 +2178,7 @@ public class Noise {
     public static class Turbulent2D implements Noise2D {
         protected int octaves;
         protected Noise2D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
         public final double correct;
 
         public Turbulent2D() {
@@ -2200,7 +2231,7 @@ public class Noise {
     public static class Turbulent3D implements Noise3D {
         protected int octaves;
         protected Noise3D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
         public final double correct;
 
         public Turbulent3D() {
@@ -2256,7 +2287,7 @@ public class Noise {
     public static class Turbulent4D implements Noise4D {
         protected int octaves;
         protected Noise4D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
         public final double correct;
         public Turbulent4D() {
             this(SeededNoise.instance, alternate, 1);
@@ -2313,7 +2344,7 @@ public class Noise {
     public static class Turbulent6D implements Noise6D {
         protected int octaves;
         protected Noise6D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
         public final double correct;
         public Turbulent6D() {
             this(SeededNoise.instance, alternate, 1);
@@ -2373,7 +2404,7 @@ public class Noise {
     public static class Viny2D implements Noise2D {
         protected int octaves;
         protected Noise2D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
 
         public Viny2D() {
             this(SeededNoise.instance, alternate, 1);
@@ -2424,7 +2455,7 @@ public class Noise {
     public static class Viny3D implements Noise3D {
         protected int octaves;
         protected Noise3D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
 
         public Viny3D() {
             this(SeededNoise.instance, alternate, 1);
@@ -2481,7 +2512,7 @@ public class Noise {
     public static class Viny4D implements Noise4D {
         protected int octaves;
         protected Noise4D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
 
         public Viny4D() {
             this(SeededNoise.instance, alternate, 1);
@@ -2541,7 +2572,7 @@ public class Noise {
     public static class Viny6D implements Noise6D {
         protected int octaves;
         protected Noise6D basis, disturbance;
-        public double frequency = 1.0;
+        public double frequency;
         public Viny6D() {
             this(SeededNoise.instance, alternate, 1);
         }
