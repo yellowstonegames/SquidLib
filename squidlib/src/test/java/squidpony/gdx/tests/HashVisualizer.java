@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 5;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 22, noiseMode = 74, otherMode = 0;//76;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 74, otherMode = 0;//76;//118;//82;
 
     private SpriteBatch batch;
     private SparseLayers display;//, overlay;
@@ -196,7 +196,8 @@ public class HashVisualizer extends ApplicationAdapter {
     private RandomnessSource fuzzy;
     private Random jreRandom = new Random(0xFEDCBA987654321L);
     private RandomXS128 gdxRandom = new RandomXS128(0xFEDCBA987654321L);
-    private SloppyRandom mr = new SloppyRandom();
+    private BasicRandom32 br32 = new BasicRandom32();
+    private BasicRandom64 br64 = new BasicRandom64();
     private CellularAutomaton ca = new CellularAutomaton(512, 512);
     private int ctr = 0;
     private boolean keepGoing = true;
@@ -4618,46 +4619,58 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 22:
-                        flap.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = flap.nextInt() | 255L;
+                                code = (br64.nextLong() & 0xFFFFFF00L) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
+//                        flap.setState(System.nanoTime());
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                code = flap.nextInt() | 255L;
+//                                display.put(x, y, floatGet(code));
+//                            }
+//                        }
+//                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        break;
                     case 23:
-                        flap.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = flap.next(8);
+                                iBright = (br64.nextInt() & 0xFF);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
+//                        flap.setState(System.nanoTime());
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                iBright = flap.next(8);
+//                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+//                            }
+//                        }
+//                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        break;
                     case 24:
-                        //mr.setState(System.nanoTime());
-                        //mr.mul += 2;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = (mr.nextLong() & 0xFFFFFF00L) | 255L;
+                                code = (br32.nextInt() & 0xFFFFFF00L) | 255L;
                                 display.put(x, y, floatGet(code));
                             }
                         }
-                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("BasicRandom32 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 25:
-                        //mr.setState(System.nanoTime());
-                        //mr.mul += 2;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)(mr.nextLong() & 0xFF);
+                                iBright = (br32.nextInt() & 0xFF);
                                 display.put(x, y, floatGetI(iBright, iBright, iBright));
                             }
                         }
-                        Gdx.graphics.setTitle("MicroRandom (edited) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("BasicRandom32 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 26:
                         jab.setState(System.nanoTime());
