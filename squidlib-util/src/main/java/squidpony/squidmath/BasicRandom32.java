@@ -6,24 +6,33 @@ import java.util.Random;
 
 /**
  * A low-quality but very fast RNG that has no apparent visual artifacts here; uses Mark Overton's CMR subcycle
- * generator type, but modified to be especially GWT-friendly. This is meant to be an answer to when people ask for
+ * generator type, but modified to be especially GWT-friendly. Even though it has no visual issues when rendered as
+ * pixels, it still fails PractRand testing almost immediately. This is meant to be an answer to when people ask for
  * a bare-minimum generator that's still "good enough" for games. It has a period of 0xFFF43787 or 4294195079, which
  * can be exhausted in seconds if you only generate numbers in that time, but some seeds will be in a different
  * cycle with a much lower period. The likelihood of choosing one of these seeds is low, less than a fiftieth of one
  * percent, but it can happen. It cannot produce all possible ints in its longest cycle, and it can't produce even a
- * fraction of all possible ints in its smallest cycle. It does not implement RandomnessSource so it can have no
- * dependencies, and can be easily copied out. It does extend java.util.Random for additional ease of integration.
+ * fraction of all possible ints in its smallest cycle. It implements RandomnessSource, but if you just want to copy
+ * this class with no dependencies, then the class declaration can easily be changed to
+ * {@code public class BasicRandom32 extends Random implements Serializable} without any other changes. Note, it does
+ * extend java.util.Random for additional ease of integration, but doesn't use the slow {@code synchronized} keyword
+ * that Random's implementations do.
+ * <br>
+ * <a href="http://www.drdobbs.com/tools/fast-high-quality-parallel-random-number/231000484">This Dr. Dobb's article has
+ * more on this type of generator</a>.
+ * @author Mark Overton
+ * @author Tommy Ettinger
  */
-public class SloppyRandom extends Random implements Serializable {
+public class BasicRandom32 extends Random implements RandomnessSource, Serializable {
     private static final long serialVersionUID = 1L;
     public int state;
 
-    public SloppyRandom()
+    public BasicRandom32()
     {
         state = 1;
     }
 
-    public SloppyRandom(final int seed) {
+    public BasicRandom32(final int seed) {
         setState(seed);
     }
 
@@ -75,7 +84,7 @@ public class SloppyRandom extends Random implements Serializable {
      * <br>
      * Credit for this method goes to <a href="https://oroboro.com/large-random-in-range/">Rafael Baptista's blog</a>,
      * with some adaptation for signed long values and a 64-bit generator. It also always gets
-     * exactly two random numbers, so it advances the state as much as {@link #nextLong(long)}.
+     * exactly two random numbers, so it advances the state as much as {@link #nextLong()}.
      * @param bound the outer exclusive bound; should be positive, otherwise this always returns 0L
      * @return a random long between 0 (inclusive) and bound (exclusive)
      */
@@ -165,8 +174,8 @@ public class SloppyRandom extends Random implements Serializable {
         return elements;
     }
 
-    public SloppyRandom copy() {
-        SloppyRandom sr = new SloppyRandom();
+    public BasicRandom32 copy() {
+        BasicRandom32 sr = new BasicRandom32();
         sr.state = state;
         return sr;
     }
