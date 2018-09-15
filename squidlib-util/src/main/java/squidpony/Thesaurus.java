@@ -22,7 +22,7 @@ public class Thesaurus implements Serializable{
             similarFinder = Pattern.compile(".*?\\b(\\w\\w\\w\\w).*?{\\@1}.*$", "ui");
     public OrderedMap<CharSequence, GapShuffler<String>> mappings;
     public ArrayList<FakeLanguageGen.Alteration> alterations = new ArrayList<>(4);
-    protected StatefulRNG rng;
+    protected GWTRNG rng;
     public transient ArrayList<FakeLanguageGen> randomLanguages = new ArrayList<>(2);
     public transient String latestGenerated = "Nationia";
     /**
@@ -31,7 +31,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus()
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        rng = new StatefulRNG();
+        rng = new GWTRNG();
     }
 
     /**
@@ -41,7 +41,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus(IRNG rng)
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        this.rng = new StatefulRNG(rng.nextLong());
+        this.rng = new GWTRNG(rng.nextLong());
     }
 
     /**
@@ -51,7 +51,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus(long shuffleSeed)
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        this.rng = new StatefulRNG(shuffleSeed);
+        this.rng = new GWTRNG(shuffleSeed);
     }
 
 
@@ -62,7 +62,7 @@ public class Thesaurus implements Serializable{
     public Thesaurus(String shuffleSeed)
     {
         mappings = new OrderedMap<>(256, Hashers.caseInsensitiveStringHasher);
-        this.rng = new StatefulRNG(shuffleSeed);
+        this.rng = new GWTRNG(CrossHash.hash64(shuffleSeed));
     }
 
     /**
@@ -407,6 +407,42 @@ public class Thesaurus implements Serializable{
             }
             return;
         }
+        else if(numbers.containsKey(word))
+        {
+            if(word.length() > 1 && Category.Lu.contains(word.charAt(1)))
+            {
+                dest.append(numberWordInRange(2, numbers.get(word)).toUpperCase());
+            }
+            else if(Category.Lu.contains(word.charAt(0)))
+            {
+                String w = numberWordInRange(2, numbers.get(word));
+                dest.append(Character.toUpperCase(w.charAt(0)));
+                dest.append(w.substring(1));
+            }
+            else
+            {
+                dest.append(numberWordInRange(2, numbers.get(word)));
+            }
+            return;
+        }
+        else if(numberAdjectives.containsKey(word))
+        {
+            if(word.length() > 1 && Category.Lu.contains(word.charAt(1)))
+            {
+                dest.append(numberAdjectiveInRange(2, numberAdjectives.get(word)).toUpperCase());
+            }
+            else if(Category.Lu.contains(word.charAt(0)))
+            {
+                String w = numberAdjectiveInRange(2, numberAdjectives.get(word));
+                dest.append(Character.toUpperCase(w.charAt(0)));
+                dest.append(w.substring(1));
+            }
+            else
+            {
+                dest.append(numberAdjectiveInRange(2, numberAdjectives.get(word)));
+            }
+            return;
+        }
         if(dest instanceof Replacer.StringBuilderBuffer)
         {
             ((Replacer.StringBuilderBuffer)dest).sb.append(word);
@@ -530,6 +566,131 @@ public class Thesaurus implements Serializable{
         return replacer.replace(working);
     }
 
+    /**
+     * Gets an English word for a given number, if this knows it. These words are known from 0 ("zero") to 20
+     * ("twenty"), as well as some higher numbers. If a word isn't known for a number, this returns the number as a
+     * String, such as "537" or "-1".
+     * @param number the number to get a word for
+     * @return the word associated with a number as a String, or if none is known, {@code String.valueOf(number)}.
+     */
+    public static String numberWord(final int number)
+    {
+        switch (number){
+            case 0: return "zero";
+            case 1: return "one";
+            case 2: return "two";
+            case 3: return "three";
+            case 4: return "four";
+            case 5: return "five";
+            case 6: return "six";
+            case 7: return "seven";
+            case 8: return "eight";
+            case 9: return "nine";
+            case 10: return "ten";
+            case 11: return "eleven";
+            case 12: return "twelve";
+            case 13: return "thirteen";
+            case 14: return "fourteen";
+            case 15: return "fifteen";
+            case 16: return "sixteen";
+            case 17: return "seventeen";
+            case 18: return "eighteen";
+            case 19: return "nineteen";
+            case 20: return "twenty";
+            case 30: return "thirty";
+            case 40: return "fourty";
+            case 50: return "fifty";
+            case 60: return "sixty";
+            case 70: return "seventy";
+            case 80: return "eighty";
+            case 90: return "ninety";
+            case 100: return "hundred";
+            case 1000: return "thousand";
+            case 1000000: return "million";
+            case 1000000000: return "billion";
+            default: return String.valueOf(number);
+        }
+    }
+
+    /**
+     * Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
+     * "eleventh"). These words are known from 1 ("first") to 20 ("twentieth"), as well as some higher numbers. If a
+     * word isn't known for a number, this appends a suffix based on the last base-10 digit to the number, as with "0th"
+     * or "42nd".
+     * @param number the number to get a position adjective for
+     * @return the word associated with a number as a String, or if none is known, {@code String.valueOf(number)} followed by a two-char suffix from the last digit.
+     */
+    public static String numberAdjective(final int number)
+    {
+        switch (number){
+            case 1: return "first";
+            case 2: return "second";
+            case 3: return "third";
+            case 4: return "fourth";
+            case 5: return "fifth";
+            case 6: return "sixth";
+            case 7: return "seventh";
+            case 8: return "eighth";
+            case 9: return "ninth";
+            case 10: return "tenth";
+            case 11: return "eleventh";
+            case 12: return "twelfth";
+            case 13: return "thirteenth";
+            case 14: return "fourteenth";
+            case 15: return "fifteenth";
+            case 16: return "sixteenth";
+            case 17: return "seventeenth";
+            case 18: return "eighteenth";
+            case 19: return "nineteenth";
+            case 20: return "twentieth";
+            case 30: return "thirtieth";
+            case 40: return "fourtieth";
+            case 50: return "fiftieth";
+            case 60: return "sixtieth";
+            case 70: return "seventieth";
+            case 80: return "eightieth";
+            case 90: return "ninetieth";
+            case 100: return "hundredth";
+            case 1000: return "thousandth";
+            case 1000000: return "millionth";
+            case 1000000000: return "billionth";
+            default: 
+            {
+                switch (number % 10){
+                    case 1: return number + "st";
+                    case 2: return number + "nd";
+                    case 3: return number + "rd";
+                    default:return number + "th";
+                }
+            }
+        }
+    }
+
+    /**
+     * Gets an English word for a number, if this knows it, where the number is chosen randomly between lowest and
+     * highest, both inclusive. These words are known from 0 ("zero") to 20 ("twenty"), as well as some higher numbers.
+     * If a word isn't known for a number, this returns the number as a String, such as "537" or "-1".
+     * @param lowest the lower bound for numbers this can choose, inclusive
+     * @param highest the upper bound for numbers this can choose, inclusive
+     * @return a String word for a number in the given range, such as "six" or "eleven", if it is known
+     */
+    public String numberWordInRange(int lowest, int highest)
+    {
+        return numberWord(rng.nextSignedInt(highest + 1 - lowest) + lowest);
+    }
+    /**
+     * Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
+     * "eleventh"), where the number is chosen randomly between lowest and highest, both inclusive. These words are
+     * known from 1 ("first") to 20 ("twentieth"), as well as some output for other numbers (such as "42nd" or "23rd").
+     * @param lowest the lower bound for numbers this can choose, inclusive
+     * @param highest the upper bound for numbers this can choose, inclusive
+     * @return a String word for a number in the given range, such as "third" or "twelfth", if it is known
+     */
+    public String numberAdjectiveInRange(int lowest, int highest)
+    {
+        return numberAdjective(rng.nextSignedInt(highest + 1 - lowest) + lowest);
+    }
+    
     private static final String[] nationTerms = new String[]{
             "Union`adj` Union`noun` of @", "Union`adj` @ Union`noun`", "@ Union`noun`", "@ Union`noun`", "@-@ Union`noun`", "Union`adj` Union`noun` of @",
             "Union`adj` Duchy`nouns` of @",  "The @ Duchy`noun`", "The Fancy`adj` @ Duchy`noun`", "The Sole`adj` @ Empire`noun`",
@@ -711,7 +872,7 @@ public class Thesaurus implements Serializable{
             "ominous`adj`",
             makeList("ominous", "foreboding", "fateful", "baleful", "portentous"),
             "many`adj`",
-            makeList("many", "myriad", "thousandfold", "infinite", "countless", "unlimited"),
+            makeList("many", "myriad", "thousandfold", "infinite", "countless", "unlimited", "manifold"),
             "impossible`adj`",
             makeList("impossible", "forbidden", "incomprehensible", "ineffable", "unearthly", "abominable", "unspeakable", "indescribable"),
             "gaze`noun`",
@@ -733,7 +894,15 @@ public class Thesaurus implements Serializable{
             "popular`adj`",
             makeList("beloved", "adored", "revered", "worshipped"),
             "unpopular`adj`",
-            makeList("reviled", "despised", "hated", "loathed")
+            makeList("reviled", "despised", "hated", "loathed"),
+            "glyph`noun`",
+            makeList("glyph", "sign", "symbol", "sigil", "seal", "mark"),
+            "glyph`nouns`",
+            makeList("glyphs", "signs", "symbols", "sigils", "seals", "marks"),
+            "power`noun`",
+            makeList("power", "force", "potency", "strength", "authority", "dominance"),
+            "power`adj`",
+            makeList("powerful", "forceful", "potent", "strong", "authoritative", "dominant")
             );
     public static final OrderedMap<String, ArrayList<String>>
             adjective = new OrderedMap<>(categories),
@@ -890,6 +1059,54 @@ public class Thesaurus implements Serializable{
                     FakeLanguageGen.INUKTITUT, 2
             )
     );
+    public static final OrderedMap<CharSequence, Integer> numbers = new OrderedMap<CharSequence, Integer>(
+            100, Hashers.caseInsensitiveStringHasher
+    ).putPairs(
+            "one`noun`", 1,
+            "two`noun`", 2,
+            "three`noun`", 3,
+            "four`noun`", 4,
+            "five`noun`", 5,
+            "six`noun`", 6,
+            "seven`noun`", 7,
+            "eight`noun`", 8,
+            "nine`noun`", 9,
+            "ten`noun`", 10,
+            "eleven`noun`", 11,
+            "twelve`noun`", 12,
+            "thirteen`noun`", 13,
+            "fourteen`noun`", 14,
+            "fifteen`noun`", 15,
+            "sixteen`noun`", 16,
+            "seventeen`noun`", 17,
+            "eighteen`noun`", 18,
+            "nineteen`noun`", 19,
+            "twenty`noun`", 20
+    ),
+            numberAdjectives = new OrderedMap<CharSequence, Integer>(
+                    100, Hashers.caseInsensitiveStringHasher
+            ).putPairs(
+                    "one`adj`", 1,
+                    "two`adj`", 2,
+                    "three`adj`", 3,
+                    "four`adj`", 4,
+                    "five`adj`", 5,
+                    "six`adj`", 6,
+                    "seven`adj`", 7,
+                    "eight`adj`", 8,
+                    "nine`adj`", 9,
+                    "ten`adj`", 10,
+                    "eleven`adj`", 11,
+                    "twelve`adj`", 12,
+                    "thirteen`adj`", 13,
+                    "fourteen`adj`", 14,
+                    "fifteen`adj`", 15,
+                    "sixteen`adj`", 16,
+                    "seventeen`adj`", 17,
+                    "eighteen`adj`", 18,
+                    "nineteen`adj`", 19,
+                    "twenty`adj`", 20
+            );
 
     /**
      * Thesaurus preset that changes all text to sound like this speaker: "Desaurus preset dat changez all text to sound
