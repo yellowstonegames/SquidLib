@@ -11,6 +11,10 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidmath.NumberTools;
+
+import java.util.Arrays;
+import java.util.Comparator;
 
 import static squidpony.StringKit.safeSubstring;
 
@@ -21,22 +25,24 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static int gridWidth = 64;
+    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
      * In number of cells
      */
-    private static int gridHeight = 32;
+    private static int gridHeight = 103;
 //    private static int gridHeight = 27;
 
     /**
      * The pixel width of a cell
      */
-    private static int cellWidth = 10;
+    private static int cellWidth = 5;
+//    private static int cellWidth = 10;
     /**
      * The pixel height of a cell
      */
-    private static int cellHeight = 25;
+    private static int cellHeight = 5;
+//    private static int cellHeight = 25;
 
     private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
 
@@ -47,8 +53,9 @@ public class ColorTest extends ApplicationAdapter {
     private SquidLayers display;
     private int hh = 0;
     private int vv = 0;
+    private float luma = 0.5f;
     private Color tmp = new Color();
-    
+
     private void show(float hue, float sat, float val)
     {
         display.putString(hh * 8, vv, "          ", SColor.BLACK,
@@ -60,6 +67,64 @@ public class ColorTest extends ApplicationAdapter {
             System.out.println();
         }
     }
+
+    private void ycc(float y, float cb, float cr)
+    {
+        final byte b = (byte) ((cb + 0.8f) * 64), r = (byte) ((0.8f - cr) * 64);
+//        SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(y, cb, cr, 1f));
+//        display.putString(b, r, StringKit.hex(b) + "x" + StringKit.hex(r), y < 0.65f ? SColor.WHITE : SColor.BLACK,
+//                tmp);
+        display.put(b, r, '\0', SColor.floatGetYCoCg(y, cb, cr, 1f));
+//        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
+//        if((vv = ((vv + 1) & 7)) == 0)
+//        {
+//            ++hh;
+//            System.out.println();
+//        }
+    }
+    private void ycc(float[] components)
+    {
+        display.putString(hh * 8, vv, "          ", SColor.BLACK,
+                SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(components[0], components[1], components[2], 1f)));
+        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
+        if((vv = ((vv + 1) & 7)) == 0)
+        {
+            ++hh;
+            System.out.println();
+        }
+    }
+
+    private void hsv(float[] components)
+    {
+        display.putString(hh * 8, vv, "          ", SColor.BLACK,
+                SColor.colorFromFloat(tmp, SColor.floatGetHSV(components[0], components[1], components[2], 1f)));
+        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
+        if((vv = ((vv + 1) & 7)) == 0)
+        {
+            ++hh;
+            System.out.println();
+        }
+    }
+    public static float vdc(final int base, final int index)
+    {
+        if(base <= 2) {
+            return (Integer.reverse(index + 1) >>> 8) * 0x1p-24f;
+        }
+        float denominator = base, res = 0f;
+        int n = (index+1 & 0x7fffffff);
+        while (n > 0)
+        {
+            res += (n % base) / denominator;
+            n /= base;
+            denominator *= base;
+        }
+        return res;
+    }
+    public static float emphasize(final float a)
+    {
+        return a * a * (3f - 2f * a);
+    }
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -78,10 +143,42 @@ public class ColorTest extends ApplicationAdapter {
             }
         });
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
-        for (int i = 0; i < 256; i++) {
-            SColor db = SColor.DAWNBRINGER_AURORA[i];
-            display.putString(i >>> 2 & 0xF8, i & 31, String.format("   %02X   ", i), db.value() < 0.7f ? SColor.WHITE : SColor.BLACK, db);
+//        for (int i = 0; i < 256; i++) {
+//            SColor db = SColor.DAWNBRINGER_AURORA[i];
+//            display.putString(i >>> 2 & 0xF8, i & 31, String.format("   %02X   ", i), db.value() < 0.7f ? SColor.WHITE : SColor.BLACK, db);
+//        }
+
+        float[][] random = new float[32][3];
+        random[0][0] = 0.1f;
+        random[0][1] = 0.05f;
+        random[0][2] = 0.04f;
+        random[1][0] = 0.45f;
+        random[1][1] = 0.03f;
+        random[1][2] = 0.03f;
+        random[2][0] = 0.75f;
+        random[2][1] = -0.02f;
+        random[2][2] = 0.03f;
+        random[3][0] = 0.95f;
+        random[3][1] = -0.01f;
+        random[3][2] = -0.03f;
+        for (int i = 4; i < random.length; i++) {
+            random[i][0] = vdc(2, i);
+            final float rad = vdc(13, i) * 6.2831855f, adj = NumberTools.sin(random[i][0] * 3.14159265358979323846f) * 0.4f + 0.1f;
+            random[i][1] = NumberTools.cos(rad) * adj;
+            random[i][2] = NumberTools.sin(rad) * adj;
+//            random[i][1] = vdc(5, i) - 0.5f;
+//            random[i][2] = vdc(11, i) - 0.5f;
         }
+        Arrays.sort(random, new Comparator<float[]>() {
+            @Override
+            public int compare(float[] o1, float[] o2) {
+                return (int)Math.signum(o1[0] - o2[0]);
+            }
+        });
+        for (int i = 0; i < 32; i++) {
+            ycc(random[i]);
+        }
+        
 //        for (int i = 0; i < 32; i++) {
 //            SColor db = SColor.DAWNBRINGER_32[i];
 //            display.putString(0, i, "                                ", db, db);
@@ -332,9 +429,9 @@ public class ColorTest extends ApplicationAdapter {
                     .replace("`VAL", Float.toString(scc.getValue(c)))
                     .replace("`PACKED", Float.toHexString(c.toFloatBits()))
             );
-            System.out.println("Processd " + i);
+            //System.out.println("Processed " + i);
         }
-        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
+//        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
     }
     public static void tabSplit(String[] receiving, String source) {
         int dl = 1, idx = -1, idx2;
@@ -356,6 +453,13 @@ public class ColorTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        luma = NumberTools.zigzag((System.nanoTime() >>> 26 & 0xfff) * 0x1p-7f) * 0.5f + 0.5f;
+        Gdx.graphics.setTitle("Current luma: " + luma);
+        for (float cb = -0.8f; cb <= 0.8f; cb += 0x1p-6f) {
+            for (float cr = -0.8f; cr <= 0.8f; cr += 0x1p-6f) {
+                ycc(luma, cb, cr);
+            }
+        }
         stage.getViewport().update(totalWidth, totalHeight, true);
         stage.getViewport().apply(true);
         stage.draw();
