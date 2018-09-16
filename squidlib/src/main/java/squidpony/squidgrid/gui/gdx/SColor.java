@@ -12709,6 +12709,58 @@ public class SColor extends Color implements Serializable {
     }
 
     /**
+     * The "luminance" of the given packed float, which is like its lightness, in YCoCg format; ranges from 0.0f to
+     * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCoCg(float, float, float, float)}.
+     * YCoCg is useful for modifications to colors because you can get a grayscale version of a color by setting Co and
+     * Cg to 0, you can desaturate by multiplying Co and Cg by a number between 0 and 1, you can oversaturate by
+     * multiplying Co and Cg by a number greater than 1, you can lighten or darken by increasing or decreasing
+     * luminance, and so on and so forth. YCoCg is also a little more efficient to process than YCbCr, which other
+     * methods like {@link #floatGetYCbCr(float, float, float, float)} use. This might not be as perceptually accurate
+     * at determining lightness as {@link #lumaOfFloat(float)}.
+     * @param encoded a packed float
+     * @return the luminance as a float from 0.0f to 1.0f
+     */
+    public static float luminanceYCoCg(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return (((bits & 0x0000ff00) >>> 7) + (bits & 0x000000ff) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
+    }
+    /**
+     * The "chrominance orange" of the given packed float, which when combined with chrominance green describes the
+     * shade and saturation of a color, in YCoCg format; ranges from -0.5f to 0.5f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCoCg(float, float, float, float)}. YCoCg is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Co and Cg to 0, you can desaturate by
+     * multiplying Co and Cg by a number between 0 and 1, you can oversaturate by multiplying Co and Cg by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luminance, and so on and so forth. YCoCg is
+     * also a little more efficient to process than YCbCr, which other methods like
+     * {@link #floatGetYCbCr(float, float, float, float)} use.
+     * @param encoded a packed float
+     * @return the chrominance orange as a float from -0.5f to 0.5f
+     */
+    public static float chrominanceOrange(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return ((bits & 0x000000ff) - ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-9f;
+    }
+    /**
+     * The "chrominance green" of the given packed float, which when combined with chrominance orange describes the
+     * shade and saturation of a color, in YCoCg format; ranges from -0.5f to 0.5f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCoCg(float, float, float, float)}. YCoCg is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Co and Cg to 0, you can desaturate by
+     * multiplying Co and Cg by a number between 0 and 1, you can oversaturate by multiplying Co and Cg by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luminance, and so on and so forth. YCoCg is
+     * also a little more efficient to process than YCbCr, which other methods like
+     * {@link #floatGetYCbCr(float, float, float, float)} use.
+     * @param encoded a packed float
+     * @return the chrominance orange as a float from -0.5f to 0.5f
+     */
+    public static float chrominanceGreen(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return (((bits & 0x0000ff00) >>> 7) - (bits & 0x000000ff) - ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
+    }
+
+    /**
      * A color distance metric between two colors as packed floats, without performing a square root on the result.
      * The returned int can be used directly, with a typical difference of 5 or greater meaning there is a perceptible
      * difference between the two colors, or you can get its square root to have a more typical metric where differences
@@ -13136,17 +13188,14 @@ public class SColor extends Color implements Serializable {
         }
     }
     /**
-     * Gets a color as a packed float given floats representing hue, saturation, value, and opacity.
-     * All parameters should normally be between 0 and 1 inclusive, though hue is tolerated if it is negative down to
-     * -6f at the lowest or positive up to any finite value, though precision loss may affect the color if the hue is
-     * too large. A hue of 0 is red, progressively higher hue values go to orange, yellow, green, blue, and purple
-     * before wrapping around to red as it approaches 1. A saturation of 0 is grayscale, a saturation of 1 is brightly
-     * colored, and values close to 1 will usually appear more distinct than values close to 0, especially if the
-     * hue is different (saturation below 0.0039f is treated specially here, and does less work to simply get a color
-     * between black and white with the given opacity). The value is similar to lightness; a value of 0.0039 or less is
-     * always black (also using a shortcut if this is the case, respecting opacity), while a value of 1 is as bright as
-     * the color gets with the given saturation and value. To get a value of white, you would need both a value of 1 and
-     * a saturation of 0.
+     * Gets a color as a packed float given floats representing luma (Y, akin to lightness), blue chroma (Cb, one of two
+     * kinds of chroma used here), red chroma (Cr, the other kind of chroma), and opacity. Luma should be between 0 and
+     * 1, inclusive, with 0 used for very dark colors including but not limited to black, and 1 used for very light
+     * colors including but not limited to white. The two chroma values range from -0.5 to 0.5, and only make sense when
+     * used together. When Chroma B is high and Chroma R is low, the color is more blue; when Chroma R is high and
+     * Chroma B is low, the color is more red, when both are low it is more green, and when both are high it is more
+     * purple. When Chroma R and Chroma B are both near 0.0f, the color is closer to gray. Because Chroma values are
+     * centered on 0.0f, you can multiply them by a value like 0.5f to halve the colorfulness of the color.
      *
      * @param luma       0f to 1f, lightness (see {@link #lumaOfFloat(float)})
      * @param chromaB    -0.5f to 0.5f, "blueness" of chroma component, with 0.5 more blue (see {@link #chromaBOfFloat(float)})
@@ -13155,17 +13204,60 @@ public class SColor extends Color implements Serializable {
      * @return a float encoding a color with the given properties
      */
     public static float floatGetYCbCr(float luma, float chromaB, float chromaR, float opacity) {
-        if (luma <= 0.0039f) {
-            return floatGet(0f, 0f, 0f, opacity);
-        } else if (luma >= 0.9961f) {
-            return floatGet(1f, 1f, 1f, opacity);
-        }
+//        if (luma <= 0.0039f) {
+//            return floatGet(0f, 0f, 0f, opacity);
+//        } else if (luma >= 0.9961f) {
+//            return floatGet(1f, 1f, 1f, opacity);
+//        }
         if (chromaR >= -0.0039f && chromaR <= 0.0039f && chromaB >= -0.0039f && chromaB <= 0.0039f) {
             return floatGet(luma, luma, luma, opacity);
         }
         return floatGet(MathUtils.clamp(luma + chromaR * 1.402f, 0f, 1f),
                 MathUtils.clamp(luma - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 1f),
                 MathUtils.clamp(luma + chromaB * 1.772f, 0f, 1f),
+                opacity);
+    }
+    /**
+     * Gets a color as a packed float given floats representing luminance (Y, akin to lightness), orange chrominance
+     * (Co, one of two kinds of chroma used here), green chrominance (Cg, the other kind of chroma), and opacity.
+     * Luminance should be between 0 and 1, inclusive, with 0 used for very dark colors including but not limited to
+     * black, and 1 used for very light colors including but not limited to white. The two chrominance values range from
+     * -0.5 to 0.5, and only make sense when used together. When Co is high and Cg is low, the color is more reddish;
+     * when both are low it is more bluish, and when Cg is high the color tends to be greenish (it can be more cyan or
+     * more yellow depending on Co, but mostly when Y isn't low). When Co and Cg are both near 0.0f, the color is closer
+     * to gray. Because chrominance values are centered on 0.0f, you can multiply them by a value like 0.5f to halve the
+     * colorfulness of the color.
+     * 
+     * This method clamps the resulting color's RGB values, so any values can technically be given to this as y, co, and
+     * cg, but they will only be reversible from the returned float color to the original Y, Cb, and Cr values if the
+     * original values were in the range that {@link #chrominanceOrange(float)}, {@link #chrominanceGreen(float)}, and
+     * {@link #luminanceYCoCg(float)} return.
+     *
+     * @param y          0f to 1f, luminance or Y component of YCoCg
+     * @param co         -0.5f to 0.5f, "chrominance orange" or Co component of YCoCg, with 0.5f more orange
+     * @param cg         -0.5f to 0.5f, "chrominance green" or Cg component of YCoCg, with 0.5f more green
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a float encoding a color with the given properties
+     */
+    public static float floatGetYCoCg(float y, float co, float cg, float opacity) {
+//        if (luma <= 0.0039f) {
+//            return floatGet(0f, 0f, 0f, opacity);
+//        } else if (luma >= 0.9961f) {
+//            return floatGet(1f, 1f, 1f, opacity);
+//        }
+        if (co >= -0.0039f && co <= 0.0039f && cg >= -0.0039f && cg <= 0.0039f) {
+            return floatGet(y, y, y, opacity);
+        }
+        /*
+        tmp = Y   - Cg;
+R   = tmp + Co;
+G   = Y   + Cg;
+B   = tmp - Co;
+         */
+        final float t = y - cg;
+        return floatGet(MathUtils.clamp(t + co, 0f, 1f),
+                MathUtils.clamp(y + cg, 0f, 1f),
+                MathUtils.clamp(t - co, 0f, 1f),
                 opacity);
     }
 
