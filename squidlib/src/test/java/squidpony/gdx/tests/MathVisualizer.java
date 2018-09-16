@@ -21,7 +21,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 13;
+    private int mode = 19;
     private int modes = 24;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -642,8 +642,9 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("Halton[striding 1](2,3) sequence, first " + size + " points");
                 int x, y;
                 for (int i = 0; i < size; i++) {
-                    x = (int) (VanDerCorputQRNG.determine2(i) * 512);
-                    y = (int) (VanDerCorputQRNG.determine(3, i) * 512);
+                    y = LFSR.determinePositiveInt(i+1);
+                    x = (int) (VanDerCorputQRNG.determine2(y) * 512);
+                    y = (int) (VanDerCorputQRNG.determine(3, y) * 512);
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
@@ -657,8 +658,9 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("Halton[striding 1](2,39) sequence, first " + size + " points");
                 int x, y;
                 for (int i = 0; i < size; i++) {
-                    x = (int) (VanDerCorputQRNG.determine2(i) * 512);
-                    y = (int) (VanDerCorputQRNG.determine(39, i) * 512);
+                    y = LFSR.determinePositiveInt(i+1);
+                    x = (int) (VanDerCorputQRNG.determine2(y) * 512);
+                    y = (int) (VanDerCorputQRNG.determine(39, y) * 512);
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
@@ -667,14 +669,27 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
+            // too good to be true...
+            // from http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/
+            // it is in fact unreasonable.
+            // this looks like https://i.imgur.com/wdkvdqN.png 
             case 21: {
                 long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
-                Gdx.graphics.setTitle("AltVDC(7) sequence, first " + size + " points");
-                int a, x, y;
+                Gdx.graphics.setTitle("Roberts sequence, first " + size + " points");
+                int x, y; //, a;
+                double p, q;
                 for (int i = 0; i < size; i++) {
-                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
-                    x = a & 0x1ff;
-                    y = a >>> 16 & 0x1ff;
+                    //1.32471795724474602596 0.7548776662466927 0.5698402909980532
+                    x = LFSR.determinePositiveInt(i+1);
+                    p = 0.5 + x * 0.7548776662466927;
+                    q = 0.5 + x * 0.5698402909980532;
+                    x = (int) ((p - (int)p) * 512);
+                    y = (int) ((q - (int)q) * 512);
+                    
+//                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
+//                    x = a & 0x1ff;
+//                    y = a >>> 16 & 0x1ff;
+                    
 //                    a = GreasedRegion.disperseBits((int)(VanDerCorputQRNG.altDetermine(7L, i) * 0x4000));
 //                    x = a & 0x7f;
 //                    y = a >>> 16 & 0x7f;
@@ -729,6 +744,7 @@ public class MathVisualizer extends ApplicationAdapter {
                         yy = y + ctr;
                         //amounts[(int)((((seed = (((1234567L * (0x632BE59BD9B4E019L + (xx << 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (yy << 23)))) ^ seed >>> 27 ^ xx + yy) * 0xAEF17502108EF2D9L)
                         //        >>> 55)]++;
+                        //amounts[Noise.PointHash.hash256(xx, yy, 1L)]++;
                         amounts[((int)(((seed = 1234567L ^ 0xB4C4D * xx ^ 0xEE2C3 * yy) ^ seed >>> 13) * seed) >>> 24)]++;
                     }
                 }
@@ -783,7 +799,7 @@ public class MathVisualizer extends ApplicationAdapter {
     @Override
     public void render() {
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(1f, 1f, 1f, 1.0f);
+        Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //layers.put(10, 10, '@');
         update();
