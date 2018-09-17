@@ -44,9 +44,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             Empty                  = 14;
 
     //private static final int width = 314 * 3, height = 300;
-    //private static final int width = 1024, height = 512;
+    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
-    private static final int width = 400, height = 400;
+//    private static final int width = 400, height = 400;
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
@@ -63,13 +63,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private long seed;
     private int mode = 1, maxModes = 4;
     //private WorldMapGenerator.SpaceViewMap world;
-    private WorldMapGenerator.RotatingSpaceMap world;
+//    private WorldMapGenerator.RotatingSpaceMap world;
     //private WorldMapGenerator.MimicMap world;
     //private WorldMapGenerator.EllipticalMap world;
     //private WorldMapGenerator.EllipticalHammerMap world;
     //private WorldMapGenerator.RoundSideMap world;
 //    private WorldMapGenerator.HyperellipticalMap world;
 //    private WorldMapGenerator.SphereMapAlt world;
+    private WorldMapGenerator world;
     //private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
 
@@ -305,14 +306,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
-//        world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 0.8);
-        //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.8);
+        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.8);
+//        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.875);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.75);
+//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7, 0.1, 2.5);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
