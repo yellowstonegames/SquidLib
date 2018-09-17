@@ -41,8 +41,10 @@ import java.io.Serializable;
  * smaller state but implements StatefulRandomness). Some simple tests on bytes instead of ints showed that the
  * technique used here produces all possible bytes with equal frequency when run on bytes as state, with the exception
  * of producing 0 one less time (because both states cannot be 0 at the same time). This gives some confidence for the
- * algorithm used here, but doesn't say anything about how equidistributed this is across more than one dimension (it
- * could be better or worse than xoroshiro128+).
+ * algorithm used here, but the algorithm is still only one-dimensionally equidistributed (the same as xoroshiro128+),
+ * meaning it produces some pairs of ints more frequently than others. You may want to prefer {@link Starfish32RNG},
+ * which is the current default in {@link GWTRNG}, because it can produce all pairs of ints and all longs (except one),
+ * and has noticeably better quality even on some short generated sequences.
  * <br>
  * The name comes from a tool that rotates very quickly to remove undesirable parts of an object, akin to how this
  * generator adds an extra bitwise rotation to xoroshiro64+ to remove several types of
