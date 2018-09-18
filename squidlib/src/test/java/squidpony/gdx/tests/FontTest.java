@@ -10,9 +10,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.SquidPanel;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.TextPanel;
 import squidpony.squidgrid.mapping.LineKit;
-import squidpony.squidmath.ThrustAltRNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.LinnormRNG;
 
 import java.util.ArrayList;
 
@@ -50,15 +54,15 @@ public class FontTest extends ApplicationAdapter {
     private SquidPanel[] displays;
     private TextPanel<Color> text;
     private ArrayList<TextPanel<Color>> texts;
-    private int index = 3;
+    private int index = 6;
     private static final int ZOOM = 1;
     @Override
     public void create() {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 120,  30,  30,  100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
-        heights = new int[]{22,  29,  22,  29,  24,   15,  15,  20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
+        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
+        heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabFamily().width(ZOOM * 14).height(28).initBySize(),
@@ -114,10 +118,10 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[22].width() * widths[22], factories[22].height() * heights[22]),
         };
         displays = new SquidPanel[]{
-                new SquidPanel(widths[0 ], heights[0 ], factories[0 ]).setTextSize(factories[0 ].width() + 0f * ZOOM, factories[0].height() + 0f * ZOOM),
-                new SquidPanel(widths[1 ], heights[1 ], factories[1 ]).setTextSize(factories[1 ].width() + 0f * ZOOM, factories[1].height() + 0f * ZOOM),
-                new SquidPanel(widths[2 ], heights[2 ], factories[2 ]).setTextSize(factories[2 ].width() + 0f * ZOOM, factories[2].height() + 0f * ZOOM),
-                new SquidPanel(widths[3 ], heights[3 ], factories[3 ]).setTextSize(factories[3 ].width() + 0f * ZOOM, factories[3].height() + 0f * ZOOM),
+                new SquidPanel(widths[0 ], heights[0 ], factories[0 ]).setTextSize(factories[0 ].width() + 0f * ZOOM, factories[0].height() + 2f * ZOOM),
+                new SquidPanel(widths[1 ], heights[1 ], factories[1 ]).setTextSize(factories[1 ].width() + 0f * ZOOM, factories[1].height() + 2f * ZOOM),
+                new SquidPanel(widths[2 ], heights[2 ], factories[2 ]).setTextSize(factories[2 ].width() + 0f * ZOOM, factories[2].height() + 2f * ZOOM),
+                new SquidPanel(widths[3 ], heights[3 ], factories[3 ]).setTextSize(factories[3 ].width() + 0f * ZOOM, factories[3].height() + 2f * ZOOM),
                 new SquidPanel(widths[4 ], heights[4 ], factories[4 ]).setTextSize(factories[4 ].width() + 2f * ZOOM, factories[4].height() + 1f * ZOOM),
                 new SquidPanel(widths[5 ], heights[5 ], factories[5 ]).setTextSize(factories[5 ].width() + -4f * ZOOM, factories[5].height() + -4f * ZOOM),
                 new SquidPanel(widths[6 ], heights[6 ], factories[6 ]).setTextSize(factories[6 ].width() + 0.5f * ZOOM, factories[6].height() + 0.5f * ZOOM),
@@ -197,27 +201,34 @@ public class FontTest extends ApplicationAdapter {
         stage = new Stage(viewport, batch);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
+            LinnormRNG rng = new LinnormRNG(System.nanoTime());
             @Override
             public boolean keyUp(int keycode) {
                 if(keycode == Input.Keys.B)
                 {
                     display.erase();
-                    long r = System.nanoTime(), h;
-                    r = ThrustAltRNG.determine(r);
+                    long r, h;
+                    //r = determine(r);
+                    r = GreasedRegion.approximateBits(rng, 15);
                     h = LineKit.flipHorizontal4x4(r);
                     display.put(4, 2, LineKit.decode4x4(r));
                     display.put(8, 2, LineKit.decode4x4(h));
                     display.put(4, 6, LineKit.decode4x4(LineKit.flipVertical4x4(r)));
                     display.put(8, 6, LineKit.decode4x4(LineKit.flipVertical4x4(h)));
 
-                    r = ThrustAltRNG.determine(h) & (ThrustAltRNG.determine(h + 1) | ThrustAltRNG.determine(h + 2));
-                    h = ThrustAltRNG.determine(r + 1) & (ThrustAltRNG.determine(r + 2) | ThrustAltRNG.determine(r + 3));
-                    display.put(14,2, LineKit.decode4x4(r));
+//                    r = determine(h) & (determine(h + 1) | determine(h + 2));
+//                    h = determine(r + 1) & (determine(r + 2) | determine(r + 3));
+                    r = GreasedRegion.approximateBits(rng, 13);
+                    h = GreasedRegion.approximateBits(rng, 13);
+                    display.put(14, 2, LineKit.decode4x4(r));
                     display.put(18, 2, LineKit.decode4x4(LineKit.flipHorizontal4x4(r)));
                     display.put(14, 6, LineKit.decode4x4(h));
                     display.put(18, 6, LineKit.decode4x4(LineKit.flipHorizontal4x4(h)));
 
-                    r = (ThrustAltRNG.determine(r + 1) & ThrustAltRNG.determine(r + 2)) & LineKit.interiorCircleLarge;
+//                    r = (determine(r + 1) & determine(r + 2)) & LineKit.interiorCircleLarge;
+//                    r ^= LineKit.transpose4x4(r);
+//                    r |= LineKit.exteriorCircleLarge;
+                    r = GreasedRegion.approximateBits(rng, 10) & LineKit.interiorCircleLarge;
                     r ^= LineKit.transpose4x4(r);
                     r |= LineKit.exteriorCircleLarge;
                     h = LineKit.flipHorizontal4x4(r);
@@ -227,40 +238,48 @@ public class FontTest extends ApplicationAdapter {
                     display.put(28, 6, LineKit.decode4x4(LineKit.flipVertical4x4(h)));
 
 
-                    r = ThrustAltRNG.determine(r + 1);
+//                    r = determine(r + 1);
+                    r = GreasedRegion.approximateBits(rng, 15);
                     h = (r & LineKit.shallowInteriorSquareLarge) | LineKit.exteriorSquareLarge;
                     display.put(34, 2, LineKit.decode4x4(h));
                     h = LineKit.flipHorizontal4x4(h);
                     display.put(38, 2, LineKit.decode4x4(h));
-                    r = ThrustAltRNG.determine(r + 1);
+//                    r = determine(r + 1);
+                    r = GreasedRegion.approximateBits(rng, 14);
                     h = LineKit.flipVertical4x4(
                             (r & LineKit.shallowerInteriorSquareLarge) | LineKit.exteriorDiamondLarge);
                     display.put(34, 6, LineKit.decode4x4(h));
                     h = LineKit.flipHorizontal4x4(h);
                     display.put(38, 6, LineKit.decode4x4(h));
 
-                    r = ThrustAltRNG.determine(r+1) & ThrustAltRNG.determine(r + 2);
+//                    r = determine(r+1) & determine(r + 2);
+                    r = GreasedRegion.approximateBits(rng, 36);
                     r &= LineKit.flipHorizontal4x4(r);
-                    h = ThrustAltRNG.determine(h+1) & ThrustAltRNG.determine(h + 2);
+//                    h = determine(h+1) & determine(h + 2);
+                    h = GreasedRegion.approximateBits(rng, 36);
                     h &= LineKit.flipHorizontal4x4(h);
                     display.put(4,  12, LineKit.decode4x4(r));
                     display.put(4,  16, LineKit.decode4x4(h));
 
-                    r = ThrustAltRNG.determine(r+1) & ThrustAltRNG.determine(r + 2);
+//                    r = determine(r+1) & determine(r + 2);
+                    r = GreasedRegion.approximateBits(rng, 12);
                     r ^= LineKit.flipHorizontal4x4(r);
-                    h = ThrustAltRNG.determine(h+1) & ThrustAltRNG.determine(h + 2);
+//                    h = determine(h+1) & determine(h + 2);
+                    h = GreasedRegion.approximateBits(rng, 12);
                     h ^= LineKit.flipHorizontal4x4(h);
                     display.put(11,  12, LineKit.decode4x4(r));
                     display.put(11,  16, LineKit.decode4x4(h));
 
-                    r = ThrustAltRNG.determine(r+1) & ThrustAltRNG.determine(r + 2);
+//                    r = determine(r+1) & determine(r + 2);
+                    r = GreasedRegion.approximateBits(rng, 10);
                     r |= LineKit.flipHorizontal4x4(r);
-                    h = ThrustAltRNG.determine(h+1) & ThrustAltRNG.determine(h + 2);
+//                    h = determine(h+1) & determine(h + 2);
+                    h = GreasedRegion.approximateBits(rng, 10);
                     h |= LineKit.flipHorizontal4x4(h);
                     display.put(18,  12, LineKit.decode4x4(r));
                     display.put(18,  16, LineKit.decode4x4(h));
                 }
-                else {
+                else if(keycode == Input.Keys.SPACE || keycode == Input.Keys.ENTER) {
                     index = ((index + 1) % factories.length);
                     viewport = viewports[index];
                     if (index < factories.length - 3) {
