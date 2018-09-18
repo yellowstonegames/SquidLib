@@ -39,7 +39,7 @@ public class SparseDemo2 extends ApplicationAdapter {
     private FilterBatch batch;
 
     private IRNG rng;
-    private SparseLayersExperiment display, languageDisplay;
+    private SubcellLayers display, languageDisplay;
     private DungeonGenerator dungeonGen;
     // decoDungeon stores the dungeon map with features like grass and water, if present, as chars like '"' and '~'.
     // bareDungeon stores the dungeon map with just walls as '#' and anything not a wall as '.'.
@@ -47,7 +47,7 @@ public class SparseDemo2 extends ApplicationAdapter {
     // lineDungeon stores the whole map the same as decoDungeon except for walls, which are box-drawing characters here.
     // prunedDungeon takes lineDungeon and adjusts it so unseen segments of wall (represented by box-drawing characters)
     //   are removed from rendering; unlike the others, it is frequently changed.
-    private char[][] decoDungeon, bareDungeon, lineDungeon, prunedDungeon, triDungeon;
+    private char[][] decoDungeon, bareDungeon, lineDungeon, prunedDungeon;
     private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
@@ -186,7 +186,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         // it also includes 4 text faces (regular, bold, oblique, and bold oblique) so methods in GDXMarkup can make
         // italic or bold text without switching fonts (they can color sections of text too).
-        display = new SparseLayersExperiment(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
+        display = new SubcellLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
                 DefaultResources.getCrispSlabFamily());
 
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
@@ -194,7 +194,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         // if you use '#' for walls instead of box drawing chars, you don't need this.
         display.font.tweakWidth(cellWidth * 1.075f).tweakHeight(cellHeight * 1.1f).initBySize();
 
-        languageDisplay = new SparseLayersExperiment(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
+        languageDisplay = new SubcellLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can
         // set the background colors directly as floats with the SparseDisplay.backgrounds field, and it can be handy
         // to hold onto the current color we want to fill that with in the defaultPackedBackground field.
@@ -251,9 +251,9 @@ public class SparseDemo2 extends ApplicationAdapter {
         // └───────┘      └──┘    └──┘    └──┘     └───────┘ └──┘  └──┘
         //this is also good to compare against if the map looks incorrect, and you need an example of a correct map when
         //no parameters are given to generate().
-        lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
         resistance = DungeonUtility.generateResistances(decoDungeon);
         visible = new double[bigWidth][bigHeight];
+        lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
         triResistance = DungeonUtility.generateResistances3x3(lineDungeon);
         triVisible = new double[triWidth][triHeight];
 
@@ -634,14 +634,7 @@ public class SparseDemo2 extends ApplicationAdapter {
                     }
                 }
                 if (isSeen) {
-                    // Here we use a convenience method in SparseLayers that puts a char at a specified position (the
-                    // first three parameters), with a foreground color for that char (fourth parameter), as well as
-                    // placing a background tile made of a one base color (fifth parameter) that is adjusted to bring it
-                    // closer to FLOAT_LIGHTING (sixth parameter) based on how visible the cell is (seventh parameter,
-                    // comes from the FOV calculations) in a way that fairly-quickly changes over time.
-                    // This effect appears to shrink and grow in a circular area around the player, with the lightest
-                    // cells around the player and dimmer ones near the edge of vision. This lighting is "consistent"
-                    // because all cells at the same distance will have the same amount of lighting applied.
+                    // This just shows every char that we know the contents of, using their normal colors.
                     // We use prunedDungeon here so segments of walls that the player isn't aware of won't be shown.
                     display.put(x, y, prunedDungeon[x][y], colors[x][y]);
                 }

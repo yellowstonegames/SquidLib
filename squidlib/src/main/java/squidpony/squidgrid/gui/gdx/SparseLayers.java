@@ -110,7 +110,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     public SparseLayers(int gridWidth, int gridHeight, float cellWidth, float cellHeight, TextCellFactory font, float xOffset, float yOffset) {
         this.gridWidth = MathUtils.clamp(gridWidth, 1, 65535);
         this.gridHeight = MathUtils.clamp(gridHeight, 1, 65535);
-        backgrounds = ArrayTools.fill(0f, this.gridWidth, this.gridHeight);
+        backgrounds = new float[this.gridWidth][this.gridHeight];
         layers = new ArrayList<>(4);
         if(font.initialized())
             this.font = font;
@@ -834,9 +834,11 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
      */
     public void put(int x, int y, String text, float foreground, float background)
     {
-        int len = Math.min(text.length(), gridWidth - x);
-        for (int i = 0; i < len; i++) {
-            put(x + i, y, text.charAt(i), foreground, background);
+        if(text != null) {
+            int len = Math.min(text.length(), gridWidth - x);
+            for (int i = 0; i < len; i++) {
+                put(x + i, y, text.charAt(i), foreground, background);
+            }
         }
     }
     /**
@@ -1745,6 +1747,15 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         return Math.round((getY() - worldY) / font.actualCellHeight + gridHeight);
     }
 
+    /**
+     * Using the existing background color at the position x,y, this performs color blending from that existing color to
+     * the given color (as a float), using the mixBy parameter to determine how much of the color parameter to use (1f
+     * will set the color in this to the parameter, while 0f for mixBy will ignore the color parameter entirely).
+     * @param x the x component of the position in this panel to draw the starting color from
+     * @param y the y component of the position in this panel to draw the starting color from
+     * @param color the new color to mix with the starting color; a packed float, as made by {@link Color#toFloatBits()}
+     * @param mixBy the amount by which the new color will affect the old one, between 0 (no effect) and 1 (overwrite)
+     */
     @Override
     public void blend(int x, int y, float color, float mixBy)
     {
