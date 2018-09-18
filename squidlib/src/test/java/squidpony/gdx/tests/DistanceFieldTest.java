@@ -57,8 +57,8 @@ public class DistanceFieldTest extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         factories = new TextCellFactory[]{
-                DefaultResources.getCrispSlabFont().width(32).height(64).initBySize(),
-                DefaultResources.getStretchableSlabFont().width(32).height(64).initBySize(),
+                DefaultResources.getCrispLeanFont().width(32).height(64).initBySize(),//.setSmoothingMultiplier(1f),
+                DefaultResources.getStretchableLeanFont().width(32).height(64).initBySize(),
         };
         factory = factories[0];
         //factories[0].font().setUseIntegerPositions(true);
@@ -123,7 +123,7 @@ public class DistanceFieldTest extends ApplicationAdapter {
 //        final long time = (System.currentTimeMillis() & 0x3FFFL);
 //        final float zoom = MathUtils.clamp((time & 0x1FFFL) * 0x1.7p-13f - 0x0.7p-14f, 0.0f, 1f);
 //        if((time & 0x2000L) == 0L) {
-        final long time = (System.nanoTime() >>> 21);
+        final long time = (System.nanoTime() >>> 22);
         final float zoom = MathUtils.clamp((time & 0x7FFL) * 0x3p-12f - 0.25f, 0.0f, 1f);
         if((time & 0x800L) == 0x800L) {
             display.font.resetSize(32f * (0.25f + zoom * 2f), 64f * (0.25f + zoom * 2f));
