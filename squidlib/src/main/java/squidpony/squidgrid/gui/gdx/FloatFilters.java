@@ -191,7 +191,7 @@ public final class FloatFilters {
         public float yMul, cbMul, crMul;
 
         public YCbCrFilter(float yMul) {
-            this(1f, 1f, yMul);
+            this(yMul, 1f, 1f);
         }
 
         public YCbCrFilter(float yMul, float cbMul, float crMul) {
@@ -214,11 +214,6 @@ public final class FloatFilters {
                     (bits & 0x000000ff) * (0x1.010102p-8f * 0.299f) +
                             (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
                             (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f));
-            if (luma <= 0.0039f) {
-                return floatGet(0f, 0f, 0f, opacity);
-            } else if (luma >= 0.9961f) {
-                return floatGet(1f, 1f, 1f, opacity);
-            }
             final float chromaB = cbMul * (
                     (bits & 0x000000ff) * (0x1.010102p-8f * -0.168736f) +
                             (bits & 0x0000ff00) * (0x1.010102p-16f * -0.331264f) +
@@ -228,12 +223,61 @@ public final class FloatFilters {
                             (bits & 0x0000ff00) * (0x1.010102p-16f * -0.418688f) +
                             (bits & 0x00ff0000) * (0x1.010102p-24f * -0.081312f));
 
-            if (chromaR >= -0.0039f && chromaR <= 0.0039f && chromaB >= -0.0039f && chromaB <= 0.0039f) {
-                return floatGet(luma, luma, luma, opacity);
-            }
+//            if (chromaR >= -0.0039f && chromaR <= 0.0039f && chromaB >= -0.0039f && chromaB <= 0.0039f) {
+//                return floatGet(luma, luma, luma, opacity);
+//            }
             return floatGet(MathUtils.clamp(luma + chromaR * 1.402f, 0f, 1f),
                     MathUtils.clamp(luma - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 1f),
                     MathUtils.clamp(luma + chromaB * 1.772f, 0f, 1f),
+                    opacity);
+        }
+    }
+
+    /**
+     * Like {@link HSVFilter} or {@link YCbCrFilter}, but edits its input colors in YCoCg color space, and multiplies
+     * rather than adds. Most of the time you should prefer {@link YCbCrFilter} as long as it isn't a performance
+     * bottleneck; if it is, this method is faster but less accurate. Y is luminance, ranging from 0 (dark) to 1
+     * (light), and affects how bright the color is, but isn't very accurate perceptually. Co is Chrominance(orange) and
+     * Cg is Chrominance(green) (both range from -0.5 to 0.5), two inter-related channels that determine the hue and
+     * vividness of a specific color. When Co and Cg are both 0, the color is grayscale. When Co is 0.5 and Cg is -0.5,
+     * the color is red unless Y is very high or low. When Co is -0.5 and Cg is 0.5, the color is cyan with the same
+     * caveats re: Y. When Co and Cg are both -0.5, the color is blue (same caveats), and when both are 0.5, the color
+     * is yellow.
+     * <br>
+     * Valid values for Co and Cg are from -0.5 to 0.5 at the widest part of the range (it shrinks as Y approaches 0 or
+     * 1), but there aren't really invalid values here because this filter will clamp results with higher or lower
+     * channel values than a color can have. Each of yMul, coMul, and cgMul can have any float value, but yMul should be
+     * positive (unless you want this to only produce solid black). Similarly, coMul and cgMul will not produce
+     * meaningful results if they are very large (either positive or negative); it's recommended to use values between
+     * 0.0 and 1.0 for both if you want to desaturate colors or values somewhat greater than 1.0 to oversaturate them.
+     */
+    public static class YCoCgFilter extends FloatFilter {
+        public float yMul, coMul, cgMul;
+
+        public YCoCgFilter(float luminanceMul, float orangeMul, float greenMul) {
+            this.yMul = luminanceMul;
+            this.coMul = orangeMul;
+            this.cgMul = greenMul;
+        }
+
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            final int bits = NumberTools.floatToIntBits(color);
+            final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
+            final float y = yMul * (((bits & 0x000000ff) + ((bits & 0x0000ff00) >>> 7) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f);
+            final float co = coMul * (((bits & 0x000000ff) - ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-9f);
+            final float cg = cgMul * ((((bits & 0x0000ff00) >>> 7) - (bits & 0x000000ff) - ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f);
+
+            final float t = y - cg;
+            return floatGet(MathUtils.clamp(t + co, 0f, 1f),
+                    MathUtils.clamp(y + cg, 0f, 1f),
+                    MathUtils.clamp(t - co, 0f, 1f),
                     opacity);
         }
     }

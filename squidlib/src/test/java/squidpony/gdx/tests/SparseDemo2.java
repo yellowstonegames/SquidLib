@@ -147,6 +147,7 @@ public class SparseDemo2 extends ApplicationAdapter {
 //    private FloatFilters.PaletteFilter pal;
 //    private FloatFilters.MultiLerpFilter mlerp;
     private FloatFilters.YCbCrFilter ycbcr;
+    private FloatFilters.YCoCgFilter ycocg;
     //    private FloatFilter sepia;
     @Override
     public void create () {
@@ -165,12 +166,13 @@ public class SparseDemo2 extends ApplicationAdapter {
 //        );
         // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
         ycbcr = new FloatFilters.YCbCrFilter(0.875f, 0.6f, 0.6f);
+        ycocg = new FloatFilters.YCoCgFilter(1.0625f, 1.25f, 0.75f);
 //        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or
         // for tinting images.
-        batch = new FilterBatch(ycbcr);
+        batch = new FilterBatch(ycocg);
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -602,8 +604,10 @@ public class SparseDemo2 extends ApplicationAdapter {
         //past from affecting the current frame. This isn't a problem here, but would probably be an issue if we had
         //monsters running in and out of our vision. If artifacts from previous frames show up, uncomment the next line.
         //display.clear();
-        ycbcr.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
-        ycbcr.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+//        ycbcr.crMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
+//        ycbcr.cbMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
+        ycocg.coMul = NumberTools.swayRandomized(123456789L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.2p-10f) * 1.75f;
+        ycocg.cgMul = NumberTools.swayRandomized(987654321L, (System.currentTimeMillis() & 0x1FFFFFL) * 0x1.1p-10f) * 1.75f;
         float modifier = display.calculateConsistentLightModifier(), la, seenColor = GRAY_FLOAT;
         boolean isSeen;
         // The loop here only will draw tiles if they are potentially in the visible part of the map.

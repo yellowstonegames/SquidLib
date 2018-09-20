@@ -12723,7 +12723,7 @@ public class SColor extends Color implements Serializable {
     public static float luminanceYCoCg(final float encoded)
     {
         final int bits = NumberTools.floatToIntBits(encoded);
-        return (((bits & 0x0000ff00) >>> 7) + (bits & 0x000000ff) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
+        return ((bits & 0x000000ff) + ((bits & 0x0000ff00) >>> 7) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
     }
     /**
      * The "chrominance orange" of the given packed float, which when combined with chrominance green describes the
@@ -13204,11 +13204,6 @@ public class SColor extends Color implements Serializable {
      * @return a float encoding a color with the given properties
      */
     public static float floatGetYCbCr(float luma, float chromaB, float chromaR, float opacity) {
-//        if (luma <= 0.0039f) {
-//            return floatGet(0f, 0f, 0f, opacity);
-//        } else if (luma >= 0.9961f) {
-//            return floatGet(1f, 1f, 1f, opacity);
-//        }
         if (chromaR >= -0.0039f && chromaR <= 0.0039f && chromaB >= -0.0039f && chromaB <= 0.0039f) {
             return floatGet(luma, luma, luma, opacity);
         }
@@ -13245,14 +13240,14 @@ public class SColor extends Color implements Serializable {
 //        } else if (luma >= 0.9961f) {
 //            return floatGet(1f, 1f, 1f, opacity);
 //        }
-        if (co >= -0.0039f && co <= 0.0039f && cg >= -0.0039f && cg <= 0.0039f) {
-            return floatGet(y, y, y, opacity);
-        }
+//        if (co >= -0.0039f && co <= 0.0039f && cg >= -0.0039f && cg <= 0.0039f) {
+//            return floatGet(y, y, y, opacity);
+//        }
         /*
-        tmp = Y   - Cg;
-R   = tmp + Co;
-G   = Y   + Cg;
-B   = tmp - Co;
+t = Y - Cg;
+R = t + Co;
+G = Y + Cg;
+B = t - Co;
          */
         final float t = y - cg;
         return floatGet(MathUtils.clamp(t + co, 0f, 1f),
