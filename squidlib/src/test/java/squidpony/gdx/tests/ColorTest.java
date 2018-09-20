@@ -220,11 +220,26 @@ public class ColorTest extends ApplicationAdapter {
 
         final float t = (luma * 4 + warm) * 0x8p-5f;
         float r = t + mild * 0x1Bp-5f;//t - cool;//luma * 4 - cool * 0x0.8p0f + full * 0x0.3p0f;
-        if(r < 0f || r > 1f) r = MathExtras.clamp(r,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
+        if(r < 0f || r > 1f) 
+            r = MathExtras.clamp(r,0,1);
+        //return -0x1.fefefep125F;//SColor.CW_GRAY
         float g = t - mild * 0x25p-5f;//0.5f - full;
-        if(g < 0f || g > 1f) g = MathExtras.clamp(g,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
+        if(g < 0f || g > 1f) 
+            g = MathExtras.clamp(g,0,1);
+        //return -0x1.fefefep125F;//SColor.CW_GRAY
         float b = luma * 4 - r * 0x5p-2f - g * 0x9p-2f;//t + cool;
-        if(b < 0f || b > 1f) b = MathExtras.clamp(b,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
+        if(b < 0f || b > 1f) 
+            b = MathExtras.clamp(b,0,1);
+        //return -0x1.fefefep125F;//SColor.CW_GRAY
+
+//        final float t = (luma * 4 + warm) * 0x8p-5f;
+//        float r = t + mild * 0x1Bp-5f;//t - cool;//luma * 4 - cool * 0x0.8p0f + full * 0x0.3p0f;
+//        if(r < 0f || r > 1f) r = MathExtras.clamp(r,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
+//        float g = t - mild * 0x25p-5f;//0.5f - full;
+//        if(g < 0f || g > 1f) g = MathExtras.clamp(g,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
+//        float b = luma * 4 - r * 0x5p-2f - g * 0x9p-2f;//t + cool;
+//        if(b < 0f || b > 1f) b = MathExtras.clamp(b,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
+
         return floatGet(r, g, b,
                 opacity);
     }
