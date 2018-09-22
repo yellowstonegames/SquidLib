@@ -168,7 +168,7 @@ public class EverythingDemo extends ApplicationAdapter {
         // This causes a tiny bit of overlap between cells, which gets rid of an annoying gap between solid lines.
         // If you use '#' for walls instead of box drawing chars, you don't need this.
         // If you don't use DefaultResources.getCrispSlabFont(), you may need to adjust the multipliers here.
-        display.font.tweakHeight(cellHeight * 1.1f).initBySize();
+        //display.font.tweakHeight(cellHeight * 1.1f).initBySize();
 
         messageDisplay.appendWrappingMessage(GDXMarkup.instance.colorString(
                         "Use numpad or vi-keys ([@0.0 0.8 1]h[@0.1 0.8 1]j[@0.17 0.8 1]k[@0.21 0.8 1]l" +

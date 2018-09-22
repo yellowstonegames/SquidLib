@@ -306,7 +306,7 @@ public class ColorTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         tcf = DefaultResources.getCrispSlabFont();//.width(cellWidth).height(cellHeight).initBySize();
         viewport = new StretchViewport(totalWidth, totalHeight);
-        display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight, tcf).setTextSize(cellWidth + 1f, cellHeight + 1f);
+        display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight, tcf);//.setTextSize(cellWidth + 1f, cellHeight + 1f);
         stage = new Stage(viewport, batch);
         SquidColorCenter scc = DefaultResources.getSCC();
 

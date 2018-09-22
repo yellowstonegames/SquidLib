@@ -145,7 +145,7 @@ public class StarterKit {
         this.textFactory = DefaultResources.getStretchableFont()
                 .width(this.cellWidth).height(this.cellHeight).initBySize();
         layers = new SquidLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, textFactory);
-        layers.setTextSize(cellWidth, cellHeight + 2);
+        //layers.setTextSize(cellWidth, cellHeight + 2);
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
         batch = new SpriteBatch();

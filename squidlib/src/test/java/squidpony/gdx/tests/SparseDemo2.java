@@ -194,7 +194,7 @@ public class SparseDemo2 extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        display.font.tweakWidth(cellWidth * 1.075f).tweakHeight(cellHeight * 1.1f).initBySize();
+        //display.font.tweakWidth(cellWidth * 1.075f).tweakHeight(cellHeight * 1.1f).initBySize();
 
         languageDisplay = new SubcellLayers(gridWidth, bonusHeight - 1, cellWidth, cellHeight, display.font);
         // SparseDisplay doesn't currently use the default background fields, but this isn't really a problem; we can

@@ -118,12 +118,12 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[22].width() * widths[22], factories[22].height() * heights[22]),
         };
         displays = new SquidPanel[]{
-                new SquidPanel(widths[0 ], heights[0 ], factories[0 ]).setTextSize(factories[0 ].width() + 0f * ZOOM, factories[0].height() + 2f * ZOOM),
-                new SquidPanel(widths[1 ], heights[1 ], factories[1 ]).setTextSize(factories[1 ].width() + 0f * ZOOM, factories[1].height() + 2f * ZOOM),
-                new SquidPanel(widths[2 ], heights[2 ], factories[2 ]).setTextSize(factories[2 ].width() + 0f * ZOOM, factories[2].height() + 2f * ZOOM),
-                new SquidPanel(widths[3 ], heights[3 ], factories[3 ]).setTextSize(factories[3 ].width() + 0f * ZOOM, factories[3].height() + 2f * ZOOM),
-                new SquidPanel(widths[4 ], heights[4 ], factories[4 ]).setTextSize(factories[4 ].width() + 2f * ZOOM, factories[4].height() + 1f * ZOOM),
-                new SquidPanel(widths[5 ], heights[5 ], factories[5 ]).setTextSize(factories[5 ].width() + -4f * ZOOM, factories[5].height() + -4f * ZOOM),
+                new SquidPanel(widths[0 ], heights[0 ], factories[0 ]).setTextSize(factories[0 ].width() + 0f * ZOOM, factories[0].height() + 0f * ZOOM),
+                new SquidPanel(widths[1 ], heights[1 ], factories[1 ]).setTextSize(factories[1 ].width() + 0f * ZOOM, factories[1].height() + 0f * ZOOM),
+                new SquidPanel(widths[2 ], heights[2 ], factories[2 ]).setTextSize(factories[2 ].width() + 0f * ZOOM, factories[2].height() + 0f * ZOOM),
+                new SquidPanel(widths[3 ], heights[3 ], factories[3 ]).setTextSize(factories[3 ].width() + 0f * ZOOM, factories[3].height() + 0f * ZOOM),
+                new SquidPanel(widths[4 ], heights[4 ], factories[4 ]).setTextSize(factories[4 ].width() + 0f * ZOOM, factories[4].height() + 0f * ZOOM),
+                new SquidPanel(widths[5 ], heights[5 ], factories[5 ]).setTextSize(factories[5 ].width() + 0f * ZOOM, factories[5].height() + 0f * ZOOM),
                 new SquidPanel(widths[6 ], heights[6 ], factories[6 ]).setTextSize(factories[6 ].width() + 0.5f * ZOOM, factories[6].height() + 0.5f * ZOOM),
                 new SquidPanel(widths[7 ], heights[7 ], factories[7 ]).setTextSize(factories[7 ].width() + 0.75f * ZOOM, factories[7].height() + 5.25f * ZOOM),
                 new SquidPanel(widths[8 ], heights[8 ], factories[8 ]).setTextSize(factories[8 ].width() + 1f * ZOOM, factories[8].height() + 0.5f * ZOOM),

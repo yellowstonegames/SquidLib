@@ -57,7 +57,7 @@ public class ZoneDemo extends ApplicationAdapter {
         screenWidth = width * cellWidth;
         screenHeight = height * cellHeight;
         display.setAnimationDuration(0.2f);
-        display.setTextSize(cellWidth, cellHeight * 1.1f);
+        //display.setTextSize(cellWidth, cellHeight * 1.1f);
         stage = new Stage(new StretchViewport(screenWidth, screenHeight), batch);
 
         rng = new RNG(0xBABABADAAAAAAAL);

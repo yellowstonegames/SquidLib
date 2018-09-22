@@ -68,7 +68,7 @@ public class DefaultResources implements LifecycleListener {
             smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null,
-            arial15 = null, tiny = null;
+            arial15 = null, tiny = null, lessTiny;
 
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceCodeJP = null,
@@ -88,7 +88,8 @@ public class DefaultResources implements LifecycleListener {
             narrowNameLarge = "Rogue-Zodiac-12x24.fnt", narrowTextureLarge = "Rogue-Zodiac-12x24_0.png",
             unicodeNameLarge = "Mandrill-12x32.fnt", unicodeTextureLarge = "Mandrill-12x32.png",
             narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt", narrowTextureExtraLarge = "Rogue-Zodiac-18x36_0.png",
-            tinyName = "Monty-4x10.fnt", tinyTexture = "Monty-4x10.png", 
+            tinyName = "Monty-4x10.fnt", tinyTexture = "Monty-4x10.png",
+            lessTinyName = "Monty-8x20.fnt", lessTinyTexture = "Monty-8x20.png",
             smoothName = "Inconsolata-LGC-8x18.fnt", smoothTexture = "Inconsolata-LGC-8x18.png",
             smoothNameLarge = "Inconsolata-LGC-12x24.fnt", smoothTextureLarge = "Inconsolata-LGC-12x24.png",
             smoothSquareName = "Inconsolata-LGC-Square-25x25.fnt", smoothSquareTexture = "Inconsolata-LGC-Square-25x25.png",
@@ -311,6 +312,7 @@ public class DefaultResources implements LifecycleListener {
 
     static BitmapFont copyFont(BitmapFont font)
     {
+        if(font == null) return new BitmapFont();
         return new BitmapFont(new BitmapFont.BitmapFontData(font.getData().getFontFile(), false),
                 font.getRegions(), font.usesIntegerPositions());
     }
@@ -613,6 +615,34 @@ public class DefaultResources implements LifecycleListener {
         }
         return copyFont(instance.tiny);
     }
+    /**
+     * Returns a 8x20px, extremely thin font (that may be barely legible) as an embedded resource.
+     * The font builds on work by Christian Munk in his font called Monotwist, making some changes for legibility.
+     * A smaller version of this font, {@link #getTinyFont()}, has the lowest width of any font asset distributed with
+     * SquidLib; this doubles its resolution in case you like its appearance but don't want to go blind. Caches the font
+     * for later calls. Attribution to Christian Munk (or the username he used, CMunk) is required to use this font;
+     * this is in the license file linked below.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-8x20.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-8x20.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Monty-license.txt</li>
+     * </ul>
+     * @return the BitmapFont object representing Monty.ttf at size 16 pt
+     */
+    public static BitmapFont getLessTinyFont()
+    {
+        initialize();
+        if(instance.lessTiny == null)
+        {
+            try {
+                instance.lessTiny = new BitmapFont(Gdx.files.internal(lessTinyName), Gdx.files.internal(lessTinyTexture), false);
+            } catch (Exception e) {
+            }
+        }
+        return copyFont(instance.lessTiny);
+    }
 
     /**
      * Returns a TextCellFactory already configured to use a square font that should scale cleanly to many sizes. Caches
@@ -713,7 +743,7 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.msdfCurvySquare = new TextCellFactory()
-                        .fontMultiDistanceField(crispCurvySquare, crispCurvySquareTexture).setSmoothingMultiplier(4f);
+                        .fontMultiDistanceField(crispCurvySquare, crispCurvySquareTexture).setSmoothingMultiplier(6f);
             } catch (Exception e) {
             }
         }
