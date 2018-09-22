@@ -70,7 +70,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 5;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 130;
     private int hashMode = 0, rngMode = 21, noiseMode = 74, otherMode = 0;//76;//118;//82;
 
@@ -302,11 +302,22 @@ public class HashVisualizer extends ApplicationAdapter {
 //        y *= 0xACEDB;
 //        x *= 0x3FFF;
 //        y *= 0x3FFF;
+//        return (x += y ^ ((x *= 0xB531A935) ^ x >>> 13) * (y * 0x41C64E6D | 1)) ^ (x << 18 | x >>> 14) ^ (x << 9 | x >>> 23);
+
+//        // works very well, GWT-safe
+        y ^= x * 0x89A7 + 0xB531A935; // + 0xB531A935;
+        x ^= y * 0xBCFD + 0x41C64E6D; // + 0x41C64E6D;
+//        y ^= (x << 17 | x >>> 15);
+//        x ^= (y << 13 | y >>> 19);
         y ^= x * 0x89A7; // + 0xB531A935;
         x ^= y * 0xBCFD; // + 0x41C64E6D;
-        y ^= (x << 17 | x >>> 15);
-        x ^= (y << 13 | y >>> 19);
-        return (x - y << 13) - (y << 7 | y >>> 25) ^ (y - x << 11) - (x << 5 | x >>> 27);
+//        y ^= (x << 17 | x >>> 15);
+//        x ^= (y << 13 | y >>> 19);
+        return x;
+//        y += x * 0x41C64E6D;
+//        return (y << 18 | y >>> 14) - x;
+        //return (x - y << 13) - (y << 7 | y >>> 25) ^ (y - x << 11) - (x << 5 | x >>> 27);
+
 //        y ^= x * 0xBCFD;
 //        x ^= y * 0x89A7;
 //        return (y << 13 | y >>> 19) ^ (x << 17 | x >>> 15);
