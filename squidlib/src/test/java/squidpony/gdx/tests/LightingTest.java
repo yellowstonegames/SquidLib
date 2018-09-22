@@ -58,7 +58,7 @@ public class LightingTest extends ApplicationAdapter{
                 DefaultResources.getCrispLeanFont());
         //new TextCellFactory().fontDistanceField("SourceCodePro-Medium-distance.fnt", "SourceCodePro-Medium-distance.png"));
                 //DefaultResources.getStretchableFont());
-        layers.setTextSize(cellWidth + 1, cellHeight + 2);
+        //layers.setTextSize(cellWidth + 1, cellHeight + 2);
         //colors = DefaultResources.getSCC().rainbow(0.2f, 1.0f, 144);
         colors = DefaultResources.getSCC().rainbow(0.85f, 1.0f, 512);
         mColors = DefaultResources.getSCC().loopingGradient(SColor.BLACK, SColor.WHITE, 523);

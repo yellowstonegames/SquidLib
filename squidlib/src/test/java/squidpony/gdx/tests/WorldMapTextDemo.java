@@ -205,7 +205,7 @@ public static final char[]  terrainChars = {
     public void create() {
         batch = new SpriteBatch();
         display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispCurvySquareFont());
-        display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
+        //display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
         stage = new Stage(view, batch);
         seed = 0xDEBACL;

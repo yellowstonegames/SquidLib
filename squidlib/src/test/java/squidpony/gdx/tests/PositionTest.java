@@ -14,23 +14,25 @@ import squidpony.squidgrid.gui.gdx.*;
  */
 public class PositionTest extends ApplicationAdapter {
     public static final int msgWidth = 80, msgHeight = 6, gridWidth = 50, gridHeight = 20,
-            statWidth = 30, statHeight = gridHeight, cellWidth = 10, cellHeight = 22;
-    public SquidPanel display, statPanel;
+            statWidth = 30, statHeight = gridHeight, cellWidth = 8, cellHeight = 20;
+    public SparseLayers display;
+    public SquidPanel statPanel;
     public Stage stage;
     @Override
     public void create() {
         stage = new Stage();
-        TextCellFactory tcf = DefaultResources.getStretchableSlabFont();
+        TextCellFactory tcf = 
+                new TextCellFactory().font(DefaultResources.getLessTinyFont());
         tcf.height(cellHeight).width(cellWidth).initBySize();
-        display = new SquidPanel(gridWidth, gridHeight, tcf);
+        display = new SparseLayers(gridWidth, gridHeight, cellWidth, cellHeight, tcf);
         SquidMessageBox msgs = new SquidMessageBox(msgWidth, msgHeight, tcf);
         display.setBounds(0, msgHeight * cellHeight, gridWidth * cellWidth, gridHeight * cellHeight);
         msgs.setBounds(0, 0, msgWidth * cellWidth, msgHeight * cellHeight);
         statPanel = new SquidPanel(statWidth, statHeight, tcf);
-        statPanel.setBounds(gridWidth * cellWidth, msgHeight * cellWidth, statWidth * cellWidth, statHeight * cellHeight);
-        display.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
-        msgs.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
-        statPanel.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
+        statPanel.setBounds(gridWidth * cellWidth, msgHeight * cellHeight, statWidth * cellWidth, statHeight * cellHeight);
+        //display.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
+        //msgs.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
+        //statPanel.setTextSize(cellWidth * 1.1f, cellHeight * 1.1f);
         stage.addActor(display);
         stage.addActor(msgs);
         stage.addActor(statPanel);
