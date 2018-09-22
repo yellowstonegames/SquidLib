@@ -75,13 +75,18 @@ public class HashVisualizer extends ApplicationAdapter {
     private int hashMode = 0, rngMode = 21, noiseMode = 74, otherMode = 0;//76;//118;//82;
 
     private SpriteBatch batch;
-    private SparseLayers display;//, overlay;
+    //private SparseLayers display;//, overlay;
+    
+    private TextCellFactory tcf;
     private static final int width = 512, height = 512;
     private static final int cellWidth = 1, cellHeight = 1;
+    private static final float[][] back = new float[width][height];
+
     private SquidInput input;
-    private static final SColor bgColor = SColor.BLACK;
+    
     private Stage stage;
     private Viewport view;
+    
     private CrossHash.Mist Mist_, Mist_A, Mist_B, Mist_C;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private NLFSR nlfsr = new NLFSR();
@@ -955,7 +960,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     @Override
     public void create() {
         batch = new SpriteBatch();
-        display = new SparseLayers(width, height, cellWidth, cellHeight, new TextCellFactory().includedFont());
+        tcf = new TextCellFactory().includedFont().width(1).height(1).initBySize();
+        //display = new SparseLayers(width, height, cellWidth, cellHeight, new TextCellFactory().includedFont());
 //        IFilter<Color> filter0 = new Filters.PaletteFilter(
 //                new float[]{0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f},
 //                new float[]{0f, 0.125f, 0.25f, 0.375f, 0.5f, 0.625f, 0.75f, 0.875f, 1f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f, 0f,},
@@ -986,8 +992,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         Noise.seamless3D(seamless[1], 123456, 1, SeededNoise.instance);
         Noise.seamless3D(seamless[2], -9999, 1, SeededNoise.instance);
         */
-
-        ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
+        ArrayTools.fill(back, FLOAT_WHITE);
+//        ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
         ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
                 .insert(250, 249).insert(251, 249)
                 .insert(125, 125).insert(125, 126).insert(124, 125)
@@ -1154,11 +1160,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         Gdx.graphics.setTitle("Mummy 5D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
-                                                display.put(x, y, floatGet(
+                                                back[x][y] = floatGet(
                                                         (float) (MummyNoise.instance.arbitraryNoise(seedX0, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
                                                         (float) (MummyNoise.instance.arbitraryNoise(seedX1, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
                                                         (float) (MummyNoise.instance.arbitraryNoise(seedX2, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        1.0f));
+                                                        1.0f);
                                             }
                                         }
                                         break;
@@ -1167,7 +1173,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
                                                 bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter5D(x, y, ctr)) * 0.50f) + 0.50f;
-                                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                                back[x][y] = floatGet(bright, bright, bright, 1f);
                                             }
                                         }
                                         break;
@@ -1175,11 +1181,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
-                                                display.put(x, y, floatGet(
+                                                back[x][y] = floatGet(
                                                         (float) (MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
                                                         (float) (MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
                                                         (float) (MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        1.0f));
+                                                        1.0f);
                                             }
                                         }
                                         break;
@@ -1188,7 +1194,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         for (int x = 0; x < width; x++) {
                                             for (int y = 0; y < height; y++) {
                                                 bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr)) * 0.50f) + 0.50f;
-                                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                                back[x][y] = floatGet(bright, bright, bright, 1f);
                                             }
                                         }
                                         break;
@@ -1214,7 +1220,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 otherMode++;
                                 otherMode %= 17;
                                 if (otherMode == 0) {
-                                    ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
+                                    ArrayTools.fill(back, FLOAT_WHITE);
+                                    //ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
                                     ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
                                             .insert(250, 249).insert(251, 249)
                                             .insert(125, 125).insert(125, 126).insert(124, 125)
@@ -1281,12 +1288,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(input);
         // and then add display, our one visual component, to the list of things that act in Stage.
-        display.setPosition(0, -1);
+        //display.setPosition(0, -1);
         //overlay.setPosition(0, 0);
         //Stack stk = new Stack(display, overlay);
         //stage.addActor(stk);
         //stk.layout();
-        stage.addActor(display);
+        //stage.addActor(display);
         putMap();
         //Gdx.graphics.setContinuousRendering(false);
         //Gdx.graphics.requestRendering();
@@ -1310,7 +1317,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1319,7 +1326,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = weirdPointHash(x, y) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
 
@@ -1329,7 +1336,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            for (int y = 0; y < height; y++) {
 //                                coordinates[1] = y;
 //                                code = Mist_A.hash(coordinates) << 8 | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
                         break;
@@ -1338,7 +1345,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = weirdPointHash(x, y) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1347,7 +1354,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1357,7 +1364,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1367,7 +1374,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = ion32(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
 
@@ -1376,7 +1383,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
 //                                code = Mist_A.hash(coordinate) << 8 | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
                         break;
@@ -1385,7 +1392,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1394,7 +1401,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1405,7 +1412,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = ion64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
 //                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 2, low bits");
@@ -1414,7 +1421,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            for (int y = 0; y < height; y++) {
 //                                coordinates[1] = y;
 //                                code = Mist_A.hash64(coordinates) << 8 | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
                         break;
@@ -1423,7 +1430,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1434,7 +1441,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Mist_C.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1444,7 +1451,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = ion64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
 //                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 1, low bits");
@@ -1452,7 +1459,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
 //                                code = Mist_A.hash64(coordinate) << 8 | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
                         break;
@@ -1461,7 +1468,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) >>> 24 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1471,7 +1478,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Mist_C.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1482,7 +1489,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1491,7 +1498,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll(x, y, 123L) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1500,7 +1507,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll(x, y, 123L) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1509,7 +1516,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.HastyPointHash.hashAll(x, y, 123) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1519,7 +1526,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1529,7 +1536,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = ion32(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
 //                        Gdx.graphics.setTitle("Mist_ (alpha) on length 1, high bits");
@@ -1537,7 +1544,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
 //                                code = Mist_A.hash(coordinate) & 0xFFFFFF00L | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
                         break;
@@ -1546,7 +1553,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1555,7 +1562,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1566,7 +1573,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = ion64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
 //                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 2, high bits");
@@ -1575,7 +1582,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            for (int y = 0; y < height; y++) {
 //                                coordinates[1] = y;
 //                                code = Mist_A.hash64(coordinates) & 0xFFFFFF00L | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
                         break;
@@ -1584,7 +1591,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll(x, y, 123L) >>> 32 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1595,7 +1602,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Mist_C.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1605,7 +1612,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = ion64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
 //                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 1, high bits");
@@ -1613,7 +1620,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            for (int y = 0; y < height; y++) {
 //                                coordinate[0] = (x << 9) | y;
 //                                code = Mist_A.hash64(coordinate) & 0xFFFFFF00L | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
                         break;
@@ -1622,7 +1629,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) >>> 32 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1632,7 +1639,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Mist_C.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1642,7 +1649,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1652,7 +1659,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mist.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1662,7 +1669,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mist.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1672,7 +1679,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mist.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1682,7 +1689,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mist.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1693,7 +1700,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mist.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1704,7 +1711,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mist.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1715,7 +1722,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mist.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1726,7 +1733,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mist.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1737,7 +1744,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Mist.predefined[Light32RNG.determine(x + Light32RNG.determine(y)) & 31].hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1751,7 +1758,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1762,7 +1769,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistA.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1773,7 +1780,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistB.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1784,7 +1791,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistC.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1794,7 +1801,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1804,7 +1811,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistA.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1814,7 +1821,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistB.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1824,7 +1831,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistC.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1835,7 +1842,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistA.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1846,7 +1853,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistB.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1857,7 +1864,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistC.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1867,7 +1874,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistA.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1877,7 +1884,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistB.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1887,7 +1894,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistC.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1898,7 +1905,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1909,7 +1916,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistA.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1920,7 +1927,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistB.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1931,7 +1938,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistC.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1941,7 +1948,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1951,7 +1958,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistA.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1961,7 +1968,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistB.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1971,7 +1978,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistC.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1982,7 +1989,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistA.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -1993,7 +2000,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistB.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2004,7 +2011,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = mistC.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2014,7 +2021,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistA.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2024,7 +2031,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistB.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2034,7 +2041,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = mistC.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2043,7 +2050,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = floatHash(x * 0.211211211f, y * 0.211211211f, 0.123456789f);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2052,7 +2059,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.3456789f);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2060,12 +2067,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("FloatHash (3 seeds, color) on length 2");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(
+                                back[x][y] = floatGet(
                                         floatHash(x * 0.211211211f, y * 0.211211211f, 0.39456189f),
                                         floatHash(x * 0.211211211f, y * 0.211211211f, 0.48456289f),
                                         floatHash(x * 0.211211211f, y * 0.211211211f, 0.57456389f),
                                         1f
-                                ));
+                                );
                             }
                         }
                         break;
@@ -2073,12 +2080,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("FloatHash (3 seeds, color) on length 3");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(
+                                back[x][y] = floatGet(
                                         floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.39456189f),
                                         floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.48456289f),
                                         floatHash(x * 0.211211211f, y * 0.211211211f, ctr * 0.211211211f, 0.57456389f),
                                         1f
-                                ));
+                                );
                             }
                         }
                         break;
@@ -2087,7 +2094,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = ion64(x, y, ctr) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2096,7 +2103,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = ion64(x, y, ctr) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2105,7 +2112,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = ion64(x, y, ctr) >>> 32 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -2122,7 +2129,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("JDK, hash on length 2, low bits");
@@ -2133,7 +2140,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash on length 2, low bits");
@@ -2144,7 +2151,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Mist_.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash on length 2, low bits");
@@ -2155,7 +2162,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash on length 2, low bits");
@@ -2165,7 +2172,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("JDK, hash on length 1, low bits");
@@ -2175,7 +2182,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash on length 1, low bits");
@@ -2185,7 +2192,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Mist_.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash on length 1, low bits");
@@ -2195,7 +2202,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash on length 1, low bits");
@@ -2206,7 +2213,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash64 on length 2, low bits");
@@ -2217,7 +2224,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Mist_.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash64 on length 2, low bits");
@@ -2228,7 +2235,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash64 on length 2, low bits");
@@ -2238,7 +2245,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash64 on length 1, low bits");
@@ -2248,7 +2255,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Mist_.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash64 on length 1, low bits");
@@ -2258,7 +2265,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash64 on length 1, low bits");
@@ -2269,7 +2276,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Arrays.hashCode(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("JDK, hash on length 2, high bits");
@@ -2280,7 +2287,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash on length 2, high bits");
@@ -2291,7 +2298,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Mist_.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash on length 2, high bits");
@@ -2302,7 +2309,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash on length 2, high bits");
@@ -2312,7 +2319,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("JDK, hash on length 1, high bits");
@@ -2322,7 +2329,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash on length 1, high bits");
@@ -2332,7 +2339,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Mist_.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash on length 1, high bits");
@@ -2342,7 +2349,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash on length 1, high bits");
@@ -2353,7 +2360,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash64 on length 2, high bits");
@@ -2364,7 +2371,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = Mist_.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash64 on length 2, high bits");
@@ -2375,7 +2382,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Lightning.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash64 on length 2, high bits");
@@ -2385,7 +2392,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("FNV, hash64 on length 1, high bits");
@@ -2395,7 +2402,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = Mist_.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Mist_, hash64 on length 1, high bits");
@@ -2405,7 +2412,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Lightning.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Lightning, hash64 on length 1, high bits");
@@ -2416,7 +2423,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Falcon.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash on length 2, high bits");
@@ -2426,7 +2433,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Falcon.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash on length 1, high bits");
@@ -2437,7 +2444,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Falcon.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash64 on length 2, high bits");
@@ -2447,7 +2454,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Falcon.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash64 on length 1, high bits");
@@ -2458,7 +2465,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash on length 2, high bits");
@@ -2468,7 +2475,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash on length 1, high bits");
@@ -2479,7 +2486,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash64(coordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash64 on length 2, high bits");
@@ -2489,7 +2496,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash64(coordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash64 on length 1, high bits");
@@ -2498,7 +2505,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = (mixHash(x, y) << 8) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("mixHash");
@@ -2508,7 +2515,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash on length 1, low bits");
@@ -2518,7 +2525,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash64 on length 1, low bits");
@@ -2529,7 +2536,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash on length 2, low bits");
@@ -2540,7 +2547,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp, hash64 on length 2, low bits");
@@ -2551,7 +2558,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Falcon.hash(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash on length 2, low bits");
@@ -2561,7 +2568,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Falcon.hash(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash on length 1, low bits");
@@ -2572,7 +2579,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
                                 code = CrossHash.Falcon.hash64(coordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash64 on length 2, low bits");
@@ -2582,7 +2589,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 coordinate[0] = (x << 9) | y;
                                 code = CrossHash.Falcon.hash64(coordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Falcon, hash64 on length 1, low bits");
@@ -2594,7 +2601,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
                                 code = CrossHash.hash(doubleCoordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash on length 2, high bits");
@@ -2604,7 +2611,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
                                 code = CrossHash.hash(doubleCoordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash on length 1, high bits");
@@ -2615,7 +2622,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
                                 code = CrossHash.hash64(doubleCoordinates) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash64 on length 2, high bits");
@@ -2625,7 +2632,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
                                 code = CrossHash.hash64(doubleCoordinate) & 0xFFFFFF00L | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash64 on length 1, high bits");
@@ -2635,7 +2642,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
                                 code = CrossHash.hash(doubleCoordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash on length 1, low bits");
@@ -2645,7 +2652,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinate[0] = Math.sqrt((x << 9) | y);
                                 code = CrossHash.hash64(doubleCoordinate) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash64 on length 1, low bits");
@@ -2656,7 +2663,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
                                 code = CrossHash.hash(doubleCoordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash on length 2, low bits");
@@ -2667,7 +2674,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 doubleCoordinates[1] = Math.sqrt(y);
                                 code = CrossHash.hash64(doubleCoordinates) << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("Wisp Double, hash64 on length 2, low bits");
@@ -2694,7 +2701,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         ///) 7f);
                                         + 7f) / 14f;
                                         //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2705,7 +2712,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(layered2D.getNoise(xx * 0.125, yy * 0.125));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2719,7 +2726,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(invLayered2D.getNoise(xx * 0.125, yy * 0.125));
                                 //               + 1f) * 0.5f;
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2730,7 +2737,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 //yy = y + ctr;
                                 bright = basicPrepare(layered3D.getNoise(x * 0.125, y * 0.125, ctr * 0.0625));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2739,8 +2746,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ColorNoise 2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        ColorNoise.colorNoise(x * 0.0625f + 20f + ctr * 0.05f, y * 0.0625f + 30f + ctr * 0.05f, 1234));
+                                back[x][y] = 
+                                        ColorNoise.colorNoise(x * 0.0625f + 20f + ctr * 0.05f, y * 0.0625f + 30f + ctr * 0.05f, 1234);
                             }
                         }
                         break;
@@ -2748,8 +2755,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ColorNoise 3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
-                                        ColorNoise.colorNoise(x * 0.05f + 20f, y * 0.05f + 30f, ctr * 0.05f, 1234));
+                                back[x][y] = 
+                                        ColorNoise.colorNoise(x * 0.05f + 20f, y * 0.05f + 30f, ctr * 0.05f, 1234);
                             }
                         }
                         break;
@@ -2758,7 +2765,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (int)MerlinNoise.noise2D(x + ctr, y + ctr, 9000L, 4, 1) * 255;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         break;
@@ -2768,7 +2775,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = map[x][y];
-                                display.put(x, y, floatGet(iBright, iBright, iBright));
+                                back[x][y] = floatGet(iBright, iBright, iBright);
                             }
                         }
                         break;
@@ -2780,7 +2787,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = map[x][y];
-                                display.put(x, y, floatGet(iBright, iBright, iBright));
+                                back[x][y] = floatGet(iBright, iBright, iBright);
                             }
                         }
                         break;*/
@@ -2798,7 +2805,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                         + 7f) / 14f;
                                 //+ 15.0f) / 30f;
 
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2816,7 +2823,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                 PerlinNoise.noise(xx, yy)
                                                         + 1f) * 0.5f;
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2833,7 +2840,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                                         + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2847,7 +2854,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                          //               + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2862,7 +2869,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         prepare(WhirlingNoise.noise(xx * 0.03125, yy * 0.03125));
                                          //               + 1f) * 0.5f;
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2877,7 +2884,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 + 1f) * 0.5f;
                                 //+ 15.0f) / 30f;
 
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2894,7 +2901,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         //);
                                          * 0.5f + 0.5f;
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2915,7 +2922,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 bright = prepare(WhirlingNoise.noiseAlt(xx * 0.03125, yy * 0.03125)
                                 );
 
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -2923,11 +2930,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling 3D Color Noise, unprocessed " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(
+                                back[x][y] = floatGet(
                                         ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 1234567L) + 1f) * 0.5f,
                                         ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5, 7654321L) + 1f) * 0.5f,
                                         ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9, 9999999L) + 1f) * 0.5f,
-                                        1f));
+                                        1f);
                             }
                         }
                         break;
@@ -2982,12 +2989,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
 
                             }
                         }
@@ -2998,7 +3005,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
 
                             }
                         }
@@ -3008,12 +3015,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 0.0, 0.0, 0.0,1234) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 0.0, 0.0, 0.0,54321) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 0.0, 0.0, 0.0,1234321) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3028,7 +3035,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */SeededNoise.noise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
                                         0.0, 0.0, 0.0, 123456) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3037,12 +3044,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                     break;
@@ -3052,7 +3059,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     break;
@@ -3061,12 +3068,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 4D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 0,1234) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 0,54321) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 0,1234321) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3081,7 +3088,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */SeededNoise.noise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
                                         0.0,123456) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3089,12 +3096,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1234) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 54321) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 1234321) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3108,7 +3115,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */SeededNoise.noise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
                                         123456) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3116,12 +3123,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(SeededNoise.noise(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(SeededNoise.noise(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
                                                 (float)(SeededNoise.noise(x * 0.03125 + 10 + ctr * 0.05125, y * 0.03125 + 20 + ctr * 0.05125, 1234321) * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3135,7 +3142,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */SeededNoise.noise(x * 0.03125 + ctr  * 0.05125, y * 0.03125 + ctr  * 0.05125,
                                         123456) * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3144,12 +3151,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Ridged 3D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1234) * 0.50f) + 0.50f,
                                                 ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 54321) * 0.50f) + 0.50f,
                                                 ((float)ridged3D.getNoiseWithSeed(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 1234321) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3163,7 +3170,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */ridged3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr  * 0.05125,
                                         123456) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3171,12 +3178,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Ridged 2D Color Noise, two octaves per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
                                                 (float)(ridged2D.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.05125, y * 0.03125 + 20 + ctr * 0.05125, 1234321) * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3190,7 +3197,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */ridged2D.getNoiseWithSeed(x * 0.03125 + ctr  * 0.05125, y * 0.03125 + ctr  * 0.05125,
                                         123456) * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3198,12 +3205,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Turbulent Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3212,7 +3219,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         Gdx.graphics.setTitle("Turb6D Seamless at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
@@ -3221,12 +3228,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Turbulent Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3235,7 +3242,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         Gdx.graphics.setTitle("Turb4D Seamless at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
@@ -3244,12 +3251,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Turbulent 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 ((float)turb3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 1234) * 0.50f) + 0.50f,
                                                 ((float)turb3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 54321) * 0.50f) + 0.50f,
                                                 ((float)turb3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 1234321) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3265,7 +3272,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         123456) * 0.5f);
                                 total += bright;
                                 bright += 0.5f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         Gdx.graphics.setTitle("Turb3D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
@@ -3274,12 +3281,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling Turbulent 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(turb2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(turb2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
                                                 (float)(turb2D.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.05125, y * 0.03125 + 20 + ctr * 0.05125, 1234321) * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3295,7 +3302,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         123456) * 0.5);
                                 total += bright;
                                 bright += 0.5f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         Gdx.graphics.setTitle("Turb2D at " + Gdx.graphics.getFramesPerSecond()  + " FPS, total " + total);
@@ -3304,12 +3311,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Slick Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3318,7 +3325,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3326,12 +3333,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Slick Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3340,7 +3347,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -3349,12 +3356,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Slick 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 ((float)slick3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 1234) * 0.50f) + 0.50f,
                                                 ((float)slick3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 54321) * 0.50f) + 0.50f,
                                                 ((float)slick3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125, 1234321) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3368,7 +3375,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */slick3D.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.05125,
                                         123456) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3376,12 +3383,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Slick 2D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(slick2D.getNoiseWithSeed(x * 0.03125 + 20 + ctr * 0.05125, y * 0.03125 + 30 + ctr * 0.05125, 1234) * 0.5 + 0.5),
                                                 (float)(slick2D.getNoiseWithSeed(x * 0.03125 + 30 + ctr * 0.05125, y * 0.03125 + 10 + ctr * 0.05125, 54321) * 0.5 + 0.5),
                                                 (float)(slick2D.getNoiseWithSeed(x * 0.03125 + 10 + ctr * 0.05125, y * 0.03125 + 20 + ctr * 0.05125, 1234321) * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3392,7 +3399,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 bright = (float)(
                                         slick2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
                                         123456) * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3400,12 +3407,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Ridged Seamless 3D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3414,7 +3421,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3422,12 +3429,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Ridged Seamless 2D Color Noise at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3436,7 +3443,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -3446,12 +3453,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 3D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
 
                             }
                         }
@@ -3461,7 +3468,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
 
                             }
                         }
@@ -3470,12 +3477,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded 6D as 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 ((float)SeededNoise.noise(x * 0.03125 + 20, y * 0.03125 + 30, ctr * 0.05125 + 10, 1.0, 3.0, 2.0,1234) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 30, y * 0.03125 + 10, ctr * 0.05125 + 20, 1.0, 3.0, 2.0,54321) * 0.50f) + 0.50f,
                                                 ((float)SeededNoise.noise(x * 0.03125 + 10, y * 0.03125 + 20, ctr * 0.05125 + 30, 1.0, 3.0, 2.0,1234321) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3489,7 +3496,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         40.0, 40.0, 20.0, 1234)
                                         + */SeededNoise.noise(x * 0.03125, y * 0.03125, ctr  * 0.05125,
                                         1.0, 3.0, 2.0, 123456) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3497,12 +3504,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 2D Color Noise, three octaves per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[1][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
                                                 (float) (seamless[2][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5),
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3511,7 +3518,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (seamless[0][0][x+ctr & 63][y+ctr & 63] * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -3521,7 +3528,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = ectoNoise((x + ctr) * 0.0625f, (y + ctr) * 0.0625f, -999999L) * 0.5f + 0.5f; //0.61803398875
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3533,7 +3540,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(turing[x * height + y]) * 0.5f + 0.5f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3544,7 +3551,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(turing[x * height + y]) * 0.5f + 0.5f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3555,7 +3562,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 bright = (float)(
                                         MasonNoise.noise(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
                                                 123456) * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         /*
@@ -3573,9 +3580,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(fillField[0][x][y] * 0.25f + 0.5f, fillField[1][x][y] * 0.25f + 0.5f, fillField[2][x][y] * 0.25f + 0.5f, 1f)
-                                );
+                                ;
                             }
                         }*/
                         break;
@@ -3586,7 +3593,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 bright = (float)(
                                         masonLayered2D.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
                                                 123456) * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         /*
@@ -3599,9 +3606,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = fillField[0][x][y] * 0.0625f + 0.5f;
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(bright, bright, bright, 1f)
-                                );
+                                ;
                             }
                         }
                         */
@@ -3633,9 +3640,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(fillField3DR[0][x][y] * 0.25f + 0.5f, fillField3DG[0][x][y] * 0.25f + 0.5f, fillField3DB[0][x][y] * 0.25f + 0.5f, 1f)
-                                );
+                                ;
                             }
                         }
                         break;
@@ -3649,9 +3656,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = fillField3DG[0][x][y] * 0.0625f + 0.5f;
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(bright, bright, bright, 1f)
-                                );
+                                ;
                             }
                         }
                         break;
@@ -3663,7 +3670,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 bright = (float)(
                                         glitch.getNoiseWithSeed(x * 0.03125 + ctr * 0.05125, y * 0.03125 + ctr * 0.05125,
                                                 123456) * 0.5 + 0.5);
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3672,7 +3679,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, 123456));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3681,7 +3688,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, ctr * -0.0375, 123456));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3690,7 +3697,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(glitch.getNoiseWithSeed(x * 0.03125, y * 0.03125, ctr * 0.045, (x + y) * -0.025, (x - ctr) * -0.025, (y - ctr) * -0.025, 123456));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3699,7 +3706,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = ((int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 1)) * 255;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         break;
@@ -3708,7 +3715,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (int)(MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 4) * 31.875);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         break;
@@ -3729,12 +3736,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 connections[0] = cosmos.getDouble() * 0.25;
                                 connections[1] = cosmos.getDouble() * 0.25;
                                 connections[2] = cosmos.getDouble() * 0.25;
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)connections[0] * 4f,//NumberTools.sway((float)connections[0]) * 0.5f + 0.5f,
                                                 (float)connections[1] * 4f,//NumberTools.sway((float)connections[1]) * 0.5f + 0.5f,
                                                 (float)connections[2] * 4f,//NumberTools.sway((float)connections[2]) * 0.5f + 0.5f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3755,7 +3762,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 connections[1] = cosmos.getDouble() * 0.25;
                                 connections[2] = cosmos.getDouble() * 0.25;
                                 bright = (float)connections[1] * 4f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3765,7 +3772,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             s0 = (x + ctr) * 0.03125f; // 0.046875f
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(WhirlingNoise.noise(s0, (y + ctr) * 0.03125f, 123456));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3775,7 +3782,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             s0 = (x + ctr) * 0.03125f; // 0.046875f
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(SeededNoise.noise(s0, (y + ctr) * 0.03125f, 123456));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3789,7 +3796,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             s0 = (x + ctr);
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredFN.getSimplexFractal(s0, (y + ctr)));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3798,7 +3805,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3807,7 +3814,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(SeededNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3820,7 +3827,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredFN.getSimplexFractal(x, y, ctr)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3830,7 +3837,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3840,7 +3847,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(SeededNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3854,7 +3861,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredFN.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456L)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3863,12 +3870,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mummy 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX0, seedY0) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10, seedX1, seedY1) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 10, y * 0.11125f + ctr * 0.11125f + 20, seedX2, seedY2) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3877,7 +3884,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30, seedX3, seedY3) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3885,12 +3892,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mummy 3D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.11125f + 10, seedX0, seedY0, seedZ0) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.11125f + 20, seedX1, seedY1, seedZ1) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.11125f + 30, seedX2, seedY2, seedZ2) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3900,7 +3907,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.11125f + 10,
                                         seedX3, seedY3, seedZ3) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3909,12 +3916,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mummy 4D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 20, y * 0.11125f + 30, ctr * 0.13125f + 10, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f, seedX0, seedY0, seedZ0, seedW0) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 10, ctr * 0.13125f + 20, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 42.337) * 0.0311125f, seedX1, seedY1, seedZ1, seedW1) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 10, y * 0.11125f + 20, ctr * 0.13125f + 30, NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 53.337) * 0.0311125f, seedX2, seedY2, seedZ2, seedW2) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3924,7 +3931,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.11125f + 30, y * 0.11125f + 20, ctr  * 0.15125f + 10,
                                         NumberTools.sway((x + y + ctr) * 0.0191f) + (x + y + ctr + 31.337) * 0.0311125f, seedX3, seedY3, seedZ3, seedW3) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3932,12 +3939,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mummy 6D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y,
+                                back[x][y] = 
                                         floatGet(
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 20, y * 0.071125f + 30, ctr * 0.072125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.07611125f, seedX0, seedY0, seedZ0, seedW0, seedU0, seedV0) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 30, y * 0.071125f + 10, ctr * 0.072125f + 20, (NumberTools.sway((x + y) * 0.021f) + ctr + 42.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.6) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.3) * 0.07611125f, seedX1, seedY1, seedZ1, seedW1, seedU1, seedV1) * 0.50f) + 0.50f,
                                                 (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 10, y * 0.071125f + 20, ctr * 0.072125f + 30, (NumberTools.sway((x + y) * 0.021f) + ctr + 53.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.4) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.6) * 0.07611125f, seedX2, seedY2, seedZ2, seedW2, seedU2, seedV2) * 0.50f) + 0.50f,
-                                                1.0f));
+                                                1.0f);
                             }
                         }
                         break;
@@ -3946,7 +3953,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(MummyNoise.getNoiseWithSeeds(x * 0.071125f + 20, y * 0.071125f + 30, ctr * 0.072125f + 10, (NumberTools.sway((x + y) * 0.021f) + ctr + 31.337) * 0.072511125f, (NumberTools.sway((ctr - x) * 0.1681f) + ctr + y + 1.2) * 0.07811125f, (NumberTools.sway((y + ctr) * 0.191828) - ctr + x + 2.8) * 0.07611125f, seedX3, seedY3, seedZ3, seedW3, seedU3, seedV3) * 0.50f) + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3954,11 +3961,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mummy 5D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(
+                                back[x][y] = floatGet(
                                         (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter5D(x, y, ctr))) * 0.50f + 0.50f,
                                         (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter5D(x, y, ctr))) * 0.50f + 0.50f,
                                         (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter5D(x, y, ctr))) * 0.50f + 0.50f,
-                                        1.0f));
+                                        1.0f);
                             }
                         }
                         break;
@@ -3967,7 +3974,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float)(MummyNoise.instance.arbitraryNoise(seedX3, alter5D(x, y, ctr))) * 0.50f + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -3975,11 +3982,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(
+                                back[x][y] = floatGet(
                                         (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr))) * 0.50f + 0.50f,
                                         (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr))) * 0.50f + 0.50f,
                                         (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr))) * 0.50f + 0.50f,
-                                        1.0f));
+                                        1.0f);
                             }
                         }
                         break;
@@ -3988,122 +3995,122 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr))) * 0.50f + 0.50f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
                     case 104:
                         Gdx.graphics.setTitle("Basic 1D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
-                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
+                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+                        Arrays.fill(back[511], FLOAT_WHITE);
                         if((ctr & 3) == 0)
                         {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
                             iBright = (int)(basic1D.getNoise(ctr * 0.015625) * 240);
-                            display.put(511, 255 + iBright, bright);
-                            display.put(511, 256 + iBright, bright);
-                            display.put(511, 257 + iBright, bright);
+                            back[511][255 + iBright] =  bright;
+                            back[511][256 + iBright] =  bright;
+                            back[511][257 + iBright] =  bright;
 
-                            display.put(510, 255 + iBright, bright);
-                            display.put(510, 256 + iBright, bright);
-                            display.put(510, 257 + iBright, bright);
+                            back[510][255 + iBright] =  bright;
+                            back[510][256 + iBright] =  bright;
+                            back[510][257 + iBright] =  bright;
 
-                            display.put(509, 255 + iBright, bright);
-                            display.put(509, 256 + iBright, bright);
-                            display.put(509, 257 + iBright, bright);
+                            back[509][255 + iBright] =  bright;
+                            back[509][256 + iBright] =  bright;
+                            back[509][257 + iBright] =  bright;
                         }
                         break;
                     case 105:
                         Gdx.graphics.setTitle("Basic 1D Noise, five inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
-                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
+                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+                        Arrays.fill(back[511], FLOAT_WHITE);
                         if((ctr & 3) == 0)
                         {
                             iBright = (int)(layered1D.getNoise(ctr * 0.015625) * 240);
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                            display.put(511, 255 + iBright, bright);
-                            display.put(511, 256 + iBright, bright);
-                            display.put(511, 257 + iBright, bright);
+                            back[511][255 + iBright] =  bright;
+                            back[511][256 + iBright] =  bright;
+                            back[511][257 + iBright] =  bright;
 
-                            display.put(510, 255 + iBright, bright);
-                            display.put(510, 256 + iBright, bright);
-                            display.put(510, 257 + iBright, bright);
+                            back[510][255 + iBright] =  bright;
+                            back[510][256 + iBright] =  bright;
+                            back[510][257 + iBright] =  bright;
 
-                            display.put(509, 255 + iBright, bright);
-                            display.put(509, 256 + iBright, bright);
-                            display.put(509, 257 + iBright, bright);
+                            back[509][255 + iBright] =  bright;
+                            back[509][256 + iBright] =  bright;
+                            back[509][257 + iBright] =  bright;
                         }
                         break;
                     case 106:
                         Gdx.graphics.setTitle("NumberTools.sin() approximation at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
-                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
+                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+                        Arrays.fill(back[511], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
                     {
                         bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
                         iBright = (int)(NumberTools.sin(ctr * 0.03125) * 64.0);
-                        display.put(511, 255 + iBright, bright);
-                        display.put(511, 256 + iBright, bright);
-                        display.put(511, 257 + iBright, bright);
+                        back[511][255 + iBright] =  bright;
+                        back[511][256 + iBright] =  bright;
+                        back[511][257 + iBright] =  bright;
 
-                        display.put(510, 255 + iBright, bright);
-                        display.put(510, 256 + iBright, bright);
-                        display.put(510, 257 + iBright, bright);
+                        back[510][255 + iBright] =  bright;
+                        back[510][256 + iBright] =  bright;
+                        back[510][257 + iBright] =  bright;
 
-                        display.put(509, 255 + iBright, bright);
-                        display.put(509, 256 + iBright, bright);
-                        display.put(509, 257 + iBright, bright);
+                        back[509][255 + iBright] =  bright;
+                        back[509][256 + iBright] =  bright;
+                        back[509][257 + iBright] =  bright;
                     }
                     break;
                     case 107:
                         Gdx.graphics.setTitle("NumberTools.swayRandomized() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
-                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
+                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+                        Arrays.fill(back[511], FLOAT_WHITE);
                         if((ctr & 3) == 0) {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
                             iBright = (int) (NumberTools.swayRandomized(9001L, ctr * 0.0125f) * 240.0);
-                            display.put(511, 255 + iBright, bright);
-                            display.put(511, 256 + iBright, bright);
-                            display.put(511, 257 + iBright, bright);
+                            back[511][255 + iBright] =  bright;
+                            back[511][256 + iBright] =  bright;
+                            back[511][257 + iBright] =  bright;
 
-                            display.put(510, 255 + iBright, bright);
-                            display.put(510, 256 + iBright, bright);
-                            display.put(510, 257 + iBright, bright);
+                            back[510][255 + iBright] =  bright;
+                            back[510][256 + iBright] =  bright;
+                            back[510][257 + iBright] =  bright;
 
-                            display.put(509, 255 + iBright, bright);
-                            display.put(509, 256 + iBright, bright);
-                            display.put(509, 257 + iBright, bright);
+                            back[509][255 + iBright] =  bright;
+                            back[509][256 + iBright] =  bright;
+                            back[509][257 + iBright] =  bright;
                         }
                     break;
                     case 108:
                         Gdx.graphics.setTitle("swayRandomizedTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
-                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
-                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
+                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+                        Arrays.fill(back[511], FLOAT_WHITE);
                         if((ctr & 3) == 0) {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
                             iBright = (int) (swayRandomizedTight(9001L, ctr * 0.0125f) * 480f);
-                            display.put(511, 15 + iBright, bright);
-                            display.put(511, 16 + iBright, bright);
-                            display.put(511, 17 + iBright, bright);
+                            back[511][15 + iBright] =  bright;
+                            back[511][16 + iBright] =  bright;
+                            back[511][17 + iBright] =  bright;
 
-                            display.put(510, 15 + iBright, bright);
-                            display.put(510, 16 + iBright, bright);
-                            display.put(510, 17 + iBright, bright);
+                            back[510][15 + iBright] =  bright;
+                            back[510][16 + iBright] =  bright;
+                            back[510][17 + iBright] =  bright;
 
-                            display.put(509, 15 + iBright, bright);
-                            display.put(509, 16 + iBright, bright);
-                            display.put(509, 17 + iBright, bright);
+                            back[509][15 + iBright] =  bright;
+                            back[509][16 + iBright] =  bright;
+                            back[509][17 + iBright] =  bright;
                         }
                         break;
 //                        Gdx.graphics.setTitle("randomWobbleTight() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
 //                        for (int i = 0; i < 511; i++)
-//                            System.arraycopy(display.backgrounds[i+1], 0, display.backgrounds[i], 0, 512);
-//                        Arrays.fill(display.backgrounds[511], FLOAT_WHITE);
+//                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+//                        Arrays.fill(back[511], FLOAT_WHITE);
 //                        if((ctr & 3) == 0) {
 //                            s0 = (ThrustAlt32RNG.determine(9001) >>> 8) * 0x1.5p-25f + 0.25f;
 //                            s1 = (ThrustAlt32RNG.determine(9002) >>> 8) * 0x1.5p-25f + 0.25f;
@@ -4111,17 +4118,17 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                            c1 = (ThrustAlt32RNG.determine(9004) >>> 8) * 0x1.5p-25f + 0.25f;
 //                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
 //                            iBright = (int) (randomWobble(ctr * 0.0125f, s0, s1, c0, c1) * 240f);
-//                            display.put(511, 255 + iBright, bright);
-//                            display.put(511, 256 + iBright, bright);
-//                            display.put(511, 257 + iBright, bright);
+//                            back[511][255 + iBright] =  bright;
+//                            back[511][256 + iBright] =  bright;
+//                            back[511][257 + iBright] =  bright;
 //
-//                            display.put(510, 255 + iBright, bright);
-//                            display.put(510, 256 + iBright, bright);
-//                            display.put(510, 257 + iBright, bright);
+//                            back[510][255 + iBright] =  bright;
+//                            back[510][256 + iBright] =  bright;
+//                            back[510][257 + iBright] =  bright;
 //
-//                            display.put(509, 255 + iBright, bright);
-//                            display.put(509, 256 + iBright, bright);
-//                            display.put(509, 257 + iBright, bright);
+//                            back[509][255 + iBright] =  bright;
+//                            back[509][256 + iBright] =  bright;
+//                            back[509][257 + iBright] =  bright;
 //                        }
 //                        break;
 
@@ -4131,7 +4138,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                                iBright = (int)MerlinNoise.noise2D(x + ctr, y + ctr, 9000L, 5, 32);
 //                                iBright &= ~((int)MerlinNoise.noise2D(x + ctr + 5, y + ctr, 9000L, 5, 32) - 0x1C00000);
 //                                iBright = (iBright >> 8) >>> 24;
-//                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+//                                back[x][y] = floatGetI(iBright, iBright, iBright);
 //                            }
 //                        }
 //                        break;
@@ -4142,7 +4149,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 iBright = (int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 32);
                                 iBright ^= iBright - 0x8000000;
                                 iBright = (iBright >> 8) >>> 24;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         break;
@@ -4151,7 +4158,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = beachNoise(-999999L, (x + ctr) * 0.0625f, (y + ctr) * 0.0625f) * 0.5f + 0.5f; //0.61803398875
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4160,7 +4167,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = beachNoise(-999999L, x * 0.0625f, y * 0.0625f, ctr * 0.0625f) * 0.5f + 0.5f; //0.61803398875
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4169,7 +4176,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredWhirling.getNoiseWithSeed(x * 0.015625f, y * 0.015625f, ctr * 0.03125f, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4178,7 +4185,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredSeeded.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4191,7 +4198,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredFN.getSimplexFractal(x, y, ctr)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4201,7 +4208,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(WhirlingNoise.instance.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4211,7 +4218,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(SeededNoise.instance.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4225,7 +4232,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(layeredFN.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456L)); // , 1.5f
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4239,7 +4246,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(ClassicNoise.instance.getNoise(xx * 0.025, yy * 0.025)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4251,7 +4258,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(ClassicNoise.instance.getNoise(x * 0.025, y * 0.025, ctr * 0.03125)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4263,7 +4270,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(ClassicNoise.instance.getNoise(x * 0.015 - y * 0.01625, ctr * 0.0225 - x * 0.01625, y * 0.015 - ctr * 0.0225, x * 0.0225 + y * 0.02 + ctr * 0.01625)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4278,7 +4285,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(ClassicNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, u + x * 0.015, v - y * 0.014, w - ctr * 0.021)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4293,7 +4300,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(JitterNoise.instance.getNoise(xx * 0.025, yy * 0.025)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4305,7 +4312,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(JitterNoise.instance.getNoise(x * 0.025, y * 0.025, ctr * 0.03125)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4317,7 +4324,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(JitterNoise.instance.getNoise(x * 0.015 - y * 0.01625, ctr * 0.0225 - x * 0.01625, y * 0.015 - ctr * 0.0225, x * 0.0225 + y * 0.02 + ctr * 0.01625)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                         break;
@@ -4332,7 +4339,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         basicPrepare(JitterNoise.instance.getNoise(x * 0.03125, y * 0.03125, ctr * 0.045, u + x * 0.015, v - y * 0.014, w - ctr * 0.021)
                                         );
                                 //+ 15f) / 30f;
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -4343,11 +4350,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                display.put(x, y, floatGetYCbCr(
+                                back[x][y] = floatGetYCbCr(
                                         ((float) WhirlingNoise.noise(xx * 0.03125f + 0.1f, yy * 0.03125f + 0.4f, 1234567L) + 1f) * 0.5f,
                                         ((float) WhirlingNoise.noise(xx * 0.03125f + 0.4f, yy * 0.03125f + 0.7f, 7654321L)) * 0.45f,
                                         ((float) WhirlingNoise.noise(xx * 0.03125f + 0.7f, yy * 0.03125f + 0.1f, 9999999L)) * 0.45f,
-                                        1f));
+                                        1f);
                             }
                         }
                         break;
@@ -4357,11 +4364,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                display.put(x, y, floatGetYCbCr(
+                                back[x][y] = floatGetYCbCr(
                                         ((float) JitterNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.1f, yy * 0.025f + 0.4f, 1234567L) + 1f) * 0.5f,
                                         ((float) JitterNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.4f, yy * 0.025f + 0.7f, 7654321L)) * 0.45f,
                                         ((float) JitterNoise.instance.getNoiseWithSeed(xx * 0.025f + 0.7f, yy * 0.025f + 0.1f, 9999999L)) * 0.45f,
-                                        1f));
+                                        1f);
                             }
                         }
                         break;
@@ -4370,11 +4377,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling 3D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGetYCbCr(
+                                back[x][y] = floatGetYCbCr(
                                         ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f, 1234567L) + 1f) * 0.5f,
                                         ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 234.5, 7654321L)) * 0.45f,
                                         ((float) WhirlingNoise.noise(x * 0.03125f, y * 0.03125f, ctr * 0.045f + 678.9, 9999999L)) * 0.45f,
-                                        1f));
+                                        1f);
                             }
                         }
                         break;
@@ -4382,11 +4389,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Classic 3D YCbCr Noise " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGetYCbCr(
+                                back[x][y] = floatGetYCbCr(
                                         ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f, 1234567L) + 1f) * 0.5f,
                                         ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 234.5, 7654321L)) * 0.45f,
                                         ((float) ClassicNoise.instance.getNoiseWithSeed(x * 0.025f, y * 0.025f, ctr * 0.03125f + 678.9, 9999999L)) * 0.45f,
-                                        1f));
+                                        1f);
                             }
                         }
                         break;
@@ -4401,7 +4408,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = jreRandom.nextInt() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4411,7 +4418,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = thunder.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4421,7 +4428,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = light.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4431,7 +4438,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = xor.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4441,7 +4448,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = xoRo.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4451,7 +4458,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = permuted.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4461,7 +4468,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = longPeriod.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4471,7 +4478,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = isaac.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4481,7 +4488,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = gdxRandom.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4491,7 +4498,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = jreRandom.nextInt() >>> 24;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("java.util.Random at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4501,7 +4508,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = thunder.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("ThunderRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4511,7 +4518,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = light.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("LightRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4521,7 +4528,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = xor.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("XorRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4531,7 +4538,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = xoRo.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("XoRoRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4541,7 +4548,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = permuted.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("PermutedRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4551,7 +4558,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = longPeriod.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("LongPeriodRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4561,7 +4568,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = isaac.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("IsaacRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4571,7 +4578,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = gdxRandom.nextInt() >>> 24;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("RandomXS128 from LibGDX at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4581,7 +4588,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = pint.nextInt() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4591,7 +4598,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = pint.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("PintRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4602,7 +4609,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = lap.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4613,7 +4620,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = lap.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("LapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4622,7 +4629,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = (br64.nextLong() & 0xFFFFFF00L) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4631,7 +4638,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
 //                                code = flap.nextInt() | 255L;
-//                                display.put(x, y, floatGet(code));
+//                                back[x][y] = floatGet(code);
 //                            }
 //                        }
 //                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4640,7 +4647,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (br64.nextInt() & 0xFF);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4649,7 +4656,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                        for (int x = 0; x < width; x++) {
 //                            for (int y = 0; y < height; y++) {
 //                                iBright = flap.next(8);
-//                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+//                                back[x][y] = floatGetI(iBright, iBright, iBright);
 //                            }
 //                        }
 //                        Gdx.graphics.setTitle("FlapRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4658,7 +4665,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = (br32.nextInt() & 0xFFFFFF00L) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("BasicRandom32 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4667,7 +4674,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (br32.nextInt() & 0xFF);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("BasicRandom32 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4677,7 +4684,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = jab.nextLong() | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("JabRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4687,7 +4694,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = jab.next(8);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("JabRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4697,7 +4704,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = xoRo.nextLong() << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("XoRoRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4707,7 +4714,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (int) (xoRo.nextLong() & 255);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("XoRoRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4717,7 +4724,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = ta.nextLong() << 8 | 255L; // (FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1))) << 8 | 255L
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustAltRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4727,7 +4734,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (int) (ta.nextLong() & 255);//toFloat(FlapRNG.determine(state += 0x9E3779B9 ^ (state << 1)));
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustAltRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4737,7 +4744,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = vortex.nextLong() | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("VortexRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4747,7 +4754,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = vortex.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("VortexRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4757,7 +4764,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = jab.nextLong() << 8 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("JabRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4767,7 +4774,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = (int) (jab.nextLong() & 255);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("JabRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4777,7 +4784,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = nlfsr.nextInt() << 5 | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         Gdx.graphics.setTitle("NLFSR at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4787,7 +4794,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = nlfsr.nextInt() >>> 3;
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("NLFSR at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4796,7 +4803,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         thrust.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(thrust.nextLong() | 255L));
+                                back[x][y] = floatGet(thrust.nextLong() | 255L);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4806,7 +4813,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = thrust.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4816,7 +4823,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             extra = ThrustRNG.determine(code + x);
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(ThrustRNG.determine(extra + y) >>> 32 | 255));
+                                back[x][y] = floatGet(ThrustRNG.determine(extra + y) >>> 32 | 255);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4827,7 +4834,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             extra = ThrustRNG.determine(code + x);
                             for (int y = 0; y < height; y++) {
                                 iBright = (int)(ThrustRNG.determine(extra + y) >>> 56);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4836,7 +4843,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         ta.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(ta.nextLong() | 255L));
+                                back[x][y] = floatGet(ta.nextLong() | 255L);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustAltRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4846,7 +4853,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = ta.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustAltRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4856,7 +4863,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             extra = ThrustAltRNG.determine(code + x);
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(ThrustAltRNG.determine(extra + y) >>> 32 | 255));
+                                back[x][y] = floatGet(ThrustAltRNG.determine(extra + y) >>> 32 | 255);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustAltRNG color (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4867,7 +4874,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             extra = ThrustAltRNG.determine(code + x);
                             for (int y = 0; y < height; y++) {
                                 iBright = (int)(ThrustAltRNG.determine(extra + y) >>> 56);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("ThrustAltRNG gray (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4877,7 +4884,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             code = VortexRNG.determine(extra + x, x);
                             for (int y = 0; y < height; y++) {
-                                display.put(x, y, floatGet(VortexRNG.determine(code + y, y) >>> 32 | 255));
+                                back[x][y] = floatGet(VortexRNG.determine(code + y, y) >>> 32 | 255);
                             }
                         }
                         Gdx.graphics.setTitle("Vortex color (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4888,7 +4895,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             code = VortexRNG.determine(extra + x, x);
                             for (int y = 0; y < height; y++) {
                                 iBright = (int)(VortexRNG.determine(code + y, y) >>> 56);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("Vortex gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4898,7 +4905,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = zag.nextInt() | 255;
-                                display.put(x, y, floatGet(iBright));
+                                back[x][y] = floatGet(iBright);
                             }
                         }
                         Gdx.graphics.setTitle("Zag32RNG using higher bits at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4908,7 +4915,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 iBright = zag.next(8);
-                                display.put(x, y, floatGetI(iBright, iBright, iBright));
+                                back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
                         Gdx.graphics.setTitle("Zag32RNG using next(8) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
@@ -4926,7 +4933,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -4937,7 +4944,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -4948,7 +4955,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Mist_.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -4959,7 +4966,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -4970,7 +4977,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Arrays.hashCode(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -4981,7 +4988,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -4992,7 +4999,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Mist_.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5003,7 +5010,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5015,7 +5022,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5027,7 +5034,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Mist_.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5039,7 +5046,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5050,7 +5057,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5061,7 +5068,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Mist_.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5072,7 +5079,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash64(coordinate) & 7L;
                                 code = 0xFF00L * (code & 1L) | 0xFF0000L * ((code & 2L) >> 1) | 0xFF000000L * ((code & 4L) >> 2) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5084,7 +5091,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Arrays.hashCode(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5096,7 +5103,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5108,7 +5115,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Mist_.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5120,7 +5127,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5131,7 +5138,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Arrays.hashCode(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5142,7 +5149,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5153,7 +5160,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Mist_.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5164,7 +5171,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5176,7 +5183,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5188,7 +5195,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = Mist_.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         break;
@@ -5199,7 +5206,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinates[1] = (((y + fuzzy.next(2)) >>> 2) << 3);
                                 code = CrossHash.Lightning.hash64(coordinates) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5210,7 +5217,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5221,7 +5228,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = Mist_.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5232,7 +5239,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 coordinate[0] = ((((x + fuzzy.next(2)) >>> 2) << 9) | ((y + fuzzy.next(2)) >>> 2));
                                 code = CrossHash.Lightning.hash64(coordinate) & 1792L;
                                 code = 0xFF00L * ((code & 256L) >>> 8) | 0xFF0000L * ((code & 512L) >> 9) | 0xFF000000L * ((code & 1024L) >> 10) | 255L;
-                                display.put(x, y, floatGet(code));
+                                back[x][y] = floatGet(code);
                             }
                         }
                         //overlay.put(4, 4, String.valueOf(fuzzy.next(2)), SColor.MIDORI);
@@ -5244,9 +5251,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 switch (otherMode) {
                     case 0: {
                         Gdx.graphics.setTitle("Conway's Game Of Life at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                        display.clear();
+                        ArrayTools.fill(back, FLOAT_BLACK);
                         for (Coord c : ca.current) {
-                            display.put(c.x, c.y, FLOAT_WHITE);
+                            back[c.x][c.y] = FLOAT_WHITE;
                         }
                         ca.runGameOfLife();
                     }
@@ -5259,7 +5266,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(classic2_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5272,7 +5279,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(classic2_lf_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5285,7 +5292,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(classic3_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5298,7 +5305,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(classic3_lf_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5312,7 +5319,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(whirling2_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5325,7 +5332,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(whirling2_lf_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5338,7 +5345,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(whirling3_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5351,7 +5358,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(whirling3_lf_2D.getNoise(xx * 0.025, yy * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5362,7 +5369,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(classic2_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5373,7 +5380,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(classic2_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5386,7 +5393,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(classic3_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5399,7 +5406,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(classic3_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5413,7 +5420,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(whirling2_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5426,7 +5433,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(whirling2_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5439,7 +5446,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
                                 bright = basicPrepare(whirling3_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5450,7 +5457,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 bright = basicPrepare(whirling3_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
-                                display.put(x, y, floatGet(bright, bright, bright, 1f));
+                                back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
                     }
@@ -5509,7 +5516,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             input.next();
         }
         // stage has its own batch and must be explicitly told to draw().
-        stage.draw();
+        batch.begin();
+        tcf.draw(batch, back, 0, 0);
+        batch.end();
     }
 
     @Override
