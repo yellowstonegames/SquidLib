@@ -21,13 +21,19 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 19;
-    private int modes = 24;
+    private int mode = 23;
+    private int modes = 25;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
     private Stage stage;
     private int[] amounts = new int[512];
+    private LinnormRNG linnorm;
+    private RandomBias bias;
+    private RandomXS128 xs128;
+    private XSP xsp;
+    private EditRNG edit;
+    
     private double twist(double input) {
         return (input = input * 0.5 + 1.0) - (int)input;
     }
@@ -104,45 +110,50 @@ public class MathVisualizer extends ApplicationAdapter {
 
         }
     }
-    private final XoRoRNG r0 = new XoRoRNG(1234567890L),
-            r1 = new XoRoRNG(1234567890L),
-            r2 = new XoRoRNG(1234567890L);
-    public final long mult128(long bound)
-    {
-        long rand = r0.nextLong();
-        if (bound <= 0) return 0;
-        final long randLow = rand & 0xFFFFFFFFL;
-        final long boundLow = bound & 0xFFFFFFFFL;
-        rand >>>= 32;
-        bound >>>= 32;
-        final long z = (randLow * boundLow >>> 32);
-        long t = rand * boundLow + z;
-        final long tLow = t & 0xFFFFFFFFL;
-        t >>>= 32;
-        return rand * bound + t + (tLow + randLow * bound >> 32);
-    }
-    public final long bitmask(long bound)
-    {
-        final long mask = -1L >>> Long.numberOfLeadingZeros(--bound|1L);
-        long x;
-        do {
-            x = r2.nextLong() & mask;
-        } while (x > bound);
-        return x;
-    }
-    public final long traditional(final long bound)
-    {
-        if (bound <= 0) return 0L;
-        for (;;) {
-            final long bits = r1.nextLong() & 0x7FFFFFFFFFFFFFFFL;
-            final long value = bits % bound;
-            if (bits - value + bound - 1L >= 0L) return value;
-        }
-    }
+//    private final XoRoRNG r0 = new XoRoRNG(1234567890L),
+//            r1 = new XoRoRNG(1234567890L),
+//            r2 = new XoRoRNG(1234567890L);
+//    public final long mult128(long bound)
+//    {
+//        long rand = r0.nextLong();
+//        if (bound <= 0) return 0;
+//        final long randLow = rand & 0xFFFFFFFFL;
+//        final long boundLow = bound & 0xFFFFFFFFL;
+//        rand >>>= 32;
+//        bound >>>= 32;
+//        final long z = (randLow * boundLow >>> 32);
+//        long t = rand * boundLow + z;
+//        final long tLow = t & 0xFFFFFFFFL;
+//        t >>>= 32;
+//        return rand * bound + t + (tLow + randLow * bound >> 32);
+//    }
+//    public final long bitmask(long bound)
+//    {
+//        final long mask = -1L >>> Long.numberOfLeadingZeros(--bound|1L);
+//        long x;
+//        do {
+//            x = r2.nextLong() & mask;
+//        } while (x > bound);
+//        return x;
+//    }
+//    public final long traditional(final long bound)
+//    {
+//        if (bound <= 0) return 0L;
+//        for (;;) {
+//            final long bits = r1.nextLong() & 0x7FFFFFFFFFFFFFFFL;
+//            final long value = bits % bound;
+//            if (bits - value + bound - 1L >= 0L) return value;
+//        }
+//    }
 
     @Override
     public void create() {
         Coord.expandPoolTo(512, 512);
+        linnorm = new LinnormRNG();
+        bias = new RandomBias();
+        edit = new EditRNG();
+        xs128 = new RandomXS128();
+        xsp = new XSP();
         batch = new SpriteBatch();
         stage = new Stage(new ScreenViewport(), batch);
         layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
@@ -172,9 +183,9 @@ public class MathVisualizer extends ApplicationAdapter {
         switch (mode) {
             case 0: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(NumberTools.formCurvedFloat(random.nextLong()) * 256 + 256)]++;
+                    amounts[Noise.fastFloor(NumberTools.formCurvedFloat(linnorm.nextLong()) * 256 + 256)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -193,9 +204,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 1: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(twist(NumberTools.formCurvedFloat(random.nextLong())) * 512)]++;
+                    amounts[Noise.fastFloor(twist(NumberTools.formCurvedFloat(linnorm.nextLong())) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -212,11 +223,11 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 2: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(twist(NumberTools.formDouble(random.nextLong()) *
-                            NumberTools.formDouble(random.nextLong()) - NumberTools.formDouble(random.nextLong()) *
-                            NumberTools.formDouble(random.nextLong())) * 512)]++;
+                    amounts[Noise.fastFloor(twist(NumberTools.formDouble(linnorm.nextLong()) *
+                            NumberTools.formDouble(linnorm.nextLong()) - NumberTools.formDouble(linnorm.nextLong()) *
+                            NumberTools.formDouble(linnorm.nextLong())) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -233,10 +244,10 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 3: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
                 long state;
                 for (int i = 0; i < 0x1000000; i++) {
-                    state = random.nextLong();
+                    state = linnorm.nextLong();
                     amounts[Noise.fastFloor((NumberTools.formFloat((int) state) * 0.5 +
                             (NumberTools.formFloat((int) (state >>> 20)) + NumberTools.formFloat((int) (state >>> 41))) * 0.25) * 512)]++;
                 }
@@ -255,10 +266,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 4: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                RandomBias random = new RandomBias();
-                random.distribution = RandomBias.EXP_TRI;
+                bias.distribution = RandomBias.EXP_TRI;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(random.biasedDouble(0.6, 512.0))]++;
+                    amounts[Noise.fastFloor(bias.biasedDouble(0.6, 512.0))]++;
                     //amounts[Noise.fastFloor(Math.nextAfter(random.biasedDouble(0.5, 512.0), 0.0))]++;
                 }
                 for (int i = 0; i < 512; i++) {
@@ -276,10 +286,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 5: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                RandomBias random = new RandomBias();
-                random.distribution = RandomBias.BATHTUB_TRUNCATED;
+                bias.distribution = RandomBias.BATHTUB_TRUNCATED;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(random.biasedDouble(0.6, 512.0))]++;
+                    amounts[Noise.fastFloor(bias.biasedDouble(0.6, 512.0))]++;
                     //amounts[Noise.fastFloor(Math.nextAfter(random.biasedDouble(0.5, 512.0), 0.0))]++;
                 }
                 for (int i = 0; i < 512; i++) {
@@ -297,11 +306,10 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 6: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                EditRNG random = new EditRNG();
-                random.setCentrality(200);
-                random.setExpected(0.75);
+                edit.setCentrality(200);
+                edit.setExpected(0.75);
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(random.nextDouble(512.0))]++;
+                    amounts[Noise.fastFloor(edit.nextDouble(512.0))]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -318,11 +326,10 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 7: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                EditRNG random = new EditRNG();
-                random.setCentrality(-200);
-                random.setExpected(0.75);
+                edit.setCentrality(-200);
+                edit.setExpected(0.75);
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(random.nextDouble(512.0))]++;
+                    amounts[Noise.fastFloor(edit.nextDouble(512.0))]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -339,15 +346,15 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 8: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
 //                random.setCentrality(50);
 //                random.setExpected(0.6);
                 long centrality = NumberTools.doubleToLongBits(1.625) & 0xfffffffffffffL;
                 double offset = 0.15, range = 0.6;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(((random.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (random.nextLong() & 0xfffffffffffffL) ?
-                            ((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
-                            twist(((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
+                    amounts[Noise.fastFloor(((linnorm.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (linnorm.nextLong() & 0xfffffffffffffL) ?
+                            ((linnorm.nextLong() & 0xfffffffffffffL) - (linnorm.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
+                            twist(((linnorm.nextLong() & 0xfffffffffffffL) - (linnorm.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -364,15 +371,15 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 9: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
 //                random.setCentrality(50);
 //                random.setExpected(0.6);
                 long centrality = NumberTools.doubleToLongBits(1.375) & 0xfffffffffffffL;
                 double offset = 0.15, range = 0.6;
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[Noise.fastFloor(((random.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (random.nextLong() & 0xfffffffffffffL) ?
-                            ((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
-                            twist(((random.nextLong() & 0xfffffffffffffL) - (random.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
+                    amounts[Noise.fastFloor(((linnorm.nextLong() & 0xfffffffffffffL) * 0x1p-54 + offset + range * ((centrality > (linnorm.nextLong() & 0xfffffffffffffL) ?
+                            ((linnorm.nextLong() & 0xfffffffffffffL) - (linnorm.nextLong() & 0xfffffffffffffL)) * 0x1p-53 + 0.5 :
+                            twist(((linnorm.nextLong() & 0xfffffffffffffL) - (linnorm.nextLong() & 0xfffffffffffffL)) * 0x1p-52)))) * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0 ? -0x1.c98066p126F : -0x1.d08864p126F;
@@ -389,9 +396,9 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 10: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) (random.nextFloat() * 512)]++;
+                    amounts[(int) (linnorm.nextFloat() * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -430,9 +437,8 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 12: {
                 Gdx.graphics.setTitle("Math Visualizer: Mode " + mode);
-                RandomXS128 random = new RandomXS128();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) (random.nextFloat() * 512)]++;
+                    amounts[(int) (xs128.nextFloat() * 512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -452,9 +458,9 @@ public class MathVisualizer extends ApplicationAdapter {
             case 13: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " LinnormRNG, random.nextInt(0x200)");
-                LinnormRNG random = new LinnormRNG();
+                //LinnormRNG linnorm = new LinnormRNG();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[random.nextInt(512)]++;
+                    amounts[linnorm.nextInt(512)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -474,9 +480,8 @@ public class MathVisualizer extends ApplicationAdapter {
             case 14: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " XSP, mult128 & 0x1FFL");
-                XSP random = new XSP();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((random.nextLongMult(0x1800000000000000L)) & 0x1FFL)]++;
+                    amounts[(int) ((xsp.nextLongMult(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -515,9 +520,8 @@ public class MathVisualizer extends ApplicationAdapter {
             case 15: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " XSP, bitBased & 0x1FFL");
-                XSP random = new XSP();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((random.nextLongBit(0x1800000000000000L)) & 0x1FFL)]++;
+                    amounts[(int) ((xsp.nextLongBit(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -556,9 +560,8 @@ public class MathVisualizer extends ApplicationAdapter {
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " XSP, traditional & 0x1FFL");
-                XSP random = new XSP();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((random.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
+                    amounts[(int) ((xsp.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -575,7 +578,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " LinnormRNG, random.nextLong(0x1000000000000000L) & 0x1FFL");
-//                LinnormRNG random = new LinnormRNG();
+//                //LinnormRNG linnorm = new LinnormRNG();
 //                for (int i = 0; i < 0x1000000; i++) {
 //                    amounts[(int) ((random.nextLong(0x1000000000000000L)) & 0x1FFL)]++;
 //                }
@@ -618,9 +621,8 @@ public class MathVisualizer extends ApplicationAdapter {
             case 18: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " RandomXS128, random.nextLong(0x1800000000000000L) & 0x1FFL");
-                RandomXS128 random = new RandomXS128();
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((random.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
+                    amounts[(int) ((xs128.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
@@ -734,7 +736,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
-            case 23:
+            case 23: {
                 Arrays.fill(amounts, 0);
                 long ctr = (System.nanoTime() >>> 24), xx, yy, seed;
                 Gdx.graphics.setTitle("ClassicNoise 2D hash at " + Gdx.graphics.getFramesPerSecond() + " FPS");
@@ -745,7 +747,7 @@ public class MathVisualizer extends ApplicationAdapter {
                         //amounts[(int)((((seed = (((1234567L * (0x632BE59BD9B4E019L + (xx << 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (yy << 23)))) ^ seed >>> 27 ^ xx + yy) * 0xAEF17502108EF2D9L)
                         //        >>> 55)]++;
                         //amounts[Noise.PointHash.hash256(xx, yy, 1L)]++;
-                        amounts[((int)(((seed = 1234567L ^ 0xB4C4D * xx ^ 0xEE2C3 * yy) ^ seed >>> 13) * seed) >>> 24)]++;
+                        amounts[((int) (((seed = 1234567L ^ 0xB4C4D * xx ^ 0xEE2C3 * yy) ^ seed >>> 13) * seed) >>> 24)]++;
                     }
                 }
 //                for (int i = 0; i < 512; i++) {
@@ -769,20 +771,20 @@ public class MathVisualizer extends ApplicationAdapter {
                     color = (t & 4) == 4
                             ? -0x1.c98066p126F
                             : -0x1.d08864p126F;
-                    for (int j = amounts[t] >> 3 & -4; j >= 128; j-=4) {
+                    for (int j = amounts[t] >> 3 & -4; j >= 128; j -= 4) {
                         x = Noise.fastFloor(angle[0] * j + 260);
                         y = Noise.fastFloor(angle[1] * j + 260);
                         layers.put(x, y, color);
-                        layers.put(x+1, y, color);
-                        layers.put(x-1, y, color);
-                        layers.put(x, y+1, color);
-                        layers.put(x, y-1, color);
+                        layers.put(x + 1, y, color);
+                        layers.put(x - 1, y, color);
+                        layers.put(x, y + 1, color);
+                        layers.put(x, y - 1, color);
 //                        layers.put(x+1, y+1, color);
 //                        layers.put(x-1, y-1, color);
 //                        layers.put(x-1, y+1, color);
 //                        layers.put(x+1, y-1, color);
                     }
-                    for (int j = Math.min(amounts[t] >> 3 & -4, 128); j >= 32; j-=4) {
+                    for (int j = Math.min(amounts[t] >> 3 & -4, 128); j >= 32; j -= 4) {
                         x = Noise.fastFloor(angle[0] * j + 260);
                         y = Noise.fastFloor(angle[1] * j + 260);
                         layers.put(x, y, color);
@@ -792,10 +794,55 @@ public class MathVisualizer extends ApplicationAdapter {
 //                        layers.put(x, y-1, color);
                     }
                 }
-
+            }
                 break;
+            case 24: {
+                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+                        " LinnormRNG, hyperCurve(0x1FF)");
+                //LinnormRNG linnorm = new LinnormRNG();
+                for (int i = 0; i < 0x1000000; i++) {
+                    amounts[hyperCurve(linnorm, 0x1FF)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    float color = (i & 63) == 0
+                            ? -0x1.c98066p126F // CW Azure
+                            : -0x1.d08864p126F; // CW Sapphire
+                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                        layers.put(i, j, color);
+                    }
+                }
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 8; j < 520; j += 32) {
+                        layers.put(i, j, -0x1.7677e8p125F);
+                    }
+                }
+            }
+            break;
+
         }
     }
+
+    private int hyperCurve(LinnormRNG random, int bound) {
+        long a = random.nextLong(), mask;
+        int lz = Integer.numberOfLeadingZeros(bound), res = 0, ctr = 0;
+        while (lz < 32)
+        {
+            mask = 0x7FFFFFFFL >>> lz;
+            bound &= mask;
+            if((ctr & 63) > ((ctr += 32 - lz) & 63))
+            {
+                res += (a & (mask >>> ctr)); // implicitly does ctr & 63
+                a = LinnormRNG.determine(a);
+                mask = 0x7FFFFFFFL >>> 32 - (ctr & 63);
+//                res += (a & mask);
+            }
+            res += (a & mask);
+            a >>>= 31 - lz;
+            lz = Integer.numberOfLeadingZeros(bound);
+        }
+        return res;
+    }
+
     @Override
     public void render() {
         // standard clear the background routine for libGDX
