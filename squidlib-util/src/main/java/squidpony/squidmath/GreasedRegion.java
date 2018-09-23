@@ -5002,25 +5002,21 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return this for chaining
      */
     public GreasedRegion randomScatter(IRNG rng, int minimumDistance, int limit) {
-        int ic = 0;
-        for (; ic < width * ySections; ic++) {
-            if(data[ic] != 0)
-                break;
-        }
-        if(ic == width * ySections)
+        int tmp, total = 0, ct;
+        tally();
+        if(this.ct == 0)
             return this;
         if(limit == 0)
             return empty();
         else if(limit < 0)
             limit = 0x7fffffff;
-        long[] data2 = new long[data.length];
         long t, w;
-        int tmp, total = 0;
+        long[] data2 = new long[data.length];
         MAIN_LOOP:
         while (total < limit) { 
             if(!tallied) 
                 tally();
-            tmp = rng.nextInt(ct);
+            tmp = rng.nextInt(this.ct);
 
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
@@ -5029,11 +5025,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                         w = NumberTools.lowestOneBit(t);
                         for (--ct; w != 0; ct--) {
                             if (ct == tmp) {
-                                data2[x * ySections + s] |= w;
-                                ++total;
                                 removeRectangle(x - minimumDistance,
                                         ((s << 6) | Long.numberOfTrailingZeros(w)) - minimumDistance,
                                         minimumDistance << 1 | 1, minimumDistance << 1 | 1);
+                                data2[x * ySections + s] |= w;
+                                ++total;
                                 continue MAIN_LOOP;
                             }
                             t ^= w;

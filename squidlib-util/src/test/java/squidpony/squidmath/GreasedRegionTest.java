@@ -146,19 +146,20 @@ public class GreasedRegionTest {
             printRegion(gr2 = dataDungeon.copy().empty().insertSeveral(dataDungeon.mixedRandomSeparated(0.4)));
             System.out.println("expected size: " + (dataDungeon.size() * 2 / 5) + ", actual size " + gr2.size());
 
-
-//            System.out.println("\nrandomScatter with minimum distance 1:");
-//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 1));
-//            System.out.println("\nrandomScatter with minimum distance 2:");
-//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 2));
-//            System.out.println("\nrandomScatter with minimum distance 3:");
-//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 3));
-//            System.out.println("\nrandomScatter with minimum distance 1 and limit of 20:");
-//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 1, 20));
-//            System.out.println("\nrandomScatter with minimum distance 2 and limit of 20:");
-//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 2, 20));
-//            System.out.println("\nrandomScatter with minimum distance 3 and limit of 20:");
-//            printRegion(gr = dataDungeon.copy().randomScatter(rng, 3, 20));
+            gr = dataDungeon.copy();
+            System.out.println("\nrandomScatter with minimum distance 1:");
+            printRegion(gr.randomScatter(rng, 1));
+            System.out.println("\nrandomScatter with minimum distance 2:");
+            printRegion(gr.allOn().randomScatter(rng, 2));
+            System.out.println("\nrandomScatter with minimum distance 3:");
+            printRegion(gr.allOn().randomScatter(rng, 3));
+            gr = dataDungeon.copy();
+            System.out.println("\nrandomScatter with minimum distance 1 and limit of 20:");
+            printRegion(gr.randomScatter(rng, 1, 20));
+            System.out.println("\nrandomScatter with minimum distance 2 and limit of 20:");
+            printRegion(gr.allOn().randomScatter(rng, 2, 20));
+            System.out.println("\nrandomScatter with minimum distance 3 and limit of 20:");
+            printRegion(gr.allOn().randomScatter(rng, 3, 20));
         }
         GreasedRegion g = new GreasedRegion(box);
         GreasedRegion g2 = new GreasedRegion(64, 64);
