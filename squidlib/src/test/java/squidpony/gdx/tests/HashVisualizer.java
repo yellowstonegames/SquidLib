@@ -305,12 +305,23 @@ public class HashVisualizer extends ApplicationAdapter {
 //        return (x += y ^ ((x *= 0xB531A935) ^ x >>> 13) * (y * 0x41C64E6D | 1)) ^ (x << 18 | x >>> 14) ^ (x << 9 | x >>> 23);
 
 //        // works very well, GWT-safe
-        y ^= x * 0x89A7 + 0xB531A935; // + 0xB531A935;
-        x ^= y * 0xBCFD + 0x41C64E6D; // + 0x41C64E6D;
+        y ^= ~x * 0x89A7; // + 0xB531A935;
+        x ^= ~y * 0xBCFD; // + 0x41C64E6D;
+        x += x >>> 21;
+        y += y >>> 22;
+        x += x << 8;
+        y += y << 5;
+        y ^= x * 0xACED;
+        x ^= y * 0xBA55;
+//        x += x >>> 21;
+//        y += y >>> 22;
+//        x += x << 8;
+//        y += y << 5;
+
 //        y ^= (x << 17 | x >>> 15);
 //        x ^= (y << 13 | y >>> 19);
-        y ^= x * 0x89A7; // + 0xB531A935;
-        x ^= y * 0xBCFD; // + 0x41C64E6D;
+//        y ^= x * 0x89A7; // + 0xB531A935;
+//        x ^= y * 0xBCFD; // + 0x41C64E6D;
 //        y ^= (x << 17 | x >>> 15);
 //        x ^= (y << 13 | y >>> 19);
         return x;
