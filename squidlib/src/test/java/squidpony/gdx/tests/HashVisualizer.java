@@ -306,11 +306,13 @@ public class HashVisualizer extends ApplicationAdapter {
 
 //        // works very well, GWT-safe
         y ^= ~x * 0x89A7; // + 0xB531A935;
-        x ^= ~y * 0xBCFD; // + 0x41C64E6D;
-        x += x >>> 21;
-        y += y >>> 22;
-        x += x << 8;
-        y += y << 5;
+        x ^= ~y * 0xBCFD; // + 0x41C64E6D;         
+//        x += x >>> 21;
+//        y += y >>> 22;
+//        x += x << 8;
+//        y += y << 5;
+        y ^= (x << 17 | x >>> 15);
+        x ^= (y << 13 | y >>> 19);
         y ^= x * 0xACED;
         x ^= y * 0xBA55;
 //        x += x >>> 21;
@@ -1347,26 +1349,18 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Weird Hash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = weirdPointHash(x, y) << 8 | 255L;
+                                code = -(weirdPointHash(x, y) & 1L) | 255L;
+                                //code = weirdPointHash(x, y) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-
-//                        Gdx.graphics.setTitle("Mist_ (alpha) on length 2, low bits");
-//                        for (int x = 0; x < width; x++) {
-//                            coordinates[0] = x;
-//                            for (int y = 0; y < height; y++) {
-//                                coordinates[1] = y;
-//                                code = Mist_A.hash(coordinates) << 8 | 255L;
-//                                back[x][y] = floatGet(code);
-//                            }
-//                        }
                         break;
                     case 2:
                         Gdx.graphics.setTitle("Weird Hash on length 2, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = weirdPointHash(x, y) & 0xFFFFFF00L | 255L;
+                                code = (long) (weirdPointHash(x, y) >> 31) | 255L;
+                                //code = weirdPointHash(x, y) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -1375,12 +1369,23 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("HastyPointHash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
+                                code = -(Noise.HastyPointHash.hashAll(x, y, 123) & 1L) | 255L;
+                                //code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
                         break;
                     case 4:
+                        Gdx.graphics.setTitle("HastyPointHash on length 2, high bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = Noise.HastyPointHash.hashAll(x, y, 123) >> 63 | 255L;
+                                //code = Noise.HastyPointHash.hashAll(x, y, 123) << 8 | 255L;
+                                back[x][y] = floatGet(code);
+                            }
+                        }
+                        break;
+                    case 5:
                         Gdx.graphics.setTitle("Arrays.hashCode on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -1390,73 +1395,57 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             }
                         }
                         break;
-                    case 5:
-                        Gdx.graphics.setTitle("Ion 32 on length 1, low bits");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = ion32(coordinate) << 8 | 255L;
-                                back[x][y] = floatGet(code);
-                            }
-                        }
-
-//                        Gdx.graphics.setTitle("Mist_ (alpha) on length 1, low bits");
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                coordinate[0] = (x << 9) | y;
-//                                code = Mist_A.hash(coordinate) << 8 | 255L;
-//                                back[x][y] = floatGet(code);
-//                            }
-//                        }
-                        break;
                     case 6:
                         Gdx.graphics.setTitle("PointHash on length 1, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
+                                code = -(Noise.PointHash.hashAll((x << 9) | y, 0L, 123L) & 1L) | 255L;
+                                //code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
                         break;
                     case 7:
-                        Gdx.graphics.setTitle("HastyPointHash on length 1, low bits");
+                        Gdx.graphics.setTitle("PointHash on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) << 8 | 255L;
+                                code = Noise.PointHash.hashAll((x << 9) | y, 0L, 123L) >> 63 | 255L;
+                                //code = Noise.PointHash.hashAll((x << 9) | y, 0, 123L) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
                         break;
                     case 8:
-                        Gdx.graphics.setTitle("Ion 64 on length 2, low bits");
+                        Gdx.graphics.setTitle("HastyPointHash on length 1, low bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = ion64(coordinates) << 8 | 255L;
+                                code = -(Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) & 1L) | 255L;
+                                //code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-//                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 2, low bits");
-//                        for (int x = 0; x < width; x++) {
-//                            coordinates[0] = x;
-//                            for (int y = 0; y < height; y++) {
-//                                coordinates[1] = y;
-//                                code = Mist_A.hash64(coordinates) << 8 | 255L;
-//                                back[x][y] = floatGet(code);
-//                            }
-//                        }
                         break;
                     case 9:
-                        Gdx.graphics.setTitle("PointHash 64 on length 2, low bits");
+                        Gdx.graphics.setTitle("HastyPointHash on length 1, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
+                                code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) >> 63 | 255L;
+                                //code = Noise.HastyPointHash.hashAll(x << 9 | y, 0, 123) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
                         break;
                     case 10:
+                        Gdx.graphics.setTitle("PointHash 64 on length 2, low bits");
+                        for (int x = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++) {
+                                code = -(Noise.PointHash.hashAll(x, y, 123L) & 1L) | 255L;
+                                //code = Noise.PointHash.hashAll(x, y, 123L) >>> 24 | 255L;
+                                back[x][y] = floatGet(code);
+                            }
+                        }
+                        break;
+                    case 11:
                         Gdx.graphics.setTitle("Mist_ (chi) 64 on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             coordinates[0] = x;
@@ -1466,24 +1455,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        break;
-                    case 11:
-                        Gdx.graphics.setTitle("Ion 64 on length 1, low bits");
-                        for (int x = 0; x < width; x++) {
-                            for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = ion64(coordinate) << 8 | 255L;
-                                back[x][y] = floatGet(code);
-                            }
-                        }
-//                        Gdx.graphics.setTitle("Mist_ (alpha) 64 on length 1, low bits");
-//                        for (int x = 0; x < width; x++) {
-//                            for (int y = 0; y < height; y++) {
-//                                coordinate[0] = (x << 9) | y;
-//                                code = Mist_A.hash64(coordinate) << 8 | 255L;
-//                                back[x][y] = floatGet(code);
-//                            }
-//                        }
                         break;
                     case 12:
                         Gdx.graphics.setTitle("PointHash 64 on length 1, low bits");
