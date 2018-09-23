@@ -19,13 +19,12 @@ import java.io.Serializable;
  * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
  * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
  * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
- * randomness slightly. The round function used here acts like a rather-robust 2-item hash. It bitwise-NOTs the data,
- * multiplies by a 16-bit constant, and XORs that with the seed. It then does the same with data and seed switched.
- * After that, it uses two different iadla generators from Mark Overton's subcycle generator research, which are
- * irreversible and nicely random. These generators look like {@code x += x >>> 21; return (x += x << 8);}, and after
- * running the data and seed through different iadla generators, it repeats the first step but without using NOT, and
- * with different multipliers. It then returns data, which has been randomized the most. Using 4 rounds turns out to be
- * overkill in this case. This also uses a different seed for each round.
+ * randomness slightly. The round function used here acts like a rather-robust 2-item hash. First, it runs a step where
+ * it takes one of the two parameters, multiplies it by a 16-bit value, "sometimes" adds a 32-bit value, and XORs that
+ * with the other parameter. It It runs this step twice each on both combinations of the two parameters, once doing the
+ * "sometimes" adding and once not, then runs a different Overton iadla generator on each parameter (one such generator
+ * is {@code x += x >>> 21; return (x += x << 8);}, for reference). It then returns data XORed with seed. Using 4 rounds
+ * turns out to be overkill in this case. This also uses a different seed for each round.
  * <br>
  * Created by Tommy Ettinger on 9/22/2018.
  * @author Alan Wolfe
@@ -134,28 +133,27 @@ public class LowStorageShuffler implements Serializable {
     }
 
     /**
-     * An irreversible mixing function that seems to give good results. GWT-compatible.
-     * First, it runs a step where it takes one of the two parameters, bitwise-NOTs it, multiplies it by a 16-bit value,
-     * and XORs that with the other parameter. It runs this step on both combinations of the two parameters, then runs
-     * a different Overton iadla generator on each parameter (one such generator is
-     * {@code x += x >>> 21; return (x += x << 8);}, for reference). It then repeats the initial step but without the
-     * NOT and using different multipliers. It returns data, which is the value that has been randomized the most. This
-     * is complicated, but less involved schemes did not do well at all. There's four multiplications used here, all by
-     * small enough values to not risk GWT safety.
+     * An irreversible mixing function that seems to give good results; GWT-compatible.
+     * First, it runs a step where it takes one of the two parameters, multiplies it by a 16-bit value, "sometimes" adds
+     * a 32-bit value, and XORs that with the other parameter. It It runs this step twice each on both combinations of
+     * the two parameters, once doing the "sometimes" adding and once not, then runs a different Overton iadla generator
+     * on each parameter (one such generator is {@code x += x >>> 21; return (x += x << 8);}, for reference). It then
+     * returns data XORed with seed. This is complicated, but less involved schemes did not do well at all. There's four
+     * multiplications used here, all by small enough values to not risk GWT safety.
      * @param data the data being ciphered
      * @param seed the current seed
      * @return the ciphered data
      */
     protected int round(int data, int seed)
     {
-        seed ^= ~data * 0x89A7;
-        data ^= ~seed * 0xBCFD;
+        seed ^= data * 0xC6D5 + 0xB531A935;
+        data ^= seed * 0xBCFD + 0x41C64E6D;
+        seed ^= data * 0xACED;
+        data ^= seed * 0xBA55;
         data += data >>> 21;
         seed += seed >>> 22;
         data += data << 8;
         seed += seed << 5;
-        seed ^= data * 0xACED;
-        data ^= seed * 0xBA55;
 //        data += data >>> 21;
 //        seed += seed >>> 22;
 //        data += data << 8;
@@ -164,7 +162,7 @@ public class LowStorageShuffler implements Serializable {
 //        seed += seed >>> 13;
 //        data += data << 9;
 //        seed += seed << 11;
-        return data;
+        return data ^ seed;
     }
 
     /**
