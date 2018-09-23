@@ -14,6 +14,19 @@ import java.io.Serializable;
  * {@link #restart()} to use the same sequence over again, or {@link #restart(int)} to use a different seed (the bound
  * is fixed).
  * <br>
+ * This differs from the version in Alan Wolfe's example code and blog post; it uses a very different round function,
+ * and it only uses 2 rounds of it (instead of 4). Wolfe's round function is MurmurHash2, but as far as I can tell the
+ * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
+ * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
+ * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
+ * randomness slightly. The round function used here acts like a rather-robust 2-item hash. It bitwise-NOTs the data,
+ * multiplies by a 16-bit constant, and XORs that with the seed. It then does the same with data and seed switched.
+ * After that, it uses two different iadla generators from Mark Overton's subcycle generator research, which are
+ * irreversible and nicely random. These generators look like {@code x += x >>> 21; return (x += x << 8);}, and after
+ * running the data and seed through different iadla generators, it repeats the first step but without using NOT, and
+ * with different multipliers. It then returns data, which has been randomized the most. Using 4 rounds turns out to be
+ * overkill in this case. This also uses a different seed for each round.
+ * <br>
  * Created by Tommy Ettinger on 9/22/2018.
  * @author Alan Wolfe
  * @author Tommy Ettinger
@@ -22,7 +35,7 @@ public class LowStorageShuffler implements Serializable {
     private static final long serialVersionUID = 1L;
     public final int bound;
     protected int index, pow4, halfBits, leftMask, rightMask;
-    protected int key0, key1, key2, key3;
+    protected int key0, key1;//, key2, key3;
 
     /**
      * Constructs a LowStorageShuffler with the given exclusive upper bound and a random seed.
@@ -42,17 +55,13 @@ public class LowStorageShuffler implements Serializable {
     {
         // initialize our state
         this.bound = bound;
-        index = 0;
-        key0 = Light32RNG.determine(seed ^ bound);
-        key1 = Light32RNG.determine(seed ^ 0x1337 * bound);
-        key2 = Light32RNG.determine(seed ^ 0xBEEF * bound);
-        key3 = Light32RNG.determine(seed ^ 0xDE4D * bound);
+        restart(seed);
         // calculate next power of 4.  Needed since the balanced Feistel network needs
         // an even number of bits to work with
         pow4 = HashCommon.nextPowerOfTwo(bound);
         pow4 = ((pow4 | pow4 << 1) & 0x55555554) - 1;
         // calculate our left and right masks to split our indices for the Feistel network
-        halfBits = Integer.bitCount(pow4) >> 1;
+        halfBits = Integer.bitCount(pow4) >>> 1;
         rightMask = pow4 >>> halfBits;
         leftMask = pow4 ^ rightMask;
     }
@@ -118,54 +127,69 @@ public class LowStorageShuffler implements Serializable {
     public void restart(int seed)
     {
         index = 0;
-        key0 = Light32RNG.determine(seed ^ bound);
-        key1 = Light32RNG.determine(seed ^ 0x1337 * bound);
-        key2 = Light32RNG.determine(seed ^ 0xBEEF * bound);
-        key3 = Light32RNG.determine(seed ^ 0xDE4D * bound);
+        key0 = Light32RNG.determine(seed ^ 0xDE4D * ~bound);
+        key1 = Light32RNG.determine(key0 ^ 0xBA55 * bound);
+        key0 ^= Light32RNG.determine(~key1 ^ 0xBEEF * bound);
+        key1 ^= Light32RNG.determine(~key0 ^ 0x1337 * bound);
     }
 
     /**
      * An irreversible mixing function that seems to give good results. GWT-compatible.
-     * Uses two LCG-like steps that take one of the two parameters and get XORed with the other parameter, then runs
-     * a different Overton iadla generator on each parameter (one is {@code x += x >> 21; x += x << 8;}, for reference).
-     * It returns one parameter xorshifted, then minus the other parameter. This is complicated, but less involved
-     * schemes did not do well at all. There's also only two multiplications used here.
+     * First, it runs a step where it takes one of the two parameters, bitwise-NOTs it, multiplies it by a 16-bit value,
+     * and XORs that with the other parameter. It runs this step on both combinations of the two parameters, then runs
+     * a different Overton iadla generator on each parameter (one such generator is
+     * {@code x += x >>> 21; return (x += x << 8);}, for reference). It then repeats the initial step but without the
+     * NOT and using different multipliers. It returns data, which is the value that has been randomized the most. This
+     * is complicated, but less involved schemes did not do well at all. There's four multiplications used here, all by
+     * small enough values to not risk GWT safety.
      * @param data the data being ciphered
      * @param seed the current seed
      * @return the ciphered data
      */
     protected int round(int data, int seed)
     {
-        seed ^= data * 0x89A7 + 0xB531A935;
-        data ^= seed * 0xBCFD + 0x41C64E6D;
-        data += data >> 21;
-        seed += seed >> 22;
+        seed ^= ~data * 0x89A7;
+        data ^= ~seed * 0xBCFD;
+        data += data >>> 21;
+        seed += seed >>> 22;
         data += data << 8;
         seed += seed << 5;
-        return (data ^ data >> 15) - seed;
+        seed ^= data * 0xACED;
+        data ^= seed * 0xBA55;
+//        data += data >>> 21;
+//        seed += seed >>> 22;
+//        data += data << 8;
+//        seed += seed << 5;
+//        data += data >>> 16;
+//        seed += seed >>> 13;
+//        data += data << 9;
+//        seed += seed << 11;
+        return data;
     }
 
     /**
-     * Encodes an index with a 4-round Feistel network
+     * Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method
+     * to use more or less rounds, but there must always be an even number.
      * @param index the index to cipher; must be betweeen 0 and {@link #pow4}, inclusive
      * @return the ciphered index, which might not be less than bound but will be less than or equal to {@link #pow4}
      */
     protected int encode(int index)
     {
         // break our index into the left and right half
-        int left = (index & leftMask) >> halfBits;
+        int left = (index & leftMask) >>> halfBits;
         int right = (index & rightMask);
-        // do 4 Feistel rounds
+        // do 2 Feistel rounds
         int newRight = left ^ (round(right, key0) & rightMask);
         left = right;
         right = newRight;
         newRight = left ^ (round(right, key1) & rightMask);
-        left = right;
-        right = newRight;
-        newRight = left ^ (round(right, key2) & rightMask);
-        left = right;
-        right = newRight;
-        newRight = left ^ (round(right, key3) & rightMask);
+//        left = right;
+//        right = newRight;
+//        newRight = left ^ (round(right, key2) & rightMask);
+//        left = right;
+//        right = newRight;
+//        newRight = left ^ (round(right, key3) & rightMask);
+
 //        left = right;
 //        right = newRight;
 

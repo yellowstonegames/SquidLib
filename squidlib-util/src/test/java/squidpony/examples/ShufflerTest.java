@@ -46,12 +46,25 @@ public class ShufflerTest {
         }
     }
     @Test
-    public void testLSS()
+    public void testLSSBounds()
     {
-        for (int i = 5; i <= 42; i++) {
+        for (int i = 2; i <= 42; i++) {
             LowStorageShuffler lss = new LowStorageShuffler(i, 0x31337);
             System.out.printf("Bound %02d: %d", i, lss.next());
             for (int j = 1; j < i; j++) {
+                System.out.print(", " + lss.next());
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLSSReseed()
+    {
+        LowStorageShuffler lss = new LowStorageShuffler(7, 0);
+        for (int i = 0; i < 30; i++) {
+            lss.restart(i);
+            System.out.printf("Seed %08X: %d", i, lss.next());
+            for (int j = 1; j < 7; j++) {
                 System.out.print(", " + lss.next());
             }
             System.out.println();
