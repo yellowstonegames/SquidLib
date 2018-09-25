@@ -1102,7 +1102,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         data = new long[width * ySections];
         counts = new int[width * ySections];
         System.arraycopy(other.data, 0, data, 0, width * ySections);
-        System.arraycopy(other.data, 0, data, 0, width * ySections);
+        System.arraycopy(other.counts, 0, counts, 0, width * ySections);
         ct  = other.ct;
         tallied = other.tallied;
     }
