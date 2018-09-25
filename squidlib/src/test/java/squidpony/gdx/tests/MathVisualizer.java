@@ -21,7 +21,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 23;
+    private int mode = 19;
     private int modes = 25;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -145,6 +145,12 @@ public class MathVisualizer extends ApplicationAdapter {
 //            if (bits - value + bound - 1L >= 0L) return value;
 //        }
 //    }
+
+    public static int determinePositive16(final int state)
+    {
+        return state >>> 1 ^ (-(state & 1) & 0xB400);
+    }
+
 
     @Override
     public void create() {
@@ -642,11 +648,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 19: {
                 long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Halton[striding 1](2,3) sequence, first " + size + " points");
-                int x, y;
+                int x, y, a = 421;
                 for (int i = 0; i < size; i++) {
-                    y = LFSR.determinePositiveInt(i+1);
-                    x = (int) (VanDerCorputQRNG.determine2(y) * 512);
-                    y = (int) (VanDerCorputQRNG.determine(3, y) * 512);
+                    a = determinePositive16(a);
+                    x = (int) (VanDerCorputQRNG.determine2(a) * 512);
+                    y = (int) (VanDerCorputQRNG.determine(3, a) * 512);
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
@@ -658,11 +664,11 @@ public class MathVisualizer extends ApplicationAdapter {
             case 20: {
                 long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Halton[striding 1](2,39) sequence, first " + size + " points");
-                int x, y;
+                int x, y, a = 421;
                 for (int i = 0; i < size; i++) {
-                    y = LFSR.determinePositiveInt(i+1);
-                    x = (int) (VanDerCorputQRNG.determine2(y) * 512);
-                    y = (int) (VanDerCorputQRNG.determine(39, y) * 512);
+                    a = determinePositive16(a);
+                    x = (int) (VanDerCorputQRNG.determine2(a) * 512);
+                    y = (int) (VanDerCorputQRNG.determine(39, a) * 512);
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
@@ -671,27 +677,27 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
-            // too good to be true...
             // from http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/
-            // it is in fact unreasonable.
-            // this looks like https://i.imgur.com/wdkvdqN.png 
+            // this works much better than I had previously found, since the LFSR I was using wasn't being advanced
+            // correctly, and this caused a pattern in the output because there was a pattern in the input.
+            // Notably, with very large indices this still doesn't get collisions, but Halton does.
             case 21: {
                 long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Roberts sequence, first " + size + " points");
-                int x, y; //, a;
+                int x, y, a = 421;
                 double p, q;
                 for (int i = 0; i < size; i++) {
                     //1.32471795724474602596 0.7548776662466927 0.5698402909980532
-                    x = LFSR.determinePositiveInt(i+1);
-                    p = 0.5 + x * 0.7548776662466927;
-                    q = 0.5 + x * 0.5698402909980532;
+                    a = determinePositive16(a);
+                    p = 0.5 + a * 0.7548776662466927;
+                    q = 0.5 + a * 0.5698402909980532;
                     x = (int) ((p - (int)p) * 512);
                     y = (int) ((q - (int)q) * 512);
-                    
+
 //                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
 //                    x = a & 0x1ff;
 //                    y = a >>> 16 & 0x1ff;
-                    
+
 //                    a = GreasedRegion.disperseBits((int)(VanDerCorputQRNG.altDetermine(7L, i) * 0x4000));
 //                    x = a & 0x7f;
 //                    y = a >>> 16 & 0x7f;
@@ -704,6 +710,37 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 22: {
+                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                Gdx.graphics.setTitle("Roberts sequence (int math), first " + size + " points");
+                int x, y, a = 1337;
+                for (int i = 0; i < size; i++) {
+                    //1.32471795724474602596 0.7548776662466927 0.5698402909980532
+                    //0x5320B74F 0xC13FA9A9 0x91E10DA5
+                    //0x5320B74ECA44ADACL 0xC13FA9A902A6328FL 0x91E10DA5C79E7B1DL
+                    // 0x9E3779B97F4A7C15L
+                    //a = determinePositive16(a);
+//                    x = (int) (0x8000000000000000L + a * 0xC13FA9A902A6328FL >>> 55);
+//                    y = (int) (0x8000000000000000L + a * 0x91E10DA5C79E7B1DL >>> 55);
+                    x = (int)((a * 0xC13FA9A9L & 0xFFFFFFFFL) * 120 >>> 32);
+                    y = (int)((a * 0x91E10DA5L & 0xFFFFFFFFL) * 120 >>> 32);
+                    a++;
+//                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
+//                    x = a & 0x1ff;
+//                    y = a >>> 16 & 0x1ff;
+
+//                    a = GreasedRegion.disperseBits((int)(VanDerCorputQRNG.altDetermine(7L, i) * 0x4000));
+//                    x = a & 0x7f;
+//                    y = a >>> 16 & 0x7f;
+                    if (layers.backgrounds[x][y] != 0f) {
+                        layers.put(x, y, -0x1.7677e8p125F);
+                        System.out.println("Overlap on index " + i);
+                    } else
+                        layers.put(x, y, SColor.FLOAT_BLACK);
+                }
+            }
+            break;
+
+            case 23: {
                 //long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 final long size = 128;
                 Gdx.graphics.setTitle("Haltoid(777) sequence, first " + size + " points");
@@ -736,7 +773,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
             break;
-            case 23: {
+            case 24: {
                 Arrays.fill(amounts, 0);
                 long ctr = (System.nanoTime() >>> 24), xx, yy, seed;
                 Gdx.graphics.setTitle("ClassicNoise 2D hash at " + Gdx.graphics.getFramesPerSecond() + " FPS");
@@ -796,28 +833,28 @@ public class MathVisualizer extends ApplicationAdapter {
                 }
             }
                 break;
-            case 24: {
-                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " LinnormRNG, hyperCurve(0x1FF)");
-                //LinnormRNG linnorm = new LinnormRNG();
-                for (int i = 0; i < 0x1000000; i++) {
-                    amounts[hyperCurve(linnorm, 0x1FF)]++;
-                }
-                for (int i = 0; i < 512; i++) {
-                    float color = (i & 63) == 0
-                            ? -0x1.c98066p126F // CW Azure
-                            : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
-                        layers.put(i, j, color);
-                    }
-                }
-                for (int i = 0; i < 10; i++) {
-                    for (int j = 8; j < 520; j += 32) {
-                        layers.put(i, j, -0x1.7677e8p125F);
-                    }
-                }
-            }
-            break;
+//            case 24: {
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " LinnormRNG, hyperCurve(0x1FF)");
+//                //LinnormRNG linnorm = new LinnormRNG();
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[hyperCurve(linnorm, 0x1FF)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.put(i, j, color);
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.put(i, j, -0x1.7677e8p125F);
+//                    }
+//                }
+//            }
+//            break;
 
         }
     }

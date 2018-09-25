@@ -561,5 +561,44 @@ public class VanDerCorputQRNG implements StatefulRandomness, RandomnessSource, S
         int morton = GreasedRegion.disperseBits(Integer.reverse((seed * 0x2C9277B5 | 1) * (index + 1)));
         return Coord.get((int)(width * ((morton & 0xffff) * 0x1p-16)) + xOffset, (int)(((morton >>> 16) * 0x1p-16) * height) + yOffset);
     }
-
+    /**
+     * Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">his blog</a> for
+     * more detailed info, but this can be summarized as being extremely good at separating outputs at the expense of
+     * seeming less random. Produces an int between offset (inclusive) and offset + span (exclusive), with the int at
+     * each {@code index} likely to be different for at least {@code span / 4} indices (very low spans may offer less of
+     * a guarantee).
+     * <br>
+     * Note, use {@link #roberts(int, int, int, int, int)} for 2D points and this method for 1D values; the same
+     * properties won't be preserved if you use a 1D Roberts sequence in 2D.
+     * @param span the size of the range this can return
+     * @param offset the minimum value this can return
+     * @param index the index of the int in the 1D Roberts sequence; should be greater than 0, but not required to be
+     * @return an int between offset inclusive and offset+span exclusive
+     */
+    public static int roberts(int span, int offset, int index)
+    {
+        return (int)((index * 0x9E3779B9L & 0xFFFFFFFFL) * span >>> 32) + offset;
+    }
+    
+    /**
+     * Martin Roberts' "unreasonably effective" quasi-random point sequence based on a 2D analogue to the golden ratio.
+     * See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">his blog</a> for
+     * more detailed info, but this can be summarized as being extremely good at separating points at the expense of
+     * seeming less random. Produces a Coord with x between xOffset (inclusive) and xOffset + width (exclusive), and y
+     * between yOffset (inclusive) and yOffset + height (exclusive), with the Coord at each {@code index} likely to be
+     * different for at least {@code width * height / 4} indices (very low sizes may offer less of a guarantee).
+     * @param width the x-size of the space this can place a Coord
+     * @param height the y-size of the space this can place a Coord
+     * @param xOffset the minimum x-position of a Coord
+     * @param yOffset the minimum y-position of a Coord
+     * @param index the index of the Coord in the 2D Roberts sequence; should be greater than 0, but not required to be
+     * @return a Coord with x,y between xOffset,yOffset inclusive and xOffset+width,yOffset+height exclusive
+     */
+    public static Coord roberts(int width, int height, int xOffset, int yOffset, int index)
+    {
+        return Coord.get(
+        (int)((index * 0xC13FA9A9L & 0xFFFFFFFFL) * width  >>> 32) + xOffset,
+        (int)((index * 0x91E10DA5L & 0xFFFFFFFFL) * height >>> 32) + yOffset);
+    }
 }
