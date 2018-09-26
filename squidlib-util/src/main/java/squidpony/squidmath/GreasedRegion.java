@@ -5689,6 +5689,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 }
             }
         }
+        tallied = false;
         return this;
     }
 

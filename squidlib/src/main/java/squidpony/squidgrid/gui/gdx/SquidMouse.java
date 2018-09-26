@@ -171,38 +171,34 @@ public class SquidMouse extends InputAdapter {
 
     public boolean onGrid(int screenX, int screenY)
     {
-        int tmp = MathUtils.floor((screenX + offsetX) / cellWidth);
-        if(tmp < 0 || tmp >= gridWidth)
-            return false;
-        tmp = MathUtils.floor((screenY + offsetY) / cellHeight);
-        return tmp >= 0 && tmp < gridHeight;
+        return screenX >= 0 && screenX < gridWidth && screenY >= 0 && screenY < gridHeight;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if(onGrid(screenX, screenY))
-            return processor.touchDown(translateX(screenX), translateY(screenY), pointer, button);
+        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+            return processor.touchDown(screenX, screenY, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        if(onGrid(screenX, screenY))
-            return processor.touchUp(translateX(screenX), translateY(screenY), pointer, button);
+        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+            return processor.touchUp(screenX, screenY, pointer, button);
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if(onGrid(screenX, screenY))
-            return processor.touchDragged(translateX(screenX), translateY(screenY), pointer);
+        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+            return processor.touchDragged(screenX, screenY, pointer);
         return false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        if(onGrid(screenX, screenY))
-            return processor.mouseMoved(translateX(screenX), translateY(screenY));
+        if(onGrid(screenX = translateX(screenX), screenY = translateY(screenY)))
+            return processor.mouseMoved(screenX, screenY);
         return false;
     }
 
