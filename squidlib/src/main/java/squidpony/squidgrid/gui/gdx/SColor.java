@@ -13416,7 +13416,7 @@ B = t - Co;
      */
     public static int floatToInt(final float packed)
     {
-        return Integer.reverseBytes(NumberTools.floatToIntBits(packed));
+        return NumberTools.floatToReversedIntBits(packed);
     }
 
     /**
