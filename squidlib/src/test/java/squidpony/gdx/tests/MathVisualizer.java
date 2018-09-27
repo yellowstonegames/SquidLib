@@ -650,9 +650,10 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("Halton[striding 1](2,3) sequence, first " + size + " points");
                 int x, y, a = 421;
                 for (int i = 0; i < size; i++) {
-                    a = determinePositive16(a);
+                    //a = determinePositive16(a);
                     x = (int) (VanDerCorputQRNG.determine2(a) * 512);
                     y = (int) (VanDerCorputQRNG.determine(3, a) * 512);
+                    a++;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
@@ -666,9 +667,10 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle("Halton[striding 1](2,39) sequence, first " + size + " points");
                 int x, y, a = 421;
                 for (int i = 0; i < size; i++) {
-                    a = determinePositive16(a);
+//                    a = determinePositive16(a);
                     x = (int) (VanDerCorputQRNG.determine2(a) * 512);
                     y = (int) (VanDerCorputQRNG.determine(39, a) * 512);
+                    a++;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
@@ -685,15 +687,19 @@ public class MathVisualizer extends ApplicationAdapter {
                 long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Roberts sequence, first " + size + " points");
                 int x, y, a = 421;
-                double p, q;
+                int t;
+//                double p, q;
                 for (int i = 0; i < size; i++) {
                     //1.32471795724474602596 0.7548776662466927 0.5698402909980532
-                    a = determinePositive16(a);
-                    p = 0.5 + a * 0.7548776662466927;
-                    q = 0.5 + a * 0.5698402909980532;
-                    x = (int) ((p - (int)p) * 512);
-                    y = (int) ((q - (int)q) * 512);
+//                    a = determinePositive16(a);
+                    x = (int)((((t = a * 0xC13FA9A9) ^ (t >>> 11)) & 0xFFFFFFFFL) * 512 >>> 32);
+                    y = (int)((((t = a * 0x91E10DA5) ^ (t >>> 11)) & 0xFFFFFFFFL) * 512 >>> 32);
 
+//                    p = 0.5 + a * 0.7548776662466927;
+//                    q = 0.5 + a * 0.5698402909980532;
+//                    x = (int) ((p - (int)p) * 512);
+//                    y = (int) ((q - (int)q) * 512);
+                    a++;
 //                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
 //                    x = a & 0x1ff;
 //                    y = a >>> 16 & 0x1ff;
@@ -712,7 +718,7 @@ public class MathVisualizer extends ApplicationAdapter {
             case 22: {
                 long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Roberts sequence (int math), first " + size + " points");
-                int x, y, a = 1337;
+                int x, y, a = 421;
                 for (int i = 0; i < size; i++) {
                     //1.32471795724474602596 0.7548776662466927 0.5698402909980532
                     //0x5320B74F 0xC13FA9A9 0x91E10DA5
@@ -721,8 +727,8 @@ public class MathVisualizer extends ApplicationAdapter {
                     //a = determinePositive16(a);
 //                    x = (int) (0x8000000000000000L + a * 0xC13FA9A902A6328FL >>> 55);
 //                    y = (int) (0x8000000000000000L + a * 0x91E10DA5C79E7B1DL >>> 55);
-                    x = (int)((a * 0xC13FA9A9L & 0xFFFFFFFFL) * 120 >>> 32);
-                    y = (int)((a * 0x91E10DA5L & 0xFFFFFFFFL) * 120 >>> 32);
+                    x = (int)((a * 0xC13FA9A9L & 0xFFFFFFFFL) * 512 >>> 32);
+                    y = (int)((a * 0x91E10DA5L & 0xFFFFFFFFL) * 512 >>> 32);
                     a++;
 //                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
 //                    x = a & 0x1ff;
