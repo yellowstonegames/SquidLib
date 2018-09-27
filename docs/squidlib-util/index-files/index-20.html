@@ -1170,6 +1170,15 @@
 <div class="block">Sets the salt, which should usually be a non-negative int less than 16384, though it can be any int (only the
  bottom 15 bits are used).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom32.html#setSeed-long-">setSeed(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom32.html" title="class in squidpony.squidmath">BasicRandom32</a></dt>
+<dd>
+<div class="block">Sets the seed using a long, by XORing the upper and lower halves of <code>seed</code> and passing that to
+ <a href="../squidpony/squidmath/BasicRandom32.html#setState-int-"><code>BasicRandom32.setState(int)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#setSeed-long-">setSeed(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
+<dd>
+<div class="block">Sets the seed using a long, passing its argument to <a href="../squidpony/squidmath/BasicRandom64.html#setState-long-"><code>BasicRandom64.setState(long)</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#setSeed-int-">setSeed(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>
 <div class="block">Sets the seed used for all noise types, as a long.</div>
@@ -1206,6 +1215,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutedRNG.html#setSeed-long-">setSeed(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></dt>
 <dd>
 <div class="block">Sets the seed of this generator (which is also the current state).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#setSeed-int-">setSeed(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get 
+ two ints.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoRoRNG.html#setSeed-long-">setSeed(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoRoRNG.html" title="class in squidpony.squidmath">XoRoRNG</a></dt>
 <dd>
@@ -1250,6 +1264,10 @@
  but that may cause the sound to be un-hear-able.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/ConeAOE.html#setSpan-double-">setSpan(double)</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/ConeAOE.html" title="class in squidpony.squidai">ConeAOE</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom32.html#setState-int-">setState(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom32.html" title="class in squidpony.squidmath">BasicRandom32</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>
@@ -1311,6 +1329,10 @@
 <dd>
 <div class="block">Set the current internal state of this StatefulRandomness with a long; all longs are allowed.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover32RNG.html#setState-int-">setState(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover32RNG.html" title="class in squidpony.squidmath">Mover32RNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover64RNG.html#setState-int-">setState(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover64RNG.html" title="class in squidpony.squidmath">Mover64RNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NLFSR.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/NLFSR.html" title="class in squidpony.squidmath">NLFSR</a></dt>
 <dd>
 <div class="block">Sets the seed of this generator using one long, running that through LightRNG's algorithm twice to get the state.</div>
@@ -1333,6 +1355,15 @@
 <dd>
 <div class="block">Sets the current "state" of the QRNG (which number in the sequence it will produce), using the least-significant
  16 bits of a given long.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#setState-int-int-">setState(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Sets the current internal state of this Lathe32RNG with three ints, where stateA and stateB can each be any int
+ unless they are both 0 (which will be treated as if stateA is 1 and stateB is 0).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/StatefulRandomness.html#setState-long-">setState(long)</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></dt>
 <dd>
@@ -1394,12 +1425,24 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#setStateA-int-">setStateA(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover32RNG.html#setStateA-int-">setStateA(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover32RNG.html" title="class in squidpony.squidmath">Mover32RNG</a></dt>
+<dd>
+<div class="block">Sets the "A" part of the state to any int, which may put the generator in a low-period subcycle.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover64RNG.html#setStateA-long-">setStateA(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover64RNG.html" title="class in squidpony.squidmath">Mover64RNG</a></dt>
+<dd>
+<div class="block">Sets the "A" part of the state to any long, which may put the generator in a low-period subcycle.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrbitRNG.html#setStateA-long-">setStateA(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrbitRNG.html" title="class in squidpony.squidmath">OrbitRNG</a></dt>
 <dd>
 <div class="block">Set the "A" part of the internal state with a long.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Oriole32RNG.html#setStateA-int-">setStateA(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Oriole32RNG.html" title="class in squidpony.squidmath">Oriole32RNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#setStateA-int-">setStateA(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Sets the first part of the state to the given int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#setStateA-long-">setStateA(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>
 <div class="block">Set the "A" part of the internal state with a long.</div>
@@ -1416,12 +1459,24 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover32RNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover32RNG.html" title="class in squidpony.squidmath">Mover32RNG</a></dt>
+<dd>
+<div class="block">Sets the "B" part of the state to any int, which may put the generator in a low-period subcycle.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Mover64RNG.html#setStateB-long-">setStateB(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Mover64RNG.html" title="class in squidpony.squidmath">Mover64RNG</a></dt>
+<dd>
+<div class="block">Sets the "B" part of the state to any long, which may put the generator in a low-period subcycle.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrbitRNG.html#setStateB-long-">setStateB(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrbitRNG.html" title="class in squidpony.squidmath">OrbitRNG</a></dt>
 <dd>
 <div class="block">Set the "B" part of the internal state with a long.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Oriole32RNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Oriole32RNG.html" title="class in squidpony.squidmath">Oriole32RNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Sets the second part of the state to the given int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#setStateB-long-">setStateB(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>
 <div class="block">Set the "B" part of the internal state with a long; the least significant bit is ignored (will always be odd).</div>
@@ -1686,6 +1741,16 @@
 <dd>
 <div class="block">Randomly alters the iteration order for this Arrangement using the given IRNG to shuffle.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom32.html#shuffle-T:A-">shuffle(T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom32.html" title="class in squidpony.squidmath">BasicRandom32</a></dt>
+<dd>
+<div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy, freshly-allocated, without
+ modifying elements.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#shuffle-T:A-">shuffle(T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
+<dd>
+<div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy, freshly-allocated, without
+ modifying elements.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#shuffle-T:A-">shuffle(T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm.</div>
@@ -1762,6 +1827,24 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/AbstractRNG.html#shuffleInPlace-java.util.List-">shuffleInPlace(List&lt;T&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
 <dd>
 <div class="block">Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom32.html#shuffleInPlace-T:A-int-">shuffleInPlace(T[], int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom32.html" title="class in squidpony.squidmath">BasicRandom32</a></dt>
+<dd>
+<div class="block">Shuffles an array in-place using the Fisher-Yates algorithm, affecting indices from 0 (inclusive) to length
+ (exclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom32.html#shuffleInPlace-T:A-">shuffleInPlace(T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom32.html" title="class in squidpony.squidmath">BasicRandom32</a></dt>
+<dd>
+<div class="block">Shuffles an array in-place using the Fisher-Yates algorithm.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#shuffleInPlace-T:A-int-">shuffleInPlace(T[], int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
+<dd>
+<div class="block">Shuffles an array in-place using the Fisher-Yates algorithm, affecting indices from 0 (inclusive) to length
+ (exclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#shuffleInPlace-T:A-">shuffleInPlace(T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
+<dd>
+<div class="block">Shuffles an array in-place using the Fisher-Yates algorithm.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IRNG.html#shuffleInPlace-T:A-">shuffleInPlace(T[])</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
 <dd>
@@ -2637,6 +2720,30 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#STAR_WARS_STYLE_NAMES">STAR_WARS_STYLE_NAMES</a></span> - Static variable in class squidpony.<a href="../squidpony/WeightedLetterNamegen.html" title="class in squidpony">WeightedLetterNamegen</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Starfish32RNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A modification of Blackman and Vigna's xoroshiro64** generator; uses two 32-bit ints of state like <a href="../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a>
+ but has better equidistribution.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#Starfish32RNG--">Starfish32RNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Creates a new generator seeded using two calls to Math.random().</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#Starfish32RNG-int-">Starfish32RNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Constructs this Lathe32RNG by dispersing the bits of seed using <a href="../squidpony/squidmath/Starfish32RNG.html#setSeed-int-"><code>Starfish32RNG.setSeed(int)</code></a> across the two parts of state
+ this has.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#Starfish32RNG-long-">Starfish32RNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Constructs this Lathe32RNG by splitting the given seed across the two parts of state this has with
+ <a href="../squidpony/squidmath/Starfish32RNG.html#setState-long-"><code>Starfish32RNG.setState(long)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#Starfish32RNG-int-int-">Starfish32RNG(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
+<dd>
+<div class="block">Constructs this Lathe32RNG by calling <a href="../squidpony/squidmath/Starfish32RNG.html#setState-int-int-"><code>Starfish32RNG.setState(int, int)</code></a> on stateA and stateB as given; see that method
+ for the specific details (stateA and stateB are kept as-is unless they are both 0).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/Symbol.html#START">START</a></span> - Static variable in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/Symbol.html" title="class in squidpony.squidgrid.mapping.locks">Symbol</a></dt>
 <dd>
 <div class="block">Symbol map with special meanings.</div>
@@ -2670,6 +2777,10 @@
 <div class="block">The starting Y-coordinate</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#startY">startY</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom32.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom32.html" title="class in squidpony.squidmath">BasicRandom32</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#state">state</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>&nbsp;</dd>
@@ -2960,6 +3071,14 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#swap-K-K-">swap(K, K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Swaps the positions in the ordering for the given items, if they are both present.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom32.html#swap-T:A-int-int-">swap(T[], int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom32.html" title="class in squidpony.squidmath">BasicRandom32</a></dt>
+<dd>
+<div class="block">Mutates the array arr by switching the contents at pos1 and pos2.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/BasicRandom64.html#swap-T:A-int-int-">swap(T[], int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/BasicRandom64.html" title="class in squidpony.squidmath">BasicRandom64</a></dt>
+<dd>
+<div class="block">Mutates the array arr by switching the contents at pos1 and pos2.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#swap-int-int-">swap(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
 <dd>

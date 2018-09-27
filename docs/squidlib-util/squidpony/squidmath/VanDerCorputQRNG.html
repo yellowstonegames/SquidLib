@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":9,"i3":9,"i4":9,"i5":9,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":9,"i19":10,"i20":10,"i21":9,"i22":9};
+var methods = {"i0":9,"i1":10,"i2":9,"i3":9,"i4":9,"i5":9,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":10,"i15":10,"i16":10,"i17":10,"i18":9,"i19":9,"i20":9,"i21":10,"i22":10,"i23":9,"i24":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -406,23 +406,41 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </td>
 </tr>
 <tr id="i19" class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#roberts-int-int-int-">roberts</a></span>(int&nbsp;span,
+       int&nbsp;offset,
+       int&nbsp;index)</code>
+<div class="block">Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.</div>
+</td>
+</tr>
+<tr id="i20" class="altColor">
+<td class="colFirst"><code>static <a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#roberts-int-int-int-int-int-">roberts</a></span>(int&nbsp;width,
+       int&nbsp;height,
+       int&nbsp;xOffset,
+       int&nbsp;yOffset,
+       int&nbsp;index)</code>
+<div class="block">Martin Roberts' "unreasonably effective" quasi-random point sequence based on a 2D analogue to the golden ratio.</div>
+</td>
+</tr>
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#setState-long-">setState</a></span>(long&nbsp;state)</code>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#weakDetermine-int-">weakDetermine</a></span>(int&nbsp;index)</code>
 <div class="block">Given any int (0 is allowed), this gets a somewhat-sub-random float from 0.0 (inclusive) to 1.0 (exclusive)
  using the same implementation as <a href="../../squidpony/squidmath/NumberTools.html#randomFloat-long-"><code>NumberTools.randomFloat(long)</code></a> but with index alterations.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html#weakSignedDetermine-int-">weakSignedDetermine</a></span>(int&nbsp;index)</code>
 <div class="block">Like <a href="../../squidpony/squidmath/VanDerCorputQRNG.html#weakDetermine-int-"><code>weakDetermine(int)</code></a>, but returns a float between -1.0f and 1.0f, exclusive on both.</div>
@@ -1056,7 +1074,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <a name="haltoid-int-int-int-int-int-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>haltoid</h4>
 <pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.559">haltoid</a>(int&nbsp;seed,
@@ -1084,6 +1102,63 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <dd><code>index</code> - the index in the sequence, almost always a positive int that increases by 1 with each call</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a Coord between (xOffset, yOffset) inclusive and (width+xOffset, height+yOffset) exclusive</dd>
+</dl>
+</li>
+</ul>
+<a name="roberts-int-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>roberts</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.579">roberts</a>(int&nbsp;span,
+                          int&nbsp;offset,
+                          int&nbsp;index)</pre>
+<div class="block">Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.
+ See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">his blog</a> for
+ more detailed info, but this can be summarized as being extremely good at separating outputs at the expense of
+ seeming less random. Produces an int between offset (inclusive) and offset + span (exclusive), with the int at
+ each <code>index</code> likely to be different for at least <code>span / 4</code> indices (very low spans may offer less of
+ a guarantee).
+ <br>
+ Note, use <a href="../../squidpony/squidmath/VanDerCorputQRNG.html#roberts-int-int-int-int-int-"><code>roberts(int, int, int, int, int)</code></a> for 2D points and this method for 1D values; the same
+ properties won't be preserved if you use a 1D Roberts sequence in 2D.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>span</code> - the size of the range this can return</dd>
+<dd><code>offset</code> - the minimum value this can return</dd>
+<dd><code>index</code> - the index of the int in the 1D Roberts sequence; should be greater than 0, but not required to be</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int between offset inclusive and offset+span exclusive</dd>
+</dl>
+</li>
+</ul>
+<a name="roberts-int-int-int-int-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>roberts</h4>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../src-html/squidpony/squidmath/VanDerCorputQRNG.html#line.598">roberts</a>(int&nbsp;width,
+                            int&nbsp;height,
+                            int&nbsp;xOffset,
+                            int&nbsp;yOffset,
+                            int&nbsp;index)</pre>
+<div class="block">Martin Roberts' "unreasonably effective" quasi-random point sequence based on a 2D analogue to the golden ratio.
+ See <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">his blog</a> for
+ more detailed info, but this can be summarized as being extremely good at separating points at the expense of
+ seeming less random. Produces a Coord with x between xOffset (inclusive) and xOffset + width (exclusive), and y
+ between yOffset (inclusive) and yOffset + height (exclusive), with the Coord at each <code>index</code> likely to be
+ different for at least <code>width * height / 4</code> indices (very low sizes may offer less of a guarantee).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>width</code> - the x-size of the space this can place a Coord</dd>
+<dd><code>height</code> - the y-size of the space this can place a Coord</dd>
+<dd><code>xOffset</code> - the minimum x-position of a Coord</dd>
+<dd><code>yOffset</code> - the minimum y-position of a Coord</dd>
+<dd><code>index</code> - the index of the Coord in the 2D Roberts sequence; should be greater than 0, but not required to be</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a Coord with x,y between xOffset,yOffset inclusive and xOffset+width,yOffset+height exclusive</dd>
 </dl>
 </li>
 </ul>

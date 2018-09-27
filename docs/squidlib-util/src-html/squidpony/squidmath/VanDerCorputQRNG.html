@@ -569,8 +569,47 @@
 <span class="sourceLineNo">561</span>        int morton = GreasedRegion.disperseBits(Integer.reverse((seed * 0x2C9277B5 | 1) * (index + 1)));<a name="line.561"></a>
 <span class="sourceLineNo">562</span>        return Coord.get((int)(width * ((morton &amp; 0xffff) * 0x1p-16)) + xOffset, (int)(((morton &gt;&gt;&gt; 16) * 0x1p-16) * height) + yOffset);<a name="line.562"></a>
 <span class="sourceLineNo">563</span>    }<a name="line.563"></a>
-<span class="sourceLineNo">564</span><a name="line.564"></a>
-<span class="sourceLineNo">565</span>}<a name="line.565"></a>
+<span class="sourceLineNo">564</span>    /**<a name="line.564"></a>
+<span class="sourceLineNo">565</span>     * Martin Roberts' "unreasonably effective" quasi-random int sequence based on the golden ratio.<a name="line.565"></a>
+<span class="sourceLineNo">566</span>     * See &lt;a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/"&gt;his blog&lt;/a&gt; for<a name="line.566"></a>
+<span class="sourceLineNo">567</span>     * more detailed info, but this can be summarized as being extremely good at separating outputs at the expense of<a name="line.567"></a>
+<span class="sourceLineNo">568</span>     * seeming less random. Produces an int between offset (inclusive) and offset + span (exclusive), with the int at<a name="line.568"></a>
+<span class="sourceLineNo">569</span>     * each {@code index} likely to be different for at least {@code span / 4} indices (very low spans may offer less of<a name="line.569"></a>
+<span class="sourceLineNo">570</span>     * a guarantee).<a name="line.570"></a>
+<span class="sourceLineNo">571</span>     * &lt;br&gt;<a name="line.571"></a>
+<span class="sourceLineNo">572</span>     * Note, use {@link #roberts(int, int, int, int, int)} for 2D points and this method for 1D values; the same<a name="line.572"></a>
+<span class="sourceLineNo">573</span>     * properties won't be preserved if you use a 1D Roberts sequence in 2D.<a name="line.573"></a>
+<span class="sourceLineNo">574</span>     * @param span the size of the range this can return<a name="line.574"></a>
+<span class="sourceLineNo">575</span>     * @param offset the minimum value this can return<a name="line.575"></a>
+<span class="sourceLineNo">576</span>     * @param index the index of the int in the 1D Roberts sequence; should be greater than 0, but not required to be<a name="line.576"></a>
+<span class="sourceLineNo">577</span>     * @return an int between offset inclusive and offset+span exclusive<a name="line.577"></a>
+<span class="sourceLineNo">578</span>     */<a name="line.578"></a>
+<span class="sourceLineNo">579</span>    public static int roberts(int span, int offset, int index)<a name="line.579"></a>
+<span class="sourceLineNo">580</span>    {<a name="line.580"></a>
+<span class="sourceLineNo">581</span>        return (int)((index * 0x9E3779B9L &amp; 0xFFFFFFFFL) * span &gt;&gt;&gt; 32) + offset;<a name="line.581"></a>
+<span class="sourceLineNo">582</span>    }<a name="line.582"></a>
+<span class="sourceLineNo">583</span>    <a name="line.583"></a>
+<span class="sourceLineNo">584</span>    /**<a name="line.584"></a>
+<span class="sourceLineNo">585</span>     * Martin Roberts' "unreasonably effective" quasi-random point sequence based on a 2D analogue to the golden ratio.<a name="line.585"></a>
+<span class="sourceLineNo">586</span>     * See &lt;a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/"&gt;his blog&lt;/a&gt; for<a name="line.586"></a>
+<span class="sourceLineNo">587</span>     * more detailed info, but this can be summarized as being extremely good at separating points at the expense of<a name="line.587"></a>
+<span class="sourceLineNo">588</span>     * seeming less random. Produces a Coord with x between xOffset (inclusive) and xOffset + width (exclusive), and y<a name="line.588"></a>
+<span class="sourceLineNo">589</span>     * between yOffset (inclusive) and yOffset + height (exclusive), with the Coord at each {@code index} likely to be<a name="line.589"></a>
+<span class="sourceLineNo">590</span>     * different for at least {@code width * height / 4} indices (very low sizes may offer less of a guarantee).<a name="line.590"></a>
+<span class="sourceLineNo">591</span>     * @param width the x-size of the space this can place a Coord<a name="line.591"></a>
+<span class="sourceLineNo">592</span>     * @param height the y-size of the space this can place a Coord<a name="line.592"></a>
+<span class="sourceLineNo">593</span>     * @param xOffset the minimum x-position of a Coord<a name="line.593"></a>
+<span class="sourceLineNo">594</span>     * @param yOffset the minimum y-position of a Coord<a name="line.594"></a>
+<span class="sourceLineNo">595</span>     * @param index the index of the Coord in the 2D Roberts sequence; should be greater than 0, but not required to be<a name="line.595"></a>
+<span class="sourceLineNo">596</span>     * @return a Coord with x,y between xOffset,yOffset inclusive and xOffset+width,yOffset+height exclusive<a name="line.596"></a>
+<span class="sourceLineNo">597</span>     */<a name="line.597"></a>
+<span class="sourceLineNo">598</span>    public static Coord roberts(int width, int height, int xOffset, int yOffset, int index)<a name="line.598"></a>
+<span class="sourceLineNo">599</span>    {<a name="line.599"></a>
+<span class="sourceLineNo">600</span>        return Coord.get(<a name="line.600"></a>
+<span class="sourceLineNo">601</span>        (int)((index * 0xC13FA9A9L &amp; 0xFFFFFFFFL) * width  &gt;&gt;&gt; 32) + xOffset,<a name="line.601"></a>
+<span class="sourceLineNo">602</span>        (int)((index * 0x91E10DA5L &amp; 0xFFFFFFFFL) * height &gt;&gt;&gt; 32) + yOffset);<a name="line.602"></a>
+<span class="sourceLineNo">603</span>    }<a name="line.603"></a>
+<span class="sourceLineNo">604</span>}<a name="line.604"></a>
 
 
 

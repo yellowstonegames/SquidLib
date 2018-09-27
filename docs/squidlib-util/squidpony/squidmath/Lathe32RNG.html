@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.62">Lathe32RNG</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.64">Lathe32RNG</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A modification of Blackman and Vigna's xoroshiro128+ generator using two 32-bit ints of state instead of two 64-bit
@@ -145,8 +145,10 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
  smaller state but implements StatefulRandomness). Some simple tests on bytes instead of ints showed that the
  technique used here produces all possible bytes with equal frequency when run on bytes as state, with the exception
  of producing 0 one less time (because both states cannot be 0 at the same time). This gives some confidence for the
- algorithm used here, but doesn't say anything about how equidistributed this is across more than one dimension (it
- could be better or worse than xoroshiro128+).
+ algorithm used here, but the algorithm is still only one-dimensionally equidistributed (the same as xoroshiro128+),
+ meaning it produces some pairs of ints more frequently than others. You may want to prefer <a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath"><code>Starfish32RNG</code></a>,
+ which is the current default in <a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a>, because it can produce all pairs of ints and all longs (except one),
+ and has noticeably better quality even on some short generated sequences.
  <br>
  The name comes from a tool that rotates very quickly to remove undesirable parts of an object, akin to how this
  generator adds an extra bitwise rotation to xoroshiro64+ to remove several types of
@@ -335,7 +337,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>Lathe32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.71">Lathe32RNG</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.73">Lathe32RNG</a>()</pre>
 <div class="block">Creates a new generator seeded using two calls to Math.random().</div>
 </li>
 </ul>
@@ -345,7 +347,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>Lathe32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.79">Lathe32RNG</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.81">Lathe32RNG</a>(int&nbsp;seed)</pre>
 <div class="block">Constructs this Lathe32RNG by dispersing the bits of seed using <a href="../../squidpony/squidmath/Lathe32RNG.html#setSeed-int-"><code>setSeed(int)</code></a> across the two parts of state
  this has.</div>
 <dl>
@@ -360,7 +362,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>Lathe32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.87">Lathe32RNG</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.89">Lathe32RNG</a>(long&nbsp;seed)</pre>
 <div class="block">Constructs this Lathe32RNG by splitting the given seed across the two parts of state this has with
  <a href="../../squidpony/squidmath/Lathe32RNG.html#setState-long-"><code>setState(long)</code></a>.</div>
 <dl>
@@ -375,7 +377,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Lathe32RNG</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.96">Lathe32RNG</a>(int&nbsp;stateA,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.98">Lathe32RNG</a>(int&nbsp;stateA,
                   int&nbsp;stateB)</pre>
 <div class="block">Constructs this Lathe32RNG by calling <a href="../../squidpony/squidmath/Lathe32RNG.html#setState-int-int-"><code>setState(int, int)</code></a> on stateA and stateB as given; see that method
  for the specific details (stateA and stateB are kept as-is unless they are both 0).</div>
@@ -400,7 +402,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.101">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.103">next</a>(int&nbsp;bits)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#next-int-">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
  can interface with this randomness source.</div>
@@ -420,7 +422,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.115">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.117">nextInt</a>()</pre>
 <div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -434,7 +436,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.126">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.128">nextLong</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/squidmath/RandomnessSource.html#nextLong--">RandomnessSource</a></code></span></div>
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.
@@ -454,7 +456,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath">Lathe32RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.148">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath">Lathe32RNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.150">copy</a>()</pre>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called. This just needs to
  copy the state so it isn't shared, usually, and produce a new value with the same exact state.</div>
@@ -474,7 +476,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.157">setSeed</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.159">setSeed</a>(int&nbsp;seed)</pre>
 <div class="block">Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get 
  two ints. If the states would both be 0, state A is assigned 1 instead.</div>
 <dl>
@@ -489,7 +491,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateA</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.172">getStateA</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.174">getStateA</a>()</pre>
 </li>
 </ul>
 <a name="setStateA-int-">
@@ -498,7 +500,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateA</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.184">setStateA</a>(int&nbsp;stateA)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.186">setStateA</a>(int&nbsp;stateA)</pre>
 <div class="block">Sets the first part of the state to the given int. As a special case, if the parameter is 0 and stateB is
  already 0, this will set stateA to 1 instead, since both states cannot be 0 at the same time. Usually, you
  should use <a href="../../squidpony/squidmath/Lathe32RNG.html#setState-int-int-"><code>setState(int, int)</code></a> to set both states at once, but the result will be the same if you call
@@ -515,7 +517,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateB</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.188">getStateB</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.190">getStateB</a>()</pre>
 </li>
 </ul>
 <a name="setStateB-int-">
@@ -524,7 +526,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateB</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.200">setStateB</a>(int&nbsp;stateB)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.202">setStateB</a>(int&nbsp;stateB)</pre>
 <div class="block">Sets the second part of the state to the given int. As a special case, if the parameter is 0 and stateA is
  already 0, this will set stateA to 1 and stateB to 0, since both cannot be 0 at the same time. Usually, you
  should use <a href="../../squidpony/squidmath/Lathe32RNG.html#setState-int-int-"><code>setState(int, int)</code></a> to set both states at once, but the result will be the same if you call
@@ -541,7 +543,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.212">setState</a>(int&nbsp;stateA,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.214">setState</a>(int&nbsp;stateA,
                      int&nbsp;stateB)</pre>
 <div class="block">Sets the current internal state of this Lathe32RNG with three ints, where stateA and stateB can each be any int
  unless they are both 0 (which will be treated as if stateA is 1 and stateB is 0).</div>
@@ -558,7 +560,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.224">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.226">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -574,7 +576,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.234">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.236">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -590,7 +592,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.240">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.242">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -603,7 +605,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.245">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.247">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -616,7 +618,7 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.255">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Lathe32RNG.html#line.257">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

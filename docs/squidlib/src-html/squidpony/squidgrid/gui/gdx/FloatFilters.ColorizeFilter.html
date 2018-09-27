@@ -199,7 +199,7 @@
 <span class="sourceLineNo">191</span>        public float yMul, cbMul, crMul;<a name="line.191"></a>
 <span class="sourceLineNo">192</span><a name="line.192"></a>
 <span class="sourceLineNo">193</span>        public YCbCrFilter(float yMul) {<a name="line.193"></a>
-<span class="sourceLineNo">194</span>            this(1f, 1f, yMul);<a name="line.194"></a>
+<span class="sourceLineNo">194</span>            this(yMul, 1f, 1f);<a name="line.194"></a>
 <span class="sourceLineNo">195</span>        }<a name="line.195"></a>
 <span class="sourceLineNo">196</span><a name="line.196"></a>
 <span class="sourceLineNo">197</span>        public YCbCrFilter(float yMul, float cbMul, float crMul) {<a name="line.197"></a>
@@ -222,221 +222,265 @@
 <span class="sourceLineNo">214</span>                    (bits &amp; 0x000000ff) * (0x1.010102p-8f * 0.299f) +<a name="line.214"></a>
 <span class="sourceLineNo">215</span>                            (bits &amp; 0x0000ff00) * (0x1.010102p-16f * 0.587f) +<a name="line.215"></a>
 <span class="sourceLineNo">216</span>                            (bits &amp; 0x00ff0000) * (0x1.010102p-24f * 0.114f));<a name="line.216"></a>
-<span class="sourceLineNo">217</span>            if (luma &lt;= 0.0039f) {<a name="line.217"></a>
-<span class="sourceLineNo">218</span>                return floatGet(0f, 0f, 0f, opacity);<a name="line.218"></a>
-<span class="sourceLineNo">219</span>            } else if (luma &gt;= 0.9961f) {<a name="line.219"></a>
-<span class="sourceLineNo">220</span>                return floatGet(1f, 1f, 1f, opacity);<a name="line.220"></a>
-<span class="sourceLineNo">221</span>            }<a name="line.221"></a>
-<span class="sourceLineNo">222</span>            final float chromaB = cbMul * (<a name="line.222"></a>
-<span class="sourceLineNo">223</span>                    (bits &amp; 0x000000ff) * (0x1.010102p-8f * -0.168736f) +<a name="line.223"></a>
-<span class="sourceLineNo">224</span>                            (bits &amp; 0x0000ff00) * (0x1.010102p-16f * -0.331264f) +<a name="line.224"></a>
-<span class="sourceLineNo">225</span>                            (bits &amp; 0x00ff0000) * (0x1.010102p-24f * 0.5f));<a name="line.225"></a>
-<span class="sourceLineNo">226</span>            final float chromaR = crMul * (<a name="line.226"></a>
-<span class="sourceLineNo">227</span>                    (bits &amp; 0x000000ff) * (0x1.010102p-8f * 0.5f) +<a name="line.227"></a>
-<span class="sourceLineNo">228</span>                            (bits &amp; 0x0000ff00) * (0x1.010102p-16f * -0.418688f) +<a name="line.228"></a>
-<span class="sourceLineNo">229</span>                            (bits &amp; 0x00ff0000) * (0x1.010102p-24f * -0.081312f));<a name="line.229"></a>
-<span class="sourceLineNo">230</span><a name="line.230"></a>
-<span class="sourceLineNo">231</span>            if (chromaR &gt;= -0.0039f &amp;&amp; chromaR &lt;= 0.0039f &amp;&amp; chromaB &gt;= -0.0039f &amp;&amp; chromaB &lt;= 0.0039f) {<a name="line.231"></a>
-<span class="sourceLineNo">232</span>                return floatGet(luma, luma, luma, opacity);<a name="line.232"></a>
-<span class="sourceLineNo">233</span>            }<a name="line.233"></a>
-<span class="sourceLineNo">234</span>            return floatGet(MathUtils.clamp(luma + chromaR * 1.402f, 0f, 1f),<a name="line.234"></a>
-<span class="sourceLineNo">235</span>                    MathUtils.clamp(luma - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 1f),<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                    MathUtils.clamp(luma + chromaB * 1.772f, 0f, 1f),<a name="line.236"></a>
-<span class="sourceLineNo">237</span>                    opacity);<a name="line.237"></a>
-<span class="sourceLineNo">238</span>        }<a name="line.238"></a>
-<span class="sourceLineNo">239</span>    }<a name="line.239"></a>
-<span class="sourceLineNo">240</span><a name="line.240"></a>
-<span class="sourceLineNo">241</span>    /**<a name="line.241"></a>
-<span class="sourceLineNo">242</span>     * A FloatFilter that chains together one or more FloatFilters one after the next, passing the float output of one<a name="line.242"></a>
-<span class="sourceLineNo">243</span>     * as input to the next until the chain has all been called.<a name="line.243"></a>
-<span class="sourceLineNo">244</span>     */<a name="line.244"></a>
-<span class="sourceLineNo">245</span>    public static class ChainFilter extends FloatFilter {<a name="line.245"></a>
-<span class="sourceLineNo">246</span>        public FloatFilter[] filters;<a name="line.246"></a>
-<span class="sourceLineNo">247</span><a name="line.247"></a>
-<span class="sourceLineNo">248</span>        /**<a name="line.248"></a>
-<span class="sourceLineNo">249</span>         * Takes a vararg or array of FloatFilter objects and produces a ChainFilter that will call all of them in order<a name="line.249"></a>
-<span class="sourceLineNo">250</span>         * on any color given to this to alter.<a name="line.250"></a>
-<span class="sourceLineNo">251</span>         * @param filters an array or vararg of FloatFilter objects; none can be null<a name="line.251"></a>
-<span class="sourceLineNo">252</span>         */<a name="line.252"></a>
-<span class="sourceLineNo">253</span>        public ChainFilter(FloatFilter... filters)<a name="line.253"></a>
-<span class="sourceLineNo">254</span>        {<a name="line.254"></a>
-<span class="sourceLineNo">255</span>            if(filters == null || filters.length == 0)<a name="line.255"></a>
-<span class="sourceLineNo">256</span>                this.filters = new FloatFilter[]{new IdentityFilter()};<a name="line.256"></a>
-<span class="sourceLineNo">257</span>            this.filters = filters;<a name="line.257"></a>
-<span class="sourceLineNo">258</span>        }<a name="line.258"></a>
-<span class="sourceLineNo">259</span><a name="line.259"></a>
-<span class="sourceLineNo">260</span>        /**<a name="line.260"></a>
-<span class="sourceLineNo">261</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.261"></a>
-<span class="sourceLineNo">262</span>         *<a name="line.262"></a>
-<span class="sourceLineNo">263</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.263"></a>
-<span class="sourceLineNo">264</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.264"></a>
-<span class="sourceLineNo">265</span>         */<a name="line.265"></a>
-<span class="sourceLineNo">266</span>        @Override<a name="line.266"></a>
-<span class="sourceLineNo">267</span>        public float alter(float color) {<a name="line.267"></a>
-<span class="sourceLineNo">268</span>            for (int i = 0; i &lt; filters.length; i++) {<a name="line.268"></a>
-<span class="sourceLineNo">269</span>                color = filters[i].alter(color);<a name="line.269"></a>
-<span class="sourceLineNo">270</span>            }<a name="line.270"></a>
-<span class="sourceLineNo">271</span>            return color;<a name="line.271"></a>
-<span class="sourceLineNo">272</span>        }<a name="line.272"></a>
-<span class="sourceLineNo">273</span>    }<a name="line.273"></a>
-<span class="sourceLineNo">274</span><a name="line.274"></a>
-<span class="sourceLineNo">275</span>    /**<a name="line.275"></a>
-<span class="sourceLineNo">276</span>     * A FloatFilter that linearly interpolates (lerps) any color it is given toward a specified color by a specified<a name="line.276"></a>
-<span class="sourceLineNo">277</span>     * amount. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the target<a name="line.277"></a>
-<span class="sourceLineNo">278</span>     * color, and this means the alpha of the target color affects the amount of change instead of the resulting alpha. <a name="line.278"></a>
-<span class="sourceLineNo">279</span>     */<a name="line.279"></a>
-<span class="sourceLineNo">280</span>    public static class LerpFilter extends FloatFilter {<a name="line.280"></a>
-<span class="sourceLineNo">281</span>        public float target, amount;<a name="line.281"></a>
-<span class="sourceLineNo">282</span><a name="line.282"></a>
-<span class="sourceLineNo">283</span>        /**<a name="line.283"></a>
-<span class="sourceLineNo">284</span>         * Builds a LerpFilter with a Color (which will be converted to a packed float color) and an amount as a float.<a name="line.284"></a>
-<span class="sourceLineNo">285</span>         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an<a name="line.285"></a>
-<span class="sourceLineNo">286</span>         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.<a name="line.286"></a>
-<span class="sourceLineNo">287</span>         * @param target a libGDX color; must not be null<a name="line.287"></a>
-<span class="sourceLineNo">288</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.288"></a>
-<span class="sourceLineNo">289</span>         */<a name="line.289"></a>
-<span class="sourceLineNo">290</span>        public LerpFilter(Color target, float amount) {<a name="line.290"></a>
-<span class="sourceLineNo">291</span>            this.target = target.toFloatBits();<a name="line.291"></a>
-<span class="sourceLineNo">292</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.292"></a>
-<span class="sourceLineNo">293</span>        }<a name="line.293"></a>
-<span class="sourceLineNo">294</span><a name="line.294"></a>
-<span class="sourceLineNo">295</span>        /**<a name="line.295"></a>
-<span class="sourceLineNo">296</span>         * Builds a LerpFilter with a packed float color and an amount as a float.<a name="line.296"></a>
-<span class="sourceLineNo">297</span>         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an<a name="line.297"></a>
-<span class="sourceLineNo">298</span>         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.<a name="line.298"></a>
-<span class="sourceLineNo">299</span>         * @param target a packed float color; must not be null<a name="line.299"></a>
-<span class="sourceLineNo">300</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.300"></a>
-<span class="sourceLineNo">301</span>         */<a name="line.301"></a>
-<span class="sourceLineNo">302</span><a name="line.302"></a>
-<span class="sourceLineNo">303</span>        public LerpFilter(float target, float amount)<a name="line.303"></a>
-<span class="sourceLineNo">304</span>        {<a name="line.304"></a>
-<span class="sourceLineNo">305</span>            this.target = target;<a name="line.305"></a>
-<span class="sourceLineNo">306</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.306"></a>
-<span class="sourceLineNo">307</span>        }<a name="line.307"></a>
-<span class="sourceLineNo">308</span><a name="line.308"></a>
-<span class="sourceLineNo">309</span>        /**<a name="line.309"></a>
-<span class="sourceLineNo">310</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.310"></a>
-<span class="sourceLineNo">311</span>         *<a name="line.311"></a>
-<span class="sourceLineNo">312</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.312"></a>
-<span class="sourceLineNo">313</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.313"></a>
-<span class="sourceLineNo">314</span>         */<a name="line.314"></a>
-<span class="sourceLineNo">315</span>        @Override<a name="line.315"></a>
-<span class="sourceLineNo">316</span>        public float alter(float color) {<a name="line.316"></a>
-<span class="sourceLineNo">317</span>            return lerpFloatColorsBlended(color, target, amount);<a name="line.317"></a>
-<span class="sourceLineNo">318</span>        }<a name="line.318"></a>
-<span class="sourceLineNo">319</span>    }<a name="line.319"></a>
-<span class="sourceLineNo">320</span><a name="line.320"></a>
-<span class="sourceLineNo">321</span>    /**<a name="line.321"></a>
-<span class="sourceLineNo">322</span>     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of<a name="line.322"></a>
-<span class="sourceLineNo">323</span>     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the<a name="line.323"></a>
-<span class="sourceLineNo">324</span>     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the<a name="line.324"></a>
-<span class="sourceLineNo">325</span>     * resulting alpha. Changing the alpha of the colors this is given can be done easily with<a name="line.325"></a>
-<span class="sourceLineNo">326</span>     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.<a name="line.326"></a>
-<span class="sourceLineNo">327</span>     */<a name="line.327"></a>
-<span class="sourceLineNo">328</span>    public static class MultiLerpFilter extends FloatFilter {<a name="line.328"></a>
-<span class="sourceLineNo">329</span>        public float[] targets;<a name="line.329"></a>
-<span class="sourceLineNo">330</span>        public float amount;<a name="line.330"></a>
-<span class="sourceLineNo">331</span>        /**<a name="line.331"></a>
-<span class="sourceLineNo">332</span>         * Builds a MultiLerpFilter with an array of Color objects (which will be converted to an array of packed float<a name="line.332"></a>
-<span class="sourceLineNo">333</span>         * colors) and an amount as a float. The amount is how much the target colors will affect input colors, from 0f<a name="line.333"></a>
-<span class="sourceLineNo">334</span>         * to 1f. If a target color has an alpha component that is less than 1, then amount is effectively multiplied by<a name="line.334"></a>
-<span class="sourceLineNo">335</span>         * that alpha. If you want to edit the alpha without duplicating Color objects, you can use<a name="line.335"></a>
-<span class="sourceLineNo">336</span>         * {@link SColor#translucentColor(Color, float)} to make a float array to pass to<a name="line.336"></a>
-<span class="sourceLineNo">337</span>         *{@link #MultiLerpFilter(float, float...)}.<a name="line.337"></a>
-<span class="sourceLineNo">338</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.338"></a>
-<span class="sourceLineNo">339</span>         * @param targets an array of libGDX Color objects; must not be null or empty<a name="line.339"></a>
-<span class="sourceLineNo">340</span>         */<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        public MultiLerpFilter(float amount, Color[] targets) {<a name="line.341"></a>
-<span class="sourceLineNo">342</span>            this.targets = new float[targets.length];<a name="line.342"></a>
-<span class="sourceLineNo">343</span>            for (int i = 0; i &lt; targets.length; i++) {<a name="line.343"></a>
-<span class="sourceLineNo">344</span>                this.targets[i] = targets[i].toFloatBits();<a name="line.344"></a>
-<span class="sourceLineNo">345</span>            }<a name="line.345"></a>
-<span class="sourceLineNo">346</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.346"></a>
-<span class="sourceLineNo">347</span>        }<a name="line.347"></a>
-<span class="sourceLineNo">348</span><a name="line.348"></a>
-<span class="sourceLineNo">349</span>        /**<a name="line.349"></a>
-<span class="sourceLineNo">350</span>         * Builds a MultiLerpFilter with an array of packed float colors and an amount as a float.<a name="line.350"></a>
-<span class="sourceLineNo">351</span>         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an<a name="line.351"></a>
-<span class="sourceLineNo">352</span>         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.<a name="line.352"></a>
-<span class="sourceLineNo">353</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.353"></a>
-<span class="sourceLineNo">354</span>         * @param targets an array or vararg of packed float colors; must not be null or empty<a name="line.354"></a>
-<span class="sourceLineNo">355</span>         */<a name="line.355"></a>
-<span class="sourceLineNo">356</span><a name="line.356"></a>
-<span class="sourceLineNo">357</span>        public MultiLerpFilter(float amount, float... targets)<a name="line.357"></a>
-<span class="sourceLineNo">358</span>        {<a name="line.358"></a>
-<span class="sourceLineNo">359</span>            this.targets = targets;<a name="line.359"></a>
-<span class="sourceLineNo">360</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        }<a name="line.361"></a>
-<span class="sourceLineNo">362</span><a name="line.362"></a>
-<span class="sourceLineNo">363</span>        /**<a name="line.363"></a>
-<span class="sourceLineNo">364</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.364"></a>
-<span class="sourceLineNo">365</span>         *<a name="line.365"></a>
-<span class="sourceLineNo">366</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.366"></a>
-<span class="sourceLineNo">367</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.367"></a>
-<span class="sourceLineNo">368</span>         */<a name="line.368"></a>
-<span class="sourceLineNo">369</span>        @Override<a name="line.369"></a>
-<span class="sourceLineNo">370</span>        public float alter(float color) {<a name="line.370"></a>
-<span class="sourceLineNo">371</span>            int choice = 0, diff = SColor.difference2(targets[0], color);<a name="line.371"></a>
-<span class="sourceLineNo">372</span>            for (int i = 1; i &lt; targets.length; i++) {<a name="line.372"></a>
-<span class="sourceLineNo">373</span>                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))<a name="line.373"></a>
-<span class="sourceLineNo">374</span>                    choice = i;<a name="line.374"></a>
-<span class="sourceLineNo">375</span>            }<a name="line.375"></a>
-<span class="sourceLineNo">376</span>            return lerpFloatColorsBlended(color, targets[choice], amount);<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        }<a name="line.377"></a>
-<span class="sourceLineNo">378</span>    }<a name="line.378"></a>
-<span class="sourceLineNo">379</span><a name="line.379"></a>
-<span class="sourceLineNo">380</span>    /**<a name="line.380"></a>
-<span class="sourceLineNo">381</span>     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of<a name="line.381"></a>
-<span class="sourceLineNo">382</span>     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the<a name="line.382"></a>
-<span class="sourceLineNo">383</span>     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the<a name="line.383"></a>
-<span class="sourceLineNo">384</span>     * resulting alpha. Changing the alpha of the colors this is given can be done easily with<a name="line.384"></a>
-<span class="sourceLineNo">385</span>     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.<a name="line.385"></a>
-<span class="sourceLineNo">386</span>     */<a name="line.386"></a>
-<span class="sourceLineNo">387</span>    public static class PaletteFilter extends FloatFilter {<a name="line.387"></a>
-<span class="sourceLineNo">388</span>        public float[] targets;<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        /**<a name="line.389"></a>
-<span class="sourceLineNo">390</span>         * Builds a PaletteFilter with an array of Color objects that this will choose from. The array will be converted<a name="line.390"></a>
-<span class="sourceLineNo">391</span>         * to an array of packed float colors, and not referenced directly.<a name="line.391"></a>
-<span class="sourceLineNo">392</span>         * @param targets an array of libGDX Color objects; must not be null or empty<a name="line.392"></a>
-<span class="sourceLineNo">393</span>         */<a name="line.393"></a>
-<span class="sourceLineNo">394</span>        public PaletteFilter(final Color[] targets) {<a name="line.394"></a>
-<span class="sourceLineNo">395</span>            this.targets = new float[targets.length];<a name="line.395"></a>
-<span class="sourceLineNo">396</span>            for (int i = 0; i &lt; targets.length; i++) {<a name="line.396"></a>
-<span class="sourceLineNo">397</span>                this.targets[i] = targets[i].toFloatBits();<a name="line.397"></a>
-<span class="sourceLineNo">398</span>            }<a name="line.398"></a>
-<span class="sourceLineNo">399</span>        }<a name="line.399"></a>
+<span class="sourceLineNo">217</span>            final float chromaB = cbMul * (<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                    (bits &amp; 0x000000ff) * (0x1.010102p-8f * -0.168736f) +<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                            (bits &amp; 0x0000ff00) * (0x1.010102p-16f * -0.331264f) +<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                            (bits &amp; 0x00ff0000) * (0x1.010102p-24f * 0.5f));<a name="line.220"></a>
+<span class="sourceLineNo">221</span>            final float chromaR = crMul * (<a name="line.221"></a>
+<span class="sourceLineNo">222</span>                    (bits &amp; 0x000000ff) * (0x1.010102p-8f * 0.5f) +<a name="line.222"></a>
+<span class="sourceLineNo">223</span>                            (bits &amp; 0x0000ff00) * (0x1.010102p-16f * -0.418688f) +<a name="line.223"></a>
+<span class="sourceLineNo">224</span>                            (bits &amp; 0x00ff0000) * (0x1.010102p-24f * -0.081312f));<a name="line.224"></a>
+<span class="sourceLineNo">225</span><a name="line.225"></a>
+<span class="sourceLineNo">226</span>//            if (chromaR &gt;= -0.0039f &amp;&amp; chromaR &lt;= 0.0039f &amp;&amp; chromaB &gt;= -0.0039f &amp;&amp; chromaB &lt;= 0.0039f) {<a name="line.226"></a>
+<span class="sourceLineNo">227</span>//                return floatGet(luma, luma, luma, opacity);<a name="line.227"></a>
+<span class="sourceLineNo">228</span>//            }<a name="line.228"></a>
+<span class="sourceLineNo">229</span>            return floatGet(MathUtils.clamp(luma + chromaR * 1.402f, 0f, 1f),<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                    MathUtils.clamp(luma - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 1f),<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                    MathUtils.clamp(luma + chromaB * 1.772f, 0f, 1f),<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                    opacity);<a name="line.232"></a>
+<span class="sourceLineNo">233</span>        }<a name="line.233"></a>
+<span class="sourceLineNo">234</span>    }<a name="line.234"></a>
+<span class="sourceLineNo">235</span><a name="line.235"></a>
+<span class="sourceLineNo">236</span>    /**<a name="line.236"></a>
+<span class="sourceLineNo">237</span>     * Like {@link HSVFilter} or {@link YCbCrFilter}, but edits its input colors in YCoCg color space, and multiplies<a name="line.237"></a>
+<span class="sourceLineNo">238</span>     * rather than adds. Most of the time you should prefer {@link YCbCrFilter} as long as it isn't a performance<a name="line.238"></a>
+<span class="sourceLineNo">239</span>     * bottleneck; if it is, this method is faster but less accurate. Y is luminance, ranging from 0 (dark) to 1<a name="line.239"></a>
+<span class="sourceLineNo">240</span>     * (light), and affects how bright the color is, but isn't very accurate perceptually. Co is Chrominance(orange) and<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * Cg is Chrominance(green) (both range from -0.5 to 0.5), two inter-related channels that determine the hue and<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * vividness of a specific color. When Co and Cg are both 0, the color is grayscale. When Co is 0.5 and Cg is -0.5,<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * the color is red unless Y is very high or low. When Co is -0.5 and Cg is 0.5, the color is cyan with the same<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * caveats re: Y. When Co and Cg are both -0.5, the color is blue (same caveats), and when both are 0.5, the color<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     * is yellow.<a name="line.245"></a>
+<span class="sourceLineNo">246</span>     * &lt;br&gt;<a name="line.246"></a>
+<span class="sourceLineNo">247</span>     * Valid values for Co and Cg are from -0.5 to 0.5 at the widest part of the range (it shrinks as Y approaches 0 or<a name="line.247"></a>
+<span class="sourceLineNo">248</span>     * 1), but there aren't really invalid values here because this filter will clamp results with higher or lower<a name="line.248"></a>
+<span class="sourceLineNo">249</span>     * channel values than a color can have. Each of yMul, coMul, and cgMul can have any float value, but yMul should be<a name="line.249"></a>
+<span class="sourceLineNo">250</span>     * positive (unless you want this to only produce solid black). Similarly, coMul and cgMul will not produce<a name="line.250"></a>
+<span class="sourceLineNo">251</span>     * meaningful results if they are very large (either positive or negative); it's recommended to use values between<a name="line.251"></a>
+<span class="sourceLineNo">252</span>     * 0.0 and 1.0 for both if you want to desaturate colors or values somewhat greater than 1.0 to oversaturate them.<a name="line.252"></a>
+<span class="sourceLineNo">253</span>     */<a name="line.253"></a>
+<span class="sourceLineNo">254</span>    public static class YCoCgFilter extends FloatFilter {<a name="line.254"></a>
+<span class="sourceLineNo">255</span>        public float yMul, coMul, cgMul;<a name="line.255"></a>
+<span class="sourceLineNo">256</span><a name="line.256"></a>
+<span class="sourceLineNo">257</span>        public YCoCgFilter(float luminanceMul, float orangeMul, float greenMul) {<a name="line.257"></a>
+<span class="sourceLineNo">258</span>            this.yMul = luminanceMul;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>            this.coMul = orangeMul;<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            this.cgMul = greenMul;<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        }<a name="line.261"></a>
+<span class="sourceLineNo">262</span><a name="line.262"></a>
+<span class="sourceLineNo">263</span>        /**<a name="line.263"></a>
+<span class="sourceLineNo">264</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.264"></a>
+<span class="sourceLineNo">265</span>         *<a name="line.265"></a>
+<span class="sourceLineNo">266</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.266"></a>
+<span class="sourceLineNo">267</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.267"></a>
+<span class="sourceLineNo">268</span>         */<a name="line.268"></a>
+<span class="sourceLineNo">269</span>        @Override<a name="line.269"></a>
+<span class="sourceLineNo">270</span>        public float alter(float color) {<a name="line.270"></a>
+<span class="sourceLineNo">271</span>            final int bits = NumberTools.floatToIntBits(color);<a name="line.271"></a>
+<span class="sourceLineNo">272</span>            final float opacity = (bits &gt;&gt;&gt; 24 &amp; 0xFE) * 0.003937008f;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>            final float y = yMul * (((bits &amp; 0x000000ff) + ((bits &amp; 0x0000ff00) &gt;&gt;&gt; 7) + ((bits &amp; 0x00ff0000) &gt;&gt;&gt; 16)) * 0x1.010102p-10f);<a name="line.273"></a>
+<span class="sourceLineNo">274</span>            final float co = coMul * (((bits &amp; 0x000000ff) - ((bits &amp; 0x00ff0000) &gt;&gt;&gt; 16)) * 0x1.010102p-9f);<a name="line.274"></a>
+<span class="sourceLineNo">275</span>            final float cg = cgMul * ((((bits &amp; 0x0000ff00) &gt;&gt;&gt; 7) - (bits &amp; 0x000000ff) - ((bits &amp; 0x00ff0000) &gt;&gt;&gt; 16)) * 0x1.010102p-10f);<a name="line.275"></a>
+<span class="sourceLineNo">276</span><a name="line.276"></a>
+<span class="sourceLineNo">277</span>            final float t = y - cg;<a name="line.277"></a>
+<span class="sourceLineNo">278</span>            return floatGet(MathUtils.clamp(t + co, 0f, 1f),<a name="line.278"></a>
+<span class="sourceLineNo">279</span>                    MathUtils.clamp(y + cg, 0f, 1f),<a name="line.279"></a>
+<span class="sourceLineNo">280</span>                    MathUtils.clamp(t - co, 0f, 1f),<a name="line.280"></a>
+<span class="sourceLineNo">281</span>                    opacity);<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        }<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    }<a name="line.283"></a>
+<span class="sourceLineNo">284</span><a name="line.284"></a>
+<span class="sourceLineNo">285</span>    /**<a name="line.285"></a>
+<span class="sourceLineNo">286</span>     * A FloatFilter that chains together one or more FloatFilters one after the next, passing the float output of one<a name="line.286"></a>
+<span class="sourceLineNo">287</span>     * as input to the next until the chain has all been called.<a name="line.287"></a>
+<span class="sourceLineNo">288</span>     */<a name="line.288"></a>
+<span class="sourceLineNo">289</span>    public static class ChainFilter extends FloatFilter {<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        public FloatFilter[] filters;<a name="line.290"></a>
+<span class="sourceLineNo">291</span><a name="line.291"></a>
+<span class="sourceLineNo">292</span>        /**<a name="line.292"></a>
+<span class="sourceLineNo">293</span>         * Takes a vararg or array of FloatFilter objects and produces a ChainFilter that will call all of them in order<a name="line.293"></a>
+<span class="sourceLineNo">294</span>         * on any color given to this to alter.<a name="line.294"></a>
+<span class="sourceLineNo">295</span>         * @param filters an array or vararg of FloatFilter objects; none can be null<a name="line.295"></a>
+<span class="sourceLineNo">296</span>         */<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        public ChainFilter(FloatFilter... filters)<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>            if(filters == null || filters.length == 0)<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                this.filters = new FloatFilter[]{new IdentityFilter()};<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            this.filters = filters;<a name="line.301"></a>
+<span class="sourceLineNo">302</span>        }<a name="line.302"></a>
+<span class="sourceLineNo">303</span><a name="line.303"></a>
+<span class="sourceLineNo">304</span>        /**<a name="line.304"></a>
+<span class="sourceLineNo">305</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.305"></a>
+<span class="sourceLineNo">306</span>         *<a name="line.306"></a>
+<span class="sourceLineNo">307</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.307"></a>
+<span class="sourceLineNo">308</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.308"></a>
+<span class="sourceLineNo">309</span>         */<a name="line.309"></a>
+<span class="sourceLineNo">310</span>        @Override<a name="line.310"></a>
+<span class="sourceLineNo">311</span>        public float alter(float color) {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>            for (int i = 0; i &lt; filters.length; i++) {<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                color = filters[i].alter(color);<a name="line.313"></a>
+<span class="sourceLineNo">314</span>            }<a name="line.314"></a>
+<span class="sourceLineNo">315</span>            return color;<a name="line.315"></a>
+<span class="sourceLineNo">316</span>        }<a name="line.316"></a>
+<span class="sourceLineNo">317</span>    }<a name="line.317"></a>
+<span class="sourceLineNo">318</span><a name="line.318"></a>
+<span class="sourceLineNo">319</span>    /**<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * A FloatFilter that linearly interpolates (lerps) any color it is given toward a specified color by a specified<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     * amount. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the target<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * color, and this means the alpha of the target color affects the amount of change instead of the resulting alpha. <a name="line.322"></a>
+<span class="sourceLineNo">323</span>     */<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    public static class LerpFilter extends FloatFilter {<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        public float target, amount;<a name="line.325"></a>
+<span class="sourceLineNo">326</span><a name="line.326"></a>
+<span class="sourceLineNo">327</span>        /**<a name="line.327"></a>
+<span class="sourceLineNo">328</span>         * Builds a LerpFilter with a Color (which will be converted to a packed float color) and an amount as a float.<a name="line.328"></a>
+<span class="sourceLineNo">329</span>         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an<a name="line.329"></a>
+<span class="sourceLineNo">330</span>         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.<a name="line.330"></a>
+<span class="sourceLineNo">331</span>         * @param target a libGDX color; must not be null<a name="line.331"></a>
+<span class="sourceLineNo">332</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.332"></a>
+<span class="sourceLineNo">333</span>         */<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        public LerpFilter(Color target, float amount) {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>            this.target = target.toFloatBits();<a name="line.335"></a>
+<span class="sourceLineNo">336</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.336"></a>
+<span class="sourceLineNo">337</span>        }<a name="line.337"></a>
+<span class="sourceLineNo">338</span><a name="line.338"></a>
+<span class="sourceLineNo">339</span>        /**<a name="line.339"></a>
+<span class="sourceLineNo">340</span>         * Builds a LerpFilter with a packed float color and an amount as a float.<a name="line.340"></a>
+<span class="sourceLineNo">341</span>         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an<a name="line.341"></a>
+<span class="sourceLineNo">342</span>         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.<a name="line.342"></a>
+<span class="sourceLineNo">343</span>         * @param target a packed float color; must not be null<a name="line.343"></a>
+<span class="sourceLineNo">344</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.344"></a>
+<span class="sourceLineNo">345</span>         */<a name="line.345"></a>
+<span class="sourceLineNo">346</span><a name="line.346"></a>
+<span class="sourceLineNo">347</span>        public LerpFilter(float target, float amount)<a name="line.347"></a>
+<span class="sourceLineNo">348</span>        {<a name="line.348"></a>
+<span class="sourceLineNo">349</span>            this.target = target;<a name="line.349"></a>
+<span class="sourceLineNo">350</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        }<a name="line.351"></a>
+<span class="sourceLineNo">352</span><a name="line.352"></a>
+<span class="sourceLineNo">353</span>        /**<a name="line.353"></a>
+<span class="sourceLineNo">354</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.354"></a>
+<span class="sourceLineNo">355</span>         *<a name="line.355"></a>
+<span class="sourceLineNo">356</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.356"></a>
+<span class="sourceLineNo">357</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.357"></a>
+<span class="sourceLineNo">358</span>         */<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        @Override<a name="line.359"></a>
+<span class="sourceLineNo">360</span>        public float alter(float color) {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>            return lerpFloatColorsBlended(color, target, amount);<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        }<a name="line.362"></a>
+<span class="sourceLineNo">363</span>    }<a name="line.363"></a>
+<span class="sourceLineNo">364</span><a name="line.364"></a>
+<span class="sourceLineNo">365</span>    /**<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of<a name="line.366"></a>
+<span class="sourceLineNo">367</span>     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the<a name="line.367"></a>
+<span class="sourceLineNo">368</span>     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the<a name="line.368"></a>
+<span class="sourceLineNo">369</span>     * resulting alpha. Changing the alpha of the colors this is given can be done easily with<a name="line.369"></a>
+<span class="sourceLineNo">370</span>     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.<a name="line.370"></a>
+<span class="sourceLineNo">371</span>     */<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    public static class MultiLerpFilter extends FloatFilter {<a name="line.372"></a>
+<span class="sourceLineNo">373</span>        public float[] targets;<a name="line.373"></a>
+<span class="sourceLineNo">374</span>        public float amount;<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        /**<a name="line.375"></a>
+<span class="sourceLineNo">376</span>         * Builds a MultiLerpFilter with an array of Color objects (which will be converted to an array of packed float<a name="line.376"></a>
+<span class="sourceLineNo">377</span>         * colors) and an amount as a float. The amount is how much the target colors will affect input colors, from 0f<a name="line.377"></a>
+<span class="sourceLineNo">378</span>         * to 1f. If a target color has an alpha component that is less than 1, then amount is effectively multiplied by<a name="line.378"></a>
+<span class="sourceLineNo">379</span>         * that alpha. If you want to edit the alpha without duplicating Color objects, you can use<a name="line.379"></a>
+<span class="sourceLineNo">380</span>         * {@link SColor#translucentColor(Color, float)} to make a float array to pass to<a name="line.380"></a>
+<span class="sourceLineNo">381</span>         *{@link #MultiLerpFilter(float, float...)}.<a name="line.381"></a>
+<span class="sourceLineNo">382</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.382"></a>
+<span class="sourceLineNo">383</span>         * @param targets an array of libGDX Color objects; must not be null or empty<a name="line.383"></a>
+<span class="sourceLineNo">384</span>         */<a name="line.384"></a>
+<span class="sourceLineNo">385</span>        public MultiLerpFilter(float amount, Color[] targets) {<a name="line.385"></a>
+<span class="sourceLineNo">386</span>            this.targets = new float[targets.length];<a name="line.386"></a>
+<span class="sourceLineNo">387</span>            for (int i = 0; i &lt; targets.length; i++) {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                this.targets[i] = targets[i].toFloatBits();<a name="line.388"></a>
+<span class="sourceLineNo">389</span>            }<a name="line.389"></a>
+<span class="sourceLineNo">390</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        }<a name="line.391"></a>
+<span class="sourceLineNo">392</span><a name="line.392"></a>
+<span class="sourceLineNo">393</span>        /**<a name="line.393"></a>
+<span class="sourceLineNo">394</span>         * Builds a MultiLerpFilter with an array of packed float colors and an amount as a float.<a name="line.394"></a>
+<span class="sourceLineNo">395</span>         * The amount is how much the target color will affect input colors, from 0f to 1f. If the target color has an<a name="line.395"></a>
+<span class="sourceLineNo">396</span>         * alpha component that is less than 1, then amount is effectively multiplied by that alpha.<a name="line.396"></a>
+<span class="sourceLineNo">397</span>         * @param amount a float that determines how much target will affect an input color; will be clamped between 0f and 1f<a name="line.397"></a>
+<span class="sourceLineNo">398</span>         * @param targets an array or vararg of packed float colors; must not be null or empty<a name="line.398"></a>
+<span class="sourceLineNo">399</span>         */<a name="line.399"></a>
 <span class="sourceLineNo">400</span><a name="line.400"></a>
-<span class="sourceLineNo">401</span>        /**<a name="line.401"></a>
-<span class="sourceLineNo">402</span>         * Builds a PaletteFilter with an array of packed float colors that this will choose from. The array will be<a name="line.402"></a>
-<span class="sourceLineNo">403</span>         * referenced directly, not copied, so if you change the contents of targets, it will be reflected here.<a name="line.403"></a>
-<span class="sourceLineNo">404</span>         * @param targets an array or vararg of packed float colors; must not be null or empty<a name="line.404"></a>
-<span class="sourceLineNo">405</span>         */<a name="line.405"></a>
+<span class="sourceLineNo">401</span>        public MultiLerpFilter(float amount, float... targets)<a name="line.401"></a>
+<span class="sourceLineNo">402</span>        {<a name="line.402"></a>
+<span class="sourceLineNo">403</span>            this.targets = targets;<a name="line.403"></a>
+<span class="sourceLineNo">404</span>            this.amount = MathUtils.clamp(amount, 0f, 1f);<a name="line.404"></a>
+<span class="sourceLineNo">405</span>        }<a name="line.405"></a>
 <span class="sourceLineNo">406</span><a name="line.406"></a>
-<span class="sourceLineNo">407</span>        public PaletteFilter(final float... targets)<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        {<a name="line.408"></a>
-<span class="sourceLineNo">409</span>            this.targets = targets;<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        }<a name="line.410"></a>
-<span class="sourceLineNo">411</span><a name="line.411"></a>
-<span class="sourceLineNo">412</span>        /**<a name="line.412"></a>
-<span class="sourceLineNo">413</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.413"></a>
-<span class="sourceLineNo">414</span>         *<a name="line.414"></a>
-<span class="sourceLineNo">415</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.415"></a>
-<span class="sourceLineNo">416</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.416"></a>
-<span class="sourceLineNo">417</span>         */<a name="line.417"></a>
-<span class="sourceLineNo">418</span>        @Override<a name="line.418"></a>
-<span class="sourceLineNo">419</span>        public float alter(float color) {<a name="line.419"></a>
-<span class="sourceLineNo">420</span>            if(color &gt;= 0f) //if color is halfway-transparent or closer to transparent...<a name="line.420"></a>
-<span class="sourceLineNo">421</span>                return 0f; // return fully transparent<a name="line.421"></a>
-<span class="sourceLineNo">422</span>            int choice = 0, diff = SColor.difference2(targets[0], color);<a name="line.422"></a>
-<span class="sourceLineNo">423</span>            for (int i = 1; i &lt; targets.length; i++) {<a name="line.423"></a>
-<span class="sourceLineNo">424</span>                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))<a name="line.424"></a>
-<span class="sourceLineNo">425</span>                    choice = i;<a name="line.425"></a>
-<span class="sourceLineNo">426</span>            }<a name="line.426"></a>
-<span class="sourceLineNo">427</span>            return targets[choice];<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        }<a name="line.428"></a>
-<span class="sourceLineNo">429</span>    }<a name="line.429"></a>
-<span class="sourceLineNo">430</span><a name="line.430"></a>
-<span class="sourceLineNo">431</span>}<a name="line.431"></a>
+<span class="sourceLineNo">407</span>        /**<a name="line.407"></a>
+<span class="sourceLineNo">408</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.408"></a>
+<span class="sourceLineNo">409</span>         *<a name="line.409"></a>
+<span class="sourceLineNo">410</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.410"></a>
+<span class="sourceLineNo">411</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.411"></a>
+<span class="sourceLineNo">412</span>         */<a name="line.412"></a>
+<span class="sourceLineNo">413</span>        @Override<a name="line.413"></a>
+<span class="sourceLineNo">414</span>        public float alter(float color) {<a name="line.414"></a>
+<span class="sourceLineNo">415</span>            int choice = 0, diff = SColor.difference2(targets[0], color);<a name="line.415"></a>
+<span class="sourceLineNo">416</span>            for (int i = 1; i &lt; targets.length; i++) {<a name="line.416"></a>
+<span class="sourceLineNo">417</span>                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                    choice = i;<a name="line.418"></a>
+<span class="sourceLineNo">419</span>            }<a name="line.419"></a>
+<span class="sourceLineNo">420</span>            return lerpFloatColorsBlended(color, targets[choice], amount);<a name="line.420"></a>
+<span class="sourceLineNo">421</span>        }<a name="line.421"></a>
+<span class="sourceLineNo">422</span>    }<a name="line.422"></a>
+<span class="sourceLineNo">423</span><a name="line.423"></a>
+<span class="sourceLineNo">424</span>    /**<a name="line.424"></a>
+<span class="sourceLineNo">425</span>     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of<a name="line.425"></a>
+<span class="sourceLineNo">426</span>     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the<a name="line.426"></a>
+<span class="sourceLineNo">427</span>     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the<a name="line.427"></a>
+<span class="sourceLineNo">428</span>     * resulting alpha. Changing the alpha of the colors this is given can be done easily with<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.<a name="line.429"></a>
+<span class="sourceLineNo">430</span>     */<a name="line.430"></a>
+<span class="sourceLineNo">431</span>    public static class PaletteFilter extends FloatFilter {<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        public float[] targets;<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        /**<a name="line.433"></a>
+<span class="sourceLineNo">434</span>         * Builds a PaletteFilter with an array of Color objects that this will choose from. The array will be converted<a name="line.434"></a>
+<span class="sourceLineNo">435</span>         * to an array of packed float colors, and not referenced directly.<a name="line.435"></a>
+<span class="sourceLineNo">436</span>         * @param targets an array of libGDX Color objects; must not be null or empty<a name="line.436"></a>
+<span class="sourceLineNo">437</span>         */<a name="line.437"></a>
+<span class="sourceLineNo">438</span>        public PaletteFilter(final Color[] targets) {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>            this.targets = new float[targets.length];<a name="line.439"></a>
+<span class="sourceLineNo">440</span>            for (int i = 0; i &lt; targets.length; i++) {<a name="line.440"></a>
+<span class="sourceLineNo">441</span>                this.targets[i] = targets[i].toFloatBits();<a name="line.441"></a>
+<span class="sourceLineNo">442</span>            }<a name="line.442"></a>
+<span class="sourceLineNo">443</span>        }<a name="line.443"></a>
+<span class="sourceLineNo">444</span><a name="line.444"></a>
+<span class="sourceLineNo">445</span>        /**<a name="line.445"></a>
+<span class="sourceLineNo">446</span>         * Builds a PaletteFilter with an array of packed float colors that this will choose from. The array will be<a name="line.446"></a>
+<span class="sourceLineNo">447</span>         * referenced directly, not copied, so if you change the contents of targets, it will be reflected here.<a name="line.447"></a>
+<span class="sourceLineNo">448</span>         * @param targets an array or vararg of packed float colors; must not be null or empty<a name="line.448"></a>
+<span class="sourceLineNo">449</span>         */<a name="line.449"></a>
+<span class="sourceLineNo">450</span><a name="line.450"></a>
+<span class="sourceLineNo">451</span>        public PaletteFilter(final float... targets)<a name="line.451"></a>
+<span class="sourceLineNo">452</span>        {<a name="line.452"></a>
+<span class="sourceLineNo">453</span>            this.targets = targets;<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        }<a name="line.454"></a>
+<span class="sourceLineNo">455</span><a name="line.455"></a>
+<span class="sourceLineNo">456</span>        /**<a name="line.456"></a>
+<span class="sourceLineNo">457</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.457"></a>
+<span class="sourceLineNo">458</span>         *<a name="line.458"></a>
+<span class="sourceLineNo">459</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.459"></a>
+<span class="sourceLineNo">460</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.460"></a>
+<span class="sourceLineNo">461</span>         */<a name="line.461"></a>
+<span class="sourceLineNo">462</span>        @Override<a name="line.462"></a>
+<span class="sourceLineNo">463</span>        public float alter(float color) {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>            if(color &gt;= 0f) //if color is halfway-transparent or closer to transparent...<a name="line.464"></a>
+<span class="sourceLineNo">465</span>                return 0f; // return fully transparent<a name="line.465"></a>
+<span class="sourceLineNo">466</span>            int choice = 0, diff = SColor.difference2(targets[0], color);<a name="line.466"></a>
+<span class="sourceLineNo">467</span>            for (int i = 1; i &lt; targets.length; i++) {<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                    choice = i;<a name="line.469"></a>
+<span class="sourceLineNo">470</span>            }<a name="line.470"></a>
+<span class="sourceLineNo">471</span>            return targets[choice];<a name="line.471"></a>
+<span class="sourceLineNo">472</span>        }<a name="line.472"></a>
+<span class="sourceLineNo">473</span>    }<a name="line.473"></a>
+<span class="sourceLineNo">474</span><a name="line.474"></a>
+<span class="sourceLineNo">475</span>}<a name="line.475"></a>
 
 
 

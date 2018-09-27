@@ -571,7 +571,7 @@
 </li>
 <li class="blockListLast">
 <h4>rng</h4>
-<pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath">StatefulRNG</a> rng</pre>
+<pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GWTRNG.html?is-external=true" title="class or interface in squidpony.squidmath">GWTRNG</a> rng</pre>
 </li>
 </ul>
 </li>
@@ -791,6 +791,46 @@
 <li class="blockListLast">
 <h4>finished</h4>
 <pre>boolean[][] finished</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.BasicRandom32">
+<!--   -->
+</a>
+<h3>Class <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/BasicRandom32.html?is-external=true" title="class or interface in squidpony.squidmath">squidpony.squidmath.BasicRandom32</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>state</h4>
+<pre>int state</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.BasicRandom64">
+<!--   -->
+</a>
+<h3>Class <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/BasicRandom64.html?is-external=true" title="class or interface in squidpony.squidmath">squidpony.squidmath.BasicRandom64</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>state</h4>
+<pre>long state</pre>
 </li>
 </ul>
 </li>
@@ -1819,6 +1859,54 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="squidpony.squidmath.LowStorageShuffler">
+<!--   -->
+</a>
+<h3>Class <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/LowStorageShuffler.html?is-external=true" title="class or interface in squidpony.squidmath">squidpony.squidmath.LowStorageShuffler</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>bound</h4>
+<pre>int bound</pre>
+</li>
+<li class="blockList">
+<h4>index</h4>
+<pre>int index</pre>
+</li>
+<li class="blockList">
+<h4>pow4</h4>
+<pre>int pow4</pre>
+</li>
+<li class="blockList">
+<h4>halfBits</h4>
+<pre>int halfBits</pre>
+</li>
+<li class="blockList">
+<h4>leftMask</h4>
+<pre>int leftMask</pre>
+</li>
+<li class="blockList">
+<h4>rightMask</h4>
+<pre>int rightMask</pre>
+</li>
+<li class="blockList">
+<h4>key0</h4>
+<pre>int key0</pre>
+</li>
+<li class="blockListLast">
+<h4>key1</h4>
+<pre>int key1</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="squidpony.squidmath.MerlinNoise">
 <!--   -->
 </a>
@@ -1898,6 +1986,46 @@
 <li class="blockListLast">
 <h4>state</h4>
 <pre>long state</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Mover32RNG">
+<!--   -->
+</a>
+<h3>Class <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Mover32RNG.html?is-external=true" title="class or interface in squidpony.squidmath">squidpony.squidmath.Mover32RNG</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>stateA</h4>
+<pre>int stateA</pre>
+</li>
+<li class="blockListLast">
+<h4>stateB</h4>
+<pre>int stateB</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Mover64RNG">
+<!--   -->
+</a>
+<h3>Class <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Mover64RNG.html?is-external=true" title="class or interface in squidpony.squidmath">squidpony.squidmath.Mover64RNG</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>stateA</h4>
+<pre>long stateA</pre>
+</li>
+<li class="blockListLast">
+<h4>stateB</h4>
+<pre>long stateB</pre>
 </li>
 </ul>
 </li>
@@ -2775,6 +2903,30 @@
 <li class="blockListLast">
 <h4>high</h4>
 <pre>long high</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Starfish32RNG">
+<!--   -->
+</a>
+<h3>Class <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Starfish32RNG.html?is-external=true" title="class or interface in squidpony.squidmath">squidpony.squidmath.Starfish32RNG</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>stateA</h4>
+<pre>int stateA</pre>
+</li>
+<li class="blockListLast">
+<h4>stateB</h4>
+<pre>int stateB</pre>
 </li>
 </ul>
 </li>

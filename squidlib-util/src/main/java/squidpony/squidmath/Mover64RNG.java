@@ -485,29 +485,29 @@ public final class Mover64RNG implements RandomnessSource {
 ///////// END subcycle finder code and period evaluator
     
     
-    public static void main(String[] args)
-    {
-        long stateA = 1, stateB = 1;
-        System.out.println("long[] startingA = {");
-        for (int ctr = 0; ctr < 128; ctr++) {
-            System.out.printf("0x%016XL, ", stateA);
-            if((ctr & 7) == 7)
-                System.out.println();
-            for (int i = 0; i < 512; i++) {
-                stateA *= 0x41C64E6BL;
-                stateA = (stateA << 28 | stateA >>> 36);
-            }
-        }
-        System.out.println("}, startingB = {");
-        for (int ctr = 0; ctr < 128; ctr++) {
-            System.out.printf("0x%016XL, ", stateB);
-            if((ctr & 7) == 7)
-                System.out.println();
-            for (int i = 0; i < 512; i++) {
-                stateB *= 0x9E3779B9L;
-                stateB = (stateB << 37 | stateB >>> 27);
-            }
-        }
-        System.out.println("};");
-    }
+//    public static void main(String[] args)
+//    {
+//        long stateA = 1, stateB = 1;
+//        System.out.println("long[] startingA = {");
+//        for (int ctr = 0; ctr < 128; ctr++) {
+//            System.out.printf("0x%016XL, ", stateA);
+//            if((ctr & 7) == 7)
+//                System.out.println();
+//            for (int i = 0; i < 512; i++) {
+//                stateA *= 0x41C64E6BL;
+//                stateA = (stateA << 28 | stateA >>> 36);
+//            }
+//        }
+//        System.out.println("}, startingB = {");
+//        for (int ctr = 0; ctr < 128; ctr++) {
+//            System.out.printf("0x%016XL, ", stateB);
+//            if((ctr & 7) == 7)
+//                System.out.println();
+//            for (int i = 0; i < 512; i++) {
+//                stateB *= 0x9E3779B9L;
+//                stateB = (stateB << 37 | stateB >>> 27);
+//            }
+//        }
+//        System.out.println("};");
+//    }
 }

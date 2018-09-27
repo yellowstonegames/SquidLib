@@ -36,6 +36,16 @@ public class Playground {
         final double mixed = NumberTools.setExponent((base * index >>> 12 ^ index) * 1.6180339887498948482, 0x400); // 2.0 to 4.0
         return NumberTools.setExponent(Math.pow((mixed + index), mixed * 2.6180339887498948482), 0x3ff) - 1.0;
     }
+    public static double robertsAltDetermine2x(int a)
+    {
+        return (((a *= 0xC13FA9A9) ^ (a >>> 11)) * 0x1p-32); // 0.003274283
+//        return (((a *= 0xC13FA9A9)) * 0x1p-32);
+    }
+    public static double robertsAltDetermine2y(int a)
+    {
+        return (((a *= 0x91E10DA5) ^ (a >>> 11)) * 0x1p-32); // 0.003274283 with 16
+//        return (((a *= 0x91E10DA5)) * 0x1p-32);            // 0.003294911
+    }
     // just puts outputs on lines, Marsaglia's Theorem style
     public static double determine4(final long base, final int index)
     {
@@ -137,17 +147,17 @@ public class Playground {
         return n << 3 | 0x4000000000000003L;
     }
     private void go() {
-        float r, r_;
-        for (int xx = 0; xx < 20; xx++) {
-            float x = LinnormRNG.determineFloat(xx) * 4f - 2f;
-            for (int yy = 0; yy < 20; yy++) {
-                float y = LinnormRNG.determineFloat(yy) * 4f - 2f;
-                System.out.printf("x: %1.9f, y: %1.9f, atan2: %1.9f, atan2_: %1.9f, diff: %1.9f\n", x, y,
-                        r = (NumberTools.atan2(y, x) / (3.141592653589793f * 2f) + 1f) % 1f,
-                        r_ = NumberTools.atan2_(y, x),
-                        Math.abs(r - r_));
-            }
-        }
+//        float r, r_;
+//        for (int xx = 0; xx < 20; xx++) {
+//            float x = LinnormRNG.determineFloat(xx) * 4f - 2f;
+//            for (int yy = 0; yy < 20; yy++) {
+//                float y = LinnormRNG.determineFloat(yy) * 4f - 2f;
+//                System.out.printf("x: %1.9f, y: %1.9f, atan2: %1.9f, atan2_: %1.9f, diff: %1.9f\n", x, y,
+//                        r = (NumberTools.atan2(y, x) / (3.141592653589793f * 2f) + 1f) % 1f,
+//                        r_ = NumberTools.atan2_(y, x),
+//                        Math.abs(r - r_));
+//            }
+//        }
 //        LightRNG r = new LightRNG();
 //        System.out.printf("state: 0x%016XL\n\n", r.getState());
 //        long l;
@@ -235,27 +245,29 @@ public class Playground {
 //        System.out.println("swayRandomized(Double.MIN_NORMAL)          :  " + NumberTools.swayRandomized(seed, Double.MIN_NORMAL));
 //        System.out.println("swayRandomized(Double.NaN)                 :  " + NumberTools.swayRandomized(seed, Double.NaN));
 
-//        final int SIZE = 0x8000;
-//        double[] xs = new double[SIZE], ys = new double[SIZE];
-//        double closest = 999.0, average = 0.0, x, y, xx, yy, t;
-////        for (int i = 0; i < SIZE; i++) {
-//////            xs[i] = x = planarDetermine(0xDE4DBEEF, i + 1); // why do these work so well???
-//////            ys[i] = y = planarDetermine(0x1337D00D, i + 1); //  now we know, they were forming lines
-////            xs[i] = x = planarDetermine(57L, i);
-////            ys[i] = y = planarDetermine(73L, i);
-////            for (int k = 0; k < i; k++) {
-////                xx = x - xs[k];
-////                yy = y - ys[k];
-////                closest = Math.min(closest, xx * xx + yy * yy);
-////            }
-////        }
-////        System.out.printf("Closest distance with integer-reversal(%d,%d): %.9f\n", 0xDE4DBEEF, 0x1337D00D, Math.sqrt(closest));
-//        int s, p2;
+        final int SIZE = 0x8000;
+        double[] xs = new double[SIZE], ys = new double[SIZE];
+        double closest = 999.0, average, x, y, xx, yy, t;
+        for (int i = 0; i < SIZE; i++) {
+//            xs[i] = x = planarDetermine(0xDE4DBEEF, i + 1); // why do these work so well???
+//            ys[i] = y = planarDetermine(0x1337D00D, i + 1); //  now we know, they were forming lines
+//            xs[i] = x = planarDetermine(57L, i);
+//            ys[i] = y = planarDetermine(73L, i);
+            xs[i] = x = robertsAltDetermine2x(i);
+            ys[i] = y = robertsAltDetermine2y(i);
+            for (int k = 0; k < i; k++) {
+                xx = x - xs[k];
+                yy = y - ys[k];
+                closest = Math.min(closest, xx * xx + yy * yy);
+            }
+        }
+        System.out.printf("Closest distance with Alt Roberts: %.9f\n", Math.sqrt(closest));
+        int s;
 //        for(int p : new int[]{1, 3, 11, 13, 15, 23, 29, 39, 41, 47, 71, 93}) {
 ////        for (int p = 1; p < 100; p+=2) {
 //            closest = 999.0;
 //            average = 0.0;
-//            p2 = p * 0x2C9277B5 | 1;  //0xAC564B05
+//            //p2 = p * 0x2C9277B5 | 1;  //0xAC564B05
 //            for (int i = 0; i < SIZE; i++) {
 //                //s = GreasedRegion.disperseBits(Integer.reverse(i * p + 1));
 ////                s = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(p, i) * 0x40000000));
@@ -273,25 +285,25 @@ public class Playground {
 //            }
 //            System.out.printf("Closest distance with Z-order on altHalton(%d): %.9f, 'average' %9.9f\n", p, Math.sqrt(closest), average);
 //        }
-//        //Closest distance with Halton(2,13): 0.000871727
-//        //Closest distance with Halton(2,39): 0.001147395
-//        for(int p : new int[]{3, 11, 13, 23, 29, 39, 41, 47, 69, 75, 87}) {
-////        for (int p = 3; p < 100; p+=2) {
-//            closest = 999.0;
-//            average = 0.0;
-//            for (int i = 0; i < SIZE; i++) {
-//                s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
-//                xs[i] = x = VanDerCorputQRNG.determine2(s);
-//                ys[i] = y = VanDerCorputQRNG.determine(p, s);
-//                for (int k = 0; k < i; k++) {
-//                    xx = x - xs[k];
-//                    yy = y - ys[k];
-//                    closest = Math.min(closest, t = xx * xx + yy * yy);
-//                    average += t * 0x1p-15;
-//                }
-//            }
-//            System.out.printf("Closest distance with Halton(2,%d): %.9f, 'average' %9.9f\n", p, Math.sqrt(closest), average);
-//        }
+        //Closest distance with Halton(2,13): 0.000871727
+        //Closest distance with Halton(2,39): 0.001147395
+        for(int p : new int[]{3, 11, 13, 23, 29, 39, 41, 47, 69, 75, 87}) {
+//        for (int p = 3; p < 100; p+=2) {
+            closest = 999.0;
+            average = 0.0;
+            for (int i = 0; i < SIZE; i++) {
+                s = i;//(i ^ (i << 7 | i >>> 25) ^ (i << 19 | i >>> 13));
+                xs[i] = x = VanDerCorputQRNG.determine2(s);
+                ys[i] = y = VanDerCorputQRNG.determine(p, s);
+                for (int k = 0; k < i; k++) {
+                    xx = x - xs[k];
+                    yy = y - ys[k];
+                    closest = Math.min(closest, t = xx * xx + yy * yy);
+                    average += t * 0x1p-15;
+                }
+            }
+            System.out.printf("Closest distance with Halton(2,%d): %.9f, 'average' %9.9f\n", p, Math.sqrt(closest), average);
+        }
     }
 
     private static long rand(final long z, final long mod, final long n2)

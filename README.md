@@ -18,6 +18,8 @@ map generation, and text generation in fictional languages.
 
 [![Join the slow-paced chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib)
 
+There's a [SquidLib IRC channel on Freenode](http://webchat.freenode.net/?channels=%23squidlib&uio=MT1mYWxzZSY5PXRydWUmMTE9MjU242); it is usually more active than Gitter.
+
 Documentation:
 ---
 Jars of javadocs are distributed with each release via Maven Central, and with the current latest via JitPack. You can

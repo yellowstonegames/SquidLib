@@ -94,9 +94,9 @@
 <span class="sourceLineNo">086</span>                y0 = fastFloor(y);         <a name="line.86"></a>
 <span class="sourceLineNo">087</span>//        final double res =<a name="line.87"></a>
 <span class="sourceLineNo">088</span>        return <a name="line.88"></a>
-<span class="sourceLineNo">089</span>                cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),<a name="line.89"></a>
+<span class="sourceLineNo">089</span>                Noise.emphasizeSigned(cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),<a name="line.89"></a>
 <span class="sourceLineNo">090</span>                                cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),<a name="line.90"></a>
-<span class="sourceLineNo">091</span>                                y - y0) * 1.4142;//* 0.875;// * 1.4142;<a name="line.91"></a>
+<span class="sourceLineNo">091</span>                                y - y0) * 1.4142);//* 0.875;// * 1.4142;<a name="line.91"></a>
 <span class="sourceLineNo">092</span>//        if(res &lt; -1.0 || res &gt; 1.0) System.out.println(res);<a name="line.92"></a>
 <span class="sourceLineNo">093</span>//        return res;<a name="line.93"></a>
 <span class="sourceLineNo">094</span>    }<a name="line.94"></a>
@@ -117,12 +117,12 @@
 <span class="sourceLineNo">109</span>                z0 = fastFloor(z);<a name="line.109"></a>
 <span class="sourceLineNo">110</span>//        final double res =<a name="line.110"></a>
 <span class="sourceLineNo">111</span>         return <a name="line.111"></a>
-<span class="sourceLineNo">112</span>                 cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),<a name="line.112"></a>
+<span class="sourceLineNo">112</span>                 Noise.emphasizeSigned(cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),<a name="line.112"></a>
 <span class="sourceLineNo">113</span>                cerp(gradCoord3D(seed, x0, y0+1, z0, x - x0, y - y0-1, z - z0), gradCoord3D(seed, x0+1, y0+1, z0, x - x0 - 1, y - y0 - 1, z - z0), x - x0),<a name="line.113"></a>
 <span class="sourceLineNo">114</span>                y - y0),<a name="line.114"></a>
 <span class="sourceLineNo">115</span>                cerp(cerp(gradCoord3D(seed, x0, y0, z0+1, x - x0, y - y0, z - z0-1), gradCoord3D(seed, x0+1, y0, z0+1, x - x0 - 1, y - y0, z - z0-1), x - x0),<a name="line.115"></a>
 <span class="sourceLineNo">116</span>                        cerp(gradCoord3D(seed, x0, y0+1, z0+1, x - x0, y - y0-1, z - z0-1), gradCoord3D(seed, x0+1, y0+1, z0+1, x - x0 - 1, y - y0 - 1, z - z0-1), x - x0),<a name="line.116"></a>
-<span class="sourceLineNo">117</span>                        y - y0), z - z0) * 1.0625;<a name="line.117"></a>
+<span class="sourceLineNo">117</span>                        y - y0), z - z0) * 1.0625);<a name="line.117"></a>
 <span class="sourceLineNo">118</span>//        if(res &lt; -1 || res &gt; 1) System.out.println(res);<a name="line.118"></a>
 <span class="sourceLineNo">119</span>//        return res;<a name="line.119"></a>
 <span class="sourceLineNo">120</span>    }<a name="line.120"></a>
@@ -144,8 +144,8 @@
 <span class="sourceLineNo">136</span>                z0 = fastFloor(z),<a name="line.136"></a>
 <span class="sourceLineNo">137</span>                w0 = fastFloor(w);<a name="line.137"></a>
 <span class="sourceLineNo">138</span>//        final double res =<a name="line.138"></a>
-<span class="sourceLineNo">139</span>        return <a name="line.139"></a>
-<span class="sourceLineNo">140</span>                cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),<a name="line.140"></a>
+<span class="sourceLineNo">139</span>        return<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                Noise.emphasizeSigned(cerp(cerp(cerp(cerp(gradCoord4D(seed, x0, y0, z0, w0, x - x0, y - y0, z - z0, w - w0), gradCoord4D(seed, x0+1, y0, z0, w0, x - x0 - 1, y - y0, z - z0, w - w0), x - x0),<a name="line.140"></a>
 <span class="sourceLineNo">141</span>                        cerp(gradCoord4D(seed, x0, y0+1, z0, w0, x - x0, y - y0-1, z - z0, w - w0), gradCoord4D(seed, x0+1, y0+1, z0, w0, x - x0 - 1, y - y0 - 1, z - z0, w - w0), x - x0),<a name="line.141"></a>
 <span class="sourceLineNo">142</span>                        y - y0),<a name="line.142"></a>
 <span class="sourceLineNo">143</span>                        cerp(cerp(gradCoord4D(seed, x0, y0, z0+1, w0, x - x0, y - y0, z - z0-1, w - w0), gradCoord4D(seed, x0+1, y0, z0+1, w0, x - x0 - 1, y - y0, z - z0-1, w - w0), x - x0),<a name="line.143"></a>
@@ -159,7 +159,7 @@
 <span class="sourceLineNo">151</span>                                        cerp(gradCoord4D(seed, x0, y0+1, z0+1, w0+1, x - x0, y - y0-1, z - z0-1, w - w0 - 1), gradCoord4D(seed, x0+1, y0+1, z0+1, w0+1, x - x0 - 1, y - y0 - 1, z - z0-1, w - w0 - 1), x - x0),<a name="line.151"></a>
 <span class="sourceLineNo">152</span>                                        y - y0),<a name="line.152"></a>
 <span class="sourceLineNo">153</span>                                z - z0),<a name="line.153"></a>
-<span class="sourceLineNo">154</span>                        w - w0) * 0.555;<a name="line.154"></a>
+<span class="sourceLineNo">154</span>                        w - w0) * 0.555);<a name="line.154"></a>
 <span class="sourceLineNo">155</span>//        if(res &lt; -1 || res &gt; 1) System.out.println(res);<a name="line.155"></a>
 <span class="sourceLineNo">156</span>//        return res;<a name="line.156"></a>
 <span class="sourceLineNo">157</span>    }<a name="line.157"></a>
@@ -187,7 +187,7 @@
 <span class="sourceLineNo">179</span>                v0 = fastFloor(v);<a name="line.179"></a>
 <span class="sourceLineNo">180</span>        final double xd = x - x0, yd = y - y0, zd = z - z0, wd = w - w0, ud = u - u0, vd = v - v0; <a name="line.180"></a>
 <span class="sourceLineNo">181</span>//        final double res =<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        return <a name="line.182"></a>
+<span class="sourceLineNo">182</span>        return Noise.emphasizeSigned(<a name="line.182"></a>
 <span class="sourceLineNo">183</span>        cerp(cerp(cerp(<a name="line.183"></a>
 <span class="sourceLineNo">184</span>                cerp(<a name="line.184"></a>
 <span class="sourceLineNo">185</span>                        cerp(<a name="line.185"></a>
@@ -311,7 +311,7 @@
 <span class="sourceLineNo">303</span>                                        zd),<a name="line.303"></a>
 <span class="sourceLineNo">304</span>                                wd),<a name="line.304"></a>
 <span class="sourceLineNo">305</span>                        ud),<a name="line.305"></a>
-<span class="sourceLineNo">306</span>                vd) * 1.875;<a name="line.306"></a>
+<span class="sourceLineNo">306</span>                vd) * 1.875);<a name="line.306"></a>
 <span class="sourceLineNo">307</span>//        if(res &lt; -1 || res &gt; 1) System.out.println(res);<a name="line.307"></a>
 <span class="sourceLineNo">308</span>//        return res;<a name="line.308"></a>
 <span class="sourceLineNo">309</span>    }<a name="line.309"></a>

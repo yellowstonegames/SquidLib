@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":9,"i9":10,"i10":9,"i11":10,"i12":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -173,6 +173,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#nouns">nouns</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static <a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#numberAdjectives">numberAdjectives</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#numbers">numbers</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#ORK">ORK</a></span></code>
 <div class="block">Thesaurus preset that changes all text to sound like this speaker: "Desaurus preset dat changez all text to sound
@@ -184,7 +192,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#randomLanguages">randomLanguages</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected <a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></td>
+<td class="colFirst"><code>protected <a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -239,7 +247,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -296,6 +304,35 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#numberAdjective-int-">numberAdjective</a></span>(int&nbsp;number)</code>
+<div class="block">Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
+ "eleventh").</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#numberAdjectiveInRange-int-int-">numberAdjectiveInRange</a></span>(int&nbsp;lowest,
+                      int&nbsp;highest)</code>
+<div class="block">Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
+ "eleventh"), where the number is chosen randomly between lowest and highest, both inclusive.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#numberWord-int-">numberWord</a></span>(int&nbsp;number)</code>
+<div class="block">Gets an English word for a given number, if this knows it.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#numberWordInRange-int-int-">numberWordInRange</a></span>(int&nbsp;lowest,
+                 int&nbsp;highest)</code>
+<div class="block">Gets an English word for a number, if this knows it, where the number is chosen randomly between lowest and
+ highest, both inclusive.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../squidpony/Thesaurus.html#process-java.lang.CharSequence-">process</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</code>
 <div class="block">Given a String, StringBuilder, or other CharSequence that should contain words this knows synonyms for, this
@@ -366,7 +403,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>protected&nbsp;<a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../src-html/squidpony/Thesaurus.html#line.25">rng</a></pre>
+<pre>protected&nbsp;<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a> <a href="../src-html/squidpony/Thesaurus.html#line.25">rng</a></pre>
 </li>
 </ul>
 <a name="randomLanguages">
@@ -393,7 +430,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>categories</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.538">categories</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.699">categories</a></pre>
 </li>
 </ul>
 <a name="adjective">
@@ -402,7 +439,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>adjective</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.739">adjective</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.908">adjective</a></pre>
 </li>
 </ul>
 <a name="noun">
@@ -411,7 +448,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>noun</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.740">noun</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.909">noun</a></pre>
 </li>
 </ul>
 <a name="nouns">
@@ -420,7 +457,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>nouns</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.741">nouns</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt; <a href="../src-html/squidpony/Thesaurus.html#line.910">nouns</a></pre>
 </li>
 </ul>
 <a name="languages">
@@ -429,7 +466,25 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>languages</h4>
-<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>,<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&gt; <a href="../src-html/squidpony/Thesaurus.html#line.742">languages</a></pre>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>,<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&gt; <a href="../src-html/squidpony/Thesaurus.html#line.911">languages</a></pre>
+</li>
+</ul>
+<a name="numbers">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>numbers</h4>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt; <a href="../src-html/squidpony/Thesaurus.html#line.1062">numbers</a></pre>
+</li>
+</ul>
+<a name="numberAdjectives">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>numberAdjectives</h4>
+<pre>public static final&nbsp;<a href="../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath">OrderedMap</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>,<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt; <a href="../src-html/squidpony/Thesaurus.html#line.1086">numberAdjectives</a></pre>
 </li>
 </ul>
 <a name="ORK">
@@ -438,7 +493,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ORK</h4>
-<pre>public static&nbsp;<a href="../squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a> <a href="../src-html/squidpony/Thesaurus.html#line.898">ORK</a></pre>
+<pre>public static&nbsp;<a href="../squidpony/Thesaurus.html" title="class in squidpony">Thesaurus</a> <a href="../src-html/squidpony/Thesaurus.html#line.1115">ORK</a></pre>
 <div class="block">Thesaurus preset that changes all text to sound like this speaker: "Desaurus preset dat changez all text to sound
  like dis speakah." You may be familiar with a certain sci-fi game that has orks that sound like this.</div>
 </li>
@@ -748,7 +803,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>makeNationName</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.490">makeNationName</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.526">makeNationName</a>()</pre>
 <div class="block">Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth".
  Needs <a href="../squidpony/Thesaurus.html#addKnownCategories--"><code>addKnownCategories()</code></a> to be called on this Thesaurus first. May use accented characters, as in
  "Thùdshù-Hyóttiálb Hegemony" or "The Glorious Chô Empire"; if you want to strip these out and replace accented
@@ -773,10 +828,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <a name="makeNationName-squidpony.FakeLanguageGen-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>makeNationName</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.521">makeNationName</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.557">makeNationName</a>(<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language)</pre>
 <div class="block">Generates a random possible name for a nation, such as "Iond-Gouccief Alliance" or "The Last Drayo Commonwealth",
  with the FakeLanguageGen already available instead of randomly created. Needs <a href="../squidpony/Thesaurus.html#addKnownCategories--"><code>addKnownCategories()</code></a> to be
  called on this Thesaurus first. May use accented characters, as in "Thùdshù Hegemony" or "The Glorious Chô
@@ -797,6 +852,83 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <dd><code>language</code> - a FakeLanguageGen that will be used to construct any non-English names</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a random name for a nation or a loose equivalent to a nation, as a String</dd>
+</dl>
+</li>
+</ul>
+<a name="numberWord-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>numberWord</h4>
+<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.576">numberWord</a>(int&nbsp;number)</pre>
+<div class="block">Gets an English word for a given number, if this knows it. These words are known from 0 ("zero") to 20
+ ("twenty"), as well as some higher numbers. If a word isn't known for a number, this returns the number as a
+ String, such as "537" or "-1".</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>number</code> - the number to get a word for</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the word associated with a number as a String, or if none is known, <code>String.valueOf(number)</code>.</dd>
+</dl>
+</li>
+</ul>
+<a name="numberAdjective-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>numberAdjective</h4>
+<pre>public static&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.623">numberAdjective</a>(int&nbsp;number)</pre>
+<div class="block">Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
+ "eleventh"). These words are known from 1 ("first") to 20 ("twentieth"), as well as some higher numbers. If a
+ word isn't known for a number, this appends a suffix based on the last base-10 digit to the number, as with "0th"
+ or "42nd".</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>number</code> - the number to get a position adjective for</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the word associated with a number as a String, or if none is known, <code>String.valueOf(number)</code> followed by a two-char suffix from the last digit.</dd>
+</dl>
+</li>
+</ul>
+<a name="numberWordInRange-int-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>numberWordInRange</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.677">numberWordInRange</a>(int&nbsp;lowest,
+                                int&nbsp;highest)</pre>
+<div class="block">Gets an English word for a number, if this knows it, where the number is chosen randomly between lowest and
+ highest, both inclusive. These words are known from 0 ("zero") to 20 ("twenty"), as well as some higher numbers.
+ If a word isn't known for a number, this returns the number as a String, such as "537" or "-1".</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>lowest</code> - the lower bound for numbers this can choose, inclusive</dd>
+<dd><code>highest</code> - the upper bound for numbers this can choose, inclusive</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String word for a number in the given range, such as "six" or "eleven", if it is known</dd>
+</dl>
+</li>
+</ul>
+<a name="numberAdjectiveInRange-int-int-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>numberAdjectiveInRange</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/Thesaurus.html#line.689">numberAdjectiveInRange</a>(int&nbsp;lowest,
+                                     int&nbsp;highest)</pre>
+<div class="block">Gets an English word that describes a numbered position in some sequence, if this knows it (such as "second" or
+ "eleventh"), where the number is chosen randomly between lowest and highest, both inclusive. These words are
+ known from 1 ("first") to 20 ("twentieth"), as well as some output for other numbers (such as "42nd" or "23rd").</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>lowest</code> - the lower bound for numbers this can choose, inclusive</dd>
+<dd><code>highest</code> - the upper bound for numbers this can choose, inclusive</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a String word for a number in the given range, such as "third" or "twelfth", if it is known</dd>
 </dl>
 </li>
 </ul>
