@@ -85,7 +85,6 @@ public class TextCellFactory implements Disposable {
     protected float smoothingMultiplier = 1.2f;
     protected float descent, lineHeight;
     protected Label.LabelStyle style;
-    //protected OrderedMap<Character, Character> swap = new OrderedMap<>(32);
     protected CharCharMap swap = new CharCharMap(8);
     {
         swap.defaultReturnValue('\uffff');
@@ -123,7 +122,6 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory copy()
     {
         TextCellFactory next = new TextCellFactory(assetManager);
-        //next.bmpFont = bmpFont;
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
         next.bmpFont = DefaultResources.copyFont(bmpFont);
@@ -142,7 +140,6 @@ public class TextCellFactory implements Disposable {
         next.actualCellHeight = actualCellHeight;
         next.descent = descent;
         next.lineHeight = lineHeight;
-        //next.modifiedHeight = modifiedHeight;
         next.smoothingMultiplier = smoothingMultiplier;
         next.scc = scc;
         next.directionGlyph = directionGlyph;
@@ -173,7 +170,6 @@ public class TextCellFactory implements Disposable {
 
         actualCellWidth = width;
         actualCellHeight = height;
-        //modifiedHeight = height;
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(Color.WHITE);
         temp.fill();
@@ -204,8 +200,6 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory initBySize() {
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
-
-        //bmpFont.setFixedWidthGlyphs(fitting);
         Pixmap temp = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         temp.setColor(Color.WHITE);
         temp.fill();
@@ -231,16 +225,12 @@ public class TextCellFactory implements Disposable {
             if (!shader.isCompiled()) {
                 Gdx.app.error("shader", "Distance Field font shader compilation failed:\n" + shader.getLog());
             }
-            //lineTweak = lineHeight / 20f;
-            //distanceFieldScaleX *= (((float)width) / height) / (distanceFieldScaleX / distanceFieldScaleY);
         }
         else {
             shader = SpriteBatch.createDefaultShader();
-            //lineTweak = lineHeight * 0.0625f;
         }
         lineHeight = bmpFont.getLineHeight();
         descent = bmpFont.getDescent();
-        //(msdf && bmpFont.getAscent() > 0 ? -bmpFont.getDescent(): bmpFont.getDescent());
         style = new Label.LabelStyle(bmpFont, null);
         BitmapFont.Glyph g = bmpFont.getData().getGlyph(directionGlyph);
         if(g != null) 
@@ -313,21 +303,19 @@ public class TextCellFactory implements Disposable {
      *
      * This should be called with an argument such as "Rogue-Zodiac-6x12.fnt", that is, it should have the .fnt
      * extension as opposed to the .png that accompanies such a bitmap font. The bitmap font should be either in the
-     * internal folder that libGDX knows about, which means it is in the assets folder of your project usually, or it
-     * can be on the classpath, which mostly applies to these resources bundled with SquidLib:
+     * internal folder that libGDX knows about, which means it is in the assets folder of your project usually.
+     * These BitmapFont resources are already known by SquidLib, but may need separate downloads (detailed in the linked
+     * DefaultResources documentation):
      * <ul>
-     *     <li>DefaultResources.squareName = "Zodiac-Square-12x12.fnt"</li>
-     *     <li>DefaultResources.narrowName = "Rogue-Zodiac-6x12.fnt"</li>
-     *     <li>DefaultResources.unicodeName = "Mandrill-6x16.fnt"</li>
-     *     <li>DefaultResources.smoothName = "Inconsolata-LGC-8x18.fnt"</li>
-     *     <li>DefaultResources.squareNameLarge = "Zodiac-Square-24x24.fnt"</li>
-     *     <li>DefaultResources.narrowNameLarge = "Rogue-Zodiac-12x24.fnt"</li>
-     *     <li>DefaultResources.unicodeNameLarge = "Mandrill-12x32.fnt"</li>
-     *     <li>DefaultResources.smoothNameLarge = "Inconsolata-LGC-12x24.fnt"</li>
-     *     <li>DefaultResources.narrowNameExtraLarge = "Rogue-Zodiac-18x36.fnt"</li>
-     *     <li>There is also a sequence of resized versions of Inconsolata LGC, altered to fit in a square area. These
-     *     don't have names in DefaultResources; you should use the overload of font() that takes a BitmapFont if you
-     *     want to use the multiple, increasingly-resized versions.</li>
+     *     <li>{@link DefaultResources#getDefaultFont()} = "Zodiac-Square-12x12.fnt"</li>
+     *     <li>{@link DefaultResources#getDefaultNarrowFont()} = "Rogue-Zodiac-6x12.fnt"</li>
+     *     <li>{@link DefaultResources#getDefaultUnicodeFont()} = "Mandrill-6x16.fnt"</li>
+     *     <li>{@link DefaultResources#getSmoothFont()} = "Inconsolata-LGC-8x18.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeFont()} = "Zodiac-Square-24x24.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeNarrowFont()} = "Rogue-Zodiac-12x24.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeUnicodeFont()} = "Mandrill-12x32.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeSmoothFont()} = "Inconsolata-LGC-12x24.fnt"</li>
+     *     <li>{@link DefaultResources#getExtraLargeNarrowFont()} = "Rogue-Zodiac-18x36.fnt"</li>
      * </ul>
      * "Rogue-Zodiac-12x24.fnt", which is easily accessed by the field DefaultResources.narrowNameLarge , can also
      * be set using TextCellFactory.defaultNarrowFont() instead of font(). "Zodiac-Square-12x12.fnt", also accessible
@@ -373,19 +361,17 @@ public class TextCellFactory implements Disposable {
      * This should be called with an argument such as {@code DefaultResources.getDefaultFont()} or any other variable
      * with BitmapFont as its type. The bitmap font will not be loaded from file with this method, which it would be if
      * you called the overload of font() that takes a String more than once. These BitmapFont resources are already
-     * bundled with SquidLib:
+     * known by SquidLib, but may need separate downloads (detailed in the linked DefaultResources documentation):
      * <ul>
-     *     <li>DefaultResources.getDefaultFont() = "Zodiac-Square-12x12.fnt"</li>
-     *     <li>DefaultResources.getDefaultNarrowFont() = "Rogue-Zodiac-6x12.fnt"</li>
-     *     <li>DefaultResources.getDefaultUnicodeFont() = "Mandrill-6x16.fnt"</li>
-     *     <li>DefaultResources.getSmoothFont() = "Inconsolata-LGC-8x18.fnt"</li>
-     *     <li>DefaultResources.getLargeFont() = "Zodiac-Square-24x24.fnt"</li>
-     *     <li>DefaultResources.getLargeNarrowFont() = "Rogue-Zodiac-12x24.fnt"</li>
-     *     <li>DefaultResources.getLargeUnicodeFont() = "Mandrill-12x32.fnt"</li>
-     *     <li>DefaultResources.getLargeSmoothFont() = "Inconsolata-LGC-12x24.fnt"</li>
-     *     <li>DefaultResources.getExtraLargeNarrowFont() = "Rogue-Zodiac-18x36.fnt"</li>
-     *     <li>There is also a sequence of resized versions of Inconsolata LGC, altered to fit in a square area. These
-     *     can be accessed with DefaultResources.getZoomedFont(), passing an int between 0 and 11 inclusive.</li>
+     *     <li>{@link DefaultResources#getDefaultFont()} = "Zodiac-Square-12x12.fnt"</li>
+     *     <li>{@link DefaultResources#getDefaultNarrowFont()} = "Rogue-Zodiac-6x12.fnt"</li>
+     *     <li>{@link DefaultResources#getDefaultUnicodeFont()} = "Mandrill-6x16.fnt"</li>
+     *     <li>{@link DefaultResources#getSmoothFont()} = "Inconsolata-LGC-8x18.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeFont()} = "Zodiac-Square-24x24.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeNarrowFont()} = "Rogue-Zodiac-12x24.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeUnicodeFont()} = "Mandrill-12x32.fnt"</li>
+     *     <li>{@link DefaultResources#getLargeSmoothFont()} = "Inconsolata-LGC-12x24.fnt"</li>
+     *     <li>{@link DefaultResources#getExtraLargeNarrowFont()} = "Rogue-Zodiac-18x36.fnt"</li>
      * </ul>
      * "Rogue-Zodiac-12x24.fnt", which is easily accessed by the method DefaultResources.getLargeNarrowFont() , can also
      * be set using TextCellFactory.defaultNarrowFont() instead of font(). "Zodiac-Square-12x12.fnt", also accessible
@@ -427,7 +413,9 @@ public class TextCellFactory implements Disposable {
      * To create distance field fonts that work well with monospace layout is... time-consuming and error-prone, though
      * not especially difficult for most fonts. The process is documented as well as we can, given how differently all
      * fonts are made, in a file not included in the distribution JAR but present on GitHub:
-     * https://github.com/SquidPony/SquidLib/blob/master/squidlib/etc/making-distance-field-fonts.txt
+     * <a href="https://github.com/SquidPony/SquidLib/blob/master/squidlib/etc/making-distance-field-fonts.txt">Instructions here</a>.
+     * A separate project is dedicated to automating this process somewhat,
+     * <a href="https://github.com/tommyettinger/Glamer">Glamer</a>; Glamer can also produce MSDF fonts.
      * @param fontPath the path to a .fnt bitmap font file with distance field effects applied, which requires a complex
      *                 process to create.
      * @param texturePath the path to the texture used by the bitmap font
@@ -902,11 +890,11 @@ public class TextCellFactory implements Disposable {
 
 
     /**
-     * Use the specified Batch to draw a char with the default color (white), with x and y
-     * determining the world-space coordinates for the upper-left corner.
+     * Use the specified Batch to draw a char with the default color (white), with x and y determining the world-space
+     * coordinates for the upper-left corner. If c is {@code '\0'}, will draw a solid white block instead.
      *
      * @param batch the LibGDX Batch to do the drawing
-     * @param c the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param c the char to draw. Can be {@code '\0'} to draw a solid block instead.
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
@@ -935,10 +923,10 @@ public class TextCellFactory implements Disposable {
      *
      * @param batch the LibGDX Batch to do the drawing
      * @param s the string to draw, often but not necessarily one char. Can be null to draw a solid block instead.
-     * @param r 0.0 to 0.1 red value
-     * @param g 0.0 to 0.1 green value
-     * @param b 0.0 to 0.1 blue value
-     * @param a 0.0 to 0.1 alpha value
+     * @param r 0.0f to 1.0f red value
+     * @param g 0.0f to 1.0f green value
+     * @param b 0.0f to 1.0f blue value
+     * @param a 0.0f to 1.0f alpha value
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
      */
@@ -955,13 +943,12 @@ public class TextCellFactory implements Disposable {
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
             batch.setColor(orig);
         } else {
             batch.setColor(r, g, b, a); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
-            bmpFont.setColor(r, g, b, a);
-            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, s, x, y - descent + 1, width, Align.center, false);
         }
     }
 
@@ -983,17 +970,17 @@ public class TextCellFactory implements Disposable {
         if (s == null) {
             float orig = batch.getPackedColor();
             batch.setColor(color);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
             batch.setColor(color);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
             batch.setColor(orig);
         } else {
             batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
-            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, s, x, y - descent + 1, width, Align.center, false);
         }
     }
     /**
@@ -1014,27 +1001,27 @@ public class TextCellFactory implements Disposable {
         if (s == null) {
             float orig = batch.getPackedColor();
             batch.setColor(encodedColor);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
             batch.setColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
             batch.setColor(encodedColor);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight); // descent * 1 / 3f
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
             batch.setColor(orig);
         } else
         {
             batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
-            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, s, x, y - descent + 1, width, Align.center, false);
         }
     }
 
     /**
-     * Use the specified Batch to draw a String (often just one char long) in the specified LibGDX Color, with x and y
+     * Use the specified Batch to draw a char in the specified LibGDX Color, with x and y
      * determining the world-space coordinates for the upper-left corner.
      *
      * @param batch the LibGDX Batch to do the drawing
-     * @param c the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param c the char to draw. Can be {@code '\0'} to draw a solid block instead.
      * @param color the LibGDX Color (or SquidLib SColor) to use, as an object
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
@@ -1046,14 +1033,14 @@ public class TextCellFactory implements Disposable {
         if (c == 0) {
             float orig = batch.getPackedColor();
             batch.setColor(color);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
             batch.setColor(orig);
         } else
         {
             batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
-            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, mut, x, y - descent + 1, width, Align.center, false);
         }
     }
 
@@ -1062,7 +1049,7 @@ public class TextCellFactory implements Disposable {
      * determining the world-space coordinates for the upper-left corner.
      *
      * @param batch the LibGDX Batch to do the drawing
-     * @param c the char to draw, often but not necessarily one char. Can be null to draw a solid block instead.
+     * @param c the char to draw. Can be {@code '\0'} to draw a solid block instead.
      * @param encodedColor the LibGDX Color to use, converted to float as by {@link Color#toFloatBits()}
      * @param x x of the upper-left corner of the region of text in world coordinates.
      * @param y y of the upper-left corner of the region of text in world coordinates.
@@ -1074,14 +1061,14 @@ public class TextCellFactory implements Disposable {
         if (c == 0) {
             float orig = batch.getPackedColor();
             batch.setColor(encodedColor);
-            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
+            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
             batch.setColor(orig);
         } else
         {
             batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
-            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
+            bmpFont.draw(batch, mut, x, y - descent + 1, width, Align.center, false);
         }
     }
 
@@ -1710,7 +1697,7 @@ public class TextCellFactory implements Disposable {
      * ColorChange classes will rotate between all colors given in the List in the given amount of loopTime, and are not
      * affected by setColor, though they are affected by their setColors methods. Their color change is not considered
      * an animation for the purposes of things like SquidPanel.hasActiveAnimations() .
-     * @param colors a List of Color to tint s with, looping through all elements in the list each second
+     * @param colors a List of Color to tint the '^' with, looping through all elements in the list each second
      * @param loopTime the amount of time, in seconds, to spend looping through all colors in the list
      * @return the Actor, with no position set.
      */
@@ -1747,10 +1734,24 @@ public class TextCellFactory implements Disposable {
         return im;
     }
 
+    /**
+     * Given a char and a Color, makes a ColorChangeImage of that colored char so it can be rotated and so on.
+     * @param glyph a char; should probably be visible, so not space or tab
+     * @param color a Color to use for the image; will not change even though ColorChangeImage permits this
+     * @return the ColorChangeImage with the one color for glyph
+     */
     public ColorChangeImage makeGlyphImage(char glyph, Color color)
     {
         return makeGlyphImage(glyph, color, false);
     }
+    /**
+     * Given a char and a Color, makes a ColorChangeImage of that colored char so it can be rotated and so on.
+     * This overload allows double-width mode to be specified.
+     * @param glyph a char; should probably be visible, so not space or tab
+     * @param color a Color to use for the image; will not change even though ColorChangeImage permits this
+     * @param doubleWidth true if layout uses two chars of width per logical cell, false otherwise
+     * @return the ColorChangeImage with the one color for glyph
+     */
     public ColorChangeImage makeGlyphImage(char glyph, Color color, boolean doubleWidth)
     {
         if (!initialized) {
@@ -1774,6 +1775,17 @@ public class TextCellFactory implements Disposable {
         im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         return im;
     }
+    /**
+     * Given a char and a Collection of Color (such as a List that might be produced by
+     * {@link SquidColorCenter#gradient(Color, Color)}), makes a ColorChangeImage of that char so it can be rotated and
+     * so on. The colors will cycle through the given collection onceper {@code loopTime} seconds. You can specify
+     * double-width mode if you use it, probably in SquidPanel or SquidLayers.
+     * @param glyph a char; should probably be visible, so not space or tab
+     * @param colors a Collection of Colors to use for the image; the image will cycle through them in order
+     * @param loopTime the amount of time, in seconds, it should take for all colors to be cycled through
+     * @param doubleWidth true if layout uses two chars of width per logical cell, false otherwise
+     * @return the ColorChangeImage with the one color for glyph
+     */
     public ColorChangeImage makeGlyphImage(char glyph, Collection<Color> colors, float loopTime, boolean doubleWidth) {
         if (!initialized) {
             throw new IllegalStateException("This factory has not yet been initialized!");
@@ -1857,7 +1869,6 @@ public class TextCellFactory implements Disposable {
 
     /**
      * Returns a solid block of white, 1x1 pixel in size; can be drawn at other sizes by Batch.
-     *
      * @return a white 1x1 pixel Texture.
      */
     public Texture getSolid() {
@@ -2157,20 +2168,48 @@ public class TextCellFactory implements Disposable {
     {
     }
 
+    /**
+     * A kind of Actor for one char (with one color) that is innately drawn with a specific TextCellFactory, and will
+     * match the layout behavior of that TextCellFactory when it is used for other purposes. This is an inner class of
+     * TextCellFactory, and can't be constructed without a TextCellFactory being involved; usually you instantiate
+     * Glyphs with {@link #glyph(char, Color, float, float)} or an overload of that method on TextCellFactory.
+     */
     public class Glyph extends Actor
     {
+        /**
+         * The char that will be shown for this Glyph.
+         */
         public char shown;
 
+        /**
+         * Makes an orange '@' Glyph at 0,0 in world coordinates.
+         */
         public Glyph() {
-            this('@', SColor.SAFETY_ORANGE.toFloatBits(), 0f, 0f);
+            this('@', SColor.SAFETY_ORANGE, 0f, 0f);
         }
+
+        /**
+         * Makes a Glyph of the given char in the given Color, at the specified world coordinates.
+         * @param shown the char to show
+         * @param color the Color to use; if null this will instead use {@link SColor#TRANSPARENT}
+         * @param x x position in world coordinates
+         * @param y y position in world coordinates
+         */
         public Glyph(char shown, Color color, float x, float y)
         {
             super();
             this.shown = shown;
-            super.getColor().set(color);
+            super.getColor().set(color == null ? SColor.TRANSPARENT : color);
             setPosition(x, y);
         }
+
+        /**
+         * Makes a Glyph of the given char in the given packed float color, at the specified world coordinates.
+         * @param shown the char to show
+         * @param color the packed float color to use, as produced by {@link Color#toFloatBits()}
+         * @param x x position in world coordinates
+         * @param y y position in world coordinates
+         */
         public Glyph(char shown, float color, float x, float y) {
             super();
             this.shown = shown;
@@ -2178,10 +2217,18 @@ public class TextCellFactory implements Disposable {
             setPosition(x, y);
         }
 
+        /**
+         * Gets the color of this Glyph as a packed float color; does not allocate any objects.
+         * @return the color of this Glyph as a packed float
+         */
         public float getPackedColor() {
             return getColor().toFloatBits();
         }
 
+        /**
+         * Sets the color of this Glyph with the given packed float color; does not allocate any objects.
+         * @param color the color to set this Glyph to, as a packed float
+         */
         public void setPackedColor(float color) {
             Color.abgr8888ToColor(super.getColor(), color);
         }
@@ -2198,17 +2245,14 @@ public class TextCellFactory implements Disposable {
 
         /**
          * Draws the actor. The batch is configured to draw in the parent's coordinate system.
-         * {@link Batch#draw(TextureRegion, float, float, float, float, float, float, float, float, float)
-         * This draw method} is convenient to draw a rotated and scaled TextureRegion. {@link Batch#begin()} has already been called on
-         * the batch. If {@link Batch#end()} is called to draw without the batch then {@link Batch#begin()} must be called before the
-         * method returns.
+         * {@link Batch#begin()} must have already been called on the batch before this method.
          *
          * @param batch the batch should be between begin() and end(), usually handled by Stage
-         * @param parentAlpha Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.
+         * @param parentAlpha Multiplied with this Glyph's alpha, allowing a parent's alpha to affect all children.
          */
         @Override
         public void draw(Batch batch, float parentAlpha) {
-            TextCellFactory.this.draw(batch, shown, getColor(), getX(), getY() + 1);
+            TextCellFactory.this.draw(batch, shown, SColor.multiplyAlpha(getColor(), parentAlpha), getX(), getY() + 1);
         }
     }
 }
