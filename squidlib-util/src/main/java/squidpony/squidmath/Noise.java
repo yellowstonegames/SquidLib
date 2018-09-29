@@ -891,10 +891,15 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y point with the given state
          */
-        public static long hashAll(final int x, final int y, final int state)
+        public static long hashAll(long x, long y, long state)
         {
-            return LinnormRNG.determine((y + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255]) ^ state);
+            x += y += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ state;
+            return x ^ x >>> 25;
         }
 
         /**
@@ -905,12 +910,17 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y,z point with the given state
          */
-        public static long hashAll(final int x, final int y, final int z, final int state)
+        public static long hashAll(long x, long y, long z, long state)
         {
-            return LinnormRNG.determine(
-                    (z + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255])
-                    ^ (y + perm_z[z + (state >>> 16) & 255]) ^ state);
+            x += y += z += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ state;
+            return x ^ x >>> 25;
         }
 
         /**
@@ -922,13 +932,19 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y,z,w point with the given state
          */
-        public static long hashAll(final int x, final int y, final int z, final int w, final int state)
+        public static long hashAll(long x, long y, long z, long w, long state)
         {
-            return LinnormRNG.determine(
-                    (w + perm_x[x + state & 255])
-                            ^ (x + perm_y[y + (state >>> 8) & 255])
-                            ^ (y + perm_z[z + (state >>> 16) & 255])
-                            ^ (z + perm_w[w + (state >>> 24) & 255]) ^ state);
+            x += y += z += w += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ state;
+            return x ^ x >>> 25;
         }
 
         /**
@@ -942,15 +958,23 @@ public class Noise {
          * @param state
          * @return 64-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static long hashAll(final int x, final int y, final int z, final int w, final int u, final int v, final int state)
+        public static long hashAll(long x, long y, long z, long w, long u, long v, long state)
         {
-            return LinnormRNG.determine(
-                    (v + perm_x[x + state & 255])
-                            ^ (x + perm_y[y + (state >>> 8) & 255])
-                            ^ (y + perm_z[z + (state >>> 16) & 255])
-                            ^ (z + perm_w[w + (state >>> 24) & 255])
-                            ^ (w + perm_u[u + (state >>> 8 ^ state >>> 24) & 255])
-                            ^ (u + perm_v[v + (state ^ state >>> 16) & 255]) ^ state);
+            x += y += z += w += u += v += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((u ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((v ^= 0xC6BC279692B5CC8BL + u - (u << 35 | u >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + v - (v << 35 | v >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ u ^ v ^ state;
+            return x ^ x >>> 25;
         }
         /**
          *
@@ -959,11 +983,17 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y point with the given state
          */
-        public static int hash256(final int x, final int y, final int state)
+        public static int hash256(long x, long y, long state)
         {
-            return ((y + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255]) ^ state) & 255;
+            x += y += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            x += y - state;
+            return (int)(x >>> 56);
         }
+
         /**
          *
          * @param x
@@ -972,12 +1002,19 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y,z point with the given state
          */
-        public static int hash256(final int x, final int y, final int z, final int state)
+        public static int hash256(long x, long y, long z, long state)
         {
-            return ((z + perm_x[x + state & 255])
-                            ^ (x + perm_y[y + (state >>> 8) & 255])
-                            ^ (y + perm_z[z + (state >>> 16) & 255]) ^ state) & 255;
+            x += y += z += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ state;
+            return (int)(x >>> 56);
         }
+
         /**
          *
          * @param x
@@ -987,12 +1024,19 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y,z,w point with the given state
          */
-        public static int hash256(final int x, final int y, final int z, final int w, final int state)
+        public static int hash256(long x, long y, long z, long w, long state)
         {
-            return ((w + perm_x[x + state & 255])
-                            ^ (x + perm_y[y + (state >>> 8) & 255])
-                            ^ (y + perm_z[z + (state >>> 16) & 255])
-                            ^ (z + perm_w[w + (state >>> 24) & 255]) ^ state) & 255;
+            x += y += z += w += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ state;
+            return (int)(x >>> 56);
         }
 
         /**
@@ -1006,14 +1050,23 @@ public class Noise {
          * @param state
          * @return 8-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static int hash256(final int x, final int y, final int z, final int w, final int u, final int v, final int state)
+        public static int hash256(long x, long y, long z, long w, long u, long v, long state)
         {
-            return ((v + perm_x[x + state & 255])
-                            ^ (x + perm_y[y + (state >>> 8) & 255])
-                            ^ (y + perm_z[z + (state >>> 16) & 255])
-                            ^ (z + perm_w[w + (state >>> 24) & 255])
-                            ^ (w + perm_u[u + (state >>> 8 ^ state >>> 24) & 255])
-                            ^ (u + perm_v[v + (state ^ state >>> 16) & 255]) ^ state) & 255;
+            x += y += z += w += u += v += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((u ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((v ^= 0xC6BC279692B5CC8BL + u - (u << 35 | u >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + v - (v << 35 | v >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ u ^ v ^ state;
+            return (int)(x >>> 56);
         }
         /**
          *
@@ -1022,11 +1075,17 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y point with the given state
          */
-        public static int hash32(final int x, final int y, final int state)
+        public static int hash32(long x, long y, long state)
         {
-            return ((y + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255]) ^ state) & 31;
+            x += y += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            x += y - state;
+            return (int)(x >>> 59);
         }
+
         /**
          *
          * @param x
@@ -1035,12 +1094,19 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y,z point with the given state
          */
-        public static int hash32(final int x, final int y, final int z, final int state)
+        public static int hash32(long x, long y, long z, long state)
         {
-            return ((z + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255])
-                    ^ (y + perm_z[z + (state >>> 16) & 255]) ^ state) & 31;
+            x += y += z += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ state;
+            return (int)(x >>> 59);
         }
+
         /**
          *
          * @param x
@@ -1050,12 +1116,19 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y,z,w point with the given state
          */
-        public static int hash32(final int x, final int y, final int z, final int w, final int state)
+        public static int hash32(long x, long y, long z, long w, long state)
         {
-            return ((w + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255])
-                    ^ (y + perm_z[z + (state >>> 16) & 255])
-                    ^ (z + perm_w[w + (state >>> 24) & 255]) ^ state) & 31;
+            x += y += z += w += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ state;
+            return (int)(x >>> 59);
         }
 
         /**
@@ -1069,14 +1142,23 @@ public class Noise {
          * @param state
          * @return 5-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static int hash32(final int x, final int y, final int z, final int w, final int u, final int v, final int state)
+        public static int hash32(long x, long y, long z, long w, long u, long v, long state)
         {
-            return ((v + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255])
-                    ^ (y + perm_z[z + (state >>> 16) & 255])
-                    ^ (z + perm_w[w + (state >>> 24) & 255])
-                    ^ (w + perm_u[u + (state >>> 8 ^ state >>> 24) & 255])
-                    ^ (u + perm_v[v + (state ^ state >>> 16) & 255]) ^ state) & 31;
+            x += y += z += w += u += v += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((u ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((v ^= 0xC6BC279692B5CC8BL + u - (u << 35 | u >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + v - (v << 35 | v >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ u ^ v ^ state;
+            return (int)(x >>> 59);
         }
 
         /**
@@ -1086,11 +1168,17 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y point with the given state
          */
-        public static int hash64(final int x, final int y, final int state)
+        public static int hash64(long x, long y, long state)
         {
-            return ((y + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255]) ^ state) & 63;
+            x += y += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            x += y - state;
+            return (int)(x >>> 58);
         }
+
         /**
          *
          * @param x
@@ -1099,12 +1187,19 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y,z point with the given state
          */
-        public static int hash64(final int x, final int y, final int z, final int state)
+        public static int hash64(long x, long y, long z, long state)
         {
-            return ((z + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255])
-                    ^ (y + perm_z[z + (state >>> 16) & 255]) ^ state) & 63;
+            x += y += z += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ state;
+            return (int)(x >>> 58);
         }
+
         /**
          *
          * @param x
@@ -1114,12 +1209,19 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y,z,w point with the given state
          */
-        public static int hash64(final int x, final int y, final int z, final int w, final int state)
+        public static int hash64(long x, long y, long z, long w, long state)
         {
-            return ((w + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255])
-                    ^ (y + perm_z[z + (state >>> 16) & 255])
-                    ^ (z + perm_w[w + (state >>> 24) & 255]) ^ state) & 63;
+            x += y += z += w += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ state;
+            return (int)(x >>> 58);
         }
 
         /**
@@ -1133,14 +1235,23 @@ public class Noise {
          * @param state
          * @return 6-bit hash of the x,y,z,w,u,v point with the given state
          */
-        public static int hash64(final int x, final int y, final int z, final int w, final int u, final int v, final int state)
+        public static int hash64(long x, long y, long z, long w, long u, long v, long state)
         {
-            return ((v + perm_x[x + state & 255])
-                    ^ (x + perm_y[y + (state >>> 8) & 255])
-                    ^ (y + perm_z[z + (state >>> 16) & 255])
-                    ^ (z + perm_w[w + (state >>> 24) & 255])
-                    ^ (w + perm_u[u + (state >>> 8 ^ state >>> 24) & 255])
-                    ^ (u + perm_v[v + (state ^ state >>> 16) & 255]) ^ state) & 63;
+            x += y += z += w += u += v += state += 0x9E3779B97F4A7C15L;
+            state *= ((y ^= 0xC6BC279692B5CC8BL + x - (x << 35 | x >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((z ^= 0xC6BC279692B5CC8BL + y - (y << 35 | y >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((w ^= 0xC6BC279692B5CC8BL + z - (z << 35 | z >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((u ^= 0xC6BC279692B5CC8BL + w - (w << 35 | w >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((v ^= 0xC6BC279692B5CC8BL + u - (u << 35 | u >>> 29))|1);
+            state ^= state >>> 31;
+            state *= ((x ^= 0xC6BC279692B5CC8BL + v - (v << 35 | v >>> 29))|1);
+            state ^= state >>> 31;
+            x ^= y ^ z ^ w ^ u ^ v ^ state;
+            return (int)(x >>> 58);
         }
 
         public static int hash256_alt(final long x, final long y, final long z, final long w, final long seed) {
