@@ -117,8 +117,12 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2160">TextCellFactory.Glyph</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.html#line.2177">TextCellFactory.Glyph</a>
 extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
+<div class="block">A kind of Actor for one char (with one color) that is innately drawn with a specific TextCellFactory, and will
+ match the layout behavior of that TextCellFactory when it is used for other purposes. This is an inner class of
+ TextCellFactory, and can't be constructed without a TextCellFactory being involved; usually you instantiate
+ Glyphs with <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#glyph-char-com.badlogic.gdx.graphics.Color-float-float-"><code>TextCellFactory.glyph(char, Color, float, float)</code></a> or an overload of that method on TextCellFactory.</div>
 </li>
 </ul>
 </div>
@@ -139,7 +143,9 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>char</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#shown">shown</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#shown">shown</a></span></code>
+<div class="block">The char that will be shown for this Glyph.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -156,19 +162,25 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#Glyph--">Glyph</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#Glyph--">Glyph</a></span>()</code>
+<div class="block">Makes an orange '@' Glyph at 0,0 in world coordinates.</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#Glyph-char-com.badlogic.gdx.graphics.Color-float-float-">Glyph</a></span>(char&nbsp;shown,
      com.badlogic.gdx.graphics.Color&nbsp;color,
      float&nbsp;x,
-     float&nbsp;y)</code>&nbsp;</td>
+     float&nbsp;y)</code>
+<div class="block">Makes a Glyph of the given char in the given Color, at the specified world coordinates.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#Glyph-char-float-float-float-">Glyph</a></span>(char&nbsp;shown,
      float&nbsp;color,
      float&nbsp;x,
-     float&nbsp;y)</code>&nbsp;</td>
+     float&nbsp;y)</code>
+<div class="block">Makes a Glyph of the given char in the given packed float color, at the specified world coordinates.</div>
+</td>
 </tr>
 </table>
 </li>
@@ -194,11 +206,15 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>float</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#getPackedColor--">getPackedColor</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#getPackedColor--">getPackedColor</a></span>()</code>
+<div class="block">Gets the color of this Glyph as a packed float color; does not allocate any objects.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#setPackedColor-float-">setPackedColor</a></span>(float&nbsp;color)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#setPackedColor-float-">setPackedColor</a></span>(float&nbsp;color)</code>
+<div class="block">Sets the color of this Glyph with the given packed float color; does not allocate any objects.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
@@ -239,7 +255,8 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>shown</h4>
-<pre>public&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2162">shown</a></pre>
+<pre>public&nbsp;char <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2182">shown</a></pre>
+<div class="block">The char that will be shown for this Glyph.</div>
 </li>
 </ul>
 </li>
@@ -256,7 +273,8 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>Glyph</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2164">Glyph</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2187">Glyph</a>()</pre>
+<div class="block">Makes an orange '@' Glyph at 0,0 in world coordinates.</div>
 </li>
 </ul>
 <a name="Glyph-char-com.badlogic.gdx.graphics.Color-float-float-">
@@ -265,10 +283,18 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>Glyph</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2167">Glyph</a>(char&nbsp;shown,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2198">Glyph</a>(char&nbsp;shown,
              com.badlogic.gdx.graphics.Color&nbsp;color,
              float&nbsp;x,
              float&nbsp;y)</pre>
+<div class="block">Makes a Glyph of the given char in the given Color, at the specified world coordinates.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>shown</code> - the char to show</dd>
+<dd><code>color</code> - the Color to use; if null this will instead use <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#TRANSPARENT"><code>SColor.TRANSPARENT</code></a></dd>
+<dd><code>x</code> - x position in world coordinates</dd>
+<dd><code>y</code> - y position in world coordinates</dd>
+</dl>
 </li>
 </ul>
 <a name="Glyph-char-float-float-float-">
@@ -277,10 +303,18 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Glyph</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2174">Glyph</a>(char&nbsp;shown,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2213">Glyph</a>(char&nbsp;shown,
              float&nbsp;color,
              float&nbsp;x,
              float&nbsp;y)</pre>
+<div class="block">Makes a Glyph of the given char in the given packed float color, at the specified world coordinates.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>shown</code> - the char to show</dd>
+<dd><code>color</code> - the packed float color to use, as produced by <code>Color.toFloatBits()</code></dd>
+<dd><code>x</code> - x position in world coordinates</dd>
+<dd><code>y</code> - y position in world coordinates</dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -297,7 +331,12 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getPackedColor</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2181">getPackedColor</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2224">getPackedColor</a>()</pre>
+<div class="block">Gets the color of this Glyph as a packed float color; does not allocate any objects.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the color of this Glyph as a packed float</dd>
+</dl>
 </li>
 </ul>
 <a name="setPackedColor-float-">
@@ -306,7 +345,12 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setPackedColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2185">setPackedColor</a>(float&nbsp;color)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2232">setPackedColor</a>(float&nbsp;color)</pre>
+<div class="block">Sets the color of this Glyph with the given packed float color; does not allocate any objects.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>color</code> - the color to set this Glyph to, as a packed float</dd>
+</dl>
 </li>
 </ul>
 <a name="toString--">
@@ -315,7 +359,7 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2190">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2237">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>toString</code>&nbsp;in class&nbsp;<code>com.badlogic.gdx.scenes.scene2d.Actor</code></dd>
@@ -328,18 +372,16 @@ extends com.badlogic.gdx.scenes.scene2d.Actor</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2210">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html#line.2254">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  float&nbsp;parentAlpha)</pre>
 <div class="block">Draws the actor. The batch is configured to draw in the parent's coordinate system.
- <code>This draw method</code> is convenient to draw a rotated and scaled TextureRegion. <code>Batch.begin()</code> has already been called on
- the batch. If <code>Batch.end()</code> is called to draw without the batch then <code>Batch.begin()</code> must be called before the
- method returns.</div>
+ <code>Batch.begin()</code> must have already been called on the batch before this method.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code>draw</code>&nbsp;in class&nbsp;<code>com.badlogic.gdx.scenes.scene2d.Actor</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>batch</code> - the batch should be between begin() and end(), usually handled by Stage</dd>
-<dd><code>parentAlpha</code> - Should be multiplied with the actor's alpha, allowing a parent's alpha to affect all children.</dd>
+<dd><code>parentAlpha</code> - Multiplied with this Glyph's alpha, allowing a parent's alpha to affect all children.</dd>
 </dl>
 </li>
 </ul>

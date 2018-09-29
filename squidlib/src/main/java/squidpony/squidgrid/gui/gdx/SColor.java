@@ -12889,6 +12889,35 @@ public class SColor extends Color implements Serializable {
     public static final float FLOAT_BLACK = -0x1.0p125f;
 
     /**
+     * Given a Color or SColor object and an alpha multiplier to affect that color (between 0f and 1f, inclusive and
+     * clamped in that range), this makes a packed float color that has the same red, green, and blue channels but has
+     * its own alpha multiplied by {@code alpha}, without constructing any objects along the way.
+     *
+     * @param color  a libGDX Color (or SColor); will not be modified
+     * @param alpha  between 0.0 and 1.0 inclusive, the alpha to multiply the color's own alpha by
+     * @return a color encoded as a packed float, using color's RGB channels but with its A channel times {@code alpha}
+     */
+    public static float multiplyAlpha(Color color, float alpha) {
+        return NumberTools.intBitsToFloat(color.toIntBits() & 0xFFFFFF
+                | (MathUtils.clamp((int) (color.a * 255f * alpha), 0, 255) << 24 & 0xFE000000));
+    }
+
+    /**
+     * Given a color stored as a packed float and an alpha multiplier to affect that color (between 0f and 1f, inclusive
+     * and clamped in that range), this makes a packed float color that has the same red, green, and blue channels but
+     * has its own alpha multiplied by {@code alpha}, without constructing any objects along the way.
+     *
+     * @param encodedColor a color encoded as a packed float, as by {@link Color#toFloatBits()}
+     * @param alpha  between 0.0 and 1.0 inclusive, the alpha to multiply the color's own alpha by
+     * @return a color encoded as a packed float, using color's RGB channels but with its A channel times {@code alpha}
+     */
+    public static float multiplyAlpha(float encodedColor, float alpha) {
+        final int bits = NumberTools.floatToIntBits(encodedColor);
+        return NumberTools.intBitsToFloat(bits & 0xFFFFFF
+                | (MathUtils.clamp((int) ((bits >>> 24) * alpha), 0, 255) << 24 & 0xFE000000));
+    }
+
+    /**
      * Given a Color or SColor object and a desired alpha to set for that color (between 0f and 1f, inclusive and
      * clamped in that range), this makes a packed float color that has the same red, green, and blue channels but has
      * been set to the given alpha, without constructing any objects along the way.

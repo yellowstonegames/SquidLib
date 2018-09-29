@@ -142,68 +142,74 @@
 <span class="sourceLineNo">134</span><a name="line.134"></a>
 <span class="sourceLineNo">135</span>    /**<a name="line.135"></a>
 <span class="sourceLineNo">136</span>     * An irreversible mixing function that seems to give good results; GWT-compatible.<a name="line.136"></a>
-<span class="sourceLineNo">137</span>     * First, it runs a step where it takes one of the two parameters, multiplies it by a 16-bit value, "sometimes" adds<a name="line.137"></a>
-<span class="sourceLineNo">138</span>     * a 32-bit value, and XORs that with the other parameter. It It runs this step twice each on both combinations of<a name="line.138"></a>
-<span class="sourceLineNo">139</span>     * the two parameters, once doing the "sometimes" adding and once not, then runs a different Overton iadla generator<a name="line.139"></a>
-<span class="sourceLineNo">140</span>     * on each parameter (one such generator is {@code x += x &gt;&gt;&gt; 21; return (x += x &lt;&lt; 8);}, for reference). It then<a name="line.140"></a>
-<span class="sourceLineNo">141</span>     * returns data XORed with seed. This is complicated, but less involved schemes did not do well at all. There's four<a name="line.141"></a>
-<span class="sourceLineNo">142</span>     * multiplications used here, all by small enough values to not risk GWT safety.<a name="line.142"></a>
-<span class="sourceLineNo">143</span>     * @param data the data being ciphered<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     * @param seed the current seed<a name="line.144"></a>
-<span class="sourceLineNo">145</span>     * @return the ciphered data<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     */<a name="line.146"></a>
-<span class="sourceLineNo">147</span>    protected int round(int data, int seed)<a name="line.147"></a>
-<span class="sourceLineNo">148</span>    {<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        seed ^= data * 0xC6D5 + 0xB531A935;<a name="line.149"></a>
-<span class="sourceLineNo">150</span>        data ^= seed * 0xBCFD + 0x41C64E6D;<a name="line.150"></a>
-<span class="sourceLineNo">151</span>        seed ^= data * 0xACED;<a name="line.151"></a>
-<span class="sourceLineNo">152</span>        data ^= seed * 0xBA55;<a name="line.152"></a>
-<span class="sourceLineNo">153</span>        data += data &gt;&gt;&gt; 21;<a name="line.153"></a>
-<span class="sourceLineNo">154</span>        seed += seed &gt;&gt;&gt; 22;<a name="line.154"></a>
-<span class="sourceLineNo">155</span>        data += data &lt;&lt; 8;<a name="line.155"></a>
-<span class="sourceLineNo">156</span>        seed += seed &lt;&lt; 5;<a name="line.156"></a>
+<span class="sourceLineNo">137</span>     * This is mostly the same as {@link Coord#hashCode()}, with data acting like x and seed acting like y, but also<a name="line.137"></a>
+<span class="sourceLineNo">138</span>     * includes two small multiplications (each by 16-bit numbers, which doesn't risk GWT safety). The algorithm is a<a name="line.138"></a>
+<span class="sourceLineNo">139</span>     * little complicated, and is much like the 32-bit xoroshiro variant used by {@link Lathe32RNG}, but changes any<a name="line.139"></a>
+<span class="sourceLineNo">140</span>     * additive operations to use XOR. Less involved schemes did not do well at all. There's four bitwise rotations and<a name="line.140"></a>
+<span class="sourceLineNo">141</span>     * two multiplications used here, plus several XOR and bitwise shift operations.<a name="line.141"></a>
+<span class="sourceLineNo">142</span>     * @param data the data being ciphered<a name="line.142"></a>
+<span class="sourceLineNo">143</span>     * @param seed the current seed<a name="line.143"></a>
+<span class="sourceLineNo">144</span>     * @return the ciphered data<a name="line.144"></a>
+<span class="sourceLineNo">145</span>     */<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    protected int round(int data, int seed)<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    {<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        seed ^= data * 0xBCFD;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        seed ^= (data &lt;&lt; 13 | data &gt;&gt;&gt; 19) ^ (seed &lt;&lt; 5) ^ (seed &lt;&lt; 28 | seed &gt;&gt;&gt; 4);<a name="line.149"></a>
+<span class="sourceLineNo">150</span>        data ^= (seed &lt;&lt; 11 | seed &gt;&gt;&gt; 21) * 0xC6D5;<a name="line.150"></a>
+<span class="sourceLineNo">151</span>        return data ^ (data &lt;&lt; 25 | data &gt;&gt;&gt; 7);<a name="line.151"></a>
+<span class="sourceLineNo">152</span><a name="line.152"></a>
+<span class="sourceLineNo">153</span>//        seed ^= data * 0xC6D5 + 0xB531A935;<a name="line.153"></a>
+<span class="sourceLineNo">154</span>//        data ^= seed * 0xBCFD + 0x41C64E6D;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>//        seed ^= data * 0xACED;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>//        data ^= seed * 0xBA55;<a name="line.156"></a>
 <span class="sourceLineNo">157</span>//        data += data &gt;&gt;&gt; 21;<a name="line.157"></a>
 <span class="sourceLineNo">158</span>//        seed += seed &gt;&gt;&gt; 22;<a name="line.158"></a>
 <span class="sourceLineNo">159</span>//        data += data &lt;&lt; 8;<a name="line.159"></a>
 <span class="sourceLineNo">160</span>//        seed += seed &lt;&lt; 5;<a name="line.160"></a>
-<span class="sourceLineNo">161</span>//        data += data &gt;&gt;&gt; 16;<a name="line.161"></a>
-<span class="sourceLineNo">162</span>//        seed += seed &gt;&gt;&gt; 13;<a name="line.162"></a>
-<span class="sourceLineNo">163</span>//        data += data &lt;&lt; 9;<a name="line.163"></a>
-<span class="sourceLineNo">164</span>//        seed += seed &lt;&lt; 11;<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        return data ^ seed;<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    }<a name="line.166"></a>
-<span class="sourceLineNo">167</span><a name="line.167"></a>
-<span class="sourceLineNo">168</span>    /**<a name="line.168"></a>
-<span class="sourceLineNo">169</span>     * Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method<a name="line.169"></a>
-<span class="sourceLineNo">170</span>     * to use more or less rounds, but there must always be an even number.<a name="line.170"></a>
-<span class="sourceLineNo">171</span>     * @param index the index to cipher; must be betweeen 0 and {@link #pow4}, inclusive<a name="line.171"></a>
-<span class="sourceLineNo">172</span>     * @return the ciphered index, which might not be less than bound but will be less than or equal to {@link #pow4}<a name="line.172"></a>
-<span class="sourceLineNo">173</span>     */<a name="line.173"></a>
-<span class="sourceLineNo">174</span>    protected int encode(int index)<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        // break our index into the left and right half<a name="line.176"></a>
-<span class="sourceLineNo">177</span>        int left = (index &amp; leftMask) &gt;&gt;&gt; halfBits;<a name="line.177"></a>
-<span class="sourceLineNo">178</span>        int right = (index &amp; rightMask);<a name="line.178"></a>
-<span class="sourceLineNo">179</span>        // do 2 Feistel rounds<a name="line.179"></a>
-<span class="sourceLineNo">180</span>        int newRight = left ^ (round(right, key0) &amp; rightMask);<a name="line.180"></a>
-<span class="sourceLineNo">181</span>        left = right;<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        right = newRight;<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        newRight = left ^ (round(right, key1) &amp; rightMask);<a name="line.183"></a>
-<span class="sourceLineNo">184</span>//        left = right;<a name="line.184"></a>
-<span class="sourceLineNo">185</span>//        right = newRight;<a name="line.185"></a>
-<span class="sourceLineNo">186</span>//        newRight = left ^ (round(right, key2) &amp; rightMask);<a name="line.186"></a>
-<span class="sourceLineNo">187</span>//        left = right;<a name="line.187"></a>
-<span class="sourceLineNo">188</span>//        right = newRight;<a name="line.188"></a>
-<span class="sourceLineNo">189</span>//        newRight = left ^ (round(right, key3) &amp; rightMask);<a name="line.189"></a>
-<span class="sourceLineNo">190</span><a name="line.190"></a>
-<span class="sourceLineNo">191</span>//        left = right;<a name="line.191"></a>
-<span class="sourceLineNo">192</span>//        right = newRight;<a name="line.192"></a>
-<span class="sourceLineNo">193</span><a name="line.193"></a>
-<span class="sourceLineNo">194</span>        // put the left and right back together to form the encrypted index<a name="line.194"></a>
-<span class="sourceLineNo">195</span>//        return left &lt;&lt; halfBits | right;<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        return right &lt;&lt; halfBits | newRight;<a name="line.196"></a>
-<span class="sourceLineNo">197</span>    }<a name="line.197"></a>
-<span class="sourceLineNo">198</span>}<a name="line.198"></a>
+<span class="sourceLineNo">161</span>//        return data ^ seed;<a name="line.161"></a>
+<span class="sourceLineNo">162</span><a name="line.162"></a>
+<span class="sourceLineNo">163</span>//        data += data &gt;&gt;&gt; 21;<a name="line.163"></a>
+<span class="sourceLineNo">164</span>//        seed += seed &gt;&gt;&gt; 22;<a name="line.164"></a>
+<span class="sourceLineNo">165</span>//        data += data &lt;&lt; 8;<a name="line.165"></a>
+<span class="sourceLineNo">166</span>//        seed += seed &lt;&lt; 5;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>//        data += data &gt;&gt;&gt; 16;<a name="line.167"></a>
+<span class="sourceLineNo">168</span>//        seed += seed &gt;&gt;&gt; 13;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>//        data += data &lt;&lt; 9;<a name="line.169"></a>
+<span class="sourceLineNo">170</span>//        seed += seed &lt;&lt; 11;<a name="line.170"></a>
+<span class="sourceLineNo">171</span>//        return data ^ seed;<a name="line.171"></a>
+<span class="sourceLineNo">172</span>    }<a name="line.172"></a>
+<span class="sourceLineNo">173</span><a name="line.173"></a>
+<span class="sourceLineNo">174</span>    /**<a name="line.174"></a>
+<span class="sourceLineNo">175</span>     * Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method<a name="line.175"></a>
+<span class="sourceLineNo">176</span>     * to use more or less rounds, but there must always be an even number.<a name="line.176"></a>
+<span class="sourceLineNo">177</span>     * @param index the index to cipher; must be betweeen 0 and {@link #pow4}, inclusive<a name="line.177"></a>
+<span class="sourceLineNo">178</span>     * @return the ciphered index, which might not be less than bound but will be less than or equal to {@link #pow4}<a name="line.178"></a>
+<span class="sourceLineNo">179</span>     */<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    protected int encode(int index)<a name="line.180"></a>
+<span class="sourceLineNo">181</span>    {<a name="line.181"></a>
+<span class="sourceLineNo">182</span>        // break our index into the left and right half<a name="line.182"></a>
+<span class="sourceLineNo">183</span>        int left = (index &amp; leftMask) &gt;&gt;&gt; halfBits;<a name="line.183"></a>
+<span class="sourceLineNo">184</span>        int right = (index &amp; rightMask);<a name="line.184"></a>
+<span class="sourceLineNo">185</span>        // do 2 Feistel rounds<a name="line.185"></a>
+<span class="sourceLineNo">186</span>        int newRight = left ^ (round(right, key0) &amp; rightMask);<a name="line.186"></a>
+<span class="sourceLineNo">187</span>        left = right;<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        right = newRight;<a name="line.188"></a>
+<span class="sourceLineNo">189</span>        newRight = left ^ (round(right, key1) &amp; rightMask);<a name="line.189"></a>
+<span class="sourceLineNo">190</span>//        left = right;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>//        right = newRight;<a name="line.191"></a>
+<span class="sourceLineNo">192</span>//        newRight = left ^ (round(right, key2) &amp; rightMask);<a name="line.192"></a>
+<span class="sourceLineNo">193</span>//        left = right;<a name="line.193"></a>
+<span class="sourceLineNo">194</span>//        right = newRight;<a name="line.194"></a>
+<span class="sourceLineNo">195</span>//        newRight = left ^ (round(right, key3) &amp; rightMask);<a name="line.195"></a>
+<span class="sourceLineNo">196</span><a name="line.196"></a>
+<span class="sourceLineNo">197</span>//        left = right;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>//        right = newRight;<a name="line.198"></a>
+<span class="sourceLineNo">199</span><a name="line.199"></a>
+<span class="sourceLineNo">200</span>        // put the left and right back together to form the encrypted index<a name="line.200"></a>
+<span class="sourceLineNo">201</span>//        return left &lt;&lt; halfBits | right;<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        return right &lt;&lt; halfBits | newRight;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>    }<a name="line.203"></a>
+<span class="sourceLineNo">204</span>}<a name="line.204"></a>
 
 
 

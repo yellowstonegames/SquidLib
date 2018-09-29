@@ -134,26 +134,32 @@ public class LowStorageShuffler implements Serializable {
 
     /**
      * An irreversible mixing function that seems to give good results; GWT-compatible.
-     * First, it runs a step where it takes one of the two parameters, multiplies it by a 16-bit value, "sometimes" adds
-     * a 32-bit value, and XORs that with the other parameter. It It runs this step twice each on both combinations of
-     * the two parameters, once doing the "sometimes" adding and once not, then runs a different Overton iadla generator
-     * on each parameter (one such generator is {@code x += x >>> 21; return (x += x << 8);}, for reference). It then
-     * returns data XORed with seed. This is complicated, but less involved schemes did not do well at all. There's four
-     * multiplications used here, all by small enough values to not risk GWT safety.
+     * This is mostly the same as {@link Coord#hashCode()}, with data acting like x and seed acting like y, but also
+     * includes two small multiplications (each by 16-bit numbers, which doesn't risk GWT safety). The algorithm is a
+     * little complicated, and is much like the 32-bit xoroshiro variant used by {@link Lathe32RNG}, but changes any
+     * additive operations to use XOR. Less involved schemes did not do well at all. There's four bitwise rotations and
+     * two multiplications used here, plus several XOR and bitwise shift operations.
      * @param data the data being ciphered
      * @param seed the current seed
      * @return the ciphered data
      */
     protected int round(int data, int seed)
     {
-        seed ^= data * 0xC6D5 + 0xB531A935;
-        data ^= seed * 0xBCFD + 0x41C64E6D;
-        seed ^= data * 0xACED;
-        data ^= seed * 0xBA55;
-        data += data >>> 21;
-        seed += seed >>> 22;
-        data += data << 8;
-        seed += seed << 5;
+        seed ^= data * 0xBCFD;
+        seed ^= (data << 13 | data >>> 19) ^ (seed << 5) ^ (seed << 28 | seed >>> 4);
+        data ^= (seed << 11 | seed >>> 21) * 0xC6D5;
+        return data ^ (data << 25 | data >>> 7);
+
+//        seed ^= data * 0xC6D5 + 0xB531A935;
+//        data ^= seed * 0xBCFD + 0x41C64E6D;
+//        seed ^= data * 0xACED;
+//        data ^= seed * 0xBA55;
+//        data += data >>> 21;
+//        seed += seed >>> 22;
+//        data += data << 8;
+//        seed += seed << 5;
+//        return data ^ seed;
+
 //        data += data >>> 21;
 //        seed += seed >>> 22;
 //        data += data << 8;
@@ -162,7 +168,7 @@ public class LowStorageShuffler implements Serializable {
 //        seed += seed >>> 13;
 //        data += data << 9;
 //        seed += seed << 11;
-        return data ^ seed;
+//        return data ^ seed;
     }
 
     /**

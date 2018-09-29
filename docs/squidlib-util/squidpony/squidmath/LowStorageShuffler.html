@@ -476,15 +476,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>round</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.147">round</a>(int&nbsp;data,
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.146">round</a>(int&nbsp;data,
                     int&nbsp;seed)</pre>
 <div class="block">An irreversible mixing function that seems to give good results; GWT-compatible.
- First, it runs a step where it takes one of the two parameters, multiplies it by a 16-bit value, "sometimes" adds
- a 32-bit value, and XORs that with the other parameter. It It runs this step twice each on both combinations of
- the two parameters, once doing the "sometimes" adding and once not, then runs a different Overton iadla generator
- on each parameter (one such generator is <code>x += x &gt;&gt;&gt; 21; return (x += x &lt;&lt; 8);</code>, for reference). It then
- returns data XORed with seed. This is complicated, but less involved schemes did not do well at all. There's four
- multiplications used here, all by small enough values to not risk GWT safety.</div>
+ This is mostly the same as <a href="../../squidpony/squidmath/Coord.html#hashCode--"><code>Coord.hashCode()</code></a>, with data acting like x and seed acting like y, but also
+ includes two small multiplications (each by 16-bit numbers, which doesn't risk GWT safety). The algorithm is a
+ little complicated, and is much like the 32-bit xoroshiro variant used by <a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a>, but changes any
+ additive operations to use XOR. Less involved schemes did not do well at all. There's four bitwise rotations and
+ two multiplications used here, plus several XOR and bitwise shift operations.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>data</code> - the data being ciphered</dd>
@@ -500,7 +499,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>encode</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.174">encode</a>(int&nbsp;index)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.180">encode</a>(int&nbsp;index)</pre>
 <div class="block">Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method
  to use more or less rounds, but there must always be an even number.</div>
 <dl>
