@@ -302,18 +302,33 @@ public class HashVisualizer extends ApplicationAdapter {
 //        y *= 0xACEDB;
 //        x *= 0x3FFF;
 //        y *= 0x3FFF;
-//        return (x += y ^ ((x *= 0xB531A935) ^ x >>> 13) * (y * 0x41C64E6D | 1)) ^ (x << 18 | x >>> 14) ^ (x << 9 | x >>> 23);
-
-//        // works very well, GWT-safe
-        y ^= x * 0xC6D5 + 0xB531A935;
-        x ^= y * 0xBCFD + 0x41C64E6D;         
-        y ^= x * 0xACED;
-        x ^= y * 0xBA55;
-        x += x >>> 21;
-        y += y >>> 22;
-        x += x << 8;
-        y += y << 5;
+//        return (x += y ^ ((x *= 0xB531A935) ^ x >>> 13) * (y * 0x41C64E6D | 1)) ^ (x << 18 | x >>> 14) ^ (x << 9 | x >>> 23);         
+        
+//         works very well, GWT-safe
+        y ^= (x ^ 0xB531A935) * 0xC6D3;
+        x ^= (y ^ 0x41C64E6D) * 0xBCFB;         
+        y ^= x * 0xACEDB;
+        x ^= y * 0x9E375;
+        y -= (x << 19 | x >>> 13);
+        x -= (y << 14 | y >>> 18);
+//        x += x >>> 21;
+//        y += y >>> 22;
+//        x += x << 8;
+//        y += y << 5;
         return x ^ y;
+
+//        int z = x ^ y;
+//        z = (z ^ z >>> 13 ^ 0x9E3779B5) * 0x7FFFF ^ x;
+//        z = (z ^ z >>> 12) * 0x1FFFF ^ y;
+//        z = (z ^ z >>> 14) * 0x1FFF ^ x;
+//        z ^= z >>> 11 ^ y;
+//        z = (z ^ z >>> 13 ^ 0x9E3779B5) * 0x7FFFF ^ y;
+//        z = (z ^ z >>> 12) * 0x1FFFF ^ x;
+//        z = (z ^ z >>> 14) * 0x1FFF ^ y;
+//        z ^= z >>> 11 ^ x;
+//        return z;
+
+
 //        x += x >>> 21;
 //        y += y >>> 22;
 //        x += x << 8;
