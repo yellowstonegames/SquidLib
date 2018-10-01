@@ -5,6 +5,7 @@ import squidpony.FakeLanguageGen;
 import squidpony.squidmath.GapShuffler;
 import squidpony.squidmath.LowStorageShuffler;
 import squidpony.squidmath.RNG;
+import squidpony.squidmath.ShuffledIntSequence;
 
 import java.util.ArrayList;
 
@@ -66,6 +67,37 @@ public class ShufflerTest {
             System.out.printf("Seed %08X: %d", i, lss.next());
             for (int j = 1; j < 7; j++) {
                 System.out.print(", " + lss.next());
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testLSSReverse()
+    {
+        LowStorageShuffler lss = new LowStorageShuffler(7, 0);
+        for (int i = 0; i < 10; i++) {
+            lss.restart(i);
+            System.out.printf("Seed %08X forward: %d", i, lss.next());
+            for (int j = 1; j < 7; j++) {
+                System.out.print(", " + lss.next());
+            }
+            System.out.println();
+            System.out.printf("Seed %08X reverse: %d", i, lss.previous());
+            for (int j = 1; j < 7; j++) {
+                System.out.print(", " + lss.previous());
+            }
+            System.out.println();
+
+        }
+    }
+    @Test
+    public void testSIS()
+    {
+        ShuffledIntSequence sis = new ShuffledIntSequence(10, 31337);
+        for (int j = 0; j < 10; j++) {
+            System.out.print(sis.next());
+            for (int i = 1; i < 20; i++) {
+                System.out.print(", " + sis.next());
             }
             System.out.println();
         }
