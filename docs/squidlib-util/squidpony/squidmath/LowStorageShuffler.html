@@ -111,9 +111,13 @@ var activeTableTab = "activeTableTab";
 <dt>All Implemented Interfaces:</dt>
 <dd><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></dd>
 </dl>
+<dl>
+<dt>Direct Known Subclasses:</dt>
+<dd><a href="../../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></dd>
+</dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.33">LowStorageShuffler</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.30">LowStorageShuffler</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
@@ -132,12 +136,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
  are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
  fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
- randomness slightly. The round function used here acts like a rather-robust 2-item hash. First, it runs a step where
- it takes one of the two parameters, multiplies it by a 16-bit value, "sometimes" adds a 32-bit value, and XORs that
- with the other parameter. It It runs this step twice each on both combinations of the two parameters, once doing the
- "sometimes" adding and once not, then runs a different Overton iadla generator on each parameter (one such generator
- is <code>x += x &gt;&gt;&gt; 21; return (x += x &lt;&lt; 8);</code>, for reference). It then returns data XORed with seed. Using 4 rounds
- turns out to be overkill in this case. This also uses a different seed for each round.
+ randomness slightly. The <a href="../../squidpony/squidmath/LowStorageShuffler.html#round-int-int-"><code>round(int, int)</code></a> method used here acts like <a href="../../squidpony/squidmath/Coord.html#hashCode--"><code>Coord.hashCode()</code></a>, but with two
+ small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this
+ case. This also uses a different seed for each round.
  <br>
  Created by Tommy Ettinger on 9/22/2018.</div>
 <dl>
@@ -211,11 +212,16 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LowStorageShuffler.html#LowStorageShuffler--">LowStorageShuffler</a></span>()</code>
+<div class="block">Constructs a LowStorageShuffler with a random seed and a bound of 10.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LowStorageShuffler.html#LowStorageShuffler-int-">LowStorageShuffler</a></span>(int&nbsp;bound)</code>
 <div class="block">Constructs a LowStorageShuffler with the given exclusive upper bound and a random seed.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LowStorageShuffler.html#LowStorageShuffler-int-int-">LowStorageShuffler</a></span>(int&nbsp;bound,
                   int&nbsp;seed)</code>
 <div class="block">Constructs a LowStorageShuffler with the given exclusive upper bound and int seed.</div>
@@ -237,7 +243,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected int</code></td>
+<td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LowStorageShuffler.html#encode-int-">encode</a></span>(int&nbsp;index)</code>
 <div class="block">Encodes an index with a 2-round Feistel network.</div>
 </td>
@@ -269,7 +275,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code>protected int</code></td>
+<td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/LowStorageShuffler.html#round-int-int-">round</a></span>(int&nbsp;data,
      int&nbsp;seed)</code>
 <div class="block">An irreversible mixing function that seems to give good results; GWT-compatible.</div>
@@ -303,7 +309,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>bound</h4>
-<pre>public final&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.35">bound</a></pre>
+<pre>public final&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.32">bound</a></pre>
 </li>
 </ul>
 <a name="index">
@@ -312,7 +318,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>index</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">index</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.33">index</a></pre>
 </li>
 </ul>
 <a name="pow4">
@@ -321,7 +327,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>pow4</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">pow4</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.33">pow4</a></pre>
 </li>
 </ul>
 <a name="halfBits">
@@ -330,7 +336,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>halfBits</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">halfBits</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.33">halfBits</a></pre>
 </li>
 </ul>
 <a name="leftMask">
@@ -339,7 +345,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>leftMask</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">leftMask</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.33">leftMask</a></pre>
 </li>
 </ul>
 <a name="rightMask">
@@ -348,7 +354,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>rightMask</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.36">rightMask</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.33">rightMask</a></pre>
 </li>
 </ul>
 <a name="key0">
@@ -357,7 +363,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>key0</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.37">key0</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.34">key0</a></pre>
 </li>
 </ul>
 <a name="key1">
@@ -366,7 +372,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>key1</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.37">key1</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.34">key1</a></pre>
 </li>
 </ul>
 </li>
@@ -377,13 +383,23 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="LowStorageShuffler--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>LowStorageShuffler</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.39">LowStorageShuffler</a>()</pre>
+<div class="block">Constructs a LowStorageShuffler with a random seed and a bound of 10.</div>
+</li>
+</ul>
 <a name="LowStorageShuffler-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>LowStorageShuffler</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.43">LowStorageShuffler</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.46">LowStorageShuffler</a>(int&nbsp;bound)</pre>
 <div class="block">Constructs a LowStorageShuffler with the given exclusive upper bound and a random seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -397,7 +413,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LowStorageShuffler</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.53">LowStorageShuffler</a>(int&nbsp;bound,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.56">LowStorageShuffler</a>(int&nbsp;bound,
                           int&nbsp;seed)</pre>
 <div class="block">Constructs a LowStorageShuffler with the given exclusive upper bound and int seed.</div>
 <dl>
@@ -421,7 +437,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.73">next</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.76">next</a>()</pre>
 <div class="block">Gets the next distinct int in the sequence, or -1 if all distinct ints have been returned that are non-negative
  and less than <a href="../../squidpony/squidmath/LowStorageShuffler.html#bound"><code>bound</code></a>.</div>
 <dl>
@@ -436,7 +452,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>previous</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.95">previous</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.98">previous</a>()</pre>
 <div class="block">Gets the previous returned int from the sequence (as yielded by <a href="../../squidpony/squidmath/LowStorageShuffler.html#next--"><code>next()</code></a>), or -1 if next() has never been
  called (or the LowStorageShuffler has reached the beginning from repeated calls to this method).</div>
 <dl>
@@ -451,7 +467,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>restart</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.116">restart</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.119">restart</a>()</pre>
 <div class="block">Starts the same sequence over from the beginning.</div>
 </li>
 </ul>
@@ -461,7 +477,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>restart</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.126">restart</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.129">restart</a>(int&nbsp;seed)</pre>
 <div class="block">Starts the sequence over, but can change the seed (completely changing the sequence). If <code>seed</code> is the same
  as the seed given in the constructor, this will use the same sequence, acting like <a href="../../squidpony/squidmath/LowStorageShuffler.html#restart--"><code>restart()</code></a>.</div>
 <dl>
@@ -476,8 +492,8 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>round</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.146">round</a>(int&nbsp;data,
-                    int&nbsp;seed)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.149">round</a>(int&nbsp;data,
+                 int&nbsp;seed)</pre>
 <div class="block">An irreversible mixing function that seems to give good results; GWT-compatible.
  This is mostly the same as <a href="../../squidpony/squidmath/Coord.html#hashCode--"><code>Coord.hashCode()</code></a>, with data acting like x and seed acting like y, but also
  includes two small multiplications (each by 16-bit numbers, which doesn't risk GWT safety). The algorithm is a
@@ -499,12 +515,12 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>encode</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.180">encode</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/LowStorageShuffler.html#line.184">encode</a>(int&nbsp;index)</pre>
 <div class="block">Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method
  to use more or less rounds, but there must always be an even number.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>index</code> - the index to cipher; must be betweeen 0 and <a href="../../squidpony/squidmath/LowStorageShuffler.html#pow4"><code>pow4</code></a>, inclusive</dd>
+<dd><code>index</code> - the index to cipher; must be between 0 and <a href="../../squidpony/squidmath/LowStorageShuffler.html#pow4"><code>pow4</code></a>, inclusive</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the ciphered index, which might not be less than bound but will be less than or equal to <a href="../../squidpony/squidmath/LowStorageShuffler.html#pow4"><code>pow4</code></a></dd>
 </dl>

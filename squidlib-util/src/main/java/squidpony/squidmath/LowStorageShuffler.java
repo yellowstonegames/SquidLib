@@ -19,12 +19,9 @@ import java.io.Serializable;
  * version he uses doesn't have anything like MurmurHash3's fmix32() to adequately avalanche bits, and since all keys
  * are small keys with the usage of MurmurHash2 in his code, avalanche is the most important thing. It's also perfectly
  * fine to use irreversible operations in a Feistel network round function, and I do that since it seems to improve
- * randomness slightly. The round function used here acts like a rather-robust 2-item hash. First, it runs a step where
- * it takes one of the two parameters, multiplies it by a 16-bit value, "sometimes" adds a 32-bit value, and XORs that
- * with the other parameter. It It runs this step twice each on both combinations of the two parameters, once doing the
- * "sometimes" adding and once not, then runs a different Overton iadla generator on each parameter (one such generator
- * is {@code x += x >>> 21; return (x += x << 8);}, for reference). It then returns data XORed with seed. Using 4 rounds
- * turns out to be overkill in this case. This also uses a different seed for each round.
+ * randomness slightly. The {@link #round(int, int)} method used here acts like {@link Coord#hashCode()}, but with two
+ * small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this
+ * case. This also uses a different seed for each round.
  * <br>
  * Created by Tommy Ettinger on 9/22/2018.
  * @author Alan Wolfe
@@ -36,6 +33,12 @@ public class LowStorageShuffler implements Serializable {
     protected int index, pow4, halfBits, leftMask, rightMask;
     protected int key0, key1;//, key2, key3;
 
+    /**
+     * Constructs a LowStorageShuffler with a random seed and a bound of 10.
+     */
+    public LowStorageShuffler(){
+        this(10);
+    }
     /**
      * Constructs a LowStorageShuffler with the given exclusive upper bound and a random seed.
      * @param bound how many distinct ints this can return
@@ -99,7 +102,7 @@ public class LowStorageShuffler implements Serializable {
         while (index > 0)
         {
             // get the next number
-            shuffleIndex = encode(index--);
+            shuffleIndex = encode(--index);
 
             // if we found a valid index, return success!
             if (shuffleIndex < bound)
@@ -143,8 +146,9 @@ public class LowStorageShuffler implements Serializable {
      * @param seed the current seed
      * @return the ciphered data
      */
-    protected int round(int data, int seed)
+    public int round(int data, int seed)
     {
+        
         seed ^= data * 0xBCFD;
         seed ^= (data << 13 | data >>> 19) ^ (seed << 5) ^ (seed << 28 | seed >>> 4);
         data ^= (seed << 11 | seed >>> 21) * 0xC6D5;
@@ -174,10 +178,10 @@ public class LowStorageShuffler implements Serializable {
     /**
      * Encodes an index with a 2-round Feistel network. It is possible that someone would want to override this method
      * to use more or less rounds, but there must always be an even number.
-     * @param index the index to cipher; must be betweeen 0 and {@link #pow4}, inclusive
+     * @param index the index to cipher; must be between 0 and {@link #pow4}, inclusive
      * @return the ciphered index, which might not be less than bound but will be less than or equal to {@link #pow4}
      */
-    protected int encode(int index)
+    public int encode(int index)
     {
         // break our index into the left and right half
         int left = (index & leftMask) >>> halfBits;

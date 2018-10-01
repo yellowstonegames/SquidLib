@@ -886,69 +886,76 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></td>
+<td class="colLast">
+<div class="block">An infinite sequence of pseudo-random ints (typically used as indices) from 0 to some bound, with all possible ints
+ returned in a shuffled order before re-shuffling for the next result.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></td>
 <td class="colLast">
 <div class="block">Implementation of a Sobol sequence as a Quasi-Random Number Generator.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/SquidID.html" title="class in squidpony.squidmath">SquidID</a></td>
 <td class="colLast">
 <div class="block">A UUID-like identifier; not compatible with Java's standard UUID but will work on GWT.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></td>
 <td class="colLast">
 <div class="block">A modification of Blackman and Vigna's xoroshiro64** generator; uses two 32-bit ints of state like <a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a>
  but has better equidistribution.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></td>
 <td class="colLast">
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></td>
 <td class="colLast">
 <div class="block">A variant on <a href="../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that gives up some speed, but allows choosing any of 2 to the 63 odd-number streams
  that change the set of possible outputs this can produce (amending the main flaw of ThrustAltRNG).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/ThrustAlt32RNG.html" title="class in squidpony.squidmath">ThrustAlt32RNG</a></td>
 <td class="colLast">
 <div class="block">A variant on <a href="../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that uses only 32-bit math when producing 32-bit numbers.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></td>
 <td class="colLast">
 <div class="block">A variant on <a href="../../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath"><code>ThrustRNG</code></a> that gives up a small amount of speed to attain better quality.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath">ThrustRNG</a></td>
 <td class="colLast">
 <div class="block">A hybrid of the type of algorithm LightRNG uses with some of the specific steps of a linear congruential generator.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/ThunderRNG.html" title="class in squidpony.squidmath">ThunderRNG</a></td>
 <td class="colLast">
 <div class="block">Like LightRNG, but shares a lot in common with one of CrossHash's hashing algorithms.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/TuringPattern.html" title="class in squidpony.squidmath">TuringPattern</a></td>
 <td class="colLast">
 <div class="block">A technique for producing organic-seeming patterns via iterative processing of random values (reaction-diffusion).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;K,V&gt;</td>
 <td class="colLast">
 <div class="block">A generic unordered hash map with with a fast implementation, originally from fastutil as
@@ -956,7 +963,7 @@
  interface for custom hashing instead of fastutil's Strategy interface.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/UnorderedSet.html" title="class in squidpony.squidmath">UnorderedSet</a>&lt;K&gt;</td>
 <td class="colLast">
 <div class="block">A generic unordered hash set with with a fast implementation, based on <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> in this library, which is
@@ -964,25 +971,25 @@
  potentially reduce the time cost of insertion and removal at the expense of increasing time cost for access by index.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/ValueNoise.html" title="class in squidpony.squidmath">ValueNoise</a></td>
 <td class="colLast">
 <div class="block">Performance-oriented "white noise" generator for 1D, 2D, 3D, 4D, and 6D.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></td>
 <td class="colLast">
 <div class="block">A quasi-random number generator that goes through one of many sub-random sequences found by J.G.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/VortexRNG.html" title="class in squidpony.squidmath">VortexRNG</a></td>
 <td class="colLast">
 <div class="block">A 64-bit generator based on <a href="../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> but with 2 to the 64 possible streams instead of 1 stream.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/WeightedTable.html" title="class in squidpony.squidmath">WeightedTable</a></td>
 <td class="colLast">
 <div class="block">A different approach to the same task <a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath"><code>ProbabilityTable</code></a> solves, though this only looks up an appropriate index
@@ -990,31 +997,31 @@
  simplicity.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></td>
 <td class="colLast">
 <div class="block">Another experimental noise class.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/WobblyLine.html" title="class in squidpony.squidmath">WobblyLine</a></td>
 <td class="colLast">
 <div class="block">A drunkard's-walk-like algorithm for line drawing "wobbly" paths.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/XoRoRNG.html" title="class in squidpony.squidmath">XoRoRNG</a></td>
 <td class="colLast">
 <div class="block">A port of Blackman and Vigna's xoroshiro 128+ generator; should be very fast and produce high-quality output.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/XorRNG.html" title="class in squidpony.squidmath">XorRNG</a></td>
 <td class="colLast">
 <div class="block">A port of Sebastiano Vigna's XorShift 128+ generator.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></td>
 <td class="colLast">
 <div class="block">A 32-bit generator that needs no math on 64-bit values to calculate high-quality pseudo-random numbers, and has been

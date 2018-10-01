@@ -12,358 +12,614 @@
 <span class="sourceLineNo">004</span><a name="line.4"></a>
 <span class="sourceLineNo">005</span>import static squidpony.squidmath.Noise.cerp;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import static squidpony.squidmath.Noise.longFloor;<a name="line.6"></a>
-<span class="sourceLineNo">007</span><a name="line.7"></a>
-<span class="sourceLineNo">008</span>/**<a name="line.8"></a>
-<span class="sourceLineNo">009</span> * A different kind of noise that has spotted and striped areas, like a tabby cat.<a name="line.9"></a>
-<span class="sourceLineNo">010</span> * Highly experimental and expected to change; currently has significant linear artifacts, though they do wiggle.<a name="line.10"></a>
-<span class="sourceLineNo">011</span> * Created by Tommy Ettinger on 9/2/2017.<a name="line.11"></a>
-<span class="sourceLineNo">012</span> */<a name="line.12"></a>
-<span class="sourceLineNo">013</span>@Beta<a name="line.13"></a>
-<span class="sourceLineNo">014</span>public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {<a name="line.14"></a>
-<span class="sourceLineNo">015</span>    public static final MummyNoise instance = new MummyNoise();<a name="line.15"></a>
-<span class="sourceLineNo">016</span>    public long seedX, seedY, seedZ, seedW, seedU, seedV;<a name="line.16"></a>
-<span class="sourceLineNo">017</span><a name="line.17"></a>
-<span class="sourceLineNo">018</span>    public MummyNoise() {<a name="line.18"></a>
-<span class="sourceLineNo">019</span>        this(0x1337BEEF);<a name="line.19"></a>
-<span class="sourceLineNo">020</span>    }<a name="line.20"></a>
-<span class="sourceLineNo">021</span><a name="line.21"></a>
-<span class="sourceLineNo">022</span>    public MummyNoise(final int seed) {<a name="line.22"></a>
-<span class="sourceLineNo">023</span>        seedX = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seed + 0xC6BC279692B5CC83L);<a name="line.23"></a>
-<span class="sourceLineNo">024</span>        seedY = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedX ^ 0xC7BC279692B5CB83L);<a name="line.24"></a>
-<span class="sourceLineNo">025</span>        seedZ = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedY ^ 0xC8BC279692B5CA83L);<a name="line.25"></a>
-<span class="sourceLineNo">026</span>        seedW = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedZ ^ 0xC9BC279692B5C983L);<a name="line.26"></a>
-<span class="sourceLineNo">027</span>        seedU = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedW ^ 0xCABC279692B5C883L);<a name="line.27"></a>
-<span class="sourceLineNo">028</span>        seedV = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedU ^ 0xCBBC279692B5C783L);<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    }<a name="line.29"></a>
-<span class="sourceLineNo">030</span><a name="line.30"></a>
-<span class="sourceLineNo">031</span>    /**<a name="line.31"></a>
-<span class="sourceLineNo">032</span>     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by<a name="line.32"></a>
-<span class="sourceLineNo">033</span>     * 0x632BE59BD9B4E019L.<a name="line.33"></a>
-<span class="sourceLineNo">034</span>     * @param state a long that should change in increments of 0x632BE59BD9B4E019L<a name="line.34"></a>
-<span class="sourceLineNo">035</span>     * @return a pseudo-random permutation of state<a name="line.35"></a>
-<span class="sourceLineNo">036</span>     */<a name="line.36"></a>
-<span class="sourceLineNo">037</span>    public static long determine(long state)<a name="line.37"></a>
-<span class="sourceLineNo">038</span>    {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        return (state = ((state = ((state ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25;<a name="line.39"></a>
-<span class="sourceLineNo">040</span>    }<a name="line.40"></a>
-<span class="sourceLineNo">041</span><a name="line.41"></a>
-<span class="sourceLineNo">042</span>    //    public static double gauss(final long state) {<a name="line.42"></a>
-<span class="sourceLineNo">043</span>//        final long s1 = state + 0x9E3779B97F4A7C15L,<a name="line.43"></a>
-<span class="sourceLineNo">044</span>//                s2 = s1 + 0x9E3779B97F4A7C15L,<a name="line.44"></a>
-<span class="sourceLineNo">045</span>//                y = (s1 ^ s1 &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL,<a name="line.45"></a>
-<span class="sourceLineNo">046</span>//                z = (s2 ^ s2 &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;<a name="line.46"></a>
-<span class="sourceLineNo">047</span>//        return ((((y ^ y &gt;&gt;&gt; 28) &amp; 0x7FFFFFL) + ((y ^ y &gt;&gt;&gt; 28) &gt;&gt;&gt; 41))<a name="line.47"></a>
-<span class="sourceLineNo">048</span>//                + (((z ^ z &gt;&gt;&gt; 28) &amp; 0x7FFFFFL) + ((z ^ z &gt;&gt;&gt; 28) &gt;&gt;&gt; 41))) * 0x1p-24 - 1.0;<a name="line.48"></a>
-<span class="sourceLineNo">049</span>//    }<a name="line.49"></a>
-<span class="sourceLineNo">050</span>    public static double signedDouble(long state) {<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &gt;&gt; 12) * 0x1p-52;<a name="line.51"></a>
-<span class="sourceLineNo">052</span>    }<a name="line.52"></a>
-<span class="sourceLineNo">053</span><a name="line.53"></a>
-<span class="sourceLineNo">054</span>    @Override<a name="line.54"></a>
-<span class="sourceLineNo">055</span>    public double getNoise(double x, double y) {<a name="line.55"></a>
-<span class="sourceLineNo">056</span>        return getNoiseWithSeeds(x, y, seedX, seedY);<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
-<span class="sourceLineNo">058</span><a name="line.58"></a>
-<span class="sourceLineNo">059</span>    @Override<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    public double getNoiseWithSeed(final double x, final double y, final long seed) {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        final long<a name="line.61"></a>
-<span class="sourceLineNo">062</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.62"></a>
-<span class="sourceLineNo">063</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.63"></a>
-<span class="sourceLineNo">064</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L);<a name="line.64"></a>
-<span class="sourceLineNo">065</span>        return getNoiseWithSeeds(x, y, rx, ry);<a name="line.65"></a>
-<span class="sourceLineNo">066</span>    }<a name="line.66"></a>
-<span class="sourceLineNo">067</span><a name="line.67"></a>
-<span class="sourceLineNo">068</span>    public static double getNoiseWithSeeds(final double x, final double y,<a name="line.68"></a>
-<span class="sourceLineNo">069</span>                                    final long seedX, final long seedY) {<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        final long<a name="line.70"></a>
-<span class="sourceLineNo">071</span>                xf = longFloor(x),<a name="line.71"></a>
-<span class="sourceLineNo">072</span>                yf = longFloor(y),<a name="line.72"></a>
-<span class="sourceLineNo">073</span>                bx0 = xf * seedX,<a name="line.73"></a>
-<span class="sourceLineNo">074</span>                by0 = yf * seedY,<a name="line.74"></a>
-<span class="sourceLineNo">075</span>                bx1 = bx0+seedX,<a name="line.75"></a>
-<span class="sourceLineNo">076</span>                by1 = by0+seedY;<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        return<a name="line.77"></a>
-<span class="sourceLineNo">078</span>                NumberTools.sway(<a name="line.78"></a>
-<span class="sourceLineNo">079</span>                        cerp(cerp(determine(bx0 + by0) * 0x1.25p-62, determine(bx1 + by0) * 0x1.25p-62,<a name="line.79"></a>
-<span class="sourceLineNo">080</span>                                x - xf),<a name="line.80"></a>
-<span class="sourceLineNo">081</span>                                cerp(determine(bx0 + by1) * 0x1.25p-62, determine(bx1 + by1) * 0x1.25p-62, x - xf),<a name="line.81"></a>
-<span class="sourceLineNo">082</span>                                y - yf));<a name="line.82"></a>
-<span class="sourceLineNo">083</span>    }<a name="line.83"></a>
-<span class="sourceLineNo">084</span><a name="line.84"></a>
-<span class="sourceLineNo">085</span>    @Override<a name="line.85"></a>
-<span class="sourceLineNo">086</span>    public double getNoise(double x, double y, double z) {<a name="line.86"></a>
-<span class="sourceLineNo">087</span>        return getNoiseWithSeeds(x, y, z, seedX, seedY, seedZ);<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    }<a name="line.88"></a>
-<span class="sourceLineNo">089</span><a name="line.89"></a>
-<span class="sourceLineNo">090</span>    @Override<a name="line.90"></a>
-<span class="sourceLineNo">091</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {<a name="line.91"></a>
-<span class="sourceLineNo">092</span>        final long<a name="line.92"></a>
-<span class="sourceLineNo">093</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.93"></a>
-<span class="sourceLineNo">094</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.94"></a>
-<span class="sourceLineNo">095</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.95"></a>
-<span class="sourceLineNo">096</span>                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L);<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        return getNoiseWithSeeds(x, y, z, rx, ry, rz);<a name="line.97"></a>
-<span class="sourceLineNo">098</span>    }<a name="line.98"></a>
-<span class="sourceLineNo">099</span><a name="line.99"></a>
-<span class="sourceLineNo">100</span>    public static double getNoiseWithSeeds(final double x, final double y, final double z,<a name="line.100"></a>
-<span class="sourceLineNo">101</span>                                    final long seedX, final long seedY, final long seedZ) {<a name="line.101"></a>
-<span class="sourceLineNo">102</span>        final long<a name="line.102"></a>
-<span class="sourceLineNo">103</span>                xf = longFloor(x),<a name="line.103"></a>
-<span class="sourceLineNo">104</span>                yf = longFloor(y),<a name="line.104"></a>
-<span class="sourceLineNo">105</span>                zf = longFloor(z),<a name="line.105"></a>
-<span class="sourceLineNo">106</span>                bx0 = xf * seedX,<a name="line.106"></a>
-<span class="sourceLineNo">107</span>                by0 = yf * seedY,<a name="line.107"></a>
-<span class="sourceLineNo">108</span>                bz0 = zf * seedZ,<a name="line.108"></a>
-<span class="sourceLineNo">109</span>                bx1 = bx0+seedX,<a name="line.109"></a>
-<span class="sourceLineNo">110</span>                by1 = by0+seedY,<a name="line.110"></a>
-<span class="sourceLineNo">111</span>                bz1 = bz0+seedZ;<a name="line.111"></a>
-<span class="sourceLineNo">112</span>        return NumberTools.sway(<a name="line.112"></a>
-<span class="sourceLineNo">113</span>                cerp(<a name="line.113"></a>
-<span class="sourceLineNo">114</span>                        cerp(<a name="line.114"></a>
-<span class="sourceLineNo">115</span>                                cerp(determine(bx0 + by0 + bz0) * 0x1.25p-62, determine(bx1 + by0 + bz0) * 0x1.25p-62, x - xf),<a name="line.115"></a>
-<span class="sourceLineNo">116</span>                                cerp(determine(bx0 + by1 + bz0) * 0x1.25p-62, determine(bx1 + by1 + bz0) * 0x1.25p-62, x - xf),<a name="line.116"></a>
-<span class="sourceLineNo">117</span>                                y - yf),<a name="line.117"></a>
-<span class="sourceLineNo">118</span>                        cerp(<a name="line.118"></a>
-<span class="sourceLineNo">119</span>                                cerp(determine(bx0 + by0 + bz1) * 0x1.25p-62, determine(bx1 + by0 + bz1) * 0x1.25p-62, x - xf),<a name="line.119"></a>
-<span class="sourceLineNo">120</span>                                cerp(determine(bx0 + by1 + bz1) * 0x1.25p-62, determine(bx1 + by1 + bz1) * 0x1.25p-62, x - xf),<a name="line.120"></a>
-<span class="sourceLineNo">121</span>                                y - yf),<a name="line.121"></a>
-<span class="sourceLineNo">122</span>                        z - zf));<a name="line.122"></a>
-<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
-<span class="sourceLineNo">124</span><a name="line.124"></a>
-<span class="sourceLineNo">125</span>    @Override<a name="line.125"></a>
-<span class="sourceLineNo">126</span>    public double getNoise(final double x, final double y, final double z, final double w) {<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        return getNoiseWithSeeds(x, y, z, w, seedX, seedY, seedZ, seedW);<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    }<a name="line.128"></a>
-<span class="sourceLineNo">129</span><a name="line.129"></a>
-<span class="sourceLineNo">130</span>    @Override<a name="line.130"></a>
-<span class="sourceLineNo">131</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {<a name="line.131"></a>
-<span class="sourceLineNo">132</span>        final long<a name="line.132"></a>
-<span class="sourceLineNo">133</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.133"></a>
-<span class="sourceLineNo">134</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.134"></a>
-<span class="sourceLineNo">135</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.135"></a>
-<span class="sourceLineNo">136</span>                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L),<a name="line.136"></a>
-<span class="sourceLineNo">137</span>                rw = 0x9E3779B97F4A7C15L * (rz &gt;&gt;&gt; 23 ^ rz &lt;&lt; 23) * (rz | 1L);<a name="line.137"></a>
-<span class="sourceLineNo">138</span>        return getNoiseWithSeeds(x, y, z, w, rx, ry, rz, rw);<a name="line.138"></a>
-<span class="sourceLineNo">139</span>    }<a name="line.139"></a>
-<span class="sourceLineNo">140</span><a name="line.140"></a>
-<span class="sourceLineNo">141</span>    public static double getNoiseWithSeeds(final double x, final double y, final double z, final double w,<a name="line.141"></a>
-<span class="sourceLineNo">142</span>                                    final long seedX, final long seedY, final long seedZ, final long seedW) {<a name="line.142"></a>
-<span class="sourceLineNo">143</span>        final long<a name="line.143"></a>
-<span class="sourceLineNo">144</span>                xf = longFloor(x),<a name="line.144"></a>
-<span class="sourceLineNo">145</span>                yf = longFloor(y),<a name="line.145"></a>
-<span class="sourceLineNo">146</span>                zf = longFloor(z),<a name="line.146"></a>
-<span class="sourceLineNo">147</span>                wf = longFloor(w),<a name="line.147"></a>
-<span class="sourceLineNo">148</span>                bx0 = xf * seedX,<a name="line.148"></a>
-<span class="sourceLineNo">149</span>                by0 = yf * seedY,<a name="line.149"></a>
-<span class="sourceLineNo">150</span>                bz0 = zf * seedZ,<a name="line.150"></a>
-<span class="sourceLineNo">151</span>                bw0 = wf * seedW,<a name="line.151"></a>
-<span class="sourceLineNo">152</span>                bx1 = bx0+seedX,<a name="line.152"></a>
-<span class="sourceLineNo">153</span>                by1 = by0+seedY,<a name="line.153"></a>
-<span class="sourceLineNo">154</span>                bz1 = bz0+seedZ,<a name="line.154"></a>
-<span class="sourceLineNo">155</span>                bw1 = bw0+seedW;<a name="line.155"></a>
-<span class="sourceLineNo">156</span>        return NumberTools.sway(<a name="line.156"></a>
-<span class="sourceLineNo">157</span>                cerp(<a name="line.157"></a>
-<span class="sourceLineNo">158</span>                        cerp(<a name="line.158"></a>
-<span class="sourceLineNo">159</span>                                cerp(<a name="line.159"></a>
-<span class="sourceLineNo">160</span>                                        cerp(determine(bx0 + by0 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0) * 0x1.25p-62, x - xf),<a name="line.160"></a>
-<span class="sourceLineNo">161</span>                                        cerp(determine(bx0 + by1 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0) * 0x1.25p-62, x - xf),<a name="line.161"></a>
-<span class="sourceLineNo">162</span>                                        y - yf),<a name="line.162"></a>
-<span class="sourceLineNo">163</span>                                cerp(<a name="line.163"></a>
-<span class="sourceLineNo">164</span>                                        cerp(determine(bx0 + by0 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0) * 0x1.25p-62, x - xf),<a name="line.164"></a>
-<span class="sourceLineNo">165</span>                                        cerp(determine(bx0 + by1 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0) * 0x1.25p-62, x - xf),<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                                        y - yf),<a name="line.166"></a>
-<span class="sourceLineNo">167</span>                                z - zf),<a name="line.167"></a>
-<span class="sourceLineNo">168</span>                        cerp(<a name="line.168"></a>
-<span class="sourceLineNo">169</span>                                cerp(<a name="line.169"></a>
-<span class="sourceLineNo">170</span>                                        cerp(determine(bx0 + by0 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1) * 0x1.25p-62, x - xf),<a name="line.170"></a>
-<span class="sourceLineNo">171</span>                                        cerp(determine(bx0 + by1 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1) * 0x1.25p-62, x - xf),<a name="line.171"></a>
-<span class="sourceLineNo">172</span>                                        y - yf),<a name="line.172"></a>
-<span class="sourceLineNo">173</span>                                cerp(<a name="line.173"></a>
-<span class="sourceLineNo">174</span>                                        cerp(determine(bx0 + by0 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1) * 0x1.25p-62, x - xf),<a name="line.174"></a>
-<span class="sourceLineNo">175</span>                                        cerp(determine(bx0 + by1 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1) * 0x1.25p-62, x - xf),<a name="line.175"></a>
-<span class="sourceLineNo">176</span>                                        y - yf),<a name="line.176"></a>
-<span class="sourceLineNo">177</span>                                z - zf),<a name="line.177"></a>
-<span class="sourceLineNo">178</span>                        w - wf));<a name="line.178"></a>
-<span class="sourceLineNo">179</span>    }<a name="line.179"></a>
-<span class="sourceLineNo">180</span><a name="line.180"></a>
-<span class="sourceLineNo">181</span>    @Override<a name="line.181"></a>
-<span class="sourceLineNo">182</span>    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {<a name="line.182"></a>
-<span class="sourceLineNo">183</span>        return getNoiseWithSeeds(x, y, z, w, u, v,<a name="line.183"></a>
-<span class="sourceLineNo">184</span>                seedX, seedY, seedZ, seedW, seedU, seedV);<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
-<span class="sourceLineNo">186</span><a name="line.186"></a>
-<span class="sourceLineNo">187</span>    @Override<a name="line.187"></a>
-<span class="sourceLineNo">188</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {<a name="line.188"></a>
-<span class="sourceLineNo">189</span>        final long<a name="line.189"></a>
-<span class="sourceLineNo">190</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.190"></a>
-<span class="sourceLineNo">191</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.191"></a>
-<span class="sourceLineNo">192</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.192"></a>
-<span class="sourceLineNo">193</span>                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L),<a name="line.193"></a>
-<span class="sourceLineNo">194</span>                rw = 0x9E3779B97F4A7C15L * (rz &gt;&gt;&gt; 23 ^ rz &lt;&lt; 23) * (rz | 1L),<a name="line.194"></a>
-<span class="sourceLineNo">195</span>                ru = 0x9E3779B97F4A7C15L * (rw &gt;&gt;&gt; 23 ^ rw &lt;&lt; 23) * (rw | 1L),<a name="line.195"></a>
-<span class="sourceLineNo">196</span>                rv = 0x9E3779B97F4A7C15L * (ru &gt;&gt;&gt; 23 ^ ru &lt;&lt; 23) * (ru | 1L);<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        return getNoiseWithSeeds(x, y, z, w, u, v, rx, ry, rz, rw, ru, rv);<a name="line.197"></a>
-<span class="sourceLineNo">198</span>    }<a name="line.198"></a>
-<span class="sourceLineNo">199</span><a name="line.199"></a>
-<span class="sourceLineNo">200</span>    public static double getNoiseWithSeeds(final double x, final double y, final double z,<a name="line.200"></a>
-<span class="sourceLineNo">201</span>                                    final double w, final double u, final double v,<a name="line.201"></a>
-<span class="sourceLineNo">202</span>                                    final long seedX, final long seedY, final long seedZ,<a name="line.202"></a>
-<span class="sourceLineNo">203</span>                                    final long seedW, final long seedU, final long seedV) {<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        final long<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                xf = longFloor(x),<a name="line.205"></a>
-<span class="sourceLineNo">206</span>                yf = longFloor(y),<a name="line.206"></a>
-<span class="sourceLineNo">207</span>                zf = longFloor(z),<a name="line.207"></a>
-<span class="sourceLineNo">208</span>                wf = longFloor(w),<a name="line.208"></a>
-<span class="sourceLineNo">209</span>                uf = longFloor(u),<a name="line.209"></a>
-<span class="sourceLineNo">210</span>                vf = longFloor(v),<a name="line.210"></a>
-<span class="sourceLineNo">211</span>                bx0 = xf * seedX,<a name="line.211"></a>
-<span class="sourceLineNo">212</span>                by0 = yf * seedY,<a name="line.212"></a>
-<span class="sourceLineNo">213</span>                bz0 = zf * seedZ,<a name="line.213"></a>
-<span class="sourceLineNo">214</span>                bw0 = wf * seedW,<a name="line.214"></a>
-<span class="sourceLineNo">215</span>                bu0 = uf * seedU,<a name="line.215"></a>
-<span class="sourceLineNo">216</span>                bv0 = vf * seedV,<a name="line.216"></a>
-<span class="sourceLineNo">217</span>                bx1 = bx0+seedX,<a name="line.217"></a>
-<span class="sourceLineNo">218</span>                by1 = by0+seedY,<a name="line.218"></a>
-<span class="sourceLineNo">219</span>                bz1 = bz0+seedZ,<a name="line.219"></a>
-<span class="sourceLineNo">220</span>                bw1 = bw0+seedW,<a name="line.220"></a>
-<span class="sourceLineNo">221</span>                bu1 = bu0+seedU,<a name="line.221"></a>
-<span class="sourceLineNo">222</span>                bv1 = bv0+seedV;<a name="line.222"></a>
-<span class="sourceLineNo">223</span>        return NumberTools.sway(<a name="line.223"></a>
-<span class="sourceLineNo">224</span>                cerp(<a name="line.224"></a>
-<span class="sourceLineNo">225</span>                        cerp(<a name="line.225"></a>
-<span class="sourceLineNo">226</span>                                cerp(<a name="line.226"></a>
-<span class="sourceLineNo">227</span>                                        cerp(<a name="line.227"></a>
-<span class="sourceLineNo">228</span>                                                cerp(<a name="line.228"></a>
-<span class="sourceLineNo">229</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.229"></a>
-<span class="sourceLineNo">230</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.230"></a>
-<span class="sourceLineNo">231</span>                                                        y - yf),<a name="line.231"></a>
-<span class="sourceLineNo">232</span>                                                cerp(<a name="line.232"></a>
-<span class="sourceLineNo">233</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.233"></a>
-<span class="sourceLineNo">234</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.234"></a>
-<span class="sourceLineNo">235</span>                                                        y - yf),<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                                                z - zf),<a name="line.236"></a>
-<span class="sourceLineNo">237</span>                                        cerp(<a name="line.237"></a>
-<span class="sourceLineNo">238</span>                                                cerp(<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.239"></a>
-<span class="sourceLineNo">240</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.240"></a>
-<span class="sourceLineNo">241</span>                                                        y - yf),<a name="line.241"></a>
-<span class="sourceLineNo">242</span>                                                cerp(<a name="line.242"></a>
-<span class="sourceLineNo">243</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.243"></a>
-<span class="sourceLineNo">244</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.244"></a>
-<span class="sourceLineNo">245</span>                                                        y - yf),<a name="line.245"></a>
-<span class="sourceLineNo">246</span>                                                z - zf),<a name="line.246"></a>
-<span class="sourceLineNo">247</span>                                        w - wf),<a name="line.247"></a>
-<span class="sourceLineNo">248</span>                                cerp(<a name="line.248"></a>
-<span class="sourceLineNo">249</span>                                        cerp(<a name="line.249"></a>
-<span class="sourceLineNo">250</span>                                                cerp(<a name="line.250"></a>
-<span class="sourceLineNo">251</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.251"></a>
-<span class="sourceLineNo">252</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.252"></a>
-<span class="sourceLineNo">253</span>                                                        y - yf),<a name="line.253"></a>
-<span class="sourceLineNo">254</span>                                                cerp(<a name="line.254"></a>
-<span class="sourceLineNo">255</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.255"></a>
-<span class="sourceLineNo">256</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.256"></a>
-<span class="sourceLineNo">257</span>                                                        y - yf),<a name="line.257"></a>
-<span class="sourceLineNo">258</span>                                                z - zf),<a name="line.258"></a>
-<span class="sourceLineNo">259</span>                                        cerp(<a name="line.259"></a>
-<span class="sourceLineNo">260</span>                                                cerp(<a name="line.260"></a>
-<span class="sourceLineNo">261</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.261"></a>
-<span class="sourceLineNo">262</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.262"></a>
-<span class="sourceLineNo">263</span>                                                        y - yf),<a name="line.263"></a>
-<span class="sourceLineNo">264</span>                                                cerp(<a name="line.264"></a>
-<span class="sourceLineNo">265</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.265"></a>
-<span class="sourceLineNo">266</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.266"></a>
-<span class="sourceLineNo">267</span>                                                        y - yf),<a name="line.267"></a>
-<span class="sourceLineNo">268</span>                                                z - zf),<a name="line.268"></a>
-<span class="sourceLineNo">269</span>                                        w - wf),<a name="line.269"></a>
-<span class="sourceLineNo">270</span>                                u - uf),<a name="line.270"></a>
-<span class="sourceLineNo">271</span><a name="line.271"></a>
-<span class="sourceLineNo">272</span>                        cerp(<a name="line.272"></a>
-<span class="sourceLineNo">273</span>                                cerp(<a name="line.273"></a>
-<span class="sourceLineNo">274</span>                                        cerp(<a name="line.274"></a>
-<span class="sourceLineNo">275</span>                                                cerp(<a name="line.275"></a>
-<span class="sourceLineNo">276</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.276"></a>
-<span class="sourceLineNo">277</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.277"></a>
-<span class="sourceLineNo">278</span>                                                        y - yf),<a name="line.278"></a>
-<span class="sourceLineNo">279</span>                                                cerp(<a name="line.279"></a>
-<span class="sourceLineNo">280</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.280"></a>
-<span class="sourceLineNo">281</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.281"></a>
-<span class="sourceLineNo">282</span>                                                        y - yf),<a name="line.282"></a>
-<span class="sourceLineNo">283</span>                                                z - zf),<a name="line.283"></a>
-<span class="sourceLineNo">284</span>                                        cerp(<a name="line.284"></a>
-<span class="sourceLineNo">285</span>                                                cerp(<a name="line.285"></a>
-<span class="sourceLineNo">286</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.286"></a>
-<span class="sourceLineNo">287</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                                                        y - yf),<a name="line.288"></a>
-<span class="sourceLineNo">289</span>                                                cerp(<a name="line.289"></a>
-<span class="sourceLineNo">290</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.290"></a>
-<span class="sourceLineNo">291</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.291"></a>
-<span class="sourceLineNo">292</span>                                                        y - yf),<a name="line.292"></a>
-<span class="sourceLineNo">293</span>                                                z - zf),<a name="line.293"></a>
-<span class="sourceLineNo">294</span>                                        w - wf),<a name="line.294"></a>
-<span class="sourceLineNo">295</span>                                cerp(<a name="line.295"></a>
-<span class="sourceLineNo">296</span>                                        cerp(<a name="line.296"></a>
-<span class="sourceLineNo">297</span>                                                cerp(<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.298"></a>
-<span class="sourceLineNo">299</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.299"></a>
-<span class="sourceLineNo">300</span>                                                        y - yf),<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                                                cerp(<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.303"></a>
-<span class="sourceLineNo">304</span>                                                        y - yf),<a name="line.304"></a>
-<span class="sourceLineNo">305</span>                                                z - zf),<a name="line.305"></a>
-<span class="sourceLineNo">306</span>                                        cerp(<a name="line.306"></a>
-<span class="sourceLineNo">307</span>                                                cerp(<a name="line.307"></a>
-<span class="sourceLineNo">308</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.308"></a>
-<span class="sourceLineNo">309</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.309"></a>
-<span class="sourceLineNo">310</span>                                                        y - yf),<a name="line.310"></a>
-<span class="sourceLineNo">311</span>                                                cerp(<a name="line.311"></a>
-<span class="sourceLineNo">312</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.312"></a>
-<span class="sourceLineNo">313</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.313"></a>
-<span class="sourceLineNo">314</span>                                                        y - yf),<a name="line.314"></a>
-<span class="sourceLineNo">315</span>                                                z - zf),<a name="line.315"></a>
-<span class="sourceLineNo">316</span>                                        w - wf),<a name="line.316"></a>
-<span class="sourceLineNo">317</span>                                u - uf),<a name="line.317"></a>
-<span class="sourceLineNo">318</span>                        v - vf));<a name="line.318"></a>
-<span class="sourceLineNo">319</span>    }<a name="line.319"></a>
-<span class="sourceLineNo">320</span>    private transient long[] scratch3;<a name="line.320"></a>
-<span class="sourceLineNo">321</span>    private transient double[] scratch;<a name="line.321"></a>
-<span class="sourceLineNo">322</span>    private transient int lastLen = -1;<a name="line.322"></a>
-<span class="sourceLineNo">323</span>    private transient double lastEffect = 0x1.12bp-61;<a name="line.323"></a>
-<span class="sourceLineNo">324</span>    public final double arbitraryNoise(long seed, double... coordinates) {<a name="line.324"></a>
-<span class="sourceLineNo">325</span>        final int len = coordinates.length, upper = 1 &lt;&lt; len;<a name="line.325"></a>
-<span class="sourceLineNo">326</span>        final double effect;<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        if(len != lastLen)<a name="line.327"></a>
-<span class="sourceLineNo">328</span>        {<a name="line.328"></a>
-<span class="sourceLineNo">329</span>            lastLen = len;<a name="line.329"></a>
-<span class="sourceLineNo">330</span>            lastEffect = effect = 0x1.81p-62 * Math.pow(1.1875, len);<a name="line.330"></a>
-<span class="sourceLineNo">331</span>        }<a name="line.331"></a>
-<span class="sourceLineNo">332</span>        else<a name="line.332"></a>
-<span class="sourceLineNo">333</span>            effect = lastEffect;<a name="line.333"></a>
-<span class="sourceLineNo">334</span>        if(scratch3 == null || scratch3.length &lt; len * 3)<a name="line.334"></a>
-<span class="sourceLineNo">335</span>            scratch3 = new long[len * 3];<a name="line.335"></a>
-<span class="sourceLineNo">336</span>        if(scratch == null || scratch.length &lt; upper)<a name="line.336"></a>
-<span class="sourceLineNo">337</span>            scratch = new double[upper];<a name="line.337"></a>
-<span class="sourceLineNo">338</span>        for (int i = 0; i &lt; len; i++) {<a name="line.338"></a>
-<span class="sourceLineNo">339</span>            seed = LinnormRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed &lt;&lt; 32);<a name="line.339"></a>
-<span class="sourceLineNo">340</span>            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(coordinates[i])) * seed) + seed;<a name="line.340"></a>
-<span class="sourceLineNo">341</span>        }<a name="line.341"></a>
-<span class="sourceLineNo">342</span>        long working;<a name="line.342"></a>
-<span class="sourceLineNo">343</span>        for (int i = 0; i &lt; upper; i++) {<a name="line.343"></a>
-<span class="sourceLineNo">344</span>            working = 0L;<a name="line.344"></a>
-<span class="sourceLineNo">345</span>            for (int j = 0; j &lt; len; j++) {<a name="line.345"></a>
-<span class="sourceLineNo">346</span>                working += scratch3[j * 3 + (i &gt;&gt; j &amp; 1)];<a name="line.346"></a>
-<span class="sourceLineNo">347</span>            }<a name="line.347"></a>
-<span class="sourceLineNo">348</span>            scratch[i] = determine(working) * effect;<a name="line.348"></a>
-<span class="sourceLineNo">349</span>        }<a name="line.349"></a>
-<span class="sourceLineNo">350</span>        for (int i = 0; i &lt; len; ++i) {<a name="line.350"></a>
-<span class="sourceLineNo">351</span>            for (int j = 0, t = upper &gt;&gt; i; j &lt; t; j += 2) {<a name="line.351"></a>
-<span class="sourceLineNo">352</span>                scratch[j &gt;&gt; 1] = cerp(scratch[j], scratch[j + 1], coordinates[i] - scratch3[i * 3 + 2]);<a name="line.352"></a>
-<span class="sourceLineNo">353</span>            }<a name="line.353"></a>
-<span class="sourceLineNo">354</span>        }<a name="line.354"></a>
-<span class="sourceLineNo">355</span>        return NumberTools.sway(scratch[0]);<a name="line.355"></a>
-<span class="sourceLineNo">356</span>    }<a name="line.356"></a>
-<span class="sourceLineNo">357</span><a name="line.357"></a>
-<span class="sourceLineNo">358</span>}<a name="line.358"></a>
+<span class="sourceLineNo">007</span>import static squidpony.squidmath.WhirlingNoise.grad3d;<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * A different kind of noise that has spotted and striped areas, like a tabby cat.<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * Highly experimental and expected to change; currently has significant linear artifacts, though they do wiggle.<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * Created by Tommy Ettinger on 9/2/2017.<a name="line.12"></a>
+<span class="sourceLineNo">013</span> */<a name="line.13"></a>
+<span class="sourceLineNo">014</span>@Beta<a name="line.14"></a>
+<span class="sourceLineNo">015</span>public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D {<a name="line.15"></a>
+<span class="sourceLineNo">016</span>    public static final MummyNoise instance = new MummyNoise();<a name="line.16"></a>
+<span class="sourceLineNo">017</span>    <a name="line.17"></a>
+<span class="sourceLineNo">018</span>    public static final double[][] goldenDouble = {<a name="line.18"></a>
+<span class="sourceLineNo">019</span>            {0.6180339887498949},<a name="line.19"></a>
+<span class="sourceLineNo">020</span>            {0.7548776662466927, 0.5698402909980532},<a name="line.20"></a>
+<span class="sourceLineNo">021</span>            {0.8191725133961645, 0.6710436067037893, 0.5497004779019703},<a name="line.21"></a>
+<span class="sourceLineNo">022</span>            {0.8566748838545029, 0.733891856627126, 0.6287067210378087, 0.5385972572236101},<a name="line.22"></a>
+<span class="sourceLineNo">023</span>            {0.8812714616335696, 0.7766393890897682, 0.6844301295853426, 0.6031687406857282, 0.5315553977157913},<a name="line.23"></a>
+<span class="sourceLineNo">024</span>            {0.8986537126286993, 0.8075784952213448, 0.7257334129697598,<a name="line.24"></a>
+<span class="sourceLineNo">025</span>                    0.6521830259439717, 0.5860866975779695, 0.5266889867007359}<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    };<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    public static final long[][] goldenLong = {<a name="line.27"></a>
+<span class="sourceLineNo">028</span>            {0x9E3779B97F4A7C15L},<a name="line.28"></a>
+<span class="sourceLineNo">029</span>            {0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1CL},<a name="line.29"></a>
+<span class="sourceLineNo">030</span>            {0xD1B54A32D192ED03L, 0xABC98388FB8FAC02L, 0x8CB92BA72F3D8DD7L},<a name="line.30"></a>
+<span class="sourceLineNo">031</span>            {0xDB4F0B9175AE2165L, 0xBBE0563303A4615FL, 0xA0F2EC75A1FE1575L, 0x89E182857D9ED688L},<a name="line.31"></a>
+<span class="sourceLineNo">032</span>            {0xE19B01AA9D42C633L, 0xC6D1D6C8ED0C9631L, 0xAF36D01EF7518DBBL, 0x9A69443F36F710E6L, 0x881403B9339BD42DL},<a name="line.32"></a>
+<span class="sourceLineNo">033</span>            {0xE60E2B722B53AEEBL, 0xCEBD76D9EDB6A8EFL, 0xB9C9AA3A51D00B65L, 0xA6F5777F6F88983FL, 0x9609C71EB7D03F7AL,<a name="line.33"></a>
+<span class="sourceLineNo">034</span>                    0x86D516E50B04AB1BL}, <a name="line.34"></a>
+<span class="sourceLineNo">035</span>            {0xE95E1DD17D35800DL, 0xD4BC74E13F3C782EL, 0xC1EDBC5B5C68AC24L, 0xB0C8AC50F0EDEF5CL, 0xA127A31C56D1CDB5L,<a name="line.35"></a>
+<span class="sourceLineNo">036</span>                    0x92E852C80D153DB2L, 0x85EB75C3024385C3L},<a name="line.36"></a>
+<span class="sourceLineNo">037</span>            {0xEBEDEED9D803C815L, 0xD96EB1A810CAAF5EL, 0xC862B36DAF790DD5L, 0xB8ACD90C142FE10BL, 0xAA324F90DED86B69L,<a name="line.37"></a>
+<span class="sourceLineNo">038</span>                    0x9CDA5E693FEA10AEL, 0x908E3D2C82567A73L, 0x8538ECB5BD456EA2L},<a name="line.38"></a>
+<span class="sourceLineNo">039</span>            {0xEDF84ED4185625ADL, 0xDD35B2CD88449739L, 0xCDA146AB203DAD88L, 0xBF25C1FA63435002L, 0xB1AF5C04970044E1L,<a name="line.39"></a>
+<span class="sourceLineNo">040</span>                    0xA52BB0C808635D87L, 0x9989A7D8994B239DL, 0x8EB95D05457AA16AL, 0x84AC0AA2B7D7E1C4L},<a name="line.40"></a>
+<span class="sourceLineNo">041</span>            {0xEFA239AADFF080FFL, 0xE0504E7A17640707L, 0xD1F91E9D401F2CD2L, 0xC48CA286CD4C4B4CL, 0xB7FBD901347B3E44L,<a name="line.41"></a>
+<span class="sourceLineNo">042</span>                    0xAC38B6695442DF74L, 0xA13614FB593F897CL, 0x96E7A62094FC418FL, 0x8D41E4ADD988EA91L,<a name="line.42"></a>
+<span class="sourceLineNo">043</span>                    0x843A0802F95827ACL},<a name="line.43"></a>
+<span class="sourceLineNo">044</span>            {0xF104272092F57C5DL, 0xE2E8D1BC93B1BCBFL, 0xD5A0DBC4254CF233L, 0xC91FE60DC666F779L, 0xBD5A4AD0037BF1F8L,<a name="line.44"></a>
+<span class="sourceLineNo">045</span>                    0xB24512C7D7E9D953L, 0xA7D5EB01A237A78AL, 0x9E031B3B27A07ECCL, 0x94C37CD5B1796B92L, <a name="line.45"></a>
+<span class="sourceLineNo">046</span>                    0x8C0E724FD5446177L, 0x83DBDF3EF6A3B35AL}, <a name="line.46"></a>
+<span class="sourceLineNo">047</span>            {0xF22EECF611D9436EL, 0xE51CC09B3D83CAFFL, 0xD8BF2D5017352FF9L, 0xCD0C73D06EEC786BL, 0xC1FB5B846B56C221L,<a name="line.47"></a>
+<span class="sourceLineNo">048</span>                    0xB7832B3BCCB1A38AL, 0xAD9BA24D9CF0D513L, 0xA43CF216E1960C64L, 0x9B5FB7D32E8D899FL,<a name="line.48"></a>
+<span class="sourceLineNo">049</span>                    0x92FCF6CA403AB5A5L, 0x8B0E12CE05E62F5BL, 0x838CCB04C5269A59L},<a name="line.49"></a>
+<span class="sourceLineNo">050</span>            {0xF32E81F362A69FDCL, 0xE701532702B6F82DL, 0xDB70396E42C39DCBL, 0xD073641228368B05L, 0xC60366898AB7FC8FL,<a name="line.50"></a>
+<span class="sourceLineNo">051</span>                    0xBC193374F397645CL, 0xB2AE17DAC99253B9L, 0xA9BBB6A090C6F39DL, 0xA13C043E2FE475FBL,<a name="line.51"></a>
+<span class="sourceLineNo">052</span>                    0x992942A852DFBF6EL, 0x917DFD6F28AFDA5DL, 0x8A35060EDCF5BD75L, 0x8349706F500D7573L},<a name="line.52"></a>
+<span class="sourceLineNo">053</span>            {0xF40BA295557EB087L, 0xE8A62E740B1030B6L, 0xDDC8F72B7958B04EL, 0xD36DA0129AF999DDL, 0xC98E188E5138882CL,<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                    0xC02498843215A686L, 0xB72B9CF7CB66736FL, 0xAE9DE4D05F66AF41L, 0xA6766DC536E4D933L,<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                    0x9EB0716EBBC7DEE5L, 0x9747627AA435C840L, 0x9036EA018B2BCF9EL, 0x897AE4FC66EB83E8L,<a name="line.55"></a>
+<span class="sourceLineNo">056</span>                    0x830F61D86049BD32L},<a name="line.56"></a>
+<span class="sourceLineNo">057</span>            {0xF4CCD627D640C91AL, 0xEA171C21F30F9702L, 0xDFD9550E85ACC5E5L, 0xD60E418421899E89L, 0xCCB0DCDF5F586A6BL,<a name="line.57"></a>
+<span class="sourceLineNo">058</span>                    0xC3BC5AB09BC44545L, 0xBB2C24468285A234L, 0xB2FBD654234A1D55L, 0xAB273EB15C029010L,<a name="line.58"></a>
+<span class="sourceLineNo">059</span>                    0xA3AA5A3471A8B1F5L, 0x9C8152A3BD74C39CL, 0x95A87CBE60D27129L, 0x8F1C565AFE309975L,<a name="line.59"></a>
+<span class="sourceLineNo">060</span>                    0x88D9849B80100109L, 0x82DCD235027EF537L},<a name="line.60"></a>
+<span class="sourceLineNo">061</span>            {0xF57716BC263D1509L, 0xEB5D28EA462157E8L, 0xE1ADA55D371AAD50L, 0xD8642B04DD8237ECL, 0xCF7C86F34CD519B2L,<a name="line.61"></a>
+<span class="sourceLineNo">062</span>                    0xC6F2B276C5AAA9AEL, 0xBEC2D147B3AAF99AL, 0xB6E92FC9D8D36E9CL, 0xAF62415FDC02D5B1L,<a name="line.62"></a>
+<span class="sourceLineNo">063</span>                    0xA82A9ED07916A9A9L, 0xA13F04BC98DBF8F5L, 0x9A9C52259EBB171FL, 0x943F870341597D82L,<a name="line.63"></a>
+<span class="sourceLineNo">064</span>                    0x8E25C2E84A744115L, 0x884C43B5A0F27CECL, 0x82B0645B06A50EE9L},<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            {0xF60E40931CDDA778L, 0xEC7F64E5DBDB0913L, 0xE34F959426E19B61L, 0xDA7B216D11305E35L, 0xD1FE7BF6F82D83FAL,<a name="line.65"></a>
+<span class="sourceLineNo">066</span>                    0xC9D63C0265C9E3CBL, 0xC1FF1A4B21B8D14FL, 0xBA75F026E47231D2L, 0xB337B641246F31A0L,<a name="line.66"></a>
+<span class="sourceLineNo">067</span>                    0xAC4183637B560C8EL, 0xA5908B4A25D90F57L, 0x9F221D8425EA54FBL, 0x98F3A45E9392C09EL,<a name="line.67"></a>
+<span class="sourceLineNo">068</span>                    0x9302A3DAAD3932B0L, 0x8D4CB8AE3C78C515L, 0x87CF974DE8CBB306L, 0x82890B01154E20B6L},<a name="line.68"></a>
+<span class="sourceLineNo">069</span>            {0xF6955E0400B9370BL, 0xED8367D64493BDFCL, 0xE4C6DA7D4C76061CL, 0xDC5C91B62A61DB7EL, 0xD44186D34B534C90L,<a name="line.69"></a>
+<span class="sourceLineNo">070</span>                    0xCC72CFA5E47E2501L, 0xC4ED9D719FBD4866L, 0xBDAF3BEA26B6853AL, 0xB6B5103A2FC2128CL,<a name="line.70"></a>
+<span class="sourceLineNo">071</span>                    0xAFFC9813B310185CL, 0xA98368C8F1D19F36L, 0xA3472E6DFC563E58L, 0x9D45AB02671DFC06L,<a name="line.71"></a>
+<span class="sourceLineNo">072</span>                    0x977CB5A2E1D02BB2L, 0x91EA39C265DDB74EL, 0x8C8C366AB5503245L, 0x8760BD83E4E84FC6L, <a name="line.72"></a>
+<span class="sourceLineNo">073</span>                    0x8265F322AF36CE00L},<a name="line.73"></a>
+<span class="sourceLineNo">074</span>            {0xF70EDC6AB8A7E2E4L, 0xEE6DAE32C9C7C40FL, 0xE619AA5C2E8FBF99L, 0xDE101EE43CF85908L, 0xD64E71E254B519EBL,<a name="line.74"></a>
+<span class="sourceLineNo">075</span>                    0xCED220B05B09F363L, 0xC798BF1ABDC35582L, 0xC09FF697BA00A33CL, 0xB9E58585A5DA9484L,<a name="line.75"></a>
+<span class="sourceLineNo">076</span>                    0xB3673E6FFE33FC92L, 0xAD23075AFC340498L, 0xA716D9157805F047L, 0xA140BE90E084A136L,<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                    0x9B9ED43F116FF0DAL, 0x962F4775D3B041B2L, 0x90F055D7D501F50CL, 0x8BE04CC2E6275AE6L,<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                    0x86FD88C35074C7CFL, 0x8246750C15304E84L},<a name="line.78"></a>
+<span class="sourceLineNo">079</span>            {0xF77CB1D63A7571DBL, 0xEF41DBE827E13397L, 0xE74D154843A9A0D5L, 0xDF9C098CE341C575L, 0xD82C7821919CDE34L,<a name="line.79"></a>
+<span class="sourceLineNo">080</span>                    0xD0FC339E3959C3CCL, 0xCA092123EC35F338L, 0xC35137BF17FCC3AFL, 0xBCD27FCEFABE3A2EL,<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                    0xB68B127229A241CEL, 0xB07918F7FF29533BL, 0xAA9ACC56C71B338AL, 0xA4EE74A67FC7D707L,<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                    0x9F7268A00996078FL, 0x9A250D209F279448L, 0x9504D4B1719BEB04L, 0x90103F1345B068D4L,<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                    0x8B45D8CDEFA9C9ADL, 0x86A43AC38D143EAAL, 0x822A09C75C802C88L}, <a name="line.83"></a>
+<span class="sourceLineNo">084</span>            {0xF7E0785B530538D4L, 0xF002ED13129B1B36L, 0xE8654623D5A4FDADL, 0xE1057C8C52BB6F51L, 0xD9E199C336E9A782L,<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                    0xD2F7B7315EB93DD4L, 0xCC45FDB04DEF7DC2L, 0xC5CAA50CC380F20FL, 0xBF83F38D4857DDEFL,<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                    0xB9703D7C98999134L, 0xB38DE4B7C81D2095L, 0xADDB584003C451D7L, 0xA85713CFD25DC0C1L,<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                    0xA2FF9F73B8A5A6FDL, 0x9DD38F2624E185A0L, 0x98D1826E877270B0L, 0x93F824037E9226F2L,<a name="line.87"></a>
+<span class="sourceLineNo">088</span>                    0x8F46296FFC40AC67L, 0x8ABA52BB4E330397L, 0x86536A13F0581799L, 0x8210437D13472270L},<a name="line.88"></a>
+<span class="sourceLineNo">089</span>            {0xF83B8240091653CAL, 0xF0B35A315D648BE2L, 0xE965B32CE508D7D1L, 0xE250C6C3CFEBE013L, 0xDB72DC5121B720FAL,<a name="line.89"></a>
+<span class="sourceLineNo">090</span>                    0xD4CA488E97BEA200L, 0xCE556D2CCED5DE29L, 0xC812B86E8FD1E675L, 0xC200A4C72A3ED8E2L,<a name="line.90"></a>
+<span class="sourceLineNo">091</span>                    0xBC1DB87BC58CE52FL, 0xB668854791B1725EL, 0xB0DFA802C0EBB9F0L, 0xAB81C84C35098321L,<a name="line.91"></a>
+<span class="sourceLineNo">092</span>                    0xA64D9835CB30BB8AL, 0xA141D3F331D5A3FEL, 0x9C5D418B3523501AL, 0x979EB08B6EB57305L,<a name="line.92"></a>
+<span class="sourceLineNo">093</span>                    0x9304F9BE461709CBL, 0x8E8EFEE330098749L, 0x8A3BAA691B23DA5BL, 0x8609EF2AF8E01E37L,<a name="line.93"></a>
+<span class="sourceLineNo">094</span>                    0x81F8C82E52B2202FL},<a name="line.94"></a>
+<span class="sourceLineNo">095</span>            {0xF88EE8FF789628F0L, 0xF1553336491CBF68L, 0xEA5142850AE51B39L, 0xE38186C741F35A1EL, 0xDCE47B7A35BE51FDL,<a name="line.95"></a>
+<span class="sourceLineNo">096</span>                    0xD678A76661649983L, 0xD03C9C4B680D5D39L, 0xCA2EF68E7ABB3D35L, 0xC44E5CEB1D62C9BAL,<a name="line.96"></a>
+<span class="sourceLineNo">097</span>                    0xBE998026399D81E9L, 0xB90F1AC36DD59600L, 0xB3ADF0BC88463AFAL, 0xAE74CF3B1DA834E2L,<a name="line.97"></a>
+<span class="sourceLineNo">098</span>                    0xA9628C542BDA7AC6L, 0xA47606C5B94B9652L, 0x9FAE25B66259BB0EL, 0x9B09D876C64DA00AL,<a name="line.98"></a>
+<span class="sourceLineNo">099</span>                    0x96881644C5FF0226L, 0x9227DE10869975B8L, 0x8DE836432B5CEA6EL, 0x89C82C873997130AL,<a name="line.99"></a>
+<span class="sourceLineNo">100</span>                    0x85C6D5929A71D953L, 0x81E34CF22E8F3AB1L},<a name="line.100"></a>
+<span class="sourceLineNo">101</span>            {0xF8DB97E577F72AD3L, 0xF1EA32A9D52AA512L, 0xEB2A63F7D9899909L, 0xE49AC9A46BDAC4B2L, 0xDE3A0B65FEAB39B7L,<a name="line.101"></a>
+<span class="sourceLineNo">102</span>                    0xD806DA8DFDBFA252L, 0xD1FFF1C43390BC38L, 0xCC2414C418C30C8AL, 0xC672101BFFEE3FA4L,<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                    0xC0E8B8EE106A4A36L, 0xBB86ECB303374A3CL, 0xB64B90FE957169D3L, 0xB1359345A41BB63AL,<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                    0xAC43E8A5E5640D21L, 0xA7758DAF33D7037FL, 0xA2C9862E604D0CECL, 0x9E3EDCF97FAA41C4L,<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                    0x99D4A3BDA9D7FDB1L, 0x9589F2CE1FAB3F64L, 0x915DE8F4CDB444F4L, 0x8D4FAB44223B658BL,<a name="line.105"></a>
+<span class="sourceLineNo">106</span>                    0x895E64EA2CF4AF71L, 0x85894704FF37673EL, 0x81CF887843C83839L},<a name="line.106"></a>
+<span class="sourceLineNo">107</span>            {0xF92253C6C954B5C5L, 0xF273CB930FDEC503L, 0xEBF323BAE3351016L, 0xE59F21429203FE46L, 0xDF7691A1104F820CL,<a name="line.107"></a>
+<span class="sourceLineNo">108</span>                    0xD9784A85F6EB64D4L, 0xD3A329A111303B67L, 0xCDF6146B6E3EC0D3L, 0xC86FF7F1EB6CAABEL,<a name="line.108"></a>
+<span class="sourceLineNo">109</span>                    0xC30FC8A12DBD67AEL, 0xBDD48213008EABB2L, 0xB8BD26DD0FE44679L, 0xB3C8C060F50084BFL,<a name="line.109"></a>
+<span class="sourceLineNo">110</span>                    0xAEF65E9D8C36622FL, 0xAA4518018B211C65L, 0xA5B4093F4EA957BCL, 0xA1425521D87B064AL,<a name="line.110"></a>
+<span class="sourceLineNo">111</span>                    0x9CEF2462F3C8ABEEL, 0x98B9A58279707AEBL, 0x94A10C9EABCE2517L, 0x90A4934DA2B9292BL,<a name="line.111"></a>
+<span class="sourceLineNo">112</span>                    0x8CC37877C062E3CCL, 0x88FD003327F9CA5FL, 0x855073A02F27FBFBL, 0x81BD20C6C3B2CC6CL},<a name="line.112"></a>
+<span class="sourceLineNo">113</span>            {0xF963C86534AEA218L, 0xF2F342B97BA0C0B8L, 0xECAD4E274F138B1AL, 0xE690D14E6B40C9ACL, 0xE09CBA1281C008E1L,<a name="line.113"></a>
+<span class="sourceLineNo">114</span>                    0xDACFFD6B32C8E31CL, 0xD529973543EC46F3L, 0xCFA88A050C12366AL, 0xCA4BDEFA0CBFAB77L,<a name="line.114"></a>
+<span class="sourceLineNo">115</span>                    0xC512A593B0DD1777L, 0xBFFBF38729695FDBL, 0xBB06E49660B752F0L, 0xB6329A67FD045CFEL,<a name="line.115"></a>
+<span class="sourceLineNo">116</span>                    0xB17E3C606B66D0F5L, 0xACE8F77BEC406867L, 0xA871FE299A8EBD04L, 0xA4188827679F71F9L,<a name="line.116"></a>
+<span class="sourceLineNo">117</span>                    0x9FDBD25F04D89540L, 0x9BBB1EC3B56F7790L, 0x97B5B4310210DC66L, 0x93CADE4A48A4FA01L,<a name="line.117"></a>
+<span class="sourceLineNo">118</span>                    0x8FF9ED5B228051A6L, 0x8C4236389B77FA32L, 0x88A312233474905FL, 0x851BDEA9AC42A769L,<a name="line.118"></a>
+<span class="sourceLineNo">119</span>                    0x81ABFD8C89825095L},<a name="line.119"></a>
+<span class="sourceLineNo">120</span>            {0xF9A06624E78891FDL, 0xF3696B33A14A8488L, 0xED5A0C474FD5E98DL, 0xE7714CED2171F9F8L, 0xE1AE36FB3BA4C4A2L,<a name="line.120"></a>
+<span class="sourceLineNo">121</span>                    0xDC0FDA68AC8CF831L, 0xD6954D265B8914FBL, 0xD13DAAF8F2D0DF40L, 0xCC081553BBCE6CCFL,<a name="line.121"></a>
+<span class="sourceLineNo">122</span>                    0xC6F3B334682BA958L, 0xC1FFB0FFC1AFB181L, 0xBD2B405F3B2CF3C7L, 0xB875981F5CE5A61EL,<a name="line.122"></a>
+<span class="sourceLineNo">123</span>                    0xB3DDF40F06EFD576L, 0xAF6394DF8445271BL, 0xAB05C005694C58A6L, 0xA6C3BF9A38CBA782L,<a name="line.123"></a>
+<span class="sourceLineNo">124</span>                    0xA29CE23ECA539283L, 0x9E907AFE6D50E36AL, 0x9A9DE132C413A13FL, 0x96C4706852367BA0L,<a name="line.124"></a>
+<span class="sourceLineNo">125</span>                    0x93038843B9EF6F7DL, 0x8F5A8C67A3EEDC5EL, 0x8BC8E45B4D8E0211L, 0x884DFB71B928EF01L,<a name="line.125"></a>
+<span class="sourceLineNo">126</span>                    0x84E940B17C9A4ADDL, 0x819A26BD29E924F1L},<a name="line.126"></a>
+<span class="sourceLineNo">127</span>            {0xF9D8D544F27EF365L, 0xF3D78688B5BFF9CFL, 0xEDFB2AD87B4B3897L, 0xE842DEDAC95F23FCL, 0xE2ADC4AD07A91259L,<a name="line.127"></a>
+<span class="sourceLineNo">128</span>                    0xDD3B03C1DFF6CBCDL, 0xD7E9C8C06DC8D23FL, 0xD2B9456437CC7685L, 0xCDA8B05DEE6367FAL,<a name="line.128"></a>
+<span class="sourceLineNo">129</span>                    0xC8B74534EA7C4797L, 0xC3E44429681CEC1BL, 0xBF2EF217781B75B6L, 0xBA96985AA49F118FL,<a name="line.129"></a>
+<span class="sourceLineNo">130</span>                    0xB61A84B2441C64E3L, 0xB1BA0926769C07BDL, 0xAD747BEDC9334546L, 0xA94937537BB0869BL,<a name="line.130"></a>
+<span class="sourceLineNo">131</span>                    0xA537999E6495613FL, 0xA13F04F86F903F0EL, 0x9D5EDF56B2BEFEE1L, 0x99969262171AC642L,<a name="line.131"></a>
+<span class="sourceLineNo">132</span>                    0x95E58B6090838939L, 0x924B3B1EE1F79098L, 0x8EC715DAEA9884BFL, 0x8B58932E78343D8AL,<a name="line.132"></a>
+<span class="sourceLineNo">133</span>                    0x87FF2DFA9C1BD382L, 0x84BA64537F272D05L, 0x8189B76CB1D68797L}, <a name="line.133"></a>
+<span class="sourceLineNo">134</span>            {0xFA0DCF5005A2C20BL, 0xF43EF9A70104F7A6L, 0xEE92ACCB096678F8L, 0xE9081B643A4C436AL, 0xE39E7CDFAAD55A78L,<a name="line.134"></a>
+<span class="sourceLineNo">135</span>                    0xDE550D5311B2B77AL, 0xD92B0D6111BFC621L, 0xD41FC21E2B50C306L, 0xCF3274F64E639BAEL,<a name="line.135"></a>
+<span class="sourceLineNo">136</span>                    0xCA62739309F6AEB6L, 0xC5AF0FC254DF031DL, 0xC1179F5DEC8D41A6L, 0xBC9B7C334645EE55L,<a name="line.136"></a>
+<span class="sourceLineNo">137</span>                    0xB83A03EC0F6614ECL, 0xB3F297F73961D544L, 0xAFC49D728E3DFDC6L, 0xABAF7D14CA592E83L,<a name="line.137"></a>
+<span class="sourceLineNo">138</span>                    0xA7B2A318386BD8B2L, 0xA3CD7F25CCB8D7A0L, 0x9FFF8440BC7A5BFEL, 0x9C4828B28EA8733CL,<a name="line.138"></a>
+<span class="sourceLineNo">139</span>                    0x98A6E5F7A3479D28L, 0x951B38AC2E7EA456L, 0x91A4A079A4C34CACL, 0x8E42A004957D68BDL,<a name="line.139"></a>
+<span class="sourceLineNo">140</span>                    0x8AF4BCDAF18F8514L, 0x87BA7F62BB4399E1L, 0x849372C91D291A5EL, 0x817F24F1E580474DL},<a name="line.140"></a>
+<span class="sourceLineNo">141</span>            {0xFA3F3C2E14D0B6F9L, 0xF49F9128AD7B8627L, 0xEF204087E102D835L, 0xE9C0902B2D8A1227L, 0xE47FCA20DA7EAFEFL,<a name="line.141"></a>
+<span class="sourceLineNo">142</span>                    0xDF5D3C8DE85FC90AL, 0xDA5839968AF541FFL, 0xD57017472ADA3EABL, 0xD0A42F7DEB504F2FL,<a name="line.142"></a>
+<span class="sourceLineNo">143</span>                    0xCBF3DFD4B162501BL, 0xC75E898BA96F10A0L, 0xC2E391744844896EL, 0xBE825FDCC504C678L,<a name="line.143"></a>
+<span class="sourceLineNo">144</span>                    0xBA3A607C091D9F6CL, 0xB60B025E13ABF879L, 0xB1F3B7D0CDB288BBL, 0xADF3F6514C9B0FC4L,<a name="line.144"></a>
+<span class="sourceLineNo">145</span>                    0xAA0B3679808779EAL, 0xA638F3EE4C06B542L, 0xA27CAD4E02CEE96FL, 0x9ED5E41F4D2C6489L,<a name="line.145"></a>
+<span class="sourceLineNo">146</span>                    0x9B441CC06DE1E0F4L, 0x97C6DE56E843CD29L, 0x945DB2BF8464F886L, 0x9108267EAF377921L,<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                    0x8DC5C8B13490C810L, 0x8A962AFD510BF4E0L, 0x8778E18419D07004L, 0x846D82D3384F4823L,<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                    0x8173A7D6F813D0F5L},<a name="line.148"></a>
+<span class="sourceLineNo">149</span>            {0xFA69614E16899957L, 0xF4F1FD6D7B0F8145L, 0xEF9925D84466C496L, 0xEA5E2FD7D598D5ACL, 0xE540746F939348F2L,<a name="line.149"></a>
+<span class="sourceLineNo">150</span>                    0xE03F504811D1E061L, 0xDB5A239AB36A0205L, 0xD690521DBDED3942L, 0xD1E142F0DBA6950EL,<a name="line.150"></a>
+<span class="sourceLineNo">151</span>                    0xCD4C608A0AC49885L, 0xC8D118A2F70F08DDL, 0xC46EDC26BBD52D64L, 0xC0251F200BCE15A6L,<a name="line.151"></a>
+<span class="sourceLineNo">152</span>                    0xBBF358A7BCB1308AL, 0xB7D902D3B459EF1CL, 0xB3D59AA6355557BCL, 0xAFE89FFD88C454DAL,<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                    0xAC11958403892E12L, 0xA85000A064C1FD25L, 0xA4A369668B9D1383L, 0xA10B5A88829F29C1L,<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                    0x9D876147DE7DDA76L, 0x9A170D676EBB5655L, 0x96B9F11D3E3A7168L, 0x936FA104E20C22B8L,<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                    0x9037B41214C150EAL, 0x8D11C3839C95515AL, 0x89FD6AD67ACED4EDL, 0x86FA47B962BE1F1BL,<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                    0x8407FA0076C85236L, 0x8126239949F8586FL}, <a name="line.156"></a>
+<span class="sourceLineNo">157</span>            {0xFA905D0C27652E4AL, 0xF53E47248C6FC570L, 0xF0091DA4FA352D2AL, 0xEAF043527E47412AL, 0xE5F31E48DD9832FCL,<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                    0xE11117E86E2C176EL, 0xDC499CC4537425AFL, 0xD79C1C911B3B5169L, 0xD3080A13B9174C7EL,<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                    0xCE8CDB10DE5C22D6L, 0xCA2A083CAC9B8BB6L, 0xC5DF0D2AC0C3B9DFL, 0xC1AB683E94FBE76EL,<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                    0xBD8E9A9C37671548L, 0xB988281953FF794FL, 0xB597972E8FC6E33FL, 0xB1BC70E93391F7E2L,<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                    0xADF640DD24BD8588L, 0xAA4495172A266536L, 0xA6A6FE0F7BC55A65L, 0xA31D0E9C9B5930B3L,<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                    0x9FA65BE67491F4B0L, 0x9C427D59C33893B4L, 0x98F10C9BBDD66FC7L, 0x95B1A57E036888B9L,<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                    0x9283E5F2CAB1C3D4L, 0x8F676E0151C798CFL, 0x8C5BDFBA8C7BFDC4L, 0x8960DF2E104ED60EL,<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                    0x8676125F3C986987L, 0x839B213A9DA583F5L, 0x80CFB58B8984D00CL}<a name="line.164"></a>
+<span class="sourceLineNo">165</span>    };<a name="line.165"></a>
+<span class="sourceLineNo">166</span>    <a name="line.166"></a>
+<span class="sourceLineNo">167</span>    public long seedX, seedY, seedZ, seedW, seedU, seedV;<a name="line.167"></a>
+<span class="sourceLineNo">168</span><a name="line.168"></a>
+<span class="sourceLineNo">169</span>    public MummyNoise() {<a name="line.169"></a>
+<span class="sourceLineNo">170</span>        this(0x1337BEEF);<a name="line.170"></a>
+<span class="sourceLineNo">171</span>    }<a name="line.171"></a>
+<span class="sourceLineNo">172</span><a name="line.172"></a>
+<span class="sourceLineNo">173</span>    public MummyNoise(final int seed) {<a name="line.173"></a>
+<span class="sourceLineNo">174</span>        seedX = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seed + 0xC6BC279692B5CC83L);<a name="line.174"></a>
+<span class="sourceLineNo">175</span>        seedY = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedX ^ 0xC7BC279692B5CB83L);<a name="line.175"></a>
+<span class="sourceLineNo">176</span>        seedZ = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedY ^ 0xC8BC279692B5CA83L);<a name="line.176"></a>
+<span class="sourceLineNo">177</span>        seedW = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedZ ^ 0xC9BC279692B5C983L);<a name="line.177"></a>
+<span class="sourceLineNo">178</span>        seedU = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedW ^ 0xCABC279692B5C883L);<a name="line.178"></a>
+<span class="sourceLineNo">179</span>        seedV = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedU ^ 0xCBBC279692B5C783L);<a name="line.179"></a>
+<span class="sourceLineNo">180</span>    }<a name="line.180"></a>
+<span class="sourceLineNo">181</span><a name="line.181"></a>
+<span class="sourceLineNo">182</span>    /**<a name="line.182"></a>
+<span class="sourceLineNo">183</span>     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by<a name="line.183"></a>
+<span class="sourceLineNo">184</span>     * 0x632BE59BD9B4E019L.<a name="line.184"></a>
+<span class="sourceLineNo">185</span>     * @param state a long that should change in increments of 0x632BE59BD9B4E019L<a name="line.185"></a>
+<span class="sourceLineNo">186</span>     * @return a pseudo-random permutation of state<a name="line.186"></a>
+<span class="sourceLineNo">187</span>     */<a name="line.187"></a>
+<span class="sourceLineNo">188</span>    public static long determine(long state)<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    {<a name="line.189"></a>
+<span class="sourceLineNo">190</span>        return (state = ((state = ((state ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25;<a name="line.190"></a>
+<span class="sourceLineNo">191</span>    }<a name="line.191"></a>
+<span class="sourceLineNo">192</span><a name="line.192"></a>
+<span class="sourceLineNo">193</span>    //    public static double gauss(final long state) {<a name="line.193"></a>
+<span class="sourceLineNo">194</span>//        final long s1 = state + 0x9E3779B97F4A7C15L,<a name="line.194"></a>
+<span class="sourceLineNo">195</span>//                s2 = s1 + 0x9E3779B97F4A7C15L,<a name="line.195"></a>
+<span class="sourceLineNo">196</span>//                y = (s1 ^ s1 &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL,<a name="line.196"></a>
+<span class="sourceLineNo">197</span>//                z = (s2 ^ s2 &gt;&gt;&gt; 26) * 0x2545F4914F6CDD1DL;<a name="line.197"></a>
+<span class="sourceLineNo">198</span>//        return ((((y ^ y &gt;&gt;&gt; 28) &amp; 0x7FFFFFL) + ((y ^ y &gt;&gt;&gt; 28) &gt;&gt;&gt; 41))<a name="line.198"></a>
+<span class="sourceLineNo">199</span>//                + (((z ^ z &gt;&gt;&gt; 28) &amp; 0x7FFFFFL) + ((z ^ z &gt;&gt;&gt; 28) &gt;&gt;&gt; 41))) * 0x1p-24 - 1.0;<a name="line.199"></a>
+<span class="sourceLineNo">200</span>//    }<a name="line.200"></a>
+<span class="sourceLineNo">201</span>//    public static double signedDouble(long state) {<a name="line.201"></a>
+<span class="sourceLineNo">202</span>//        return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) ^ state &gt;&gt;&gt; 25) &gt;&gt; 12) * 0x1p-52;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>//    }<a name="line.203"></a>
+<span class="sourceLineNo">204</span>    @Override<a name="line.204"></a>
+<span class="sourceLineNo">205</span>    public double getNoise(final double x, final double y) {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>        return getNoiseWithSeed(x, y, seedX);<a name="line.206"></a>
+<span class="sourceLineNo">207</span>    }<a name="line.207"></a>
+<span class="sourceLineNo">208</span><a name="line.208"></a>
+<span class="sourceLineNo">209</span>    @Override<a name="line.209"></a>
+<span class="sourceLineNo">210</span>    public double getNoiseWithSeed(double x, double y, final long seed) {<a name="line.210"></a>
+<span class="sourceLineNo">211</span>        x *= 2.0;<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        y *= 2.0;<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        final long<a name="line.213"></a>
+<span class="sourceLineNo">214</span>                x0 = longFloor(x),<a name="line.214"></a>
+<span class="sourceLineNo">215</span>                y0 = longFloor(y);<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        return Noise.emphasizeSigned(<a name="line.216"></a>
+<span class="sourceLineNo">217</span>                cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),<a name="line.217"></a>
+<span class="sourceLineNo">218</span>                        cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),<a name="line.218"></a>
+<span class="sourceLineNo">219</span>                        y - y0));// * 0.875);// * 1.4142;<a name="line.219"></a>
+<span class="sourceLineNo">220</span>    }<a name="line.220"></a>
+<span class="sourceLineNo">221</span><a name="line.221"></a>
+<span class="sourceLineNo">222</span>    @Override<a name="line.222"></a>
+<span class="sourceLineNo">223</span>    public double getNoise(final double x, final double y, final double z) {<a name="line.223"></a>
+<span class="sourceLineNo">224</span>        return getNoiseWithSeed(x, y, z, seedX);<a name="line.224"></a>
+<span class="sourceLineNo">225</span>    }<a name="line.225"></a>
+<span class="sourceLineNo">226</span><a name="line.226"></a>
+<span class="sourceLineNo">227</span>    @Override<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    public double getNoiseWithSeed(double x, double y, double z, final long seed) {<a name="line.228"></a>
+<span class="sourceLineNo">229</span>        x *= 2.0;<a name="line.229"></a>
+<span class="sourceLineNo">230</span>        y *= 2.0;<a name="line.230"></a>
+<span class="sourceLineNo">231</span>        z *= 2.0;<a name="line.231"></a>
+<span class="sourceLineNo">232</span>        final long<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                x0 = longFloor(x),<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                y0 = longFloor(y),<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                z0 = longFloor(z);<a name="line.235"></a>
+<span class="sourceLineNo">236</span>        return Noise.emphasizeSigned(<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                cerp(cerp(cerp(gradCoord3D(seed, x0, y0, z0, x - x0, y - y0, z - z0), gradCoord3D(seed, x0+1, y0, z0, x - x0 - 1, y - y0, z - z0), x - x0),<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                        cerp(gradCoord3D(seed, x0, y0+1, z0, x - x0, y - y0-1, z - z0), gradCoord3D(seed, x0+1, y0+1, z0, x - x0 - 1, y - y0 - 1, z - z0), x - x0),<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                        y - y0),<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                        cerp(cerp(gradCoord3D(seed, x0, y0, z0+1, x - x0, y - y0, z - z0-1), gradCoord3D(seed, x0+1, y0, z0+1, x - x0 - 1, y - y0, z - z0-1), x - x0),<a name="line.240"></a>
+<span class="sourceLineNo">241</span>                                cerp(gradCoord3D(seed, x0, y0+1, z0+1, x - x0, y - y0-1, z - z0-1), gradCoord3D(seed, x0+1, y0+1, z0+1, x - x0 - 1, y - y0 - 1, z - z0-1), x - x0),<a name="line.241"></a>
+<span class="sourceLineNo">242</span>                                y - y0), z - z0) * 0.666);//1.0625;<a name="line.242"></a>
+<span class="sourceLineNo">243</span>    }<a name="line.243"></a>
+<span class="sourceLineNo">244</span><a name="line.244"></a>
+<span class="sourceLineNo">245</span>//    @Override<a name="line.245"></a>
+<span class="sourceLineNo">246</span>//    public double getNoise(double x, double y) {<a name="line.246"></a>
+<span class="sourceLineNo">247</span>//        return getNoiseWithSeeds(x, y, seedX, seedY);<a name="line.247"></a>
+<span class="sourceLineNo">248</span>//    }<a name="line.248"></a>
+<span class="sourceLineNo">249</span>//<a name="line.249"></a>
+<span class="sourceLineNo">250</span>//    @Override<a name="line.250"></a>
+<span class="sourceLineNo">251</span>//    public double getNoiseWithSeed(double x, double y, final long seed) {<a name="line.251"></a>
+<span class="sourceLineNo">252</span>//        //0.7548776662466927, 0.5698402909980532<a name="line.252"></a>
+<span class="sourceLineNo">253</span>//        //0xC13FA9A902A6328FL, 0x91E10DA5C79E7B1CL<a name="line.253"></a>
+<span class="sourceLineNo">254</span>//        final long<a name="line.254"></a>
+<span class="sourceLineNo">255</span>//                x0 = longFloor(x), <a name="line.255"></a>
+<span class="sourceLineNo">256</span>//                y0 = longFloor(y);<a name="line.256"></a>
+<span class="sourceLineNo">257</span>//        final double res =<a name="line.257"></a>
+<span class="sourceLineNo">258</span>////        return<a name="line.258"></a>
+<span class="sourceLineNo">259</span>//                Noise.emphasizeSigned<a name="line.259"></a>
+<span class="sourceLineNo">260</span>//                        (cerp(cerp(gradCoord2D(seed, x0, y0, x - x0, y - y0), gradCoord2D(seed, x0+1, y0, x - x0 - 1, y - y0), x - x0),<a name="line.260"></a>
+<span class="sourceLineNo">261</span>//                        cerp(gradCoord2D(seed, x0, y0+1, x - x0, y - y0-1), gradCoord2D(seed, x0+1, y0+1, x - x0 - 1, y - y0 - 1), x - x0),<a name="line.261"></a>
+<span class="sourceLineNo">262</span>//                        y - y0));// * 1.4142);//* 0.875;// * 1.4142;<a name="line.262"></a>
+<span class="sourceLineNo">263</span>//        if(res &lt; -1.0 || res &gt; 1.0) System.out.println(res);<a name="line.263"></a>
+<span class="sourceLineNo">264</span>//        return res;<a name="line.264"></a>
+<span class="sourceLineNo">265</span>//<a name="line.265"></a>
+<span class="sourceLineNo">266</span>////        double r = NumberTools.setExponent(NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, y * 0.5698402909980532) + NumberTools.swayRandomized(seed, x * 0.7548776662466927) + 6.0, 0x400) - 3.0;<a name="line.266"></a>
+<span class="sourceLineNo">267</span>////        return r;<a name="line.267"></a>
+<span class="sourceLineNo">268</span>////        x += 75.48776662466927;<a name="line.268"></a>
+<span class="sourceLineNo">269</span>////        y += 56.98402909980532;<a name="line.269"></a>
+<span class="sourceLineNo">270</span>////        final double x1 = x * -0.3623748900804805 - y * 0.9320324238132275, y1 = x * 0.9320324238132275 + y * -0.3623748900804805;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>////        r *= NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, y1 * (NumberTools.swayRandomized(seed, x1 * 0.7548776662466927) * 1.5698402909980532));<a name="line.271"></a>
+<span class="sourceLineNo">272</span>////        x = x1 - 75.48776662466927;<a name="line.272"></a>
+<span class="sourceLineNo">273</span>////        y = y1 - 56.98402909980532;<a name="line.273"></a>
+<span class="sourceLineNo">274</span>////        final double x2 = x * -0.7373688780783193 - y * -0.6754902942615243, y2 = x * -0.6754902942615243 + y * -0.7373688780783193;<a name="line.274"></a>
+<span class="sourceLineNo">275</span>////        return r * NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, y2 * (NumberTools.swayRandomized(seed, x2 * 0.7548776662466927) * 1.5698402909980532));<a name="line.275"></a>
+<span class="sourceLineNo">276</span>//    }<a name="line.276"></a>
+<span class="sourceLineNo">277</span><a name="line.277"></a>
+<span class="sourceLineNo">278</span>    private long hash2D(long seed, long x, long y)<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    {<a name="line.279"></a>
+<span class="sourceLineNo">280</span>        return ((x = ((x = x * 0xC6BC279692B5CC85L + seed) ^ x &gt;&gt;&gt; 26)<a name="line.280"></a>
+<span class="sourceLineNo">281</span>                * ((y *= 0x9E3779B97F4A7C15L) ^ (y + 0x9E3779B97F4A7C15L))) ^ x &gt;&gt;&gt; 28);<a name="line.281"></a>
+<span class="sourceLineNo">282</span>    }<a name="line.282"></a>
+<span class="sourceLineNo">283</span>    private long hash3D(long seed, long x, long y, long z)<a name="line.283"></a>
+<span class="sourceLineNo">284</span>    {<a name="line.284"></a>
+<span class="sourceLineNo">285</span>        return (z = ((x = ((x = x * 0xC6BC279692B5CC85L + seed) ^ x &gt;&gt;&gt; 26)<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                * ((y *= 0x9E3779B97F4A7C15L) ^ (y + 0x9E3779B97F4A7C15L))) ^ x &gt;&gt;&gt; 28) * ((z *= 0x9E3779B97F4A7C15L) ^ z + 0x9E3779B97F4A7C15L)) ^ z &gt;&gt;&gt; 28;<a name="line.286"></a>
+<span class="sourceLineNo">287</span>    }<a name="line.287"></a>
+<span class="sourceLineNo">288</span>    private double gradCoord2D(long seed, long x, long y, double xDiff, double yDiff) {<a name="line.288"></a>
+<span class="sourceLineNo">289</span>        seed = hash2D(seed, x, y);<a name="line.289"></a>
+<span class="sourceLineNo">290</span>        x = (seed &gt;&gt; 11);<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        y = (seed * 0xC13FA9A902A6328FL &gt;&gt; 11);<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        return<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                x * 0x1p-52 * (xDiff + (y * 0x6p-56)) +<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                        y * 0x1p-52 * (yDiff + (x * 0x6p-56));<a name="line.294"></a>
+<span class="sourceLineNo">295</span>    }<a name="line.295"></a>
+<span class="sourceLineNo">296</span>    private double gradCoord3D(long seed, long x, long y, long z, double xDiff, double yDiff, double zDiff) {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        seed = hash3D(seed, x, y, z);<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        x = (seed &gt;&gt; 11);<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        y = (seed * 0xC13FA9A902A6328FL &gt;&gt; 11);<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        z = (seed * 0x91E10DA5C79E7B1CL &gt;&gt; 11);<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        return<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                x * 0x1p-52 * (xDiff + (y * 0x6p-56)) + <a name="line.302"></a>
+<span class="sourceLineNo">303</span>                        y * 0x1p-52 * (yDiff + (z * 0x6p-56)) +<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                z * 0x1p-52 * (zDiff + (x * 0x6p-56));<a name="line.304"></a>
+<span class="sourceLineNo">305</span>    }<a name="line.305"></a>
+<span class="sourceLineNo">306</span>//        double dist = (hash2D(seed, x, y) &gt;&gt; 11) * 0x1.921fb54442d18p-50;<a name="line.306"></a>
+<span class="sourceLineNo">307</span><a name="line.307"></a>
+<span class="sourceLineNo">308</span>    <a name="line.308"></a>
+<span class="sourceLineNo">309</span>//    protected static double gradCoord2D(long seed, int x, int y,<a name="line.309"></a>
+<span class="sourceLineNo">310</span>//                                        double xd, double yd) {<a name="line.310"></a>
+<span class="sourceLineNo">311</span>//        final int hash = ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C3 * y) ^ seed &gt;&gt;&gt; 13) * (seed)));<a name="line.311"></a>
+<span class="sourceLineNo">312</span>//        //final int hash = (int)((((seed = (((seed * (0x632BE59BD9B4E019L + (x &lt;&lt; 23))) ^ 0x9E3779B97F4A7C15L) * (0xC6BC279692B5CC83L + (y &lt;&lt; 23)))) ^ seed &gt;&gt;&gt; 27 ^ x + y) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 56);<a name="line.312"></a>
+<span class="sourceLineNo">313</span>//        final double[] grad = phiGrad2[hash &gt;&gt;&gt; 24], jitter = phiGrad2[hash &gt;&gt;&gt; 16 &amp; 0xFF];<a name="line.313"></a>
+<span class="sourceLineNo">314</span>//        return (xd + jitter[0] * 0.5) * grad[0] + (yd + jitter[1] * 0.5) * grad[1];<a name="line.314"></a>
+<span class="sourceLineNo">315</span>//    }<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    protected static double gradCoord3D(long seed, int x, int y, int z, double xd, double yd, double zd) {<a name="line.316"></a>
+<span class="sourceLineNo">317</span>        final int hash = (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z) ^ seed &gt;&gt;&gt; 13) * (seed)),<a name="line.317"></a>
+<span class="sourceLineNo">318</span>                idx = (hash &gt;&gt;&gt; 27) * 3, jitter = (hash &gt;&gt;&gt; 22 &amp; 0x1F) * 3;<a name="line.318"></a>
+<span class="sourceLineNo">319</span>        return ((xd+grad3d[jitter]*0.5) * grad3d[idx]<a name="line.319"></a>
+<span class="sourceLineNo">320</span>                + (yd+grad3d[jitter+1]*0.5) * grad3d[idx + 1]<a name="line.320"></a>
+<span class="sourceLineNo">321</span>                + (zd+grad3d[jitter+2]*0.5) * grad3d[idx + 2]);<a name="line.321"></a>
+<span class="sourceLineNo">322</span>    }<a name="line.322"></a>
+<span class="sourceLineNo">323</span><a name="line.323"></a>
+<span class="sourceLineNo">324</span>    public static double getNoiseWithSeeds(final double x, final double y,<a name="line.324"></a>
+<span class="sourceLineNo">325</span>                                    final long seedX, final long seedY) {<a name="line.325"></a>
+<span class="sourceLineNo">326</span>        final long<a name="line.326"></a>
+<span class="sourceLineNo">327</span>                xf = longFloor(x),<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                yf = longFloor(y),<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                bx0 = xf * seedX,<a name="line.329"></a>
+<span class="sourceLineNo">330</span>                by0 = yf * seedY,<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                bx1 = bx0+seedX,<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                by1 = by0+seedY;<a name="line.332"></a>
+<span class="sourceLineNo">333</span>        return<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                NumberTools.sway(<a name="line.334"></a>
+<span class="sourceLineNo">335</span>                        cerp(cerp(determine(bx0 + by0) * 0x1.25p-62, determine(bx1 + by0) * 0x1.25p-62,<a name="line.335"></a>
+<span class="sourceLineNo">336</span>                                x - xf),<a name="line.336"></a>
+<span class="sourceLineNo">337</span>                                cerp(determine(bx0 + by1) * 0x1.25p-62, determine(bx1 + by1) * 0x1.25p-62, x - xf),<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                                y - yf));<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    }<a name="line.339"></a>
+<span class="sourceLineNo">340</span><a name="line.340"></a>
+<span class="sourceLineNo">341</span>//    @Override<a name="line.341"></a>
+<span class="sourceLineNo">342</span>//    public double getNoise(double x, double y, double z) {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>//        return getNoiseWithSeeds(x, y, z, seedX, seedY, seedZ);<a name="line.343"></a>
+<span class="sourceLineNo">344</span>//    }<a name="line.344"></a>
+<span class="sourceLineNo">345</span>//<a name="line.345"></a>
+<span class="sourceLineNo">346</span>//    @Override<a name="line.346"></a>
+<span class="sourceLineNo">347</span>//    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {<a name="line.347"></a>
+<span class="sourceLineNo">348</span>//        final long<a name="line.348"></a>
+<span class="sourceLineNo">349</span>//                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.349"></a>
+<span class="sourceLineNo">350</span>//                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.350"></a>
+<span class="sourceLineNo">351</span>//                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.351"></a>
+<span class="sourceLineNo">352</span>//                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L);<a name="line.352"></a>
+<span class="sourceLineNo">353</span>//        return getNoiseWithSeeds(x, y, z, rx, ry, rz);<a name="line.353"></a>
+<span class="sourceLineNo">354</span>//    }<a name="line.354"></a>
+<span class="sourceLineNo">355</span><a name="line.355"></a>
+<span class="sourceLineNo">356</span>    public static double getNoiseWithSeeds(final double x, final double y, final double z,<a name="line.356"></a>
+<span class="sourceLineNo">357</span>                                    final long seedX, final long seedY, final long seedZ) {<a name="line.357"></a>
+<span class="sourceLineNo">358</span>        final long<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                xf = longFloor(x),<a name="line.359"></a>
+<span class="sourceLineNo">360</span>                yf = longFloor(y),<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                zf = longFloor(z),<a name="line.361"></a>
+<span class="sourceLineNo">362</span>                bx0 = xf * seedX,<a name="line.362"></a>
+<span class="sourceLineNo">363</span>                by0 = yf * seedY,<a name="line.363"></a>
+<span class="sourceLineNo">364</span>                bz0 = zf * seedZ,<a name="line.364"></a>
+<span class="sourceLineNo">365</span>                bx1 = bx0+seedX,<a name="line.365"></a>
+<span class="sourceLineNo">366</span>                by1 = by0+seedY,<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                bz1 = bz0+seedZ;<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        return NumberTools.sway(<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                cerp(<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                        cerp(<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                                cerp(determine(bx0 + by0 + bz0) * 0x1.25p-62, determine(bx1 + by0 + bz0) * 0x1.25p-62, x - xf),<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                                cerp(determine(bx0 + by1 + bz0) * 0x1.25p-62, determine(bx1 + by1 + bz0) * 0x1.25p-62, x - xf),<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                                y - yf),<a name="line.373"></a>
+<span class="sourceLineNo">374</span>                        cerp(<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                                cerp(determine(bx0 + by0 + bz1) * 0x1.25p-62, determine(bx1 + by0 + bz1) * 0x1.25p-62, x - xf),<a name="line.375"></a>
+<span class="sourceLineNo">376</span>                                cerp(determine(bx0 + by1 + bz1) * 0x1.25p-62, determine(bx1 + by1 + bz1) * 0x1.25p-62, x - xf),<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                                y - yf),<a name="line.377"></a>
+<span class="sourceLineNo">378</span>                        z - zf));<a name="line.378"></a>
+<span class="sourceLineNo">379</span>    }<a name="line.379"></a>
+<span class="sourceLineNo">380</span><a name="line.380"></a>
+<span class="sourceLineNo">381</span>    @Override<a name="line.381"></a>
+<span class="sourceLineNo">382</span>    public double getNoise(final double x, final double y, final double z, final double w) {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        return getNoiseWithSeeds(x, y, z, w, seedX, seedY, seedZ, seedW);<a name="line.383"></a>
+<span class="sourceLineNo">384</span>    }<a name="line.384"></a>
+<span class="sourceLineNo">385</span><a name="line.385"></a>
+<span class="sourceLineNo">386</span>    @Override<a name="line.386"></a>
+<span class="sourceLineNo">387</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>        final long<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.389"></a>
+<span class="sourceLineNo">390</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.390"></a>
+<span class="sourceLineNo">391</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.391"></a>
+<span class="sourceLineNo">392</span>                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L),<a name="line.392"></a>
+<span class="sourceLineNo">393</span>                rw = 0x9E3779B97F4A7C15L * (rz &gt;&gt;&gt; 23 ^ rz &lt;&lt; 23) * (rz | 1L);<a name="line.393"></a>
+<span class="sourceLineNo">394</span>        return getNoiseWithSeeds(x, y, z, w, rx, ry, rz, rw);<a name="line.394"></a>
+<span class="sourceLineNo">395</span>    }<a name="line.395"></a>
+<span class="sourceLineNo">396</span><a name="line.396"></a>
+<span class="sourceLineNo">397</span>    public static double getNoiseWithSeeds(final double x, final double y, final double z, final double w,<a name="line.397"></a>
+<span class="sourceLineNo">398</span>                                    final long seedX, final long seedY, final long seedZ, final long seedW) {<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        final long<a name="line.399"></a>
+<span class="sourceLineNo">400</span>                xf = longFloor(x),<a name="line.400"></a>
+<span class="sourceLineNo">401</span>                yf = longFloor(y),<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                zf = longFloor(z),<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                wf = longFloor(w),<a name="line.403"></a>
+<span class="sourceLineNo">404</span>                bx0 = xf * seedX,<a name="line.404"></a>
+<span class="sourceLineNo">405</span>                by0 = yf * seedY,<a name="line.405"></a>
+<span class="sourceLineNo">406</span>                bz0 = zf * seedZ,<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                bw0 = wf * seedW,<a name="line.407"></a>
+<span class="sourceLineNo">408</span>                bx1 = bx0+seedX,<a name="line.408"></a>
+<span class="sourceLineNo">409</span>                by1 = by0+seedY,<a name="line.409"></a>
+<span class="sourceLineNo">410</span>                bz1 = bz0+seedZ,<a name="line.410"></a>
+<span class="sourceLineNo">411</span>                bw1 = bw0+seedW;<a name="line.411"></a>
+<span class="sourceLineNo">412</span>        return NumberTools.sway(<a name="line.412"></a>
+<span class="sourceLineNo">413</span>                cerp(<a name="line.413"></a>
+<span class="sourceLineNo">414</span>                        cerp(<a name="line.414"></a>
+<span class="sourceLineNo">415</span>                                cerp(<a name="line.415"></a>
+<span class="sourceLineNo">416</span>                                        cerp(determine(bx0 + by0 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw0) * 0x1.25p-62, x - xf),<a name="line.416"></a>
+<span class="sourceLineNo">417</span>                                        cerp(determine(bx0 + by1 + bz0 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw0) * 0x1.25p-62, x - xf),<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                                        y - yf),<a name="line.418"></a>
+<span class="sourceLineNo">419</span>                                cerp(<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                                        cerp(determine(bx0 + by0 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw0) * 0x1.25p-62, x - xf),<a name="line.420"></a>
+<span class="sourceLineNo">421</span>                                        cerp(determine(bx0 + by1 + bz1 + bw0) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw0) * 0x1.25p-62, x - xf),<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                                        y - yf),<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                                z - zf),<a name="line.423"></a>
+<span class="sourceLineNo">424</span>                        cerp(<a name="line.424"></a>
+<span class="sourceLineNo">425</span>                                cerp(<a name="line.425"></a>
+<span class="sourceLineNo">426</span>                                        cerp(determine(bx0 + by0 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz0 + bw1) * 0x1.25p-62, x - xf),<a name="line.426"></a>
+<span class="sourceLineNo">427</span>                                        cerp(determine(bx0 + by1 + bz0 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz0 + bw1) * 0x1.25p-62, x - xf),<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                                        y - yf),<a name="line.428"></a>
+<span class="sourceLineNo">429</span>                                cerp(<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                                        cerp(determine(bx0 + by0 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by0 + bz1 + bw1) * 0x1.25p-62, x - xf),<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                                        cerp(determine(bx0 + by1 + bz1 + bw1) * 0x1.25p-62, determine(bx1 + by1 + bz1 + bw1) * 0x1.25p-62, x - xf),<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                                        y - yf),<a name="line.432"></a>
+<span class="sourceLineNo">433</span>                                z - zf),<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                        w - wf));<a name="line.434"></a>
+<span class="sourceLineNo">435</span>    }<a name="line.435"></a>
+<span class="sourceLineNo">436</span><a name="line.436"></a>
+<span class="sourceLineNo">437</span>    @Override<a name="line.437"></a>
+<span class="sourceLineNo">438</span>    public double getNoise(final double x, final double y, final double z, final double w, final double u, final double v) {<a name="line.438"></a>
+<span class="sourceLineNo">439</span>        return getNoiseWithSeeds(x, y, z, w, u, v,<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                seedX, seedY, seedZ, seedW, seedU, seedV);<a name="line.440"></a>
+<span class="sourceLineNo">441</span>    }<a name="line.441"></a>
+<span class="sourceLineNo">442</span><a name="line.442"></a>
+<span class="sourceLineNo">443</span>    @Override<a name="line.443"></a>
+<span class="sourceLineNo">444</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {<a name="line.444"></a>
+<span class="sourceLineNo">445</span>        final long<a name="line.445"></a>
+<span class="sourceLineNo">446</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.446"></a>
+<span class="sourceLineNo">447</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L),<a name="line.449"></a>
+<span class="sourceLineNo">450</span>                rw = 0x9E3779B97F4A7C15L * (rz &gt;&gt;&gt; 23 ^ rz &lt;&lt; 23) * (rz | 1L),<a name="line.450"></a>
+<span class="sourceLineNo">451</span>                ru = 0x9E3779B97F4A7C15L * (rw &gt;&gt;&gt; 23 ^ rw &lt;&lt; 23) * (rw | 1L),<a name="line.451"></a>
+<span class="sourceLineNo">452</span>                rv = 0x9E3779B97F4A7C15L * (ru &gt;&gt;&gt; 23 ^ ru &lt;&lt; 23) * (ru | 1L);<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        return getNoiseWithSeeds(x, y, z, w, u, v, rx, ry, rz, rw, ru, rv);<a name="line.453"></a>
+<span class="sourceLineNo">454</span>    }<a name="line.454"></a>
+<span class="sourceLineNo">455</span><a name="line.455"></a>
+<span class="sourceLineNo">456</span>    public static double getNoiseWithSeeds(final double x, final double y, final double z,<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                                    final double w, final double u, final double v,<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                                    final long seedX, final long seedY, final long seedZ,<a name="line.458"></a>
+<span class="sourceLineNo">459</span>                                    final long seedW, final long seedU, final long seedV) {<a name="line.459"></a>
+<span class="sourceLineNo">460</span>        final long<a name="line.460"></a>
+<span class="sourceLineNo">461</span>                xf = longFloor(x),<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                yf = longFloor(y),<a name="line.462"></a>
+<span class="sourceLineNo">463</span>                zf = longFloor(z),<a name="line.463"></a>
+<span class="sourceLineNo">464</span>                wf = longFloor(w),<a name="line.464"></a>
+<span class="sourceLineNo">465</span>                uf = longFloor(u),<a name="line.465"></a>
+<span class="sourceLineNo">466</span>                vf = longFloor(v),<a name="line.466"></a>
+<span class="sourceLineNo">467</span>                bx0 = xf * seedX,<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                by0 = yf * seedY,<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                bz0 = zf * seedZ,<a name="line.469"></a>
+<span class="sourceLineNo">470</span>                bw0 = wf * seedW,<a name="line.470"></a>
+<span class="sourceLineNo">471</span>                bu0 = uf * seedU,<a name="line.471"></a>
+<span class="sourceLineNo">472</span>                bv0 = vf * seedV,<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                bx1 = bx0+seedX,<a name="line.473"></a>
+<span class="sourceLineNo">474</span>                by1 = by0+seedY,<a name="line.474"></a>
+<span class="sourceLineNo">475</span>                bz1 = bz0+seedZ,<a name="line.475"></a>
+<span class="sourceLineNo">476</span>                bw1 = bw0+seedW,<a name="line.476"></a>
+<span class="sourceLineNo">477</span>                bu1 = bu0+seedU,<a name="line.477"></a>
+<span class="sourceLineNo">478</span>                bv1 = bv0+seedV;<a name="line.478"></a>
+<span class="sourceLineNo">479</span>        return NumberTools.sway(<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                cerp(<a name="line.480"></a>
+<span class="sourceLineNo">481</span>                        cerp(<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                                cerp(<a name="line.482"></a>
+<span class="sourceLineNo">483</span>                                        cerp(<a name="line.483"></a>
+<span class="sourceLineNo">484</span>                                                cerp(<a name="line.484"></a>
+<span class="sourceLineNo">485</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.485"></a>
+<span class="sourceLineNo">486</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.486"></a>
+<span class="sourceLineNo">487</span>                                                        y - yf),<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                                                cerp(<a name="line.488"></a>
+<span class="sourceLineNo">489</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.490"></a>
+<span class="sourceLineNo">491</span>                                                        y - yf),<a name="line.491"></a>
+<span class="sourceLineNo">492</span>                                                z - zf),<a name="line.492"></a>
+<span class="sourceLineNo">493</span>                                        cerp(<a name="line.493"></a>
+<span class="sourceLineNo">494</span>                                                cerp(<a name="line.494"></a>
+<span class="sourceLineNo">495</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.495"></a>
+<span class="sourceLineNo">496</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.496"></a>
+<span class="sourceLineNo">497</span>                                                        y - yf),<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                                                cerp(<a name="line.498"></a>
+<span class="sourceLineNo">499</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv0) * 0x1.12bp-61, x - xf),<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                                                        y - yf),<a name="line.501"></a>
+<span class="sourceLineNo">502</span>                                                z - zf),<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                                        w - wf),<a name="line.503"></a>
+<span class="sourceLineNo">504</span>                                cerp(<a name="line.504"></a>
+<span class="sourceLineNo">505</span>                                        cerp(<a name="line.505"></a>
+<span class="sourceLineNo">506</span>                                                cerp(<a name="line.506"></a>
+<span class="sourceLineNo">507</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.507"></a>
+<span class="sourceLineNo">508</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.508"></a>
+<span class="sourceLineNo">509</span>                                                        y - yf),<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                                                cerp(<a name="line.510"></a>
+<span class="sourceLineNo">511</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.511"></a>
+<span class="sourceLineNo">512</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.512"></a>
+<span class="sourceLineNo">513</span>                                                        y - yf),<a name="line.513"></a>
+<span class="sourceLineNo">514</span>                                                z - zf),<a name="line.514"></a>
+<span class="sourceLineNo">515</span>                                        cerp(<a name="line.515"></a>
+<span class="sourceLineNo">516</span>                                                cerp(<a name="line.516"></a>
+<span class="sourceLineNo">517</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.517"></a>
+<span class="sourceLineNo">518</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.518"></a>
+<span class="sourceLineNo">519</span>                                                        y - yf),<a name="line.519"></a>
+<span class="sourceLineNo">520</span>                                                cerp(<a name="line.520"></a>
+<span class="sourceLineNo">521</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.521"></a>
+<span class="sourceLineNo">522</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv0) * 0x1.12bp-61, x - xf),<a name="line.522"></a>
+<span class="sourceLineNo">523</span>                                                        y - yf),<a name="line.523"></a>
+<span class="sourceLineNo">524</span>                                                z - zf),<a name="line.524"></a>
+<span class="sourceLineNo">525</span>                                        w - wf),<a name="line.525"></a>
+<span class="sourceLineNo">526</span>                                u - uf),<a name="line.526"></a>
+<span class="sourceLineNo">527</span><a name="line.527"></a>
+<span class="sourceLineNo">528</span>                        cerp(<a name="line.528"></a>
+<span class="sourceLineNo">529</span>                                cerp(<a name="line.529"></a>
+<span class="sourceLineNo">530</span>                                        cerp(<a name="line.530"></a>
+<span class="sourceLineNo">531</span>                                                cerp(<a name="line.531"></a>
+<span class="sourceLineNo">532</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.532"></a>
+<span class="sourceLineNo">533</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.533"></a>
+<span class="sourceLineNo">534</span>                                                        y - yf),<a name="line.534"></a>
+<span class="sourceLineNo">535</span>                                                cerp(<a name="line.535"></a>
+<span class="sourceLineNo">536</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.536"></a>
+<span class="sourceLineNo">537</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.537"></a>
+<span class="sourceLineNo">538</span>                                                        y - yf),<a name="line.538"></a>
+<span class="sourceLineNo">539</span>                                                z - zf),<a name="line.539"></a>
+<span class="sourceLineNo">540</span>                                        cerp(<a name="line.540"></a>
+<span class="sourceLineNo">541</span>                                                cerp(<a name="line.541"></a>
+<span class="sourceLineNo">542</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.542"></a>
+<span class="sourceLineNo">543</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.543"></a>
+<span class="sourceLineNo">544</span>                                                        y - yf),<a name="line.544"></a>
+<span class="sourceLineNo">545</span>                                                cerp(<a name="line.545"></a>
+<span class="sourceLineNo">546</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.546"></a>
+<span class="sourceLineNo">547</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu0 + bv1) * 0x1.12bp-61, x - xf),<a name="line.547"></a>
+<span class="sourceLineNo">548</span>                                                        y - yf),<a name="line.548"></a>
+<span class="sourceLineNo">549</span>                                                z - zf),<a name="line.549"></a>
+<span class="sourceLineNo">550</span>                                        w - wf),<a name="line.550"></a>
+<span class="sourceLineNo">551</span>                                cerp(<a name="line.551"></a>
+<span class="sourceLineNo">552</span>                                        cerp(<a name="line.552"></a>
+<span class="sourceLineNo">553</span>                                                cerp(<a name="line.553"></a>
+<span class="sourceLineNo">554</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.554"></a>
+<span class="sourceLineNo">555</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                                                        y - yf),<a name="line.556"></a>
+<span class="sourceLineNo">557</span>                                                cerp(<a name="line.557"></a>
+<span class="sourceLineNo">558</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.558"></a>
+<span class="sourceLineNo">559</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw0 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.559"></a>
+<span class="sourceLineNo">560</span>                                                        y - yf),<a name="line.560"></a>
+<span class="sourceLineNo">561</span>                                                z - zf),<a name="line.561"></a>
+<span class="sourceLineNo">562</span>                                        cerp(<a name="line.562"></a>
+<span class="sourceLineNo">563</span>                                                cerp(<a name="line.563"></a>
+<span class="sourceLineNo">564</span>                                                        cerp(determine(bx0 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.564"></a>
+<span class="sourceLineNo">565</span>                                                        cerp(determine(bx0 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz0 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.565"></a>
+<span class="sourceLineNo">566</span>                                                        y - yf),<a name="line.566"></a>
+<span class="sourceLineNo">567</span>                                                cerp(<a name="line.567"></a>
+<span class="sourceLineNo">568</span>                                                        cerp(determine(bx0 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by0 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.568"></a>
+<span class="sourceLineNo">569</span>                                                        cerp(determine(bx0 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, determine(bx1 + by1 + bz1 + bw1 + bu1 + bv1) * 0x1.12bp-61, x - xf),<a name="line.569"></a>
+<span class="sourceLineNo">570</span>                                                        y - yf),<a name="line.570"></a>
+<span class="sourceLineNo">571</span>                                                z - zf),<a name="line.571"></a>
+<span class="sourceLineNo">572</span>                                        w - wf),<a name="line.572"></a>
+<span class="sourceLineNo">573</span>                                u - uf),<a name="line.573"></a>
+<span class="sourceLineNo">574</span>                        v - vf));<a name="line.574"></a>
+<span class="sourceLineNo">575</span>    }<a name="line.575"></a>
+<span class="sourceLineNo">576</span>    private transient long[] scratch3;<a name="line.576"></a>
+<span class="sourceLineNo">577</span>    private transient double[] scratch;<a name="line.577"></a>
+<span class="sourceLineNo">578</span>    private transient int lastLen = -1;<a name="line.578"></a>
+<span class="sourceLineNo">579</span>    private transient double lastEffect = 0x1.12bp-61;<a name="line.579"></a>
+<span class="sourceLineNo">580</span>    public final double arbitraryNoise(long seed, double... coordinates) {<a name="line.580"></a>
+<span class="sourceLineNo">581</span>        final int len = coordinates.length, upper = 1 &lt;&lt; len;<a name="line.581"></a>
+<span class="sourceLineNo">582</span>        final double effect;<a name="line.582"></a>
+<span class="sourceLineNo">583</span>        if(len != lastLen)<a name="line.583"></a>
+<span class="sourceLineNo">584</span>        {<a name="line.584"></a>
+<span class="sourceLineNo">585</span>            lastLen = len;<a name="line.585"></a>
+<span class="sourceLineNo">586</span>            lastEffect = effect = 0x1.81p-62 * Math.pow(1.1875, len);<a name="line.586"></a>
+<span class="sourceLineNo">587</span>        }<a name="line.587"></a>
+<span class="sourceLineNo">588</span>        else<a name="line.588"></a>
+<span class="sourceLineNo">589</span>            effect = lastEffect;<a name="line.589"></a>
+<span class="sourceLineNo">590</span>        if(scratch3 == null || scratch3.length &lt; len * 3)<a name="line.590"></a>
+<span class="sourceLineNo">591</span>            scratch3 = new long[len * 3];<a name="line.591"></a>
+<span class="sourceLineNo">592</span>        if(scratch == null || scratch.length &lt; upper)<a name="line.592"></a>
+<span class="sourceLineNo">593</span>            scratch = new double[upper];<a name="line.593"></a>
+<span class="sourceLineNo">594</span>        for (int i = 0; i &lt; len; i++) {<a name="line.594"></a>
+<span class="sourceLineNo">595</span>            seed = LinnormRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed &lt;&lt; 32);<a name="line.595"></a>
+<span class="sourceLineNo">596</span>            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(coordinates[i])) * seed) + seed;<a name="line.596"></a>
+<span class="sourceLineNo">597</span>        }<a name="line.597"></a>
+<span class="sourceLineNo">598</span>        long working;<a name="line.598"></a>
+<span class="sourceLineNo">599</span>        for (int i = 0; i &lt; upper; i++) {<a name="line.599"></a>
+<span class="sourceLineNo">600</span>            working = 0L;<a name="line.600"></a>
+<span class="sourceLineNo">601</span>            for (int j = 0; j &lt; len; j++) {<a name="line.601"></a>
+<span class="sourceLineNo">602</span>                working += scratch3[j * 3 + (i &gt;&gt; j &amp; 1)];<a name="line.602"></a>
+<span class="sourceLineNo">603</span>            }<a name="line.603"></a>
+<span class="sourceLineNo">604</span>            scratch[i] = determine(working) * effect;<a name="line.604"></a>
+<span class="sourceLineNo">605</span>        }<a name="line.605"></a>
+<span class="sourceLineNo">606</span>        for (int i = 0; i &lt; len; ++i) {<a name="line.606"></a>
+<span class="sourceLineNo">607</span>            for (int j = 0, t = upper &gt;&gt; i; j &lt; t; j += 2) {<a name="line.607"></a>
+<span class="sourceLineNo">608</span>                scratch[j &gt;&gt; 1] = cerp(scratch[j], scratch[j + 1], coordinates[i] - scratch3[i * 3 + 2]);<a name="line.608"></a>
+<span class="sourceLineNo">609</span>            }<a name="line.609"></a>
+<span class="sourceLineNo">610</span>        }<a name="line.610"></a>
+<span class="sourceLineNo">611</span>        return NumberTools.sway(scratch[0]);<a name="line.611"></a>
+<span class="sourceLineNo">612</span>    }<a name="line.612"></a>
+<span class="sourceLineNo">613</span><a name="line.613"></a>
+<span class="sourceLineNo">614</span>}<a name="line.614"></a>
 
 
 

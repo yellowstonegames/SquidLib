@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public class <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.14">MummyNoise</a>
+public class <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.15">MummyNoise</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interface in squidpony.squidmath">Noise.Noise2D</a>, <a href="../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>, <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>, <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a></pre>
 <div class="block">A different kind of noise that has spotted and striped areas, like a tabby cat.
@@ -137,6 +137,14 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static double[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MummyNoise.html#goldenDouble">goldenDouble</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static long[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MummyNoise.html#goldenLong">goldenLong</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a></code></td>
@@ -314,8 +322,14 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
                  long&nbsp;seedY)</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
-<td class="colFirst"><code>static double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MummyNoise.html#signedDouble-long-">signedDouble</a></span>(long&nbsp;state)</code>&nbsp;</td>
+<td class="colFirst"><code>protected static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MummyNoise.html#gradCoord3D-long-int-int-int-double-double-double-">gradCoord3D</a></span>(long&nbsp;seed,
+           int&nbsp;x,
+           int&nbsp;y,
+           int&nbsp;z,
+           double&nbsp;xd,
+           double&nbsp;yd,
+           double&nbsp;zd)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -345,7 +359,25 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>instance</h4>
-<pre>public static final&nbsp;<a href="../../squidpony/squidmath/MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a> <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.15">instance</a></pre>
+<pre>public static final&nbsp;<a href="../../squidpony/squidmath/MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a> <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.16">instance</a></pre>
+</li>
+</ul>
+<a name="goldenDouble">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>goldenDouble</h4>
+<pre>public static final&nbsp;double[][] <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.18">goldenDouble</a></pre>
+</li>
+</ul>
+<a name="goldenLong">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>goldenLong</h4>
+<pre>public static final&nbsp;long[][] <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.27">goldenLong</a></pre>
 </li>
 </ul>
 <a name="seedX">
@@ -354,7 +386,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>seedX</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.16">seedX</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.167">seedX</a></pre>
 </li>
 </ul>
 <a name="seedY">
@@ -363,7 +395,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>seedY</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.16">seedY</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.167">seedY</a></pre>
 </li>
 </ul>
 <a name="seedZ">
@@ -372,7 +404,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>seedZ</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.16">seedZ</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.167">seedZ</a></pre>
 </li>
 </ul>
 <a name="seedW">
@@ -381,7 +413,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>seedW</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.16">seedW</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.167">seedW</a></pre>
 </li>
 </ul>
 <a name="seedU">
@@ -390,7 +422,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>seedU</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.16">seedU</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.167">seedU</a></pre>
 </li>
 </ul>
 <a name="seedV">
@@ -399,7 +431,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>seedV</h4>
-<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.16">seedV</a></pre>
+<pre>public&nbsp;long <a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.167">seedV</a></pre>
 </li>
 </ul>
 </li>
@@ -416,7 +448,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>MummyNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.18">MummyNoise</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.169">MummyNoise</a>()</pre>
 </li>
 </ul>
 <a name="MummyNoise-int-">
@@ -425,7 +457,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MummyNoise</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.22">MummyNoise</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.173">MummyNoise</a>(int&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -442,7 +474,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.37">determine</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.188">determine</a>(long&nbsp;state)</pre>
 <div class="block">The same as <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a>, except this assumes state has already been multiplied by
  0x632BE59BD9B4E019L.</div>
 <dl>
@@ -453,22 +485,13 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 </dl>
 </li>
 </ul>
-<a name="signedDouble-long-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>signedDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.50">signedDouble</a>(long&nbsp;state)</pre>
-</li>
-</ul>
 <a name="getNoise-double-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.55">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.205">getNoise</a>(double&nbsp;x,
                        double&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -482,7 +505,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.60">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.210">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                long&nbsp;seed)</pre>
 <dl>
@@ -491,25 +514,13 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 </dl>
 </li>
 </ul>
-<a name="getNoiseWithSeeds-double-double-long-long-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNoiseWithSeeds</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.68">getNoiseWithSeeds</a>(double&nbsp;x,
-                                       double&nbsp;y,
-                                       long&nbsp;seedX,
-                                       long&nbsp;seedY)</pre>
-</li>
-</ul>
 <a name="getNoise-double-double-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.86">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.223">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z)</pre>
 <dl>
@@ -524,7 +535,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.91">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.228">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                long&nbsp;seed)</pre>
@@ -534,13 +545,40 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 </dl>
 </li>
 </ul>
+<a name="gradCoord3D-long-int-int-int-double-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>gradCoord3D</h4>
+<pre>protected static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.316">gradCoord3D</a>(long&nbsp;seed,
+                                    int&nbsp;x,
+                                    int&nbsp;y,
+                                    int&nbsp;z,
+                                    double&nbsp;xd,
+                                    double&nbsp;yd,
+                                    double&nbsp;zd)</pre>
+</li>
+</ul>
+<a name="getNoiseWithSeeds-double-double-long-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoiseWithSeeds</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.324">getNoiseWithSeeds</a>(double&nbsp;x,
+                                       double&nbsp;y,
+                                       long&nbsp;seedX,
+                                       long&nbsp;seedY)</pre>
+</li>
+</ul>
 <a name="getNoiseWithSeeds-double-double-double-long-long-long-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeeds</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.100">getNoiseWithSeeds</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.356">getNoiseWithSeeds</a>(double&nbsp;x,
                                        double&nbsp;y,
                                        double&nbsp;z,
                                        long&nbsp;seedX,
@@ -554,7 +592,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.126">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.382">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w)</pre>
@@ -570,7 +608,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.131">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.387">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
@@ -587,7 +625,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeeds</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.141">getNoiseWithSeeds</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.397">getNoiseWithSeeds</a>(double&nbsp;x,
                                        double&nbsp;y,
                                        double&nbsp;z,
                                        double&nbsp;w,
@@ -603,7 +641,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoise</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.182">getNoise</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.438">getNoise</a>(double&nbsp;x,
                        double&nbsp;y,
                        double&nbsp;z,
                        double&nbsp;w,
@@ -621,7 +659,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeed</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.188">getNoiseWithSeed</a>(double&nbsp;x,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.444">getNoiseWithSeed</a>(double&nbsp;x,
                                double&nbsp;y,
                                double&nbsp;z,
                                double&nbsp;w,
@@ -640,7 +678,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockList">
 <li class="blockList">
 <h4>getNoiseWithSeeds</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.200">getNoiseWithSeeds</a>(double&nbsp;x,
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.456">getNoiseWithSeeds</a>(double&nbsp;x,
                                        double&nbsp;y,
                                        double&nbsp;z,
                                        double&nbsp;w,
@@ -660,7 +698,7 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>arbitraryNoise</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.324">arbitraryNoise</a>(long&nbsp;seed,
+<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/MummyNoise.html#line.580">arbitraryNoise</a>(long&nbsp;seed,
                                    double...&nbsp;coordinates)</pre>
 </li>
 </ul>
