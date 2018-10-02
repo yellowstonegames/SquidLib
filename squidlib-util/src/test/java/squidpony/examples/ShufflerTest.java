@@ -2,10 +2,7 @@ package squidpony.examples;
 
 import org.junit.Test;
 import squidpony.FakeLanguageGen;
-import squidpony.squidmath.GapShuffler;
-import squidpony.squidmath.LowStorageShuffler;
-import squidpony.squidmath.RNG;
-import squidpony.squidmath.ShuffledIntSequence;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
@@ -102,4 +99,49 @@ public class ShufflerTest {
             System.out.println();
         }
     }
+    @Test
+    public void testSNBounds()
+    {
+        for (int i = 3; i <= 42; i++) {
+            SwapOrNotShuffler sn = new SwapOrNotShuffler(i, 31337);
+            System.out.printf("Bound %02d: %d", i, sn.next());
+            for (int j = 1; j < i; j++) {
+                System.out.print(", " + sn.next());
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testSNReseed()
+    {
+        SwapOrNotShuffler sn = new SwapOrNotShuffler(7, 0);
+        for (int i = 0; i < 30; i++) {
+            sn.restart(i);
+            System.out.printf("Seed %08X: %d", i, sn.next());
+            for (int j = 1; j < 7; j++) {
+                System.out.print(", " + sn.next());
+            }
+            System.out.println();
+        }
+    }
+    @Test
+    public void testSNReverse()
+    {
+        SwapOrNotShuffler sn = new SwapOrNotShuffler(7, 0);
+        for (int i = 0; i < 10; i++) {
+            sn.restart(i);
+            System.out.printf("Seed %08X forward: %d", i, sn.next());
+            for (int j = 1; j < 7; j++) {
+                System.out.print(", " + sn.next());
+            }
+            System.out.println();
+            System.out.printf("Seed %08X reverse: %d", i, sn.previous());
+            for (int j = 1; j < 7; j++) {
+                System.out.print(", " + sn.previous());
+            }
+            System.out.println();
+
+        }
+    }
+
 }
