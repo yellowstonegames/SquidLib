@@ -5,7 +5,6 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -50,9 +49,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Empty                  = 14;
 
     //private static final int width = 1920, height = 1080;
-    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
+//    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
     //private static final int width = 512, height = 256; // mimic, elliptical
-    //private static final int width = 1000, height = 1000; // space view
+    private static final int width = 1000, height = 1000; // space view
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -71,6 +70,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private Pixmap pm;
     private Texture pt;
     private int counter = 0;
+    private int octaveCounter = 500;
 //    private Color tempColor = Color.WHITE.cpy();
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
@@ -215,8 +215,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Dump " + date + "/";
         //path = "out/worlds/SpaceView " + date + "/";
         //path = "out/worlds/RoundSide " + date + "/";
-        //path = "out/worlds/Hyperellipse " + date + "/";
-        path = "out/worlds/EllipseHammer " + date + "/";
+//        path = "out/worlds/Hyperellipse " + date + "/";
+//        path = "out/worlds/EllipseHammer " + date + "/";
+        path = "out/worlds/SpaceCompare " + date + "/";
+//        path = "out/worlds/HyperCompare " + date + "/";
         
         if(!Gdx.files.local(path).exists())
             Gdx.files.local(path).mkdirs();
@@ -239,13 +241,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //world = new WorldMapGenerator.SphereMapAlt(seed, width, height, WhirlingNoise.instance, 1.625);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
-        //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.75);
-        //world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.75, 0.125, 2.5);
-        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.5, 0.0625, 2.5);
+//        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.75);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
-        world.generateRivers = false;
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -326,6 +327,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //randomizeColors(seed);
 //        world.generate(1, 1.125, seed); // mimic of Earth favors too-cold planets
 //        dbm.makeBiomes(world);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001, 0.0625, 2.5);
         world.generate(0.95 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.15,
                 LinnormRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.2 + 1.0, seed);
         dbm.makeBiomes(world);
@@ -334,11 +337,13 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     public void putMap() {
         ++counter;
-        String name = lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
+        String name = octaveCounter + "_" + lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
         while (Gdx.files.local(path + name + ".png").exists())
-            name = lang.word(rng, true);
+            name = octaveCounter + "_" + lang.word(rng, true);
 
         generate(CrossHash.hash64(name));
+        octaveCounter += 25;
+
         //display.erase();
         int hc, tc, bc;
 //        int[][] heightCodeData = world.heightCodeData;
@@ -353,12 +358,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        final double[][] moistureData = world.moistureData, heatData = world.heatData, heightData = world.heightData;
         double elevation, heat, moisture;
         boolean icy;
-
+        int t;
         double[][] heightData = world.heightData;
         int[][] heatCodeData = dbm.heatCodeData;
         int[][] biomeCodeData = dbm.biomeCodeData;
         //pm.setColor(SColor.quantize253I(SColor.DB_INK));
-        pm.setColor(Color.rgba8888(SColor.DB_INK));
+        pm.setColor(SColor.DB_INK);
         pm.fill();
         for (int y = 0; y < height; y++) {
             PER_CELL:
@@ -376,24 +381,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                         case 1:
                         case 2:
                         case 3:
-//                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(shallowColor, ice,
-//                                    (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
-//                            pm.setColor(tempColor);
                             pm.drawPixel(x, y, SColor.floatToInt(SColor.lerpFloatColors(shallowColor, ice,
                                     (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0)))));
-//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                            //display.put(x, y, SColor.lerpFloatColors(shallowColor, ice,
-                            //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                             continue PER_CELL;
                         case 4:
-//                            Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(lightIce, ice,
-//                                    (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
-//                            pm.setColor(tempColor);
                             pm.drawPixel(x, y, SColor.floatToInt(SColor.lerpFloatColors(lightIce, ice,
                                     (float) ((heightData[x][y] - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower)))));
-//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                            //display.put(x, y, SColor.lerpFloatColors(lightIce, ice,
-                            //        (float) ((heightData[x][y] - 0.1) / (0.18 - 0.1))));
                             continue PER_CELL;
                     }
                 }
@@ -402,39 +395,20 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
                     case 1:
                     case 2:
                     case 3:
-//                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
-//                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
-//                        pm.setColor(tempColor);
                         pm.drawPixel(x, y, SColor.floatToInt(SColor.lerpFloatColors(
                                 BIOME_COLOR_TABLE[56], coastalColor,
                                 (MathUtils.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f)))));
-//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                        //display.put(x, y, SColor.lerpFloatColors(deepColor, coastalColor,
-                        //        (float) ((heightData[x][y] - -1.0) / (0.1 - -1.0))));
                         break;
                     default:
-                        /*
-                        if(partialLakeData.contains(x, y))
-                            System.out.println("LAKE  x=" + x + ",y=" + y + ':' + (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 19
-                                    + shadingData[x][y] * 13) * 0.03125f);
-                        else if(partialRiverData.contains(x, y))
-                            System.out.println("RIVER x=" + x + ",y=" + y + ':' + (((heightData[x][y] - lowers[hc]) / (differences[hc])) * 19
-                                    + shadingData[x][y] * 13) * 0.03125f);
-                        */
-
-//                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
+//                        if((t = dbm.extractMixAmount(bc)) < 0f || t > 1f)
+//                            System.out.println(t);
+//                        t = SColor.floatToInt(SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
 //                                BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
-//                        pm.setColor(tempColor);
+//                        //System.out.printf("Color: 0x%08X, Biome: %s", t, dbm.extractBiomeA(bc));
+//                        pm.drawPixel(x, y, t);
                         pm.drawPixel(x, y, SColor.floatToInt(SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
                                 BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc))));
-//                            pm.drawPixel(x, y, Color.rgba8888(tempColor));
-                        //display.put(x, y, SColor.lerpFloatColors(BIOME_COLOR_TABLE[biomeLowerCodeData[x][y]],
-                        //        BIOME_DARK_COLOR_TABLE[biomeUpperCodeData[x][y]],
-                        //        (float) //(((heightData[x][y] - lowers[hc]) / (differences[hc])) * 11 +
-                        //                shadingData[x][y]// * 21) * 0.03125f
-                        //        ));
 
-                        //display.put(x, y, SColor.lerpFloatColors(darkTropicalRainforest, desert, (float) (heightData[x][y])));
                 }
             }
         }
@@ -473,13 +447,16 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //                            (extreme((float) (moisture))))));
 //            }
 //        }
+
         writer.palette.analyze(pm);
-        writer.palette.reduceSolid(pm);
+        writer.palette.reduceWithNoise(pm);
+
         batch.begin();
         pt.draw(pm, 0, 0);
         batch.draw(pt, 0, 0);
         batch.end();
-//        PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
+
+        //        PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
         try {
             writer.write(Gdx.files.local(path + name + ".png"), pm, false);
         } catch (IOException ex) {
@@ -585,7 +562,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        csv.append(csv2).append(csv3).append(csv4);
 //        Gdx.files.local(path + name + ".java").writeString(csv.toString(), false);
         //if(counter >= 1000000 || jaccard >= 0.4)
-        if(counter >= 20)
+        if(counter >= 40)
                 Gdx.app.exit();
     }
     @Override

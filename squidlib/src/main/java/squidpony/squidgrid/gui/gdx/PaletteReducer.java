@@ -376,7 +376,7 @@ public class PaletteReducer {
             Collections.sort(es, entryComparator);
             int i = 1, c = 0;
             PER_BEST:
-            for (; i < 256 && i < cs;) {
+            for (; i < 256 && c < cs;) {
                 color = es.get(c++).getKey();
                 for (int j = 1; j < i; j++) {
                     if (difference(color, paletteArray[j]) < threshold)
