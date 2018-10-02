@@ -26,23 +26,20 @@ import java.io.Serializable;
  * or lake data as a Collection of Coord, then you should call {@link Coord#expandPoolTo(int, int)}
  * with your width and height so the Coords remain safely pooled. If you're fine with keeping rivers and lakes as
  * GreasedRegions and not requesting Coord values from them, then you don't need to do anything with Coord. Certain
- * parts of this class are not necessary to generate, just in case you want river-less maps or something similar;
- * setting {@link #generateRivers} to false will disable river generation (it defaults to true).
+ * parts of this class are not necessary to generate. For example, you can enable river generation if you want by
+ * setting {@link #generateRivers} to true, but it doesn't produce very good results right now.
  * <br>
  * The main trade-off this makes to obtain better quality is reduced speed; generating a 512x512 map on a circa-2016
  * laptop (i7-6700HQ processor at 2.6 GHz) takes about 1 second (about 1.15 seconds for an un-zoomed map, 0.95 or so
  * seconds to increase zoom at double resolution). If you don't need a 512x512 map, this takes commensurately less time
  * to generate less grid cells, with 64x64 maps generating faster than they can be accurately seen on the same hardware.
- * River positions are produced using a different method, and do not involve the Simplex noise parts other than using
- * the height map to determine flow. Zooming with rivers is tricky, and generally requires starting from the outermost
- * zoom level and progressively enlarging and adding detail to all rivers as zoom increases on specified points.
  */
 @Beta
 public abstract class WorldMapGenerator implements Serializable {
     public final int width, height;
     public long seed, cachedState;
     public StatefulRNG rng;
-    public boolean generateRivers = true;
+    public boolean generateRivers = false;
     public final double[][] heightData, heatData, moistureData, freshwaterData;
     public final GreasedRegion landData
             ;//, riverData, lakeData,
@@ -1809,7 +1806,8 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     @Beta
     public static class SphereMapAlt extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        //protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -1930,9 +1928,11 @@ public abstract class WorldMapGenerator implements Serializable {
             xPositions = new double[width][height];
             yPositions = new double[width][height];
             zPositions = new double[width][height];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq * 0.7);
-            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.75, 0.48);
-            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
+            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
+            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
+//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq * 0.7);
+//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
+            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 2.75, 0.48);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -2276,9 +2276,10 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-//            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
-            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
+            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
+            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
+//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -3039,9 +3040,10 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-            //terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
-            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25, 0.475);
+            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
+            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325, 0.475);
+//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25, 0.475);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -3380,9 +3382,10 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-//            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
-            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
+            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
+            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
+//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -3792,8 +3795,8 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq * 0.8);
-            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 4.5);
+            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
+            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -4154,9 +4157,10 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[width][height];
             zPositions = new double[width][height];
             edges = new int[height << 1];
-            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-//            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 4.25, 0.48);
-            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
+            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
+            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
+//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
+//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -4573,12 +4577,13 @@ public abstract class WorldMapGenerator implements Serializable {
                 xPos = startX - rx;
                 ixPos = xPos / rx;
                 for (int x = 0; x < width; x++, xPos += i_uw, ixPos += irx) {
-                    rho = Math.sqrt(ixPos * ixPos + iyPos * iyPos);
+                    rho = (ixPos * ixPos + iyPos * iyPos);
                     if(rho > 1.0) {
                         heightCodeData[x][y] = 1000;
                         inSpace = true;
                         continue;
                     }
+                    rho = Math.sqrt(rho);
                     if(inSpace)
                     {
                         inSpace = false;

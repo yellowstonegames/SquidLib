@@ -15,9 +15,11 @@ import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
-import squidpony.squidgrid.mapping.FantasyPoliticalMapper;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.*;
+import squidpony.squidmath.ClassicNoise;
+import squidpony.squidmath.LinnormRNG;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.StatefulRNG;
 
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
@@ -44,14 +46,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             Empty                  = 14;
 
     //private static final int width = 314 * 3, height = 300;
-    private static final int width = 1024, height = 512;
+//    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
-//    private static final int width = 400, height = 400;
+    private static final int width = 400, height = 400;
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
-    //private static final int width = 700, height = 700;
+//    private static final int width = 700, height = 700;
 //    private static final int width = 512, height = 512;
+//    private static final int width = 128, height = 128;
     
     private SpriteBatch batch;
 //    private SquidPanel display;//, overlay;
@@ -82,11 +85,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private boolean spinning = false;
     
     private boolean cloudy = false;
-    private float nation = 0f;
+//    private float nation = 0f;
     private long ttg = 0; // time to generate
     private WorldMapGenerator.DetailedBiomeMapper dbm;
-    private FantasyPoliticalMapper fpm;
-    private char[][] political;
+//    private FantasyPoliticalMapper fpm;
+//    private char[][] political;
     
     // Biome map colors
     private static float baseIce = SColor.ALICE_BLUE.toFloatBits();
@@ -306,21 +309,20 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
-        world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.8);
+        //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.8);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.875);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.75);
+        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.55);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7, 0.1, 2.5);
+//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7, 0.0625, 2.5);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 0.9);
-        world.generateRivers = false;
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
-        fpm = new FantasyPoliticalMapper();
+//        fpm = new FantasyPoliticalMapper();
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -356,7 +358,6 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         Gdx.app.exit();
                     }
                 }
-                Gdx.graphics.requestRendering();
             }
         }, new SquidMouse(1, 1, width, height, 0, 0, new InputAdapter()
         {
@@ -390,12 +391,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
     public void zoomIn(int zoomX, int zoomY)
     {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         world.zoomIn(1, zoomX<<1, zoomY<<1);
         dbm.makeBiomes(world);
         //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
-        ttg = System.currentTimeMillis() - startTime;
+        ttg = System.nanoTime() - startTime >> 20;
     }
     public void zoomOut()
     {
@@ -403,16 +404,16 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
     public void zoomOut(int zoomX, int zoomY)
     {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         world.zoomOut(1, zoomX<<1, zoomY<<1);
         dbm.makeBiomes(world);
         //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
-        ttg = System.currentTimeMillis() - startTime;
+        ttg = System.nanoTime() - startTime >> 20;
     }
     public void generate(final long seed)
     {
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
         System.out.println("Seed used: 0x" + StringKit.hex(seed) + "L");
         //world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
         //world.setCenterLongitude(++counter * 0.02);
@@ -423,18 +424,18 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
         //counter = 0L;
-        ttg = System.currentTimeMillis() - startTime;
+        ttg = System.nanoTime() - startTime >> 20;
     }
     public void rotate()
     {
-        long startTime = System.currentTimeMillis();
-        world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
+        long startTime = System.nanoTime();
+        world.setCenterLongitude((startTime & 0xFFFFFFFFFFFFL) * 0x1.1p-32);
         //world.setCenterLongitude(++counter * 0.02);
         world.generate(world.landModifier, world.coolingModifier, seed);
         dbm.makeBiomes(world);
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
-        ttg = System.currentTimeMillis() - startTime;
+        ttg = System.nanoTime() - startTime >> 20;
     }
 
 //    public void putMap() {
@@ -796,8 +797,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Demo: Detailed World Map";
-        config.width = width>>1;
-        config.height = height>>1;
+        config.width = width>> 1;
+        config.height = height>> 1;
         config.foregroundFPS = 40;
         //config.fullscreen = true;
         config.backgroundFPS = -1;
