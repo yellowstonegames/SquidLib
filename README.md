@@ -14,7 +14,8 @@ and smoothly slide the player and enemies around when they move. A much more pol
 
 You don't need to use a text-based display to use many features of this library; there's a demo of this (not yet a game)
 in [ColorGuard](https://github.com/tommyettinger/ColorGuard), which uses `squidlib-util` to handle random numbers, world
-map generation, and text generation in fictional languages.
+map generation, and text generation in fictional languages. SquidLib-Demos has another that only uses `squidlib-util`
+and libGDX; [it can be seen here](https://tommyettinger.github.io/SquidLib-Demos/graphical/index.html).
 
 [![Join the slow-paced chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib)
 

@@ -2451,6 +2451,37 @@ public class FakeLanguageGen implements Serializable {
     }
 
     /**
+     * If a FakeLanguageGen is known and is in {@link #registered}, this allows you to look up that FakeLanguageGen by
+     * name (using a name from {@link #registeredNames}).
+     * @param name a String name such as "English", "Korean Romanized", or "Russian Authentic"
+     * @return a FakeLanguageGen corresponding to the given name, or null if none was found
+     */
+    public static FakeLanguageGen get(String name)
+    {
+        return registry.get(name);
+    }
+    /**
+     * If a FakeLanguageGen is known and is in {@link #registered}, this allows you to look up that FakeLanguageGen by
+     * index, from 0 to {@code FakeLanguageGen.registered.length - 1}.
+     * @param index an int from 0 to {@code FakeLanguageGen.registered.length - 1}
+     * @return a FakeLanguageGen corresponding to the given index, or null if none was found
+     */
+    public static FakeLanguageGen getAt(int index)
+    {
+        return registry.getAt(index);
+    }
+    /**
+     * If a FakeLanguageGen is known and is in {@link #registered}, this allows you to look up that FakeLanguageGen's
+     * name by index, from 0 to {@code FakeLanguageGen.registeredNames.length - 1}.
+     * @param index an int from 0 to {@code FakeLanguageGen.registeredNames.length - 1}
+     * @return a FakeLanguageGen corresponding to the given index, or null if none was found
+     */
+    public static String nameAt(int index)
+    {
+        return registry.keyAt(index);
+    }
+
+    /**
      * FakeLanguageGen constants that are meant to sound like specific real-world languages, and that all use the Latin
      * script (like English) with maybe some accents.
      */
