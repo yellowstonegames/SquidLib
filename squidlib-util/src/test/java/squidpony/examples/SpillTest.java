@@ -146,7 +146,7 @@ public class SpillTest {
             SpillWorldMap swm;
             StatefulRNG stable = new StatefulRNG(0x123456789ABCDEF0L);
             for (String world : new String[]{
-                    FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE).word(stable, true),
+                    FakeLanguageGen.NORSE_SIMPLIFIED.word(stable, true),
                     FakeLanguageGen.JAPANESE_ROMANIZED.word(stable, true),
                     FakeLanguageGen.SWAHILI.word(stable, true),
                     FakeLanguageGen.RUSSIAN_ROMANIZED.word(stable, true),
