@@ -32,7 +32,7 @@ public class LanguageGenTest {
         FakeLanguageGen flg;
         System.out.println("\nImitating language: \"Norse with simplified spelling\":\n");
         rng.setState(0xf00df00L);
-        flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
+        flg = FakeLanguageGen.NORSE_SIMPLIFIED;
         for (int i = 0; i < 40; i++) {
             System.out.println(flg.sentence(rng, 4, 9, new String[]{",", ",", ",", ";"},
                     new String[]{".", ".", "!", "?", "..."}, 0.14));
@@ -177,7 +177,7 @@ public class LanguageGenTest {
         flg = FakeLanguageGen.NORSE;
         System.out.println(flg.getName() + ": \"" + flg.sentence(rng, 4, 9, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
-        flg = FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE);
+        flg = FakeLanguageGen.NORSE_SIMPLIFIED;
         System.out.println(flg.getName() + ": \"" + flg.sentence(rng, 4, 9, new String[]{",", ",", ";"},
                 new String[]{"!", "?", ".", ".", "."}, 0.15) + "\",");
         flg = FakeLanguageGen.NAHUATL;
@@ -258,7 +258,7 @@ public class LanguageGenTest {
                 FakeLanguageGen.ARABIC_ROMANIZED,
                 FakeLanguageGen.HINDI_ROMANIZED.removeAccents(),
                 FakeLanguageGen.INUKTITUT,
-                FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
+                FakeLanguageGen.NORSE_SIMPLIFIED,
                 FakeLanguageGen.NAHUATL,
                 FakeLanguageGen.MONGOLIAN,
                 FakeLanguageGen.KOREAN_ROMANIZED,

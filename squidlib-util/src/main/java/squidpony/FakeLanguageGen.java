@@ -1408,10 +1408,11 @@ public class FakeLanguageGen implements Serializable {
      * Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules. Not
      * to be confused with the language(s) of Norway, where the Norwegian languages are called norsk, and are further
      * distinguished into Bokmål and Nynorsk. This should not be likely to seem like any form of Norwegian, since it
-     * doesn't have the a-with-ring letter 'å' and has the letters eth ('Ðð') and thorn (Þþ). If you want to remove any
-     * letters not present on a US-ASCII keyboard, you can use {@link Modifier#SIMPLIFY_NORSE} on this language or some
-     * mix of this with other languages; it also changes some of the usage of "j" where it means the English "y" sound,
-     * making "fjord" into "fyord", which is closer to familiar uses from East Asia like "Tokyo" and "Pyongyang".
+     * doesn't have the a-with-ring letter 'å' and has the letters eth ('Ðð') and thorn ('Þþ'). If you want to remove
+     * any letters not present on a US-ASCII keyboard, you can use {@link Modifier#SIMPLIFY_NORSE} on this language or
+     * some mix of this with other languages; it also changes some of the usage of "j" where it means the English "y"
+     * sound, making "fjord" into "fyord", which is closer to familiar uses from East Asia like "Tokyo" and "Pyongyang".
+     * You can also now use {@link #NORSE_SIMPLIFIED} directly, which is probably easiest.
      * <br>
      * Leyrk tjör stomri kna snó æd ðrépdápá, prygso?
      */
@@ -2429,6 +2430,21 @@ public class FakeLanguageGen implements Serializable {
      * Zrolmolurz, voluu, nguu yuh'ongohng!
      */
     public static final FakeLanguageGen DEEP_SPEECH = deepSpeech().register("Deep Speech");
+    /**
+     * Somewhat close to Old Norse, which is itself very close to Icelandic, but changed to avoid letters not on a
+     * US-ASCII keyboard. Not to be confused with the language(s) of Norway, where the Norwegian languages are called
+     * norsk, and are further distinguished into Bokmål and Nynorsk. This just applies {@link Modifier#SIMPLIFY_NORSE}
+     * to {@link #NORSE}. This replaces eth ('Ðð') and thorn ('Þþ') with 'th' unless preceded by 's' (where 'sð' or 'sþ'
+     * becomes "st") or followed by 'r' (where 'ðr' or 'þr' becomes 'fr'). It replaces 'Æ' or 'æ' with 'Ae' or 'ae', and
+     * replaces 'Ö' or 'ö' with 'Ou' or "ou", which can change the length of a String relative to NORSE. It removes all
+     * other accent marks (since the two-dot umlaut accent has already been changed, this only affects acute accents).
+     * It also changes some of the usage of "j" where it means the English "y" sound, making "fjord" into "fyord", which
+     * is closer to familiar uses from East Asia like "Tokyo" and "Pyongyang".
+     * <br>
+     * Leyrk tyour stomri kna sno aed frepdapa, prygso?
+     */
+    public static final FakeLanguageGen NORSE_SIMPLIFIED = norse().addModifiers(Modifier.SIMPLIFY_NORSE)
+            .register("Norse Simplified");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages

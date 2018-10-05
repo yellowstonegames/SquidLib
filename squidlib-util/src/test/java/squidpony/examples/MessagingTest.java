@@ -79,6 +79,8 @@ public class MessagingTest {
                             Messaging.NounTrait.MALE_GENDER)
             );
         }
+//        System.out.println();
+//        System.out.println(StringKit.join("\n", FakeLanguageGen.registeredNames));
     }
 }
 

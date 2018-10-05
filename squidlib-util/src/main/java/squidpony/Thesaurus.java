@@ -940,7 +940,7 @@ public class Thesaurus implements Serializable{
             "nr`acc`gen`",
             FakeLanguageGen.NORSE,
             "nr`gen`",
-            FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE),
+            FakeLanguageGen.NORSE_SIMPLIFIED,
             "na`gen`",
             FakeLanguageGen.NAHUATL,
             "mn`gen`",
@@ -1034,11 +1034,11 @@ public class Thesaurus implements Serializable{
             FakeLanguageGen.mixAll(FakeLanguageGen.NAHUATL, 3, FakeLanguageGen.SWAHILI, 2),
             "nr`ru`gen`",
             FakeLanguageGen.mixAll(
-                    FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE), 3,
+                    FakeLanguageGen.NORSE_SIMPLIFIED, 3,
                     FakeLanguageGen.RUSSIAN_ROMANIZED, 2),
             "nr`in`gen`",
             FakeLanguageGen.mixAll(
-                    FakeLanguageGen.NORSE.addModifiers(FakeLanguageGen.Modifier.SIMPLIFY_NORSE), 3,
+                    FakeLanguageGen.NORSE_SIMPLIFIED, 3,
                     FakeLanguageGen.INUKTITUT, 2),
             "mn`so`gen`",
             FakeLanguageGen.mixAll(
