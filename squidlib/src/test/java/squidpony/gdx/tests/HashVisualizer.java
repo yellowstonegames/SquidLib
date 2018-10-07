@@ -330,7 +330,10 @@ public class HashVisualizer extends ApplicationAdapter {
 //        y *= 0x3FFF;
 //        return (x += y ^ ((x *= 0xB531A935) ^ x >>> 13) * (y * 0x41C64E6D | 1)) ^ (x << 18 | x >>> 14) ^ (x << 9 | x >>> 23);         
         //0x9E3779B97F4A7C15L
-        return ((x = ((x *= 0xC6BC279692B5CC85L) ^ x >>> 26) * ((y *= 0x9E3779B97F4A7C15L) ^ (y + 0x9E3779B97F4A7C15L))) ^ x >>> 28);
+        y *= 0x9E3779B97F4A7C15L;
+        x ^= (y << 23 | y >>> 41);
+        return (x = ((x *= 0x6C8E9CF570932BD5L) ^ (x >>> 25)) * (x | 0xA529L)) ^ (x >>> 22);
+//        return ((x = ((x *= 0xC6BC279692B5CC85L) ^ x >>> 26) * ((y *= 0x9E3779B97F4A7C15L) ^ (y + 0x9E3779B97F4A7C15L))) ^ x >>> 28);
 //        long state = (x << 16 ^ y) + 0xBEEFL;
 //        long state = (y*0x41C64E6DL + x*0x9E3779B5L) + 0xBEEFL;
 //        long state = (y*130207L ^ x*3053L) + 0xBEEFL;
@@ -1402,7 +1405,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 2:
-                        extra = System.nanoTime() >>> 31 & 63;
+                        extra = System.nanoTime() >>> 30 & 63;
                         Gdx.graphics.setTitle("Weird Hash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
@@ -1424,7 +1427,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 4:
-                        extra = System.nanoTime() >>> 31 & 63;
+                        extra = System.nanoTime() >>> 30 & 63;
                         Gdx.graphics.setTitle("HastyPointHash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {

@@ -24,6 +24,11 @@ import java.io.Serializable;
  * small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this
  * case. This also uses a different seed for each round.
  * <br>
+ * This class extends {@link LowStorageShuffler}, changing it from producing a unique set of ints once, to producing
+ * many sets of ints one after the next. It is very similar to {@link SNShuffledIntSequence}, which is just like this
+ * class but extends {@link SwapOrNotShuffler} instead. This class and LowStorageShuffler are optimized for GWT, while
+ * SNShuffledIntSequence and SwapOrNotShuffler are not but may have higher quality.
+ * <br>
  * Created by Tommy Ettinger on 9/30/2018.
  * @author Alan Wolfe
  * @author Tommy Ettinger
@@ -62,6 +67,7 @@ public class ShuffledIntSequence extends LowStorageShuffler implements Serializa
      * Gets the next distinct int in the sequence, shuffling the sequence if it has been exhausted so it never runs out.
      * @return the next item in the sequence
      */
+    @Override
     public int next()
     {
         int r = super.next();
@@ -78,6 +84,7 @@ public class ShuffledIntSequence extends LowStorageShuffler implements Serializa
      * going forwards and backwards).
      * @return the previously-given item in the sequence, or -1 if something goes wrong (which shouldn't be possible)
      */
+    @Override
     public int previous()
     {
         int shuffleIndex;
@@ -102,6 +109,7 @@ public class ShuffledIntSequence extends LowStorageShuffler implements Serializa
      * as the seed given in the constructor, this will use the same sequence, acting like {@link #restart()}.
      * @param seed any int; will be used to get several seeds used internally
      */
+    @Override
     public void restart(int seed)
     {
         super.restart(seed);
