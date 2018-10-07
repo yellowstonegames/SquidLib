@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 /**
  * Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
- * of the sequence in memory. Uses a Swap-Or-Not network, as described in
- * <a href="https://arxiv.org/abs/1208.1176">this paper by Viet Tung Hoang, Ben Morris, and Phillip Rogaway</a>.
+ * of the sequence in memory. Uses a Swap-Or-Not network with 7 rounds using on a non-power-of-two domain, as described
+ * in <a href="https://arxiv.org/abs/1208.1176">this paper by Viet Tung Hoang, Ben Morris, and Phillip Rogaway</a>.
  * The API is very simple; you construct a SwapOrNotShuffler by specifying how many items it can shuffle, and you can
  * optionally use a seed (it will be random if you don't specify a seed). Call {@link #next()} on a SwapOrNotShuffler
  * to get the next distinct int in the shuffled ordering; next() will return -1 if there are no more distinct ints (if
@@ -14,10 +14,10 @@ import java.io.Serializable;
  * {@link #restart()} to use the same sequence over again, or {@link #restart(long)} to use a different seed (the bound
  * is fixed).
  * <br>
- * This is very similar to {@link LowStorageShuffler}; this may replace that class because it seems to produce
- * more-random shuffles with less risk of failure. It also doesn't need to iterate to a power of 4 items to get through
- * a sequence, and only needs to traverse {@link #bound} items. It does use more {@link #ROUNDS} than
- * LowStorageShuffler, but each seems to be much faster.
+ * This class is extremely similar to {@link LowStorageShuffler}, but LowStorageShuffler is optimized for usage on GWT
+ * while SwapOrNotShuffler is meant to have higher quality in general. There's also {@link ShuffledIntSequence}, which
+ * extends LowStorageShuffler and uses different behavior so it "re-shuffles" the results when all results have been
+ * produced, and {@link SNShuffledIntSequence}, which extends this class but is otherwise like ShuffledIntSequence.
  * <br>
  * Created by Tommy Ettinger on 10/1/2018.
  * @author Viet Tung Hoang, Ben Morris, and Phillip Rogaway
@@ -121,33 +121,12 @@ public class SwapOrNotShuffler implements Serializable {
      */
     public int round(int data, int key, long fun)
     {
+        // not a prime number; this is X′ in the paper
         int prime = (key - data);
+        // cheaper modulo for when we know prime is >= -bound
         prime += (prime >> 31) & bound;
+        // the operation of fun doesn't happen in the Abelian group, but prime and data are in it
         return (fun * (Math.max(data, prime) - fun) < 0L) ? prime : data;
-//        seed ^= data * 0xBCFD;
-//        seed ^= (data << 13 | data >>> 19) ^ (seed << 5) ^ (seed << 28 | seed >>> 4);
-//        data ^= (seed << 11 | seed >>> 21) * 0xC6D5;
-//        return data ^ (data << 25 | data >>> 7);
-
-//        seed ^= data * 0xC6D5 + 0xB531A935;
-//        data ^= seed * 0xBCFD + 0x41C64E6D;
-//        seed ^= data * 0xACED;
-//        data ^= seed * 0xBA55;
-//        data += data >>> 21;
-//        seed += seed >>> 22;
-//        data += data << 8;
-//        seed += seed << 5;
-//        return data ^ seed;
-
-//        data += data >>> 21;
-//        seed += seed >>> 22;
-//        data += data << 8;
-//        seed += seed << 5;
-//        data += data >>> 16;
-//        seed += seed >>> 13;
-//        data += data << 9;
-//        seed += seed << 11;
-//        return data ^ seed;
     }
 
     /**

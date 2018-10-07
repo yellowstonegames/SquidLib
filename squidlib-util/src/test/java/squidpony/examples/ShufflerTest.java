@@ -143,5 +143,17 @@ public class ShufflerTest {
 
         }
     }
+    @Test
+    public void testSNSIS()
+    {
+        SNShuffledIntSequence sis = new SNShuffledIntSequence(10, 0xBEEF1E571337CAFEL);
+        for (int j = 0; j < 10; j++) {
+            System.out.print(sis.next());
+            for (int i = 1; i < 20; i++) {
+                System.out.print(", " + sis.next());
+            }
+            System.out.println();
+        }
+    }
 
 }

@@ -23,6 +23,11 @@ import java.io.Serializable;
  * small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this
  * case. This also uses a different seed for each round.
  * <br>
+ * This class is extremely similar to {@link SwapOrNotShuffler}, but LowStorageShuffler is optimized for usage on GWT
+ * while SwapOrNotShuffler is meant to have higher quality in general. There's also {@link ShuffledIntSequence}, which
+ * extends this class and uses different behavior so it "re-shuffles" the results when all results have been produced,
+ * and {@link SNShuffledIntSequence}, which extends SwapOrNotShuffler but is otherwise like ShuffledIntSequence.
+ * <br>
  * Created by Tommy Ettinger on 9/22/2018.
  * @author Alan Wolfe
  * @author Tommy Ettinger
@@ -121,6 +126,11 @@ public class LowStorageShuffler implements Serializable {
         index = 0;
     }
 
+    public static int determine(int z)
+    {
+        return (z = ((z = ((z = ((z *= 0xBDEAD) ^ z >>> 13) * 0x7FFFF) ^ z >>> 12) * 0x1FFFF) ^ z >>> 14) * 0x1FFF) ^ z >>> 15;
+
+    }    
     /**
      * Starts the sequence over, but can change the seed (completely changing the sequence). If {@code seed} is the same
      * as the seed given in the constructor, this will use the same sequence, acting like {@link #restart()}.
@@ -129,10 +139,10 @@ public class LowStorageShuffler implements Serializable {
     public void restart(int seed)
     {
         index = 0;
-        key0 = Light32RNG.determine(seed ^ 0xDE4D * ~bound);
-        key1 = Light32RNG.determine(key0 ^ 0xBA55 * bound);
-        key0 ^= Light32RNG.determine(~key1 ^ 0xBEEF * bound);
-        key1 ^= Light32RNG.determine(~key0 ^ 0x1337 * bound);
+        key0 = determine(seed ^ 0xDE4D * ~bound);
+        key1 = determine(key0 ^ 0xBA55 * bound);
+        key0 ^= determine(~key1 ^ 0xBEEF * bound);
+        key1 ^= determine(~key0 ^ 0x1337 * bound);
     }
 
     /**
