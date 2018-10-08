@@ -76,7 +76,7 @@ public class BundleBundleBiMap<E1, E2>
      * Constructs a BundleBiMap using another BundleBiMap to copy.
      * @param other the other BundleBiMap to copy
      */
-    public BundleBundleBiMap(BundleBundleBiMap<? extends E1, ? extends E2> other)
+    public BundleBundleBiMap(BundleBundleBiMap<E1, E2> other)
     {
         if(other == null)
         {
