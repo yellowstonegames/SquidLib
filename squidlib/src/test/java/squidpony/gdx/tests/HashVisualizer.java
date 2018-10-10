@@ -277,7 +277,7 @@ public class HashVisualizer extends ApplicationAdapter {
         b += c * 0xD1B54A32D192ED03L;
         a += b * 0xABC98388FB8FAC03L;
         c += a * 0x8CB92BA72F3D8DD7L;
-        // xorshift, multiply by another inverse golden ratio constant, xorshift again, return
+        // xorshift, multiply by an inverse golden ratio constant, xorshift, return; this is like LightRNG but simpler
         return ((c = (c ^ c >> 27) * 0xDB4F0B9175AE2165L) ^ c >>> 25);
         // SplitMix64, as used in LightRNG but without the large golden-ratio multiply at the start
 //        return ((c = ((c = (c ^ c >>> 30) * 0xBF58476D1CE4E5B9L) ^ c >>> 27) * 0x94D049BB133111EBL) ^ c >>> 31);

@@ -84,9 +84,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private int counter = 0;
     private float season = 0f;
     private Color tempColor = Color.WHITE.cpy();
-    
+
     private boolean spinning = false;
-    
+
+    private boolean seasons = true;
+
     private boolean cloudy = false;
 //    private float nation = 0f;
     private long ttg = 0; // time to generate
@@ -429,6 +431,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 'p':
                         spinning = !spinning;
                         break;
+                    case 'S':
+                    case 's':
+                        seasons = !seasons;
+                        break;
                     case 'M':
                     case 'm':
                         mode = (mode + 1) % maxModes;
@@ -622,11 +628,19 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         double[][] heightData = world.heightData;
         int[][] heatCodeData = dbm.heatCodeData;
         int[][] biomeCodeData = dbm.biomeCodeData;
-        int s = (int) season, ns = s + 1 & 3;
-        float sa = season - s;
         pm.setColor(quantize(SColor.DB_INK));
         pm.fill();
+        int s = (int) season, ns = s + 1 & 3;
+        float sa = season - s;
+        final float ih = 2f / (height >> 1);
         for (int y = 0; y < height; y++) {
+            if(y == (height >> 1))
+            {
+                s = s + 2 & 3;
+                ns = s + 1 & 3;
+            }
+            float latitudeAdjust = Math.min(1f, Math.abs(((height >> 1) - y) * ih));
+            //latitudeAdjust = latitudeAdjust * latitudeAdjust;
             PER_CELL:
             for (int x = 0; x < width; x++) {
                 hc = heightCodeData[x][y];
@@ -686,11 +700,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                         */
 
                         Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(
+
+                                SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)<<2|2],
+                                        BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)<<2|2], dbm.extractMixAmount(bc)),
+                                SColor.lerpFloatColors(
                                 SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)<<2|s],
                                         BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)<<2|s], dbm.extractMixAmount(bc)),
                                 SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)<<2|ns],
-                                        BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)<<2|ns], dbm.extractMixAmount(bc)),
-                                sa));
+                                        BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)<<2|ns], dbm.extractMixAmount(bc)), sa),
+                                        latitudeAdjust));
 //                    pm.setColor(tempColor);
 //                    pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                         pm.drawPixel(x, y, quantize(tempColor));//Color.rgba8888(tempColor));
