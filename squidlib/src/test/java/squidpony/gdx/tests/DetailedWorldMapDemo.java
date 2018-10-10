@@ -21,6 +21,8 @@ import squidpony.squidmath.LinnormRNG;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.StatefulRNG;
 
+import static squidpony.squidgrid.gui.gdx.SColor.*;
+
 /**
  * Port of Zachary Carter's world generation technique, https://github.com/zacharycarter/mapgen
  * It seems to mostly work now, though it only generates one view of the map that it renders (but biome, moisture, heat,
@@ -48,7 +50,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 314 * 3, height = 300;
 //    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
-    private static final int width = 400, height = 400;
+    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
@@ -80,6 +82,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     private Pixmap pm;
     private Texture pt;
     private int counter = 0;
+    private float season = 0f;
     private Color tempColor = Color.WHITE.cpy();
     
     private boolean spinning = false;
@@ -93,7 +96,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     
     // Biome map colors
     private static float baseIce = SColor.ALICE_BLUE.toFloatBits();
-    private static float ice = baseIce;
+    private static float ice = SColor.floatGetI(240, 248, 255);
     private static float lightIce = SColor.FLOAT_WHITE;
     private static float desert = SColor.floatGetI(248, 229, 180);
     private static float savanna = SColor.floatGetI(181, 200, 100);
@@ -139,6 +142,78 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             emptyColor
     };
 
+    private static float[][] seasonColors = {
+            { //winter
+                    desert,
+                    toEditedFloat(savanna, 0f, 0.08f, -0.05f, 0f),
+                    toEditedFloat(tropicalRainforest, 0f, 0.06f, -0.09f, 0f),
+                    toEditedFloat(grassland, 0f, -0.2f, 0.12f, 0f),
+                    SColor.BAIKO_BROWN.toFloatBits(),                             // woodland
+                    SColor.BAIKO_BROWN.toEditedFloat(0f, -0.2f, -0.05f),          // seasonalForest
+                    toEditedFloat(temperateRainforest, 0f, 0.03f, -0.05f, 0f),
+                    lerpFloatColors(borealForest, FLOAT_WHITE, 0.5f),
+                    lerpFloatColors(tundra, FLOAT_WHITE, 0.65f),
+                    ice,
+                    toEditedFloat(beach, 0f, -0.1f, 0f, 0f),
+                    rocky,
+                    ice, // shallow water
+                    deepColor,
+                    emptyColor
+            },
+            { //spring
+                    desert,
+                    toEditedFloat(savanna, 0f, 0.08f, 0.1f, 0f),
+                    tropicalRainforest,
+                    toEditedFloat(grassland, 0f, 0.1f, 0.0f, 0f),
+                    woodland,
+                    toEditedFloat(seasonalForest, -0.03f, 0.05f, 0.03f, 0f),
+                    toEditedFloat(temperateRainforest, 0f, 0.01f, -0.02f, 0f),
+                    borealForest,
+                    tundra,
+                    ice,
+                    beach,
+                    rocky,
+                    foamColor,
+                    deepColor,
+                    emptyColor
+            },
+            { //summer
+                    desert,
+                    toEditedFloat(savanna, 0f, -0.03f, 0.2f, 0f),
+                    tropicalRainforest,
+                    toEditedFloat(grassland, 0f, 0.03f, 0.05f, 0f),
+                    woodland,
+                    seasonalForest,
+                    temperateRainforest,
+                    borealForest,
+                    tundra,
+                    ice,
+                    beach,
+                    rocky,
+                    foamColor,
+                    deepColor,
+                    emptyColor
+            },
+            { //autumn
+                    desert,
+                    savanna,
+                    tropicalRainforest,
+                    toEditedFloat(grassland, 0f, -0.05f, 0.07f, 0f),
+                    SColor.floatGetI(210, 228, 80), // woodland
+                    GOLDEN_FALLEN_LEAVES.toFloatBits(),//seasonalForest,
+                    temperateRainforest,
+                    toEditedFloat(borealForest, 0f, -0.1f, -0.02f, 0f),
+                    tundra,
+                    ice,
+                    beach,
+                    rocky,
+                    foamColor,
+                    deepColor,
+                    emptyColor
+            },
+
+    };
+
     protected final static float[] BIOME_TABLE = {
             //COLDEST   //COLDER      //COLD               //HOT                     //HOTTER                 //HOTTEST
             Ice+0.7f,   Ice+0.65f,    Grassland+0.9f,      Desert+0.75f,             Desert+0.8f,             Desert+0.85f,            //DRYEST
@@ -152,50 +227,56 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             Ice+0.2f,   River+0.7f,   River+0.6f,          River+0.5f,               River+0.4f,              River+0.3f,              //LAKES
             Ocean+0.9f, Ocean+0.75f,  Ocean+0.6f,          Ocean+0.45f,              Ocean+0.3f,              Ocean+0.15f,             //OCEANS
             Empty                                                                                                                      //SPACE
-    }, BIOME_COLOR_TABLE = new float[61], BIOME_DARK_COLOR_TABLE = new float[61];
+    }, BIOME_COLOR_TABLE = new float[244], BIOME_DARK_COLOR_TABLE = new float[244];
     private static final float[] NATION_COLORS = new float[144];
-    private static void randomizeColors(long seed)
-    {
-        float b, diff, alt, hue = NumberTools.randomSignedFloat(seed);
-        int bCode;
-        for (int i = 0; i < 60; i++) {
-            b = BIOME_TABLE[i];
-            bCode = (int)b;
-            alt = SColor.toEditedFloat(biomeColors[bCode],
-                    hue,
-                    NumberTools.randomSignedFloat(seed * 3L + bCode) * 0.45f - 0.1f,
-                    NumberTools.randomSignedFloat(seed * 5L + bCode) * 0.5f,
-                    0f);
-            diff = ((b % 1.0f) - 0.48f) * 0.27f;
-            BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
-                    ? SColor.lightenFloat(alt, diff)
-                    : SColor.darkenFloat(alt, -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
-        }
-        float sat = NumberTools.randomSignedFloat(seed * 3L - 1L) * 0.4f, 
-                value = NumberTools.randomSignedFloat(seed * 5L - 1L) * 0.3f;
-        
-        deepColor = SColor.toEditedFloat(baseDeepColor, hue, sat, value, 0f);
-        shallowColor = SColor.toEditedFloat(baseShallowColor, hue, sat, value, 0f);
-        coastalColor = SColor.toEditedFloat(baseCoastalColor, hue, sat, value, 0f);
-        foamColor = SColor.toEditedFloat(baseFoamColor, hue, sat, value, 0f);
-        ice = SColor.toEditedFloat(baseIce, hue, sat * 0.3f, value * 0.2f, 0f);
-    }
+
     static {
         float b, diff;
-        for (int i = 0; i < 60; i++) {
-            b = BIOME_TABLE[i];
-            diff = ((b % 1.0f) - 0.48f) * 0.27f;
-            BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
-                    ? SColor.lightenFloat(biomeColors[(int)b], diff)
-                    : SColor.darkenFloat(biomeColors[(int)b], -diff));
-            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
+        for (int i = 0; i < 240; i+=4) {
+            for (int j = 0; j < 4; j++) {
+                b = BIOME_TABLE[i>>2];
+                diff = ((b - (int)b) - 0.48f) * 0.27f;
+                BIOME_COLOR_TABLE[i + j] = (b = (diff >= 0)
+                        ? SColor.lightenFloat(seasonColors[j][(int) b], diff)
+                        : SColor.darkenFloat(seasonColors[j][(int) b], -diff));
+                BIOME_DARK_COLOR_TABLE[i + j] = SColor.darkenFloat(b, 0.08f);
+            }
         }
-        BIOME_COLOR_TABLE[60] = BIOME_DARK_COLOR_TABLE[60] = emptyColor;
+        BIOME_COLOR_TABLE[240] = BIOME_COLOR_TABLE[241] = BIOME_COLOR_TABLE[242] = BIOME_COLOR_TABLE[243] =
+                BIOME_DARK_COLOR_TABLE[240] = BIOME_DARK_COLOR_TABLE[241] = BIOME_DARK_COLOR_TABLE[242] = BIOME_DARK_COLOR_TABLE[243] = emptyColor;
         for (int i = 0; i < 144; i++) {
             NATION_COLORS[i] =  SColor.COLOR_WHEEL_PALETTE_REDUCED[((i + 1234567) * 13 & 0x7FFFFFFF) % 144].toFloatBits();
         }
     }
+
+
+//    private static void randomizeColors(long seed)
+//    {
+//        float b, diff, alt, hue = NumberTools.randomSignedFloat(seed);
+//        int bCode;
+//        for (int i = 0; i < 60; i++) {
+//            b = BIOME_TABLE[i];
+//            bCode = (int)b;
+//            alt = SColor.toEditedFloat(biomeColors[bCode],
+//                    hue,
+//                    NumberTools.randomSignedFloat(seed * 3L + bCode) * 0.45f - 0.1f,
+//                    NumberTools.randomSignedFloat(seed * 5L + bCode) * 0.5f,
+//                    0f);
+//            diff = ((b % 1.0f) - 0.48f) * 0.27f;
+//            BIOME_COLOR_TABLE[i] = (b = (diff >= 0)
+//                    ? SColor.lightenFloat(alt, diff)
+//                    : SColor.darkenFloat(alt, -diff));
+//            BIOME_DARK_COLOR_TABLE[i] = SColor.darkenFloat(b, 0.08f);
+//        }
+//        float sat = NumberTools.randomSignedFloat(seed * 3L - 1L) * 0.4f, 
+//                value = NumberTools.randomSignedFloat(seed * 5L - 1L) * 0.3f;
+//        
+//        deepColor = SColor.toEditedFloat(baseDeepColor, hue, sat, value, 0f);
+//        shallowColor = SColor.toEditedFloat(baseShallowColor, hue, sat, value, 0f);
+//        coastalColor = SColor.toEditedFloat(baseCoastalColor, hue, sat, value, 0f);
+//        foamColor = SColor.toEditedFloat(baseFoamColor, hue, sat, value, 0f);
+//        ice = SColor.toEditedFloat(baseIce, hue, sat * 0.3f, value * 0.2f, 0f);
+//    }
 
 //    protected void makeBiomes() {
 //        final WorldMapGenerator world = this.world;
@@ -541,6 +622,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         double[][] heightData = world.heightData;
         int[][] heatCodeData = dbm.heatCodeData;
         int[][] biomeCodeData = dbm.biomeCodeData;
+        int s = (int) season, ns = s + 1 & 3;
+        float sa = season - s;
         pm.setColor(quantize(SColor.DB_INK));
         pm.fill();
         for (int y = 0; y < height; y++) {
@@ -582,7 +665,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                     case 2:
                     case 3:
                         Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(
-                                BIOME_COLOR_TABLE[56], coastalColor,
+                                BIOME_COLOR_TABLE[56<<2], coastalColor,
                                 (MathUtils.clamp((float) (((heightData[x][y] + 0.06) * 8.0) / (WorldMapGenerator.sandLower + 1.0)), 0f, 1f))));
 //                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(deepColor, coastalColor,
 //                                (float) ((heightData[x][y] - -1.0) / (WorldMapGenerator.sandLower - -1.0))));
@@ -602,8 +685,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                                     + shadingData[x][y] * 13) * 0.03125f);
                         */
 
-                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)],
-                                BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)], dbm.extractMixAmount(bc)));
+                        Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(
+                                SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)<<2|s],
+                                        BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)<<2|s], dbm.extractMixAmount(bc)),
+                                SColor.lerpFloatColors(BIOME_COLOR_TABLE[dbm.extractPartB(bc)<<2|ns],
+                                        BIOME_DARK_COLOR_TABLE[dbm.extractPartA(bc)<<2|ns], dbm.extractMixAmount(bc)),
+                                sa));
 //                    pm.setColor(tempColor);
 //                    pm.drawRectangle(x * cellWidth, y * cellHeight, cellWidth, cellHeight);
                         pm.drawPixel(x, y, quantize(tempColor));//Color.rgba8888(tempColor));
@@ -708,22 +795,22 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                             heat < 0.26 ? SColor.lerpFloatColors(shallowColor, ice,
                                     (float)((elevation + 1.0) / (WorldMapGenerator.sandLower+1.0)))
                                     : SColor.lerpFloatColors(
-                            BIOME_COLOR_TABLE[56], coastalColor,
+                            BIOME_COLOR_TABLE[56<<2], coastalColor,
                             a));
                 }
                 else if(hc == 4)
-                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(icy ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_DARK_COLOR_TABLE[34], BIOME_COLOR_TABLE[41],
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(icy ? BIOME_COLOR_TABLE[0] : SColor.lerpFloatColors(BIOME_DARK_COLOR_TABLE[34<<2], BIOME_COLOR_TABLE[41<<2],
                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat))),
                             SColor.lerpFloatColors(icy ? ice : SColor.lerpFloatColors(rocky, desertAlt,
                                     (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat))),
-                                    icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[28],
+                                    icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[28<<2],
                                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat))),
                                     (extreme((float) (moisture)))),
                             (float) ((elevation - WorldMapGenerator.sandLower) / (WorldMapGenerator.sandUpper - WorldMapGenerator.sandLower))));
                 else
                     Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(icy ? ice : SColor.lerpFloatColors(rocky, desertAlt,
                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat))),
-                            icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[28],
+                            icy ? lightIce : SColor.lerpFloatColors(woodland, BIOME_COLOR_TABLE[28<<2],
                                     (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat))),
                             (extreme((float) (moisture)))));
                 pm.drawPixel(x, y, quantize(tempColor));
@@ -759,6 +846,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(SColor.DB_INK.r, SColor.DB_INK.g, SColor.DB_INK.b, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
+        season = ((System.currentTimeMillis() & 0xfffff) * 0x1p-11f) % 4f;
         if(spinning) 
             rotate();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
