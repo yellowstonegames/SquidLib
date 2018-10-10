@@ -70,9 +70,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 91, otherMode = 0;//74;//118;//82;
+    private int hashMode = 70, rngMode = 21, noiseMode = 91, otherMode = 0;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -273,10 +273,23 @@ public class HashVisualizer extends ApplicationAdapter {
 
     public static long ion64(long a, long b, long c)
     {
-        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
-        result ^= (counter += 0x6C8E9CF570932BD5L * b);
-        result ^= (counter += 0x6C8E9CF570932BD5L * c);
-        return counter - (result ^ (result >>> 25)) * (result | 0xA529L);
+        // inverse golden ratio, generalized to 3D (see MummyNoise for all constants calculated so far)
+        b += c * 0xD1B54A32D192ED03L;
+        a += b * 0xABC98388FB8FAC03L;
+        c += a * 0x8CB92BA72F3D8DD7L;
+        // xorshift, multiply by another inverse golden ratio constant, xorshift again, return
+        return ((c = (c ^ c >> 27) * 0xDB4F0B9175AE2165L) ^ c >>> 25);
+        // SplitMix64, as used in LightRNG but without the large golden-ratio multiply at the start
+//        return ((c = ((c = (c ^ c >>> 30) * 0xBF58476D1CE4E5B9L) ^ c >>> 27) * 0x94D049BB133111EBL) ^ c >>> 31);
+        //(c = (c * 0x632BE59BD9B4E019L ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L)
+        //c = a * 0xD1B54A32D192ED03L + b * 0xABC98388FB8FAC03L + c * 0x8CB92BA72F3D8DD7L;
+//        return (c = ((c = (c ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ c >>> 27) * 0xAEF17502108EF2D9L) ^ c >>> 25;
+//        return ((c = (c ^ c >>> 27 ^ 0xDB4F0B9175AE2165L) * 0xC6BC279692B5CC83L) ^ (c << 11 | c  >>> 53) ^ (c << 23 | c >>> 41));
+//        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
+//        result ^= (counter += 0x6C8E9CF570932BD5L * b);
+//        result ^= (counter += 0x6C8E9CF570932BD5L * c);
+//        return counter - (result ^ (result >>> 25)) * (result | 0xA529L);
+
 //        counter -= (result ^ (result >>> 25)) * (result | 0xA529L);
 //        return counter ^ counter >>> 22;
         //return (result ^ (result >>> 25)) * (result | 0xA529L);
@@ -2136,25 +2149,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 70:
-                        Gdx.graphics.setTitle("Ion 64 on length 3 (with time), low bits");
+                        extra = System.nanoTime() >>> 30 & 63;
+                        Gdx.graphics.setTitle("Ion 64 on length 3 (with time), bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = ion64(x, y, ctr) << 8 | 255L;
+                                code = -(ion64(x, y, ctr) >>> extra & 1L) | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
                         break;
                     case 71:
-                        Gdx.graphics.setTitle("Ion 64 on length 3 (with time), mid bits");
+                        Gdx.graphics.setTitle("Ion 64 on length 3 (with time), Hamming weights");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = ion64(x, y, ctr) | 255L;
-                                back[x][y] = floatGet(code);
+                                code = ion64(x, y, ctr);
+                                //bright = Long.bitCount(code) * 0x1p-6f;
+                                back[x][y] = floatGet(Long.bitCount(code >>> 43) / 21f,
+                                        Long.bitCount(code >>> 21 & 0x3fffffL) / 22f,
+                                        Long.bitCount(code & 0x1fffffL) / 21f, 1f);
                             }
                         }
                         break;
                     case 72:
-                        Gdx.graphics.setTitle("Ion 32 on length 3 (with time), high bits");
+                        Gdx.graphics.setTitle("Ion 64 on length 3 (with time), high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 code = ion64(x, y, ctr) >>> 32 | 255L;
