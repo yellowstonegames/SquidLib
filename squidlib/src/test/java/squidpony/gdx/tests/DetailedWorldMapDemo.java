@@ -74,7 +74,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private WorldMapGenerator.EllipticalHammerMap world;
     //private WorldMapGenerator.RoundSideMap world;
 //    private WorldMapGenerator.HyperellipticalMap world;
-//    private WorldMapGenerator.SphereMapAlt world;
+//    private WorldMapGenerator.SphereMap world;
     private WorldMapGenerator world;
     //private Noise.Noise4D cloudNoise;
     //private final float[][][] cloudData = new float[128][128][128];
