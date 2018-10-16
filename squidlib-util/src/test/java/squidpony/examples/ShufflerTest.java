@@ -103,7 +103,7 @@ public class ShufflerTest {
     public void testSNBounds()
     {
         for (int i = 3; i <= 42; i++) {
-            SwapOrNotShuffler sn = new SwapOrNotShuffler(i, 31337);
+            SwapOrNotShuffler sn = new SwapOrNotShuffler(i, 31337 + i);
             System.out.printf("Bound %02d: %d", i, sn.next());
             for (int j = 1; j < i; j++) {
                 System.out.print(", " + sn.next());

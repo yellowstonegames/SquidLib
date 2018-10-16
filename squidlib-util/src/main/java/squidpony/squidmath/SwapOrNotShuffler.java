@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
- * of the sequence in memory. Uses a Swap-Or-Not network with 7 rounds using on a non-power-of-two domain, as described
+ * of the sequence in memory. Uses a Swap-Or-Not network with 6 rounds using on a non-power-of-two domain, as described
  * in <a href="https://arxiv.org/abs/1208.1176">this paper by Viet Tung Hoang, Ben Morris, and Phillip Rogaway</a>.
  * The API is very simple; you construct a SwapOrNotShuffler by specifying how many items it can shuffle, and you can
  * optionally use a seed (it will be random if you don't specify a seed). Call {@link #next()} on a SwapOrNotShuffler
@@ -26,7 +26,7 @@ import java.io.Serializable;
 public class SwapOrNotShuffler implements Serializable {
     private static final long serialVersionUID = 1L;
     public final int bound;
-    protected static final int ROUNDS = 7;
+    protected static final int ROUNDS = 6;
     protected int index;
     protected final int[] keys = new int[ROUNDS];
     protected final long[] functions = new long[ROUNDS];
@@ -103,13 +103,12 @@ public class SwapOrNotShuffler implements Serializable {
     public void restart(long seed)
     {
         index = 0;
-        final long inc = seed << 2 | 1L;
         for (int i = 0; i < ROUNDS; i++) {
-            long z = (seed = seed * 0x41C64E6DL + inc);
+            long z = (seed = seed * 0x41C64E6DL + ~(i<<1));
             z = (z ^ z >>> 27) * 0xAEF17502108EF2D9L;
             keys[i] = (int)((bound * ((z ^= z >>> 25) & 0xFFFFFFFFL)) >> 32);
-            z = (z ^ z >>> 28) * 0xAEF17502108EF2D9L;
-            functions[i] = z ^ z >>> 26;
+            z += (seed ^ seed >>> 26) * 0xDB4F0B9175AE2165L;
+            functions[i] = z ^ z >>> 24;
         }
     }
 
@@ -121,12 +120,12 @@ public class SwapOrNotShuffler implements Serializable {
      */
     public int round(int data, int key, long fun)
     {
-        // not a prime number; this is X′ in the paper
-        int prime = (key - data);
-        // cheaper modulo for when we know prime is >= -bound
-        prime += (prime >> 31) & bound;
-        // the operation of fun doesn't happen in the Abelian group, but prime and data are in it
-        return (fun * (Math.max(data, prime) - fun) < 0L) ? prime : data;
+        // this is X′ in the paper
+        key -= data;
+        // cheaper modulo for when we know key (X') is >= -bound
+        key += (key >> 31) & bound;
+        // the operation of fun doesn't happen in the Abelian group, but X' and data are in it
+        return (fun * (Math.max(data, key) ^ fun) < 0L) ? key : data;
     }
 
     /**

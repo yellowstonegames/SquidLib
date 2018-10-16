@@ -70,9 +70,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 70, rngMode = 21, noiseMode = 91, otherMode = 0;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 110, otherMode = 0;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -262,23 +262,28 @@ public class HashVisualizer extends ApplicationAdapter {
         //return (int)((result ^ (result >>> 25)) * (result | 0xA529L));
     }
 
-    public static long ion64(long a, long b)
+    public static long ion64(long x, long y)
     {
-        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
-        result ^= (counter += 0x6C8E9CF570932BD5L * b);
-        return counter - (result ^ (result >>> 25)) * (result | 0xA529L);
+        x += y * 0xC13FA9A902A6328FL;
+        y += x * 0x91E10DA5C79E7B1CL;
+        return ((y = (y ^ y >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ y >>> 25);
+
+//        long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
+//        result ^= (counter += 0x6C8E9CF570932BD5L * b);
+//        return counter - (result ^ (result >>> 25)) * (result | 0xA529L);
+
 //        counter -= (result ^ (result >>> 25)) * (result | 0xA529L);
 //        return counter ^ counter >>> 22;
     }
 
-    public static long ion64(long a, long b, long c)
-    {
+    public static long ion64(long x, long y, long s) {
         // inverse golden ratio, generalized to 3D (see MummyNoise for all constants calculated so far)
-        b += c * 0xD1B54A32D192ED03L;
-        a += b * 0xABC98388FB8FAC03L;
-        c += a * 0x8CB92BA72F3D8DD7L;
-        // xorshift, multiply by an inverse golden ratio constant, xorshift, return; this is like LightRNG but simpler
-        return ((c = (c ^ c >> 27) * 0xDB4F0B9175AE2165L) ^ c >>> 25);
+        y += s * 0xD1B54A32D192ED03L;
+        x += y * 0xABC98388FB8FAC03L;
+        s += x * 0x8CB92BA72F3D8DD7L;
+        // xorshift, XOR with an inverse golden ratio constant, multiply by Neely's Number (a prime), xorshift, return
+        // this is like LightRNG but simpler
+        return ((s = (s ^ s >> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
         // SplitMix64, as used in LightRNG but without the large golden-ratio multiply at the start
 //        return ((c = ((c = (c ^ c >>> 30) * 0xBF58476D1CE4E5B9L) ^ c >>> 27) * 0x94D049BB133111EBL) ^ c >>> 31);
         //(c = (c * 0x632BE59BD9B4E019L ^ 0x9E3779B97F4A7C15L) * 0xD1B54A32D192ED03L)
@@ -309,7 +314,7 @@ public class HashVisualizer extends ApplicationAdapter {
         return hash;
     }
     private static final float[] BOLD = new float[100];
-    {
+    static {
         for (int idx = 0; idx < 100; idx++) {
             BOLD[idx] = BLUE_VIOLET_SERIES[LinnormRNG.determineBounded(idx, BLUE_VIOLET_SERIES.length)].toFloatBits();
         }
@@ -343,9 +348,14 @@ public class HashVisualizer extends ApplicationAdapter {
 //        y *= 0x3FFF;
 //        return (x += y ^ ((x *= 0xB531A935) ^ x >>> 13) * (y * 0x41C64E6D | 1)) ^ (x << 18 | x >>> 14) ^ (x << 9 | x >>> 23);         
         //0x9E3779B97F4A7C15L
-        y *= 0x9E3779B97F4A7C15L;
-        x ^= (y << 23 | y >>> 41);
-        return (x = ((x *= 0x6C8E9CF570932BD5L) ^ (x >>> 25)) * (x | 0xA529L)) ^ (x >>> 22);
+//        y *= 0x9E3779B97F4A7C15L;
+//        x ^= (y << 23 | y >>> 41);
+        // szudzik, rather slow
+//        x = (x >= y ? x * x + x + y : x + y * y);
+        // cantor
+        x += (((x+y) * (x+y+1) >> 1) + y) * 0xC13FA9A902A6328FL;
+        return ((x = (x ^ x >>> 25) * 0x9E3779B97F4A7C15L) ^ x >>> 22);
+        
 //        return ((x = ((x *= 0xC6BC279692B5CC85L) ^ x >>> 26) * ((y *= 0x9E3779B97F4A7C15L) ^ (y + 0x9E3779B97F4A7C15L))) ^ x >>> 28);
 //        long state = (x << 16 ^ y) + 0xBEEFL;
 //        long state = (y*0x41C64E6DL + x*0x9E3779B5L) + 0xBEEFL;
@@ -1411,8 +1421,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Weird Hash on length 2, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = -(weirdPointHash(x, y) & 1L) | 255L;
-                                //code = weirdPointHash(x, y) << 8 | 255L;
+                                //code = -(weirdPointHash(x, y) & 1L) | 255L;
+                                code = weirdPointHash(x - 256, y - 256) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -1422,7 +1432,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Weird Hash on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = -(weirdPointHash(x, y) >>> extra & 1L) | 255L;
+                                code = -(weirdPointHash(x - 256, y - 256) >>> extra & 1L) | 255L;
 //                                code = weirdPointHash(x, y) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
 //                                back[x][y] = BOLD[weirdPointHash(x, y)];
@@ -4247,7 +4257,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Whirling 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredWhirling.getNoiseWithSeed(x * 0.015625f, y * 0.015625f, ctr * 0.03125f, 123456)); // , 1.5f
+                                bright = basicPrepare(layeredWhirling.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.03125f, 123456)); // , 1.5f
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -4263,13 +4273,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         break;
                     case 114:
                         Gdx.graphics.setTitle("FastNoise 3D Noise, 1 octave, at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        layeredFN.setSeed(123456);
+                        //layeredFN.setSeed(123456);
                         layeredFN.setFractalOctaves(1);
                         layeredFN.setFractalLacunarity(0.5f);
                         layeredFN.setFractalGain(2f);
+                        c1 = ctr * 0.045f;
                         for (int x = 0; x < width; x++) {
+                            c0 = x * 0.03125f;
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredFN.getSimplexFractal(x, y, ctr)); // , 1.5f
+                                bright = basicPrepare(layeredFN.getNoiseWithSeed(c0, y * 0.03125f, c1, 123456)); // , 1.5f
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }

@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import org.junit.Test;
+import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
 import squidpony.MarkovTextLimited;
 import squidpony.squidgrid.Radius;
@@ -663,43 +664,80 @@ public class HashQualityTest {
         return r ^ (r << rot | r >>> -rot);
     }
 
-    public static int buzzCoord(int x, int y) { 
-        int result = 0xF369B, z = 0xEF17B;
-        result ^= (z += (x ^ 0xC74EAD55) * 0xA5CB3);
-        result ^= (z += (y ^ 0xC74EAD55) * 0xA5CB3);
-        result += (z ^ z >>> 13) * 0x62BD5;
-        return (result ^ result >>> 11 ^ z ^ z >>> 15);
+    public static int buzzCoord(int x, int y) {
+//        x += y * 0xC13FA9A9;
+//        y += x * 0x91E10DA5;
+        y += ((x+y) * (x+y+1) >> 1);
+        return ((y = (y ^ y >>> 13 ^ 0x9E3779BD) * 0xC6BC2793) ^ y >>> 11);
+//        int result = 0xF369B, z = 0xEF17B;
+//        result ^= (z += (x ^ 0xC74EAD55) * 0xA5CB3);
+//        result ^= (z += (y ^ 0xC74EAD55) * 0xA5CB3);
+//        result += (z ^ z >>> 13) * 0x62BD5;
+//        return (result ^ result >>> 11 ^ z ^ z >>> 15);
     }
-    
+
+    public static int szudzikCoord(int x, int y)
+    {
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+        return (x >= y ? x * x + x + y : x + y * y);// * 0xA5CB3;
+    }
+
+    public static int cantorCoord(int x, int y)
+    {
+//        x ^= x >> 31;
+//        y ^= y >> 31;
+//        x = x << 1 ^ x >> 31;
+//        y = y << 1 ^ y >> 31;
+//        return (((x+y >> 1) * (x+y+1 >> 1)) + y);// * 0xA5CB3;
+        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
+//        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
+    }
+
     @Test
     public void testCoord() {
-        final int[] params = new int[]{64, 128, 256, 512};
-        long baseTotal = 0, objeTotal = 0, lathTotal = 0, buzzTotal = 0, total = 0;
+        final int[] params = ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
+//        final int[] params = new int[]{64, 128, 256, 512};
+        long baseTotal = 0L, objeTotal = 0L, lathTotal = 0L, buzzTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L;
 //        long[] confTotals = new long[31];
-        for (int reduction = 15; reduction >= 0; reduction--) {
+        for (int reduction = 7; reduction >= 0; reduction--) {
 
-            for (int WIDTH : params) {
-                for (int HEIGHT : params) {
+            for (int w : params) {
+                int WIDTH = w * 7;
+                for (int h : params) {
+                    int HEIGHT = h * 7;
                     int SIZE = WIDTH * HEIGHT;
-                    int restrict = SIZE - 1;
+                    int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
 
                     IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderLath = new IntDoubleOrderedMap(SIZE, 0.5f),
+                            colliderSzud = new IntDoubleOrderedMap(SIZE, 0.5f),
+                            colliderCant = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderBuzz = new IntDoubleOrderedMap(SIZE, 0.5f);
 //                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
 //                    for (int i = 0; i < 31; i++) {
 //                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
 //                    }
                     LinnormRNG rng = new LinnormRNG(1L);
-                    for (int x = 0; x < WIDTH; x++) {
-                        for (int y = 0; y < HEIGHT; y++) {
-                            if (rng.next(4) > reduction) {
+                    SNShuffledIntSequence
+                            xShuffle = new SNShuffledIntSequence(WIDTH, 1), 
+                            yShuffle = new SNShuffledIntSequence(HEIGHT, -1);
+                    UnorderedSet<Coord> points = new UnorderedSet<>(WIDTH * HEIGHT);
+                    for (int i = 0; i < WIDTH; i++) {
+                        for (int j = 0; j < HEIGHT; j++) {
+//                            int x = xShuffle.next(), y = yShuffle.next();
+                            int x = xShuffle.next() - 130, y = yShuffle.next() - 130;
+                            Coord c = Coord.get(x, y);
+                            if (rng.next(3) > reduction || points.contains(c)) {
                                 --SIZE;
                                 continue;
                             }
+                            points.add(c);
                             colliderBase.put(oldCoord(x, y) & restrict, 0.0);
                             colliderLath.put(latheCoord(x, y) & restrict, 0.0);
+                            colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
+                            colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
                             colliderBuzz.put(buzzCoord(x, y) & restrict, 0.0);
                             colliderObje.put(Objects.hash(x, y) & restrict, 0.0);
 //                            for (int i = 0; i < 31; i++) {
@@ -707,17 +745,22 @@ public class HashQualityTest {
 //                            }
                         }
                     }
-                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
-                    System.out.println("Base collisions: " + (SIZE - colliderBase.size()));
-                    System.out.println("Lath collisions: " + (SIZE - colliderLath.size()));
-                    System.out.println("Buzz collisions: " + (SIZE - colliderBuzz.size()));
-                    System.out.println("Obje collisions: " + (SIZE - colliderObje.size()));
+//                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
+//                    System.out.println("Base collisions: " + (SIZE - colliderBase.size()));
+//                    System.out.println("Lath collisions: " + (SIZE - colliderLath.size()));
+//                    System.out.println("Szud collisions: " + (SIZE - colliderSzud.size()));
+//                    System.out.println("Cant collisions: " + (SIZE - colliderCant.size()));
+//                    System.out.println("Buzz collisions: " + (SIZE - colliderBuzz.size()));
+//                    System.out.println("Obje collisions: " + (SIZE - colliderObje.size()));
+                    
 //                    for (int i = 0; i < 31; i++) {
 //                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
 //                        confTotals[i] += (SIZE - colliders[i].size());
 //                    }
                     baseTotal += (SIZE - colliderBase.size());
                     lathTotal += (SIZE - colliderLath.size());
+                    szudTotal += (SIZE - colliderSzud.size());
+                    cantTotal += (SIZE - colliderCant.size());
                     buzzTotal += (SIZE - colliderBuzz.size());
                     objeTotal += (SIZE - colliderObje.size());
                     total += SIZE;
@@ -727,6 +770,8 @@ public class HashQualityTest {
         System.out.println("Number of Coords added: " + total);
         System.out.println("TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%)");
         System.out.println("TOTAL Lath collisions: " + lathTotal + " (" + (lathTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%)");
+        System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%)");
         System.out.println("TOTAL Buzz collisions: " + buzzTotal + " (" + (buzzTotal * 100.0 / total) + "%)");
         System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%)");
 //        for (int i = 0; i < 31; i++) {

@@ -50,12 +50,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 314 * 3, height = 300;
 //    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
-    private static final int width = 400, height = 400; // fast rotations
+//    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
 //    private static final int width = 700, height = 700;
-//    private static final int width = 512, height = 512;
+    private static final int width = 512, height = 512;
 //    private static final int width = 128, height = 128;
     
     private SpriteBatch batch;
@@ -516,7 +516,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public void rotate()
     {
         long startTime = System.nanoTime();
-        world.setCenterLongitude((startTime & 0xFFFFFFFFFFFFL) * 0x1.1p-32);
+        world.setCenterLongitude((startTime & 0xFFFFFFFFFFFFL) * 0x1p-32);
         //world.setCenterLongitude(++counter * 0.02);
         world.generate(world.landModifier, world.coolingModifier, seed);
         dbm.makeBiomes(world);
@@ -864,7 +864,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         Gdx.gl.glClearColor(SColor.DB_INK.r, SColor.DB_INK.g, SColor.DB_INK.b, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl.glDisable(GL20.GL_BLEND);
-        season = ((System.currentTimeMillis() & 0xfffff) * 0x1p-11f) % 4f;
+        season = ((System.currentTimeMillis() & 0xfffff) * 0x1p-10f) % 4f;
         if(spinning) 
             rotate();
         // need to display the map every frame, since we clear the screen to avoid artifacts.
