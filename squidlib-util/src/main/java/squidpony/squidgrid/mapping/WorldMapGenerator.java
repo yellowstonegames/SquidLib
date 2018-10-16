@@ -7,6 +7,7 @@ import squidpony.squidmath.Noise.Noise3D;
 import squidpony.squidmath.Noise.Noise4D;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * Can be used to generate world maps with a wide variety of data, starting with height, temperature and moisture.
@@ -53,12 +54,21 @@ public abstract class WorldMapGenerator implements Serializable {
             minWet = Double.POSITIVE_INFINITY, maxWet = Double.NEGATIVE_INFINITY;
     protected double centerLongitude = 0.0;
 
+    /**
+     * Gets the longitude line the map is centered on, which should usually be between 0 and 2 * PI.
+     * @return the longitude line the map is centered on, in radians from 0 to 2 * PI
+     */
     public double getCenterLongitude() {
         return centerLongitude;
     }
 
+    /**
+     * Sets the center longitude line to a longitude measured in radians, from 0 to 2 * PI. Positive arguments will be
+     * corrected with modulo, but negative ones may not always act as expected, and are strongly discouraged.
+     * @param centerLongitude the longitude to center the map projection on, from 0 to 2 * PI (can be any non-negative double).
+     */
     public void setCenterLongitude(double centerLongitude) {
-        this.centerLongitude = centerLongitude;
+        this.centerLongitude = centerLongitude % 6.283185307179586;
     }
 
     public int zoom = 0, startX = 0, startY = 0, usedWidth, usedHeight;
@@ -339,35 +349,19 @@ public abstract class WorldMapGenerator implements Serializable {
                               double landMod, double coolMod, long state);
     /**
      * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
-     * x-position on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
+     * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
      * generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
-     * the projection for a given lat-lon coordinate, this returns NaN. The default implementation always returns NaN.
-     * If this is a supported operation and the parameters are valid, this returns a double between 0.0 and
-     * {@link #width}, which could be used to place something on a projected map in conjunction with
-     * {@link #projectY(double, double)}.
+     * the projection for a given lat-lon coordinate, this returns null. The default implementation always returns null..
+     * If this is a supported operation and the parameters are valid, this returns a Coord with x between 0 and
+     * {@link #width}, and y between 0 and {@link #height}, both exclusive. Automatically wraps the Coord's values using
+     * {@link #wrapX(int, int)} and {@link #wrapY(int, int)}.
      * @param latitude the latitude, from {@code Math.PI * -0.5} to {@code Math.PI * 0.5}
      * @param longitude the longitude, from {@code 0.0} to {@code Math.PI * 2.0}
-     * @return the x-coordinate of the point at the given latitude and longitude, as a double between 0.0 and {@link #width}, or NaN if unsupported
+     * @return the point at the given latitude and longitude, as a Coord with x between 0 and {@link #width} and y between 0 and {@link #height}, or null if unsupported
      */
-    public double projectX(double latitude, double longitude)
+    public Coord project(double latitude, double longitude)
     {
-        return Double.NaN;
-    }
-    /**
-     * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
-     * y-position on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
-     * generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
-     * the projection for a given lat-lon coordinate, this returns NaN. The default implementation always returns NaN.
-     * If this is a supported operation and the parameters are valid, this returns a double between 0.0 and
-     * {@link #height}, which could be used to place something on a projected map in conjunction with
-     * {@link #projectX(double, double)}.
-     * @param latitude the latitude, from {@code Math.PI * -0.5} to {@code Math.PI * 0.5}
-     * @param longitude the longitude, from {@code 0.0} to {@code Math.PI * 2.0}
-     * @return the y-coordinate of the point at the given latitude and longitude, as a double between 0.0 and {@link #height}, or NaN if unsupported
-     */
-    public double projectY(double latitude, double longitude)
-    {
-        return Double.NaN;
+        return null;
     }
 
     public int codeHeight(final double high)
@@ -1644,38 +1638,23 @@ public abstract class WorldMapGenerator implements Serializable {
 
         /**
          * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
-         * x-position on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
+         * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
          * generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
-         * the projection for a given lat-lon coordinate, this returns NaN. The default implementation always returns NaN.
-         * If this is a supported operation and the parameters are valid, this returns a double between 0.0 and
-         * {@link #width}, which could be used to place something on a projected map in conjunction with
-         * {@link #projectY(double, double)}.
-         *
-         * @param latitude  the latitude, from {@code Math.PI * -0.5} to {@code Math.PI * 0.5}
+         * the projection for a given lat-lon coordinate, this returns null. This implementation never returns null.
+         * If this is a supported operation and the parameters are valid, this returns a Coord with x between 0 and
+         * {@link #width}, and y between 0 and {@link #height}, both exclusive. Automatically wraps the Coord's values using
+         * {@link #wrapX(int, int)} and {@link #wrapY(int, int)}.
+         * @param latitude the latitude, from {@code Math.PI * -0.5} to {@code Math.PI * 0.5}
          * @param longitude the longitude, from {@code 0.0} to {@code Math.PI * 2.0}
-         * @return the x-coordinate of the point at the given latitude and longitude, as a double between 0.0 and {@link #width}, or NaN if unsupported
+         * @return the point at the given latitude and longitude, as a Coord with x between 0 and {@link #width} and y between 0 and {@link #height}, or null if unsupported
          */
         @Override
-        public double projectX(double latitude, double longitude) {
-            return ((longitude - getCenterLongitude() + 12.566370614359172) % 6.283185307179586) * 0.15915494309189535 * width;
-        }
-
-        /**
-         * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
-         * y-position on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
-         * generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
-         * the projection for a given lat-lon coordinate, this returns NaN. The default implementation always returns NaN.
-         * If this is a supported operation and the parameters are valid, this returns a double between 0.0 and
-         * {@link #height}, which could be used to place something on a projected map in conjunction with
-         * {@link #projectX(double, double)}.
-         *
-         * @param latitude  the latitude, from {@code Math.PI * -0.5} to {@code Math.PI * 0.5}
-         * @param longitude the longitude, from {@code 0.0} to {@code Math.PI * 2.0}
-         * @return the y-coordinate of the point at the given latitude and longitude, as a double between 0.0 and {@link #height}, or NaN if unsupported
-         */
-        @Override
-        public double projectY(double latitude, double longitude) {
-            return (NumberTools.sin(latitude) * 0.5 + 0.5) * height;
+        public Coord project(double latitude, double longitude) {
+            int x = (int)(((longitude - getCenterLongitude() + 12.566370614359172) % 6.283185307179586) * 0.15915494309189535 * width + 0.5),
+                    y = (int)((NumberTools.sin(latitude) * 0.5 + 0.5) * height + 0.5);
+            return Coord.get(
+                    wrapX(x, y),
+                    wrapY(x, y));
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
@@ -3556,6 +3535,35 @@ public abstract class WorldMapGenerator implements Serializable {
         @Override
         public int wrapY(final int x, final int y)  {
             return Math.max(0, Math.min(y, height - 1));
+        }
+
+        /**
+         * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
+         * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
+         * generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
+         * the projection for a given lat-lon coordinate, this returns null. The default implementation always returns null..
+         * If this is a supported operation and the parameters are valid, this returns a Coord with x between 0 and
+         * {@link #width}, and y between 0 and {@link #height}, both exclusive. Automatically wraps the Coord's values using
+         * {@link #wrapX(int, int)} and {@link #wrapY(int, int)}.
+         *
+         * @param latitude  the latitude, from {@code Math.PI * -0.5} to {@code Math.PI * 0.5}
+         * @param longitude the longitude, from {@code 0.0} to {@code Math.PI * 2.0}
+         * @return the point at the given latitude and longitude, as a Coord with x between 0 and {@link #width} and y between 0 and {@link #height}, or null if unsupported
+         */
+        @Override
+        public Coord project(double latitude, double longitude) {
+            final double z0 = Math.abs(NumberTools.sin(latitude));
+            final int i = Arrays.binarySearch(Z, z0);
+            final double y;
+            if (i >= 0)
+                y = i/(Z.length-1.);
+            else if (-i-1 >= Z.length)
+                y = Z[Z.length-1];
+            else
+                y = ((z0-Z[-i-2])/(Z[-i-1]-Z[-i-2]) + (-i-2))/(Z.length-1.);
+            final int xx = (int)(((longitude - getCenterLongitude() + 12.566370614359172) % 6.283185307179586) * Math.abs(alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs(y),kappa), 1/kappa)) + 0.5);
+            final int yy = (int)(y * Math.signum(latitude) * height * 0.5 + 0.5); 
+            return Coord.get(wrapX(xx, yy), wrapY(xx, yy));
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,

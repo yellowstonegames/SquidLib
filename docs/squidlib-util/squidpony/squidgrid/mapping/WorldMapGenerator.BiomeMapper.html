@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static interface <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.636">WorldMapGenerator.BiomeMapper</a></pre>
+<pre>public static interface <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.659">WorldMapGenerator.BiomeMapper</a></pre>
 </li>
 </ul>
 </div>
@@ -183,7 +183,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getBiomeCode</h4>
-<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.649">getBiomeCode</a>(int&nbsp;x,
+<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.672">getBiomeCode</a>(int&nbsp;x,
                  int&nbsp;y)</pre>
 <div class="block">Gets the most relevant biome code for a given x,y point on the map. Some mappers can store more than one
  biome at a location, but only the one with the highest influence will be returned by this method. Biome codes
@@ -206,7 +206,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getHeatCode</h4>
-<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.659">getHeatCode</a>(int&nbsp;x,
+<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.682">getHeatCode</a>(int&nbsp;x,
                 int&nbsp;y)</pre>
 <div class="block">Gets a heat code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
  implementations may use more or less detail for heat codes, but 0 is always the coldest code used, and the
@@ -226,7 +226,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getMoistureCode</h4>
-<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.671">getMoistureCode</a>(int&nbsp;x,
+<pre>int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.694">getMoistureCode</a>(int&nbsp;x,
                     int&nbsp;y)</pre>
 <div class="block">Gets a moisture code for a given x,y point on a map, usually as an int between 0 and 5 inclusive. Some
  implementations may use more or less detail for moisture codes, but 0 is always the driest code used, and the
@@ -249,7 +249,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockList">
 <li class="blockList">
 <h4>getBiomeNameTable</h4>
-<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.682">getBiomeNameTable</a>()</pre>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.705">getBiomeNameTable</a>()</pre>
 <div class="block">Gets a String array where biome codes can be used as indices to look up a name for the biome they refer to. A
  sample table is in <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html#biomeTable"><code>WorldMapGenerator.SimpleBiomeMapper.biomeTable</code></a>; the 61-element array format documented for that
  field is encouraged for implementing classes if they use 6 levels of heat and 6 levels of moisture, and track
@@ -268,7 +268,7 @@ var activeTableTab = "activeTableTab";
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeBiomes</h4>
-<pre>void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.690">makeBiomes</a>(<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;world)</pre>
+<pre>void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#line.713">makeBiomes</a>(<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a>&nbsp;world)</pre>
 <div class="block">Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
  assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
  retrieved with <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#getBiomeCode-int-int-"><code>getBiomeCode(int, int)</code></a> and used as indices into <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html#getBiomeNameTable--"><code>getBiomeNameTable()</code></a> or a

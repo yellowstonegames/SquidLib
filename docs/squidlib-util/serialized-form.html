@@ -2584,7 +2584,7 @@
 </li>
 <li class="blockListLast">
 <h4>storedMap</h4>
-<pre><a href="squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a> storedMap</pre>
+<pre><a href="squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a> storedMap</pre>
 </li>
 </ul>
 </li>
@@ -2746,78 +2746,6 @@
 <!--   -->
 </a>
 <h3>Class <a href="squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.WorldMapGenerator.SphereMap</a> extends <a href="squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a> implements Serializable</h3>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>minHeat0</h4>
-<pre>double minHeat0</pre>
-</li>
-<li class="blockList">
-<h4>maxHeat0</h4>
-<pre>double maxHeat0</pre>
-</li>
-<li class="blockList">
-<h4>minHeat1</h4>
-<pre>double minHeat1</pre>
-</li>
-<li class="blockList">
-<h4>maxHeat1</h4>
-<pre>double maxHeat1</pre>
-</li>
-<li class="blockList">
-<h4>minWet0</h4>
-<pre>double minWet0</pre>
-</li>
-<li class="blockList">
-<h4>maxWet0</h4>
-<pre>double maxWet0</pre>
-</li>
-<li class="blockList">
-<h4>terrain</h4>
-<pre><a href="squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> terrain</pre>
-</li>
-<li class="blockList">
-<h4>terrainRidged</h4>
-<pre><a href="squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> terrainRidged</pre>
-</li>
-<li class="blockList">
-<h4>heat</h4>
-<pre><a href="squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> heat</pre>
-</li>
-<li class="blockList">
-<h4>moisture</h4>
-<pre><a href="squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> moisture</pre>
-</li>
-<li class="blockList">
-<h4>otherRidged</h4>
-<pre><a href="squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> otherRidged</pre>
-</li>
-<li class="blockList">
-<h4>riverRidged</h4>
-<pre><a href="squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a> riverRidged</pre>
-</li>
-<li class="blockList">
-<h4>xPositions</h4>
-<pre>double[][] xPositions</pre>
-</li>
-<li class="blockList">
-<h4>yPositions</h4>
-<pre>double[][] yPositions</pre>
-</li>
-<li class="blockListLast">
-<h4>zPositions</h4>
-<pre>double[][] zPositions</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="squidpony.squidgrid.mapping.WorldMapGenerator.SphereMap">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.WorldMapGenerator.SphereMap</a> extends <a href="squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a> implements Serializable</h3>
 <ul class="blockList">
 <li class="blockList">
 <h3>Serialized Fields</h3>
@@ -5315,6 +5243,26 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="squidpony.squidmath.SNShuffledIntSequence">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">squidpony.squidmath.SNShuffledIntSequence</a> extends <a href="squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>seed</h4>
+<pre>long seed</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="squidpony.squidmath.SobolQRNG">
 <!--   -->
 </a>
@@ -5407,6 +5355,38 @@
 <dt>serialVersionUID:</dt>
 <dd>-2456306898212937163L</dd>
 </dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.SwapOrNotShuffler">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">squidpony.squidmath.SwapOrNotShuffler</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>bound</h4>
+<pre>int bound</pre>
+</li>
+<li class="blockList">
+<h4>index</h4>
+<pre>int index</pre>
+</li>
+<li class="blockList">
+<h4>keys</h4>
+<pre>int[] keys</pre>
+</li>
+<li class="blockListLast">
+<h4>functions</h4>
+<pre>long[] functions</pre>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 <li class="blockList"><a name="squidpony.squidmath.TangleRNG">
 <!--   -->

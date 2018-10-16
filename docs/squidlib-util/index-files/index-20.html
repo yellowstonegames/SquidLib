@@ -391,6 +391,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShuffledIntSequence.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/ShuffledIntSequence.html" title="class in squidpony.squidmath">ShuffledIntSequence</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/WhirlingNoise.html#seed">seed</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">WhirlingNoise</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath"><span class="typeNameLink">SeededNoise</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
@@ -717,7 +719,9 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#setCenterLongitude-double-">setCenterLongitude(double)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude(double)</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Sets the center longitude line to a longitude measured in radians, from 0 to 2 * PI.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/EditRNG.html#setCentrality-double-">setCentrality(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/EditRNG.html" title="class in squidpony.squidmath">EditRNG</a></dt>
 <dd>
 <div class="block">Gets the current centrality measure of this EditRNG.</div>
@@ -2195,6 +2199,23 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#snowUpper">snowUpper</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath"><span class="typeNameLink">SNShuffledIntSequence</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">An infinite sequence of pseudo-random ints (typically used as indices) from 0 to some bound, with all possible ints
+ returned in a shuffled order before re-shuffling for the next result.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#SNShuffledIntSequence--">SNShuffledIntSequence()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
+<dd>
+<div class="block">Constructs a ShuffledIntSequence with a random seed and a bound of 10.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#SNShuffledIntSequence-int-">SNShuffledIntSequence(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
+<dd>
+<div class="block">Constructs a ShuffledIntSequence with the given exclusive upper bound and a random seed.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#SNShuffledIntSequence-int-long-">SNShuffledIntSequence(int, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
+<dd>
+<div class="block">Constructs a ShuffledIntSequence with the given exclusive upper bound and int seed.</div>
+</dd>
 <dt><a href="../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">SobolQRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">Implementation of a Sobol sequence as a Quasi-Random Number Generator.</div>
@@ -2379,6 +2400,12 @@
  3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
  have significantly-exaggerated-in-size features while the equator is not distorted.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#SphereMap-long-int-int-double-">SphereMap(long, int, int, double)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a></dt>
+<dd>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+ 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+ have significantly-exaggerated-in-size features while the equator is not distorted.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#SphereMap-long-int-int-squidpony.squidmath.Noise.Noise3D-">SphereMap(long, int, int, Noise.Noise3D)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a></dt>
 <dd>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
@@ -2386,42 +2413,6 @@
  have significantly-exaggerated-in-size features while the equator is not distorted.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html#SphereMap-long-int-int-squidpony.squidmath.Noise.Noise3D-double-">SphereMap(long, int, int, Noise.Noise3D, double)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a></dt>
-<dd>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html#SphereMapAlt--">SphereMapAlt()</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></dt>
-<dd>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html#SphereMapAlt-int-int-">SphereMapAlt(int, int)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></dt>
-<dd>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html#SphereMapAlt-long-int-int-">SphereMapAlt(long, int, int)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></dt>
-<dd>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html#SphereMapAlt-long-int-int-double-">SphereMapAlt(long, int, int, double)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></dt>
-<dd>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html#SphereMapAlt-long-int-int-squidpony.squidmath.Noise.Noise3D-">SphereMapAlt(long, int, int, Noise.Noise3D)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></dt>
-<dd>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html#SphereMapAlt-long-int-int-squidpony.squidmath.Noise.Noise3D-double-">SphereMapAlt(long, int, int, Noise.Noise3D, double)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></dt>
 <dd>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
  3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
@@ -3128,6 +3119,23 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrderedSet.html#swapIndices-int-int-">swapIndices(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a></dt>
 <dd>
 <div class="block">Swaps the given indices in the ordering, if they are both ints between 0 and size.</div>
+</dd>
+<dt><a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath"><span class="typeNameLink">SwapOrNotShuffler</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
+ of the sequence in memory.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SwapOrNotShuffler.html#SwapOrNotShuffler--">SwapOrNotShuffler()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></dt>
+<dd>
+<div class="block">Constructs a SwapOrNotShuffler with a random seed and a bound of 10.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SwapOrNotShuffler.html#SwapOrNotShuffler-int-">SwapOrNotShuffler(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></dt>
+<dd>
+<div class="block">Constructs a SwapOrNotShuffler with the given exclusive upper bound and a random seed.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SwapOrNotShuffler.html#SwapOrNotShuffler-int-long-">SwapOrNotShuffler(int, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></dt>
+<dd>
+<div class="block">Constructs a SwapOrNotShuffler with the given exclusive upper bound and long seed.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#sway-double-">sway(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>

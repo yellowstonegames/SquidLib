@@ -113,12 +113,17 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static final class <a href="../../src-html/squidpony/squidmath/Noise.html#line.841">Noise.HastyPointHash</a>
+<pre>public static final class <a href="../../src-html/squidpony/squidmath/Noise.html#line.846">Noise.HastyPointHash</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
- a long for state; like <a href="../../squidpony/squidmath/Noise.PointHash.html" title="class in squidpony.squidmath"><code>Noise.PointHash</code></a> but optimized for speed rather than quality. This may have some quality
- issues relating to repetitive patterns over long sections of noise, but these may or may not be noticeable for
- your applications. The technique used here is based on <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&rep=rep1&type=pdf">this paper</a>,
+ a long for state; like <a href="../../squidpony/squidmath/Noise.PointHash.html" title="class in squidpony.squidmath"><code>Noise.PointHash</code></a> but optimized for speed rather than quality. This implementation has
+ high enough quality to be useful as a source of random numbers based on positions, but would likely not be a good
+ option in a hash table (or at least not as good as the tailored implementation of <a href="../../squidpony/squidmath/Coord.html#hashCode--"><code>Coord.hashCode()</code></a>, for
+ instance). At low dimensions, this is a little faster than <a href="../../squidpony/squidmath/Noise.PointHash.html" title="class in squidpony.squidmath"><code>Noise.PointHash</code></a>, but this class doesn't slow down
+ much at all as more dimensions are used, while PointHash and most other implementations do slow down.
+ <br>
+ Also includes permutation tables for noise implementations that don't mind wrapping after 256 integer positions
+ have been hashed; these tables are based on <a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.140.3594&rep=rep1&type=pdf">this paper</a>,
  with credit to Andrew Kensler, Aaron Knoll and Peter Shirley.</div>
 </li>
 </ul>
@@ -206,14 +211,18 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hash256-long-long-long-">hash256</a></span>(long&nbsp;x,
        long&nbsp;y,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets an 8-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hash256-long-long-long-long-">hash256</a></span>(long&nbsp;x,
        long&nbsp;y,
        long&nbsp;z,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets an 8-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
@@ -221,7 +230,9 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
        long&nbsp;y,
        long&nbsp;z,
        long&nbsp;w,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets an 8-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static int</code></td>
@@ -231,20 +242,26 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
        long&nbsp;w,
        long&nbsp;u,
        long&nbsp;v,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets an 8-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hash32-long-long-long-">hash32</a></span>(long&nbsp;x,
       long&nbsp;y,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 5-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hash32-long-long-long-long-">hash32</a></span>(long&nbsp;x,
       long&nbsp;y,
       long&nbsp;z,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 5-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
@@ -252,7 +269,9 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
       long&nbsp;y,
       long&nbsp;z,
       long&nbsp;w,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 5-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static int</code></td>
@@ -262,20 +281,26 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
       long&nbsp;w,
       long&nbsp;u,
       long&nbsp;v,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 5-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hash64-long-long-long-">hash64</a></span>(long&nbsp;x,
       long&nbsp;y,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 6-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hash64-long-long-long-long-">hash64</a></span>(long&nbsp;x,
       long&nbsp;y,
       long&nbsp;z,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 6-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
@@ -283,7 +308,9 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
       long&nbsp;y,
       long&nbsp;z,
       long&nbsp;w,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 6-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>static int</code></td>
@@ -293,20 +320,26 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
       long&nbsp;w,
       long&nbsp;u,
       long&nbsp;v,
-      long&nbsp;state)</code>&nbsp;</td>
+      long&nbsp;s)</code>
+<div class="block">Gets a 6-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hashAll-long-long-long-">hashAll</a></span>(long&nbsp;x,
        long&nbsp;y,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets a 64-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.HastyPointHash.html#hashAll-long-long-long-long-">hashAll</a></span>(long&nbsp;x,
        long&nbsp;y,
        long&nbsp;z,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
@@ -314,7 +347,9 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
        long&nbsp;y,
        long&nbsp;z,
        long&nbsp;w,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>static long</code></td>
@@ -324,7 +359,9 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
        long&nbsp;w,
        long&nbsp;u,
        long&nbsp;v,
-       long&nbsp;state)</code>&nbsp;</td>
+       long&nbsp;s)</code>
+<div class="block">Gets a 64-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -354,7 +391,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>perm_x</h4>
-<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.845">perm_x</a></pre>
+<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.850">perm_x</a></pre>
 </li>
 </ul>
 <a name="perm_y">
@@ -363,7 +400,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>perm_y</h4>
-<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.846">perm_y</a></pre>
+<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.851">perm_y</a></pre>
 </li>
 </ul>
 <a name="perm_z">
@@ -372,7 +409,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>perm_z</h4>
-<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.847">perm_z</a></pre>
+<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.852">perm_z</a></pre>
 </li>
 </ul>
 <a name="perm_w">
@@ -381,7 +418,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>perm_w</h4>
-<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.848">perm_w</a></pre>
+<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.853">perm_w</a></pre>
 </li>
 </ul>
 <a name="perm_u">
@@ -390,7 +427,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>perm_u</h4>
-<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.849">perm_u</a></pre>
+<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.854">perm_u</a></pre>
 </li>
 </ul>
 <a name="perm_v">
@@ -399,7 +436,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>perm_v</h4>
-<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.850">perm_v</a></pre>
+<pre>public static final&nbsp;int[] <a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.855">perm_v</a></pre>
 </li>
 </ul>
 </li>
@@ -416,7 +453,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>HastyPointHash</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.841">HastyPointHash</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.846">HastyPointHash</a>()</pre>
 </li>
 </ul>
 </li>
@@ -433,14 +470,25 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.894">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.909">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
-                           long&nbsp;state)</pre>
+                           long&nbsp;s)</pre>
+<div class="block">Gets a 64-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>64-bit hash of the x,y point with the given state</dd>
 </dl>
@@ -452,16 +500,27 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.913">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.934">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
                            long&nbsp;z,
-                           long&nbsp;state)</pre>
+                           long&nbsp;s)</pre>
+<div class="block">Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>64-bit hash of the x,y,z point with the given state</dd>
 </dl>
@@ -473,18 +532,29 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.935">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.961">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
                            long&nbsp;z,
                            long&nbsp;w,
-                           long&nbsp;state)</pre>
+                           long&nbsp;s)</pre>
+<div class="block">Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>64-bit hash of the x,y,z,w point with the given state</dd>
 </dl>
@@ -496,22 +566,33 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.961">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.991">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
                            long&nbsp;z,
                            long&nbsp;w,
                            long&nbsp;u,
                            long&nbsp;v,
-                           long&nbsp;state)</pre>
+                           long&nbsp;s)</pre>
+<div class="block">Gets a 64-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
+ point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>u</code> - </dd>
-<dd><code>v</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>u</code> - u position; any long</dd>
+<dd><code>v</code> - v position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>64-bit hash of the x,y,z,w,u,v point with the given state</dd>
 </dl>
@@ -523,14 +604,25 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.986">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1018">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
-                          long&nbsp;state)</pre>
+                          long&nbsp;s)</pre>
+<div class="block">Gets an 8-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>8-bit hash of the x,y point with the given state</dd>
 </dl>
@@ -542,16 +634,27 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1005">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1043">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
                           long&nbsp;z,
-                          long&nbsp;state)</pre>
+                          long&nbsp;s)</pre>
+<div class="block">Gets an 8-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>8-bit hash of the x,y,z point with the given state</dd>
 </dl>
@@ -563,18 +666,29 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1027">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1070">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
                           long&nbsp;z,
                           long&nbsp;w,
-                          long&nbsp;state)</pre>
+                          long&nbsp;s)</pre>
+<div class="block">Gets an 8-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>8-bit hash of the x,y,z,w point with the given state</dd>
 </dl>
@@ -586,22 +700,33 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1053">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1100">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
                           long&nbsp;z,
                           long&nbsp;w,
                           long&nbsp;u,
                           long&nbsp;v,
-                          long&nbsp;state)</pre>
+                          long&nbsp;s)</pre>
+<div class="block">Gets an 8-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
+ point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>u</code> - </dd>
-<dd><code>v</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>u</code> - u position; any long</dd>
+<dd><code>v</code> - v position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>8-bit hash of the x,y,z,w,u,v point with the given state</dd>
 </dl>
@@ -613,14 +738,25 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1078">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1127">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 5-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>5-bit hash of the x,y point with the given state</dd>
 </dl>
@@ -632,16 +768,27 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1097">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1152">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 5-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>5-bit hash of the x,y,z point with the given state</dd>
 </dl>
@@ -653,18 +800,29 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1119">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1179">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 5-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>5-bit hash of the x,y,z,w point with the given state</dd>
 </dl>
@@ -676,22 +834,33 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1145">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1209">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,
                          long&nbsp;u,
                          long&nbsp;v,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 5-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
+ point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>u</code> - </dd>
-<dd><code>v</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>u</code> - u position; any long</dd>
+<dd><code>v</code> - v position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>5-bit hash of the x,y,z,w,u,v point with the given state</dd>
 </dl>
@@ -703,14 +872,25 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1171">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1237">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 6-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>6-bit hash of the x,y point with the given state</dd>
 </dl>
@@ -722,16 +902,27 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1190">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1262">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 6-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>s</code> - the state/seed; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>6-bit hash of the x,y,z point with the given state</dd>
 </dl>
@@ -743,18 +934,29 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1212">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1289">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 6-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
+ hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>6-bit hash of the x,y,z,w point with the given state</dd>
 </dl>
@@ -766,22 +968,33 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1238">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1319">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,
                          long&nbsp;u,
                          long&nbsp;v,
-                         long&nbsp;state)</pre>
+                         long&nbsp;s)</pre>
+<div class="block">Gets a 6-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
+ point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+ traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
+ <br>
+ This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
+ sequences, where each axis is multiplied by a different constant, and the choice of constants depends on the
+ number of axes but is always related to a generalized form of golden ratios, repeatedly dividing 1.0 by the
+ generalized ratio. See
+ <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/">Roberts' article</a>
+ for some more information on how he uses this, but we do things differently because we want random-seeming
+ results instead of separated sub-random results.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - </dd>
-<dd><code>y</code> - </dd>
-<dd><code>z</code> - </dd>
-<dd><code>w</code> - </dd>
-<dd><code>u</code> - </dd>
-<dd><code>v</code> - </dd>
-<dd><code>state</code> - </dd>
+<dd><code>x</code> - x position; any long</dd>
+<dd><code>y</code> - y position; any long</dd>
+<dd><code>z</code> - z position; any long</dd>
+<dd><code>w</code> - w position; any long</dd>
+<dd><code>u</code> - u position; any long</dd>
+<dd><code>v</code> - v position; any long</dd>
+<dd><code>s</code> - the state; any long</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>6-bit hash of the x,y,z,w,u,v point with the given state</dd>
 </dl>
@@ -793,7 +1006,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hash256_alt</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1257">hash256_alt</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.HastyPointHash.html#line.1330">hash256_alt</a>(long&nbsp;x,
                               long&nbsp;y,
                               long&nbsp;z,
                               long&nbsp;w,

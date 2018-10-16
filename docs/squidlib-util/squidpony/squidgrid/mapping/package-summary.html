@@ -396,19 +396,12 @@
 <td class="colFirst"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a></td>
 <td class="colLast">
 <div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that distorts the map as it nears the poles, expanding the
- smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator.</div>
+ smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
+ this counteracts certain artifacts that are common in Simplex noise world maps by using a 4D noise call to
+ generate terrain, using a normal 3D noise call's result as the extra 4th dimension.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></td>
-<td class="colLast">
-<div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that distorts the map as it nears the poles, expanding the
- smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
- this is an alternative implementation to WorldMapGenerator.SphereMap that is meant to avoid certain artifacts
- commonly produced by that generator.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></td>
 <td class="colLast">
 <div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that tiles both east-to-west and north-to-south.</div>

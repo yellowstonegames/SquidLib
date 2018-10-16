@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":6,"i9":9,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":6,"i10":9,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,12 +113,12 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalHammerMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalHammerMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SpaceViewMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dd>
+<dd><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalHammerMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalHammerMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SpaceViewMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></dd>
 </dl>
 <hr>
 <br>
 <pre><a href="../../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public abstract class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.41">WorldMapGenerator</a>
+public abstract class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.39">WorldMapGenerator</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Can be used to generate world maps with a wide variety of data, starting with height, temperature and moisture.
@@ -138,16 +138,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  or lake data as a Collection of Coord, then you should call <a href="../../../squidpony/squidmath/Coord.html#expandPoolTo-int-int-"><code>Coord.expandPoolTo(int, int)</code></a>
  with your width and height so the Coords remain safely pooled. If you're fine with keeping rivers and lakes as
  GreasedRegions and not requesting Coord values from them, then you don't need to do anything with Coord. Certain
- parts of this class are not necessary to generate, just in case you want river-less maps or something similar;
- setting <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generateRivers"><code>generateRivers</code></a> to false will disable river generation (it defaults to true).
+ parts of this class are not necessary to generate. For example, you can enable river generation if you want by
+ setting <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generateRivers"><code>generateRivers</code></a> to true, but it doesn't produce very good results right now.
  <br>
  The main trade-off this makes to obtain better quality is reduced speed; generating a 512x512 map on a circa-2016
  laptop (i7-6700HQ processor at 2.6 GHz) takes about 1 second (about 1.15 seconds for an un-zoomed map, 0.95 or so
  seconds to increase zoom at double resolution). If you don't need a 512x512 map, this takes commensurately less time
- to generate less grid cells, with 64x64 maps generating faster than they can be accurately seen on the same hardware.
- River positions are produced using a different method, and do not involve the Simplex noise parts other than using
- the height map to determine flow. Zooming with rivers is tricky, and generally requires starting from the outermost
- zoom level and progressively enlarging and adding detail to all rivers as zoom increases on specified points.</div>
+ to generate less grid cells, with 64x64 maps generating faster than they can be accurately seen on the same hardware.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../serialized-form.html#squidpony.squidgrid.mapping.WorldMapGenerator">Serialized Form</a></dd>
@@ -240,19 +237,12 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a></span></code>
 <div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that distorts the map as it nears the poles, expanding the
- smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator.</div>
+ smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
+ this counteracts certain artifacts that are common in Simplex noise world maps by using a 4D noise call to
+ generate terrain, using a normal 3D noise call's result as the extra 4th dimension.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></span></code>
-<div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that distorts the map as it nears the poles, expanding the
- smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
- this is an alternative implementation to WorldMapGenerator.SphereMap that is meant to avoid certain artifacts
- commonly produced by that generator.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></span></code>
 <div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that tiles both east-to-west and north-to-south.</div>
@@ -568,9 +558,19 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a></span>()</code>
+<div class="block">Gets the longitude line the map is centered on, which should usually be between 0 and 2 * PI.</div>
+</td>
 </tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#project-double-double-">project</a></span>(double&nbsp;latitude,
+       double&nbsp;longitude)</code>
+<div class="block">Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
+ (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>protected abstract void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-">regenerate</a></span>(int&nbsp;startX,
           int&nbsp;startY,
@@ -580,31 +580,33 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
           double&nbsp;coolMod,
           long&nbsp;state)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#removeExcess-double-">removeExcess</a></span>(double&nbsp;radians)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude</a></span>(double&nbsp;centerLongitude)</code>&nbsp;</td>
-</tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude</a></span>(double&nbsp;centerLongitude)</code>
+<div class="block">Sets the center longitude line to a longitude measured in radians, from 0 to 2 * PI.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapX-int-int-">wrapX</a></span>(int&nbsp;x,
      int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapY-int-int-">wrapY</a></span>(int&nbsp;x,
      int&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a></span>()</code>
 <div class="block">Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a></span>(int&nbsp;zoomAmount,
       int&nbsp;zoomCenterX,
@@ -613,13 +615,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  the 2D arrays this uses keep their sizes.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a></span>()</code>
 <div class="block">Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></span>(int&nbsp;zoomAmount,
        int&nbsp;zoomCenterX,
@@ -656,7 +658,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.42">width</a></pre>
+<pre>public final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.40">width</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -665,7 +667,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.42">height</a></pre>
+<pre>public final&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.40">height</a></pre>
 </li>
 </ul>
 <a name="seed">
@@ -674,7 +676,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>seed</h4>
-<pre>public&nbsp;long <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.43">seed</a></pre>
+<pre>public&nbsp;long <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.41">seed</a></pre>
 </li>
 </ul>
 <a name="cachedState">
@@ -683,7 +685,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>cachedState</h4>
-<pre>public&nbsp;long <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.43">cachedState</a></pre>
+<pre>public&nbsp;long <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.41">cachedState</a></pre>
 </li>
 </ul>
 <a name="rng">
@@ -692,7 +694,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.44">rng</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.42">rng</a></pre>
 </li>
 </ul>
 <a name="generateRivers">
@@ -701,7 +703,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>generateRivers</h4>
-<pre>public&nbsp;boolean <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.45">generateRivers</a></pre>
+<pre>public&nbsp;boolean <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.43">generateRivers</a></pre>
 </li>
 </ul>
 <a name="heightData">
@@ -710,7 +712,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>heightData</h4>
-<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.46">heightData</a></pre>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.44">heightData</a></pre>
 </li>
 </ul>
 <a name="heatData">
@@ -719,7 +721,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>heatData</h4>
-<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.46">heatData</a></pre>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.44">heatData</a></pre>
 </li>
 </ul>
 <a name="moistureData">
@@ -728,7 +730,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>moistureData</h4>
-<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.46">moistureData</a></pre>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.44">moistureData</a></pre>
 </li>
 </ul>
 <a name="freshwaterData">
@@ -737,7 +739,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>freshwaterData</h4>
-<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.46">freshwaterData</a></pre>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.44">freshwaterData</a></pre>
 </li>
 </ul>
 <a name="landData">
@@ -746,7 +748,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>landData</h4>
-<pre>public final&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.47">landData</a></pre>
+<pre>public final&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.45">landData</a></pre>
 </li>
 </ul>
 <a name="heightCodeData">
@@ -755,7 +757,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>heightCodeData</h4>
-<pre>public final&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.51">heightCodeData</a></pre>
+<pre>public final&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.49">heightCodeData</a></pre>
 </li>
 </ul>
 <a name="landModifier">
@@ -764,7 +766,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>landModifier</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.52">landModifier</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.50">landModifier</a></pre>
 </li>
 </ul>
 <a name="coolingModifier">
@@ -773,7 +775,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>coolingModifier</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.52">coolingModifier</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.50">coolingModifier</a></pre>
 </li>
 </ul>
 <a name="minHeight">
@@ -782,7 +784,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>minHeight</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.53">minHeight</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.51">minHeight</a></pre>
 </li>
 </ul>
 <a name="maxHeight">
@@ -791,7 +793,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>maxHeight</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.53">maxHeight</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.51">maxHeight</a></pre>
 </li>
 </ul>
 <a name="minHeightActual">
@@ -800,7 +802,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>minHeightActual</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.54">minHeightActual</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.52">minHeightActual</a></pre>
 </li>
 </ul>
 <a name="maxHeightActual">
@@ -809,7 +811,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>maxHeightActual</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.54">maxHeightActual</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.52">maxHeightActual</a></pre>
 </li>
 </ul>
 <a name="minHeat">
@@ -818,7 +820,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>minHeat</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.55">minHeat</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.53">minHeat</a></pre>
 </li>
 </ul>
 <a name="maxHeat">
@@ -827,7 +829,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>maxHeat</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.55">maxHeat</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.53">maxHeat</a></pre>
 </li>
 </ul>
 <a name="minWet">
@@ -836,7 +838,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>minWet</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.56">minWet</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.54">minWet</a></pre>
 </li>
 </ul>
 <a name="maxWet">
@@ -845,7 +847,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>maxWet</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.56">maxWet</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.54">maxWet</a></pre>
 </li>
 </ul>
 <a name="centerLongitude">
@@ -854,7 +856,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>centerLongitude</h4>
-<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.57">centerLongitude</a></pre>
+<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.55">centerLongitude</a></pre>
 </li>
 </ul>
 <a name="zoom">
@@ -863,7 +865,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>zoom</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.67">zoom</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.74">zoom</a></pre>
 </li>
 </ul>
 <a name="startX">
@@ -872,7 +874,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>startX</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.67">startX</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.74">startX</a></pre>
 </li>
 </ul>
 <a name="startY">
@@ -881,7 +883,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>startY</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.67">startY</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.74">startY</a></pre>
 </li>
 </ul>
 <a name="usedWidth">
@@ -890,7 +892,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>usedWidth</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.67">usedWidth</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.74">usedWidth</a></pre>
 </li>
 </ul>
 <a name="usedHeight">
@@ -899,7 +901,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>usedHeight</h4>
-<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.67">usedHeight</a></pre>
+<pre>public&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.74">usedHeight</a></pre>
 </li>
 </ul>
 <a name="startCacheX">
@@ -908,7 +910,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>startCacheX</h4>
-<pre>protected&nbsp;<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.68">startCacheX</a></pre>
+<pre>protected&nbsp;<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.75">startCacheX</a></pre>
 </li>
 </ul>
 <a name="startCacheY">
@@ -917,7 +919,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>startCacheY</h4>
-<pre>protected&nbsp;<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.68">startCacheY</a></pre>
+<pre>protected&nbsp;<a href="../../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.75">startCacheY</a></pre>
 </li>
 </ul>
 <a name="zoomStartX">
@@ -926,7 +928,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>zoomStartX</h4>
-<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.69">zoomStartX</a></pre>
+<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.76">zoomStartX</a></pre>
 </li>
 </ul>
 <a name="zoomStartY">
@@ -935,7 +937,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>zoomStartY</h4>
-<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.69">zoomStartY</a></pre>
+<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.76">zoomStartY</a></pre>
 </li>
 </ul>
 <a name="deepWaterLower">
@@ -944,7 +946,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>deepWaterLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.71">deepWaterLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.78">deepWaterLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.deepWaterLower">Constant Field Values</a></dd>
@@ -957,7 +959,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>deepWaterUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.71">deepWaterUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.78">deepWaterUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.deepWaterUpper">Constant Field Values</a></dd>
@@ -970,7 +972,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>mediumWaterLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.72">mediumWaterLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.79">mediumWaterLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.mediumWaterLower">Constant Field Values</a></dd>
@@ -983,7 +985,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>mediumWaterUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.72">mediumWaterUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.79">mediumWaterUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.mediumWaterUpper">Constant Field Values</a></dd>
@@ -996,7 +998,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>shallowWaterLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.73">shallowWaterLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.80">shallowWaterLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.shallowWaterLower">Constant Field Values</a></dd>
@@ -1009,7 +1011,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>shallowWaterUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.73">shallowWaterUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.80">shallowWaterUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.shallowWaterUpper">Constant Field Values</a></dd>
@@ -1022,7 +1024,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>coastalWaterLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.74">coastalWaterLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.81">coastalWaterLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.coastalWaterLower">Constant Field Values</a></dd>
@@ -1035,7 +1037,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>coastalWaterUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.74">coastalWaterUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.81">coastalWaterUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.coastalWaterUpper">Constant Field Values</a></dd>
@@ -1048,7 +1050,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>sandLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.75">sandLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.82">sandLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.sandLower">Constant Field Values</a></dd>
@@ -1061,7 +1063,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>sandUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.75">sandUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.82">sandUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.sandUpper">Constant Field Values</a></dd>
@@ -1074,7 +1076,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>grassLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.76">grassLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.83">grassLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.grassLower">Constant Field Values</a></dd>
@@ -1087,7 +1089,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>grassUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.76">grassUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.83">grassUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.grassUpper">Constant Field Values</a></dd>
@@ -1100,7 +1102,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>forestLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.77">forestLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.84">forestLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.forestLower">Constant Field Values</a></dd>
@@ -1113,7 +1115,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>forestUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.77">forestUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.84">forestUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.forestUpper">Constant Field Values</a></dd>
@@ -1126,7 +1128,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>rockLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.78">rockLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.85">rockLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.rockLower">Constant Field Values</a></dd>
@@ -1139,7 +1141,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>rockUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.78">rockUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.85">rockUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.rockUpper">Constant Field Values</a></dd>
@@ -1152,7 +1154,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>snowLower</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.79">snowLower</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.86">snowLower</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.snowLower">Constant Field Values</a></dd>
@@ -1165,7 +1167,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>snowUpper</h4>
-<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.79">snowUpper</a></pre>
+<pre>public static final&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.86">snowUpper</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../constant-values.html#squidpony.squidgrid.mapping.WorldMapGenerator.snowUpper">Constant Field Values</a></dd>
@@ -1186,7 +1188,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>WorldMapGenerator</h4>
-<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.112">WorldMapGenerator</a>()</pre>
+<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.119">WorldMapGenerator</a>()</pre>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
  part of an anonymous class that implements <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-"><code>regenerate(int, int, int, int, double, double, long)</code></a>).
  Always makes a 256x256 map. If you were using <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#WorldMapGenerator-long-int-int-"><code>WorldMapGenerator(long, int, int)</code></a>, then
@@ -1199,7 +1201,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>WorldMapGenerator</h4>
-<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.126">WorldMapGenerator</a>(int&nbsp;mapWidth,
+<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.133">WorldMapGenerator</a>(int&nbsp;mapWidth,
                             int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
  part of an anonymous class that implements <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#regenerate-int-int-int-int-double-double-long-"><code>regenerate(int, int, int, int, double, double, long)</code></a>).
@@ -1219,7 +1221,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>WorldMapGenerator</h4>
-<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.141">WorldMapGenerator</a>(long&nbsp;initialSeed,
+<pre>protected&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.148">WorldMapGenerator</a>(long&nbsp;initialSeed,
                             int&nbsp;mapWidth,
                             int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
@@ -1249,7 +1251,12 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getCenterLongitude</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.59">getCenterLongitude</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.61">getCenterLongitude</a>()</pre>
+<div class="block">Gets the longitude line the map is centered on, which should usually be between 0 and 2 * PI.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the longitude line the map is centered on, in radians from 0 to 2 * PI</dd>
+</dl>
 </li>
 </ul>
 <a name="setCenterLongitude-double-">
@@ -1258,7 +1265,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setCenterLongitude</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.63">setCenterLongitude</a>(double&nbsp;centerLongitude)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.70">setCenterLongitude</a>(double&nbsp;centerLongitude)</pre>
+<div class="block">Sets the center longitude line to a longitude measured in radians, from 0 to 2 * PI. Positive arguments will be
+ corrected with modulo, but negative ones may not always act as expected, and are strongly discouraged.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>centerLongitude</code> - the longitude to center the map projection on, from 0 to 2 * PI (can be any non-negative double).</dd>
+</dl>
 </li>
 </ul>
 <a name="asin-double-">
@@ -1267,7 +1280,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>asin</h4>
-<pre>protected static&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.89">asin</a>(double&nbsp;a)</pre>
+<pre>protected static&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.96">asin</a>(double&nbsp;a)</pre>
 <div class="block">Arc sine approximation with fairly low error while still being faster than <a href="../../../squidpony/squidmath/NumberTools.html#sin-double-"><code>NumberTools.sin(double)</code></a>.
  This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
  Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
@@ -1286,7 +1299,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>removeExcess</h4>
-<pre>protected static&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.94">removeExcess</a>(double&nbsp;radians)</pre>
+<pre>protected static&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.101">removeExcess</a>(double&nbsp;radians)</pre>
 </li>
 </ul>
 <a name="generate--">
@@ -1295,7 +1308,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.169">generate</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.176">generate</a>()</pre>
 <div class="block">Generates a world using a random RNG state and all parameters randomized.
  The worlds this produces will always have width and height as specified in the constructor (default 256x256).
  You can call <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-"><code>zoomIn(int, int, int)</code></a> to double the resolution and center on the specified area, but the width
@@ -1308,7 +1321,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.182">generate</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.189">generate</a>(long&nbsp;state)</pre>
 <div class="block">Generates a world using the specified RNG state as a long. Other parameters will be randomized, using the same
  RNG state to start with.
  The worlds this produces will always have width and height as specified in the constructor (default 256x256).
@@ -1326,7 +1339,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.196">generate</a>(double&nbsp;landMod,
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.203">generate</a>(double&nbsp;landMod,
                      double&nbsp;coolMod,
                      long&nbsp;state)</pre>
 <div class="block">Generates a world using the specified RNG state as a long, with specific water and cooling modifiers that affect
@@ -1348,7 +1361,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>zoomOut</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.223">zoomOut</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.230">zoomOut</a>()</pre>
 <div class="block">Halves the resolution of the map and doubles the area it covers; the 2D arrays this uses keep their sizes. This
  version of zoomOut always zooms out from the center of the currently used area.
  <br>
@@ -1361,7 +1374,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>zoomOut</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.237">zoomOut</a>(int&nbsp;zoomAmount,
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.244">zoomOut</a>(int&nbsp;zoomAmount,
                     int&nbsp;zoomCenterX,
                     int&nbsp;zoomCenterY)</pre>
 <div class="block">Halves the resolution of the map and doubles the area it covers repeatedly, halving <code>zoomAmount</code> times; the
@@ -1383,7 +1396,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>zoomIn</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.285">zoomIn</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.292">zoomIn</a>()</pre>
 <div class="block">Doubles the resolution of the map and halves the area it covers; the 2D arrays this uses keep their sizes. This
  version of zoomIn always zooms in to the center of the currently used area.
  <br>
@@ -1398,7 +1411,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>zoomIn</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.301">zoomIn</a>(int&nbsp;zoomAmount,
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.308">zoomIn</a>(int&nbsp;zoomAmount,
                    int&nbsp;zoomCenterX,
                    int&nbsp;zoomCenterY)</pre>
 <div class="block">Doubles the resolution of the map and halves the area it covers repeatedly, doubling <code>zoomAmount</code> times;
@@ -1422,7 +1435,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>regenerate</h4>
-<pre>protected abstract&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.341">regenerate</a>(int&nbsp;startX,
+<pre>protected abstract&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.348">regenerate</a>(int&nbsp;startX,
                                    int&nbsp;startY,
                                    int&nbsp;usedWidth,
                                    int&nbsp;usedHeight,
@@ -1431,13 +1444,37 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
                                    long&nbsp;state)</pre>
 </li>
 </ul>
+<a name="project-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>project</h4>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.362">project</a>(double&nbsp;latitude,
+                     double&nbsp;longitude)</pre>
+<div class="block">Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
+ (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
+ generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
+ the projection for a given lat-lon coordinate, this returns null. The default implementation always returns null..
+ If this is a supported operation and the parameters are valid, this returns a Coord with x between 0 and
+ <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#width"><code>width</code></a>, and y between 0 and <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#height"><code>height</code></a>, both exclusive. Automatically wraps the Coord's values using
+ <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapX-int-int-"><code>wrapX(int, int)</code></a> and <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#wrapY-int-int-"><code>wrapY(int, int)</code></a>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>latitude</code> - the latitude, from <code>Math.PI * -0.5</code> to <code>Math.PI * 0.5</code></dd>
+<dd><code>longitude</code> - the longitude, from <code>0.0</code> to <code>Math.PI * 2.0</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the point at the given latitude and longitude, as a Coord with x between 0 and <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#width"><code>width</code></a> and y between 0 and <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#height"><code>height</code></a>, or null if unsupported</dd>
+</dl>
+</li>
+</ul>
 <a name="codeHeight-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>codeHeight</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.344">codeHeight</a>(double&nbsp;high)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.367">codeHeight</a>(double&nbsp;high)</pre>
 </li>
 </ul>
 <a name="decodeX-int-">
@@ -1446,7 +1483,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>decodeX</h4>
-<pre>protected final&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.364">decodeX</a>(int&nbsp;coded)</pre>
+<pre>protected final&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.387">decodeX</a>(int&nbsp;coded)</pre>
 </li>
 </ul>
 <a name="decodeY-int-">
@@ -1455,7 +1492,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>decodeY</h4>
-<pre>protected final&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.368">decodeY</a>(int&nbsp;coded)</pre>
+<pre>protected final&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.391">decodeY</a>(int&nbsp;coded)</pre>
 </li>
 </ul>
 <a name="wrapX-int-int-">
@@ -1464,7 +1501,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>wrapX</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.372">wrapX</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.395">wrapX</a>(int&nbsp;x,
                  int&nbsp;y)</pre>
 </li>
 </ul>
@@ -1474,7 +1511,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>wrapY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.375">wrapY</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.398">wrapY</a>(int&nbsp;x,
                  int&nbsp;y)</pre>
 </li>
 </ul>

@@ -212,11 +212,11 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../squidpony/squidgrid/mapping/class-use/WorldMapGenerator.SphereMapAlt.html#squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a>
+<td class="colOne"><a href="../../../squidpony/squidgrid/mapping/class-use/WorldMapGenerator.SphereMap.html#squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a>
 <div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that distorts the map as it nears the poles, expanding the
  smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
- this is an alternative implementation to WorldMapGenerator.SphereMap that is meant to avoid certain artifacts
- commonly produced by that generator.</div>
+ this counteracts certain artifacts that are common in Simplex noise world maps by using a 4D noise call to
+ generate terrain, using a normal 3D noise call's result as the extra 4th dimension.</div>
 </td>
 </tr>
 </tbody>

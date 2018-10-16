@@ -505,6 +505,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/util/GenerationFailureException.html#GenerationFailureException-java.lang.String-java.lang.Throwable-">GenerationFailureException(String, Throwable)</a></span> - Constructor for exception squidpony.squidgrid.mapping.locks.util.<a href="../squidpony/squidgrid/mapping/locks/util/GenerationFailureException.html" title="class in squidpony.squidgrid.mapping.locks.util">GenerationFailureException</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#get-java.lang.String-">get(String)</a></span> - Static method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>
+<div class="block">If a FakeLanguageGen is known and is in <a href="../squidpony/FakeLanguageGen.html#registered"><code>FakeLanguageGen.registered</code></a>, this allows you to look up that FakeLanguageGen by
+ name (using a name from <a href="../squidpony/FakeLanguageGen.html#registeredNames"><code>FakeLanguageGen.registeredNames</code></a>).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#get-int-int-int-int-">get(int, int, int, int)</a></span> - Method in interface squidpony.<a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.html#get-int-int-int-">get(int, int, int)</a></span> - Method in interface squidpony.<a href="../squidpony/IColorCenter.html" title="interface in squidpony">IColorCenter</a></dt>
@@ -667,6 +672,11 @@
 <div class="block">Gets the Q values as a freshly-copied ArrayList of Q; unlike <a href="../squidpony/squidmath/K2V1.html#getSetA--"><code>K2V1.getSetA()</code></a> or <a href="../squidpony/squidmath/K2V1.html#getSetB--"><code>K2V1.getSetB()</code></a>, this does
  not cache the value list.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#getAt-int-">getAt(int)</a></span> - Static method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>
+<div class="block">If a FakeLanguageGen is known and is in <a href="../squidpony/FakeLanguageGen.html#registered"><code>FakeLanguageGen.registered</code></a>, this allows you to look up that FakeLanguageGen by
+ index, from 0 to <code>FakeLanguageGen.registered.length - 1</code>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#getAt-int-">getAt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
 <dd>
 <div class="block">Gets the value at the given index in the iteration order in constant time (random-access).</div>
@@ -808,7 +818,9 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/zone/Zone.Skeleton.html#getCenter--">getCenter()</a></span> - Method in class squidpony.squidgrid.zone.<a href="../squidpony/squidgrid/zone/Zone.Skeleton.html" title="class in squidpony.squidgrid.zone">Zone.Skeleton</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Gets the longitude line the map is centered on, which should usually be between 0 and 2 * PI.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Placement.html#getCenters--">getCenters()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Placement.html" title="class in squidpony.squidgrid.mapping">Placement</a></dt>
 <dd>
 <div class="block">Gets an OrderedSet of OrderedSet of Coord, where each inner OrderedSet of Coord refers to a room's cells

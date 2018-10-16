@@ -123,7 +123,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre><a href="../../../squidpony/annotation/Beta.html" title="annotation in squidpony.annotation">@Beta</a>
-public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.4426">WorldMapGenerator.RotatingSpaceMap</a>
+public static class <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.html#line.4173">WorldMapGenerator.RotatingSpaceMap</a>
 extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></pre>
 <div class="block">A concrete implementation of <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator</code></a> that imitates an infinite-distance perspective view of a
  world, showing only one hemisphere, that should be as wide as it is tall (its outline is a circle). It should
@@ -133,7 +133,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
  <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate--"><code>WorldMapGenerator.generate()</code></a> in those classes, since it doesn't remake the map data at a slightly different rotation and
  instead keeps a single map in use the whole time, using sections of it. This uses an
  <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
- the latitude always at the equator; the internal map is stored as a <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.SphereMapAlt</code></a>, which uses a
+ the latitude always at the equator; the internal map is stored as a <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping"><code>WorldMapGenerator.SphereMap</code></a>, which uses a
  <a href="https://en.wikipedia.org/wiki/Cylindrical_equal-area_projection#Discussion">cylindrical equal-area
  projection</a>, specifically the Smyth equal-surface projection.
  <br>
@@ -160,7 +160,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <!--   -->
 </a>
 <h3>Nested classes/interfaces inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></h3>
-<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalHammerMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalHammerMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SpaceViewMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></code></li>
+<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.BiomeMapper.html" title="interface in squidpony.squidgrid.mapping">WorldMapGenerator.BiomeMapper</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.DetailedBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.DetailedBiomeMapper</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalHammerMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalHammerMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SimpleBiomeMapper.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SimpleBiomeMapper</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SpaceViewMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.TilingMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.TilingMap</a></code></li>
 </ul>
 </li>
 </ul>
@@ -205,7 +205,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#minWet0">minWet0</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a></code></td>
+<td class="colFirst"><code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#storedMap">storedMap</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -317,7 +317,9 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#setCenterLongitude-double-">setCenterLongitude</a></span>(double&nbsp;centerLongitude)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#setCenterLongitude-double-">setCenterLongitude</a></span>(double&nbsp;centerLongitude)</code>
+<div class="block">Sets the center longitude line to a longitude measured in radians, from 0 to 2 * PI.</div>
+</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -335,7 +337,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidgrid.mapping.<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></h3>
-<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#asin-double-">asin</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#codeHeight-double-">codeHeight</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeX-int-">decodeX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeY-int-">decodeY</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-double-double-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#removeExcess-double-">removeExcess</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></code></li>
+<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#asin-double-">asin</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#codeHeight-double-">codeHeight</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeX-int-">decodeX</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#decodeY-int-">decodeY</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate--">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-double-double-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#generate-long-">generate</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#getCenterLongitude--">getCenterLongitude</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#project-double-double-">project</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#removeExcess-double-">removeExcess</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn--">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomIn-int-int-int-">zoomIn</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut--">zoomOut</a>, <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#zoomOut-int-int-int-">zoomOut</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -364,7 +366,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>minHeat0</h4>
-<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4427">minHeat0</a></pre>
+<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4174">minHeat0</a></pre>
 </li>
 </ul>
 <a name="maxHeat0">
@@ -373,7 +375,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>maxHeat0</h4>
-<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4427">maxHeat0</a></pre>
+<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4174">maxHeat0</a></pre>
 </li>
 </ul>
 <a name="minHeat1">
@@ -382,7 +384,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>minHeat1</h4>
-<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4428">minHeat1</a></pre>
+<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4175">minHeat1</a></pre>
 </li>
 </ul>
 <a name="maxHeat1">
@@ -391,7 +393,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>maxHeat1</h4>
-<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4428">maxHeat1</a></pre>
+<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4175">maxHeat1</a></pre>
 </li>
 </ul>
 <a name="minWet0">
@@ -400,7 +402,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>minWet0</h4>
-<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4429">minWet0</a></pre>
+<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4176">minWet0</a></pre>
 </li>
 </ul>
 <a name="maxWet0">
@@ -409,7 +411,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>maxWet0</h4>
-<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4429">maxWet0</a></pre>
+<pre>protected&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4176">maxWet0</a></pre>
 </li>
 </ul>
 <a name="xPositions">
@@ -418,7 +420,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>xPositions</h4>
-<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4431">xPositions</a></pre>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4178">xPositions</a></pre>
 </li>
 </ul>
 <a name="yPositions">
@@ -427,7 +429,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>yPositions</h4>
-<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4432">yPositions</a></pre>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4179">yPositions</a></pre>
 </li>
 </ul>
 <a name="zPositions">
@@ -436,7 +438,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>zPositions</h4>
-<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4433">zPositions</a></pre>
+<pre>public final&nbsp;double[][] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4180">zPositions</a></pre>
 </li>
 </ul>
 <a name="edges">
@@ -445,7 +447,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>edges</h4>
-<pre>protected final&nbsp;int[] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4434">edges</a></pre>
+<pre>protected final&nbsp;int[] <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4181">edges</a></pre>
 </li>
 </ul>
 <a name="storedMap">
@@ -454,7 +456,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockListLast">
 <li class="blockList">
 <h4>storedMap</h4>
-<pre>public final&nbsp;<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMapAlt.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMapAlt</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4435">storedMap</a></pre>
+<pre>public final&nbsp;<a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.SphereMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SphereMap</a> <a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4182">storedMap</a></pre>
 </li>
 </ul>
 </li>
@@ -471,7 +473,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>RotatingSpaceMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4444">RotatingSpaceMap</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4191">RotatingSpaceMap</a>()</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
  showing only one hemisphere at a time.
  Always makes a 100x100 map.
@@ -486,7 +488,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>RotatingSpaceMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4459">RotatingSpaceMap</a>(int&nbsp;mapWidth,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4206">RotatingSpaceMap</a>(int&nbsp;mapWidth,
                         int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
  showing only one hemisphere at a time.
@@ -507,7 +509,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>RotatingSpaceMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4475">RotatingSpaceMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4222">RotatingSpaceMap</a>(long&nbsp;initialSeed,
                         int&nbsp;mapWidth,
                         int&nbsp;mapHeight)</pre>
 <div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
@@ -530,7 +532,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>RotatingSpaceMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4492">RotatingSpaceMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4239">RotatingSpaceMap</a>(long&nbsp;initialSeed,
                         int&nbsp;mapWidth,
                         int&nbsp;mapHeight,
                         double&nbsp;octaveMultiplier)</pre>
@@ -555,7 +557,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>RotatingSpaceMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4509">RotatingSpaceMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4256">RotatingSpaceMap</a>(long&nbsp;initialSeed,
                         int&nbsp;mapWidth,
                         int&nbsp;mapHeight,
                         <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator)</pre>
@@ -580,7 +582,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockListLast">
 <li class="blockList">
 <h4>RotatingSpaceMap</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4534">RotatingSpaceMap</a>(long&nbsp;initialSeed,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4281">RotatingSpaceMap</a>(long&nbsp;initialSeed,
                         int&nbsp;mapWidth,
                         int&nbsp;mapHeight,
                         <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
@@ -623,7 +625,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>wrapX</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4544">wrapX</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4291">wrapX</a>(int&nbsp;x,
                  int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -637,7 +639,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>wrapY</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4550">wrapY</a>(int&nbsp;x,
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4297">wrapY</a>(int&nbsp;x,
                  int&nbsp;y)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -651,10 +653,15 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockList">
 <li class="blockList">
 <h4>setCenterLongitude</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4555">setCenterLongitude</a>(double&nbsp;centerLongitude)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4302">setCenterLongitude</a>(double&nbsp;centerLongitude)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">WorldMapGenerator</a></code></span></div>
+<div class="block">Sets the center longitude line to a longitude measured in radians, from 0 to 2 * PI. Positive arguments will be
+ corrected with modulo, but negative ones may not always act as expected, and are strongly discouraged.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html#setCenterLongitude-double-">setCenterLongitude</a></code>&nbsp;in class&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>centerLongitude</code> - the longitude to center the map projection on, from 0 to 2 * PI (can be any non-negative double).</dd>
 </dl>
 </li>
 </ul>
@@ -664,7 +671,7 @@ extends <a href="../../../squidpony/squidgrid/mapping/WorldMapGenerator.html" ti
 <ul class="blockListLast">
 <li class="blockList">
 <h4>regenerate</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4635">regenerate</a>(int&nbsp;startX,
+<pre>protected&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#line.4383">regenerate</a>(int&nbsp;startX,
                           int&nbsp;startY,
                           int&nbsp;usedWidth,
                           int&nbsp;usedHeight,

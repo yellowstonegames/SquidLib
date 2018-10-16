@@ -125,6 +125,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Messaging.NounTrait.html#name_sText-java.lang.String-">name_sText(String)</a></span> - Method in enum squidpony.<a href="../squidpony/Messaging.NounTrait.html" title="enum in squidpony">Messaging.NounTrait</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#nameAt-int-">nameAt(int)</a></span> - Static method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>
+<div class="block">If a FakeLanguageGen is known and is in <a href="../squidpony/FakeLanguageGen.html#registered"><code>FakeLanguageGen.registered</code></a>, this allows you to look up that FakeLanguageGen's
+ name by index, from 0 to <code>FakeLanguageGen.registeredNames.length - 1</code>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/GridData.html#names">names</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/GridData.html" title="class in squidpony.squidgrid">GridData</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionMap.html#names">names</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionMap.html" title="class in squidpony.squidgrid.mapping">SectionMap</a></dt>
@@ -439,10 +444,19 @@
 <dd>
 <div class="block">Gets the next distinct int in the sequence, shuffling the sequence if it has been exhausted so it never runs out.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SNShuffledIntSequence.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath">SNShuffledIntSequence</a></dt>
+<dd>
+<div class="block">Gets the next distinct int in the sequence, shuffling the sequence if it has been exhausted so it never runs out.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SobolQRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SobolQRNG.html" title="class in squidpony.squidmath">SobolQRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Starfish32RNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SwapOrNotShuffler.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></dt>
+<dd>
+<div class="block">Gets the next distinct int in the sequence, or -1 if all distinct ints have been returned that are non-negative
+ and less than <a href="../squidpony/squidmath/SwapOrNotShuffler.html#bound"><code>SwapOrNotShuffler.bound</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/TangleRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/TangleRNG.html" title="class in squidpony.squidmath">TangleRNG</a></dt>
 <dd>
 <div class="block">Using this method, any algorithm that might use the built-in Java Random
@@ -1625,6 +1639,11 @@
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#NORSE">NORSE</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>
 <div class="block">Somewhat close to Old Norse, which is itself very close to Icelandic, so this uses Icelandic spelling rules.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#NORSE_SIMPLIFIED">NORSE_SIMPLIFIED</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>
+<div class="block">Somewhat close to Old Norse, which is itself very close to Icelandic, but changed to avoid letters not on a
+ US-ASCII keyboard.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Hashers.html#noSpaceStringHasher">noSpaceStringHasher</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Hashers.html" title="class in squidpony.squidmath">Hashers</a></dt>
 <dd>

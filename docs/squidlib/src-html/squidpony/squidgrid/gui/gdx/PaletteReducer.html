@@ -384,7 +384,7 @@
 <span class="sourceLineNo">376</span>            Collections.sort(es, entryComparator);<a name="line.376"></a>
 <span class="sourceLineNo">377</span>            int i = 1, c = 0;<a name="line.377"></a>
 <span class="sourceLineNo">378</span>            PER_BEST:<a name="line.378"></a>
-<span class="sourceLineNo">379</span>            for (; i &lt; 256 &amp;&amp; i &lt; cs;) {<a name="line.379"></a>
+<span class="sourceLineNo">379</span>            for (; i &lt; 256 &amp;&amp; c &lt; cs;) {<a name="line.379"></a>
 <span class="sourceLineNo">380</span>                color = es.get(c++).getKey();<a name="line.380"></a>
 <span class="sourceLineNo">381</span>                for (int j = 1; j &lt; i; j++) {<a name="line.381"></a>
 <span class="sourceLineNo">382</span>                    if (difference(color, paletteArray[j]) &lt; threshold)<a name="line.382"></a>
