@@ -943,7 +943,7 @@
 <span class="sourceLineNo">935</span>            z += s * 0xDB4F0B9175AE2165L;<a name="line.935"></a>
 <span class="sourceLineNo">936</span>            y += z * 0xBBE0563303A4615FL;<a name="line.936"></a>
 <span class="sourceLineNo">937</span>            x += y * 0xA0F2EC75A1FE1575L;<a name="line.937"></a>
-<span class="sourceLineNo">938</span>            s += x * 0x89E182857D9ED688L;<a name="line.938"></a>
+<span class="sourceLineNo">938</span>            s += x * 0x89E182857D9ED689L;<a name="line.938"></a>
 <span class="sourceLineNo">939</span>            return ((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25);<a name="line.939"></a>
 <span class="sourceLineNo">940</span>        }<a name="line.940"></a>
 <span class="sourceLineNo">941</span><a name="line.941"></a>
@@ -970,7 +970,7 @@
 <span class="sourceLineNo">962</span>            w += s * 0xE19B01AA9D42C633L;<a name="line.962"></a>
 <span class="sourceLineNo">963</span>            z += w * 0xC6D1D6C8ED0C9631L;<a name="line.963"></a>
 <span class="sourceLineNo">964</span>            y += z * 0xAF36D01EF7518DBBL;<a name="line.964"></a>
-<span class="sourceLineNo">965</span>            x += y * 0x9A69443F36F710E6L;<a name="line.965"></a>
+<span class="sourceLineNo">965</span>            x += y * 0x9A69443F36F710E7L;<a name="line.965"></a>
 <span class="sourceLineNo">966</span>            s += x * 0x881403B9339BD42DL;<a name="line.966"></a>
 <span class="sourceLineNo">967</span>            return ((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25);<a name="line.967"></a>
 <span class="sourceLineNo">968</span>        }<a name="line.968"></a>
@@ -998,11 +998,11 @@
 <span class="sourceLineNo">990</span>         */<a name="line.990"></a>
 <span class="sourceLineNo">991</span>        public static long hashAll(long x, long y, long z, long w, long u, long v, long s) {<a name="line.991"></a>
 <span class="sourceLineNo">992</span>            v += s * 0xE95E1DD17D35800DL;<a name="line.992"></a>
-<span class="sourceLineNo">993</span>            u += v * 0xD4BC74E13F3C782EL;<a name="line.993"></a>
-<span class="sourceLineNo">994</span>            w += u * 0xC1EDBC5B5C68AC24L;<a name="line.994"></a>
-<span class="sourceLineNo">995</span>            z += w * 0xB0C8AC50F0EDEF5CL;<a name="line.995"></a>
+<span class="sourceLineNo">993</span>            u += v * 0xD4BC74E13F3C782FL;<a name="line.993"></a>
+<span class="sourceLineNo">994</span>            w += u * 0xC1EDBC5B5C68AC25L;<a name="line.994"></a>
+<span class="sourceLineNo">995</span>            z += w * 0xB0C8AC50F0EDEF5DL;<a name="line.995"></a>
 <span class="sourceLineNo">996</span>            y += z * 0xA127A31C56D1CDB5L;<a name="line.996"></a>
-<span class="sourceLineNo">997</span>            x += y * 0x92E852C80D153DB2L;<a name="line.997"></a>
+<span class="sourceLineNo">997</span>            x += y * 0x92E852C80D153DB3L;<a name="line.997"></a>
 <span class="sourceLineNo">998</span>            s += x * 0x85EB75C3024385C3L;<a name="line.998"></a>
 <span class="sourceLineNo">999</span>            return ((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25);<a name="line.999"></a>
 <span class="sourceLineNo">1000</span>        }<a name="line.1000"></a>
@@ -1027,7 +1027,7 @@
 <span class="sourceLineNo">1019</span>            y += s * 0xD1B54A32D192ED03L;<a name="line.1019"></a>
 <span class="sourceLineNo">1020</span>            x += y * 0xABC98388FB8FAC03L;<a name="line.1020"></a>
 <span class="sourceLineNo">1021</span>            s += x * 0x8CB92BA72F3D8DD7L;<a name="line.1021"></a>
-<span class="sourceLineNo">1022</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 56);<a name="line.1022"></a>
+<span class="sourceLineNo">1022</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 56);<a name="line.1022"></a>
 <span class="sourceLineNo">1023</span>        }<a name="line.1023"></a>
 <span class="sourceLineNo">1024</span><a name="line.1024"></a>
 <span class="sourceLineNo">1025</span>        /**<a name="line.1025"></a>
@@ -1052,8 +1052,8 @@
 <span class="sourceLineNo">1044</span>            z += s * 0xDB4F0B9175AE2165L;<a name="line.1044"></a>
 <span class="sourceLineNo">1045</span>            y += z * 0xBBE0563303A4615FL;<a name="line.1045"></a>
 <span class="sourceLineNo">1046</span>            x += y * 0xA0F2EC75A1FE1575L;<a name="line.1046"></a>
-<span class="sourceLineNo">1047</span>            s += x * 0x89E182857D9ED688L;<a name="line.1047"></a>
-<span class="sourceLineNo">1048</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 56);<a name="line.1048"></a>
+<span class="sourceLineNo">1047</span>            s += x * 0x89E182857D9ED689L;<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 56);<a name="line.1048"></a>
 <span class="sourceLineNo">1049</span>        }<a name="line.1049"></a>
 <span class="sourceLineNo">1050</span><a name="line.1050"></a>
 <span class="sourceLineNo">1051</span>        /**<a name="line.1051"></a>
@@ -1079,9 +1079,9 @@
 <span class="sourceLineNo">1071</span>            w += s * 0xE19B01AA9D42C633L;<a name="line.1071"></a>
 <span class="sourceLineNo">1072</span>            z += w * 0xC6D1D6C8ED0C9631L;<a name="line.1072"></a>
 <span class="sourceLineNo">1073</span>            y += z * 0xAF36D01EF7518DBBL;<a name="line.1073"></a>
-<span class="sourceLineNo">1074</span>            x += y * 0x9A69443F36F710E6L;<a name="line.1074"></a>
+<span class="sourceLineNo">1074</span>            x += y * 0x9A69443F36F710E7L;<a name="line.1074"></a>
 <span class="sourceLineNo">1075</span>            s += x * 0x881403B9339BD42DL;<a name="line.1075"></a>
-<span class="sourceLineNo">1076</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 56);<a name="line.1076"></a>
+<span class="sourceLineNo">1076</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 56);<a name="line.1076"></a>
 <span class="sourceLineNo">1077</span>        }<a name="line.1077"></a>
 <span class="sourceLineNo">1078</span><a name="line.1078"></a>
 <span class="sourceLineNo">1079</span>        /**<a name="line.1079"></a>
@@ -1107,13 +1107,13 @@
 <span class="sourceLineNo">1099</span>         */<a name="line.1099"></a>
 <span class="sourceLineNo">1100</span>        public static int hash256(long x, long y, long z, long w, long u, long v, long s) {<a name="line.1100"></a>
 <span class="sourceLineNo">1101</span>            v += s * 0xE95E1DD17D35800DL;<a name="line.1101"></a>
-<span class="sourceLineNo">1102</span>            u += v * 0xD4BC74E13F3C782EL;<a name="line.1102"></a>
-<span class="sourceLineNo">1103</span>            w += u * 0xC1EDBC5B5C68AC24L;<a name="line.1103"></a>
-<span class="sourceLineNo">1104</span>            z += w * 0xB0C8AC50F0EDEF5CL;<a name="line.1104"></a>
+<span class="sourceLineNo">1102</span>            u += v * 0xD4BC74E13F3C782FL;<a name="line.1102"></a>
+<span class="sourceLineNo">1103</span>            w += u * 0xC1EDBC5B5C68AC25L;<a name="line.1103"></a>
+<span class="sourceLineNo">1104</span>            z += w * 0xB0C8AC50F0EDEF5DL;<a name="line.1104"></a>
 <span class="sourceLineNo">1105</span>            y += z * 0xA127A31C56D1CDB5L;<a name="line.1105"></a>
-<span class="sourceLineNo">1106</span>            x += y * 0x92E852C80D153DB2L;<a name="line.1106"></a>
+<span class="sourceLineNo">1106</span>            x += y * 0x92E852C80D153DB3L;<a name="line.1106"></a>
 <span class="sourceLineNo">1107</span>            s += x * 0x85EB75C3024385C3L;<a name="line.1107"></a>
-<span class="sourceLineNo">1108</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 56);<a name="line.1108"></a>
+<span class="sourceLineNo">1108</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 56);<a name="line.1108"></a>
 <span class="sourceLineNo">1109</span>        }<a name="line.1109"></a>
 <span class="sourceLineNo">1110</span>        /**<a name="line.1110"></a>
 <span class="sourceLineNo">1111</span>         * Gets a 5-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point<a name="line.1111"></a>
@@ -1136,7 +1136,7 @@
 <span class="sourceLineNo">1128</span>            y += s * 0xD1B54A32D192ED03L;<a name="line.1128"></a>
 <span class="sourceLineNo">1129</span>            x += y * 0xABC98388FB8FAC03L;<a name="line.1129"></a>
 <span class="sourceLineNo">1130</span>            s += x * 0x8CB92BA72F3D8DD7L;<a name="line.1130"></a>
-<span class="sourceLineNo">1131</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 59);<a name="line.1131"></a>
+<span class="sourceLineNo">1131</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 59);<a name="line.1131"></a>
 <span class="sourceLineNo">1132</span>        }<a name="line.1132"></a>
 <span class="sourceLineNo">1133</span><a name="line.1133"></a>
 <span class="sourceLineNo">1134</span>        /**<a name="line.1134"></a>
@@ -1161,8 +1161,8 @@
 <span class="sourceLineNo">1153</span>            z += s * 0xDB4F0B9175AE2165L;<a name="line.1153"></a>
 <span class="sourceLineNo">1154</span>            y += z * 0xBBE0563303A4615FL;<a name="line.1154"></a>
 <span class="sourceLineNo">1155</span>            x += y * 0xA0F2EC75A1FE1575L;<a name="line.1155"></a>
-<span class="sourceLineNo">1156</span>            s += x * 0x89E182857D9ED688L;<a name="line.1156"></a>
-<span class="sourceLineNo">1157</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 59);<a name="line.1157"></a>
+<span class="sourceLineNo">1156</span>            s += x * 0x89E182857D9ED689L;<a name="line.1156"></a>
+<span class="sourceLineNo">1157</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 59);<a name="line.1157"></a>
 <span class="sourceLineNo">1158</span>        }<a name="line.1158"></a>
 <span class="sourceLineNo">1159</span><a name="line.1159"></a>
 <span class="sourceLineNo">1160</span>        /**<a name="line.1160"></a>
@@ -1188,9 +1188,9 @@
 <span class="sourceLineNo">1180</span>            w += s * 0xE19B01AA9D42C633L;<a name="line.1180"></a>
 <span class="sourceLineNo">1181</span>            z += w * 0xC6D1D6C8ED0C9631L;<a name="line.1181"></a>
 <span class="sourceLineNo">1182</span>            y += z * 0xAF36D01EF7518DBBL;<a name="line.1182"></a>
-<span class="sourceLineNo">1183</span>            x += y * 0x9A69443F36F710E6L;<a name="line.1183"></a>
+<span class="sourceLineNo">1183</span>            x += y * 0x9A69443F36F710E7L;<a name="line.1183"></a>
 <span class="sourceLineNo">1184</span>            s += x * 0x881403B9339BD42DL;<a name="line.1184"></a>
-<span class="sourceLineNo">1185</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 59);<a name="line.1185"></a>
+<span class="sourceLineNo">1185</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 59);<a name="line.1185"></a>
 <span class="sourceLineNo">1186</span>        }<a name="line.1186"></a>
 <span class="sourceLineNo">1187</span><a name="line.1187"></a>
 <span class="sourceLineNo">1188</span>        /**<a name="line.1188"></a>
@@ -1216,13 +1216,13 @@
 <span class="sourceLineNo">1208</span>         */<a name="line.1208"></a>
 <span class="sourceLineNo">1209</span>        public static int hash32(long x, long y, long z, long w, long u, long v, long s) {<a name="line.1209"></a>
 <span class="sourceLineNo">1210</span>            v += s * 0xE95E1DD17D35800DL;<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>            u += v * 0xD4BC74E13F3C782EL;<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>            w += u * 0xC1EDBC5B5C68AC24L;<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span>            z += w * 0xB0C8AC50F0EDEF5CL;<a name="line.1213"></a>
+<span class="sourceLineNo">1211</span>            u += v * 0xD4BC74E13F3C782FL;<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>            w += u * 0xC1EDBC5B5C68AC25L;<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>            z += w * 0xB0C8AC50F0EDEF5DL;<a name="line.1213"></a>
 <span class="sourceLineNo">1214</span>            y += z * 0xA127A31C56D1CDB5L;<a name="line.1214"></a>
-<span class="sourceLineNo">1215</span>            x += y * 0x92E852C80D153DB2L;<a name="line.1215"></a>
+<span class="sourceLineNo">1215</span>            x += y * 0x92E852C80D153DB3L;<a name="line.1215"></a>
 <span class="sourceLineNo">1216</span>            s += x * 0x85EB75C3024385C3L;<a name="line.1216"></a>
-<span class="sourceLineNo">1217</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 59);<a name="line.1217"></a>
+<span class="sourceLineNo">1217</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 59);<a name="line.1217"></a>
 <span class="sourceLineNo">1218</span>        }<a name="line.1218"></a>
 <span class="sourceLineNo">1219</span>        <a name="line.1219"></a>
 <span class="sourceLineNo">1220</span>        /**<a name="line.1220"></a>
@@ -1246,7 +1246,7 @@
 <span class="sourceLineNo">1238</span>            y += s * 0xD1B54A32D192ED03L;<a name="line.1238"></a>
 <span class="sourceLineNo">1239</span>            x += y * 0xABC98388FB8FAC03L;<a name="line.1239"></a>
 <span class="sourceLineNo">1240</span>            s += x * 0x8CB92BA72F3D8DD7L;<a name="line.1240"></a>
-<span class="sourceLineNo">1241</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 58);<a name="line.1241"></a>
+<span class="sourceLineNo">1241</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 58);<a name="line.1241"></a>
 <span class="sourceLineNo">1242</span>        }<a name="line.1242"></a>
 <span class="sourceLineNo">1243</span><a name="line.1243"></a>
 <span class="sourceLineNo">1244</span>        /**<a name="line.1244"></a>
@@ -1271,8 +1271,8 @@
 <span class="sourceLineNo">1263</span>            z += s * 0xDB4F0B9175AE2165L;<a name="line.1263"></a>
 <span class="sourceLineNo">1264</span>            y += z * 0xBBE0563303A4615FL;<a name="line.1264"></a>
 <span class="sourceLineNo">1265</span>            x += y * 0xA0F2EC75A1FE1575L;<a name="line.1265"></a>
-<span class="sourceLineNo">1266</span>            s += x * 0x89E182857D9ED688L;<a name="line.1266"></a>
-<span class="sourceLineNo">1267</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 58);<a name="line.1267"></a>
+<span class="sourceLineNo">1266</span>            s += x * 0x89E182857D9ED689L;<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 58);<a name="line.1267"></a>
 <span class="sourceLineNo">1268</span>        }<a name="line.1268"></a>
 <span class="sourceLineNo">1269</span><a name="line.1269"></a>
 <span class="sourceLineNo">1270</span>        /**<a name="line.1270"></a>
@@ -1298,9 +1298,9 @@
 <span class="sourceLineNo">1290</span>            w += s * 0xE19B01AA9D42C633L;<a name="line.1290"></a>
 <span class="sourceLineNo">1291</span>            z += w * 0xC6D1D6C8ED0C9631L;<a name="line.1291"></a>
 <span class="sourceLineNo">1292</span>            y += z * 0xAF36D01EF7518DBBL;<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>            x += y * 0x9A69443F36F710E6L;<a name="line.1293"></a>
+<span class="sourceLineNo">1293</span>            x += y * 0x9A69443F36F710E7L;<a name="line.1293"></a>
 <span class="sourceLineNo">1294</span>            s += x * 0x881403B9339BD42DL;<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 58);<a name="line.1295"></a>
+<span class="sourceLineNo">1295</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 58);<a name="line.1295"></a>
 <span class="sourceLineNo">1296</span>        }<a name="line.1296"></a>
 <span class="sourceLineNo">1297</span><a name="line.1297"></a>
 <span class="sourceLineNo">1298</span>        /**<a name="line.1298"></a>
@@ -1326,13 +1326,13 @@
 <span class="sourceLineNo">1318</span>         */<a name="line.1318"></a>
 <span class="sourceLineNo">1319</span>        public static int hash64(long x, long y, long z, long w, long u, long v, long s) {<a name="line.1319"></a>
 <span class="sourceLineNo">1320</span>            v += s * 0xE95E1DD17D35800DL;<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>            u += v * 0xD4BC74E13F3C782EL;<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span>            w += u * 0xC1EDBC5B5C68AC24L;<a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>            z += w * 0xB0C8AC50F0EDEF5CL;<a name="line.1323"></a>
+<span class="sourceLineNo">1321</span>            u += v * 0xD4BC74E13F3C782FL;<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>            w += u * 0xC1EDBC5B5C68AC25L;<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>            z += w * 0xB0C8AC50F0EDEF5DL;<a name="line.1323"></a>
 <span class="sourceLineNo">1324</span>            y += z * 0xA127A31C56D1CDB5L;<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>            x += y * 0x92E852C80D153DB2L;<a name="line.1325"></a>
+<span class="sourceLineNo">1325</span>            x += y * 0x92E852C80D153DB3L;<a name="line.1325"></a>
 <span class="sourceLineNo">1326</span>            s += x * 0x85EB75C3024385C3L;<a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>            return (int)(((s = (s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s &gt;&gt;&gt; 25) &gt;&gt;&gt; 58);<a name="line.1327"></a>
+<span class="sourceLineNo">1327</span>            return (int)(((s ^ s &gt;&gt;&gt; 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) &gt;&gt;&gt; 58);<a name="line.1327"></a>
 <span class="sourceLineNo">1328</span>        }<a name="line.1328"></a>
 <span class="sourceLineNo">1329</span><a name="line.1329"></a>
 <span class="sourceLineNo">1330</span>        public static int hash256_alt(final long x, final long y, final long z, final long w, final long seed) {<a name="line.1330"></a>
