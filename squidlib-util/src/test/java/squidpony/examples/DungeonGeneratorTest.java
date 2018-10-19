@@ -4,6 +4,7 @@ import squidpony.ArrayTools;
 import squidpony.squidai.WaypointPathfinder;
 import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.mapping.*;
+import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
 import squidpony.squidmath.*;
 
@@ -316,6 +317,33 @@ public class DungeonGeneratorTest {
         dungeonGenerator.addGrass(12);
         dungeon = dungeonGenerator.generate(flow.generate(TilesetType.DEFAULT_DUNGEON));
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
+        dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
+        dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
+
+        dungeonGenerator.setDungeon(
+                DungeonUtility.hashesToLines(dungeon, true));
+        System.out.println(dungeonGenerator);
+        System.out.println();
+        dungeonGenerator.setDungeon(DungeonUtility.linesToHashes(dungeonGenerator.getDungeon()));
+        System.out.println(dungeonGenerator);
+        System.out.println("------------------------------------------------------------");
+
+        System.out.println("Castle Interior (WIP)");
+        rng.setState(2252637788195L);
+        DungeonBoneGen dbg = new DungeonBoneGen(rng);
+        dbg.generate(TilesetType.LIMITED_CONNECTIVITY, width, height);
+        GreasedRegion gr = dbg.region.copy();
+        dbg.generate(TilesetType.LIMITED_CONNECTIVITY, width + 5, height + 5);
+        gr.insert(-5, -5, dbg.region);
+        dbg.generate(TilesetType.LIMITED_CONNECTIVITY, width + 3, height + 3);
+        gr.not().insert(-2, -2, dbg.region);
+        System.out.println(gr.show('.', '#'));
+        System.out.println("End GreasedRegion");
+        dungeonGenerator.clearEffects();
+        dungeon = gr.toChars();
+        DungeonUtility.debugPrint(dungeon);
+        dungeon = dungeonGenerator.generate(dungeon);
+        
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';
 
