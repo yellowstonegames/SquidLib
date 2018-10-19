@@ -8427,12 +8427,22 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #000000;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_00 = new SColor(0, 0, 0, 0, "Aurora 00");
+    public static final SColor AURORA_TRANSPARENT = new SColor(0, 0, 0, 0, "Aurora Transparent");
 
-    public static final SColor AURORA_01 = new SColor(0x010101, "Aurora 01");
 
     /**
-     * This color constant "Aurora 02" has RGB code {@code 0x131313}, red 0.07450981, green 0.07450981, blue 0.07450981, alpha 1, hue 0.0, saturation 0.0, and value 0.07450981.
+     * This color constant "Aurora Pitch Black" has RGB code {@code 0x010101}, red 0.003921569, green 0.003921569, blue 0.003921569, alpha 1, hue 0.0, saturation 0.0, and value 0.003921569.
+     * It can be represented as a packed float with the constant {@code -0x1.020202p125F}.
+     * <pre>
+     * <font style='background-color: #010101;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #010101; color: #000000'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #010101;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #010101'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #010101'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #010101'>&nbsp;@&nbsp;</font><font style='background-color: #010101; color: #888888'>&nbsp;@&nbsp;</font>
+     * <font style='background-color: #010101;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #010101; color: #ffffff'>&nbsp;@&nbsp;</font>
+     * </pre>
+     */
+    public static final SColor AURORA_PITCH_BLACK = new SColor(0x010101, "Aurora Pitch Black");
+
+    /**
+     * This color constant "Aurora Coal Black" has RGB code {@code 0x131313}, red 0.07450981, green 0.07450981, blue 0.07450981, alpha 1, hue 0.0, saturation 0.0, and value 0.07450981.
      * It can be represented as a packed float with the constant {@code -0x1.262626p125F}.
      * <pre>
      * <font style='background-color: #131313;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #131313; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8440,10 +8450,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #131313;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #131313; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_02 = new SColor(0x131313, "Aurora 02");
+    public static final SColor AURORA_COAL_BLACK = new SColor(0x131313, "Aurora Coal Black");
 
     /**
-     * This color constant "Aurora 03" has RGB code {@code 0x252525}, red 0.14509805, green 0.14509805, blue 0.14509805, alpha 1, hue 0.0, saturation 0.0, and value 0.14509805.
+     * This color constant "Aurora Shadow" has RGB code {@code 0x252525}, red 0.14509805, green 0.14509805, blue 0.14509805, alpha 1, hue 0.0, saturation 0.0, and value 0.14509805.
      * It can be represented as a packed float with the constant {@code -0x1.4a4a4ap125F}.
      * <pre>
      * <font style='background-color: #252525;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #252525; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8451,10 +8461,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #252525;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #252525; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_03 = new SColor(0x252525, "Aurora 03");
+    public static final SColor AURORA_SHADOW = new SColor(0x252525, "Aurora Shadow");
 
     /**
-     * This color constant "Aurora 04" has RGB code {@code 0x373737}, red 0.21568628, green 0.21568628, blue 0.21568628, alpha 1, hue 0.0, saturation 0.0, and value 0.21568628.
+     * This color constant "Aurora Graphite" has RGB code {@code 0x373737}, red 0.21568628, green 0.21568628, blue 0.21568628, alpha 1, hue 0.0, saturation 0.0, and value 0.21568628.
      * It can be represented as a packed float with the constant {@code -0x1.6e6e6ep125F}.
      * <pre>
      * <font style='background-color: #373737;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #373737; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8462,10 +8472,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #373737;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #373737; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_04 = new SColor(0x373737, "Aurora 04");
+    public static final SColor AURORA_GRAPHITE = new SColor(0x373737, "Aurora Graphite");
 
     /**
-     * This color constant "Aurora 05" has RGB code {@code 0x494949}, red 0.28627452, green 0.28627452, blue 0.28627452, alpha 1, hue 0.0, saturation 0.0, and value 0.28627452.
+     * This color constant "Aurora Smoke" has RGB code {@code 0x494949}, red 0.28627452, green 0.28627452, blue 0.28627452, alpha 1, hue 0.0, saturation 0.0, and value 0.28627452.
      * It can be represented as a packed float with the constant {@code -0x1.929292p125F}.
      * <pre>
      * <font style='background-color: #494949;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #494949; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8473,10 +8483,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #494949;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #494949; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_05 = new SColor(0x494949, "Aurora 05");
+    public static final SColor AURORA_SMOKE = new SColor(0x494949, "Aurora Smoke");
 
     /**
-     * This color constant "Aurora 06" has RGB code {@code 0x5B5B5B}, red 0.35686275, green 0.35686275, blue 0.35686275, alpha 1, hue 0.0, saturation 0.0, and value 0.35686275.
+     * This color constant "Aurora Lead" has RGB code {@code 0x5B5B5B}, red 0.35686275, green 0.35686275, blue 0.35686275, alpha 1, hue 0.0, saturation 0.0, and value 0.35686275.
      * It can be represented as a packed float with the constant {@code -0x1.b6b6b6p125F}.
      * <pre>
      * <font style='background-color: #5B5B5B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5B5B5B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8484,10 +8494,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #5B5B5B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5B5B5B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_06 = new SColor(0x5B5B5B, "Aurora 06");
+    public static final SColor AURORA_LEAD = new SColor(0x5B5B5B, "Aurora Lead");
 
     /**
-     * This color constant "Aurora 07" has RGB code {@code 0x6E6E6E}, red 0.43137255, green 0.43137255, blue 0.43137255, alpha 1, hue 0.0, saturation 0.0, and value 0.43137255.
+     * This color constant "Aurora Iron" has RGB code {@code 0x6E6E6E}, red 0.43137255, green 0.43137255, blue 0.43137255, alpha 1, hue 0.0, saturation 0.0, and value 0.43137255.
      * It can be represented as a packed float with the constant {@code -0x1.dcdcdcp125F}.
      * <pre>
      * <font style='background-color: #6E6E6E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6E6E6E; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8495,10 +8505,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #6E6E6E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6E6E6E; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_07 = new SColor(0x6E6E6E, "Aurora 07");
+    public static final SColor AURORA_IRON = new SColor(0x6E6E6E, "Aurora Iron");
 
     /**
-     * This color constant "Aurora 08" has RGB code {@code 0x808080}, red 0.5019608, green 0.5019608, blue 0.5019608, alpha 1, hue 0.0, saturation 0.0, and value 0.5019608.
+     * This color constant "Aurora Elephant" has RGB code {@code 0x808080}, red 0.5019608, green 0.5019608, blue 0.5019608, alpha 1, hue 0.0, saturation 0.0, and value 0.5019608.
      * It can be represented as a packed float with the constant {@code -0x1.0101p126F}.
      * <pre>
      * <font style='background-color: #808080;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #808080; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8506,10 +8516,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #808080;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #808080; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_08 = new SColor(0x808080, "Aurora 08");
+    public static final SColor AURORA_ELEPHANT = new SColor(0x808080, "Aurora Elephant");
 
     /**
-     * This color constant "Aurora 09" has RGB code {@code 0x929292}, red 0.57254905, green 0.57254905, blue 0.57254905, alpha 1, hue 0.0, saturation 0.0, and value 0.57254905.
+     * This color constant "Aurora Chinchilla" has RGB code {@code 0x929292}, red 0.57254905, green 0.57254905, blue 0.57254905, alpha 1, hue 0.0, saturation 0.0, and value 0.57254905.
      * It can be represented as a packed float with the constant {@code -0x1.252524p126F}.
      * <pre>
      * <font style='background-color: #929292;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #929292; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8517,10 +8527,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #929292;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #929292; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_09 = new SColor(0x929292, "Aurora 09");
+    public static final SColor AURORA_CHINCHILLA = new SColor(0x929292, "Aurora Chinchilla");
 
     /**
-     * This color constant "Aurora 0A" has RGB code {@code 0xA4A4A4}, red 0.6431373, green 0.6431373, blue 0.6431373, alpha 1, hue 0.0, saturation 0.0, and value 0.6431373.
+     * This color constant "Aurora Greyhound" has RGB code {@code 0xA4A4A4}, red 0.6431373, green 0.6431373, blue 0.6431373, alpha 1, hue 0.0, saturation 0.0, and value 0.6431373.
      * It can be represented as a packed float with the constant {@code -0x1.494948p126F}.
      * <pre>
      * <font style='background-color: #A4A4A4;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A4A4A4; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8528,10 +8538,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A4A4A4;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A4A4A4; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_0A = new SColor(0xA4A4A4, "Aurora 0A");
+    public static final SColor AURORA_GREYHOUND = new SColor(0xA4A4A4, "Aurora Greyhound");
 
     /**
-     * This color constant "Aurora 0B" has RGB code {@code 0xB6B6B6}, red 0.7137255, green 0.7137255, blue 0.7137255, alpha 1, hue 0.0, saturation 0.0, and value 0.7137255.
+     * This color constant "Aurora Silver" has RGB code {@code 0xB6B6B6}, red 0.7137255, green 0.7137255, blue 0.7137255, alpha 1, hue 0.0, saturation 0.0, and value 0.7137255.
      * It can be represented as a packed float with the constant {@code -0x1.6d6d6cp126F}.
      * <pre>
      * <font style='background-color: #B6B6B6;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B6B6B6; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8539,10 +8549,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #B6B6B6;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B6B6B6; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_0B = new SColor(0xB6B6B6, "Aurora 0B");
+    public static final SColor AURORA_SILVER = new SColor(0xB6B6B6, "Aurora Silver");
 
     /**
-     * This color constant "Aurora 0C" has RGB code {@code 0xC9C9C9}, red 0.7882353, green 0.7882353, blue 0.7882353, alpha 1, hue 0.0, saturation 0.0, and value 0.7882353.
+     * This color constant "Aurora Fog" has RGB code {@code 0xC9C9C9}, red 0.7882353, green 0.7882353, blue 0.7882353, alpha 1, hue 0.0, saturation 0.0, and value 0.7882353.
      * It can be represented as a packed float with the constant {@code -0x1.939392p126F}.
      * <pre>
      * <font style='background-color: #C9C9C9;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C9C9C9; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8550,10 +8560,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C9C9C9;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C9C9C9; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_0C = new SColor(0xC9C9C9, "Aurora 0C");
+    public static final SColor AURORA_FOG = new SColor(0xC9C9C9, "Aurora Fog");
 
     /**
-     * This color constant "Aurora 0D" has RGB code {@code 0xDBDBDB}, red 0.85882354, green 0.85882354, blue 0.85882354, alpha 1, hue 0.0, saturation 0.0, and value 0.85882354.
+     * This color constant "Aurora Platinum" has RGB code {@code 0xDBDBDB}, red 0.85882354, green 0.85882354, blue 0.85882354, alpha 1, hue 0.0, saturation 0.0, and value 0.85882354.
      * It can be represented as a packed float with the constant {@code -0x1.b7b7b6p126F}.
      * <pre>
      * <font style='background-color: #DBDBDB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DBDBDB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8561,10 +8571,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #DBDBDB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DBDBDB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_0D = new SColor(0xDBDBDB, "Aurora 0D");
+    public static final SColor AURORA_PLATINUM = new SColor(0xDBDBDB, "Aurora Platinum");
 
     /**
-     * This color constant "Aurora 0E" has RGB code {@code 0xEDEDED}, red 0.92941177, green 0.92941177, blue 0.92941177, alpha 1, hue 0.0, saturation 0.0, and value 0.92941177.
+     * This color constant "Aurora Cloud" has RGB code {@code 0xEDEDED}, red 0.92941177, green 0.92941177, blue 0.92941177, alpha 1, hue 0.0, saturation 0.0, and value 0.92941177.
      * It can be represented as a packed float with the constant {@code -0x1.dbdbdap126F}.
      * <pre>
      * <font style='background-color: #EDEDED;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EDEDED; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8572,10 +8582,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #EDEDED;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EDEDED; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_0E = new SColor(0xEDEDED, "Aurora 0E");
+    public static final SColor AURORA_CLOUD = new SColor(0xEDEDED, "Aurora Cloud");
 
     /**
-     * This color constant "Aurora 0F" has RGB code {@code 0xFFFFFF}, red 1.0, green 1.0, blue 1.0, alpha 1, hue 0.0, saturation 0.0, and value 1.0.
+     * This color constant "Aurora Shining White" has RGB code {@code 0xFFFFFF}, red 1.0, green 1.0, blue 1.0, alpha 1, hue 0.0, saturation 0.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fffffep126F}.
      * <pre>
      * <font style='background-color: #FFFFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFFF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8583,10 +8593,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFFFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFFF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_0F = new SColor(0xFFFFFF, "Aurora 0F");
+    public static final SColor AURORA_SHINING_WHITE = new SColor(0xFFFFFF, "Aurora Shining White");
 
     /**
-     * This color constant "Aurora 10" has RGB code {@code 0x007F7F}, red 0.0, green 0.49803922, blue 0.49803922, alpha 1, hue 0.5, saturation 1.0, and value 0.49803922.
+     * This color constant "Aurora Seawater" has RGB code {@code 0x007F7F}, red 0.0, green 0.49803922, blue 0.49803922, alpha 1, hue 0.5, saturation 1.0, and value 0.49803922.
      * It can be represented as a packed float with the constant {@code -0x1.fefep125F}.
      * <pre>
      * <font style='background-color: #007F7F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007F7F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8594,10 +8604,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #007F7F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007F7F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_10 = new SColor(0x007F7F, "Aurora 10");
+    public static final SColor AURORA_SEAWATER = new SColor(0x007F7F, "Aurora Seawater");
 
     /**
-     * This color constant "Aurora 11" has RGB code {@code 0x3FBFBF}, red 0.24705882, green 0.7490196, blue 0.7490196, alpha 1, hue 0.5, saturation 0.6701571, and value 0.7490196.
+     * This color constant "Aurora Hospital Green" has RGB code {@code 0x3FBFBF}, red 0.24705882, green 0.7490196, blue 0.7490196, alpha 1, hue 0.5, saturation 0.6701571, and value 0.7490196.
      * It can be represented as a packed float with the constant {@code -0x1.7f7e7ep126F}.
      * <pre>
      * <font style='background-color: #3FBFBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3FBFBF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8605,10 +8615,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3FBFBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3FBFBF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_11 = new SColor(0x3FBFBF, "Aurora 11");
+    public static final SColor AURORA_HOSPITAL_GREEN = new SColor(0x3FBFBF, "Aurora Hospital Green");
 
     /**
-     * This color constant "Aurora 12" has RGB code {@code 0x00FFFF}, red 0.0, green 1.0, blue 1.0, alpha 1, hue 0.5, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Cyan" has RGB code {@code 0x00FFFF}, red 0.0, green 1.0, blue 1.0, alpha 1, hue 0.5, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fffep126F}.
      * <pre>
      * <font style='background-color: #00FFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FFFF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8616,10 +8626,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #00FFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FFFF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_12 = new SColor(0x00FFFF, "Aurora 12");
+    public static final SColor AURORA_CYAN = new SColor(0x00FFFF, "Aurora Cyan");
 
     /**
-     * This color constant "Aurora 13" has RGB code {@code 0xBFFFFF}, red 0.7490196, green 1.0, blue 1.0, alpha 1, hue 0.5, saturation 0.25098038, and value 1.0.
+     * This color constant "Aurora Bubble" has RGB code {@code 0xBFFFFF}, red 0.7490196, green 1.0, blue 1.0, alpha 1, hue 0.5, saturation 0.25098038, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ffff7ep126F}.
      * <pre>
      * <font style='background-color: #BFFFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFFFFF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8627,10 +8637,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BFFFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFFFFF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_13 = new SColor(0xBFFFFF, "Aurora 13");
+    public static final SColor AURORA_BUBBLE = new SColor(0xBFFFFF, "Aurora Bubble");
 
     /**
-     * This color constant "Aurora 14" has RGB code {@code 0x8181FF}, red 0.5058824, green 0.5058824, blue 1.0, alpha 1, hue 0.66666675, saturation 0.49411762, and value 1.0.
+     * This color constant "Aurora Periwinkle" has RGB code {@code 0x8181FF}, red 0.5058824, green 0.5058824, blue 1.0, alpha 1, hue 0.66666675, saturation 0.49411762, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff0302p126F}.
      * <pre>
      * <font style='background-color: #8181FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8181FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8638,10 +8648,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8181FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8181FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_14 = new SColor(0x8181FF, "Aurora 14");
+    public static final SColor AURORA_PERIWINKLE = new SColor(0x8181FF, "Aurora Periwinkle");
 
     /**
-     * This color constant "Aurora 15" has RGB code {@code 0x0000FF}, red 0.0, green 0.0, blue 1.0, alpha 1, hue 0.66666675, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Ultramarine" has RGB code {@code 0x0000FF}, red 0.0, green 0.0, blue 1.0, alpha 1, hue 0.66666675, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fep126F}.
      * <pre>
      * <font style='background-color: #0000FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8649,10 +8659,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0000FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_15 = new SColor(0x0000FF, "Aurora 15");
+    public static final SColor AURORA_ULTRAMARINE = new SColor(0x0000FF, "Aurora Ultramarine");
 
     /**
-     * This color constant "Aurora 16" has RGB code {@code 0x3F3FBF}, red 0.24705882, green 0.24705882, blue 0.7490196, alpha 1, hue 0.66666687, saturation 0.6701571, and value 0.7490196.
+     * This color constant "Aurora Faded Blue" has RGB code {@code 0x3F3FBF}, red 0.24705882, green 0.24705882, blue 0.7490196, alpha 1, hue 0.66666687, saturation 0.6701571, and value 0.7490196.
      * It can be represented as a packed float with the constant {@code -0x1.7e7e7ep126F}.
      * <pre>
      * <font style='background-color: #3F3FBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F3FBF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8660,10 +8670,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3F3FBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3F3FBF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_16 = new SColor(0x3F3FBF, "Aurora 16");
+    public static final SColor AURORA_FADED_BLUE = new SColor(0x3F3FBF, "Aurora Faded Blue");
 
     /**
-     * This color constant "Aurora 17" has RGB code {@code 0x00007F}, red 0.0, green 0.0, blue 0.49803922, alpha 1, hue 0.66666675, saturation 1.0, and value 0.49803922.
+     * This color constant "Aurora Ocean Blue" has RGB code {@code 0x00007F}, red 0.0, green 0.0, blue 0.49803922, alpha 1, hue 0.66666675, saturation 1.0, and value 0.49803922.
      * It can be represented as a packed float with the constant {@code -0x1.fep125F}.
      * <pre>
      * <font style='background-color: #00007F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00007F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8671,10 +8681,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #00007F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00007F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_17 = new SColor(0x00007F, "Aurora 17");
+    public static final SColor AURORA_OCEAN_BLUE = new SColor(0x00007F, "Aurora Ocean Blue");
 
     /**
-     * This color constant "Aurora 18" has RGB code {@code 0x0F0F50}, red 0.05882353, green 0.05882353, blue 0.3137255, alpha 1, hue 0.66666687, saturation 0.8125, and value 0.3137255.
+     * This color constant "Aurora Stygian Blue" has RGB code {@code 0x0F0F50}, red 0.05882353, green 0.05882353, blue 0.3137255, alpha 1, hue 0.66666687, saturation 0.8125, and value 0.3137255.
      * It can be represented as a packed float with the constant {@code -0x1.a01e1ep125F}.
      * <pre>
      * <font style='background-color: #0F0F50;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F0F50; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8682,10 +8692,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0F0F50;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F0F50; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_18 = new SColor(0x0F0F50, "Aurora 18");
+    public static final SColor AURORA_STYGIAN_BLUE = new SColor(0x0F0F50, "Aurora Stygian Blue");
 
     /**
-     * This color constant "Aurora 19" has RGB code {@code 0x7F007F}, red 0.49803922, green 0.0, blue 0.49803922, alpha 1, hue 0.8333333, saturation 1.0, and value 0.49803922.
+     * This color constant "Aurora Deep Purple" has RGB code {@code 0x7F007F}, red 0.49803922, green 0.0, blue 0.49803922, alpha 1, hue 0.8333333, saturation 1.0, and value 0.49803922.
      * It can be represented as a packed float with the constant {@code -0x1.fe00fep125F}.
      * <pre>
      * <font style='background-color: #7F007F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F007F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8693,10 +8703,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7F007F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F007F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_19 = new SColor(0x7F007F, "Aurora 19");
+    public static final SColor AURORA_DEEP_PURPLE = new SColor(0x7F007F, "Aurora Deep Purple");
 
     /**
-     * This color constant "Aurora 1A" has RGB code {@code 0xBF3FBF}, red 0.7490196, green 0.24705882, blue 0.7490196, alpha 1, hue 0.8333334, saturation 0.6701571, and value 0.7490196.
+     * This color constant "Aurora Tyrian Purple" has RGB code {@code 0xBF3FBF}, red 0.7490196, green 0.24705882, blue 0.7490196, alpha 1, hue 0.8333334, saturation 0.6701571, and value 0.7490196.
      * It can be represented as a packed float with the constant {@code -0x1.7e7f7ep126F}.
      * <pre>
      * <font style='background-color: #BF3FBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BF3FBF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8704,10 +8714,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BF3FBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BF3FBF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_1A = new SColor(0xBF3FBF, "Aurora 1A");
+    public static final SColor AURORA_TYRIAN_PURPLE = new SColor(0xBF3FBF, "Aurora Tyrian Purple");
 
     /**
-     * This color constant "Aurora 1B" has RGB code {@code 0xF500F5}, red 0.9607843, green 0.0, blue 0.9607843, alpha 1, hue 0.8333333, saturation 1.0, and value 0.9607843.
+     * This color constant "Aurora Magenta" has RGB code {@code 0xF500F5}, red 0.9607843, green 0.0, blue 0.9607843, alpha 1, hue 0.8333333, saturation 1.0, and value 0.9607843.
      * It can be represented as a packed float with the constant {@code -0x1.ea01eap126F}.
      * <pre>
      * <font style='background-color: #F500F5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F500F5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8715,10 +8725,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F500F5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F500F5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_1B = new SColor(0xF500F5, "Aurora 1B");
+    public static final SColor AURORA_MAGENTA = new SColor(0xF500F5, "Aurora Magenta");
 
     /**
-     * This color constant "Aurora 1C" has RGB code {@code 0xFD81FF}, red 0.99215686, green 0.5058824, blue 1.0, alpha 1, hue 0.830688, saturation 0.49411762, and value 1.0.
+     * This color constant "Aurora Bubblegum Pink" has RGB code {@code 0xFD81FF}, red 0.99215686, green 0.5058824, blue 1.0, alpha 1, hue 0.830688, saturation 0.49411762, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff03fap126F}.
      * <pre>
      * <font style='background-color: #FD81FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FD81FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8726,10 +8736,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FD81FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FD81FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_1C = new SColor(0xFD81FF, "Aurora 1C");
+    public static final SColor AURORA_BUBBLEGUM_PINK = new SColor(0xFD81FF, "Aurora Bubblegum Pink");
 
     /**
-     * This color constant "Aurora 1D" has RGB code {@code 0xFFC0CB}, red 1.0, green 0.7529412, blue 0.79607844, alpha 1, hue 0.9708994, saturation 0.24705881, and value 1.0.
+     * This color constant "Aurora Pork Chop" has RGB code {@code 0xFFC0CB}, red 1.0, green 0.7529412, blue 0.79607844, alpha 1, hue 0.9708994, saturation 0.24705881, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.9781fep126F}.
      * <pre>
      * <font style='background-color: #FFC0CB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFC0CB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8737,10 +8747,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFC0CB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFC0CB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_1D = new SColor(0xFFC0CB, "Aurora 1D");
+    public static final SColor AURORA_PORK_CHOP = new SColor(0xFFC0CB, "Aurora Pork Chop");
 
     /**
-     * This color constant "Aurora 1E" has RGB code {@code 0xFF8181}, red 1.0, green 0.5058824, blue 0.5058824, alpha 1, hue 0.0, saturation 0.49411762, and value 1.0.
+     * This color constant "Aurora Raw Meat" has RGB code {@code 0xFF8181}, red 1.0, green 0.5058824, blue 0.5058824, alpha 1, hue 0.0, saturation 0.49411762, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.0303fep126F}.
      * <pre>
      * <font style='background-color: #FF8181;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF8181; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8748,10 +8758,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF8181;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF8181; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_1E = new SColor(0xFF8181, "Aurora 1E");
+    public static final SColor AURORA_RAW_MEAT = new SColor(0xFF8181, "Aurora Raw Meat");
 
     /**
-     * This color constant "Aurora 1F" has RGB code {@code 0xFF0000}, red 1.0, green 0.0, blue 0.0, alpha 1, hue 0.0, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Fresh Blood" has RGB code {@code 0xFF0000}, red 1.0, green 0.0, blue 0.0, alpha 1, hue 0.0, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.0001fep125F}.
      * <pre>
      * <font style='background-color: #FF0000;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF0000; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8759,10 +8769,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF0000;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF0000; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_1F = new SColor(0xFF0000, "Aurora 1F");
+    public static final SColor AURORA_FRESH_BLOOD = new SColor(0xFF0000, "Aurora Fresh Blood");
 
     /**
-     * This color constant "Aurora 20" has RGB code {@code 0xBF3F3F}, red 0.7490196, green 0.24705882, blue 0.24705882, alpha 1, hue 0.0, saturation 0.6701571, and value 0.7490196.
+     * This color constant "Aurora Putty" has RGB code {@code 0xBF3F3F}, red 0.7490196, green 0.24705882, blue 0.24705882, alpha 1, hue 0.0, saturation 0.6701571, and value 0.7490196.
      * It can be represented as a packed float with the constant {@code -0x1.7e7f7ep125F}.
      * <pre>
      * <font style='background-color: #BF3F3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BF3F3F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8770,10 +8780,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BF3F3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BF3F3F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_20 = new SColor(0xBF3F3F, "Aurora 20");
+    public static final SColor AURORA_PUTTY = new SColor(0xBF3F3F, "Aurora Putty");
 
     /**
-     * This color constant "Aurora 21" has RGB code {@code 0x7F0000}, red 0.49803922, green 0.0, blue 0.0, alpha 1, hue 0.0, saturation 1.0, and value 0.49803922.
+     * This color constant "Aurora Sienna" has RGB code {@code 0x7F0000}, red 0.49803922, green 0.0, blue 0.0, alpha 1, hue 0.0, saturation 1.0, and value 0.49803922.
      * It can be represented as a packed float with the constant {@code -0x1.0000fep125F}.
      * <pre>
      * <font style='background-color: #7F0000;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F0000; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8781,10 +8791,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7F0000;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F0000; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_21 = new SColor(0x7F0000, "Aurora 21");
+    public static final SColor AURORA_SIENNA = new SColor(0x7F0000, "Aurora Sienna");
 
     /**
-     * This color constant "Aurora 22" has RGB code {@code 0x551414}, red 0.33333334, green 0.078431375, blue 0.078431375, alpha 1, hue 0.0, saturation 0.7647059, and value 0.33333334.
+     * This color constant "Aurora Seal Brown" has RGB code {@code 0x551414}, red 0.33333334, green 0.078431375, blue 0.078431375, alpha 1, hue 0.0, saturation 0.7647059, and value 0.33333334.
      * It can be represented as a packed float with the constant {@code -0x1.2828aap125F}.
      * <pre>
      * <font style='background-color: #551414;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #551414; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8792,10 +8802,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #551414;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #551414; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_22 = new SColor(0x551414, "Aurora 22");
+    public static final SColor AURORA_SEAL_BROWN = new SColor(0x551414, "Aurora Seal Brown");
 
     /**
-     * This color constant "Aurora 23" has RGB code {@code 0x7F3F00}, red 0.49803922, green 0.24705882, blue 0.0, alpha 1, hue 0.082677245, saturation 1.0, and value 0.49803922.
+     * This color constant "Aurora Mummy Brown" has RGB code {@code 0x7F3F00}, red 0.49803922, green 0.24705882, blue 0.0, alpha 1, hue 0.082677245, saturation 1.0, and value 0.49803922.
      * It can be represented as a packed float with the constant {@code -0x1.007efep125F}.
      * <pre>
      * <font style='background-color: #7F3F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F3F00; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8803,10 +8813,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7F3F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F3F00; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_23 = new SColor(0x7F3F00, "Aurora 23");
+    public static final SColor AURORA_MUMMY_BROWN = new SColor(0x7F3F00, "Aurora Mummy Brown");
 
     /**
-     * This color constant "Aurora 24" has RGB code {@code 0xBF7F3F}, red 0.7490196, green 0.49803922, blue 0.24705882, alpha 1, hue 0.083333254, saturation 0.6701571, and value 0.7490196.
+     * This color constant "Aurora Fawn" has RGB code {@code 0xBF7F3F}, red 0.7490196, green 0.49803922, blue 0.24705882, alpha 1, hue 0.083333254, saturation 0.6701571, and value 0.7490196.
      * It can be represented as a packed float with the constant {@code -0x1.7eff7ep125F}.
      * <pre>
      * <font style='background-color: #BF7F3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BF7F3F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8814,10 +8824,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BF7F3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BF7F3F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_24 = new SColor(0xBF7F3F, "Aurora 24");
+    public static final SColor AURORA_FAWN = new SColor(0xBF7F3F, "Aurora Fawn");
 
     /**
-     * This color constant "Aurora 25" has RGB code {@code 0xFF7F00}, red 1.0, green 0.49803922, blue 0.0, alpha 1, hue 0.08300662, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Orange" has RGB code {@code 0xFF7F00}, red 1.0, green 0.49803922, blue 0.0, alpha 1, hue 0.08300662, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.00fffep125F}.
      * <pre>
      * <font style='background-color: #FF7F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF7F00; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8825,10 +8835,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF7F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF7F00; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_25 = new SColor(0xFF7F00, "Aurora 25");
+    public static final SColor AURORA_ORANGE = new SColor(0xFF7F00, "Aurora Orange");
 
     /**
-     * This color constant "Aurora 26" has RGB code {@code 0xFFBF81}, red 1.0, green 0.7490196, blue 0.5058824, alpha 1, hue 0.082010746, saturation 0.49411762, and value 1.0.
+     * This color constant "Aurora Peach" has RGB code {@code 0xFFBF81}, red 1.0, green 0.7490196, blue 0.5058824, alpha 1, hue 0.082010746, saturation 0.49411762, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.037ffep126F}.
      * <pre>
      * <font style='background-color: #FFBF81;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFBF81; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8836,10 +8846,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFBF81;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFBF81; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_26 = new SColor(0xFFBF81, "Aurora 26");
+    public static final SColor AURORA_PEACH = new SColor(0xFFBF81, "Aurora Peach");
 
     /**
-     * This color constant "Aurora 27" has RGB code {@code 0xFFFFBF}, red 1.0, green 1.0, blue 0.7490196, alpha 1, hue 0.16666675, saturation 0.25098038, and value 1.0.
+     * This color constant "Aurora Cream" has RGB code {@code 0xFFFFBF}, red 1.0, green 1.0, blue 0.7490196, alpha 1, hue 0.16666675, saturation 0.25098038, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.7ffffep126F}.
      * <pre>
      * <font style='background-color: #FFFFBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFBF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8847,10 +8857,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFFFBF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFFBF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_27 = new SColor(0xFFFFBF, "Aurora 27");
+    public static final SColor AURORA_CREAM = new SColor(0xFFFFBF, "Aurora Cream");
 
     /**
-     * This color constant "Aurora 28" has RGB code {@code 0xFFFF00}, red 1.0, green 1.0, blue 0.0, alpha 1, hue 0.16666675, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Lemon" has RGB code {@code 0xFFFF00}, red 1.0, green 1.0, blue 0.0, alpha 1, hue 0.16666675, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.01fffep125F}.
      * <pre>
      * <font style='background-color: #FFFF00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFF00; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8858,10 +8868,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFFF00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFFF00; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_28 = new SColor(0xFFFF00, "Aurora 28");
+    public static final SColor AURORA_LEMON = new SColor(0xFFFF00, "Aurora Lemon");
 
     /**
-     * This color constant "Aurora 29" has RGB code {@code 0xBFBF3F}, red 0.7490196, green 0.7490196, blue 0.24705882, alpha 1, hue 0.16666663, saturation 0.6701571, and value 0.7490196.
+     * This color constant "Aurora Earwax" has RGB code {@code 0xBFBF3F}, red 0.7490196, green 0.7490196, blue 0.24705882, alpha 1, hue 0.16666663, saturation 0.6701571, and value 0.7490196.
      * It can be represented as a packed float with the constant {@code -0x1.7f7f7ep125F}.
      * <pre>
      * <font style='background-color: #BFBF3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFBF3F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8869,10 +8879,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BFBF3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BFBF3F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_29 = new SColor(0xBFBF3F, "Aurora 29");
+    public static final SColor AURORA_EARWAX = new SColor(0xBFBF3F, "Aurora Earwax");
 
     /**
-     * This color constant "Aurora 2A" has RGB code {@code 0x7F7F00}, red 0.49803922, green 0.49803922, blue 0.0, alpha 1, hue 0.16666675, saturation 1.0, and value 0.49803922.
+     * This color constant "Aurora Umber" has RGB code {@code 0x7F7F00}, red 0.49803922, green 0.49803922, blue 0.0, alpha 1, hue 0.16666675, saturation 1.0, and value 0.49803922.
      * It can be represented as a packed float with the constant {@code -0x1.00fefep125F}.
      * <pre>
      * <font style='background-color: #7F7F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F7F00; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8880,10 +8890,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7F7F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F7F00; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_2A = new SColor(0x7F7F00, "Aurora 2A");
+    public static final SColor AURORA_UMBER = new SColor(0x7F7F00, "Aurora Umber");
 
     /**
-     * This color constant "Aurora 2B" has RGB code {@code 0x007F00}, red 0.0, green 0.49803922, blue 0.0, alpha 1, hue 0.33333325, saturation 1.0, and value 0.49803922.
+     * This color constant "Aurora Ivy Green" has RGB code {@code 0x007F00}, red 0.0, green 0.49803922, blue 0.0, alpha 1, hue 0.33333325, saturation 1.0, and value 0.49803922.
      * It can be represented as a packed float with the constant {@code -0x1.00fep125F}.
      * <pre>
      * <font style='background-color: #007F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007F00; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8891,10 +8901,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #007F00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007F00; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_2B = new SColor(0x007F00, "Aurora 2B");
+    public static final SColor AURORA_IVY_GREEN = new SColor(0x007F00, "Aurora Ivy Green");
 
     /**
-     * This color constant "Aurora 2C" has RGB code {@code 0x3FBF3F}, red 0.24705882, green 0.7490196, blue 0.24705882, alpha 1, hue 0.33333337, saturation 0.6701571, and value 0.7490196.
+     * This color constant "Aurora Jade" has RGB code {@code 0x3FBF3F}, red 0.24705882, green 0.7490196, blue 0.24705882, alpha 1, hue 0.33333337, saturation 0.6701571, and value 0.7490196.
      * It can be represented as a packed float with the constant {@code -0x1.7f7e7ep125F}.
      * <pre>
      * <font style='background-color: #3FBF3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3FBF3F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8902,10 +8912,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3FBF3F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3FBF3F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_2C = new SColor(0x3FBF3F, "Aurora 2C");
+    public static final SColor AURORA_JADE = new SColor(0x3FBF3F, "Aurora Jade");
 
     /**
-     * This color constant "Aurora 2D" has RGB code {@code 0x00FF00}, red 0.0, green 1.0, blue 0.0, alpha 1, hue 0.33333325, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Shamrock Green" has RGB code {@code 0x00FF00}, red 0.0, green 1.0, blue 0.0, alpha 1, hue 0.33333325, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.01fep125F}.
      * <pre>
      * <font style='background-color: #00FF00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FF00; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8913,10 +8923,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #00FF00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00FF00; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_2D = new SColor(0x00FF00, "Aurora 2D");
+    public static final SColor AURORA_SHAMROCK_GREEN = new SColor(0x00FF00, "Aurora Shamrock Green");
 
     /**
-     * This color constant "Aurora 2E" has RGB code {@code 0xAFFFAF}, red 0.6862745, green 1.0, blue 0.6862745, alpha 1, hue 0.33333325, saturation 0.31372547, and value 1.0.
+     * This color constant "Aurora Celadon" has RGB code {@code 0xAFFFAF}, red 0.6862745, green 1.0, blue 0.6862745, alpha 1, hue 0.33333325, saturation 0.31372547, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.5fff5ep126F}.
      * <pre>
      * <font style='background-color: #AFFFAF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AFFFAF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8924,10 +8934,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #AFFFAF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AFFFAF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_2E = new SColor(0xAFFFAF, "Aurora 2E");
+    public static final SColor AURORA_CELADON = new SColor(0xAFFFAF, "Aurora Celadon");
 
     /**
-     * This color constant "Aurora 2F" has RGB code {@code 0xBCAFC0}, red 0.7372549, green 0.6862745, blue 0.7529412, alpha 1, hue 0.7941178, saturation 0.08854166, and value 0.7529412.
+     * This color constant "Aurora Puce" has RGB code {@code 0xBCAFC0}, red 0.7372549, green 0.6862745, blue 0.7529412, alpha 1, hue 0.7941178, saturation 0.08854166, and value 0.7529412.
      * It can be represented as a packed float with the constant {@code -0x1.815f78p126F}.
      * <pre>
      * <font style='background-color: #BCAFC0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BCAFC0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8935,10 +8945,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BCAFC0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BCAFC0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_2F = new SColor(0xBCAFC0, "Aurora 2F");
+    public static final SColor AURORA_PUCE = new SColor(0xBCAFC0, "Aurora Puce");
 
     /**
-     * This color constant "Aurora 30" has RGB code {@code 0xCBAA89}, red 0.79607844, green 0.6666667, blue 0.5372549, alpha 1, hue 0.08333349, saturation 0.32512313, and value 0.79607844.
+     * This color constant "Aurora Beige" has RGB code {@code 0xCBAA89}, red 0.79607844, green 0.6666667, blue 0.5372549, alpha 1, hue 0.08333349, saturation 0.32512313, and value 0.79607844.
      * It can be represented as a packed float with the constant {@code -0x1.135596p126F}.
      * <pre>
      * <font style='background-color: #CBAA89;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CBAA89; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8946,10 +8956,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #CBAA89;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #CBAA89; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_30 = new SColor(0xCBAA89, "Aurora 30");
+    public static final SColor AURORA_BEIGE = new SColor(0xCBAA89, "Aurora Beige");
 
     /**
-     * This color constant "Aurora 31" has RGB code {@code 0xA6A090}, red 0.6509804, green 0.627451, blue 0.5647059, alpha 1, hue 0.121212244, saturation 0.13253011, and value 0.6509804.
+     * This color constant "Aurora Wet Stone" has RGB code {@code 0xA6A090}, red 0.6509804, green 0.627451, blue 0.5647059, alpha 1, hue 0.121212244, saturation 0.13253011, and value 0.6509804.
      * It can be represented as a packed float with the constant {@code -0x1.21414cp126F}.
      * <pre>
      * <font style='background-color: #A6A090;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A6A090; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8957,10 +8967,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A6A090;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A6A090; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_31 = new SColor(0xA6A090, "Aurora 31");
+    public static final SColor AURORA_WET_STONE = new SColor(0xA6A090, "Aurora Wet Stone");
 
     /**
-     * This color constant "Aurora 32" has RGB code {@code 0x7E9494}, red 0.49411765, green 0.5803922, blue 0.5803922, alpha 1, hue 0.5, saturation 0.14864868, and value 0.5803922.
+     * This color constant "Aurora Slow Creek" has RGB code {@code 0x7E9494}, red 0.49411765, green 0.5803922, blue 0.5803922, alpha 1, hue 0.5, saturation 0.14864868, and value 0.5803922.
      * It can be represented as a packed float with the constant {@code -0x1.2928fcp126F}.
      * <pre>
      * <font style='background-color: #7E9494;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7E9494; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8968,10 +8978,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7E9494;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7E9494; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_32 = new SColor(0x7E9494, "Aurora 32");
+    public static final SColor AURORA_SLOW_CREEK = new SColor(0x7E9494, "Aurora Slow Creek");
 
     /**
-     * This color constant "Aurora 33" has RGB code {@code 0x6E8287}, red 0.43137255, green 0.50980395, blue 0.5294118, alpha 1, hue 0.5333333, saturation 0.18518522, and value 0.5294118.
+     * This color constant "Aurora Slate Gray" has RGB code {@code 0x6E8287}, red 0.43137255, green 0.50980395, blue 0.5294118, alpha 1, hue 0.5333333, saturation 0.18518522, and value 0.5294118.
      * It can be represented as a packed float with the constant {@code -0x1.0f04dcp126F}.
      * <pre>
      * <font style='background-color: #6E8287;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6E8287; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8979,10 +8989,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #6E8287;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6E8287; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_33 = new SColor(0x6E8287, "Aurora 33");
+    public static final SColor AURORA_SLATE_GRAY = new SColor(0x6E8287, "Aurora Slate Gray");
 
     /**
-     * This color constant "Aurora 34" has RGB code {@code 0x7E6E60}, red 0.49411765, green 0.43137255, blue 0.3764706, alpha 1, hue 0.07777786, saturation 0.23809522, and value 0.49411765.
+     * This color constant "Aurora Light Skin 1" has RGB code {@code 0x7E6E60}, red 0.49411765, green 0.43137255, blue 0.3764706, alpha 1, hue 0.07777786, saturation 0.23809522, and value 0.49411765.
      * It can be represented as a packed float with the constant {@code -0x1.c0dcfcp125F}.
      * <pre>
      * <font style='background-color: #7E6E60;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7E6E60; color: #000000'>&nbsp;@&nbsp;</font>
@@ -8990,10 +9000,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7E6E60;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7E6E60; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_34 = new SColor(0x7E6E60, "Aurora 34");
+    public static final SColor AURORA_LIGHT_SKIN_1 = new SColor(0x7E6E60, "Aurora Light Skin 1");
 
     /**
-     * This color constant "Aurora 35" has RGB code {@code 0xA0695F}, red 0.627451, green 0.4117647, blue 0.37254903, alpha 1, hue 0.025640965, saturation 0.40625, and value 0.627451.
+     * This color constant "Aurora Light Skin 2" has RGB code {@code 0xA0695F}, red 0.627451, green 0.4117647, blue 0.37254903, alpha 1, hue 0.025640965, saturation 0.40625, and value 0.627451.
      * It can be represented as a packed float with the constant {@code -0x1.bed34p125F}.
      * <pre>
      * <font style='background-color: #A0695F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A0695F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9001,10 +9011,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A0695F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A0695F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_35 = new SColor(0xA0695F, "Aurora 35");
+    public static final SColor AURORA_LIGHT_SKIN_2 = new SColor(0xA0695F, "Aurora Light Skin 2");
 
     /**
-     * This color constant "Aurora 36" has RGB code {@code 0xC07872}, red 0.7529412, green 0.47058824, blue 0.44705883, alpha 1, hue 0.012820482, saturation 0.40625, and value 0.7529412.
+     * This color constant "Aurora Light Skin 3" has RGB code {@code 0xC07872}, red 0.7529412, green 0.47058824, blue 0.44705883, alpha 1, hue 0.012820482, saturation 0.40625, and value 0.7529412.
      * It can be represented as a packed float with the constant {@code -0x1.e4f18p125F}.
      * <pre>
      * <font style='background-color: #C07872;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C07872; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9012,10 +9022,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C07872;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C07872; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_36 = new SColor(0xC07872, "Aurora 36");
+    public static final SColor AURORA_LIGHT_SKIN_3 = new SColor(0xC07872, "Aurora Light Skin 3");
 
     /**
-     * This color constant "Aurora 37" has RGB code {@code 0xD08A74}, red 0.8156863, green 0.5411765, blue 0.45490196, alpha 1, hue 0.039855003, saturation 0.4423077, and value 0.8156863.
+     * This color constant "Aurora Light Skin 4" has RGB code {@code 0xD08A74}, red 0.8156863, green 0.5411765, blue 0.45490196, alpha 1, hue 0.039855003, saturation 0.4423077, and value 0.8156863.
      * It can be represented as a packed float with the constant {@code -0x1.e915ap125F}.
      * <pre>
      * <font style='background-color: #D08A74;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D08A74; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9023,10 +9033,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #D08A74;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D08A74; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_37 = new SColor(0xD08A74, "Aurora 37");
+    public static final SColor AURORA_LIGHT_SKIN_4 = new SColor(0xD08A74, "Aurora Light Skin 4");
 
     /**
-     * This color constant "Aurora 38" has RGB code {@code 0xE19B7D}, red 0.88235295, green 0.60784316, blue 0.49019608, alpha 1, hue 0.05000007, saturation 0.44444445, and value 0.88235295.
+     * This color constant "Aurora Light Skin 5" has RGB code {@code 0xE19B7D}, red 0.88235295, green 0.60784316, blue 0.49019608, alpha 1, hue 0.05000007, saturation 0.44444445, and value 0.88235295.
      * It can be represented as a packed float with the constant {@code -0x1.fb37c2p125F}.
      * <pre>
      * <font style='background-color: #E19B7D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E19B7D; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9034,10 +9044,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E19B7D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E19B7D; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_38 = new SColor(0xE19B7D, "Aurora 38");
+    public static final SColor AURORA_LIGHT_SKIN_5 = new SColor(0xE19B7D, "Aurora Light Skin 5");
 
     /**
-     * This color constant "Aurora 39" has RGB code {@code 0xEBAA8C}, red 0.92156863, green 0.6666667, blue 0.54901963, alpha 1, hue 0.052631617, saturation 0.4042553, and value 0.92156863.
+     * This color constant "Aurora Light Skin 6" has RGB code {@code 0xEBAA8C}, red 0.92156863, green 0.6666667, blue 0.54901963, alpha 1, hue 0.052631617, saturation 0.4042553, and value 0.92156863.
      * It can be represented as a packed float with the constant {@code -0x1.1955d6p126F}.
      * <pre>
      * <font style='background-color: #EBAA8C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EBAA8C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9045,10 +9055,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #EBAA8C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EBAA8C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_39 = new SColor(0xEBAA8C, "Aurora 39");
+    public static final SColor AURORA_LIGHT_SKIN_6 = new SColor(0xEBAA8C, "Aurora Light Skin 6");
 
     /**
-     * This color constant "Aurora 3A" has RGB code {@code 0xF5B99B}, red 0.9607843, green 0.7254902, blue 0.60784316, alpha 1, hue 0.055555582, saturation 0.3673469, and value 0.9607843.
+     * This color constant "Aurora Light Skin 7" has RGB code {@code 0xF5B99B}, red 0.9607843, green 0.7254902, blue 0.60784316, alpha 1, hue 0.055555582, saturation 0.3673469, and value 0.9607843.
      * It can be represented as a packed float with the constant {@code -0x1.3773eap126F}.
      * <pre>
      * <font style='background-color: #F5B99B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F5B99B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9056,10 +9066,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F5B99B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F5B99B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_3A = new SColor(0xF5B99B, "Aurora 3A");
+    public static final SColor AURORA_LIGHT_SKIN_7 = new SColor(0xF5B99B, "Aurora Light Skin 7");
 
     /**
-     * This color constant "Aurora 3B" has RGB code {@code 0xF6C8AF}, red 0.9647059, green 0.78431374, blue 0.6862745, alpha 1, hue 0.05868554, saturation 0.28861788, and value 0.9647059.
+     * This color constant "Aurora Light Skin 8" has RGB code {@code 0xF6C8AF}, red 0.9647059, green 0.78431374, blue 0.6862745, alpha 1, hue 0.05868554, saturation 0.28861788, and value 0.9647059.
      * It can be represented as a packed float with the constant {@code -0x1.5f91ecp126F}.
      * <pre>
      * <font style='background-color: #F6C8AF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F6C8AF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9067,10 +9077,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F6C8AF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F6C8AF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_3B = new SColor(0xF6C8AF, "Aurora 3B");
+    public static final SColor AURORA_LIGHT_SKIN_8 = new SColor(0xF6C8AF, "Aurora Light Skin 8");
 
     /**
-     * This color constant "Aurora 3C" has RGB code {@code 0xF5E1D2}, red 0.9607843, green 0.88235295, blue 0.8235294, alpha 1, hue 0.07142866, saturation 0.14285713, and value 0.9607843.
+     * This color constant "Aurora Light Skin 9" has RGB code {@code 0xF5E1D2}, red 0.9607843, green 0.88235295, blue 0.8235294, alpha 1, hue 0.07142866, saturation 0.14285713, and value 0.9607843.
      * It can be represented as a packed float with the constant {@code -0x1.a5c3eap126F}.
      * <pre>
      * <font style='background-color: #F5E1D2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F5E1D2; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9078,10 +9088,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F5E1D2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F5E1D2; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_3C = new SColor(0xF5E1D2, "Aurora 3C");
+    public static final SColor AURORA_LIGHT_SKIN_9 = new SColor(0xF5E1D2, "Aurora Light Skin 9");
 
     /**
-     * This color constant "Aurora 3D" has RGB code {@code 0x573B3B}, red 0.34117648, green 0.23137255, blue 0.23137255, alpha 1, hue 0.0, saturation 0.3218391, and value 0.34117648.
+     * This color constant "Aurora Dark Skin 1" has RGB code {@code 0x573B3B}, red 0.34117648, green 0.23137255, blue 0.23137255, alpha 1, hue 0.0, saturation 0.3218391, and value 0.34117648.
      * It can be represented as a packed float with the constant {@code -0x1.7676aep125F}.
      * <pre>
      * <font style='background-color: #573B3B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #573B3B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9089,10 +9099,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #573B3B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #573B3B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_3D = new SColor(0x573B3B, "Aurora 3D");
+    public static final SColor AURORA_DARK_SKIN_1 = new SColor(0x573B3B, "Aurora Dark Skin 1");
 
     /**
-     * This color constant "Aurora 3E" has RGB code {@code 0x73413C}, red 0.4509804, green 0.25490198, blue 0.23529412, alpha 1, hue 0.01515162, saturation 0.47826087, and value 0.4509804.
+     * This color constant "Aurora Dark Skin 2" has RGB code {@code 0x73413C}, red 0.4509804, green 0.25490198, blue 0.23529412, alpha 1, hue 0.01515162, saturation 0.47826087, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.7882e6p125F}.
      * <pre>
      * <font style='background-color: #73413C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73413C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9100,10 +9110,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #73413C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73413C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_3E = new SColor(0x73413C, "Aurora 3E");
+    public static final SColor AURORA_DARK_SKIN_2 = new SColor(0x73413C, "Aurora Dark Skin 2");
 
     /**
-     * This color constant "Aurora 3F" has RGB code {@code 0x8E5555}, red 0.5568628, green 0.33333334, blue 0.33333334, alpha 1, hue 0.0, saturation 0.40140846, and value 0.5568628.
+     * This color constant "Aurora Dark Skin 3" has RGB code {@code 0x8E5555}, red 0.5568628, green 0.33333334, blue 0.33333334, alpha 1, hue 0.0, saturation 0.40140846, and value 0.5568628.
      * It can be represented as a packed float with the constant {@code -0x1.aaab1cp125F}.
      * <pre>
      * <font style='background-color: #8E5555;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8E5555; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9111,10 +9121,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8E5555;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8E5555; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_3F = new SColor(0x8E5555, "Aurora 3F");
+    public static final SColor AURORA_DARK_SKIN_3 = new SColor(0x8E5555, "Aurora Dark Skin 3");
 
     /**
-     * This color constant "Aurora 40" has RGB code {@code 0xAB7373}, red 0.67058825, green 0.4509804, blue 0.4509804, alpha 1, hue 0.0, saturation 0.32748538, and value 0.67058825.
+     * This color constant "Aurora Pink Skin 1" has RGB code {@code 0xAB7373}, red 0.67058825, green 0.4509804, blue 0.4509804, alpha 1, hue 0.0, saturation 0.32748538, and value 0.67058825.
      * It can be represented as a packed float with the constant {@code -0x1.e6e756p125F}.
      * <pre>
      * <font style='background-color: #AB7373;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB7373; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9122,10 +9132,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #AB7373;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB7373; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_40 = new SColor(0xAB7373, "Aurora 40");
+    public static final SColor AURORA_PINK_SKIN_1 = new SColor(0xAB7373, "Aurora Pink Skin 1");
 
     /**
-     * This color constant "Aurora 41" has RGB code {@code 0xC78F8F}, red 0.78039217, green 0.56078434, blue 0.56078434, alpha 1, hue 0.0, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Pink Skin 2" has RGB code {@code 0xC78F8F}, red 0.78039217, green 0.56078434, blue 0.56078434, alpha 1, hue 0.0, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.1f1f8ep126F}.
      * <pre>
      * <font style='background-color: #C78F8F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C78F8F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9133,10 +9143,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C78F8F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C78F8F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_41 = new SColor(0xC78F8F, "Aurora 41");
+    public static final SColor AURORA_PINK_SKIN_2 = new SColor(0xC78F8F, "Aurora Pink Skin 2");
 
     /**
-     * This color constant "Aurora 42" has RGB code {@code 0xE3ABAB}, red 0.8901961, green 0.67058825, blue 0.67058825, alpha 1, hue 0.0, saturation 0.24669603, and value 0.8901961.
+     * This color constant "Aurora Pink Skin 3" has RGB code {@code 0xE3ABAB}, red 0.8901961, green 0.67058825, blue 0.67058825, alpha 1, hue 0.0, saturation 0.24669603, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.5757c6p126F}.
      * <pre>
      * <font style='background-color: #E3ABAB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3ABAB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9144,10 +9154,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E3ABAB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3ABAB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_42 = new SColor(0xE3ABAB, "Aurora 42");
+    public static final SColor AURORA_PINK_SKIN_3 = new SColor(0xE3ABAB, "Aurora Pink Skin 3");
 
     /**
-     * This color constant "Aurora 43" has RGB code {@code 0xF8D2DA}, red 0.972549, green 0.8235294, blue 0.85490197, alpha 1, hue 0.96491224, saturation 0.1532258, and value 0.972549.
+     * This color constant "Aurora Pink Skin 4" has RGB code {@code 0xF8D2DA}, red 0.972549, green 0.8235294, blue 0.85490197, alpha 1, hue 0.96491224, saturation 0.1532258, and value 0.972549.
      * It can be represented as a packed float with the constant {@code -0x1.b5a5fp126F}.
      * <pre>
      * <font style='background-color: #F8D2DA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F8D2DA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9155,10 +9165,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F8D2DA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F8D2DA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_43 = new SColor(0xF8D2DA, "Aurora 43");
+    public static final SColor AURORA_PINK_SKIN_4 = new SColor(0xF8D2DA, "Aurora Pink Skin 4");
 
     /**
-     * This color constant "Aurora 44" has RGB code {@code 0xE3C7AB}, red 0.8901961, green 0.78039217, blue 0.67058825, alpha 1, hue 0.08333349, saturation 0.24669603, and value 0.8901961.
+     * This color constant "Aurora Bronze Skin 4" has RGB code {@code 0xE3C7AB}, red 0.8901961, green 0.78039217, blue 0.67058825, alpha 1, hue 0.08333349, saturation 0.24669603, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.578fc6p126F}.
      * <pre>
      * <font style='background-color: #E3C7AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3C7AB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9166,10 +9176,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E3C7AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3C7AB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_44 = new SColor(0xE3C7AB, "Aurora 44");
+    public static final SColor AURORA_BRONZE_SKIN_4 = new SColor(0xE3C7AB, "Aurora Bronze Skin 4");
 
     /**
-     * This color constant "Aurora 45" has RGB code {@code 0xC49E73}, red 0.76862746, green 0.61960787, blue 0.4509804, alpha 1, hue 0.08847737, saturation 0.41326532, and value 0.76862746.
+     * This color constant "Aurora Bronze Skin 3" has RGB code {@code 0xC49E73}, red 0.76862746, green 0.61960787, blue 0.4509804, alpha 1, hue 0.08847737, saturation 0.41326532, and value 0.76862746.
      * It can be represented as a packed float with the constant {@code -0x1.e73d88p125F}.
      * <pre>
      * <font style='background-color: #C49E73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C49E73; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9177,10 +9187,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C49E73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C49E73; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_45 = new SColor(0xC49E73, "Aurora 45");
+    public static final SColor AURORA_BRONZE_SKIN_3 = new SColor(0xC49E73, "Aurora Bronze Skin 3");
 
     /**
-     * This color constant "Aurora 46" has RGB code {@code 0x8F7357}, red 0.56078434, green 0.4509804, blue 0.34117648, alpha 1, hue 0.083333254, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Bronze Skin 2" has RGB code {@code 0x8F7357}, red 0.56078434, green 0.4509804, blue 0.34117648, alpha 1, hue 0.083333254, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.aee71ep125F}.
      * <pre>
      * <font style='background-color: #8F7357;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F7357; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9188,10 +9198,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8F7357;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F7357; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_46 = new SColor(0x8F7357, "Aurora 46");
+    public static final SColor AURORA_BRONZE_SKIN_2 = new SColor(0x8F7357, "Aurora Bronze Skin 2");
 
     /**
-     * This color constant "Aurora 47" has RGB code {@code 0x73573B}, red 0.4509804, green 0.34117648, blue 0.23137255, alpha 1, hue 0.08333349, saturation 0.48695654, and value 0.4509804.
+     * This color constant "Aurora Bronze Skin 1" has RGB code {@code 0x73573B}, red 0.4509804, green 0.34117648, blue 0.23137255, alpha 1, hue 0.08333349, saturation 0.48695654, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.76aee6p125F}.
      * <pre>
      * <font style='background-color: #73573B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73573B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9199,10 +9209,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #73573B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73573B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_47 = new SColor(0x73573B, "Aurora 47");
+    public static final SColor AURORA_BRONZE_SKIN_1 = new SColor(0x73573B, "Aurora Bronze Skin 1");
 
     /**
-     * This color constant "Aurora 48" has RGB code {@code 0x3B2D1F}, red 0.23137255, green 0.1764706, blue 0.12156863, alpha 1, hue 0.08333349, saturation 0.47457626, and value 0.23137255.
+     * This color constant "Aurora Taupe" has RGB code {@code 0x3B2D1F}, red 0.23137255, green 0.1764706, blue 0.12156863, alpha 1, hue 0.08333349, saturation 0.47457626, and value 0.23137255.
      * It can be represented as a packed float with the constant {@code -0x1.3e5a76p125F}.
      * <pre>
      * <font style='background-color: #3B2D1F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B2D1F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9210,10 +9220,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3B2D1F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B2D1F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_48 = new SColor(0x3B2D1F, "Aurora 48");
+    public static final SColor AURORA_TAUPE = new SColor(0x3B2D1F, "Aurora Taupe");
 
     /**
-     * This color constant "Aurora 49" has RGB code {@code 0x414123}, red 0.25490198, green 0.25490198, blue 0.13725491, alpha 1, hue 0.16666663, saturation 0.46153846, and value 0.25490198.
+     * This color constant "Aurora Drab Green" has RGB code {@code 0x414123}, red 0.25490198, green 0.25490198, blue 0.13725491, alpha 1, hue 0.16666663, saturation 0.46153846, and value 0.25490198.
      * It can be represented as a packed float with the constant {@code -0x1.468282p125F}.
      * <pre>
      * <font style='background-color: #414123;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #414123; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9221,10 +9231,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #414123;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #414123; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_49 = new SColor(0x414123, "Aurora 49");
+    public static final SColor AURORA_DRAB_GREEN = new SColor(0x414123, "Aurora Drab Green");
 
     /**
-     * This color constant "Aurora 4A" has RGB code {@code 0x73733B}, red 0.4509804, green 0.4509804, blue 0.23137255, alpha 1, hue 0.16666675, saturation 0.48695654, and value 0.4509804.
+     * This color constant "Aurora Lizard Scales" has RGB code {@code 0x73733B}, red 0.4509804, green 0.4509804, blue 0.23137255, alpha 1, hue 0.16666675, saturation 0.48695654, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.76e6e6p125F}.
      * <pre>
      * <font style='background-color: #73733B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73733B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9232,10 +9242,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #73733B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73733B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_4A = new SColor(0x73733B, "Aurora 4A");
+    public static final SColor AURORA_LIZARD_SCALES = new SColor(0x73733B, "Aurora Lizard Scales");
 
     /**
-     * This color constant "Aurora 4B" has RGB code {@code 0x8F8F57}, red 0.56078434, green 0.56078434, blue 0.34117648, alpha 1, hue 0.16666663, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Cricket" has RGB code {@code 0x8F8F57}, red 0.56078434, green 0.56078434, blue 0.34117648, alpha 1, hue 0.16666663, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.af1f1ep125F}.
      * <pre>
      * <font style='background-color: #8F8F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F8F57; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9243,10 +9253,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8F8F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F8F57; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_4B = new SColor(0x8F8F57, "Aurora 4B");
+    public static final SColor AURORA_CRICKET = new SColor(0x8F8F57, "Aurora Cricket");
 
     /**
-     * This color constant "Aurora 4C" has RGB code {@code 0xA2A255}, red 0.63529414, green 0.63529414, blue 0.33333334, alpha 1, hue 0.16666663, saturation 0.47530866, and value 0.63529414.
+     * This color constant "Aurora Olive Oil" has RGB code {@code 0xA2A255}, red 0.63529414, green 0.63529414, blue 0.33333334, alpha 1, hue 0.16666663, saturation 0.47530866, and value 0.63529414.
      * It can be represented as a packed float with the constant {@code -0x1.ab4544p125F}.
      * <pre>
      * <font style='background-color: #A2A255;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A2A255; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9254,10 +9264,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A2A255;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A2A255; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_4C = new SColor(0xA2A255, "Aurora 4C");
+    public static final SColor AURORA_OLIVE_OIL = new SColor(0xA2A255, "Aurora Olive Oil");
 
     /**
-     * This color constant "Aurora 4D" has RGB code {@code 0xB5B572}, red 0.70980394, green 0.70980394, blue 0.44705883, alpha 1, hue 0.16666663, saturation 0.37016577, and value 0.70980394.
+     * This color constant "Aurora Dun" has RGB code {@code 0xB5B572}, red 0.70980394, green 0.70980394, blue 0.44705883, alpha 1, hue 0.16666663, saturation 0.37016577, and value 0.70980394.
      * It can be represented as a packed float with the constant {@code -0x1.e56b6ap125F}.
      * <pre>
      * <font style='background-color: #B5B572;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B5B572; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9265,10 +9275,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #B5B572;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B5B572; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_4D = new SColor(0xB5B572, "Aurora 4D");
+    public static final SColor AURORA_DUN = new SColor(0xB5B572, "Aurora Dun");
 
     /**
-     * This color constant "Aurora 4E" has RGB code {@code 0xC7C78F}, red 0.78039217, green 0.78039217, blue 0.56078434, alpha 1, hue 0.16666675, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Corn Silk" has RGB code {@code 0xC7C78F}, red 0.78039217, green 0.78039217, blue 0.56078434, alpha 1, hue 0.16666675, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.1f8f8ep126F}.
      * <pre>
      * <font style='background-color: #C7C78F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C7C78F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9276,10 +9286,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C7C78F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C7C78F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_4E = new SColor(0xC7C78F, "Aurora 4E");
+    public static final SColor AURORA_CORN_SILK = new SColor(0xC7C78F, "Aurora Corn Silk");
 
     /**
-     * This color constant "Aurora 4F" has RGB code {@code 0xDADAAB}, red 0.85490197, green 0.85490197, blue 0.67058825, alpha 1, hue 0.16666675, saturation 0.21559632, and value 0.85490197.
+     * This color constant "Aurora Tan" has RGB code {@code 0xDADAAB}, red 0.85490197, green 0.85490197, blue 0.67058825, alpha 1, hue 0.16666675, saturation 0.21559632, and value 0.85490197.
      * It can be represented as a packed float with the constant {@code -0x1.57b5b4p126F}.
      * <pre>
      * <font style='background-color: #DADAAB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DADAAB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9287,10 +9297,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #DADAAB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DADAAB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_4F = new SColor(0xDADAAB, "Aurora 4F");
+    public static final SColor AURORA_TAN = new SColor(0xDADAAB, "Aurora Tan");
 
     /**
-     * This color constant "Aurora 50" has RGB code {@code 0xEDEDC7}, red 0.92941177, green 0.92941177, blue 0.78039217, alpha 1, hue 0.16666675, saturation 0.16033754, and value 0.92941177.
+     * This color constant "Aurora Straw" has RGB code {@code 0xEDEDC7}, red 0.92941177, green 0.92941177, blue 0.78039217, alpha 1, hue 0.16666675, saturation 0.16033754, and value 0.92941177.
      * It can be represented as a packed float with the constant {@code -0x1.8fdbdap126F}.
      * <pre>
      * <font style='background-color: #EDEDC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EDEDC7; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9298,10 +9308,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #EDEDC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EDEDC7; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_50 = new SColor(0xEDEDC7, "Aurora 50");
+    public static final SColor AURORA_STRAW = new SColor(0xEDEDC7, "Aurora Straw");
 
     /**
-     * This color constant "Aurora 51" has RGB code {@code 0xC7E3AB}, red 0.78039217, green 0.8901961, blue 0.67058825, alpha 1, hue 0.25, saturation 0.24669603, and value 0.8901961.
+     * This color constant "Aurora Honeydew" has RGB code {@code 0xC7E3AB}, red 0.78039217, green 0.8901961, blue 0.67058825, alpha 1, hue 0.25, saturation 0.24669603, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.57c78ep126F}.
      * <pre>
      * <font style='background-color: #C7E3AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C7E3AB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9309,10 +9319,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C7E3AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C7E3AB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_51 = new SColor(0xC7E3AB, "Aurora 51");
+    public static final SColor AURORA_HONEYDEW = new SColor(0xC7E3AB, "Aurora Honeydew");
 
     /**
-     * This color constant "Aurora 52" has RGB code {@code 0xABC78F}, red 0.67058825, green 0.78039217, blue 0.56078434, alpha 1, hue 0.25, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Tarnish" has RGB code {@code 0xABC78F}, red 0.67058825, green 0.78039217, blue 0.56078434, alpha 1, hue 0.25, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.1f8f56p126F}.
      * <pre>
      * <font style='background-color: #ABC78F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABC78F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9320,10 +9330,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ABC78F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABC78F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_52 = new SColor(0xABC78F, "Aurora 52");
+    public static final SColor AURORA_TARNISH = new SColor(0xABC78F, "Aurora Tarnish");
 
     /**
-     * This color constant "Aurora 53" has RGB code {@code 0x8EBE55}, red 0.5568628, green 0.74509805, blue 0.33333334, alpha 1, hue 0.24285722, saturation 0.55263156, and value 0.74509805.
+     * This color constant "Aurora Pea Soup" has RGB code {@code 0x8EBE55}, red 0.5568628, green 0.74509805, blue 0.33333334, alpha 1, hue 0.24285722, saturation 0.55263156, and value 0.74509805.
      * It can be represented as a packed float with the constant {@code -0x1.ab7d1cp125F}.
      * <pre>
      * <font style='background-color: #8EBE55;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8EBE55; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9331,10 +9341,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8EBE55;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8EBE55; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_53 = new SColor(0x8EBE55, "Aurora 53");
+    public static final SColor AURORA_PEA_SOUP = new SColor(0x8EBE55, "Aurora Pea Soup");
 
     /**
-     * This color constant "Aurora 54" has RGB code {@code 0x738F57}, red 0.4509804, green 0.56078434, blue 0.34117648, alpha 1, hue 0.25000012, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Marsh" has RGB code {@code 0x738F57}, red 0.4509804, green 0.56078434, blue 0.34117648, alpha 1, hue 0.25000012, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.af1ee6p125F}.
      * <pre>
      * <font style='background-color: #738F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #738F57; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9342,10 +9352,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #738F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #738F57; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_54 = new SColor(0x738F57, "Aurora 54");
+    public static final SColor AURORA_MARSH = new SColor(0x738F57, "Aurora Marsh");
 
     /**
-     * This color constant "Aurora 55" has RGB code {@code 0x587D3E}, red 0.34509805, green 0.49019608, blue 0.24313726, alpha 1, hue 0.2645502, saturation 0.504, and value 0.49019608.
+     * This color constant "Aurora Asparagus" has RGB code {@code 0x587D3E}, red 0.34509805, green 0.49019608, blue 0.24313726, alpha 1, hue 0.2645502, saturation 0.504, and value 0.49019608.
      * It can be represented as a packed float with the constant {@code -0x1.7cfabp125F}.
      * <pre>
      * <font style='background-color: #587D3E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #587D3E; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9353,10 +9363,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #587D3E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #587D3E; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_55 = new SColor(0x587D3E, "Aurora 55");
+    public static final SColor AURORA_ASPARAGUS = new SColor(0x587D3E, "Aurora Asparagus");
 
     /**
-     * This color constant "Aurora 56" has RGB code {@code 0x465032}, red 0.27450982, green 0.3137255, blue 0.19607843, alpha 1, hue 0.22222221, saturation 0.375, and value 0.3137255.
+     * This color constant "Aurora Peat Bog" has RGB code {@code 0x465032}, red 0.27450982, green 0.3137255, blue 0.19607843, alpha 1, hue 0.22222221, saturation 0.375, and value 0.3137255.
      * It can be represented as a packed float with the constant {@code -0x1.64a08cp125F}.
      * <pre>
      * <font style='background-color: #465032;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #465032; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9364,10 +9374,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #465032;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #465032; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_56 = new SColor(0x465032, "Aurora 56");
+    public static final SColor AURORA_PEAT_BOG = new SColor(0x465032, "Aurora Peat Bog");
 
     /**
-     * This color constant "Aurora 57" has RGB code {@code 0x191E0F}, red 0.09803922, green 0.11764706, blue 0.05882353, alpha 1, hue 0.22222209, saturation 0.5, and value 0.11764706.
+     * This color constant "Aurora Deep Jungle" has RGB code {@code 0x191E0F}, red 0.09803922, green 0.11764706, blue 0.05882353, alpha 1, hue 0.22222209, saturation 0.5, and value 0.11764706.
      * It can be represented as a packed float with the constant {@code -0x1.1e3c32p125F}.
      * <pre>
      * <font style='background-color: #191E0F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #191E0F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9375,10 +9385,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #191E0F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #191E0F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_57 = new SColor(0x191E0F, "Aurora 57");
+    public static final SColor AURORA_DEEP_JUNGLE = new SColor(0x191E0F, "Aurora Deep Jungle");
 
     /**
-     * This color constant "Aurora 58" has RGB code {@code 0x235037}, red 0.13725491, green 0.3137255, blue 0.21568628, alpha 1, hue 0.4074074, saturation 0.5625, and value 0.3137255.
+     * This color constant "Aurora Pine Green" has RGB code {@code 0x235037}, red 0.13725491, green 0.3137255, blue 0.21568628, alpha 1, hue 0.4074074, saturation 0.5625, and value 0.3137255.
      * It can be represented as a packed float with the constant {@code -0x1.6ea046p125F}.
      * <pre>
      * <font style='background-color: #235037;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #235037; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9386,10 +9396,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #235037;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #235037; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_58 = new SColor(0x235037, "Aurora 58");
+    public static final SColor AURORA_PINE_GREEN = new SColor(0x235037, "Aurora Pine Green");
 
     /**
-     * This color constant "Aurora 59" has RGB code {@code 0x3B573B}, red 0.23137255, green 0.34117648, blue 0.23137255, alpha 1, hue 0.33333337, saturation 0.3218391, and value 0.34117648.
+     * This color constant "Aurora Olive Green" has RGB code {@code 0x3B573B}, red 0.23137255, green 0.34117648, blue 0.23137255, alpha 1, hue 0.33333337, saturation 0.3218391, and value 0.34117648.
      * It can be represented as a packed float with the constant {@code -0x1.76ae76p125F}.
      * <pre>
      * <font style='background-color: #3B573B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B573B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9397,10 +9407,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3B573B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B573B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_59 = new SColor(0x3B573B, "Aurora 59");
+    public static final SColor AURORA_OLIVE_GREEN = new SColor(0x3B573B, "Aurora Olive Green");
 
     /**
-     * This color constant "Aurora 5A" has RGB code {@code 0x506450}, red 0.3137255, green 0.39215687, blue 0.3137255, alpha 1, hue 0.33333325, saturation 0.19999999, and value 0.39215687.
+     * This color constant "Aurora Gray Green" has RGB code {@code 0x506450}, red 0.3137255, green 0.39215687, blue 0.3137255, alpha 1, hue 0.33333325, saturation 0.19999999, and value 0.39215687.
      * It can be represented as a packed float with the constant {@code -0x1.a0c8ap125F}.
      * <pre>
      * <font style='background-color: #506450;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #506450; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9408,10 +9418,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #506450;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #506450; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_5A = new SColor(0x506450, "Aurora 5A");
+    public static final SColor AURORA_GRAY_GREEN = new SColor(0x506450, "Aurora Gray Green");
 
     /**
-     * This color constant "Aurora 5B" has RGB code {@code 0x3B7349}, red 0.23137255, green 0.4509804, blue 0.28627452, alpha 1, hue 0.375, saturation 0.48695654, and value 0.4509804.
+     * This color constant "Aurora Maidenhair Fern" has RGB code {@code 0x3B7349}, red 0.23137255, green 0.4509804, blue 0.28627452, alpha 1, hue 0.375, saturation 0.48695654, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.92e676p125F}.
      * <pre>
      * <font style='background-color: #3B7349;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B7349; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9419,10 +9429,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3B7349;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B7349; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_5B = new SColor(0x3B7349, "Aurora 5B");
+    public static final SColor AURORA_MAIDENHAIR_FERN = new SColor(0x3B7349, "Aurora Maidenhair Fern");
 
     /**
-     * This color constant "Aurora 5C" has RGB code {@code 0x578F57}, red 0.34117648, green 0.56078434, blue 0.34117648, alpha 1, hue 0.33333337, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Kelly Green" has RGB code {@code 0x578F57}, red 0.34117648, green 0.56078434, blue 0.34117648, alpha 1, hue 0.33333337, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.af1eaep125F}.
      * <pre>
      * <font style='background-color: #578F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #578F57; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9430,10 +9440,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #578F57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #578F57; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_5C = new SColor(0x578F57, "Aurora 5C");
+    public static final SColor AURORA_KELLY_GREEN = new SColor(0x578F57, "Aurora Kelly Green");
 
     /**
-     * This color constant "Aurora 5D" has RGB code {@code 0x73AB73}, red 0.4509804, green 0.67058825, blue 0.4509804, alpha 1, hue 0.33333337, saturation 0.32748538, and value 0.67058825.
+     * This color constant "Aurora Dusty Green" has RGB code {@code 0x73AB73}, red 0.4509804, green 0.67058825, blue 0.4509804, alpha 1, hue 0.33333337, saturation 0.32748538, and value 0.67058825.
      * It can be represented as a packed float with the constant {@code -0x1.e756e6p125F}.
      * <pre>
      * <font style='background-color: #73AB73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73AB73; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9441,10 +9451,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #73AB73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73AB73; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_5D = new SColor(0x73AB73, "Aurora 5D");
+    public static final SColor AURORA_DUSTY_GREEN = new SColor(0x73AB73, "Aurora Dusty Green");
 
     /**
-     * This color constant "Aurora 5E" has RGB code {@code 0x64C082}, red 0.39215687, green 0.7529412, blue 0.50980395, alpha 1, hue 0.38768125, saturation 0.47916666, and value 0.7529412.
+     * This color constant "Aurora Garter Snake" has RGB code {@code 0x64C082}, red 0.39215687, green 0.7529412, blue 0.50980395, alpha 1, hue 0.38768125, saturation 0.47916666, and value 0.7529412.
      * It can be represented as a packed float with the constant {@code -0x1.0580c8p126F}.
      * <pre>
      * <font style='background-color: #64C082;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #64C082; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9452,10 +9462,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #64C082;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #64C082; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_5E = new SColor(0x64C082, "Aurora 5E");
+    public static final SColor AURORA_GARTER_SNAKE = new SColor(0x64C082, "Aurora Garter Snake");
 
     /**
-     * This color constant "Aurora 5F" has RGB code {@code 0x8FC78F}, red 0.56078434, green 0.78039217, blue 0.56078434, alpha 1, hue 0.33333325, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Silver Green" has RGB code {@code 0x8FC78F}, red 0.56078434, green 0.78039217, blue 0.56078434, alpha 1, hue 0.33333325, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.1f8f1ep126F}.
      * <pre>
      * <font style='background-color: #8FC78F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8FC78F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9463,10 +9473,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8FC78F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8FC78F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_5F = new SColor(0x8FC78F, "Aurora 5F");
+    public static final SColor AURORA_SILVER_GREEN = new SColor(0x8FC78F, "Aurora Silver Green");
 
     /**
-     * This color constant "Aurora 60" has RGB code {@code 0xA2D8A2}, red 0.63529414, green 0.84705883, blue 0.63529414, alpha 1, hue 0.33333325, saturation 0.24999999, and value 0.84705883.
+     * This color constant "Aurora Pistachio" has RGB code {@code 0xA2D8A2}, red 0.63529414, green 0.84705883, blue 0.63529414, alpha 1, hue 0.33333325, saturation 0.24999999, and value 0.84705883.
      * It can be represented as a packed float with the constant {@code -0x1.45b144p126F}.
      * <pre>
      * <font style='background-color: #A2D8A2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A2D8A2; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9474,10 +9484,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A2D8A2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A2D8A2; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_60 = new SColor(0xA2D8A2, "Aurora 60");
+    public static final SColor AURORA_PISTACHIO = new SColor(0xA2D8A2, "Aurora Pistachio");
 
     /**
-     * This color constant "Aurora 61" has RGB code {@code 0xE1F8FA}, red 0.88235295, green 0.972549, blue 0.98039216, alpha 1, hue 0.5133333, saturation 0.099999994, and value 0.98039216.
+     * This color constant "Aurora Angel Wing" has RGB code {@code 0xE1F8FA}, red 0.88235295, green 0.972549, blue 0.98039216, alpha 1, hue 0.5133333, saturation 0.099999994, and value 0.98039216.
      * It can be represented as a packed float with the constant {@code -0x1.f5f1c2p126F}.
      * <pre>
      * <font style='background-color: #E1F8FA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E1F8FA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9485,10 +9495,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E1F8FA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E1F8FA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_61 = new SColor(0xE1F8FA, "Aurora 61");
+    public static final SColor AURORA_ANGEL_WING = new SColor(0xE1F8FA, "Aurora Angel Wing");
 
     /**
-     * This color constant "Aurora 62" has RGB code {@code 0xB4EECA}, red 0.7058824, green 0.93333334, blue 0.7921569, alpha 1, hue 0.39655173, saturation 0.24369746, and value 0.93333334.
+     * This color constant "Aurora Sage Green" has RGB code {@code 0xB4EECA}, red 0.7058824, green 0.93333334, blue 0.7921569, alpha 1, hue 0.39655173, saturation 0.24369746, and value 0.93333334.
      * It can be represented as a packed float with the constant {@code -0x1.95dd68p126F}.
      * <pre>
      * <font style='background-color: #B4EECA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B4EECA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9496,10 +9506,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #B4EECA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B4EECA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_62 = new SColor(0xB4EECA, "Aurora 62");
+    public static final SColor AURORA_SAGE_GREEN = new SColor(0xB4EECA, "Aurora Sage Green");
 
     /**
-     * This color constant "Aurora 63" has RGB code {@code 0xABE3C5}, red 0.67058825, green 0.8901961, blue 0.77254903, alpha 1, hue 0.41071427, saturation 0.24669603, and value 0.8901961.
+     * This color constant "Aurora Dried Sage" has RGB code {@code 0xABE3C5}, red 0.67058825, green 0.8901961, blue 0.77254903, alpha 1, hue 0.41071427, saturation 0.24669603, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.8bc756p126F}.
      * <pre>
      * <font style='background-color: #ABE3C5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABE3C5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9507,10 +9517,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ABE3C5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABE3C5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_63 = new SColor(0xABE3C5, "Aurora 63");
+    public static final SColor AURORA_DRIED_SAGE = new SColor(0xABE3C5, "Aurora Dried Sage");
 
     /**
-     * This color constant "Aurora 64" has RGB code {@code 0x87B48E}, red 0.5294118, green 0.7058824, blue 0.5568628, alpha 1, hue 0.35925925, saturation 0.24999999, and value 0.7058824.
+     * This color constant "Aurora Artichoke" has RGB code {@code 0x87B48E}, red 0.5294118, green 0.7058824, blue 0.5568628, alpha 1, hue 0.35925925, saturation 0.24999999, and value 0.7058824.
      * It can be represented as a packed float with the constant {@code -0x1.1d690ep126F}.
      * <pre>
      * <font style='background-color: #87B48E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #87B48E; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9518,10 +9528,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #87B48E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #87B48E; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_64 = new SColor(0x87B48E, "Aurora 64");
+    public static final SColor AURORA_ARTICHOKE = new SColor(0x87B48E, "Aurora Artichoke");
 
     /**
-     * This color constant "Aurora 65" has RGB code {@code 0x507D5F}, red 0.3137255, green 0.49019608, blue 0.37254903, alpha 1, hue 0.38888884, saturation 0.35999998, and value 0.49019608.
+     * This color constant "Aurora Viridian" has RGB code {@code 0x507D5F}, red 0.3137255, green 0.49019608, blue 0.37254903, alpha 1, hue 0.38888884, saturation 0.35999998, and value 0.49019608.
      * It can be represented as a packed float with the constant {@code -0x1.befaap125F}.
      * <pre>
      * <font style='background-color: #507D5F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #507D5F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9529,10 +9539,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #507D5F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #507D5F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_65 = new SColor(0x507D5F, "Aurora 65");
+    public static final SColor AURORA_VIRIDIAN = new SColor(0x507D5F, "Aurora Viridian");
 
     /**
-     * This color constant "Aurora 66" has RGB code {@code 0x0F6946}, red 0.05882353, green 0.4117647, blue 0.27450982, alpha 1, hue 0.4351852, saturation 0.85714287, and value 0.4117647.
+     * This color constant "Aurora Floral Foam" has RGB code {@code 0x0F6946}, red 0.05882353, green 0.4117647, blue 0.27450982, alpha 1, hue 0.4351852, saturation 0.85714287, and value 0.4117647.
      * It can be represented as a packed float with the constant {@code -0x1.8cd21ep125F}.
      * <pre>
      * <font style='background-color: #0F6946;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F6946; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9540,10 +9550,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0F6946;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F6946; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_66 = new SColor(0x0F6946, "Aurora 66");
+    public static final SColor AURORA_FLORAL_FOAM = new SColor(0x0F6946, "Aurora Floral Foam");
 
     /**
-     * This color constant "Aurora 67" has RGB code {@code 0x1E2D23}, red 0.11764706, green 0.1764706, blue 0.13725491, alpha 1, hue 0.38888884, saturation 0.33333334, and value 0.1764706.
+     * This color constant "Aurora Hunter Green" has RGB code {@code 0x1E2D23}, red 0.11764706, green 0.1764706, blue 0.13725491, alpha 1, hue 0.38888884, saturation 0.33333334, and value 0.1764706.
      * It can be represented as a packed float with the constant {@code -0x1.465a3cp125F}.
      * <pre>
      * <font style='background-color: #1E2D23;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1E2D23; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9551,10 +9561,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #1E2D23;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1E2D23; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_67 = new SColor(0x1E2D23, "Aurora 67");
+    public static final SColor AURORA_HUNTER_GREEN = new SColor(0x1E2D23, "Aurora Hunter Green");
 
     /**
-     * This color constant "Aurora 68" has RGB code {@code 0x234146}, red 0.13725491, green 0.25490198, blue 0.27450982, alpha 1, hue 0.52380955, saturation 0.5, and value 0.27450982.
+     * This color constant "Aurora Dark Teal" has RGB code {@code 0x234146}, red 0.13725491, green 0.25490198, blue 0.27450982, alpha 1, hue 0.52380955, saturation 0.5, and value 0.27450982.
      * It can be represented as a packed float with the constant {@code -0x1.8c8246p125F}.
      * <pre>
      * <font style='background-color: #234146;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #234146; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9562,10 +9572,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #234146;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #234146; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_68 = new SColor(0x234146, "Aurora 68");
+    public static final SColor AURORA_DARK_TEAL = new SColor(0x234146, "Aurora Dark Teal");
 
     /**
-     * This color constant "Aurora 69" has RGB code {@code 0x3B7373}, red 0.23137255, green 0.4509804, blue 0.4509804, alpha 1, hue 0.5, saturation 0.48695654, and value 0.4509804.
+     * This color constant "Aurora Kyanite" has RGB code {@code 0x3B7373}, red 0.23137255, green 0.4509804, blue 0.4509804, alpha 1, hue 0.5, saturation 0.48695654, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.e6e676p125F}.
      * <pre>
      * <font style='background-color: #3B7373;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B7373; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9573,10 +9583,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3B7373;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B7373; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_69 = new SColor(0x3B7373, "Aurora 69");
+    public static final SColor AURORA_KYANITE = new SColor(0x3B7373, "Aurora Kyanite");
 
     /**
-     * This color constant "Aurora 6A" has RGB code {@code 0x64ABAB}, red 0.39215687, green 0.67058825, blue 0.67058825, alpha 1, hue 0.5, saturation 0.41520467, and value 0.67058825.
+     * This color constant "Aurora Spearmint" has RGB code {@code 0x64ABAB}, red 0.39215687, green 0.67058825, blue 0.67058825, alpha 1, hue 0.5, saturation 0.41520467, and value 0.67058825.
      * It can be represented as a packed float with the constant {@code -0x1.5756c8p126F}.
      * <pre>
      * <font style='background-color: #64ABAB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #64ABAB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9584,10 +9594,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #64ABAB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #64ABAB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_6A = new SColor(0x64ABAB, "Aurora 6A");
+    public static final SColor AURORA_SPEARMINT = new SColor(0x64ABAB, "Aurora Spearmint");
 
     /**
-     * This color constant "Aurora 6B" has RGB code {@code 0x8FC7C7}, red 0.56078434, green 0.78039217, blue 0.78039217, alpha 1, hue 0.5, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Amazonite" has RGB code {@code 0x8FC7C7}, red 0.56078434, green 0.78039217, blue 0.78039217, alpha 1, hue 0.5, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.8f8f1ep126F}.
      * <pre>
      * <font style='background-color: #8FC7C7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8FC7C7; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9595,10 +9605,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8FC7C7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8FC7C7; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_6B = new SColor(0x8FC7C7, "Aurora 6B");
+    public static final SColor AURORA_AMAZONITE = new SColor(0x8FC7C7, "Aurora Amazonite");
 
     /**
-     * This color constant "Aurora 6C" has RGB code {@code 0xABE3E3}, red 0.67058825, green 0.8901961, blue 0.8901961, alpha 1, hue 0.5, saturation 0.24669603, and value 0.8901961.
+     * This color constant "Aurora Pastel Sky" has RGB code {@code 0xABE3E3}, red 0.67058825, green 0.8901961, blue 0.8901961, alpha 1, hue 0.5, saturation 0.24669603, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.c7c756p126F}.
      * <pre>
      * <font style='background-color: #ABE3E3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABE3E3; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9606,10 +9616,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ABE3E3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABE3E3; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_6C = new SColor(0xABE3E3, "Aurora 6C");
+    public static final SColor AURORA_PASTEL_SKY = new SColor(0xABE3E3, "Aurora Pastel Sky");
 
     /**
-     * This color constant "Aurora 6D" has RGB code {@code 0xC7F1F1}, red 0.78039217, green 0.94509804, blue 0.94509804, alpha 1, hue 0.5, saturation 0.17427385, and value 0.94509804.
+     * This color constant "Aurora Aquamarine" has RGB code {@code 0xC7F1F1}, red 0.78039217, green 0.94509804, blue 0.94509804, alpha 1, hue 0.5, saturation 0.17427385, and value 0.94509804.
      * It can be represented as a packed float with the constant {@code -0x1.e3e38ep126F}.
      * <pre>
      * <font style='background-color: #C7F1F1;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C7F1F1; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9617,10 +9627,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C7F1F1;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C7F1F1; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_6D = new SColor(0xC7F1F1, "Aurora 6D");
+    public static final SColor AURORA_AQUAMARINE = new SColor(0xC7F1F1, "Aurora Aquamarine");
 
     /**
-     * This color constant "Aurora 6E" has RGB code {@code 0xBED2F0}, red 0.74509805, green 0.8235294, blue 0.9411765, alpha 1, hue 0.60000014, saturation 0.20833331, and value 0.9411765.
+     * This color constant "Aurora Dust Bunny" has RGB code {@code 0xBED2F0}, red 0.74509805, green 0.8235294, blue 0.9411765, alpha 1, hue 0.60000014, saturation 0.20833331, and value 0.9411765.
      * It can be represented as a packed float with the constant {@code -0x1.e1a57cp126F}.
      * <pre>
      * <font style='background-color: #BED2F0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BED2F0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9628,10 +9638,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BED2F0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BED2F0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_6E = new SColor(0xBED2F0, "Aurora 6E");
+    public static final SColor AURORA_DUST_BUNNY = new SColor(0xBED2F0, "Aurora Dust Bunny");
 
     /**
-     * This color constant "Aurora 6F" has RGB code {@code 0xABC7E3}, red 0.67058825, green 0.78039217, blue 0.8901961, alpha 1, hue 0.58333325, saturation 0.24669603, and value 0.8901961.
+     * This color constant "Aurora Patina" has RGB code {@code 0xABC7E3}, red 0.67058825, green 0.78039217, blue 0.8901961, alpha 1, hue 0.58333325, saturation 0.24669603, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.c78f56p126F}.
      * <pre>
      * <font style='background-color: #ABC7E3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABC7E3; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9639,10 +9649,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ABC7E3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABC7E3; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_6F = new SColor(0xABC7E3, "Aurora 6F");
+    public static final SColor AURORA_PATINA = new SColor(0xABC7E3, "Aurora Patina");
 
     /**
-     * This color constant "Aurora 70" has RGB code {@code 0xA8B9DC}, red 0.65882355, green 0.7254902, blue 0.8627451, alpha 1, hue 0.6121795, saturation 0.23636362, and value 0.8627451.
+     * This color constant "Aurora Chipped Granite" has RGB code {@code 0xA8B9DC}, red 0.65882355, green 0.7254902, blue 0.8627451, alpha 1, hue 0.6121795, saturation 0.23636362, and value 0.8627451.
      * It can be represented as a packed float with the constant {@code -0x1.b9735p126F}.
      * <pre>
      * <font style='background-color: #A8B9DC;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A8B9DC; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9650,10 +9660,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A8B9DC;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A8B9DC; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_70 = new SColor(0xA8B9DC, "Aurora 70");
+    public static final SColor AURORA_CHIPPED_GRANITE = new SColor(0xA8B9DC, "Aurora Chipped Granite");
 
     /**
-     * This color constant "Aurora 71" has RGB code {@code 0x8FABC7}, red 0.56078434, green 0.67058825, blue 0.78039217, alpha 1, hue 0.58333325, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Blue Smoke" has RGB code {@code 0x8FABC7}, red 0.56078434, green 0.67058825, blue 0.78039217, alpha 1, hue 0.58333325, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.8f571ep126F}.
      * <pre>
      * <font style='background-color: #8FABC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8FABC7; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9661,10 +9671,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8FABC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8FABC7; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_71 = new SColor(0x8FABC7, "Aurora 71");
+    public static final SColor AURORA_BLUE_SMOKE = new SColor(0x8FABC7, "Aurora Blue Smoke");
 
     /**
-     * This color constant "Aurora 72" has RGB code {@code 0x578FC7}, red 0.34117648, green 0.56078434, blue 0.78039217, alpha 1, hue 0.58333325, saturation 0.56281406, and value 0.78039217.
+     * This color constant "Aurora Air Force Blue" has RGB code {@code 0x578FC7}, red 0.34117648, green 0.56078434, blue 0.78039217, alpha 1, hue 0.58333325, saturation 0.56281406, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.8f1eaep126F}.
      * <pre>
      * <font style='background-color: #578FC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #578FC7; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9672,10 +9682,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #578FC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #578FC7; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_72 = new SColor(0x578FC7, "Aurora 72");
+    public static final SColor AURORA_AIR_FORCE_BLUE = new SColor(0x578FC7, "Aurora Air Force Blue");
 
     /**
-     * This color constant "Aurora 73" has RGB code {@code 0x57738F}, red 0.34117648, green 0.4509804, blue 0.56078434, alpha 1, hue 0.5833334, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Cold Iron" has RGB code {@code 0x57738F}, red 0.34117648, green 0.4509804, blue 0.56078434, alpha 1, hue 0.5833334, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.1ee6aep126F}.
      * <pre>
      * <font style='background-color: #57738F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #57738F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9683,10 +9693,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #57738F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #57738F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_73 = new SColor(0x57738F, "Aurora 73");
+    public static final SColor AURORA_COLD_IRON = new SColor(0x57738F, "Aurora Cold Iron");
 
     /**
-     * This color constant "Aurora 74" has RGB code {@code 0x3B5773}, red 0.23137255, green 0.34117648, blue 0.4509804, alpha 1, hue 0.58333325, saturation 0.48695654, and value 0.4509804.
+     * This color constant "Aurora Dreary Blue" has RGB code {@code 0x3B5773}, red 0.23137255, green 0.34117648, blue 0.4509804, alpha 1, hue 0.58333325, saturation 0.48695654, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.e6ae76p125F}.
      * <pre>
      * <font style='background-color: #3B5773;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B5773; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9694,10 +9704,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3B5773;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B5773; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_74 = new SColor(0x3B5773, "Aurora 74");
+    public static final SColor AURORA_DREARY_BLUE = new SColor(0x3B5773, "Aurora Dreary Blue");
 
     /**
-     * This color constant "Aurora 75" has RGB code {@code 0x0F192D}, red 0.05882353, green 0.09803922, blue 0.1764706, alpha 1, hue 0.6111113, saturation 0.6666667, and value 0.1764706.
+     * This color constant "Aurora Murk" has RGB code {@code 0x0F192D}, red 0.05882353, green 0.09803922, blue 0.1764706, alpha 1, hue 0.6111113, saturation 0.6666667, and value 0.1764706.
      * It can be represented as a packed float with the constant {@code -0x1.5a321ep125F}.
      * <pre>
      * <font style='background-color: #0F192D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F192D; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9705,10 +9715,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0F192D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F192D; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_75 = new SColor(0x0F192D, "Aurora 75");
+    public static final SColor AURORA_MURK = new SColor(0x0F192D, "Aurora Murk");
 
     /**
-     * This color constant "Aurora 76" has RGB code {@code 0x1F1F3B}, red 0.12156863, green 0.12156863, blue 0.23137255, alpha 1, hue 0.66666675, saturation 0.47457626, and value 0.23137255.
+     * This color constant "Aurora Ninja" has RGB code {@code 0x1F1F3B}, red 0.12156863, green 0.12156863, blue 0.23137255, alpha 1, hue 0.66666675, saturation 0.47457626, and value 0.23137255.
      * It can be represented as a packed float with the constant {@code -0x1.763e3ep125F}.
      * <pre>
      * <font style='background-color: #1F1F3B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1F1F3B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9716,10 +9726,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #1F1F3B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1F1F3B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_76 = new SColor(0x1F1F3B, "Aurora 76");
+    public static final SColor AURORA_NINJA = new SColor(0x1F1F3B, "Aurora Ninja");
 
     /**
-     * This color constant "Aurora 77" has RGB code {@code 0x3B3B57}, red 0.23137255, green 0.23137255, blue 0.34117648, alpha 1, hue 0.66666687, saturation 0.3218391, and value 0.34117648.
+     * This color constant "Aurora Watercolor Black" has RGB code {@code 0x3B3B57}, red 0.23137255, green 0.23137255, blue 0.34117648, alpha 1, hue 0.66666687, saturation 0.3218391, and value 0.34117648.
      * It can be represented as a packed float with the constant {@code -0x1.ae7676p125F}.
      * <pre>
      * <font style='background-color: #3B3B57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B3B57; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9727,10 +9737,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3B3B57;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3B3B57; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_77 = new SColor(0x3B3B57, "Aurora 77");
+    public static final SColor AURORA_WATERCOLOR_BLACK = new SColor(0x3B3B57, "Aurora Watercolor Black");
 
     /**
-     * This color constant "Aurora 78" has RGB code {@code 0x494973}, red 0.28627452, green 0.28627452, blue 0.4509804, alpha 1, hue 0.66666675, saturation 0.36521736, and value 0.4509804.
+     * This color constant "Aurora Iolite" has RGB code {@code 0x494973}, red 0.28627452, green 0.28627452, blue 0.4509804, alpha 1, hue 0.66666675, saturation 0.36521736, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.e69292p125F}.
      * <pre>
      * <font style='background-color: #494973;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #494973; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9738,10 +9748,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #494973;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #494973; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_78 = new SColor(0x494973, "Aurora 78");
+    public static final SColor AURORA_IOLITE = new SColor(0x494973, "Aurora Iolite");
 
     /**
-     * This color constant "Aurora 79" has RGB code {@code 0x57578F}, red 0.34117648, green 0.34117648, blue 0.56078434, alpha 1, hue 0.66666687, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Boysenberry" has RGB code {@code 0x57578F}, red 0.34117648, green 0.34117648, blue 0.56078434, alpha 1, hue 0.66666687, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.1eaeaep126F}.
      * <pre>
      * <font style='background-color: #57578F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #57578F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9749,10 +9759,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #57578F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #57578F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_79 = new SColor(0x57578F, "Aurora 79");
+    public static final SColor AURORA_BOYSENBERRY = new SColor(0x57578F, "Aurora Boysenberry");
 
     /**
-     * This color constant "Aurora 7A" has RGB code {@code 0x736EAA}, red 0.4509804, green 0.43137255, blue 0.6666667, alpha 1, hue 0.6805558, saturation 0.3529412, and value 0.6666667.
+     * This color constant "Aurora Watercolor Gray" has RGB code {@code 0x736EAA}, red 0.4509804, green 0.43137255, blue 0.6666667, alpha 1, hue 0.6805558, saturation 0.3529412, and value 0.6666667.
      * It can be represented as a packed float with the constant {@code -0x1.54dce6p126F}.
      * <pre>
      * <font style='background-color: #736EAA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #736EAA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9760,10 +9770,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #736EAA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #736EAA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_7A = new SColor(0x736EAA, "Aurora 7A");
+    public static final SColor AURORA_WATERCOLOR_GRAY = new SColor(0x736EAA, "Aurora Watercolor Gray");
 
     /**
-     * This color constant "Aurora 7B" has RGB code {@code 0x7676CA}, red 0.4627451, green 0.4627451, blue 0.7921569, alpha 1, hue 0.66666687, saturation 0.41584158, and value 0.7921569.
+     * This color constant "Aurora Blue Steel" has RGB code {@code 0x7676CA}, red 0.4627451, green 0.4627451, blue 0.7921569, alpha 1, hue 0.66666687, saturation 0.41584158, and value 0.7921569.
      * It can be represented as a packed float with the constant {@code -0x1.94ececp126F}.
      * <pre>
      * <font style='background-color: #7676CA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7676CA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9771,10 +9781,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7676CA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7676CA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_7B = new SColor(0x7676CA, "Aurora 7B");
+    public static final SColor AURORA_BLUE_STEEL = new SColor(0x7676CA, "Aurora Blue Steel");
 
     /**
-     * This color constant "Aurora 7C" has RGB code {@code 0x8F8FC7}, red 0.56078434, green 0.56078434, blue 0.78039217, alpha 1, hue 0.66666675, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Twilight Cloud" has RGB code {@code 0x8F8FC7}, red 0.56078434, green 0.56078434, blue 0.78039217, alpha 1, hue 0.66666675, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.8f1f1ep126F}.
      * <pre>
      * <font style='background-color: #8F8FC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F8FC7; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9782,10 +9792,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8F8FC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F8FC7; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_7C = new SColor(0x8F8FC7, "Aurora 7C");
+    public static final SColor AURORA_TWILIGHT_CLOUD = new SColor(0x8F8FC7, "Aurora Twilight Cloud");
 
     /**
-     * This color constant "Aurora 7D" has RGB code {@code 0xABABE3}, red 0.67058825, green 0.67058825, blue 0.8901961, alpha 1, hue 0.66666675, saturation 0.24669603, and value 0.8901961.
+     * This color constant "Aurora Smog" has RGB code {@code 0xABABE3}, red 0.67058825, green 0.67058825, blue 0.8901961, alpha 1, hue 0.66666675, saturation 0.24669603, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.c75756p126F}.
      * <pre>
      * <font style='background-color: #ABABE3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABABE3; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9793,10 +9803,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #ABABE3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ABABE3; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_7D = new SColor(0xABABE3, "Aurora 7D");
+    public static final SColor AURORA_SMOG = new SColor(0xABABE3, "Aurora Smog");
 
     /**
-     * This color constant "Aurora 7E" has RGB code {@code 0xD0DAF8}, red 0.8156863, green 0.85490197, blue 0.972549, alpha 1, hue 0.625, saturation 0.16129032, and value 0.972549.
+     * This color constant "Aurora Tropic Mist" has RGB code {@code 0xD0DAF8}, red 0.8156863, green 0.85490197, blue 0.972549, alpha 1, hue 0.625, saturation 0.16129032, and value 0.972549.
      * It can be represented as a packed float with the constant {@code -0x1.f1b5ap126F}.
      * <pre>
      * <font style='background-color: #D0DAF8;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D0DAF8; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9804,10 +9814,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #D0DAF8;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D0DAF8; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_7E = new SColor(0xD0DAF8, "Aurora 7E");
+    public static final SColor AURORA_TROPIC_MIST = new SColor(0xD0DAF8, "Aurora Tropic Mist");
 
     /**
-     * This color constant "Aurora 7F" has RGB code {@code 0xE3E3FF}, red 0.8901961, green 0.8901961, blue 1.0, alpha 1, hue 0.66666675, saturation 0.109803915, and value 1.0.
+     * This color constant "Aurora Feather Down" has RGB code {@code 0xE3E3FF}, red 0.8901961, green 0.8901961, blue 1.0, alpha 1, hue 0.66666675, saturation 0.109803915, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ffc7c6p126F}.
      * <pre>
      * <font style='background-color: #E3E3FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3E3FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9815,10 +9825,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E3E3FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3E3FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_7F = new SColor(0xE3E3FF, "Aurora 7F");
+    public static final SColor AURORA_FEATHER_DOWN = new SColor(0xE3E3FF, "Aurora Feather Down");
 
     /**
-     * This color constant "Aurora 80" has RGB code {@code 0xAB8FC7}, red 0.67058825, green 0.56078434, blue 0.78039217, alpha 1, hue 0.75000024, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Mild Violet" has RGB code {@code 0xAB8FC7}, red 0.67058825, green 0.56078434, blue 0.78039217, alpha 1, hue 0.75000024, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.8f1f56p126F}.
      * <pre>
      * <font style='background-color: #AB8FC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB8FC7; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9826,10 +9836,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #AB8FC7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB8FC7; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_80 = new SColor(0xAB8FC7, "Aurora 80");
+    public static final SColor AURORA_MILD_VIOLET = new SColor(0xAB8FC7, "Aurora Mild Violet");
 
     /**
-     * This color constant "Aurora 81" has RGB code {@code 0x8F57C7}, red 0.56078434, green 0.34117648, blue 0.78039217, alpha 1, hue 0.75000024, saturation 0.56281406, and value 0.78039217.
+     * This color constant "Aurora Violet Cushions" has RGB code {@code 0x8F57C7}, red 0.56078434, green 0.34117648, blue 0.78039217, alpha 1, hue 0.75000024, saturation 0.56281406, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.8eaf1ep126F}.
      * <pre>
      * <font style='background-color: #8F57C7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F57C7; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9837,10 +9847,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8F57C7;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F57C7; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_81 = new SColor(0x8F57C7, "Aurora 81");
+    public static final SColor AURORA_VIOLET_CUSHIONS = new SColor(0x8F57C7, "Aurora Violet Cushions");
 
     /**
-     * This color constant "Aurora 82" has RGB code {@code 0x73578F}, red 0.4509804, green 0.34117648, blue 0.56078434, alpha 1, hue 0.75000024, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Dull Violet" has RGB code {@code 0x73578F}, red 0.4509804, green 0.34117648, blue 0.56078434, alpha 1, hue 0.75000024, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.1eaee6p126F}.
      * <pre>
      * <font style='background-color: #73578F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73578F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9848,10 +9858,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #73578F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73578F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_82 = new SColor(0x73578F, "Aurora 82");
+    public static final SColor AURORA_DULL_VIOLET = new SColor(0x73578F, "Aurora Dull Violet");
 
     /**
-     * This color constant "Aurora 83" has RGB code {@code 0x573B73}, red 0.34117648, green 0.23137255, blue 0.4509804, alpha 1, hue 0.75000024, saturation 0.48695654, and value 0.4509804.
+     * This color constant "Aurora Royal Violet" has RGB code {@code 0x573B73}, red 0.34117648, green 0.23137255, blue 0.4509804, alpha 1, hue 0.75000024, saturation 0.48695654, and value 0.4509804.
      * It can be represented as a packed float with the constant {@code -0x1.e676aep125F}.
      * <pre>
      * <font style='background-color: #573B73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #573B73; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9859,10 +9869,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #573B73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #573B73; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_83 = new SColor(0x573B73, "Aurora 83");
+    public static final SColor AURORA_ROYAL_VIOLET = new SColor(0x573B73, "Aurora Royal Violet");
 
     /**
-     * This color constant "Aurora 84" has RGB code {@code 0x3C233C}, red 0.23529412, green 0.13725491, blue 0.23529412, alpha 1, hue 0.8333333, saturation 0.41666663, and value 0.23529412.
+     * This color constant "Aurora Eminence" has RGB code {@code 0x3C233C}, red 0.23529412, green 0.13725491, blue 0.23529412, alpha 1, hue 0.8333333, saturation 0.41666663, and value 0.23529412.
      * It can be represented as a packed float with the constant {@code -0x1.784678p125F}.
      * <pre>
      * <font style='background-color: #3C233C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3C233C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9870,10 +9880,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3C233C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3C233C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_84 = new SColor(0x3C233C, "Aurora 84");
+    public static final SColor AURORA_EMINENCE = new SColor(0x3C233C, "Aurora Eminence");
 
     /**
-     * This color constant "Aurora 85" has RGB code {@code 0x463246}, red 0.27450982, green 0.19607843, blue 0.27450982, alpha 1, hue 0.8333333, saturation 0.2857143, and value 0.27450982.
+     * This color constant "Aurora Prune" has RGB code {@code 0x463246}, red 0.27450982, green 0.19607843, blue 0.27450982, alpha 1, hue 0.8333333, saturation 0.2857143, and value 0.27450982.
      * It can be represented as a packed float with the constant {@code -0x1.8c648cp125F}.
      * <pre>
      * <font style='background-color: #463246;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #463246; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9881,10 +9891,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #463246;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #463246; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_85 = new SColor(0x463246, "Aurora 85");
+    public static final SColor AURORA_PRUNE = new SColor(0x463246, "Aurora Prune");
 
     /**
-     * This color constant "Aurora 86" has RGB code {@code 0x724072}, red 0.44705883, green 0.2509804, blue 0.44705883, alpha 1, hue 0.8333333, saturation 0.43859646, and value 0.44705883.
+     * This color constant "Aurora Dusty Grape" has RGB code {@code 0x724072}, red 0.44705883, green 0.2509804, blue 0.44705883, alpha 1, hue 0.8333333, saturation 0.43859646, and value 0.44705883.
      * It can be represented as a packed float with the constant {@code -0x1.e480e4p125F}.
      * <pre>
      * <font style='background-color: #724072;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #724072; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9892,10 +9902,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #724072;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #724072; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_86 = new SColor(0x724072, "Aurora 86");
+    public static final SColor AURORA_DUSTY_GRAPE = new SColor(0x724072, "Aurora Dusty Grape");
 
     /**
-     * This color constant "Aurora 87" has RGB code {@code 0x8F578F}, red 0.56078434, green 0.34117648, blue 0.56078434, alpha 1, hue 0.8333334, saturation 0.39160842, and value 0.56078434.
+     * This color constant "Aurora Pink Violet" has RGB code {@code 0x8F578F}, red 0.56078434, green 0.34117648, blue 0.56078434, alpha 1, hue 0.8333334, saturation 0.39160842, and value 0.56078434.
      * It can be represented as a packed float with the constant {@code -0x1.1eaf1ep126F}.
      * <pre>
      * <font style='background-color: #8F578F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F578F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9903,10 +9913,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8F578F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8F578F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_87 = new SColor(0x8F578F, "Aurora 87");
+    public static final SColor AURORA_PINK_VIOLET = new SColor(0x8F578F, "Aurora Pink Violet");
 
     /**
-     * This color constant "Aurora 88" has RGB code {@code 0xAB57AB}, red 0.67058825, green 0.34117648, blue 0.67058825, alpha 1, hue 0.8333334, saturation 0.49122807, and value 0.67058825.
+     * This color constant "Aurora Ripe Plum" has RGB code {@code 0xAB57AB}, red 0.67058825, green 0.34117648, blue 0.67058825, alpha 1, hue 0.8333334, saturation 0.49122807, and value 0.67058825.
      * It can be represented as a packed float with the constant {@code -0x1.56af56p126F}.
      * <pre>
      * <font style='background-color: #AB57AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB57AB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9914,10 +9924,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #AB57AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB57AB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_88 = new SColor(0xAB57AB, "Aurora 88");
+    public static final SColor AURORA_RIPE_PLUM = new SColor(0xAB57AB, "Aurora Ripe Plum");
 
     /**
-     * This color constant "Aurora 89" has RGB code {@code 0xAB73AB}, red 0.67058825, green 0.4509804, blue 0.67058825, alpha 1, hue 0.8333334, saturation 0.32748538, and value 0.67058825.
+     * This color constant "Aurora Mauve" has RGB code {@code 0xAB73AB}, red 0.67058825, green 0.4509804, blue 0.67058825, alpha 1, hue 0.8333334, saturation 0.32748538, and value 0.67058825.
      * It can be represented as a packed float with the constant {@code -0x1.56e756p126F}.
      * <pre>
      * <font style='background-color: #AB73AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB73AB; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9925,10 +9935,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #AB73AB;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AB73AB; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_89 = new SColor(0xAB73AB, "Aurora 89");
+    public static final SColor AURORA_MAUVE = new SColor(0xAB73AB, "Aurora Mauve");
 
     /**
-     * This color constant "Aurora 8A" has RGB code {@code 0xEBACE1}, red 0.92156863, green 0.6745098, blue 0.88235295, alpha 1, hue 0.85978836, saturation 0.2680851, and value 0.92156863.
+     * This color constant "Aurora Ham" has RGB code {@code 0xEBACE1}, red 0.92156863, green 0.6745098, blue 0.88235295, alpha 1, hue 0.85978836, saturation 0.2680851, and value 0.92156863.
      * It can be represented as a packed float with the constant {@code -0x1.c359d6p126F}.
      * <pre>
      * <font style='background-color: #EBACE1;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EBACE1; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9936,10 +9946,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #EBACE1;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #EBACE1; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_8A = new SColor(0xEBACE1, "Aurora 8A");
+    public static final SColor AURORA_HAM = new SColor(0xEBACE1, "Aurora Ham");
 
     /**
-     * This color constant "Aurora 8B" has RGB code {@code 0xFFDCF5}, red 1.0, green 0.8627451, blue 0.9607843, alpha 1, hue 0.8809524, saturation 0.1372549, and value 1.0.
+     * This color constant "Aurora Cotton Candy" has RGB code {@code 0xFFDCF5}, red 1.0, green 0.8627451, blue 0.9607843, alpha 1, hue 0.8809524, saturation 0.1372549, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ebb9fep126F}.
      * <pre>
      * <font style='background-color: #FFDCF5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFDCF5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9947,10 +9957,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFDCF5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFDCF5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_8B = new SColor(0xFFDCF5, "Aurora 8B");
+    public static final SColor AURORA_COTTON_CANDY = new SColor(0xFFDCF5, "Aurora Cotton Candy");
 
     /**
-     * This color constant "Aurora 8C" has RGB code {@code 0xE3C7E3}, red 0.8901961, green 0.78039217, blue 0.8901961, alpha 1, hue 0.8333333, saturation 0.12334801, and value 0.8901961.
+     * This color constant "Aurora Silver Pink" has RGB code {@code 0xE3C7E3}, red 0.8901961, green 0.78039217, blue 0.8901961, alpha 1, hue 0.8333333, saturation 0.12334801, and value 0.8901961.
      * It can be represented as a packed float with the constant {@code -0x1.c78fc6p126F}.
      * <pre>
      * <font style='background-color: #E3C7E3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3C7E3; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9958,10 +9968,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E3C7E3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E3C7E3; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_8C = new SColor(0xE3C7E3, "Aurora 8C");
+    public static final SColor AURORA_SILVER_PINK = new SColor(0xE3C7E3, "Aurora Silver Pink");
 
     /**
-     * This color constant "Aurora 8D" has RGB code {@code 0xE1B9D2}, red 0.88235295, green 0.7254902, blue 0.8235294, alpha 1, hue 0.8958333, saturation 0.17777777, and value 0.88235295.
+     * This color constant "Aurora Tea Rose" has RGB code {@code 0xE1B9D2}, red 0.88235295, green 0.7254902, blue 0.8235294, alpha 1, hue 0.8958333, saturation 0.17777777, and value 0.88235295.
      * It can be represented as a packed float with the constant {@code -0x1.a573c2p126F}.
      * <pre>
      * <font style='background-color: #E1B9D2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E1B9D2; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9969,10 +9979,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E1B9D2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E1B9D2; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_8D = new SColor(0xE1B9D2, "Aurora 8D");
+    public static final SColor AURORA_TEA_ROSE = new SColor(0xE1B9D2, "Aurora Tea Rose");
 
     /**
-     * This color constant "Aurora 8E" has RGB code {@code 0xD7A0BE}, red 0.84313726, green 0.627451, blue 0.74509805, alpha 1, hue 0.9090908, saturation 0.25581393, and value 0.84313726.
+     * This color constant "Aurora Old Rose" has RGB code {@code 0xD7A0BE}, red 0.84313726, green 0.627451, blue 0.74509805, alpha 1, hue 0.9090908, saturation 0.25581393, and value 0.84313726.
      * It can be represented as a packed float with the constant {@code -0x1.7d41aep126F}.
      * <pre>
      * <font style='background-color: #D7A0BE;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D7A0BE; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9980,10 +9990,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #D7A0BE;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D7A0BE; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_8E = new SColor(0xD7A0BE, "Aurora 8E");
+    public static final SColor AURORA_OLD_ROSE = new SColor(0xD7A0BE, "Aurora Old Rose");
 
     /**
-     * This color constant "Aurora 8F" has RGB code {@code 0xC78FB9}, red 0.78039217, green 0.56078434, blue 0.7254902, alpha 1, hue 0.87500006, saturation 0.28140703, and value 0.78039217.
+     * This color constant "Aurora Dusty Pink" has RGB code {@code 0xC78FB9}, red 0.78039217, green 0.56078434, blue 0.7254902, alpha 1, hue 0.87500006, saturation 0.28140703, and value 0.78039217.
      * It can be represented as a packed float with the constant {@code -0x1.731f8ep126F}.
      * <pre>
      * <font style='background-color: #C78FB9;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C78FB9; color: #000000'>&nbsp;@&nbsp;</font>
@@ -9991,10 +10001,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C78FB9;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C78FB9; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_8F = new SColor(0xC78FB9, "Aurora 8F");
+    public static final SColor AURORA_DUSTY_PINK = new SColor(0xC78FB9, "Aurora Dusty Pink");
 
     /**
-     * This color constant "Aurora 90" has RGB code {@code 0xC87DA0}, red 0.78431374, green 0.49019608, blue 0.627451, alpha 1, hue 0.92222226, saturation 0.375, and value 0.78431374.
+     * This color constant "Aurora Roseate Spoonbill" has RGB code {@code 0xC87DA0}, red 0.78431374, green 0.49019608, blue 0.627451, alpha 1, hue 0.92222226, saturation 0.375, and value 0.78431374.
      * It can be represented as a packed float with the constant {@code -0x1.40fb9p126F}.
      * <pre>
      * <font style='background-color: #C87DA0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C87DA0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10002,10 +10012,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C87DA0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C87DA0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_90 = new SColor(0xC87DA0, "Aurora 90");
+    public static final SColor AURORA_ROSEATE_SPOONBILL = new SColor(0xC87DA0, "Aurora Roseate Spoonbill");
 
     /**
-     * This color constant "Aurora 91" has RGB code {@code 0xC35A91}, red 0.7647059, green 0.3529412, blue 0.5686275, alpha 1, hue 0.9126983, saturation 0.5384615, and value 0.7647059.
+     * This color constant "Aurora Thulian Pink" has RGB code {@code 0xC35A91}, red 0.7647059, green 0.3529412, blue 0.5686275, alpha 1, hue 0.9126983, saturation 0.5384615, and value 0.7647059.
      * It can be represented as a packed float with the constant {@code -0x1.22b586p126F}.
      * <pre>
      * <font style='background-color: #C35A91;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C35A91; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10013,10 +10023,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C35A91;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C35A91; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_91 = new SColor(0xC35A91, "Aurora 91");
+    public static final SColor AURORA_THULIAN_PINK = new SColor(0xC35A91, "Aurora Thulian Pink");
 
     /**
-     * This color constant "Aurora 92" has RGB code {@code 0x4B2837}, red 0.29411766, green 0.15686275, blue 0.21568628, alpha 1, hue 0.92857146, saturation 0.46666667, and value 0.29411766.
+     * This color constant "Aurora Brown Velvet" has RGB code {@code 0x4B2837}, red 0.29411766, green 0.15686275, blue 0.21568628, alpha 1, hue 0.92857146, saturation 0.46666667, and value 0.29411766.
      * It can be represented as a packed float with the constant {@code -0x1.6e5096p125F}.
      * <pre>
      * <font style='background-color: #4B2837;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B2837; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10024,10 +10034,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #4B2837;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B2837; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_92 = new SColor(0x4B2837, "Aurora 92");
+    public static final SColor AURORA_BROWN_VELVET = new SColor(0x4B2837, "Aurora Brown Velvet");
 
     /**
-     * This color constant "Aurora 93" has RGB code {@code 0x321623}, red 0.19607843, green 0.08627451, blue 0.13725491, alpha 1, hue 0.9226189, saturation 0.56, and value 0.19607843.
+     * This color constant "Aurora Nightshade" has RGB code {@code 0x321623}, red 0.19607843, green 0.08627451, blue 0.13725491, alpha 1, hue 0.9226189, saturation 0.56, and value 0.19607843.
      * It can be represented as a packed float with the constant {@code -0x1.462c64p125F}.
      * <pre>
      * <font style='background-color: #321623;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #321623; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10035,10 +10045,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #321623;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #321623; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_93 = new SColor(0x321623, "Aurora 93");
+    public static final SColor AURORA_NIGHTSHADE = new SColor(0x321623, "Aurora Nightshade");
 
     /**
-     * This color constant "Aurora 94" has RGB code {@code 0x280A1E}, red 0.15686275, green 0.039215688, blue 0.11764706, alpha 1, hue 0.88888896, saturation 0.75, and value 0.15686275.
+     * This color constant "Aurora Scribe Ink" has RGB code {@code 0x280A1E}, red 0.15686275, green 0.039215688, blue 0.11764706, alpha 1, hue 0.88888896, saturation 0.75, and value 0.15686275.
      * It can be represented as a packed float with the constant {@code -0x1.3c145p125F}.
      * <pre>
      * <font style='background-color: #280A1E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #280A1E; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10046,10 +10056,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #280A1E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #280A1E; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_94 = new SColor(0x280A1E, "Aurora 94");
+    public static final SColor AURORA_SCRIBE_INK = new SColor(0x280A1E, "Aurora Scribe Ink");
 
     /**
-     * This color constant "Aurora 95" has RGB code {@code 0x401811}, red 0.2509804, green 0.09411765, blue 0.06666667, alpha 1, hue 0.024822712, saturation 0.73437506, and value 0.2509804.
+     * This color constant "Aurora Varnish" has RGB code {@code 0x401811}, red 0.2509804, green 0.09411765, blue 0.06666667, alpha 1, hue 0.024822712, saturation 0.73437506, and value 0.2509804.
      * It can be represented as a packed float with the constant {@code -0x1.22308p125F}.
      * <pre>
      * <font style='background-color: #401811;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #401811; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10057,10 +10067,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #401811;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #401811; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_95 = new SColor(0x401811, "Aurora 95");
+    public static final SColor AURORA_VARNISH = new SColor(0x401811, "Aurora Varnish");
 
     /**
-     * This color constant "Aurora 96" has RGB code {@code 0x621800}, red 0.38431373, green 0.09411765, blue 0.0, alpha 1, hue 0.040816426, saturation 1.0, and value 0.38431373.
+     * This color constant "Aurora Cedar Wood" has RGB code {@code 0x621800}, red 0.38431373, green 0.09411765, blue 0.0, alpha 1, hue 0.040816426, saturation 1.0, and value 0.38431373.
      * It can be represented as a packed float with the constant {@code -0x1.0030c4p125F}.
      * <pre>
      * <font style='background-color: #621800;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #621800; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10068,10 +10078,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #621800;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #621800; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_96 = new SColor(0x621800, "Aurora 96");
+    public static final SColor AURORA_CEDAR_WOOD = new SColor(0x621800, "Aurora Cedar Wood");
 
     /**
-     * This color constant "Aurora 97" has RGB code {@code 0xA5140A}, red 0.64705884, green 0.078431375, blue 0.039215688, alpha 1, hue 0.010752678, saturation 0.93939394, and value 0.64705884.
+     * This color constant "Aurora Hot Sauce " has RGB code {@code 0xA5140A}, red 0.64705884, green 0.078431375, blue 0.039215688, alpha 1, hue 0.010752678, saturation 0.93939394, and value 0.64705884.
      * It can be represented as a packed float with the constant {@code -0x1.14294ap125F}.
      * <pre>
      * <font style='background-color: #A5140A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A5140A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10079,10 +10089,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A5140A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A5140A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_97 = new SColor(0xA5140A, "Aurora 97");
+    public static final SColor AURORA_HOT_SAUCE_ = new SColor(0xA5140A, "Aurora Hot Sauce ");
 
     /**
-     * This color constant "Aurora 98" has RGB code {@code 0xDA2010}, red 0.85490197, green 0.1254902, blue 0.0627451, alpha 1, hue 0.013201356, saturation 0.9266055, and value 0.85490197.
+     * This color constant "Aurora Lurid Red" has RGB code {@code 0xDA2010}, red 0.85490197, green 0.1254902, blue 0.0627451, alpha 1, hue 0.013201356, saturation 0.9266055, and value 0.85490197.
      * It can be represented as a packed float with the constant {@code -0x1.2041b4p125F}.
      * <pre>
      * <font style='background-color: #DA2010;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA2010; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10090,10 +10100,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #DA2010;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA2010; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_98 = new SColor(0xDA2010, "Aurora 98");
+    public static final SColor AURORA_LURID_RED = new SColor(0xDA2010, "Aurora Lurid Red");
 
     /**
-     * This color constant "Aurora 99" has RGB code {@code 0xD5524A}, red 0.8352941, green 0.32156864, blue 0.2901961, alpha 1, hue 0.009592295, saturation 0.65258217, and value 0.8352941.
+     * This color constant "Aurora Brick" has RGB code {@code 0xD5524A}, red 0.8352941, green 0.32156864, blue 0.2901961, alpha 1, hue 0.009592295, saturation 0.65258217, and value 0.8352941.
      * It can be represented as a packed float with the constant {@code -0x1.94a5aap125F}.
      * <pre>
      * <font style='background-color: #D5524A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D5524A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10101,10 +10111,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #D5524A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D5524A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_99 = new SColor(0xD5524A, "Aurora 99");
+    public static final SColor AURORA_BRICK = new SColor(0xD5524A, "Aurora Brick");
 
     /**
-     * This color constant "Aurora 9A" has RGB code {@code 0xFF3C0A}, red 1.0, green 0.23529412, blue 0.039215688, alpha 1, hue 0.03401375, saturation 0.9607843, and value 1.0.
+     * This color constant "Aurora Fusion Red" has RGB code {@code 0xFF3C0A}, red 1.0, green 0.23529412, blue 0.039215688, alpha 1, hue 0.03401375, saturation 0.9607843, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.1479fep125F}.
      * <pre>
      * <font style='background-color: #FF3C0A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF3C0A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10112,10 +10122,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF3C0A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF3C0A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_9A = new SColor(0xFF3C0A, "Aurora 9A");
+    public static final SColor AURORA_FUSION_RED = new SColor(0xFF3C0A, "Aurora Fusion Red");
 
     /**
-     * This color constant "Aurora 9B" has RGB code {@code 0xF55A32}, red 0.9607843, green 0.3529412, blue 0.19607843, alpha 1, hue 0.03418815, saturation 0.7959184, and value 0.9607843.
+     * This color constant "Aurora Embers" has RGB code {@code 0xF55A32}, red 0.9607843, green 0.3529412, blue 0.19607843, alpha 1, hue 0.03418815, saturation 0.7959184, and value 0.9607843.
      * It can be represented as a packed float with the constant {@code -0x1.64b5eap125F}.
      * <pre>
      * <font style='background-color: #F55A32;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F55A32; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10123,10 +10133,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F55A32;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F55A32; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_9B = new SColor(0xF55A32, "Aurora 9B");
+    public static final SColor AURORA_EMBERS = new SColor(0xF55A32, "Aurora Embers");
 
     /**
-     * This color constant "Aurora 9C" has RGB code {@code 0xFF6262}, red 1.0, green 0.38431373, blue 0.38431373, alpha 1, hue 0.0, saturation 0.6156863, and value 1.0.
+     * This color constant "Aurora Salmon" has RGB code {@code 0xFF6262}, red 1.0, green 0.38431373, blue 0.38431373, alpha 1, hue 0.0, saturation 0.6156863, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.c4c5fep125F}.
      * <pre>
      * <font style='background-color: #FF6262;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF6262; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10134,10 +10144,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF6262;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF6262; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_9C = new SColor(0xFF6262, "Aurora 9C");
+    public static final SColor AURORA_SALMON = new SColor(0xFF6262, "Aurora Salmon");
 
     /**
-     * This color constant "Aurora 9D" has RGB code {@code 0xF6BD31}, red 0.9647059, green 0.7411765, blue 0.19215687, alpha 1, hue 0.11844337, saturation 0.800813, and value 0.9647059.
+     * This color constant "Aurora Taxicab Yellow" has RGB code {@code 0xF6BD31}, red 0.9647059, green 0.7411765, blue 0.19215687, alpha 1, hue 0.11844337, saturation 0.800813, and value 0.9647059.
      * It can be represented as a packed float with the constant {@code -0x1.637becp125F}.
      * <pre>
      * <font style='background-color: #F6BD31;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F6BD31; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10145,10 +10155,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F6BD31;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F6BD31; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_9D = new SColor(0xF6BD31, "Aurora 9D");
+    public static final SColor AURORA_TAXICAB_YELLOW = new SColor(0xF6BD31, "Aurora Taxicab Yellow");
 
     /**
-     * This color constant "Aurora 9E" has RGB code {@code 0xFFA53C}, red 1.0, green 0.64705884, blue 0.23529412, alpha 1, hue 0.089743614, saturation 0.7647059, and value 1.0.
+     * This color constant "Aurora Apricot" has RGB code {@code 0xFFA53C}, red 1.0, green 0.64705884, blue 0.23529412, alpha 1, hue 0.089743614, saturation 0.7647059, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.794bfep125F}.
      * <pre>
      * <font style='background-color: #FFA53C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA53C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10156,10 +10166,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFA53C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFA53C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_9E = new SColor(0xFFA53C, "Aurora 9E");
+    public static final SColor AURORA_APRICOT = new SColor(0xFFA53C, "Aurora Apricot");
 
     /**
-     * This color constant "Aurora 9F" has RGB code {@code 0xD79B0F}, red 0.84313726, green 0.60784316, blue 0.05882353, alpha 1, hue 0.116666794, saturation 0.9302326, and value 0.84313726.
+     * This color constant "Aurora Burnt Yellow" has RGB code {@code 0xD79B0F}, red 0.84313726, green 0.60784316, blue 0.05882353, alpha 1, hue 0.116666794, saturation 0.9302326, and value 0.84313726.
      * It can be represented as a packed float with the constant {@code -0x1.1f37aep125F}.
      * <pre>
      * <font style='background-color: #D79B0F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D79B0F; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10167,10 +10177,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #D79B0F;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D79B0F; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_9F = new SColor(0xD79B0F, "Aurora 9F");
+    public static final SColor AURORA_BURNT_YELLOW = new SColor(0xD79B0F, "Aurora Burnt Yellow");
 
     /**
-     * This color constant "Aurora A0" has RGB code {@code 0xDA6E0A}, red 0.85490197, green 0.43137255, blue 0.039215688, alpha 1, hue 0.08012831, saturation 0.95412844, and value 0.85490197.
+     * This color constant "Aurora Dry Pepper" has RGB code {@code 0xDA6E0A}, red 0.85490197, green 0.43137255, blue 0.039215688, alpha 1, hue 0.08012831, saturation 0.95412844, and value 0.85490197.
      * It can be represented as a packed float with the constant {@code -0x1.14ddb4p125F}.
      * <pre>
      * <font style='background-color: #DA6E0A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA6E0A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10178,10 +10188,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #DA6E0A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA6E0A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A0 = new SColor(0xDA6E0A, "Aurora A0");
+    public static final SColor AURORA_DRY_PEPPER = new SColor(0xDA6E0A, "Aurora Dry Pepper");
 
     /**
-     * This color constant "Aurora A1" has RGB code {@code 0xB45A00}, red 0.7058824, green 0.3529412, blue 0.0, alpha 1, hue 0.083333254, saturation 1.0, and value 0.7058824.
+     * This color constant "Aurora Redwood" has RGB code {@code 0xB45A00}, red 0.7058824, green 0.3529412, blue 0.0, alpha 1, hue 0.083333254, saturation 1.0, and value 0.7058824.
      * It can be represented as a packed float with the constant {@code -0x1.00b568p125F}.
      * <pre>
      * <font style='background-color: #B45A00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B45A00; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10189,10 +10199,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #B45A00;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B45A00; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A1 = new SColor(0xB45A00, "Aurora A1");
+    public static final SColor AURORA_REDWOOD = new SColor(0xB45A00, "Aurora Redwood");
 
     /**
-     * This color constant "Aurora A2" has RGB code {@code 0xA04B05}, red 0.627451, green 0.29411766, blue 0.019607844, alpha 1, hue 0.075268745, saturation 0.96875, and value 0.627451.
+     * This color constant "Aurora Koa" has RGB code {@code 0xA04B05}, red 0.627451, green 0.29411766, blue 0.019607844, alpha 1, hue 0.075268745, saturation 0.96875, and value 0.627451.
      * It can be represented as a packed float with the constant {@code -0x1.0a974p125F}.
      * <pre>
      * <font style='background-color: #A04B05;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A04B05; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10200,10 +10210,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A04B05;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A04B05; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A2 = new SColor(0xA04B05, "Aurora A2");
+    public static final SColor AURORA_KOA = new SColor(0xA04B05, "Aurora Koa");
 
     /**
-     * This color constant "Aurora A3" has RGB code {@code 0x5F3214}, red 0.37254903, green 0.19607843, blue 0.078431375, alpha 1, hue 0.0666666, saturation 0.7894737, and value 0.37254903.
+     * This color constant "Aurora Ochre" has RGB code {@code 0x5F3214}, red 0.37254903, green 0.19607843, blue 0.078431375, alpha 1, hue 0.0666666, saturation 0.7894737, and value 0.37254903.
      * It can be represented as a packed float with the constant {@code -0x1.2864bep125F}.
      * <pre>
      * <font style='background-color: #5F3214;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5F3214; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10211,10 +10221,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #5F3214;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5F3214; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A3 = new SColor(0x5F3214, "Aurora A3");
+    public static final SColor AURORA_OCHRE = new SColor(0x5F3214, "Aurora Ochre");
 
     /**
-     * This color constant "Aurora A4" has RGB code {@code 0x53500A}, red 0.3254902, green 0.3137255, blue 0.039215688, alpha 1, hue 0.15981734, saturation 0.8795181, and value 0.3254902.
+     * This color constant "Aurora Dull Green" has RGB code {@code 0x53500A}, red 0.3254902, green 0.3137255, blue 0.039215688, alpha 1, hue 0.15981734, saturation 0.8795181, and value 0.3254902.
      * It can be represented as a packed float with the constant {@code -0x1.14a0a6p125F}.
      * <pre>
      * <font style='background-color: #53500A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #53500A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10222,10 +10232,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #53500A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #53500A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A4 = new SColor(0x53500A, "Aurora A4");
+    public static final SColor AURORA_DULL_GREEN = new SColor(0x53500A, "Aurora Dull Green");
 
     /**
-     * This color constant "Aurora A5" has RGB code {@code 0x626200}, red 0.38431373, green 0.38431373, blue 0.0, alpha 1, hue 0.16666675, saturation 1.0, and value 0.38431373.
+     * This color constant "Aurora Army Green" has RGB code {@code 0x626200}, red 0.38431373, green 0.38431373, blue 0.0, alpha 1, hue 0.16666675, saturation 1.0, and value 0.38431373.
      * It can be represented as a packed float with the constant {@code -0x1.00c4c4p125F}.
      * <pre>
      * <font style='background-color: #626200;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #626200; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10233,10 +10243,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #626200;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #626200; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A5 = new SColor(0x626200, "Aurora A5");
+    public static final SColor AURORA_ARMY_GREEN = new SColor(0x626200, "Aurora Army Green");
 
     /**
-     * This color constant "Aurora A6" has RGB code {@code 0x8C805A}, red 0.54901963, green 0.5019608, blue 0.3529412, alpha 1, hue 0.12666655, saturation 0.35714287, and value 0.54901963.
+     * This color constant "Aurora Driftwood" has RGB code {@code 0x8C805A}, red 0.54901963, green 0.5019608, blue 0.3529412, alpha 1, hue 0.12666655, saturation 0.35714287, and value 0.54901963.
      * It can be represented as a packed float with the constant {@code -0x1.b50118p125F}.
      * <pre>
      * <font style='background-color: #8C805A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C805A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10244,10 +10254,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8C805A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C805A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A6 = new SColor(0x8C805A, "Aurora A6");
+    public static final SColor AURORA_DRIFTWOOD = new SColor(0x8C805A, "Aurora Driftwood");
 
     /**
-     * This color constant "Aurora A7" has RGB code {@code 0xAC9400}, red 0.6745098, green 0.5803922, blue 0.0, alpha 1, hue 0.1434108, saturation 1.0, and value 0.6745098.
+     * This color constant "Aurora Dry Brush" has RGB code {@code 0xAC9400}, red 0.6745098, green 0.5803922, blue 0.0, alpha 1, hue 0.1434108, saturation 1.0, and value 0.6745098.
      * It can be represented as a packed float with the constant {@code -0x1.012958p125F}.
      * <pre>
      * <font style='background-color: #AC9400;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AC9400; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10255,10 +10265,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #AC9400;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #AC9400; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A7 = new SColor(0xAC9400, "Aurora A7");
+    public static final SColor AURORA_DRY_BRUSH = new SColor(0xAC9400, "Aurora Dry Brush");
 
     /**
-     * This color constant "Aurora A8" has RGB code {@code 0xB1B10A}, red 0.69411767, green 0.69411767, blue 0.039215688, alpha 1, hue 0.16666663, saturation 0.94350284, and value 0.69411767.
+     * This color constant "Aurora Mush" has RGB code {@code 0xB1B10A}, red 0.69411767, green 0.69411767, blue 0.039215688, alpha 1, hue 0.16666663, saturation 0.94350284, and value 0.69411767.
      * It can be represented as a packed float with the constant {@code -0x1.156362p125F}.
      * <pre>
      * <font style='background-color: #B1B10A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B1B10A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10266,10 +10276,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #B1B10A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B1B10A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A8 = new SColor(0xB1B10A, "Aurora A8");
+    public static final SColor AURORA_MUSH = new SColor(0xB1B10A, "Aurora Mush");
 
     /**
-     * This color constant "Aurora A9" has RGB code {@code 0xE6D55A}, red 0.9019608, green 0.8352941, blue 0.3529412, alpha 1, hue 0.14642859, saturation 0.6086956, and value 0.9019608.
+     * This color constant "Aurora Banana Pudding" has RGB code {@code 0xE6D55A}, red 0.9019608, green 0.8352941, blue 0.3529412, alpha 1, hue 0.14642859, saturation 0.6086956, and value 0.9019608.
      * It can be represented as a packed float with the constant {@code -0x1.b5abccp125F}.
      * <pre>
      * <font style='background-color: #E6D55A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E6D55A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10277,10 +10287,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E6D55A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E6D55A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_A9 = new SColor(0xE6D55A, "Aurora A9");
+    public static final SColor AURORA_BANANA_PUDDING = new SColor(0xE6D55A, "Aurora Banana Pudding");
 
     /**
-     * This color constant "Aurora AA" has RGB code {@code 0xFFD510}, red 1.0, green 0.8352941, blue 0.0627451, alpha 1, hue 0.13737798, saturation 0.9372549, and value 1.0.
+     * This color constant "Aurora Saffron" has RGB code {@code 0xFFD510}, red 1.0, green 0.8352941, blue 0.0627451, alpha 1, hue 0.13737798, saturation 0.9372549, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.21abfep125F}.
      * <pre>
      * <font style='background-color: #FFD510;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFD510; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10288,10 +10298,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFD510;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFD510; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_AA = new SColor(0xFFD510, "Aurora AA");
+    public static final SColor AURORA_SAFFRON = new SColor(0xFFD510, "Aurora Saffron");
 
     /**
-     * This color constant "Aurora AB" has RGB code {@code 0xFFEA4A}, red 1.0, green 0.91764706, blue 0.2901961, alpha 1, hue 0.14732957, saturation 0.70980394, and value 1.0.
+     * This color constant "Aurora Pencil Yellow" has RGB code {@code 0xFFEA4A}, red 1.0, green 0.91764706, blue 0.2901961, alpha 1, hue 0.14732957, saturation 0.70980394, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.95d5fep125F}.
      * <pre>
      * <font style='background-color: #FFEA4A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFEA4A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10299,10 +10309,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FFEA4A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FFEA4A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_AB = new SColor(0xFFEA4A, "Aurora AB");
+    public static final SColor AURORA_PENCIL_YELLOW = new SColor(0xFFEA4A, "Aurora Pencil Yellow");
 
     /**
-     * This color constant "Aurora AC" has RGB code {@code 0xC8FF41}, red 0.78431374, green 1.0, blue 0.25490198, alpha 1, hue 0.21491218, saturation 0.745098, and value 1.0.
+     * This color constant "Aurora Chartreuse" has RGB code {@code 0xC8FF41}, red 0.78431374, green 1.0, blue 0.25490198, alpha 1, hue 0.21491218, saturation 0.745098, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.83ff9p125F}.
      * <pre>
      * <font style='background-color: #C8FF41;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C8FF41; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10310,10 +10320,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C8FF41;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C8FF41; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_AC = new SColor(0xC8FF41, "Aurora AC");
+    public static final SColor AURORA_CHARTREUSE = new SColor(0xC8FF41, "Aurora Chartreuse");
 
     /**
-     * This color constant "Aurora AD" has RGB code {@code 0x9BF046}, red 0.60784316, green 0.9411765, blue 0.27450982, alpha 1, hue 0.25, saturation 0.7083333, and value 0.9411765.
+     * This color constant "Aurora Absinthe" has RGB code {@code 0x9BF046}, red 0.60784316, green 0.9411765, blue 0.27450982, alpha 1, hue 0.25, saturation 0.7083333, and value 0.9411765.
      * It can be represented as a packed float with the constant {@code -0x1.8de136p125F}.
      * <pre>
      * <font style='background-color: #9BF046;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9BF046; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10321,10 +10331,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #9BF046;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9BF046; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_AD = new SColor(0x9BF046, "Aurora AD");
+    public static final SColor AURORA_ABSINTHE = new SColor(0x9BF046, "Aurora Absinthe");
 
     /**
-     * This color constant "Aurora AE" has RGB code {@code 0x96DC19}, red 0.5882353, green 0.8627451, blue 0.09803922, alpha 1, hue 0.22649574, saturation 0.8863636, and value 0.8627451.
+     * This color constant "Aurora Infection" has RGB code {@code 0x96DC19}, red 0.5882353, green 0.8627451, blue 0.09803922, alpha 1, hue 0.22649574, saturation 0.8863636, and value 0.8627451.
      * It can be represented as a packed float with the constant {@code -0x1.33b92cp125F}.
      * <pre>
      * <font style='background-color: #96DC19;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #96DC19; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10332,10 +10342,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #96DC19;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #96DC19; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_AE = new SColor(0x96DC19, "Aurora AE");
+    public static final SColor AURORA_INFECTION = new SColor(0x96DC19, "Aurora Infection");
 
     /**
-     * This color constant "Aurora AF" has RGB code {@code 0x73C805}, red 0.4509804, green 0.78431374, blue 0.019607844, alpha 1, hue 0.23931623, saturation 0.975, and value 0.78431374.
+     * This color constant "Aurora Frog Green" has RGB code {@code 0x73C805}, red 0.4509804, green 0.78431374, blue 0.019607844, alpha 1, hue 0.23931623, saturation 0.975, and value 0.78431374.
      * It can be represented as a packed float with the constant {@code -0x1.0b90e6p125F}.
      * <pre>
      * <font style='background-color: #73C805;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73C805; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10343,10 +10353,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #73C805;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #73C805; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_AF = new SColor(0x73C805, "Aurora AF");
+    public static final SColor AURORA_FROG_GREEN = new SColor(0x73C805, "Aurora Frog Green");
 
     /**
-     * This color constant "Aurora B0" has RGB code {@code 0x6AA805}, red 0.41568628, green 0.65882355, blue 0.019607844, alpha 1, hue 0.23006141, saturation 0.9702381, and value 0.65882355.
+     * This color constant "Aurora Avocado" has RGB code {@code 0x6AA805}, red 0.41568628, green 0.65882355, blue 0.019607844, alpha 1, hue 0.23006141, saturation 0.9702381, and value 0.65882355.
      * It can be represented as a packed float with the constant {@code -0x1.0b50d4p125F}.
      * <pre>
      * <font style='background-color: #6AA805;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6AA805; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10354,10 +10364,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #6AA805;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6AA805; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B0 = new SColor(0x6AA805, "Aurora B0");
+    public static final SColor AURORA_AVOCADO = new SColor(0x6AA805, "Aurora Avocado");
 
     /**
-     * This color constant "Aurora B1" has RGB code {@code 0x3C6E14}, red 0.23529412, green 0.43137255, blue 0.078431375, alpha 1, hue 0.25925934, saturation 0.8181818, and value 0.43137255.
+     * This color constant "Aurora Woodlands" has RGB code {@code 0x3C6E14}, red 0.23529412, green 0.43137255, blue 0.078431375, alpha 1, hue 0.25925934, saturation 0.8181818, and value 0.43137255.
      * It can be represented as a packed float with the constant {@code -0x1.28dc78p125F}.
      * <pre>
      * <font style='background-color: #3C6E14;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3C6E14; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10365,10 +10375,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3C6E14;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3C6E14; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B1 = new SColor(0x3C6E14, "Aurora B1");
+    public static final SColor AURORA_WOODLANDS = new SColor(0x3C6E14, "Aurora Woodlands");
 
     /**
-     * This color constant "Aurora B2" has RGB code {@code 0x283405}, red 0.15686275, green 0.20392157, blue 0.019607844, alpha 1, hue 0.20921993, saturation 0.90384614, and value 0.20392157.
+     * This color constant "Aurora Dark Pine" has RGB code {@code 0x283405}, red 0.15686275, green 0.20392157, blue 0.019607844, alpha 1, hue 0.20921993, saturation 0.90384614, and value 0.20392157.
      * It can be represented as a packed float with the constant {@code -0x1.0a685p125F}.
      * <pre>
      * <font style='background-color: #283405;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #283405; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10376,10 +10386,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #283405;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #283405; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B2 = new SColor(0x283405, "Aurora B2");
+    public static final SColor AURORA_DARK_PINE = new SColor(0x283405, "Aurora Dark Pine");
 
     /**
-     * This color constant "Aurora B3" has RGB code {@code 0x204608}, red 0.1254902, green 0.27450982, blue 0.03137255, alpha 1, hue 0.2688173, saturation 0.8857143, and value 0.27450982.
+     * This color constant "Aurora Moss Green" has RGB code {@code 0x204608}, red 0.1254902, green 0.27450982, blue 0.03137255, alpha 1, hue 0.2688173, saturation 0.8857143, and value 0.27450982.
      * It can be represented as a packed float with the constant {@code -0x1.108c4p125F}.
      * <pre>
      * <font style='background-color: #204608;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #204608; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10387,10 +10397,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #204608;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #204608; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B3 = new SColor(0x204608, "Aurora B3");
+    public static final SColor AURORA_MOSS_GREEN = new SColor(0x204608, "Aurora Moss Green");
 
     /**
-     * This color constant "Aurora B4" has RGB code {@code 0x0C5C0C}, red 0.047058824, green 0.36078432, blue 0.047058824, alpha 1, hue 0.33333337, saturation 0.86956525, and value 0.36078432.
+     * This color constant "Aurora Fern Green" has RGB code {@code 0x0C5C0C}, red 0.047058824, green 0.36078432, blue 0.047058824, alpha 1, hue 0.33333337, saturation 0.86956525, and value 0.36078432.
      * It can be represented as a packed float with the constant {@code -0x1.18b818p125F}.
      * <pre>
      * <font style='background-color: #0C5C0C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0C5C0C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10398,10 +10408,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0C5C0C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0C5C0C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B4 = new SColor(0x0C5C0C, "Aurora B4");
+    public static final SColor AURORA_FERN_GREEN = new SColor(0x0C5C0C, "Aurora Fern Green");
 
     /**
-     * This color constant "Aurora B5" has RGB code {@code 0x149605}, red 0.078431375, green 0.5882353, blue 0.019607844, alpha 1, hue 0.316092, saturation 0.9666667, and value 0.5882353.
+     * This color constant "Aurora Forest Glen" has RGB code {@code 0x149605}, red 0.078431375, green 0.5882353, blue 0.019607844, alpha 1, hue 0.316092, saturation 0.9666667, and value 0.5882353.
      * It can be represented as a packed float with the constant {@code -0x1.0b2c28p125F}.
      * <pre>
      * <font style='background-color: #149605;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #149605; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10409,10 +10419,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #149605;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #149605; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B5 = new SColor(0x149605, "Aurora B5");
+    public static final SColor AURORA_FOREST_GLEN = new SColor(0x149605, "Aurora Forest Glen");
 
     /**
-     * This color constant "Aurora B6" has RGB code {@code 0x0AD70A}, red 0.039215688, green 0.84313726, blue 0.039215688, alpha 1, hue 0.33333325, saturation 0.95348835, and value 0.84313726.
+     * This color constant "Aurora Malachite" has RGB code {@code 0x0AD70A}, red 0.039215688, green 0.84313726, blue 0.039215688, alpha 1, hue 0.33333325, saturation 0.95348835, and value 0.84313726.
      * It can be represented as a packed float with the constant {@code -0x1.15ae14p125F}.
      * <pre>
      * <font style='background-color: #0AD70A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0AD70A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10420,10 +10430,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0AD70A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0AD70A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B6 = new SColor(0x0AD70A, "Aurora B6");
+    public static final SColor AURORA_MALACHITE = new SColor(0x0AD70A, "Aurora Malachite");
 
     /**
-     * This color constant "Aurora B7" has RGB code {@code 0x14E60A}, red 0.078431375, green 0.9019608, blue 0.039215688, alpha 1, hue 0.3257575, saturation 0.95652175, and value 0.9019608.
+     * This color constant "Aurora Apple Green" has RGB code {@code 0x14E60A}, red 0.078431375, green 0.9019608, blue 0.039215688, alpha 1, hue 0.3257575, saturation 0.95652175, and value 0.9019608.
      * It can be represented as a packed float with the constant {@code -0x1.15cc28p125F}.
      * <pre>
      * <font style='background-color: #14E60A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #14E60A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10431,10 +10441,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #14E60A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #14E60A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B7 = new SColor(0x14E60A, "Aurora B7");
+    public static final SColor AURORA_APPLE_GREEN = new SColor(0x14E60A, "Aurora Apple Green");
 
     /**
-     * This color constant "Aurora B8" has RGB code {@code 0x7DFF73}, red 0.49019608, green 1.0, blue 0.4509804, alpha 1, hue 0.32142854, saturation 0.5490196, and value 1.0.
+     * This color constant "Aurora Celery" has RGB code {@code 0x7DFF73}, red 0.49019608, green 1.0, blue 0.4509804, alpha 1, hue 0.32142854, saturation 0.5490196, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.e7fefap125F}.
      * <pre>
      * <font style='background-color: #7DFF73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7DFF73; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10442,10 +10452,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7DFF73;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7DFF73; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B8 = new SColor(0x7DFF73, "Aurora B8");
+    public static final SColor AURORA_CELERY = new SColor(0x7DFF73, "Aurora Celery");
 
     /**
-     * This color constant "Aurora B9" has RGB code {@code 0x4BF05A}, red 0.29411766, green 0.9411765, blue 0.3529412, alpha 1, hue 0.34848487, saturation 0.6875, and value 0.9411765.
+     * This color constant "Aurora Mint Green" has RGB code {@code 0x4BF05A}, red 0.29411766, green 0.9411765, blue 0.3529412, alpha 1, hue 0.34848487, saturation 0.6875, and value 0.9411765.
      * It can be represented as a packed float with the constant {@code -0x1.b5e096p125F}.
      * <pre>
      * <font style='background-color: #4BF05A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4BF05A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10453,10 +10463,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #4BF05A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4BF05A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_B9 = new SColor(0x4BF05A, "Aurora B9");
+    public static final SColor AURORA_MINT_GREEN = new SColor(0x4BF05A, "Aurora Mint Green");
 
     /**
-     * This color constant "Aurora BA" has RGB code {@code 0x00C514}, red 0.0, green 0.77254903, blue 0.078431375, alpha 1, hue 0.35025382, saturation 1.0, and value 0.77254903.
+     * This color constant "Aurora Emerald" has RGB code {@code 0x00C514}, red 0.0, green 0.77254903, blue 0.078431375, alpha 1, hue 0.35025382, saturation 1.0, and value 0.77254903.
      * It can be represented as a packed float with the constant {@code -0x1.298ap125F}.
      * <pre>
      * <font style='background-color: #00C514;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00C514; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10464,10 +10474,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #00C514;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00C514; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_BA = new SColor(0x00C514, "Aurora BA");
+    public static final SColor AURORA_EMERALD = new SColor(0x00C514, "Aurora Emerald");
 
     /**
-     * This color constant "Aurora BB" has RGB code {@code 0x05B450}, red 0.019607844, green 0.7058824, blue 0.3137255, alpha 1, hue 0.4047619, saturation 0.9722222, and value 0.7058824.
+     * This color constant "Aurora Prase" has RGB code {@code 0x05B450}, red 0.019607844, green 0.7058824, blue 0.3137255, alpha 1, hue 0.4047619, saturation 0.9722222, and value 0.7058824.
      * It can be represented as a packed float with the constant {@code -0x1.a1680ap125F}.
      * <pre>
      * <font style='background-color: #05B450;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #05B450; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10475,10 +10485,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #05B450;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #05B450; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_BB = new SColor(0x05B450, "Aurora BB");
+    public static final SColor AURORA_PRASE = new SColor(0x05B450, "Aurora Prase");
 
     /**
-     * This color constant "Aurora BC" has RGB code {@code 0x1C8C4E}, red 0.10980392, green 0.54901963, blue 0.30588236, alpha 1, hue 0.4077381, saturation 0.8, and value 0.54901963.
+     * This color constant "Aurora Eucalyptus" has RGB code {@code 0x1C8C4E}, red 0.10980392, green 0.54901963, blue 0.30588236, alpha 1, hue 0.4077381, saturation 0.8, and value 0.54901963.
      * It can be represented as a packed float with the constant {@code -0x1.9d1838p125F}.
      * <pre>
      * <font style='background-color: #1C8C4E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1C8C4E; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10486,10 +10496,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #1C8C4E;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #1C8C4E; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_BC = new SColor(0x1C8C4E, "Aurora BC");
+    public static final SColor AURORA_EUCALYPTUS = new SColor(0x1C8C4E, "Aurora Eucalyptus");
 
     /**
-     * This color constant "Aurora BD" has RGB code {@code 0x123832}, red 0.07058824, green 0.21960784, blue 0.19607843, alpha 1, hue 0.4736842, saturation 0.6785714, and value 0.21960784.
+     * This color constant "Aurora Zucchini" has RGB code {@code 0x123832}, red 0.07058824, green 0.21960784, blue 0.19607843, alpha 1, hue 0.4736842, saturation 0.6785714, and value 0.21960784.
      * It can be represented as a packed float with the constant {@code -0x1.647024p125F}.
      * <pre>
      * <font style='background-color: #123832;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #123832; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10497,10 +10507,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #123832;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #123832; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_BD = new SColor(0x123832, "Aurora BD");
+    public static final SColor AURORA_ZUCCHINI = new SColor(0x123832, "Aurora Zucchini");
 
     /**
-     * This color constant "Aurora BE" has RGB code {@code 0x129880}, red 0.07058824, green 0.59607846, blue 0.5019608, alpha 1, hue 0.47014928, saturation 0.881579, and value 0.59607846.
+     * This color constant "Aurora Soft Teal" has RGB code {@code 0x129880}, red 0.07058824, green 0.59607846, blue 0.5019608, alpha 1, hue 0.47014928, saturation 0.881579, and value 0.59607846.
      * It can be represented as a packed float with the constant {@code -0x1.013024p126F}.
      * <pre>
      * <font style='background-color: #129880;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #129880; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10508,10 +10518,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #129880;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #129880; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_BE = new SColor(0x129880, "Aurora BE");
+    public static final SColor AURORA_SOFT_TEAL = new SColor(0x129880, "Aurora Soft Teal");
 
     /**
-     * This color constant "Aurora BF" has RGB code {@code 0x06C491}, red 0.023529412, green 0.76862746, blue 0.5686275, alpha 1, hue 0.45526314, saturation 0.96938777, and value 0.76862746.
+     * This color constant "Aurora Medium Teal" has RGB code {@code 0x06C491}, red 0.023529412, green 0.76862746, blue 0.5686275, alpha 1, hue 0.45526314, saturation 0.96938777, and value 0.76862746.
      * It can be represented as a packed float with the constant {@code -0x1.23880cp126F}.
      * <pre>
      * <font style='background-color: #06C491;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #06C491; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10519,10 +10529,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #06C491;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #06C491; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_BF = new SColor(0x06C491, "Aurora BF");
+    public static final SColor AURORA_MEDIUM_TEAL = new SColor(0x06C491, "Aurora Medium Teal");
 
     /**
-     * This color constant "Aurora C0" has RGB code {@code 0x00DE6A}, red 0.0, green 0.87058824, blue 0.41568628, alpha 1, hue 0.41291285, saturation 1.0, and value 0.87058824.
+     * This color constant "Aurora Spring Green" has RGB code {@code 0x00DE6A}, red 0.0, green 0.87058824, blue 0.41568628, alpha 1, hue 0.41291285, saturation 1.0, and value 0.87058824.
      * It can be represented as a packed float with the constant {@code -0x1.d5bcp125F}.
      * <pre>
      * <font style='background-color: #00DE6A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00DE6A; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10530,10 +10540,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #00DE6A;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00DE6A; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C0 = new SColor(0x00DE6A, "Aurora C0");
+    public static final SColor AURORA_SPRING_GREEN = new SColor(0x00DE6A, "Aurora Spring Green");
 
     /**
-     * This color constant "Aurora C1" has RGB code {@code 0x2DEBA8}, red 0.1764706, green 0.92156863, blue 0.65882355, alpha 1, hue 0.44122815, saturation 0.80851066, and value 0.92156863.
+     * This color constant "Aurora Turquoise" has RGB code {@code 0x2DEBA8}, red 0.1764706, green 0.92156863, blue 0.65882355, alpha 1, hue 0.44122815, saturation 0.80851066, and value 0.92156863.
      * It can be represented as a packed float with the constant {@code -0x1.51d65ap126F}.
      * <pre>
      * <font style='background-color: #2DEBA8;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2DEBA8; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10541,10 +10551,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #2DEBA8;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2DEBA8; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C1 = new SColor(0x2DEBA8, "Aurora C1");
+    public static final SColor AURORA_TURQUOISE = new SColor(0x2DEBA8, "Aurora Turquoise");
 
     /**
-     * This color constant "Aurora C2" has RGB code {@code 0x3CFEA5}, red 0.23529412, green 0.99607843, blue 0.64705884, alpha 1, hue 0.42353952, saturation 0.7637795, and value 0.99607843.
+     * This color constant "Aurora Seafoam" has RGB code {@code 0x3CFEA5}, red 0.23529412, green 0.99607843, blue 0.64705884, alpha 1, hue 0.42353952, saturation 0.7637795, and value 0.99607843.
      * It can be represented as a packed float with the constant {@code -0x1.4bfc78p126F}.
      * <pre>
      * <font style='background-color: #3CFEA5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3CFEA5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10552,10 +10562,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3CFEA5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3CFEA5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C2 = new SColor(0x3CFEA5, "Aurora C2");
+    public static final SColor AURORA_SEAFOAM = new SColor(0x3CFEA5, "Aurora Seafoam");
 
     /**
-     * This color constant "Aurora C3" has RGB code {@code 0x6AFFCD}, red 0.41568628, green 1.0, blue 0.8039216, alpha 1, hue 0.44407153, saturation 0.58431375, and value 1.0.
+     * This color constant "Aurora Variscite" has RGB code {@code 0x6AFFCD}, red 0.41568628, green 1.0, blue 0.8039216, alpha 1, hue 0.44407153, saturation 0.58431375, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.9bfed4p126F}.
      * <pre>
      * <font style='background-color: #6AFFCD;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6AFFCD; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10563,10 +10573,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #6AFFCD;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6AFFCD; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C3 = new SColor(0x6AFFCD, "Aurora C3");
+    public static final SColor AURORA_VARISCITE = new SColor(0x6AFFCD, "Aurora Variscite");
 
     /**
-     * This color constant "Aurora C4" has RGB code {@code 0x91EBFF}, red 0.5686275, green 0.92156863, blue 1.0, alpha 1, hue 0.530303, saturation 0.43137252, and value 1.0.
+     * This color constant "Aurora Refreshing Mist" has RGB code {@code 0x91EBFF}, red 0.5686275, green 0.92156863, blue 1.0, alpha 1, hue 0.530303, saturation 0.43137252, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ffd722p126F}.
      * <pre>
      * <font style='background-color: #91EBFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #91EBFF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10574,10 +10584,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #91EBFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #91EBFF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C4 = new SColor(0x91EBFF, "Aurora C4");
+    public static final SColor AURORA_REFRESHING_MIST = new SColor(0x91EBFF, "Aurora Refreshing Mist");
 
     /**
-     * This color constant "Aurora C5" has RGB code {@code 0x55E6FF}, red 0.33333334, green 0.9019608, blue 1.0, alpha 1, hue 0.52450967, saturation 0.6666666, and value 1.0.
+     * This color constant "Aurora Shining Sky" has RGB code {@code 0x55E6FF}, red 0.33333334, green 0.9019608, blue 1.0, alpha 1, hue 0.52450967, saturation 0.6666666, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ffccaap126F}.
      * <pre>
      * <font style='background-color: #55E6FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #55E6FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10585,10 +10595,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #55E6FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #55E6FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C5 = new SColor(0x55E6FF, "Aurora C5");
+    public static final SColor AURORA_SHINING_SKY = new SColor(0x55E6FF, "Aurora Shining Sky");
 
     /**
-     * This color constant "Aurora C6" has RGB code {@code 0x7DD7F0}, red 0.49019608, green 0.84313726, blue 0.9411765, alpha 1, hue 0.53623176, saturation 0.47916666, and value 0.9411765.
+     * This color constant "Aurora Steam" has RGB code {@code 0x7DD7F0}, red 0.49019608, green 0.84313726, blue 0.9411765, alpha 1, hue 0.53623176, saturation 0.47916666, and value 0.9411765.
      * It can be represented as a packed float with the constant {@code -0x1.e1aefap126F}.
      * <pre>
      * <font style='background-color: #7DD7F0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7DD7F0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10596,10 +10606,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7DD7F0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7DD7F0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C6 = new SColor(0x7DD7F0, "Aurora C6");
+    public static final SColor AURORA_STEAM = new SColor(0x7DD7F0, "Aurora Steam");
 
     /**
-     * This color constant "Aurora C7" has RGB code {@code 0x08DED5}, red 0.03137255, green 0.87058824, blue 0.8352941, alpha 1, hue 0.49299073, saturation 0.963964, and value 0.87058824.
+     * This color constant "Aurora Robin Egg Blue" has RGB code {@code 0x08DED5}, red 0.03137255, green 0.87058824, blue 0.8352941, alpha 1, hue 0.49299073, saturation 0.963964, and value 0.87058824.
      * It can be represented as a packed float with the constant {@code -0x1.abbc1p126F}.
      * <pre>
      * <font style='background-color: #08DED5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #08DED5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10607,10 +10617,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #08DED5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #08DED5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C7 = new SColor(0x08DED5, "Aurora C7");
+    public static final SColor AURORA_ROBIN_EGG_BLUE = new SColor(0x08DED5, "Aurora Robin Egg Blue");
 
     /**
-     * This color constant "Aurora C8" has RGB code {@code 0x109CDE}, red 0.0627451, green 0.6117647, blue 0.87058824, alpha 1, hue 0.55339813, saturation 0.9279279, and value 0.87058824.
+     * This color constant "Aurora Denim Blue" has RGB code {@code 0x109CDE}, red 0.0627451, green 0.6117647, blue 0.87058824, alpha 1, hue 0.55339813, saturation 0.9279279, and value 0.87058824.
      * It can be represented as a packed float with the constant {@code -0x1.bd382p126F}.
      * <pre>
      * <font style='background-color: #109CDE;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #109CDE; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10618,10 +10628,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #109CDE;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #109CDE; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C8 = new SColor(0x109CDE, "Aurora C8");
+    public static final SColor AURORA_DENIM_BLUE = new SColor(0x109CDE, "Aurora Denim Blue");
 
     /**
-     * This color constant "Aurora C9" has RGB code {@code 0x055A5C}, red 0.019607844, green 0.3529412, blue 0.36078432, alpha 1, hue 0.5038315, saturation 0.9456522, and value 0.36078432.
+     * This color constant "Aurora Deep Teal" has RGB code {@code 0x055A5C}, red 0.019607844, green 0.3529412, blue 0.36078432, alpha 1, hue 0.5038315, saturation 0.9456522, and value 0.36078432.
      * It can be represented as a packed float with the constant {@code -0x1.b8b40ap125F}.
      * <pre>
      * <font style='background-color: #055A5C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #055A5C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10629,10 +10639,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #055A5C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #055A5C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_C9 = new SColor(0x055A5C, "Aurora C9");
+    public static final SColor AURORA_DEEP_TEAL = new SColor(0x055A5C, "Aurora Deep Teal");
 
     /**
-     * This color constant "Aurora CA" has RGB code {@code 0x162C52}, red 0.08627451, green 0.17254902, blue 0.32156864, alpha 1, hue 0.60555565, saturation 0.73170733, and value 0.32156864.
+     * This color constant "Aurora Navy Blue" has RGB code {@code 0x162C52}, red 0.08627451, green 0.17254902, blue 0.32156864, alpha 1, hue 0.60555565, saturation 0.73170733, and value 0.32156864.
      * It can be represented as a packed float with the constant {@code -0x1.a4582cp125F}.
      * <pre>
      * <font style='background-color: #162C52;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #162C52; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10640,10 +10650,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #162C52;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #162C52; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_CA = new SColor(0x162C52, "Aurora CA");
+    public static final SColor AURORA_NAVY_BLUE = new SColor(0x162C52, "Aurora Navy Blue");
 
     /**
-     * This color constant "Aurora CB" has RGB code {@code 0x0F377D}, red 0.05882353, green 0.21568628, blue 0.49019608, alpha 1, hue 0.6060605, saturation 0.88, and value 0.49019608.
+     * This color constant "Aurora Blueberry" has RGB code {@code 0x0F377D}, red 0.05882353, green 0.21568628, blue 0.49019608, alpha 1, hue 0.6060605, saturation 0.88, and value 0.49019608.
      * It can be represented as a packed float with the constant {@code -0x1.fa6e1ep125F}.
      * <pre>
      * <font style='background-color: #0F377D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F377D; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10651,10 +10661,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0F377D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0F377D; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_CB = new SColor(0x0F377D, "Aurora CB");
+    public static final SColor AURORA_BLUEBERRY = new SColor(0x0F377D, "Aurora Blueberry");
 
     /**
-     * This color constant "Aurora CC" has RGB code {@code 0x004A9C}, red 0.0, green 0.2901961, blue 0.6117647, alpha 1, hue 0.587607, saturation 1.0, and value 0.6117647.
+     * This color constant "Aurora Prussian Blue" has RGB code {@code 0x004A9C}, red 0.0, green 0.2901961, blue 0.6117647, alpha 1, hue 0.587607, saturation 1.0, and value 0.6117647.
      * It can be represented as a packed float with the constant {@code -0x1.3894p126F}.
      * <pre>
      * <font style='background-color: #004A9C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #004A9C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10662,10 +10672,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #004A9C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #004A9C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_CC = new SColor(0x004A9C, "Aurora CC");
+    public static final SColor AURORA_PRUSSIAN_BLUE = new SColor(0x004A9C, "Aurora Prussian Blue");
 
     /**
-     * This color constant "Aurora CD" has RGB code {@code 0x326496}, red 0.19607843, green 0.39215687, blue 0.5882353, alpha 1, hue 0.5833334, saturation 0.6666667, and value 0.5882353.
+     * This color constant "Aurora Desert Rain" has RGB code {@code 0x326496}, red 0.19607843, green 0.39215687, blue 0.5882353, alpha 1, hue 0.5833334, saturation 0.6666667, and value 0.5882353.
      * It can be represented as a packed float with the constant {@code -0x1.2cc864p126F}.
      * <pre>
      * <font style='background-color: #326496;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #326496; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10673,10 +10683,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #326496;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #326496; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_CD = new SColor(0x326496, "Aurora CD");
+    public static final SColor AURORA_DESERT_RAIN = new SColor(0x326496, "Aurora Desert Rain");
 
     /**
-     * This color constant "Aurora CE" has RGB code {@code 0x0052F6}, red 0.0, green 0.32156864, blue 0.9647059, alpha 1, hue 0.61111116, saturation 1.0, and value 0.9647059.
+     * This color constant "Aurora Electric Blue" has RGB code {@code 0x0052F6}, red 0.0, green 0.32156864, blue 0.9647059, alpha 1, hue 0.61111116, saturation 1.0, and value 0.9647059.
      * It can be represented as a packed float with the constant {@code -0x1.eca4p126F}.
      * <pre>
      * <font style='background-color: #0052F6;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0052F6; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10684,10 +10694,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0052F6;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0052F6; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_CE = new SColor(0x0052F6, "Aurora CE");
+    public static final SColor AURORA_ELECTRIC_BLUE = new SColor(0x0052F6, "Aurora Electric Blue");
 
     /**
-     * This color constant "Aurora CF" has RGB code {@code 0x186ABD}, red 0.09411765, green 0.41568628, blue 0.7411765, alpha 1, hue 0.5838386, saturation 0.8730159, and value 0.7411765.
+     * This color constant "Aurora Hidden Blue" has RGB code {@code 0x186ABD}, red 0.09411765, green 0.41568628, blue 0.7411765, alpha 1, hue 0.5838386, saturation 0.8730159, and value 0.7411765.
      * It can be represented as a packed float with the constant {@code -0x1.7ad43p126F}.
      * <pre>
      * <font style='background-color: #186ABD;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #186ABD; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10695,10 +10705,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #186ABD;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #186ABD; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_CF = new SColor(0x186ABD, "Aurora CF");
+    public static final SColor AURORA_HIDDEN_BLUE = new SColor(0x186ABD, "Aurora Hidden Blue");
 
     /**
-     * This color constant "Aurora D0" has RGB code {@code 0x2378DC}, red 0.13725491, green 0.47058824, blue 0.8627451, alpha 1, hue 0.59009016, saturation 0.8409091, and value 0.8627451.
+     * This color constant "Aurora Dull Azure" has RGB code {@code 0x2378DC}, red 0.13725491, green 0.47058824, blue 0.8627451, alpha 1, hue 0.59009016, saturation 0.8409091, and value 0.8627451.
      * It can be represented as a packed float with the constant {@code -0x1.b8f046p126F}.
      * <pre>
      * <font style='background-color: #2378DC;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2378DC; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10706,10 +10716,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #2378DC;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #2378DC; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D0 = new SColor(0x2378DC, "Aurora D0");
+    public static final SColor AURORA_DULL_AZURE = new SColor(0x2378DC, "Aurora Dull Azure");
 
     /**
-     * This color constant "Aurora D1" has RGB code {@code 0x699DC3}, red 0.4117647, green 0.6156863, blue 0.7647059, alpha 1, hue 0.57037055, saturation 0.46153846, and value 0.7647059.
+     * This color constant "Aurora Ripped Denim" has RGB code {@code 0x699DC3}, red 0.4117647, green 0.6156863, blue 0.7647059, alpha 1, hue 0.57037055, saturation 0.46153846, and value 0.7647059.
      * It can be represented as a packed float with the constant {@code -0x1.873ad2p126F}.
      * <pre>
      * <font style='background-color: #699DC3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #699DC3; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10717,10 +10727,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #699DC3;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #699DC3; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D1 = new SColor(0x699DC3, "Aurora D1");
+    public static final SColor AURORA_RIPPED_DENIM = new SColor(0x699DC3, "Aurora Ripped Denim");
 
     /**
-     * This color constant "Aurora D2" has RGB code {@code 0x4AA4FF}, red 0.2901961, green 0.6431373, blue 1.0, alpha 1, hue 0.583794, saturation 0.70980394, and value 1.0.
+     * This color constant "Aurora Calm Sky" has RGB code {@code 0x4AA4FF}, red 0.2901961, green 0.6431373, blue 1.0, alpha 1, hue 0.583794, saturation 0.70980394, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff4894p126F}.
      * <pre>
      * <font style='background-color: #4AA4FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4AA4FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10728,10 +10738,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #4AA4FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4AA4FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D2 = new SColor(0x4AA4FF, "Aurora D2");
+    public static final SColor AURORA_CALM_SKY = new SColor(0x4AA4FF, "Aurora Calm Sky");
 
     /**
-     * This color constant "Aurora D3" has RGB code {@code 0x90B0FF}, red 0.5647059, green 0.6901961, blue 1.0, alpha 1, hue 0.6186187, saturation 0.4352941, and value 1.0.
+     * This color constant "Aurora Vapor" has RGB code {@code 0x90B0FF}, red 0.5647059, green 0.6901961, blue 1.0, alpha 1, hue 0.6186187, saturation 0.4352941, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff612p126F}.
      * <pre>
      * <font style='background-color: #90B0FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #90B0FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10739,10 +10749,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #90B0FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #90B0FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D3 = new SColor(0x90B0FF, "Aurora D3");
+    public static final SColor AURORA_VAPOR = new SColor(0x90B0FF, "Aurora Vapor");
 
     /**
-     * This color constant "Aurora D4" has RGB code {@code 0x5AC5FF}, red 0.3529412, green 0.77254903, blue 1.0, alpha 1, hue 0.558586, saturation 0.64705884, and value 1.0.
+     * This color constant "Aurora Powder Blue" has RGB code {@code 0x5AC5FF}, red 0.3529412, green 0.77254903, blue 1.0, alpha 1, hue 0.558586, saturation 0.64705884, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff8ab4p126F}.
      * <pre>
      * <font style='background-color: #5AC5FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5AC5FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10750,10 +10760,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #5AC5FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5AC5FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D4 = new SColor(0x5AC5FF, "Aurora D4");
+    public static final SColor AURORA_POWDER_BLUE = new SColor(0x5AC5FF, "Aurora Powder Blue");
 
     /**
-     * This color constant "Aurora D5" has RGB code {@code 0xBEB9FA}, red 0.74509805, green 0.7254902, blue 0.98039216, alpha 1, hue 0.67948735, saturation 0.26, and value 0.98039216.
+     * This color constant "Aurora Suds" has RGB code {@code 0xBEB9FA}, red 0.74509805, green 0.7254902, blue 0.98039216, alpha 1, hue 0.67948735, saturation 0.26, and value 0.98039216.
      * It can be represented as a packed float with the constant {@code -0x1.f5737cp126F}.
      * <pre>
      * <font style='background-color: #BEB9FA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BEB9FA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10761,10 +10771,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BEB9FA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BEB9FA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D5 = new SColor(0xBEB9FA, "Aurora D5");
+    public static final SColor AURORA_SUDS = new SColor(0xBEB9FA, "Aurora Suds");
 
     /**
-     * This color constant "Aurora D6" has RGB code {@code 0x00BFFF}, red 0.0, green 0.7490196, blue 1.0, alpha 1, hue 0.54183006, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Strong Cyan" has RGB code {@code 0x00BFFF}, red 0.0, green 0.7490196, blue 1.0, alpha 1, hue 0.54183006, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff7ep126F}.
      * <pre>
      * <font style='background-color: #00BFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00BFFF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10772,10 +10782,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #00BFFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00BFFF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D6 = new SColor(0x00BFFF, "Aurora D6");
+    public static final SColor AURORA_STRONG_CYAN = new SColor(0x00BFFF, "Aurora Strong Cyan");
 
     /**
-     * This color constant "Aurora D7" has RGB code {@code 0x007FFF}, red 0.0, green 0.49803922, blue 1.0, alpha 1, hue 0.5836601, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Sharp Azure" has RGB code {@code 0x007FFF}, red 0.0, green 0.49803922, blue 1.0, alpha 1, hue 0.5836601, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fefep126F}.
      * <pre>
      * <font style='background-color: #007FFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007FFF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10783,10 +10793,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #007FFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #007FFF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D7 = new SColor(0x007FFF, "Aurora D7");
+    public static final SColor AURORA_SHARP_AZURE = new SColor(0x007FFF, "Aurora Sharp Azure");
 
     /**
-     * This color constant "Aurora D8" has RGB code {@code 0x4B7DC8}, red 0.29411766, green 0.49019608, blue 0.78431374, alpha 1, hue 0.60000014, saturation 0.625, and value 0.78431374.
+     * This color constant "Aurora Blue Eye" has RGB code {@code 0x4B7DC8}, red 0.29411766, green 0.49019608, blue 0.78431374, alpha 1, hue 0.60000014, saturation 0.625, and value 0.78431374.
      * It can be represented as a packed float with the constant {@code -0x1.90fa96p126F}.
      * <pre>
      * <font style='background-color: #4B7DC8;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B7DC8; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10794,10 +10804,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #4B7DC8;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4B7DC8; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D8 = new SColor(0x4B7DC8, "Aurora D8");
+    public static final SColor AURORA_BLUE_EYE = new SColor(0x4B7DC8, "Aurora Blue Eye");
 
     /**
-     * This color constant "Aurora D9" has RGB code {@code 0x786EF0}, red 0.47058824, green 0.43137255, blue 0.9411765, alpha 1, hue 0.67948735, saturation 0.5416666, and value 0.9411765.
+     * This color constant "Aurora Subtlety" has RGB code {@code 0x786EF0}, red 0.47058824, green 0.43137255, blue 0.9411765, alpha 1, hue 0.67948735, saturation 0.5416666, and value 0.9411765.
      * It can be represented as a packed float with the constant {@code -0x1.e0dcfp126F}.
      * <pre>
      * <font style='background-color: #786EF0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #786EF0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10805,10 +10815,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #786EF0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #786EF0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_D9 = new SColor(0x786EF0, "Aurora D9");
+    public static final SColor AURORA_SUBTLETY = new SColor(0x786EF0, "Aurora Subtlety");
 
     /**
-     * This color constant "Aurora DA" has RGB code {@code 0x4A5AFF}, red 0.2901961, green 0.3529412, blue 1.0, alpha 1, hue 0.6519338, saturation 0.70980394, and value 1.0.
+     * This color constant "Aurora Rough Sapphire" has RGB code {@code 0x4A5AFF}, red 0.2901961, green 0.3529412, blue 1.0, alpha 1, hue 0.6519338, saturation 0.70980394, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.feb494p126F}.
      * <pre>
      * <font style='background-color: #4A5AFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4A5AFF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10816,10 +10826,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #4A5AFF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #4A5AFF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_DA = new SColor(0x4A5AFF, "Aurora DA");
+    public static final SColor AURORA_ROUGH_SAPPHIRE = new SColor(0x4A5AFF, "Aurora Rough Sapphire");
 
     /**
-     * This color constant "Aurora DB" has RGB code {@code 0x6241F6}, red 0.38431373, green 0.25490198, blue 0.9647059, alpha 1, hue 0.69705355, saturation 0.7357724, and value 0.9647059.
+     * This color constant "Aurora Iris" has RGB code {@code 0x6241F6}, red 0.38431373, green 0.25490198, blue 0.9647059, alpha 1, hue 0.69705355, saturation 0.7357724, and value 0.9647059.
      * It can be represented as a packed float with the constant {@code -0x1.ec82c4p126F}.
      * <pre>
      * <font style='background-color: #6241F6;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6241F6; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10827,10 +10837,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #6241F6;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6241F6; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_DB = new SColor(0x6241F6, "Aurora DB");
+    public static final SColor AURORA_IRIS = new SColor(0x6241F6, "Aurora Iris");
 
     /**
-     * This color constant "Aurora DC" has RGB code {@code 0x3C3CF5}, red 0.23529412, green 0.23529412, blue 0.9607843, alpha 1, hue 0.66666687, saturation 0.75510204, and value 0.9607843.
+     * This color constant "Aurora Cornflower Blue" has RGB code {@code 0x3C3CF5}, red 0.23529412, green 0.23529412, blue 0.9607843, alpha 1, hue 0.66666687, saturation 0.75510204, and value 0.9607843.
      * It can be represented as a packed float with the constant {@code -0x1.ea7878p126F}.
      * <pre>
      * <font style='background-color: #3C3CF5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3C3CF5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10838,10 +10848,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #3C3CF5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #3C3CF5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_DC = new SColor(0x3C3CF5, "Aurora DC");
+    public static final SColor AURORA_CORNFLOWER_BLUE = new SColor(0x3C3CF5, "Aurora Cornflower Blue");
 
     /**
-     * This color constant "Aurora DD" has RGB code {@code 0x101CDA}, red 0.0627451, green 0.10980392, blue 0.85490197, alpha 1, hue 0.6567657, saturation 0.9266055, and value 0.85490197.
+     * This color constant "Aurora Polished Sapphire" has RGB code {@code 0x101CDA}, red 0.0627451, green 0.10980392, blue 0.85490197, alpha 1, hue 0.6567657, saturation 0.9266055, and value 0.85490197.
      * It can be represented as a packed float with the constant {@code -0x1.b4382p126F}.
      * <pre>
      * <font style='background-color: #101CDA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #101CDA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10849,10 +10859,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #101CDA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #101CDA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_DD = new SColor(0x101CDA, "Aurora DD");
+    public static final SColor AURORA_POLISHED_SAPPHIRE = new SColor(0x101CDA, "Aurora Polished Sapphire");
 
     /**
-     * This color constant "Aurora DE" has RGB code {@code 0x0010BD}, red 0.0, green 0.0627451, blue 0.7411765, alpha 1, hue 0.6525575, saturation 1.0, and value 0.7411765.
+     * This color constant "Aurora Royal Blue" has RGB code {@code 0x0010BD}, red 0.0, green 0.0627451, blue 0.7411765, alpha 1, hue 0.6525575, saturation 1.0, and value 0.7411765.
      * It can be represented as a packed float with the constant {@code -0x1.7a2p126F}.
      * <pre>
      * <font style='background-color: #0010BD;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0010BD; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10860,10 +10870,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0010BD;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0010BD; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_DE = new SColor(0x0010BD, "Aurora DE");
+    public static final SColor AURORA_ROYAL_BLUE = new SColor(0x0010BD, "Aurora Royal Blue");
 
     /**
-     * This color constant "Aurora DF" has RGB code {@code 0x231094}, red 0.13725491, green 0.0627451, blue 0.5803922, alpha 1, hue 0.69065666, saturation 0.8918919, and value 0.5803922.
+     * This color constant "Aurora Indigo" has RGB code {@code 0x231094}, red 0.13725491, green 0.0627451, blue 0.5803922, alpha 1, hue 0.69065666, saturation 0.8918919, and value 0.5803922.
      * It can be represented as a packed float with the constant {@code -0x1.282046p126F}.
      * <pre>
      * <font style='background-color: #231094;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #231094; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10871,10 +10881,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #231094;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #231094; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_DF = new SColor(0x231094, "Aurora DF");
+    public static final SColor AURORA_INDIGO = new SColor(0x231094, "Aurora Indigo");
 
     /**
-     * This color constant "Aurora E0" has RGB code {@code 0x0C2148}, red 0.047058824, green 0.12941177, blue 0.28235295, alpha 1, hue 0.60833347, saturation 0.8333334, and value 0.28235295.
+     * This color constant "Aurora Space Blue" has RGB code {@code 0x0C2148}, red 0.047058824, green 0.12941177, blue 0.28235295, alpha 1, hue 0.60833347, saturation 0.8333334, and value 0.28235295.
      * It can be represented as a packed float with the constant {@code -0x1.904218p125F}.
      * <pre>
      * <font style='background-color: #0C2148;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0C2148; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10882,10 +10892,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #0C2148;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0C2148; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E0 = new SColor(0x0C2148, "Aurora E0");
+    public static final SColor AURORA_SPACE_BLUE = new SColor(0x0C2148, "Aurora Space Blue");
 
     /**
-     * This color constant "Aurora E1" has RGB code {@code 0x5010B0}, red 0.3137255, green 0.0627451, blue 0.6901961, alpha 1, hue 0.7333336, saturation 0.90909094, and value 0.6901961.
+     * This color constant "Aurora Thick Amethyst" has RGB code {@code 0x5010B0}, red 0.3137255, green 0.0627451, blue 0.6901961, alpha 1, hue 0.7333336, saturation 0.90909094, and value 0.6901961.
      * It can be represented as a packed float with the constant {@code -0x1.6020ap126F}.
      * <pre>
      * <font style='background-color: #5010B0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5010B0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10893,10 +10903,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #5010B0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5010B0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E1 = new SColor(0x5010B0, "Aurora E1");
+    public static final SColor AURORA_THICK_AMETHYST = new SColor(0x5010B0, "Aurora Thick Amethyst");
 
     /**
-     * This color constant "Aurora E2" has RGB code {@code 0x6010D0}, red 0.3764706, green 0.0627451, blue 0.8156863, alpha 1, hue 0.7361113, saturation 0.9230769, and value 0.8156863.
+     * This color constant "Aurora Juicy Grape" has RGB code {@code 0x6010D0}, red 0.3764706, green 0.0627451, blue 0.8156863, alpha 1, hue 0.7361113, saturation 0.9230769, and value 0.8156863.
      * It can be represented as a packed float with the constant {@code -0x1.a020cp126F}.
      * <pre>
      * <font style='background-color: #6010D0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6010D0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10904,10 +10914,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #6010D0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #6010D0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E2 = new SColor(0x6010D0, "Aurora E2");
+    public static final SColor AURORA_JUICY_GRAPE = new SColor(0x6010D0, "Aurora Juicy Grape");
 
     /**
-     * This color constant "Aurora E3" has RGB code {@code 0x8732D2}, red 0.5294118, green 0.19607843, blue 0.8235294, alpha 1, hue 0.7552085, saturation 0.7619048, and value 0.8235294.
+     * This color constant "Aurora Blacklight Glow" has RGB code {@code 0x8732D2}, red 0.5294118, green 0.19607843, blue 0.8235294, alpha 1, hue 0.7552085, saturation 0.7619048, and value 0.8235294.
      * It can be represented as a packed float with the constant {@code -0x1.a4650ep126F}.
      * <pre>
      * <font style='background-color: #8732D2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8732D2; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10915,10 +10925,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8732D2;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8732D2; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E3 = new SColor(0x8732D2, "Aurora E3");
+    public static final SColor AURORA_BLACKLIGHT_GLOW = new SColor(0x8732D2, "Aurora Blacklight Glow");
 
     /**
-     * This color constant "Aurora E4" has RGB code {@code 0x9C41FF}, red 0.6117647, green 0.25490198, blue 1.0, alpha 1, hue 0.74649143, saturation 0.745098, and value 1.0.
+     * This color constant "Aurora Purple Freesia" has RGB code {@code 0x9C41FF}, red 0.6117647, green 0.25490198, blue 1.0, alpha 1, hue 0.74649143, saturation 0.745098, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fe8338p126F}.
      * <pre>
      * <font style='background-color: #9C41FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9C41FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10926,10 +10936,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #9C41FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #9C41FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E4 = new SColor(0x9C41FF, "Aurora E4");
+    public static final SColor AURORA_PURPLE_FREESIA = new SColor(0x9C41FF, "Aurora Purple Freesia");
 
     /**
-     * This color constant "Aurora E5" has RGB code {@code 0x7F00FF}, red 0.49803922, green 0.0, blue 1.0, alpha 1, hue 0.74967337, saturation 1.0, and value 1.0.
+     * This color constant "Aurora Thin Amethyst" has RGB code {@code 0x7F00FF}, red 0.49803922, green 0.0, blue 1.0, alpha 1, hue 0.74967337, saturation 1.0, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fe00fep126F}.
      * <pre>
      * <font style='background-color: #7F00FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F00FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10937,10 +10947,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #7F00FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #7F00FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E5 = new SColor(0x7F00FF, "Aurora E5");
+    public static final SColor AURORA_THIN_AMETHYST = new SColor(0x7F00FF, "Aurora Thin Amethyst");
 
     /**
-     * This color constant "Aurora E6" has RGB code {@code 0xBD62FF}, red 0.7411765, green 0.38431373, blue 1.0, alpha 1, hue 0.7632698, saturation 0.6156863, and value 1.0.
+     * This color constant "Aurora Orchid" has RGB code {@code 0xBD62FF}, red 0.7411765, green 0.38431373, blue 1.0, alpha 1, hue 0.7632698, saturation 0.6156863, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fec57ap126F}.
      * <pre>
      * <font style='background-color: #BD62FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD62FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10948,10 +10958,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BD62FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD62FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E6 = new SColor(0xBD62FF, "Aurora E6");
+    public static final SColor AURORA_ORCHID = new SColor(0xBD62FF, "Aurora Orchid");
 
     /**
-     * This color constant "Aurora E7" has RGB code {@code 0xB991FF}, red 0.7254902, green 0.5686275, blue 1.0, alpha 1, hue 0.72727287, saturation 0.43137252, and value 1.0.
+     * This color constant "Aurora Lavender" has RGB code {@code 0xB991FF}, red 0.7254902, green 0.5686275, blue 1.0, alpha 1, hue 0.72727287, saturation 0.43137252, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff2372p126F}.
      * <pre>
      * <font style='background-color: #B991FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B991FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10959,10 +10969,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #B991FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #B991FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E7 = new SColor(0xB991FF, "Aurora E7");
+    public static final SColor AURORA_LAVENDER = new SColor(0xB991FF, "Aurora Lavender");
 
     /**
-     * This color constant "Aurora E8" has RGB code {@code 0xD7A5FF}, red 0.84313726, green 0.64705884, blue 1.0, alpha 1, hue 0.75925946, saturation 0.35294116, and value 1.0.
+     * This color constant "Aurora Lilac" has RGB code {@code 0xD7A5FF}, red 0.84313726, green 0.64705884, blue 1.0, alpha 1, hue 0.75925946, saturation 0.35294116, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.ff4baep126F}.
      * <pre>
      * <font style='background-color: #D7A5FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D7A5FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10970,10 +10980,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #D7A5FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D7A5FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E8 = new SColor(0xD7A5FF, "Aurora E8");
+    public static final SColor AURORA_LILAC = new SColor(0xD7A5FF, "Aurora Lilac");
 
     /**
-     * This color constant "Aurora E9" has RGB code {@code 0xD7C3FA}, red 0.84313726, green 0.7647059, blue 0.98039216, alpha 1, hue 0.72727287, saturation 0.21999998, and value 0.98039216.
+     * This color constant "Aurora Soap" has RGB code {@code 0xD7C3FA}, red 0.84313726, green 0.7647059, blue 0.98039216, alpha 1, hue 0.72727287, saturation 0.21999998, and value 0.98039216.
      * It can be represented as a packed float with the constant {@code -0x1.f587aep126F}.
      * <pre>
      * <font style='background-color: #D7C3FA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D7C3FA; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10981,10 +10991,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #D7C3FA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #D7C3FA; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_E9 = new SColor(0xD7C3FA, "Aurora E9");
+    public static final SColor AURORA_SOAP = new SColor(0xD7C3FA, "Aurora Soap");
 
     /**
-     * This color constant "Aurora EA" has RGB code {@code 0xF8C6FC}, red 0.972549, green 0.7764706, blue 0.9882353, alpha 1, hue 0.8209878, saturation 0.2142857, and value 0.9882353.
+     * This color constant "Aurora Pink Tutu" has RGB code {@code 0xF8C6FC}, red 0.972549, green 0.7764706, blue 0.9882353, alpha 1, hue 0.8209878, saturation 0.2142857, and value 0.9882353.
      * It can be represented as a packed float with the constant {@code -0x1.f98dfp126F}.
      * <pre>
      * <font style='background-color: #F8C6FC;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F8C6FC; color: #000000'>&nbsp;@&nbsp;</font>
@@ -10992,10 +11002,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #F8C6FC;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #F8C6FC; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_EA = new SColor(0xF8C6FC, "Aurora EA");
+    public static final SColor AURORA_PINK_TUTU = new SColor(0xF8C6FC, "Aurora Pink Tutu");
 
     /**
-     * This color constant "Aurora EB" has RGB code {@code 0xE673FF}, red 0.9019608, green 0.4509804, blue 1.0, alpha 1, hue 0.8035716, saturation 0.5490196, and value 1.0.
+     * This color constant "Aurora Thistle" has RGB code {@code 0xE673FF}, red 0.9019608, green 0.4509804, blue 1.0, alpha 1, hue 0.8035716, saturation 0.5490196, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fee7ccp126F}.
      * <pre>
      * <font style='background-color: #E673FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E673FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11003,10 +11013,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E673FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E673FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_EB = new SColor(0xE673FF, "Aurora EB");
+    public static final SColor AURORA_THISTLE = new SColor(0xE673FF, "Aurora Thistle");
 
     /**
-     * This color constant "Aurora EC" has RGB code {@code 0xFF52FF}, red 1.0, green 0.32156864, blue 1.0, alpha 1, hue 0.8333334, saturation 0.6784314, and value 1.0.
+     * This color constant "Aurora Heliotrope" has RGB code {@code 0xFF52FF}, red 1.0, green 0.32156864, blue 1.0, alpha 1, hue 0.8333334, saturation 0.6784314, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fea5fep126F}.
      * <pre>
      * <font style='background-color: #FF52FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF52FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11014,10 +11024,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF52FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF52FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_EC = new SColor(0xFF52FF, "Aurora EC");
+    public static final SColor AURORA_HELIOTROPE = new SColor(0xFF52FF, "Aurora Heliotrope");
 
     /**
-     * This color constant "Aurora ED" has RGB code {@code 0xDA20E0}, red 0.85490197, green 0.1254902, blue 0.8784314, alpha 1, hue 0.82812524, saturation 0.85714287, and value 0.8784314.
+     * This color constant "Aurora Light Plum" has RGB code {@code 0xDA20E0}, red 0.85490197, green 0.1254902, blue 0.8784314, alpha 1, hue 0.82812524, saturation 0.85714287, and value 0.8784314.
      * It can be represented as a packed float with the constant {@code -0x1.c041b4p126F}.
      * <pre>
      * <font style='background-color: #DA20E0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA20E0; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11025,10 +11035,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #DA20E0;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #DA20E0; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_ED = new SColor(0xDA20E0, "Aurora ED");
+    public static final SColor AURORA_LIGHT_PLUM = new SColor(0xDA20E0, "Aurora Light Plum");
 
     /**
-     * This color constant "Aurora EE" has RGB code {@code 0xBD29FF}, red 0.7411765, green 0.16078432, blue 1.0, alpha 1, hue 0.78193164, saturation 0.8392157, and value 1.0.
+     * This color constant "Aurora Wisteria" has RGB code {@code 0xBD29FF}, red 0.7411765, green 0.16078432, blue 1.0, alpha 1, hue 0.78193164, saturation 0.8392157, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.fe537ap126F}.
      * <pre>
      * <font style='background-color: #BD29FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD29FF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11036,10 +11046,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BD29FF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD29FF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_EE = new SColor(0xBD29FF, "Aurora EE");
+    public static final SColor AURORA_WISTERIA = new SColor(0xBD29FF, "Aurora Wisteria");
 
     /**
-     * This color constant "Aurora EF" has RGB code {@code 0xBD10C5}, red 0.7411765, green 0.0627451, blue 0.77254903, alpha 1, hue 0.8259671, saturation 0.91878176, and value 0.77254903.
+     * This color constant "Aurora Medium Plum" has RGB code {@code 0xBD10C5}, red 0.7411765, green 0.0627451, blue 0.77254903, alpha 1, hue 0.8259671, saturation 0.91878176, and value 0.77254903.
      * It can be represented as a packed float with the constant {@code -0x1.8a217ap126F}.
      * <pre>
      * <font style='background-color: #BD10C5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD10C5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11047,10 +11057,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BD10C5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD10C5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_EF = new SColor(0xBD10C5, "Aurora EF");
+    public static final SColor AURORA_MEDIUM_PLUM = new SColor(0xBD10C5, "Aurora Medium Plum");
 
     /**
-     * This color constant "Aurora F0" has RGB code {@code 0x8C14BE}, red 0.54901963, green 0.078431375, blue 0.74509805, alpha 1, hue 0.7843139, saturation 0.8947368, and value 0.74509805.
+     * This color constant "Aurora Violet" has RGB code {@code 0x8C14BE}, red 0.54901963, green 0.078431375, blue 0.74509805, alpha 1, hue 0.7843139, saturation 0.8947368, and value 0.74509805.
      * It can be represented as a packed float with the constant {@code -0x1.7c2918p126F}.
      * <pre>
      * <font style='background-color: #8C14BE;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C14BE; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11058,10 +11068,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #8C14BE;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #8C14BE; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F0 = new SColor(0x8C14BE, "Aurora F0");
+    public static final SColor AURORA_VIOLET = new SColor(0x8C14BE, "Aurora Violet");
 
     /**
-     * This color constant "Aurora F1" has RGB code {@code 0x5A187B}, red 0.3529412, green 0.09411765, blue 0.48235294, alpha 1, hue 0.7777779, saturation 0.80487806, and value 0.48235294.
+     * This color constant "Aurora Grape Lollipop" has RGB code {@code 0x5A187B}, red 0.3529412, green 0.09411765, blue 0.48235294, alpha 1, hue 0.7777779, saturation 0.80487806, and value 0.48235294.
      * It can be represented as a packed float with the constant {@code -0x1.f630b4p125F}.
      * <pre>
      * <font style='background-color: #5A187B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5A187B; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11069,10 +11079,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #5A187B;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #5A187B; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F1 = new SColor(0x5A187B, "Aurora F1");
+    public static final SColor AURORA_GRAPE_LOLLIPOP = new SColor(0x5A187B, "Aurora Grape Lollipop");
 
     /**
-     * This color constant "Aurora F2" has RGB code {@code 0x641464}, red 0.39215687, green 0.078431375, blue 0.39215687, alpha 1, hue 0.8333334, saturation 0.8, and value 0.39215687.
+     * This color constant "Aurora Mulberry" has RGB code {@code 0x641464}, red 0.39215687, green 0.078431375, blue 0.39215687, alpha 1, hue 0.8333334, saturation 0.8, and value 0.39215687.
      * It can be represented as a packed float with the constant {@code -0x1.c828c8p125F}.
      * <pre>
      * <font style='background-color: #641464;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #641464; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11080,10 +11090,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #641464;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #641464; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F2 = new SColor(0x641464, "Aurora F2");
+    public static final SColor AURORA_MULBERRY = new SColor(0x641464, "Aurora Mulberry");
 
     /**
-     * This color constant "Aurora F3" has RGB code {@code 0x410062}, red 0.25490198, green 0.0, blue 0.38431373, alpha 1, hue 0.77721107, saturation 1.0, and value 0.38431373.
+     * This color constant "Aurora Grape Soda" has RGB code {@code 0x410062}, red 0.25490198, green 0.0, blue 0.38431373, alpha 1, hue 0.77721107, saturation 1.0, and value 0.38431373.
      * It can be represented as a packed float with the constant {@code -0x1.c40082p125F}.
      * <pre>
      * <font style='background-color: #410062;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #410062; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11091,10 +11101,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #410062;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #410062; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F3 = new SColor(0x410062, "Aurora F3");
+    public static final SColor AURORA_GRAPE_SODA = new SColor(0x410062, "Aurora Grape Soda");
 
     /**
-     * This color constant "Aurora F4" has RGB code {@code 0x320A46}, red 0.19607843, green 0.039215688, blue 0.27450982, alpha 1, hue 0.7777779, saturation 0.85714287, and value 0.27450982.
+     * This color constant "Aurora Eggplant" has RGB code {@code 0x320A46}, red 0.19607843, green 0.039215688, blue 0.27450982, alpha 1, hue 0.7777779, saturation 0.85714287, and value 0.27450982.
      * It can be represented as a packed float with the constant {@code -0x1.8c1464p125F}.
      * <pre>
      * <font style='background-color: #320A46;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #320A46; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11102,10 +11112,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #320A46;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #320A46; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F4 = new SColor(0x320A46, "Aurora F4");
+    public static final SColor AURORA_EGGPLANT = new SColor(0x320A46, "Aurora Eggplant");
 
     /**
-     * This color constant "Aurora F5" has RGB code {@code 0x551937}, red 0.33333334, green 0.09803922, blue 0.21568628, alpha 1, hue 0.9166666, saturation 0.7058824, and value 0.33333334.
+     * This color constant "Aurora Cherry Syrup" has RGB code {@code 0x551937}, red 0.33333334, green 0.09803922, blue 0.21568628, alpha 1, hue 0.9166666, saturation 0.7058824, and value 0.33333334.
      * It can be represented as a packed float with the constant {@code -0x1.6e32aap125F}.
      * <pre>
      * <font style='background-color: #551937;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #551937; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11113,10 +11123,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #551937;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #551937; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F5 = new SColor(0x551937, "Aurora F5");
+    public static final SColor AURORA_CHERRY_SYRUP = new SColor(0x551937, "Aurora Cherry Syrup");
 
     /**
-     * This color constant "Aurora F6" has RGB code {@code 0xA01982}, red 0.627451, green 0.09803922, blue 0.50980395, alpha 1, hue 0.8703704, saturation 0.84375, and value 0.627451.
+     * This color constant "Aurora Plum Juice" has RGB code {@code 0xA01982}, red 0.627451, green 0.09803922, blue 0.50980395, alpha 1, hue 0.8703704, saturation 0.84375, and value 0.627451.
      * It can be represented as a packed float with the constant {@code -0x1.04334p126F}.
      * <pre>
      * <font style='background-color: #A01982;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A01982; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11124,10 +11134,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #A01982;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #A01982; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F6 = new SColor(0xA01982, "Aurora F6");
+    public static final SColor AURORA_PLUM_JUICE = new SColor(0xA01982, "Aurora Plum Juice");
 
     /**
-     * This color constant "Aurora F7" has RGB code {@code 0xC80078}, red 0.78431374, green 0.0, blue 0.47058824, alpha 1, hue 0.8999999, saturation 1.0, and value 0.78431374.
+     * This color constant "Aurora Fruit Punch" has RGB code {@code 0xC80078}, red 0.78431374, green 0.0, blue 0.47058824, alpha 1, hue 0.8999999, saturation 1.0, and value 0.78431374.
      * It can be represented as a packed float with the constant {@code -0x1.f0019p125F}.
      * <pre>
      * <font style='background-color: #C80078;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C80078; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11135,10 +11145,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #C80078;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #C80078; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F7 = new SColor(0xC80078, "Aurora F7");
+    public static final SColor AURORA_FRUIT_PUNCH = new SColor(0xC80078, "Aurora Fruit Punch");
 
     /**
-     * This color constant "Aurora F8" has RGB code {@code 0xFF50BF}, red 1.0, green 0.3137255, blue 0.7490196, alpha 1, hue 0.8942858, saturation 0.6862745, and value 1.0.
+     * This color constant "Aurora Bubble Gum" has RGB code {@code 0xFF50BF}, red 1.0, green 0.3137255, blue 0.7490196, alpha 1, hue 0.8942858, saturation 0.6862745, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.7ea1fep126F}.
      * <pre>
      * <font style='background-color: #FF50BF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF50BF; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11146,10 +11156,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF50BF;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF50BF; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F8 = new SColor(0xFF50BF, "Aurora F8");
+    public static final SColor AURORA_BUBBLE_GUM = new SColor(0xFF50BF, "Aurora Bubble Gum");
 
     /**
-     * This color constant "Aurora F9" has RGB code {@code 0xFF6AC5}, red 1.0, green 0.41568628, blue 0.77254903, alpha 1, hue 0.8982104, saturation 0.58431375, and value 1.0.
+     * This color constant "Aurora Pink Lemonade" has RGB code {@code 0xFF6AC5}, red 1.0, green 0.41568628, blue 0.77254903, alpha 1, hue 0.8982104, saturation 0.58431375, and value 1.0.
      * It can be represented as a packed float with the constant {@code -0x1.8ad5fep126F}.
      * <pre>
      * <font style='background-color: #FF6AC5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF6AC5; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11157,10 +11167,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FF6AC5;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FF6AC5; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_F9 = new SColor(0xFF6AC5, "Aurora F9");
+    public static final SColor AURORA_PINK_LEMONADE = new SColor(0xFF6AC5, "Aurora Pink Lemonade");
 
     /**
-     * This color constant "Aurora FA" has RGB code {@code 0xFAA0B9}, red 0.98039216, green 0.627451, blue 0.7254902, alpha 1, hue 0.9537037, saturation 0.35999998, and value 0.98039216.
+     * This color constant "Aurora Shrimp" has RGB code {@code 0xFAA0B9}, red 0.98039216, green 0.627451, blue 0.7254902, alpha 1, hue 0.9537037, saturation 0.35999998, and value 0.98039216.
      * It can be represented as a packed float with the constant {@code -0x1.7341f4p126F}.
      * <pre>
      * <font style='background-color: #FAA0B9;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FAA0B9; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11168,10 +11178,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FAA0B9;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FAA0B9; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_FA = new SColor(0xFAA0B9, "Aurora FA");
+    public static final SColor AURORA_SHRIMP = new SColor(0xFAA0B9, "Aurora Shrimp");
 
     /**
-     * This color constant "Aurora FB" has RGB code {@code 0xFC3A8C}, red 0.9882353, green 0.22745098, blue 0.54901963, alpha 1, hue 0.9295532, saturation 0.7698413, and value 0.9882353.
+     * This color constant "Aurora Flamingo" has RGB code {@code 0xFC3A8C}, red 0.9882353, green 0.22745098, blue 0.54901963, alpha 1, hue 0.9295532, saturation 0.7698413, and value 0.9882353.
      * It can be represented as a packed float with the constant {@code -0x1.1875f8p126F}.
      * <pre>
      * <font style='background-color: #FC3A8C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FC3A8C; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11179,10 +11189,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #FC3A8C;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FC3A8C; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_FB = new SColor(0xFC3A8C, "Aurora FB");
+    public static final SColor AURORA_FLAMINGO = new SColor(0xFC3A8C, "Aurora Flamingo");
 
     /**
-     * This color constant "Aurora FC" has RGB code {@code 0xE61E78}, red 0.9019608, green 0.11764706, blue 0.47058824, alpha 1, hue 0.925, saturation 0.86956525, and value 0.9019608.
+     * This color constant "Aurora Lipstick" has RGB code {@code 0xE61E78}, red 0.9019608, green 0.11764706, blue 0.47058824, alpha 1, hue 0.925, saturation 0.86956525, and value 0.9019608.
      * It can be represented as a packed float with the constant {@code -0x1.f03dccp125F}.
      * <pre>
      * <font style='background-color: #E61E78;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E61E78; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11190,10 +11200,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #E61E78;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #E61E78; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_FC = new SColor(0xE61E78, "Aurora FC");
+    public static final SColor AURORA_LIPSTICK = new SColor(0xE61E78, "Aurora Lipstick");
 
     /**
-     * This color constant "Aurora FD" has RGB code {@code 0xBD1039}, red 0.7411765, green 0.0627451, blue 0.22352941, alpha 1, hue 0.9605011, saturation 0.91534394, and value 0.7411765.
+     * This color constant "Aurora Carmine" has RGB code {@code 0xBD1039}, red 0.7411765, green 0.0627451, blue 0.22352941, alpha 1, hue 0.9605011, saturation 0.91534394, and value 0.7411765.
      * It can be represented as a packed float with the constant {@code -0x1.72217ap125F}.
      * <pre>
      * <font style='background-color: #BD1039;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD1039; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11201,10 +11211,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #BD1039;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #BD1039; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_FD = new SColor(0xBD1039, "Aurora FD");
+    public static final SColor AURORA_CARMINE = new SColor(0xBD1039, "Aurora Carmine");
 
     /**
-     * This color constant "Aurora FE" has RGB code {@code 0x98344D}, red 0.59607846, green 0.20392157, blue 0.3019608, alpha 1, hue 0.9583334, saturation 0.6578948, and value 0.59607846.
+     * This color constant "Aurora Bologna" has RGB code {@code 0x98344D}, red 0.59607846, green 0.20392157, blue 0.3019608, alpha 1, hue 0.9583334, saturation 0.6578948, and value 0.59607846.
      * It can be represented as a packed float with the constant {@code -0x1.9a693p125F}.
      * <pre>
      * <font style='background-color: #98344D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #98344D; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11212,10 +11222,10 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #98344D;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #98344D; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_FE = new SColor(0x98344D, "Aurora FE");
+    public static final SColor AURORA_BOLOGNA = new SColor(0x98344D, "Aurora Bologna");
 
     /**
-     * This color constant "Aurora FF" has RGB code {@code 0x911437}, red 0.5686275, green 0.078431375, blue 0.21568628, alpha 1, hue 0.9533334, saturation 0.86206895, and value 0.5686275.
+     * This color constant "Aurora Raspberry" has RGB code {@code 0x911437}, red 0.5686275, green 0.078431375, blue 0.21568628, alpha 1, hue 0.9533334, saturation 0.86206895, and value 0.5686275.
      * It can be represented as a packed float with the constant {@code -0x1.6e2922p125F}.
      * <pre>
      * <font style='background-color: #911437;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #911437; color: #000000'>&nbsp;@&nbsp;</font>
@@ -11223,7 +11233,8 @@ public class SColor extends Color implements Serializable {
      * <font style='background-color: #911437;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #911437; color: #ffffff'>&nbsp;@&nbsp;</font>
      * </pre>
      */
-    public static final SColor AURORA_FF = new SColor(0x911437, "Aurora FF");
+    public static final SColor AURORA_RASPBERRY = new SColor(0x911437, "Aurora Raspberry");
+
 
 
 
@@ -11490,40 +11501,49 @@ public class SColor extends Color implements Serializable {
             DB_SHADOW, DB_COBALT, DB_CERULEAN, DB_DENIM, DB_SKY_BLUE, DB_SEAFOAM, DB_PLATINUM, DB_WHITE,
             DB_STORM_CLOUD, DB_ELEPHANT, DB_GRAPHITE, DB_SOOT, DB_EGGPLANT, DB_BLOOD, DB_CORAL, DB_LAVENDER,
             DB_ARMY_GREEN, DB_COMPOST};
-    
+
+    /**
+     * DawnBringer's 256-color Aurora palette, modified slightly to fit one transparent color by removing one gray.
+     * Aurora is available in <a href="http://pixeljoint.com/forum/forum_posts.asp?TID=26080&KW=">this set of tools</a>
+     * for a pixel art editor, but it is usable for lots of high-color purposes. The original palette did not have
+     * names. Naming 256 colors was an ordeal, since many of these colors are well-described by the same name, even when
+     * two or more can be distinguished visually from each other.
+     * <a href="https://i.imgur.com/CrI1LyU.png">Preview of all 256 colors, each with the hex number for its index in
+     * this array.</a>
+     */
     public static final SColor[] DAWNBRINGER_AURORA = {
-            AURORA_00, AURORA_01, AURORA_02, AURORA_03, AURORA_04, AURORA_05, AURORA_06, AURORA_07,
-            AURORA_08, AURORA_09, AURORA_0A, AURORA_0B, AURORA_0C, AURORA_0D, AURORA_0E, AURORA_0F,
-            AURORA_10, AURORA_11, AURORA_12, AURORA_13, AURORA_14, AURORA_15, AURORA_16, AURORA_17,
-            AURORA_18, AURORA_19, AURORA_1A, AURORA_1B, AURORA_1C, AURORA_1D, AURORA_1E, AURORA_1F,
-            AURORA_20, AURORA_21, AURORA_22, AURORA_23, AURORA_24, AURORA_25, AURORA_26, AURORA_27,
-            AURORA_28, AURORA_29, AURORA_2A, AURORA_2B, AURORA_2C, AURORA_2D, AURORA_2E, AURORA_2F,
-            AURORA_30, AURORA_31, AURORA_32, AURORA_33, AURORA_34, AURORA_35, AURORA_36, AURORA_37,
-            AURORA_38, AURORA_39, AURORA_3A, AURORA_3B, AURORA_3C, AURORA_3D, AURORA_3E, AURORA_3F,
-            AURORA_40, AURORA_41, AURORA_42, AURORA_43, AURORA_44, AURORA_45, AURORA_46, AURORA_47,
-            AURORA_48, AURORA_49, AURORA_4A, AURORA_4B, AURORA_4C, AURORA_4D, AURORA_4E, AURORA_4F,
-            AURORA_50, AURORA_51, AURORA_52, AURORA_53, AURORA_54, AURORA_55, AURORA_56, AURORA_57,
-            AURORA_58, AURORA_59, AURORA_5A, AURORA_5B, AURORA_5C, AURORA_5D, AURORA_5E, AURORA_5F,
-            AURORA_60, AURORA_61, AURORA_62, AURORA_63, AURORA_64, AURORA_65, AURORA_66, AURORA_67,
-            AURORA_68, AURORA_69, AURORA_6A, AURORA_6B, AURORA_6C, AURORA_6D, AURORA_6E, AURORA_6F,
-            AURORA_70, AURORA_71, AURORA_72, AURORA_73, AURORA_74, AURORA_75, AURORA_76, AURORA_77,
-            AURORA_78, AURORA_79, AURORA_7A, AURORA_7B, AURORA_7C, AURORA_7D, AURORA_7E, AURORA_7F,
-            AURORA_80, AURORA_81, AURORA_82, AURORA_83, AURORA_84, AURORA_85, AURORA_86, AURORA_87,
-            AURORA_88, AURORA_89, AURORA_8A, AURORA_8B, AURORA_8C, AURORA_8D, AURORA_8E, AURORA_8F,
-            AURORA_90, AURORA_91, AURORA_92, AURORA_93, AURORA_94, AURORA_95, AURORA_96, AURORA_97,
-            AURORA_98, AURORA_99, AURORA_9A, AURORA_9B, AURORA_9C, AURORA_9D, AURORA_9E, AURORA_9F,
-            AURORA_A0, AURORA_A1, AURORA_A2, AURORA_A3, AURORA_A4, AURORA_A5, AURORA_A6, AURORA_A7,
-            AURORA_A8, AURORA_A9, AURORA_AA, AURORA_AB, AURORA_AC, AURORA_AD, AURORA_AE, AURORA_AF,
-            AURORA_B0, AURORA_B1, AURORA_B2, AURORA_B3, AURORA_B4, AURORA_B5, AURORA_B6, AURORA_B7,
-            AURORA_B8, AURORA_B9, AURORA_BA, AURORA_BB, AURORA_BC, AURORA_BD, AURORA_BE, AURORA_BF,
-            AURORA_C0, AURORA_C1, AURORA_C2, AURORA_C3, AURORA_C4, AURORA_C5, AURORA_C6, AURORA_C7,
-            AURORA_C8, AURORA_C9, AURORA_CA, AURORA_CB, AURORA_CC, AURORA_CD, AURORA_CE, AURORA_CF,
-            AURORA_D0, AURORA_D1, AURORA_D2, AURORA_D3, AURORA_D4, AURORA_D5, AURORA_D6, AURORA_D7,
-            AURORA_D8, AURORA_D9, AURORA_DA, AURORA_DB, AURORA_DC, AURORA_DD, AURORA_DE, AURORA_DF,
-            AURORA_E0, AURORA_E1, AURORA_E2, AURORA_E3, AURORA_E4, AURORA_E5, AURORA_E6, AURORA_E7,
-            AURORA_E8, AURORA_E9, AURORA_EA, AURORA_EB, AURORA_EC, AURORA_ED, AURORA_EE, AURORA_EF,
-            AURORA_F0, AURORA_F1, AURORA_F2, AURORA_F3, AURORA_F4, AURORA_F5, AURORA_F6, AURORA_F7,
-            AURORA_F8, AURORA_F9, AURORA_FA, AURORA_FB, AURORA_FC, AURORA_FD, AURORA_FE, AURORA_FF,
+            AURORA_TRANSPARENT, AURORA_PITCH_BLACK, AURORA_COAL_BLACK, AURORA_SHADOW, AURORA_GRAPHITE, AURORA_SMOKE, AURORA_LEAD, AURORA_IRON,
+            AURORA_ELEPHANT, AURORA_CHINCHILLA, AURORA_GREYHOUND, AURORA_SILVER, AURORA_FOG, AURORA_PLATINUM, AURORA_CLOUD, AURORA_SHINING_WHITE,
+            AURORA_SEAWATER, AURORA_HOSPITAL_GREEN, AURORA_CYAN, AURORA_BUBBLE, AURORA_PERIWINKLE, AURORA_ULTRAMARINE, AURORA_FADED_BLUE, AURORA_OCEAN_BLUE,
+            AURORA_STYGIAN_BLUE, AURORA_DEEP_PURPLE, AURORA_TYRIAN_PURPLE, AURORA_MAGENTA, AURORA_BUBBLEGUM_PINK, AURORA_PORK_CHOP, AURORA_RAW_MEAT, AURORA_FRESH_BLOOD,
+            AURORA_PUTTY, AURORA_SIENNA, AURORA_SEAL_BROWN, AURORA_MUMMY_BROWN, AURORA_FAWN, AURORA_ORANGE, AURORA_PEACH, AURORA_CREAM,
+            AURORA_LEMON, AURORA_EARWAX, AURORA_UMBER, AURORA_IVY_GREEN, AURORA_JADE, AURORA_SHAMROCK_GREEN, AURORA_CELADON, AURORA_PUCE,
+            AURORA_BEIGE, AURORA_WET_STONE, AURORA_SLOW_CREEK, AURORA_SLATE_GRAY, AURORA_LIGHT_SKIN_1, AURORA_LIGHT_SKIN_2, AURORA_LIGHT_SKIN_3, AURORA_LIGHT_SKIN_4,
+            AURORA_LIGHT_SKIN_5, AURORA_LIGHT_SKIN_6, AURORA_LIGHT_SKIN_7, AURORA_LIGHT_SKIN_8, AURORA_LIGHT_SKIN_9, AURORA_DARK_SKIN_1, AURORA_DARK_SKIN_2, AURORA_DARK_SKIN_3,
+            AURORA_PINK_SKIN_1, AURORA_PINK_SKIN_2, AURORA_PINK_SKIN_3, AURORA_PINK_SKIN_4, AURORA_BRONZE_SKIN_4, AURORA_BRONZE_SKIN_3, AURORA_BRONZE_SKIN_2, AURORA_BRONZE_SKIN_1,
+            AURORA_TAUPE, AURORA_DRAB_GREEN, AURORA_LIZARD_SCALES, AURORA_CRICKET, AURORA_OLIVE_OIL, AURORA_DUN, AURORA_CORN_SILK, AURORA_TAN,
+            AURORA_STRAW, AURORA_HONEYDEW, AURORA_TARNISH, AURORA_PEA_SOUP, AURORA_MARSH, AURORA_ASPARAGUS, AURORA_PEAT_BOG, AURORA_DEEP_JUNGLE,
+            AURORA_PINE_GREEN, AURORA_OLIVE_GREEN, AURORA_GRAY_GREEN, AURORA_MAIDENHAIR_FERN, AURORA_KELLY_GREEN, AURORA_DUSTY_GREEN, AURORA_GARTER_SNAKE, AURORA_SILVER_GREEN,
+            AURORA_PISTACHIO, AURORA_ANGEL_WING, AURORA_SAGE_GREEN, AURORA_DRIED_SAGE, AURORA_ARTICHOKE, AURORA_VIRIDIAN, AURORA_FLORAL_FOAM, AURORA_HUNTER_GREEN,
+            AURORA_DARK_TEAL, AURORA_KYANITE, AURORA_SPEARMINT, AURORA_AMAZONITE, AURORA_PASTEL_SKY, AURORA_AQUAMARINE, AURORA_DUST_BUNNY, AURORA_PATINA,
+            AURORA_CHIPPED_GRANITE, AURORA_BLUE_SMOKE, AURORA_AIR_FORCE_BLUE, AURORA_COLD_IRON, AURORA_DREARY_BLUE, AURORA_MURK, AURORA_NINJA, AURORA_WATERCOLOR_BLACK,
+            AURORA_IOLITE, AURORA_BOYSENBERRY, AURORA_WATERCOLOR_GRAY, AURORA_BLUE_STEEL, AURORA_TWILIGHT_CLOUD, AURORA_SMOG, AURORA_TROPIC_MIST, AURORA_FEATHER_DOWN,
+            AURORA_MILD_VIOLET, AURORA_VIOLET_CUSHIONS, AURORA_DULL_VIOLET, AURORA_ROYAL_VIOLET, AURORA_EMINENCE, AURORA_PRUNE, AURORA_DUSTY_GRAPE, AURORA_PINK_VIOLET,
+            AURORA_RIPE_PLUM, AURORA_MAUVE, AURORA_HAM, AURORA_COTTON_CANDY, AURORA_SILVER_PINK, AURORA_TEA_ROSE, AURORA_OLD_ROSE, AURORA_DUSTY_PINK,
+            AURORA_ROSEATE_SPOONBILL, AURORA_THULIAN_PINK, AURORA_BROWN_VELVET, AURORA_NIGHTSHADE, AURORA_SCRIBE_INK, AURORA_VARNISH, AURORA_CEDAR_WOOD, AURORA_HOT_SAUCE_,
+            AURORA_LURID_RED, AURORA_BRICK, AURORA_FUSION_RED, AURORA_EMBERS, AURORA_SALMON, AURORA_TAXICAB_YELLOW, AURORA_APRICOT, AURORA_BURNT_YELLOW,
+            AURORA_DRY_PEPPER, AURORA_REDWOOD, AURORA_KOA, AURORA_OCHRE, AURORA_DULL_GREEN, AURORA_ARMY_GREEN, AURORA_DRIFTWOOD, AURORA_DRY_BRUSH,
+            AURORA_MUSH, AURORA_BANANA_PUDDING, AURORA_SAFFRON, AURORA_PENCIL_YELLOW, AURORA_CHARTREUSE, AURORA_ABSINTHE, AURORA_INFECTION, AURORA_FROG_GREEN,
+            AURORA_AVOCADO, AURORA_WOODLANDS, AURORA_DARK_PINE, AURORA_MOSS_GREEN, AURORA_FERN_GREEN, AURORA_FOREST_GLEN, AURORA_MALACHITE, AURORA_APPLE_GREEN,
+            AURORA_CELERY, AURORA_MINT_GREEN, AURORA_EMERALD, AURORA_PRASE, AURORA_EUCALYPTUS, AURORA_ZUCCHINI, AURORA_SOFT_TEAL, AURORA_MEDIUM_TEAL,
+            AURORA_SPRING_GREEN, AURORA_TURQUOISE, AURORA_SEAFOAM, AURORA_VARISCITE, AURORA_REFRESHING_MIST, AURORA_SHINING_SKY, AURORA_STEAM, AURORA_ROBIN_EGG_BLUE,
+            AURORA_DENIM_BLUE, AURORA_DEEP_TEAL, AURORA_NAVY_BLUE, AURORA_BLUEBERRY, AURORA_PRUSSIAN_BLUE, AURORA_DESERT_RAIN, AURORA_ELECTRIC_BLUE, AURORA_HIDDEN_BLUE,
+            AURORA_DULL_AZURE, AURORA_RIPPED_DENIM, AURORA_CALM_SKY, AURORA_VAPOR, AURORA_POWDER_BLUE, AURORA_SUDS, AURORA_STRONG_CYAN, AURORA_SHARP_AZURE,
+            AURORA_BLUE_EYE, AURORA_SUBTLETY, AURORA_ROUGH_SAPPHIRE, AURORA_IRIS, AURORA_CORNFLOWER_BLUE, AURORA_POLISHED_SAPPHIRE, AURORA_ROYAL_BLUE, AURORA_INDIGO,
+            AURORA_SPACE_BLUE, AURORA_THICK_AMETHYST, AURORA_JUICY_GRAPE, AURORA_BLACKLIGHT_GLOW, AURORA_PURPLE_FREESIA, AURORA_THIN_AMETHYST, AURORA_ORCHID, AURORA_LAVENDER,
+            AURORA_LILAC, AURORA_SOAP, AURORA_PINK_TUTU, AURORA_THISTLE, AURORA_HELIOTROPE, AURORA_LIGHT_PLUM, AURORA_WISTERIA, AURORA_MEDIUM_PLUM,
+            AURORA_VIOLET, AURORA_GRAPE_LOLLIPOP, AURORA_MULBERRY, AURORA_GRAPE_SODA, AURORA_EGGPLANT, AURORA_CHERRY_SYRUP, AURORA_PLUM_JUICE, AURORA_FRUIT_PUNCH,
+            AURORA_BUBBLE_GUM, AURORA_PINK_LEMONADE, AURORA_SHRIMP, AURORA_FLAMINGO, AURORA_LIPSTICK, AURORA_CARMINE, AURORA_BOLOGNA, AURORA_RASPBERRY,
     };
 
     /**

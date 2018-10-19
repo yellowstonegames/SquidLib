@@ -12,10 +12,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.MathExtras;
-import squidpony.squidmath.NumberTools;
-
-import java.util.Arrays;
-import java.util.Comparator;
 
 import static squidpony.StringKit.safeSubstring;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
@@ -27,26 +23,64 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static int gridWidth = 103;
+    private static int gridWidth = 64;
+//    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
      * In number of cells
      */
-    private static int gridHeight = 103;
+    private static int gridHeight = 32;
 //    private static int gridHeight = 27;
 
     /**
      * The pixel width of a cell
      */
-    private static int cellWidth = 5;
-//    private static int cellWidth = 10;
+//    private static int cellWidth = 5;
+    private static int cellWidth = 10;
     /**
      * The pixel height of a cell
      */
-    private static int cellHeight = 5;
-//    private static int cellHeight = 25;
+//    private static int cellHeight = 5;
+    private static int cellHeight = 25;
 
     private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
+
+
+
+    private static final int[] RINSED = {
+            0x00000000, 0x444444ff, 0x000000ff, 0x88ffff00, 0x212121ff, 0x00ff00ff, 0x0000ffff, 0x080808ff,
+            0xff574600, 0xffb14600, 0xfffd4600, 0x4bff4600, 0x51bf6c00, 0x4697ff00, 0x9146ff00, 0xff46ae00,
+            0xf8f9faff, 0xc4c3c5ff, 0x9c9c9dff, 0x757676ff, 0x616262ff, 0x4c484aff, 0x252626ff, 0x090304ff,
+            0xd89789ff, 0xc4877aff, 0xb47b76ff, 0xa36c72ff, 0x905861ff, 0x76454cff, 0x5f3234ff, 0x452327ff,
+            0xf9dcb8ff, 0xceb29aff, 0xb29891ff, 0x8f797fff, 0x75636fff, 0x554b67ff, 0x3e3552ff, 0x272340ff,
+            0xeaa18dff, 0xcf9180ff, 0xb87c6bff, 0xa06a60ff, 0x905c59ff, 0x73474bff, 0x52383eff, 0x35242aff,
+            0xf9ce8fff, 0xeba685ff, 0xc48772ff, 0xa96e5cff, 0x8a5a4bff, 0x7c4b49ff, 0x6a3e3dff, 0x572d2fff,
+            0xeed8a1ff, 0xe7b38cff, 0xcc967fff, 0xb6776dff, 0x995a55ff, 0x803d49ff, 0x662139ff, 0x500328ff,
+            0xfdfe9cff, 0xfdd7aaff, 0xe9bba4ff, 0xc9a09dff, 0xb7889aff, 0x957088ff, 0x755b7bff, 0x514265ff,
+            0xfdf067ff, 0xfdbf60ff, 0xef995aff, 0xcc7148ff, 0xb65549ff, 0xa34547ff, 0x7d303fff, 0x61242fff,
+            0xddbba4ff, 0xc0a68fff, 0x9f8871ff, 0x7f6b5cff, 0x6b5755ff, 0x5d464cff, 0x482f3dff, 0x30232dff,
+            0xfef5e1ff, 0xe9dfd3ff, 0xcfc5baff, 0xbaafabff, 0xaaa291ff, 0x9a877bff, 0x816f69ff, 0x615d56ff,
+            0xfef1a8ff, 0xe4ce85ff, 0xc9ad77ff, 0xb19169ff, 0x957859ff, 0x7b604cff, 0x60463bff, 0x472f2aff,
+            0xfefc74ff, 0xe8d861ff, 0xcdad53ff, 0xb2893eff, 0x91672fff, 0x7d4f21ff, 0x693c12ff, 0x562810ff,
+            0xfdfcb7ff, 0xfcfa3cff, 0xfad725ff, 0xf5b325ff, 0xd7853cff, 0xb25345ff, 0x8a2b2bff, 0x67160aff,
+            0xcbd350ff, 0xb3b24bff, 0x9a9e3aff, 0x808b30ff, 0x647717ff, 0x4b6309ff, 0x305413ff, 0x272a07ff,
+            0x8dc655ff, 0x7ba838ff, 0x6c8a37ff, 0x5d733aff, 0x4f633cff, 0x3f5244ff, 0x323d4aff, 0x232a45ff,
+            0xadd54bff, 0x80b040ff, 0x599135ff, 0x35761aff, 0x2a621fff, 0x1e5220ff, 0x063824ff, 0x012b1dff,
+            0xe8ffefff, 0xa9ddc0ff, 0x95c89cff, 0x91b48eff, 0x759983ff, 0x627f72ff, 0x4c655cff, 0x36514aff,
+            0x91e49dff, 0x69c085ff, 0x4f8f62ff, 0x4a7855ff, 0x396044ff, 0x385240ff, 0x31413dff, 0x233631ff,
+            0x09efd0ff, 0x07cca2ff, 0x03aa83ff, 0x038d75ff, 0x04726dff, 0x01585aff, 0x05454eff, 0x083142ff,
+            0x97d6f9ff, 0x3eb0caff, 0x3c919fff, 0x0a737cff, 0x226171ff, 0x0b505fff, 0x0d3948ff, 0x052935ff,
+            0x91fcfcff, 0x68dbfeff, 0x5cb1d5ff, 0x4c8caaff, 0x406883ff, 0x2b4965ff, 0x29324dff, 0x1c1e34ff,
+            0x80d1fbff, 0x62b2e7ff, 0x4d96dbff, 0x267db9ff, 0x195f97ff, 0x114776ff, 0x0b355aff, 0x031d41ff,
+            0xceeefdff, 0xcdd7feff, 0xa1aed7ff, 0x898caeff, 0x7c7196ff, 0x5e597cff, 0x404163ff, 0x26294cff,
+            0x8391c1ff, 0x7181caff, 0x5e71beff, 0x555fa2ff, 0x424c84ff, 0x323b6dff, 0x2b325cff, 0x292349ff,
+            0xe3d1fdff, 0xbaabfaff, 0x9f94e2ff, 0x9588d7ff, 0x7b71b3ff, 0x675e9cff, 0x4f4d7cff, 0x333158ff,
+            0xd2bafbff, 0xbda5f0ff, 0xab90edff, 0x977ae8ff, 0x745dadff, 0x584481ff, 0x3f314cff, 0x221f24ff,
+            0xf7c1e7ff, 0xd791c6ff, 0xbb6faaff, 0xaf6190ff, 0x924b76ff, 0x623155ff, 0x47253fff, 0x2f0e25ff,
+            0xfdc7fbff, 0xfc9fc5ff, 0xfb71a9ff, 0xe6497eff, 0xc33c6bff, 0x933255ff, 0x68243fff, 0x3f122aff,
+            0xfddddcff, 0xd1abb1ff, 0xb48c9aff, 0x9d7482ff, 0x8b5d6eff, 0x705057ff, 0x583c4bff, 0x421e29ff,
+            0xfcd9fbff, 0xfdb8c7ff, 0xfd97aaff, 0xf46e7eff, 0xc65365ff, 0x9e303cff, 0x741b28ff, 0x50071aff,
+};
 
     private Stage stage;
     private SpriteBatch batch;
@@ -319,41 +353,90 @@ public class ColorTest extends ApplicationAdapter {
             }
         });
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
-//        for (int i = 0; i < 256; i++) {
-//            SColor db = SColor.DAWNBRINGER_AURORA[i];
-//            display.putString(i >>> 2 & 0xF8, i & 31, String.format("   %02X   ", i), db.value() < 0.7f ? SColor.WHITE : SColor.BLACK, db);
+        SColor col;// = new SColor(0, 0, 0, 0);
+        for (int i = 0; i < 256; i++) {
+            col = SColor.DAWNBRINGER_AURORA[i];
+            display.putString(i >>> 2 & 0xF8, i & 31, String.format("   %02X   ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+        }
+//            SColor col = SColor.DAWNBRINGER_AURORA[i];
+//        for (int i = 0; i < 48; i++) {
+//            Color.rgba8888ToColor(col, RINSED[i]);
+//            col.clamp();
+//            display.putString(i >>> 3 & 0xFC, i & 31, String.format("%3d ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            int cf = NumberTools.floatToReversedIntBits(col.toFloatBits());
+//            System.out.printf("0x%08X, ", cf | (cf & 2) >>> 1);
+//            if((i & 7) == 7)
+//                System.out.println();
+//        }
+//        for (int i = 48; i < 56; i++) {
+//            Color.rgba8888ToColor(col, RINSED[i]);
+//            Color.abgr8888ToColor(col, col.toEditedFloat(0f, -0.22f, -0.23f));
+//            col.clamp();
+//            display.putString(i >>> 3 & 0xFC, i & 31, String.format("%3d ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            int cf = NumberTools.floatToReversedIntBits(col.toFloatBits());
+//            System.out.printf("0x%08X, ", cf | (cf & 2) >>> 1);
+//            if((i & 7) == 7)
+//                System.out.println();
+//        }
+//        for (int i = 56; i < 216; i++) {
+//            Color.rgba8888ToColor(col, RINSED[i]);
+//            col.clamp();
+//            display.putString(i >>> 3 & 0xFC, i & 31, String.format("%3d ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            int cf = NumberTools.floatToReversedIntBits(col.toFloatBits());
+//            System.out.printf("0x%08X, ", cf | (cf & 2) >>> 1);
+//            if((i & 7) == 7)
+//                System.out.println();
+//        }
+//
+//        for (int i = 216; i < 224; i++) {
+//            Color.rgba8888ToColor(col, RINSED[i]);
+//            Color.abgr8888ToColor(col, col.toEditedFloat(0f, 0.3f, 0.08f));
+//            col.clamp();
+//            display.putString(i >>> 3 & 0xFC, i & 31, String.format("%3d ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            int cf = NumberTools.floatToReversedIntBits(col.toFloatBits());
+//            System.out.printf("0x%08X, ", cf | (cf & 2) >>> 1);
+//            if((i & 7) == 7)
+//                System.out.println();
+//        }
+//
+//        for (int i = 224; i < 256; i++) {
+//            Color.rgba8888ToColor(col, RINSED[i]);
+//            col.clamp();
+//            display.putString(i >>> 3 & 0xFC, i & 31, String.format("%3d ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            int cf = NumberTools.floatToReversedIntBits(col.toFloatBits());
+//            System.out.printf("0x%08X, ", cf | (cf & 2) >>> 1);
+//            if((i & 7) == 7)
+//                System.out.println();
 //        }
 
-        float[][] random = new float[32][3];
-        random[0][0] = 0.1f;
-        random[0][1] = 0.05f;
-        random[0][2] = 0.04f;
-        random[1][0] = 0.45f;
-        random[1][1] = 0.03f;
-        random[1][2] = 0.03f;
-        random[2][0] = 0.75f;
-        random[2][1] = -0.02f;
-        random[2][2] = 0.03f;
-        random[3][0] = 0.95f;
-        random[3][1] = -0.01f;
-        random[3][2] = -0.03f;
-        for (int i = 4; i < random.length; i++) {
-            random[i][0] = vdc(2, i);
-            final float rad = vdc(13, i) * 6.2831855f, adj = NumberTools.sin(random[i][0] * 3.14159265358979323846f) * 0.4f + 0.1f;
-            random[i][1] = NumberTools.cos(rad) * adj;
-            random[i][2] = NumberTools.sin(rad) * adj;
-//            random[i][1] = vdc(5, i) - 0.5f;
-//            random[i][2] = vdc(11, i) - 0.5f;
-        }
-        Arrays.sort(random, new Comparator<float[]>() {
-            @Override
-            public int compare(float[] o1, float[] o2) {
-                return (int)Math.signum(o1[0] - o2[0]);
-            }
-        });
-        for (int i = 0; i < 32; i++) {
-            ycc(random[i]);
-        }
+//        float[][] random = new float[32][3];
+//        random[0][0] = 0.1f;
+//        random[0][1] = 0.05f;
+//        random[0][2] = 0.04f;
+//        random[1][0] = 0.45f;
+//        random[1][1] = 0.03f;
+//        random[1][2] = 0.03f;
+//        random[2][0] = 0.75f;
+//        random[2][1] = -0.02f;
+//        random[2][2] = 0.03f;
+//        random[3][0] = 0.95f;
+//        random[3][1] = -0.01f;
+//        random[3][2] = -0.03f;
+//        for (int i = 4; i < random.length; i++) {
+//            random[i][0] = vdc(2, i);
+//            final float rad = vdc(13, i) * 6.2831855f, adj = NumberTools.sin(random[i][0] * 3.14159265358979323846f) * 0.4f + 0.1f;
+//            random[i][1] = NumberTools.cos(rad) * adj;
+//            random[i][2] = NumberTools.sin(rad) * adj;
+//        }
+//        Arrays.sort(random, new Comparator<float[]>() {
+//            @Override
+//            public int compare(float[] o1, float[] o2) {
+//                return (int)Math.signum(o1[0] - o2[0]);
+//            }
+//        });
+//        for (int i = 0; i < 32; i++) {
+//            ycc(random[i]);
+//        }
         
 //        for (int i = 0; i < 32; i++) {
 //            SColor db = SColor.DAWNBRINGER_32[i];
@@ -607,7 +690,7 @@ public class ColorTest extends ApplicationAdapter {
             );
             //System.out.println("Processed " + i);
         }
-//        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
+        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
     }
     public static void tabSplit(String[] receiving, String source) {
         int dl = 1, idx = -1, idx2;
@@ -629,13 +712,13 @@ public class ColorTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xfff) * 0x1p-7f) * 0.5f + 0.5f;
-        Gdx.graphics.setTitle("Current luma: " + luma);
-        for (float cb = -0.625f; cb <= 0.625f; cb += 0x1p-6f) {
-            for (float cr = -0.626f; cr <= 0.625f; cr += 0x1p-6f) {
-                ycc(luma, cb, cr);
-            }
-        }
+//        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xfff) * 0x1p-7f) * 0.5f + 0.5f;
+//        Gdx.graphics.setTitle("Current luma: " + luma);
+//        for (float cb = -0.625f; cb <= 0.625f; cb += 0x1p-6f) {
+//            for (float cr = -0.626f; cr <= 0.625f; cr += 0x1p-6f) {
+//                ycc(luma, cb, cr);
+//            }
+//        }
         stage.getViewport().update(totalWidth, totalHeight, true);
         stage.getViewport().apply(true);
         stage.draw();
