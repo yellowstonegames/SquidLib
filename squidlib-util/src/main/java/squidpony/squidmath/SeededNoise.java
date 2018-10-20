@@ -656,7 +656,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     };
 
 
-    protected static final int[] SIMPLEX = WhirlingNoise.SIMPLEX;
+    protected static final int[] SIMPLEX = WhirlingNoise.SIMPLEX_4D;
 
     /**
      * Possibly useful outside SeededNoise. Uses a modified version of LinnormRNG's algorithm and generates 8 bits.
