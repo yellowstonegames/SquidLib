@@ -72,7 +72,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 110, otherMode = 0;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 82, otherMode = 0;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -204,7 +204,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private BasicRandom32 br32 = new BasicRandom32();
     private BasicRandom64 br64 = new BasicRandom64();
     private CellularAutomaton ca = new CellularAutomaton(512, 512);
-    private int ctr = 0;
+    private int ctr = -256;
     private boolean keepGoing = true;
 
     private double total = 0.0;
@@ -1106,6 +1106,29 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
                 float bright;
                 switch (key) {
+                    case '-':
+                        switch (testType)
+                        {
+                            case 4:
+                                noiseMode = (noiseMode + NOISE_LIMIT - 1) % NOISE_LIMIT;
+                                break;
+                            case 5:
+                                rngMode = (rngMode + 49) % 50;
+                                break;
+                            case 0:
+                                hashMode = (hashMode + 52) % 53;
+                                break;
+                            case 1:
+                                hashMode = (hashMode + 72) % 73;
+                                break;
+                            case 2:
+                                hashMode = (hashMode + 27) % 28;
+                                break;
+                            default:
+                                otherMode = (otherMode + 16) % 17;
+                                break;
+                        }
+                        break;
                     case 'u':
                     case 'U':
                     case SquidInput.ENTER:
@@ -1356,6 +1379,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 'N':
                     case 'n':
                         testType = 4;
+                        ctr = -256;
                         putMap();
                         //Gdx.graphics.requestRendering();
                         break;

@@ -51,6 +51,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
             root3 = 1.7320508f,
             F2f = 0.5f * (root3 - 1f),
             G2f = (3f - root3) * 0.16666667f,
+            H2f = 2f * G2f,
             F3f = 0.33333334f,
             G3f = 0.16666667f;
     /*
@@ -502,6 +503,73 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
                     -1.4183908, 1.4183908, -1.4183908, 0.5875167,
                     -1.4183908, -1.4183908, 1.4183908, 0.5875167,
                     -1.4183908, -1.4183908, -1.4183908, 0.5875167,
+            };
+    protected static final float[] grad4f =
+            {
+                    -0.5875167f, 1.4183908f, 1.4183908f, 1.4183908f,
+                    -0.5875167f, 1.4183908f, 1.4183908f, -1.4183908f,
+                    -0.5875167f, 1.4183908f, -1.4183908f, 1.4183908f,
+                    -0.5875167f, 1.4183908f, -1.4183908f, -1.4183908f,
+                    -0.5875167f, -1.4183908f, 1.4183908f, 1.4183908f,
+                    -0.5875167f, -1.4183908f, 1.4183908f, -1.4183908f,
+                    -0.5875167f, -1.4183908f, -1.4183908f, 1.4183908f,
+                    -0.5875167f, -1.4183908f, -1.4183908f, -1.4183908f,
+                    1.4183908f, -0.5875167f, 1.4183908f, 1.4183908f,
+                    1.4183908f, -0.5875167f, 1.4183908f, -1.4183908f,
+                    1.4183908f, -0.5875167f, -1.4183908f, 1.4183908f,
+                    1.4183908f, -0.5875167f, -1.4183908f, -1.4183908f,
+                    -1.4183908f, -0.5875167f, 1.4183908f, 1.4183908f,
+                    -1.4183908f, -0.5875167f, 1.4183908f, -1.4183908f,
+                    -1.4183908f, -0.5875167f, -1.4183908f, 1.4183908f,
+                    -1.4183908f, -0.5875167f, -1.4183908f, -1.4183908f,
+                    1.4183908f, 1.4183908f, -0.5875167f, 1.4183908f,
+                    1.4183908f, 1.4183908f, -0.5875167f, -1.4183908f,
+                    1.4183908f, -1.4183908f, -0.5875167f, 1.4183908f,
+                    1.4183908f, -1.4183908f, -0.5875167f, -1.4183908f,
+                    -1.4183908f, 1.4183908f, -0.5875167f, 1.4183908f,
+                    -1.4183908f, 1.4183908f, -0.5875167f, -1.4183908f,
+                    -1.4183908f, -1.4183908f, -0.5875167f, 1.4183908f,
+                    -1.4183908f, -1.4183908f, -0.5875167f, -1.4183908f,
+                    1.4183908f, 1.4183908f, 1.4183908f, -0.5875167f,
+                    1.4183908f, 1.4183908f, -1.4183908f, -0.5875167f,
+                    1.4183908f, -1.4183908f, 1.4183908f, -0.5875167f,
+                    1.4183908f, -1.4183908f, -1.4183908f, -0.5875167f,
+                    -1.4183908f, 1.4183908f, 1.4183908f, -0.5875167f,
+                    -1.4183908f, 1.4183908f, -1.4183908f, -0.5875167f,
+                    -1.4183908f, -1.4183908f, 1.4183908f, -0.5875167f,
+                    -1.4183908f, -1.4183908f, -1.4183908f, -0.5875167f,
+                    0.5875167f, 1.4183908f, 1.4183908f, 1.4183908f,
+                    0.5875167f, 1.4183908f, 1.4183908f, -1.4183908f,
+                    0.5875167f, 1.4183908f, -1.4183908f, 1.4183908f,
+                    0.5875167f, 1.4183908f, -1.4183908f, -1.4183908f,
+                    0.5875167f, -1.4183908f, 1.4183908f, 1.4183908f,
+                    0.5875167f, -1.4183908f, 1.4183908f, -1.4183908f,
+                    0.5875167f, -1.4183908f, -1.4183908f, 1.4183908f,
+                    0.5875167f, -1.4183908f, -1.4183908f, -1.4183908f,
+                    1.4183908f, 0.5875167f, 1.4183908f, 1.4183908f,
+                    1.4183908f, 0.5875167f, 1.4183908f, -1.4183908f,
+                    1.4183908f, 0.5875167f, -1.4183908f, 1.4183908f,
+                    1.4183908f, 0.5875167f, -1.4183908f, -1.4183908f,
+                    -1.4183908f, 0.5875167f, 1.4183908f, 1.4183908f,
+                    -1.4183908f, 0.5875167f, 1.4183908f, -1.4183908f,
+                    -1.4183908f, 0.5875167f, -1.4183908f, 1.4183908f,
+                    -1.4183908f, 0.5875167f, -1.4183908f, -1.4183908f,
+                    1.4183908f, 1.4183908f, 0.5875167f, 1.4183908f,
+                    1.4183908f, 1.4183908f, 0.5875167f, -1.4183908f,
+                    1.4183908f, -1.4183908f, 0.5875167f, 1.4183908f,
+                    1.4183908f, -1.4183908f, 0.5875167f, -1.4183908f,
+                    -1.4183908f, 1.4183908f, 0.5875167f, 1.4183908f,
+                    -1.4183908f, 1.4183908f, 0.5875167f, -1.4183908f,
+                    -1.4183908f, -1.4183908f, 0.5875167f, 1.4183908f,
+                    -1.4183908f, -1.4183908f, 0.5875167f, -1.4183908f,
+                    1.4183908f, 1.4183908f, 1.4183908f, 0.5875167f,
+                    1.4183908f, 1.4183908f, -1.4183908f, 0.5875167f,
+                    1.4183908f, -1.4183908f, 1.4183908f, 0.5875167f,
+                    1.4183908f, -1.4183908f, -1.4183908f, 0.5875167f,
+                    -1.4183908f, 1.4183908f, 1.4183908f, 0.5875167f,
+                    -1.4183908f, 1.4183908f, -1.4183908f, 0.5875167f,
+                    -1.4183908f, -1.4183908f, 1.4183908f, 0.5875167f,
+                    -1.4183908f, -1.4183908f, -1.4183908f, 0.5875167f,
             };
 //    public static void randomUnitVector4(long seed, final float[] vector)
 //    {
@@ -1017,7 +1085,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
     /**
      * Used by {@link #noise(double, double, double, double, long)} to look up the vertices of the 4D triangle analogue.
      */
-    protected static final int[] SIMPLEX = {0, 1, 3, 7, 0, 1, 7, 3,
+    protected static final int[] SIMPLEX_4D = {0, 1, 3, 7, 0, 1, 7, 3,
             0, 0, 0, 0, 0, 3, 7, 1, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 1, 3, 7, 0, 0, 3, 1, 7, 0, 0, 0, 0,
             0, 7, 1, 3, 0, 7, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1061,18 +1129,18 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
                 z0 = z - Z0,
                 w0 = w - W0;
         final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
-        final int i1 = SIMPLEX[c] >>> 2,
-                j1 = SIMPLEX[c | 1] >>> 2,
-                k1 = SIMPLEX[c | 2] >>> 2,
-                l1 = SIMPLEX[c | 3] >>> 2,
-                i2 = SIMPLEX[c] >>> 1 & 1,
-                j2 = SIMPLEX[c | 1] >>> 1 & 1,
-                k2 = SIMPLEX[c | 2] >>> 1 & 1,
-                l2 = SIMPLEX[c | 3] >>> 1 & 1,
-                i3 = SIMPLEX[c] & 1,
-                j3 = SIMPLEX[c | 1] & 1,
-                k3 = SIMPLEX[c | 2] & 1,
-                l3 = SIMPLEX[c | 3] & 1;
+        final int i1 = SIMPLEX_4D[c] >>> 2,
+                j1 = SIMPLEX_4D[c | 1] >>> 2,
+                k1 = SIMPLEX_4D[c | 2] >>> 2,
+                l1 = SIMPLEX_4D[c | 3] >>> 2,
+                i2 = SIMPLEX_4D[c] >>> 1 & 1,
+                j2 = SIMPLEX_4D[c | 1] >>> 1 & 1,
+                k2 = SIMPLEX_4D[c | 2] >>> 1 & 1,
+                l2 = SIMPLEX_4D[c | 3] >>> 1 & 1,
+                i3 = SIMPLEX_4D[c] & 1,
+                j3 = SIMPLEX_4D[c | 1] & 1,
+                k3 = SIMPLEX_4D[c | 2] & 1,
+                l3 = SIMPLEX_4D[c | 3] & 1;
         final double x1 = x0 - i1 + G4,
                 y1 = y0 - j1 + G4,
                 z1 = z0 - k1 + G4,
@@ -1103,27 +1171,27 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         double t0 = 0.62 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
         if(t0 > 0) {
             t0 *= t0;
-            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 | 1] + z0 * gradient4DLUT[h0 | 2] + w0 * gradient4DLUT[h0 | 3]);
+            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 + 1] + z0 * gradient4DLUT[h0 + 2] + w0 * gradient4DLUT[h0 + 3]);
         }
         double t1 = 0.62 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
         if (t1 > 0) {
             t1 *= t1;
-            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 | 1] + z1 * gradient4DLUT[h1 | 2] + w1 * gradient4DLUT[h1 | 3]);
+            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 + 1] + z1 * gradient4DLUT[h1 + 2] + w1 * gradient4DLUT[h1 + 3]);
         }
         double t2 = 0.62 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
         if (t2 > 0) {
             t2 *= t2;
-            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 | 1] + z2 * gradient4DLUT[h2 | 2] + w2 * gradient4DLUT[h2 | 3]);
+            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 + 1] + z2 * gradient4DLUT[h2 + 2] + w2 * gradient4DLUT[h2 + 3]);
         }
         double t3 = 0.62 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
         if (t3 > 0) {
             t3 *= t3;
-            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 | 1] + z3 * gradient4DLUT[h3 | 2] + w3 * gradient4DLUT[h3 | 3]);
+            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 + 1] + z3 * gradient4DLUT[h3 + 2] + w3 * gradient4DLUT[h3 + 3]);
         }
         double t4 = 0.62 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
         if (t4 > 0) {
             t4 *= t4;
-            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 | 1] + z4 * gradient4DLUT[h4 | 2] + w4 * gradient4DLUT[h4 | 3]);
+            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 + 1] + z4 * gradient4DLUT[h4 + 2] + w4 * gradient4DLUT[h4 + 3]);
         }
         //n *= 14.75;
         //if(n > 1.0 || n < -1.0) System.out.printf("x: %f, y: %f, z: %f, w: %f, n is %f\n", x, y, z, w, n);
@@ -1307,9 +1375,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
         float x1 = x0 - i1 + G2f; // Offsets for middle corner in (x,y)
         // unskewed coords
         float y1 = y0 - j1 + G2f;
-        float x2 = x0 - 1f + 2f * G2f; // Offsets for last corner in (x,y)
+        float x2 = x0 - 1f + H2f; // Offsets for last corner in (x,y)
         // unskewed coords
-        float y2 = y0 - 1f + 2f * G2f;
+        float y2 = y0 - 1f + H2f;
         // Work out the hashed gradient indices of the three simplex corners
 //        int gi0 = determine256(i + determine(j));
 //        int gi1 = determine256(i + i1 + determine(j + j1));
