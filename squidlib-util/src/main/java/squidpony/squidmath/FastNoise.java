@@ -31,8 +31,7 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.HastyPointHash.hash256;
-import static squidpony.squidmath.Noise.HastyPointHash.hash32;
+import static squidpony.squidmath.Noise.HastyPointHash.*;
 import static squidpony.squidmath.WhirlingNoise.grad4f;
 
 /**
@@ -115,6 +114,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
+     * Gets the frequency for all noise types. The default is 0.03125f, or 1f/32f.
+     * @return the frequency for all noise types, which should be a positive non-zero float
+     */
+    public float getFrequency()
+    {
+        return frequency;
+    }
+
+    /**
      * Changes the interpolation method used to smooth between noise values, using on of the following constants from
      * this class (lowest to highest quality): {@link #LINEAR} (0), {@link #HERMITE} (1), or {@link #QUINTIC} (2). If
      * this is not called, it defaults to HERMITE. This is used in Value, Gradient Noise and Position Perturbing.
@@ -136,8 +144,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         this.noiseType = noiseType;
     }
 
-    // Sets
-    // Default: 3
+    /**
+     * Gets the default type of noise returned by {@link #getConfiguredNoise(float, float)}, using one of the following constants
+     * in this class:
+     * {@link #VALUE} (0), {@link #VALUE_FRACTAL} (1), {@link #PERLIN} (2), {@link #PERLIN_FRACTAL} (3),
+     * {@link #SIMPLEX} (4), {@link #SIMPLEX_FRACTAL} (5), {@link #CELLULAR} (6), {@link #WHITE_NOISE} (7),
+     * {@link #CUBIC} (8), or {@link #CUBIC_FRACTAL} (9). The default is SIMPLEX.
+     * @return the noise type as a code, from 0 to 9 inclusive
+     */
+    public int getNoiseType()
+    {
+        return noiseType;
+    }
 
     /**
      * Sets the octave count for all fractal noise types.
@@ -150,8 +168,17 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     /**
+     * Gets the octave count for all fractal noise types. The default is 3.
+     * @return the number of octaves to use for fractal noise types, as a positive non-zero int
+     */
+    public int getFractalOctaves()
+    {
+        return octaves;
+    }
+
+    /**
      * Sets the octave lacunarity for all fractal noise types.
-     * Lacunarity is a multiplicative change to frequency between octaves. If this isn't called, it defaults to 2.0.
+     * Lacunarity is a multiplicative change to frequency between octaves. If this isn't called, it defaults to 2.
      * @param lacunarity a non-0 float that will be used for the lacunarity of fractal noise types; commonly 2.0 or 0.5
      */
     public void setFractalLacunarity(float lacunarity) {
@@ -178,6 +205,16 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         this.fractalType = fractalType;
     }
 
+    /**
+     * Gets the method for combining octaves in all fractal noise types, allowing an int argument corresponding to one
+     * of the following constants from this class: {@link #FBM} (0), {@link #BILLOW} (1), or {@link #RIDGED_MULTI} (2).
+     * The default is FBM.     
+     * @return the fractal type as a code; 0, 1, or 2
+     */
+    public int getFractalType()
+    {
+        return fractalType;
+    }
     /**
      * Sets the distance function used in cellular noise calculations, allowing an int argument corresponding to one of
      * the following constants from this class: {@link #EUCLIDEAN} (0), {@link #MANHATTAN} (1), or {@link #NATURAL} (2).
@@ -444,23 +481,26 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     private static float valCoord2D(int seed, int x, int y) {
-        final int n = seed ^ X_PRIME * x ^ Y_PRIME * y;
-        return (n * n * n * 60493) / 2147483648f;
+        return (hashAll(x, y, seed) & 0xFFFFFF) * 0x1.0p-24f;
+//        final int n = (seed ^ X_PRIME * x ^ Y_PRIME * y) >> 12;
+//        return ((n * n ^ n * 0xEC4D ^ seed) & 0xFFFFFF) * 0x1.0p-24f;
     }
 
     private static float valCoord3D(int seed, int x, int y, int z) {
-        final int n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z;
-        return (n * n * n * 60493) / 2147483648f;
+        return (hashAll(x, y, z, seed) & 0xFFFFFF) * 0x1.0p-24f;
+//        final int n = (seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) >> 12;
+//        return ((n * n ^ n * 0xEC4D ^ seed) & 0xFFFFFF) * 0x1.0p-24f;
     }
 
     private static float valCoord4D(int seed, int x, int y, int z, int w) {
-        final int n = seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w;
-        return (n * n * n * 60493) / 2147483648f;
+        return (hashAll(x, y, z, w, seed) & 0xFFFFFF) * 0x1.0p-24f;
+//        final int n = (seed ^ X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z ^ W_PRIME * w) >> 12;
+//        return ((n * n ^ n * 0xEC4D ^ seed) & 0xFFFFFF) * 0x1.0p-24f;
     }
 
     private static float gradCoord2D(int seed, int x, int y, float xd, float yd) {
         //Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) & 7];
-        float[] g = WhirlingNoise.phiGrad2f[hash256(x, y, seed)];
+        final float[] g = WhirlingNoise.phiGrad2f[hash256(x, y, seed)];
         //Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) >>> 29];
         return xd * g[0] + yd * g[1];
     }
@@ -469,7 +509,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 //        seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z;
 //        seed = seed * seed * seed * 60493;
 //        Float3 g = GRAD_3D[(seed ^ (seed >>> 13)) & 31];
-        Float3 g = GRAD_3D[hash32(x, y, z, seed)];
+        final Float3 g = GRAD_3D[hash32(x, y, z, seed)];
         //Float3 g = GRAD_3D[((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) >>> 27];
         return xd * g.x + yd * g.y + zd * g.z;
     }
@@ -992,20 +1032,20 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
                 break;
         }
 
-        float xd0 = x - x0;
-        float yd0 = y - y0;
-        float zd0 = z - z0;
-        float xd1 = xd0 - 1;
-        float yd1 = yd0 - 1;
-        float zd1 = zd0 - 1;
+        final float xd0 = x - x0;
+        final float yd0 = y - y0;
+        final float zd0 = z - z0;
+        final float xd1 = xd0 - 1;
+        final float yd1 = yd0 - 1;
+        final float zd1 = zd0 - 1;
 
-        float xf00 = lerp(gradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), gradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs);
-        float xf10 = lerp(gradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), gradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs);
-        float xf01 = lerp(gradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), gradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs);
-        float xf11 = lerp(gradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), gradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs);
+        final float xf00 = lerp(gradCoord3D(seed, x0, y0, z0, xd0, yd0, zd0), gradCoord3D(seed, x1, y0, z0, xd1, yd0, zd0), xs);
+        final float xf10 = lerp(gradCoord3D(seed, x0, y1, z0, xd0, yd1, zd0), gradCoord3D(seed, x1, y1, z0, xd1, yd1, zd0), xs);
+        final float xf01 = lerp(gradCoord3D(seed, x0, y0, z1, xd0, yd0, zd1), gradCoord3D(seed, x1, y0, z1, xd1, yd0, zd1), xs);
+        final float xf11 = lerp(gradCoord3D(seed, x0, y1, z1, xd0, yd1, zd1), gradCoord3D(seed, x1, y1, z1, xd1, yd1, zd1), xs);
 
-        float yf0 = lerp(xf00, xf10, ys);
-        float yf1 = lerp(xf01, xf11, ys);
+        final float yf0 = lerp(xf00, xf10, ys);
+        final float yf1 = lerp(xf01, xf11, ys);
 
         return lerp(yf0, yf1, zs);
     }
@@ -2211,7 +2251,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleCubic(0, x, y);
     }
 
-    private final static float CUBIC_2D_BOUNDING = 1 / (float) (1.5 * 1.5);
+    private final static float CUBIC_2D_BOUNDING = 1 / 2.25f;
 
     private float singleCubic(int seed, float x, float y) {
         int x1 = fastFloor(x);

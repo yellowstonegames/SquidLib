@@ -1076,20 +1076,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         mistA = CrossHash.Mist.alpha;
         mistB = CrossHash.Mist.beta;
         mistC = CrossHash.Mist.chi;
-        fuzzy = new ThunderRNG(0xBEEFCAFEF00DCABAL);
+        fuzzy = new ThrustAltRNG(0xBEEFCAFEF00DCABAL);
         view = new ScreenViewport();
-        stage = new Stage(view, batch);
 
         Noise.seamless3D(seamless[0], 1337, 1);
         Noise.seamless3D(seamless[1], 123456, 1);
         Noise.seamless3D(seamless[2], -9999, 1);
-        /*
-        Noise.seamless3D(seamless[0], 1337, 1, SeededNoise.instance);
-        Noise.seamless3D(seamless[1], 123456, 1, SeededNoise.instance);
-        Noise.seamless3D(seamless[2], -9999, 1, SeededNoise.instance);
-        */
         ArrayTools.fill(back, FLOAT_WHITE);
-//        ArrayTools.fill(display.backgrounds, -0x1.fffffep126f); // white as a float
         ca.current.insert(250, 250).insert(250, 251).insert(249, 250)
                 .insert(250, 249).insert(251, 249)
                 .insert(125, 125).insert(125, 126).insert(124, 125)
@@ -1275,48 +1268,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                         TuringPattern.offsetsCircleInto(turingInhibit, width, height, 8);
                                         TuringPattern.initializeInto(turing, width, height, stretchScaled2D, ctr);
                                         break;
-                                    case 100:
-                                        Gdx.graphics.setTitle("Mummy 5D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                                        for (int x = 0; x < width; x++) {
-                                            for (int y = 0; y < height; y++) {
-                                                back[x][y] = floatGet(
-                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX0, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX1, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX2, alter5D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        1.0f);
-                                            }
-                                        }
-                                        break;
-                                    case 101:
-                                        Gdx.graphics.setTitle("Mummy 5D Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                                        for (int x = 0; x < width; x++) {
-                                            for (int y = 0; y < height; y++) {
-                                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter5D(x, y, ctr)) * 0.50f) + 0.50f;
-                                                back[x][y] = floatGet(bright, bright, bright, 1f);
-                                            }
-                                        }
-                                        break;
-                                    case 102:
-                                        Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                                        for (int x = 0; x < width; x++) {
-                                            for (int y = 0; y < height; y++) {
-                                                back[x][y] = floatGet(
-                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        (float) (MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr)) * 0.50f) + 0.50f,
-                                                        1.0f);
-                                            }
-                                        }
-                                        break;
-                                    case 103:
-                                        Gdx.graphics.setTitle("Mummy 7D Noise, one octave at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                                        for (int x = 0; x < width; x++) {
-                                            for (int y = 0; y < height; y++) {
-                                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr)) * 0.50f) + 0.50f;
-                                                back[x][y] = floatGet(bright, bright, bright, 1f);
-                                            }
-                                        }
-                                        break;
                                 }
                                 break;
                             case 5:
@@ -1407,16 +1358,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         input.setRepeatGap(Long.MAX_VALUE);
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(input);
-        // and then add display, our one visual component, to the list of things that act in Stage.
-        //display.setPosition(0, -1);
-        //overlay.setPosition(0, 0);
-        //Stack stk = new Stack(display, overlay);
-        //stage.addActor(stk);
-        //stk.layout();
-        //stage.addActor(display);
         putMap();
-        //Gdx.graphics.setContinuousRendering(false);
-        //Gdx.graphics.requestRendering();
     }
 
     public void putMap() {
@@ -1424,7 +1366,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
         //overlay.erase();
         long code, extra;
         float bright, s0 = 0, c0 = 0, s1 = 0, c1 = 0, s2 = 0, c2 = 0;
-        double dBright, dBright2;
+        double dBright;
         int iBright;
         int xx, yy;
         switch (testType) {
