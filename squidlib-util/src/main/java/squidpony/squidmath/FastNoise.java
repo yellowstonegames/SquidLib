@@ -85,6 +85,42 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         this.seed = seed;
         calculateFractalBounding();
     }
+    public FastNoise(int seed, float frequency)
+    {
+        this(seed, frequency, SIMPLEX, 3, 2f, 0.5f);
+    }
+    public FastNoise(int seed, float frequency, int noiseType)
+    {
+        this(seed, frequency, noiseType, 3, 2f, 0.5f);
+    }
+    public FastNoise(int seed, float frequency, int noiseType, int octaves)
+    {
+        this(seed, frequency, noiseType, octaves, 2f, 0.5f);
+    }
+
+    /**
+     * A constructor that takes a lot of parameters to specify the FastNoise from the start. An example call to this
+     * would be {@code new FastNoise(1337, 0.02f, FastNoise.SIMPLEX_FRACTAL, 4, 0.5f, 2f)}, which makes noise with a
+     * lower frequency, 4 octaves of Simplex noise, and the "inverse" effect on how those octaves work (which makes
+     * the extra added octaves be more significant to the final result and also have a lower frequency, while normally
+     * added octaves have a higher frequency and tend to have a minor effect on the large-scale shape of the noise).
+     * @param seed the int seed for the noise, which should significantly affect the produced noise
+     * @param frequency the multiplier for all dimensions, which is usually fairly small (1.0f/32.0f is the default)
+     * @param noiseType the noiseType, which should be a constant from this class (see {@link #setNoiseType(int)})
+     * @param octaves how many octaves of noise to use when the noiseType is one of the _FRACTAL types
+     * @param lacunarity typically 2.0, or 0.5 to change how extra octaves work (inverse mode) 
+     * @param gain typically 0.5, or 2.0 to change how extra octaves work (inverse mode)
+     */
+    public FastNoise(int seed, float frequency, int noiseType, int octaves, float lacunarity, float gain)
+    {
+        this.seed = seed;
+        this.frequency = frequency;
+        this.noiseType = noiseType;
+        this.octaves = octaves;
+        this.lacunarity = lacunarity;
+        this.gain = gain;
+        calculateFractalBounding();
+    }
 
     /**
      * @return Returns the seed used by this object
@@ -2050,6 +2086,79 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         return 14.75f * n;
     }
+    
+    // Simplex Noise
+    public float getSimplexFractal(float x, float y, float z, float w) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+        
+        switch (fractalType) {
+            case FBM:
+                return singleSimplexFractalFBM(x, y, z, w);
+            case BILLOW:
+                return singleSimplexFractalBillow(x, y, z, w);
+            case RIDGED_MULTI:
+                return singleSimplexFractalRidgedMulti(x, y, z, w);
+            default:
+                return 0;
+        }
+    }
+
+    private float singleSimplexFractalFBM(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = singleSimplex(seed, x, y, z, w);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += singleSimplex(seed + i, x, y, z, w) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+    private float singleSimplexFractalRidgedMulti(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = 1 - Math.abs(singleSimplex(seed, x, y, z, w));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singleSimplex(seed + i, x, y, z, w))) * amp;
+        }
+
+        return sum;
+    }
+
+    private float singleSimplexFractalBillow(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = Math.abs(singleSimplex(seed, x, y, z, w)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleSimplex(seed + i, x, y, z, w)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
 
     // Cubic Noise
     public float getCubicFractal(float x, float y, float z) {

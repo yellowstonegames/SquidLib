@@ -31,7 +31,6 @@
 
 package squidpony.performance;
 
-import squidpony.squidmath.FastNoise;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -47,81 +46,50 @@ import static squidpony.squidmath.NumberTools.zigzag;
 
 /**
  * Various different noise functions, most variants on Simplex noise. These measurements are per-call, in nanoseconds.
- * 2D and higher noise methods, before WhirlingNoise refactor (Feb 7, 2018):
- * Benchmark                            Mode  Cnt    Score   Error  Units
- * NoiseBenchmark.measureMerlin2D       avgt    4   13.131 ± 0.174  ns/op // produces longs, not continuous like Simplex
- * NoiseBenchmark.measureMerlin3D       avgt    4   33.318 ± 0.628  ns/op // produces longs, not continuous like Simplex
- * NoiseBenchmark.measurePerlin2D       avgt    4   41.864 ± 0.978  ns/op // PerlinNoise doesn't take a seed
- * NoiseBenchmark.measurePerlin3D       avgt    4   63.460 ± 1.059  ns/op
- * NoiseBenchmark.measurePerlin4D       avgt    4  117.402 ± 2.109  ns/op
- * NoiseBenchmark.measureSeeded2D       avgt    4   44.431 ± 1.367  ns/op // SeededNoise takes a seed
- * NoiseBenchmark.measureSeeded3D       avgt    4   64.741 ± 2.399  ns/op
- * NoiseBenchmark.measureSeeded4D       avgt    4  101.149 ± 2.251  ns/op
- * NoiseBenchmark.measureSeeded6D       avgt    4  192.837 ± 4.507  ns/op
- * NoiseBenchmark.measureWhirling2D     avgt    4   40.474 ± 1.329  ns/op // WhirlngNoise takes a seed and uses some
- * NoiseBenchmark.measureWhirling3D     avgt    4   63.542 ± 4.781  ns/op //   unusual gradient vectors
- * NoiseBenchmark.measureWhirling4D     avgt    4  116.715 ± 1.456  ns/op
- * NoiseBenchmark.measureWhirlingAlt2D  avgt    4   41.742 ± 1.181  ns/op // WhirlingAlt returns a float, not a double
- * NoiseBenchmark.measureWhirlingAlt3D  avgt    4   63.035 ± 1.447  ns/op
- *
- * 2D and higher noise methods, after WhirlingNoise refactor (Feb 10, 2018):
- * Benchmark                           Mode  Cnt    Score    Error  Units
- * NoiseBenchmark.measureMerlin2D      avgt    5   13.015 ±  0.106  ns/op // produces longs, not continuous like Simplex
- * NoiseBenchmark.measureMerlin3D      avgt    5   33.046 ±  0.169  ns/op // produces longs, not continuous like Simplex
- * NoiseBenchmark.measurePerlin2D      avgt    5   41.904 ±  1.197  ns/op // PerlinNoise doesn't take a seed
- * NoiseBenchmark.measurePerlin3D      avgt    5   62.919 ±  0.691  ns/op
- * NoiseBenchmark.measurePerlin4D      avgt    5  125.665 ±  0.538  ns/op
- * NoiseBenchmark.measureSeeded2D      avgt    5   44.215 ±  0.269  ns/op // SeededNoise takes a seed
- * NoiseBenchmark.measureSeeded3D      avgt    5   64.599 ±  1.826  ns/op
- * NoiseBenchmark.measureSeeded4D      avgt    5  102.462 ±  6.846  ns/op
- * NoiseBenchmark.measureSeeded6D      avgt    5  194.440 ± 19.513  ns/op
- * NoiseBenchmark.measureWhirling2D    avgt    5   41.763 ±  0.408  ns/op // WhirlngNoise takes a seed and uses some
- * NoiseBenchmark.measureWhirling3D    avgt    5   52.001 ±  0.807  ns/op //   unusual gradient vectors, as well as
- * NoiseBenchmark.measureWhirling4D    avgt    5   86.793 ±  0.789  ns/op //   different point hashes
- * NoiseBenchmark.measureWhirlingAlt2D avgt    5   42.469 ±  0.569  ns/op // WhirlingAlt returns a float, not a double
- * NoiseBenchmark.measureWhirlingAlt3D avgt    5   49.965 ±  1.281  ns/op
- *
- * Those same noise methods plus FastNoise (current version, uses int seeds) (Feb 14 2018)
- * Benchmark                            Mode  Cnt    Score    Error  Units
- * NoiseBenchmark.measureFastNoise2D    avgt    5   29.752 ±  1.547  ns/op // FastNoise is fast for 2D and 3D
- * NoiseBenchmark.measureFastNoise3D    avgt    5   50.088 ±  3.320  ns/op // uses WhirlingNoise's good gradients
- * NoiseBenchmark.measureFastNoise4D    avgt    5   97.205 ±  2.828  ns/op // not as good as WhirlingNoise 4D
- * NoiseBenchmark.measureMerlin2D       avgt    5   13.199 ±  0.242  ns/op // Merlin isn't like the others; it only
- * NoiseBenchmark.measureMerlin3D       avgt    5   33.539 ±  1.910  ns/op //   produces about 1 usable bit
- * NoiseBenchmark.measurePerlin2D       avgt    5   42.041 ±  0.431  ns/op // Perlin isn't seedable, which limits it
- * NoiseBenchmark.measurePerlin3D       avgt    5   63.872 ±  2.904  ns/op
- * NoiseBenchmark.measurePerlin4D       avgt    5  118.307 ±  3.781  ns/op
- * NoiseBenchmark.measureSeeded2D       avgt    5   44.349 ±  0.727  ns/op
- * NoiseBenchmark.measureSeeded3D       avgt    5   64.938 ±  0.454  ns/op // uses definitely bad gradients
- * NoiseBenchmark.measureSeeded4D       avgt    5  102.355 ±  5.670  ns/op
- * NoiseBenchmark.measureSeeded6D       avgt    5  195.494 ± 15.235  ns/op // only 6D noise we have, still has issues
- * NoiseBenchmark.measureWhirling2D     avgt    5   42.168 ±  1.827  ns/op
- * NoiseBenchmark.measureWhirling3D     avgt    5   64.308 ±  3.967  ns/op // uses good gradients based on a polyhedron
- * NoiseBenchmark.measureWhirling4D     avgt    5   86.755 ±  1.286  ns/op // fastest 4D, good polychoronal gradients
- * NoiseBenchmark.measureWhirlingAlt2D  avgt    5   42.485 ±  0.626  ns/op
- * NoiseBenchmark.measureWhirlingAlt3D  avgt    5   49.882 ±  0.572  ns/op // similar to non-Alt but returns a float
- *
- * Those same noise methods plus FastNoise (earlier version, uses long seeds) (Feb 13 2018)
- * Benchmark                            Mode  Cnt    Score   Error  Units
- * NoiseBenchmark.measureFastNoise2D    avgt    5   31.304 ± 0.359  ns/op
- * NoiseBenchmark.measureFastNoise3D    avgt    5   61.618 ± 0.361  ns/op
- * NoiseBenchmark.measureFastNoise4D    avgt    5   99.838 ± 0.950  ns/op
- * NoiseBenchmark.measureMerlin2D       avgt    5   13.113 ± 0.143  ns/op
- * NoiseBenchmark.measureMerlin3D       avgt    5   33.292 ± 0.285  ns/op
- * NoiseBenchmark.measurePerlin2D       avgt    5   41.822 ± 0.414  ns/op
- * NoiseBenchmark.measurePerlin3D       avgt    5   63.389 ± 0.384  ns/op
- * NoiseBenchmark.measurePerlin4D       avgt    5  117.056 ± 1.296  ns/op
- * NoiseBenchmark.measureSeeded2D       avgt    5   44.215 ± 0.473  ns/op
- * NoiseBenchmark.measureSeeded3D       avgt    5   64.608 ± 0.886  ns/op
- * NoiseBenchmark.measureSeeded4D       avgt    5  101.122 ± 1.551  ns/op
- * NoiseBenchmark.measureSeeded6D       avgt    5  192.326 ± 2.835  ns/op
- * NoiseBenchmark.measureWhirling2D     avgt    5   41.822 ± 0.309  ns/op
- * NoiseBenchmark.measureWhirling3D     avgt    5   58.869 ± 0.093  ns/op
- * NoiseBenchmark.measureWhirling4D     avgt    5   86.881 ± 0.627  ns/op
- * NoiseBenchmark.measureWhirlingAlt2D  avgt    5   42.391 ± 0.313  ns/op
- * NoiseBenchmark.measureWhirlingAlt3D  avgt    5   50.004 ± 0.456  ns/op
- *
+ * The Score column is the most relevant; the score is how much time it takes to complete one call, so lower is better.
+ * The Error column can be ignored if it is relatively small, but large Error values may show a measurement inaccuracy.
+ * <br>
+ * All 2D and higher noise benchmarks, run with Java 11, on October 21, 2018:
+ * <pre>
+ * Benchmark                                Mode  Cnt    Score    Error  Units
+ * NoiseBenchmark.measureClassic2D          avgt    4   38.779 ±  0.258  ns/op
+ * NoiseBenchmark.measureClassic3D          avgt    4   75.015 ±  2.274  ns/op
+ * NoiseBenchmark.measureClassic4D          avgt    4   86.665 ±  0.476  ns/op
+ * NoiseBenchmark.measureFast3Octave3D      avgt    4  126.118 ±  0.532  ns/op // has 3 octaves of 3D noise
+ * NoiseBenchmark.measureFast3Octave4D      avgt    4  212.586 ±  9.077  ns/op // has 3 octaves of 4D noise
+ * NoiseBenchmark.measureFast5Octave3D      avgt    4  198.581 ±  1.399  ns/op // has 5 octaves of 3D noise
+ * NoiseBenchmark.measureFast5Octave4D      avgt    4  368.770 ±  2.516  ns/op // has 5 octaves of 4D noise
+ * NoiseBenchmark.measureFastNoise2D        avgt    4   29.546 ±  0.907  ns/op // fastest 2D
+ * NoiseBenchmark.measureFastNoise3D        avgt    4   45.995 ±  0.333  ns/op // fastest 3D
+ * NoiseBenchmark.measureFastNoise4D        avgt    4   79.852 ±  0.635  ns/op // tie for fastest 4D?
+ * NoiseBenchmark.measureJitter2D           avgt    4   43.965 ±  0.181  ns/op
+ * NoiseBenchmark.measureJitter3D           avgt    4  100.873 ±  0.305  ns/op
+ * NoiseBenchmark.measureJitter4D           avgt    4  150.578 ±  0.841  ns/op
+ * NoiseBenchmark.measurePerlin2D           avgt    4   40.355 ±  1.160  ns/op
+ * NoiseBenchmark.measurePerlin3D           avgt    4   60.745 ±  0.385  ns/op
+ * NoiseBenchmark.measurePerlin4D           avgt    4  118.092 ±  0.773  ns/op
+ * NoiseBenchmark.measureSeeded2D           avgt    4   36.989 ±  1.326  ns/op
+ * NoiseBenchmark.measureSeeded3D           avgt    4   65.921 ±  1.286  ns/op
+ * NoiseBenchmark.measureSeeded4D           avgt    4   79.034 ± 21.792  ns/op // tie for fastest 4D? high error
+ * NoiseBenchmark.measureSeeded6D           avgt    4  182.435 ±  4.713  ns/op // only 6D impl, so... fastest 6D
+ * NoiseBenchmark.measureWhirling2D         avgt    4   39.140 ±  0.437  ns/op
+ * NoiseBenchmark.measureWhirling3D         avgt    4   55.484 ±  0.505  ns/op
+ * NoiseBenchmark.measureWhirling3Octave3D  avgt    4  201.752 ±  4.705  ns/op // has 3 octaves of 3D noise
+ * NoiseBenchmark.measureWhirling3Octave4D  avgt    4  248.357 ±  3.296  ns/op // has 3 octaves of 4D noise
+ * NoiseBenchmark.measureWhirling4D         avgt    4   96.235 ±  0.893  ns/op
+ * NoiseBenchmark.measureWhirling5Octave3D  avgt    4  276.712 ±  2.404  ns/op // has 5 octaves of 3D noise
+ * NoiseBenchmark.measureWhirling5Octave4D  avgt    4  422.289 ±  0.777  ns/op // has 5 octaves of 4D noise
+ * NoiseBenchmark.measureWhirlingAlt2D      avgt    4   39.591 ±  2.450  ns/op
+ * NoiseBenchmark.measureWhirlingAlt3D      avgt    4   47.147 ±  9.241  ns/op
+ * </pre>
+ * The "Octave" benchmarks should be noted. FastNoise doesn't need Noise.Layered3D or Noise.Layered4D to produce
+ * multiple octaves of noise; it can do that using just FastNoise methods, and it does so much faster than WhirlingNoise
+ * can using the Layered classes nested in Noise. FastNoise can produce 5 octaves of 3D noise in less time than
+ * WhirlingNoise takes to produce 3 octaves of 3D noise. These benchmarks aren't the same on Java 8, which suggests some
+ * optimizations are occuring only in newer JVM versions (such as dot products being turned into SIMD calls).
+ * <br>
  * 1D sway methods, some of which are used in or for noise (Feb 10, 2018):
+ * <pre>
  * Benchmark                                   Mode  Cnt    Score    Error  Units
  * NoiseBenchmark.measureSwayBitDouble         avgt    5   11.289 ±  0.774  ns/op // The Bit functions were in SquidLib,
  * NoiseBenchmark.measureSwayBitDoubleTight    avgt    5   10.680 ±  0.811  ns/op // and were replaced with the later
@@ -137,6 +105,7 @@ import static squidpony.squidmath.NumberTools.zigzag;
  * NoiseBenchmark.measureZigzagBitFloat        avgt    5   10.243 ±  0.144  ns/op
  * NoiseBenchmark.measureZigzagDouble          avgt    5    7.111 ±  0.065  ns/op
  * NoiseBenchmark.measureZigzagFloat           avgt    5    6.889 ±  0.089  ns/op
+ * </pre>
  */
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -149,10 +118,19 @@ public class NoiseBenchmark {
     private short x = 0, y = 0, z = 0, w = 0, u = 0, v = 0;
     private float[] f = new float[1024];
     private double[] d = new double[1024];
-    private FastNoise fast = new FastNoise(12345);
+    private FastNoise fast = new FastNoise(12345),
+            fast3 = new FastNoise(12345),
+            fast5 = new FastNoise(12345);
+    private Noise.Layered3D whirling3 = new Noise.Layered3D(WhirlingNoise.instance, 3, 0.03125),
+            whirling5 = new Noise.Layered3D(WhirlingNoise.instance, 5, 0.03125);
+    private Noise.Layered4D whirling3_4 = new Noise.Layered4D(WhirlingNoise.instance, 3, 0.03125),
+            whirling5_4 = new Noise.Layered4D(WhirlingNoise.instance, 5, 0.03125);
     {
         fast.setFractalOctaves(1);
-        fast.setFrequency(1f);
+        fast3.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
+        fast3.setFractalOctaves(3);
+        fast5.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
+        fast5.setFractalOctaves(5);
     }
 
     @Setup(Level.Trial)
@@ -161,119 +139,119 @@ public class NoiseBenchmark {
             f[i] = (float)(d[i] = NumberTools.randomSignedDouble(2000 - i) * (i + 0.25));
         }
     }
-    public static double swayTightBit(final double value)
-    {
-        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
-        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
-                | 0x4000000000000000L) - 2.0);
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0);
-    }
-
-    public static float swayTightBit(final float value)
-    {
-        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
-        return a * a * a * (a * (a * 6f - 15f) + 10f);
-    }
-
-
-    public static double swayBit(final double value)
-    {
-        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
-        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
-                | 0x4000000000000000L) - 2.0);
-        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * 2.0 - 1.0;
-    }
-
-    public static float swayBit(final float value)
-    {
-        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
-        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
-    }
-    @Benchmark
-    public double measureSwayRandomizedDouble() {
-        return NumberTools.swayRandomized(1024L, d[x++ & 1023]);
-    }
-
-    @Benchmark
-    public float measureSwayRandomizedFloat() {
-        return NumberTools.swayRandomized(1024L, f[x++ & 1023]);
-    }
-
-    @Benchmark
-    public double measureSwayDouble() {
-        return NumberTools.sway(d[x++ & 1023]);
-    }
-
-    @Benchmark
-    public float measureSwayFloat() {
-        return NumberTools.sway(f[x++ & 1023]);
-    }
-
-    @Benchmark
-    public double measureSwayBitDouble() {
-        return swayBit(d[x++ & 1023]);
-    }
-
-    @Benchmark
-    public float measureSwayBitFloat() {
-        return swayBit(f[x++ & 1023]);
-    }
-
-    @Benchmark
-    public double measureSwayDoubleTight() {
-        return swayTight(d[x++ & 1023]);
-    }
-
-    @Benchmark
-    public float measureSwayFloatTight() {
-        return swayTight(f[x++ & 1023]);
-    }
-
-    @Benchmark
-    public double measureSwayBitDoubleTight() {
-        return swayTightBit(d[x++ & 1023]);
-    }
-
-    @Benchmark
-    public float measureSwayBitFloatTight() {
-        return swayTightBit(f[x++ & 1023]);
-    }
-
-    public static double zigzagBit(final double value)
-    {
-        final long s = Double.doubleToLongBits(value + (value < 0f ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
-        return (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
-                | 0x4010000000000000L) - 5.0);
-    }
-
-    public static float zigzagBit(final float value)
-    {
-        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
-        return (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff)
-                | 0x40800000) - 5f);
-    }
-
-    @Benchmark
-    public double measureZigzagDouble() {
-        return zigzag(d[x++ & 1023]);
-    }
-
-    @Benchmark
-    public float measureZigzagFloat() {
-        return zigzag(f[x++ & 1023]);
-    }
-
-    @Benchmark
-    public double measureZigzagBitDouble() {
-        return zigzagBit(d[x++ & 1023]);
-    }
-
-    @Benchmark
-    public float measureZigzagBitFloat() {
-        return zigzagBit(f[x++ & 1023]);
-    }
+//    public static double swayTightBit(final double value)
+//    {
+//        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+//        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+//                | 0x4000000000000000L) - 2.0);
+//        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0);
+//    }
+//
+//    public static float swayTightBit(final float value)
+//    {
+//        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+//        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+//        return a * a * a * (a * (a * 6f - 15f) + 10f);
+//    }
+//
+//
+//    public static double swayBit(final double value)
+//    {
+//        final long s = Double.doubleToLongBits(value + (value < 0.0 ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+//        final double a = (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+//                | 0x4000000000000000L) - 2.0);
+//        return a * a * a * (a * (a * 6.0 - 15.0) + 10.0) * 2.0 - 1.0;
+//    }
+//
+//    public static float swayBit(final float value)
+//    {
+//        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+//        final float a = (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff) | 0x40000000) - 2f);
+//        return a * a * a * (a * (a * 6f - 15f) + 10f) * 2f - 1f;
+//    }
+//    @Benchmark
+//    public double measureSwayRandomizedDouble() {
+//        return NumberTools.swayRandomized(1024L, d[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public float measureSwayRandomizedFloat() {
+//        return NumberTools.swayRandomized(1024L, f[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public double measureSwayDouble() {
+//        return NumberTools.sway(d[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public float measureSwayFloat() {
+//        return NumberTools.sway(f[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public double measureSwayBitDouble() {
+//        return swayBit(d[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public float measureSwayBitFloat() {
+//        return swayBit(f[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public double measureSwayDoubleTight() {
+//        return swayTight(d[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public float measureSwayFloatTight() {
+//        return swayTight(f[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public double measureSwayBitDoubleTight() {
+//        return swayTightBit(d[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public float measureSwayBitFloatTight() {
+//        return swayTightBit(f[x++ & 1023]);
+//    }
+//
+//    public static double zigzagBit(final double value)
+//    {
+//        final long s = Double.doubleToLongBits(value + (value < 0f ? -2.0 : 2.0)), m = (s >>> 52 & 0x7FFL) - 0x400, sm = s << m;
+//        return (Double.longBitsToDouble(((sm ^ -((sm & 0x8000000000000L)>>51)) & 0xfffffffffffffL)
+//                | 0x4010000000000000L) - 5.0);
+//    }
+//
+//    public static float zigzagBit(final float value)
+//    {
+//        final int s = Float.floatToIntBits(value + (value < 0f ? -2f : 2f)), m = (s >>> 23 & 0xFF) - 0x80, sm = s << m;
+//        return (Float.intBitsToFloat(((sm ^ -((sm & 0x00400000)>>22)) & 0x007fffff)
+//                | 0x40800000) - 5f);
+//    }
+//
+//    @Benchmark
+//    public double measureZigzagDouble() {
+//        return zigzag(d[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public float measureZigzagFloat() {
+//        return zigzag(f[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public double measureZigzagBitDouble() {
+//        return zigzagBit(d[x++ & 1023]);
+//    }
+//
+//    @Benchmark
+//    public float measureZigzagBitFloat() {
+//        return zigzagBit(f[x++ & 1023]);
+//    }
 
     @Benchmark
     public double measurePerlin2D() {
@@ -315,14 +293,41 @@ public class NoiseBenchmark {
         return WhirlingNoise.noiseAlt(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
     }
 
-    @Benchmark
-    public long measureMerlin2D() {
-        return MerlinNoise.noise2D(++x, --y, 1024L, 16, 8);
-    }
+//    @Benchmark
+//    public long measureMerlin2D() {
+//        return MerlinNoise.noise2D(++x, --y, 1024L, 16, 8);
+//    }
+//
+//    @Benchmark
+//    public long measureMerlin3D() {
+//        return MerlinNoise.noise3D(++x, --y, z++, 1024L, 16, 8);
+//    }
+//
 
     @Benchmark
-    public long measureMerlin3D() {
-        return MerlinNoise.noise3D(++x, --y, z++, 1024L, 16, 8);
+    public double measureClassicNoise2D() {
+    return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125);
+}
+    @Benchmark
+    public double measureClassicNoise3D() {
+        return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
+    }
+    @Benchmark
+    public double measureClassicNoise4D() {
+        return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
+    }
+    
+    @Benchmark
+    public double measureJitterNoise2D() {
+        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125);
+    }
+    @Benchmark
+    public double measureJitterNoise3D() {
+        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
+    }
+    @Benchmark
+    public double measureJitterNoise4D() {
+        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
     }
 
     @Benchmark
@@ -347,17 +352,57 @@ public class NoiseBenchmark {
 
     @Benchmark
     public float measureFastNoise2D() {
-        return fast.getSimplex(++x * 0.03125f, --y * 0.03125f);
+        return fast.getSimplex(++x, --y);
     }
 
     @Benchmark
     public float measureFastNoise3D() {
-        return fast.getSimplex(++x * 0.03125f, --y * 0.03125f, z++ * 0.03125f);
+        return fast.getSimplex(++x, --y, z++);
     }
 
     @Benchmark
     public float measureFastNoise4D() {
-        return fast.getSimplex(++x * 0.03125f, --y * 0.03125f, z++ * 0.03125f, w-- * 0.03125f);
+        return fast.getSimplex(++x, --y, z++, w--);
+    }
+
+    @Benchmark
+    public float measureFast3Octave3D() {
+        return fast3.getSimplexFractal(++x, --y, z++);
+    }
+
+    @Benchmark
+    public float measureFast5Octave3D() {
+        return fast5.getSimplexFractal(++x, --y, z++);
+    }
+
+    @Benchmark
+    public float measureFast3Octave4D() {
+        return fast3.getSimplexFractal(++x, --y, z++, w--);
+    }
+
+    @Benchmark
+    public float measureFast5Octave4D() {
+        return fast5.getSimplexFractal(++x, --y, z++, w--);
+    }
+
+    @Benchmark
+    public double measureWhirling3Octave3D() {
+        return whirling3.getNoise(++x, --y, z++);
+    }
+
+    @Benchmark
+    public double measureWhirling5Octave3D() {
+        return whirling5.getNoise(++x, --y, z++);
+    }
+
+    @Benchmark
+    public double measureWhirling3Octave4D() {
+        return whirling3_4.getNoise(++x, --y, z++, w--);
+    }
+
+    @Benchmark
+    public double measureWhirling5Octave4D() {
+        return whirling5_4.getNoise(++x, --y, z++, w--);
     }
 
     /*
@@ -390,12 +435,12 @@ public class NoiseBenchmark {
 
         new Runner(opt).run();
     }
-    public static void main2(String[] args){
-        for (float i = -16f; i <= 16f; i+= 0.0625f) {
-            System.out.printf("Float %f : NumberTools %f , Bit %f\n", i, NumberTools.zigzag(i), zigzagBit(i));
-        }
-        for (double i = -16.0; i <= 16.0; i+= 0.0625) {
-            System.out.printf("Double %f : NumberTools %f , Bit %f\n", i, NumberTools.zigzag(i), zigzagBit(i));
-        }
-    }
+//    public static void main2(String[] args){
+//        for (float i = -16f; i <= 16f; i+= 0.0625f) {
+//            System.out.printf("Float %f : NumberTools %f , Bit %f\n", i, NumberTools.zigzag(i), zigzagBit(i));
+//        }
+//        for (double i = -16.0; i <= 16.0; i+= 0.0625) {
+//            System.out.printf("Double %f : NumberTools %f , Bit %f\n", i, NumberTools.zigzag(i), zigzagBit(i));
+//        }
+//    }
 }

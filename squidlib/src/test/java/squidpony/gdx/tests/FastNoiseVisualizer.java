@@ -200,7 +200,7 @@ public class FastNoiseVisualizer extends ApplicationAdapter {
             case 2:
                 for (int x = 0; x < 512; x++) {
                     for (int y = 0; y < 512; y++) {
-                        bright = basicPrepare(noise.getNoise(x - ctr, y - ctr, x + y, y - x + ctr));
+                        bright = basicPrepare(noise.getSimplexFractal(x - ctr, y - ctr, x + y, y - x + ctr));
                         back[x][y] = floatGet(bright, bright, bright, 1f);
                     }
                 }
