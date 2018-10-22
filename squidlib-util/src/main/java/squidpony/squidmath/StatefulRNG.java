@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by Tommy Ettinger on 9/15/2015.
  * @author Tommy Ettinger
  */
-public class StatefulRNG extends RNG implements Serializable, IRNG {
+public class StatefulRNG extends RNG implements Serializable, StatefulRandomness, IRNG {
 
 	private static final long serialVersionUID = -2456306898212937163L;
 
