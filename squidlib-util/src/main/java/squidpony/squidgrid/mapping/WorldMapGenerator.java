@@ -1192,12 +1192,12 @@ public abstract class WorldMapGenerator implements Serializable {
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Always makes a 256x256 map.
-         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0}.
          */
         public TilingMap() {
-            this(0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0);
         }
 
         /**
@@ -1206,13 +1206,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public TilingMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight, SeededNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -1221,32 +1221,31 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public TilingMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, SeededNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Takes an initial seed, the width/height of the map, and a noise generator (a
-         * {@link Noise4D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
+         * {@link Noise4D} implementation, which is usually {@link FastNoise#instance}. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call
          * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom
-         * in. Currently only SeededNoise makes sense to use as the value for {@code noiseGenerator}, and the seed it's
-         * constructed with doesn't matter because it will change the seed several times at different scales of noise
-         * (it's fine to use the static {@link SeededNoise#instance} because it has no changing state between runs of
-         * the program; it's effectively a constant). The detail level, which is the {@code octaveMultiplier} parameter
-         * that can be passed to another constructor, is always 1.0 with this constructor.
+         * in. Any seed supplied to the Noise4D given to this (if it takes one) will be ignored, and
+         * {@link Noise4D#getNoiseWithSeed(double, double, double, double, long)} will be used to specify the seed many
+         * times. The detail level, which is the {@code octaveMultiplier} parameter that can be passed to another
+         * constructor, is always 1.0 with this constructor.
          *
          * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth         the width of the map(s) to generate; cannot be changed later
          * @param mapHeight        the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator   an instance of a noise generator capable of 4D noise, almost always {@link SeededNoise}
+         * @param noiseGenerator   an instance of a noise generator capable of 4D noise, recommended to be {@link FastNoise#instance}
          */
         public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -1255,21 +1254,19 @@ public abstract class WorldMapGenerator implements Serializable {
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Takes an initial seed, the width/height of the map, and parameters for noise
-         * generation (a {@link Noise4D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * generation (a {@link Noise4D} implementation, which is usually {@link FastNoise#instance}, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Currently only SeededNoise makes sense to use as the
-         * value for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because it will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} because
-         * it has no changing state between runs of the program; it's effectively a constant). The {@code octaveMultiplier}
-         * parameter should probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more
-         * time on generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for
-         * maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. Any seed supplied to the Noise4D given to this (if it takes one) will be ignored, and
+         * {@link Noise4D#getNoiseWithSeed(double, double, double, double, long)} will be used to specify the seed many
+         * times. The {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily
+         * high if you're willing to spend much more time on generating detail only noticeable at very high zoom;
+         * normally 1.0 is fine and may even be too high for maps that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 4D noise, almost always {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 4D noise, almost always {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator, double octaveMultiplier) {
@@ -1475,12 +1472,14 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that distorts the map as it nears the poles, expanding the
      * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
      * this counteracts certain artifacts that are common in Simplex noise world maps by using a 4D noise call to
-     * generate terrain, using a normal 3D noise call's result as the extra 4th dimension. This generator does not
-     * permit a choice of {@link Noise4D}, but does allow choosing a {@link Noise3D}, which is used for most of the
-     * generation. This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch
-     * this does. You might also want to produce an oval map that more-accurately represents the changes in the diameter
-     * of a latitude line on a spherical world; you should use {@link WorldMapGenerator.EllipticalMap} or {@link WorldMapGenerator.EllipticalHammerMap} for
-     * this. <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
+     * generate terrain, using a normal 3D noise call's result as the extra 4th dimension. This generator allows
+     * choosing a {@link Noise3D}, which is used for most of the generation. This is ideal for projecting onto a 3D
+     * sphere, which could squash the poles to counteract the stretch this does. You might also want to produce an oval
+     * map that more-accurately represents the changes in the diameter of a latitude line on a spherical world; you
+     * should use {@link WorldMapGenerator.EllipticalMap} or {@link WorldMapGenerator.EllipticalHammerMap} for this.
+     * {@link WorldMapGenerator.HyperellipticalMap} is also a nice option because it can project onto a shape between a
+     * rectangle (like this class) and an ellipse (like EllipticalMap), with all-round sides.
+     * <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
      */
     @Beta
     public static class SphereMap extends WorldMapGenerator {
@@ -1491,7 +1490,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
         public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
-        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -1502,12 +1500,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Always makes a 256x128 map.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link SphereMap#SphereMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0}.
          */
         public SphereMap() {
-            this(0x1337BABE1337D00DL, 256, 128, WhirlingNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0);
         }
 
         /**
@@ -1517,13 +1515,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public SphereMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  WhirlingNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
         }
 
         /**
@@ -1533,14 +1531,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public SphereMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -1550,7 +1548,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -1558,7 +1556,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public SphereMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
         }
 
         /**
@@ -1573,7 +1571,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          */
         public SphereMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -1584,21 +1582,21 @@ public abstract class WorldMapGenerator implements Serializable {
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed, the width/height of the map, and parameters for noise
-         * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * generation (a {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise#instance}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public SphereMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier) {
@@ -1606,11 +1604,9 @@ public abstract class WorldMapGenerator implements Serializable {
             xPositions = new double[width][height];
             yPositions = new double[width][height];
             zPositions = new double[width][height];
+
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
             terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
-//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq * 0.7);
-//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
-            terrain4D = new Noise.Layered4D(WhirlingNoise.instance, 4, terrainRidgedFreq * 2.75, 0.48);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
@@ -1693,11 +1689,9 @@ public abstract class WorldMapGenerator implements Serializable {
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
-                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
-                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
-                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-                            seedA) + landModifier - 1.0);
-                    heightData[x][y] = h;
+                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
+                                    terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
+                            ps, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
@@ -1859,7 +1853,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
         public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
-        //        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -1870,12 +1863,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link EllipticalMap#EllipticalMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
          */
         public EllipticalMap() {
-            this(0x1337BABE1337D00DL, 200, 100, WhirlingNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
         }
 
         /**
@@ -1884,13 +1877,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  WhirlingNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
         }
 
         /**
@@ -1899,14 +1892,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -1915,7 +1908,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -1923,7 +1916,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public EllipticalMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
         }
 
         /**
@@ -1933,12 +1926,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
-         * implementation to use is {@link ClassicNoise#instance}, and {@link WhirlingNoise#instance} is also good.
+         * implementation to use is {@link FastNoise#instance}.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          */
         public EllipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -1948,22 +1941,21 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
-         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
+         * {@link Noise3D} implementation, where {@link FastNoise#instance} is suggested, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
-         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in.  FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public EllipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier) {
@@ -2190,13 +2182,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that should look like Earth using an elliptical projection
          * (specifically, a Mollweide projection).
          * Always makes a 512x256 map.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link MimicMap#MimicMap(long, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, FastNoise.instance, 1.0}.
          */
         public MimicMap() {
             this(0x1337BABE1337D00DL
-                    , WhirlingNoise.instance, 1.0);
+                    , FastNoise.instance, 1.0);
         }
 
         /**
@@ -2204,12 +2196,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
          * The initial seed is set to the same large long every time, and it's likely that you would set the seed when
          * you call {@link #generate(long)}. The width and height of the map cannot be changed after the fact.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          */
         public MimicMap(GreasedRegion toMimic) {
-            this(0x1337BABE1337D00DL, toMimic,  WhirlingNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, toMimic,  FastNoise.instance,1.0);
         }
 
         /**
@@ -2218,13 +2210,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the GreasedRegion containing land positions. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          */
         public MimicMap(long initialSeed, GreasedRegion toMimic) {
-            this(initialSeed, toMimic, WhirlingNoise.instance, 1.0);
+            this(initialSeed, toMimic, FastNoise.instance, 1.0);
         }
 
         /**
@@ -2234,31 +2226,31 @@ public abstract class WorldMapGenerator implements Serializable {
          * of detail by increasing or decreasing the number of octaves of noise used. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact.
-         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public MimicMap(long initialSeed, GreasedRegion toMimic, double octaveMultiplier) {
-            this(initialSeed, toMimic, WhirlingNoise.instance, octaveMultiplier);
+            this(initialSeed, toMimic, FastNoise.instance, octaveMultiplier);
         }
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
          * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
          * Takes an initial seed, the GreasedRegion containing land positions, and parameters for noise generation (a
-         * {@link Noise3D} implementation, which is usually {@link WhirlingNoise#instance}. The {@code initialSeed}
+         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call
-         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact. Both WhirlingNoise
+         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact. Both FastNoise
          * and FastNoise make sense to use for {@code noiseGenerator}, and the seed it's constructed with doesn't matter
          * because this will change the seed several times at different scales of noise (it's fine to use the static
-         * {@link FastNoise#instance} or {@link WhirlingNoise#instance} because they have no changing state between runs
+         * {@link FastNoise#instance} or {@link FastNoise#instance} because they have no changing state between runs
          * of the program). Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link FastNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}
          */
         public MimicMap(long initialSeed, GreasedRegion toMimic, Noise3D noiseGenerator) {
             this(initialSeed, toMimic, noiseGenerator, 1.0);
@@ -2269,20 +2261,20 @@ public abstract class WorldMapGenerator implements Serializable {
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed, the GreasedRegion containing land positions, parameters for noise generation (a
-         * {@link Noise3D} implementation, which is usually {@link WhirlingNoise#instance}, and a multiplier on how many
+         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a multiplier on how many
          * octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers producing even more
          * detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact. Both WhirlingNoise and FastNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact.  FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link FastNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public MimicMap(long initialSeed, GreasedRegion toMimic, Noise3D noiseGenerator, double octaveMultiplier) {
@@ -2566,12 +2558,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Always makes a 100x100 map.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link SpaceViewMap#SpaceViewMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0}.
          */
         public SpaceViewMap() {
-            this(0x1337BABE1337D00DL, 100, 100, WhirlingNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0);
         }
 
         /**
@@ -2580,13 +2572,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public SpaceViewMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  WhirlingNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
         }
 
         /**
@@ -2595,14 +2587,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public SpaceViewMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -2611,7 +2603,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -2619,7 +2611,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public SpaceViewMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
         }
 
         /**
@@ -2633,7 +2625,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          */
         public SpaceViewMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -2643,21 +2635,21 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed, the width/height of the map, and parameters for noise
-         * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * generation (a {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public SpaceViewMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier) {
@@ -2891,7 +2883,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
         public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
-        //        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -2902,12 +2893,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
-         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link RoundSideMap#RoundSideMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
          */
         public RoundSideMap() {
-            this(0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
         }
 
         /**
@@ -2916,13 +2907,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public RoundSideMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  ClassicNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
         }
 
         /**
@@ -2931,14 +2922,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, ClassicNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -2947,7 +2938,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses ClassicNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -2955,7 +2946,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, ClassicNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
         }
 
         /**
@@ -2965,12 +2956,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
-         * implementation to use is {@link ClassicNoise#instance}, and {@link WhirlingNoise#instance} is also good.
+         * implementation to use is {@link FastNoise#instance}
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -2980,22 +2971,21 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
-         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
+         * {@link Noise3D} implementation, where {@link FastNoise#instance} is suggested, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
-         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public RoundSideMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier) {
@@ -3238,12 +3228,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
-         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link HyperellipticalMap#HyperellipticalMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
          */
         public HyperellipticalMap() {
-            this(0x1337BABE1337D00DL, 200, 100, ClassicNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
         }
 
         /**
@@ -3252,13 +3242,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public HyperellipticalMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  ClassicNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
         }
 
         /**
@@ -3267,14 +3257,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, ClassicNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -3283,7 +3273,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses ClassicNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -3291,7 +3281,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, ClassicNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
         }
 
         /**
@@ -3301,12 +3291,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
-         * implementation to use is {@link ClassicNoise#instance}, and {@link WhirlingNoise#instance} is also good.
+         * implementation to use is {@link FastNoise#instance}.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -3316,50 +3306,48 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
-         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
+         * {@link Noise3D} implementation, where {@link FastNoise#instance} is suggested, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
-         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier){
-            this(initialSeed, mapWidth, mapHeight, noiseGenerator, octaveMultiplier, 0.125, 2.5);
+            this(initialSeed, mapWidth, mapHeight, noiseGenerator, octaveMultiplier, 0.0625, 2.5);
         }
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
-         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
+         * {@link Noise3D} implementation, where {@link FastNoise#instance} is suggested, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
-         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link ClassicNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
-         * @param alpha one of the Tobler parameters;  0.125 is the default and this can range from 0.0 to 1.0 at least
+         * @param alpha one of the Tobler parameters;  0.0625 is the default and this can range from 0.0 to 1.0 at least
          * @param kappa one of the Tobler parameters; 2.5 is the default but 2.0-5.0 range values are also often used
          */
         public HyperellipticalMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator,
@@ -3631,7 +3619,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
         public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
-        //        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -3644,12 +3631,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
          * Always makes a 200x100 map.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link EllipticalHammerMap#EllipticalHammerMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0}.
          */
         public EllipticalHammerMap() {
-            this(0x1337BABE1337D00DL, 200, 100, WhirlingNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 200, 100, FastNoise.instance, 1.0);
         }
 
         /**
@@ -3660,13 +3647,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalHammerMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  WhirlingNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
         }
 
         /**
@@ -3677,14 +3664,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public EllipticalHammerMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -3695,7 +3682,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -3703,7 +3690,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public EllipticalHammerMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
         }
 
         /**
@@ -3715,12 +3702,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
-         * implementation to use is {@link ClassicNoise#instance}, and {@link WhirlingNoise#instance} is also good.
+         * implementation to use is {@link FastNoise#instance}.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          */
         public EllipticalHammerMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -3732,22 +3719,21 @@ public abstract class WorldMapGenerator implements Serializable {
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
-         * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
+         * {@link Noise3D} implementation, where {@link FastNoise#instance} is suggested, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). Oddly,
-         * {@link ClassicNoise} performs better in terms of time used, and its quality may also be preferable. The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public EllipticalHammerMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier) {
@@ -3993,12 +3979,12 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Always makes a 100x100 map.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link RotatingSpaceMap#RotatingSpaceMap(long, int, int, Noise3D, double)}, then this would be the
-         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, WhirlingNoise.instance, 1.0}.
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0}.
          */
         public RotatingSpaceMap() {
-            this(0x1337BABE1337D00DL, 100, 100, WhirlingNoise.instance, 1.0);
+            this(0x1337BABE1337D00DL, 100, 100, FastNoise.instance, 1.0);
         }
 
         /**
@@ -4007,13 +3993,13 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
          * height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param mapWidth  the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          */
         public RotatingSpaceMap(int mapWidth, int mapHeight) {
-            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  WhirlingNoise.instance,1.0);
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
         }
 
         /**
@@ -4022,14 +4008,14 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
         public RotatingSpaceMap(long initialSeed, int mapWidth, int mapHeight) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, 1.0);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
         }
 
         /**
@@ -4038,7 +4024,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
-         * Uses WhirlingNoise as its noise generator, with the given octave multiplier affecting detail.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
@@ -4046,7 +4032,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public RotatingSpaceMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
-            this(initialSeed, mapWidth, mapHeight, WhirlingNoise.instance, octaveMultiplier);
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
         }
 
         /**
@@ -4060,7 +4046,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          */
         public RotatingSpaceMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator) {
             this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
@@ -4070,21 +4056,21 @@ public abstract class WorldMapGenerator implements Serializable {
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed, the width/height of the map, and parameters for noise
-         * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
+         * generation (a {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
          * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
          * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
-         * cannot be changed after the fact, but you can zoom in. Both SeededNoise and WhirlingNoise make sense to use
-         * for {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
-         * seed several times at different scales of noise (it's fine to use the static {@link SeededNoise#instance} or
-         * {@link WhirlingNoise#instance} because they have no changing state between runs of the program). The
-         * {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily high if
-         * you're willing to spend much more time on generating detail only noticeable at very high zoom; normally 1.0
-         * is fine and may even be too high for maps that don't require zooming.
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
          * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
-         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link WhirlingNoise} or {@link SeededNoise}
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
         public RotatingSpaceMap(long initialSeed, int mapWidth, int mapHeight, Noise3D noiseGenerator, double octaveMultiplier) {

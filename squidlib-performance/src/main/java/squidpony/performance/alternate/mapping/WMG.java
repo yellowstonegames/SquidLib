@@ -38,7 +38,7 @@ import java.util.Arrays;
  * to generate less grid cells, with 64x64 maps generating faster than they can be accurately seen on the same hardware.
  */
 @Beta
-public abstract class WorldMapGenerator implements Serializable {
+public abstract class WMG implements Serializable {
     public final int width, height;
     public long seed, cachedState;
     public StatefulRNG rng;
@@ -113,17 +113,17 @@ public abstract class WorldMapGenerator implements Serializable {
 
     }
     /**
-     * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
+     * Constructs a WMG (this class is abstract, so you should typically call this from a subclass or as
      * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
-     * Always makes a 256x256 map. If you were using {@link WorldMapGenerator#WorldMapGenerator(long, int, int)}, then
+     * Always makes a 256x256 map. If you were using {@link WMG#WMG(long, int, int)}, then
      * this would be the same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256}.
      */
-    protected WorldMapGenerator()
+    protected WMG()
     {
         this(0x1337BABE1337D00DL, 256, 256);
     }
     /**
-     * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
+     * Constructs a WMG (this class is abstract, so you should typically call this from a subclass or as
      * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
      * Takes only the width/height of the map. The initial seed is set to the same large long
      * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -132,12 +132,12 @@ public abstract class WorldMapGenerator implements Serializable {
      * @param mapWidth the width of the map(s) to generate; cannot be changed later
      * @param mapHeight the height of the map(s) to generate; cannot be changed later
      */
-    protected WorldMapGenerator(int mapWidth, int mapHeight)
+    protected WMG(int mapWidth, int mapHeight)
     {
         this(0x1337BABE1337D00DL, mapWidth, mapHeight);
     }
     /**
-     * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
+     * Constructs a WMG (this class is abstract, so you should typically call this from a subclass or as
      * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
      * Takes an initial seed and the width/height of the map. The {@code initialSeed}
      * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -147,7 +147,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * @param mapWidth the width of the map(s) to generate; cannot be changed later
      * @param mapHeight the height of the map(s) to generate; cannot be changed later
      */
-    protected WorldMapGenerator(long initialSeed, int mapWidth, int mapHeight)
+    protected WMG(long initialSeed, int mapWidth, int mapHeight)
     {
         width = mapWidth;
         height = mapHeight;
@@ -705,20 +705,20 @@ public abstract class WorldMapGenerator implements Serializable {
          */
         String[] getBiomeNameTable();
         /**
-         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
+         * Analyzes the last world produced by the given WMG and uses all of its generated information to
          * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
          * retrieved with {@link #getBiomeCode(int, int)} and used as indices into {@link #getBiomeNameTable()} or a
          * custom biome table.
-         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
+         * @param world a WMG that should have generated at least one map; it may be at any zoom
          */
-        void makeBiomes(WorldMapGenerator world);
+        void makeBiomes(WMG world);
     }
     /**
      * A way to get biome information for the cells on a map when you only need a single value to describe a biome, such
      * as "Grassland" or "TropicalRainforest".
      * <br>
      * To use: 1, Construct a SimpleBiomeMapper (constructor takes no arguments). 2, call
-     * {@link #makeBiomes(WorldMapGenerator)} with a WorldMapGenerator that has already produced at least one world map.
+     * {@link #makeBiomes(WMG)} with a WMG that has already produced at least one world map.
      * 3, get biome codes from the {@link #biomeCodeData} field, where a code is an int that can be used as an index
      * into the {@link #biomeTable} static field to get a String name for a biome type, or used with an alternate biome
      * table of your design. Biome tables in this case are 61-element arrays organized into groups of 6 elements, with
@@ -813,7 +813,7 @@ public abstract class WorldMapGenerator implements Serializable {
         };
 
         /**
-         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WorldMapGenerator)} before
+         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WMG)} before
          * using fields like {@link #biomeCodeData}.
          */
         public SimpleBiomeMapper()
@@ -824,13 +824,13 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
+         * Analyzes the last world produced by the given WMG and uses all of its generated information to
          * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
          * taken from {@link #biomeCodeData} and used as indices into {@link #biomeTable} or a custom biome table.
-         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
+         * @param world a WMG that should have generated at least one map; it may be at any zoom
          */
         @Override
-        public void makeBiomes(WorldMapGenerator world) {
+        public void makeBiomes(WMG world) {
             if(world == null || world.width <= 0 || world.height <= 0)
                 return;
             if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.height))
@@ -895,7 +895,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * main biome types, such as "Grassland" or "TropicalRainforest", with the biomes varying in weight between areas.
      * <br>
      * To use: 1, Construct a DetailedBiomeMapper (constructor takes no arguments). 2, call
-     * {@link #makeBiomes(WorldMapGenerator)} with a WorldMapGenerator that has already produced at least one world map.
+     * {@link #makeBiomes(WMG)} with a WMG that has already produced at least one world map.
      * 3, get biome codes from the {@link #biomeCodeData} field, where a code is an int that can be used with the
      * extract methods in this class to get various information from it (these are {@link #extractBiomeA(int)},
      * {@link #extractBiomeB(int)}, {@link #extractPartA(int)}, {@link #extractPartB(int)}, and
@@ -1060,7 +1060,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WorldMapGenerator)} before
+         * Simple constructor; pretty much does nothing. Make sure to call {@link #makeBiomes(WMG)} before
          * using fields like {@link #biomeCodeData}.
          */
         public DetailedBiomeMapper()
@@ -1071,15 +1071,15 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Analyzes the last world produced by the given WorldMapGenerator and uses all of its generated information to
+         * Analyzes the last world produced by the given WMG and uses all of its generated information to
          * assign biome codes for each cell (along with heat and moisture codes). After calling this, biome codes can be
          * taken from {@link #biomeCodeData} and used with methods in this class like {@link #extractBiomeA(int)},
          * {@link #extractBiomeB(int)}, and {@link #extractMixAmount(int)} to find the two dominant biomes in an area,
          * called biome A and biome B, and the mix amount, for finding how much biome B affects biome A.
-         * @param world a WorldMapGenerator that should have generated at least one map; it may be at any zoom
+         * @param world a WMG that should have generated at least one map; it may be at any zoom
          */
         @Override
-        public void makeBiomes(WorldMapGenerator world) {
+        public void makeBiomes(WMG world) {
             if(world == null || world.width <= 0 || world.height <= 0)
                 return;
             if(heatCodeData == null || (heatCodeData.length != world.width || heatCodeData[0].length != world.height))
@@ -1185,12 +1185,12 @@ public abstract class WorldMapGenerator implements Serializable {
     }
 
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that tiles both east-to-west and north-to-south. It tends
-     * to not appear distorted like {@link WorldMapGenerator.SphereMap} does in some areas, even though this is inaccurate for a
+     * A concrete implementation of {@link WMG} that tiles both east-to-west and north-to-south. It tends
+     * to not appear distorted like {@link WMG.SphereMap} does in some areas, even though this is inaccurate for a
      * rectangular projection of a spherical world (that inaccuracy is likely what players expect in a map, though).
      * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapRiverDemo.png" >Example map</a>.
      */
-    public static class TilingMap extends WorldMapGenerator {
+    public static class TilingMap extends WMG {
         //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
         protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5, riverRidgedFreq = 21.7;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
@@ -1200,7 +1200,7 @@ public abstract class WorldMapGenerator implements Serializable {
         public final Noise4D terrain, terrainRidged, heat, moisture, otherRidged, riverRidged;
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * Constructs a concrete WMG for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Always makes a 256x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the
@@ -1211,7 +1211,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * Constructs a concrete WMG for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -1226,7 +1226,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * Constructs a concrete WMG for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -1242,7 +1242,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * Constructs a concrete WMG for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Takes an initial seed, the width/height of the map, and a noise generator (a
          * {@link Noise4D} implementation, which is usually {@link SeededNoise#instance}. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call
@@ -1263,7 +1263,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
+         * Constructs a concrete WMG for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Takes an initial seed, the width/height of the map, and parameters for noise
          * generation (a {@link Noise4D} implementation, which is usually {@link SeededNoise#instance}, and a
          * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
@@ -1483,18 +1483,18 @@ public abstract class WorldMapGenerator implements Serializable {
     }
 
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that distorts the map as it nears the poles, expanding the
+     * A concrete implementation of {@link WMG} that distorts the map as it nears the poles, expanding the
      * smaller-diameter latitude lines in extreme north and south regions so they take up the same space as the equator;
      * this counteracts certain artifacts that are common in Simplex noise world maps by using a 4D noise call to
      * generate terrain, using a normal 3D noise call's result as the extra 4th dimension. This generator does not
      * permit a choice of {@link Noise4D}, but does allow choosing a {@link Noise3D}, which is used for most of the
      * generation. This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch
      * this does. You might also want to produce an oval map that more-accurately represents the changes in the diameter
-     * of a latitude line on a spherical world; you should use {@link WorldMapGenerator.EllipticalMap} or {@link WorldMapGenerator.EllipticalHammerMap} for
+     * of a latitude line on a spherical world; you should use {@link WMG.EllipticalMap} or {@link WMG.EllipticalHammerMap} for
      * this. <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
      */
     @Beta
-    public static class SphereMap extends WorldMapGenerator {
+    public static class SphereMap extends WMG {
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         //protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
@@ -1509,7 +1509,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * Constructs a concrete WMG for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Always makes a 256x128 map.
@@ -1522,7 +1522,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * Constructs a concrete WMG for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes only the width/height of the map. The initial seed is set to the same large long
@@ -1538,7 +1538,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * Constructs a concrete WMG for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
@@ -1555,7 +1555,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * Constructs a concrete WMG for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
@@ -1573,7 +1573,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * Constructs a concrete WMG for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
@@ -1591,7 +1591,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * Constructs a concrete WMG for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed, the width/height of the map, and parameters for noise
@@ -1857,13 +1857,13 @@ public abstract class WorldMapGenerator implements Serializable {
         }
     }
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto an ellipse that should be
+     * A concrete implementation of {@link WMG} that projects the world map onto an ellipse that should be
      * twice as wide as it is tall (although you can stretch it by width and height that don't have that ratio).
      * This uses the <a href="https://en.wikipedia.org/wiki/Mollweide_projection">Mollweide projection</a>.
      * <a href="https://i.imgur.com/BBKrKjI.png" >Example map, showing ellipse shape</a>
      */
     @Beta
-    public static class EllipticalMap extends WorldMapGenerator {
+    public static class EllipticalMap extends WMG {
 //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
@@ -1879,7 +1879,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
          * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -1891,7 +1891,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -1906,7 +1906,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -1922,7 +1922,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -1939,7 +1939,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -1957,7 +1957,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
          * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
@@ -2262,7 +2262,7 @@ public abstract class WorldMapGenerator implements Serializable {
         public GreasedRegion coast;
         public GreasedRegion earthOriginal, shallowOriginal, coastOriginal;
         /**
-         * Constructs a concrete WorldMapGenerator for a map that should look like Earth using an elliptical projection
+         * Constructs a concrete WMG for a map that should look like Earth using an elliptical projection
          * (specifically, a Mollweide projection).
          * Always makes a 512x256 map.
          * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -2275,7 +2275,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * Constructs a concrete WMG for a map that should have land in roughly the same places as the
          * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
          * The initial seed is set to the same large long every time, and it's likely that you would set the seed when
          * you call {@link #generate(long)}. The width and height of the map cannot be changed after the fact.
@@ -2288,7 +2288,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * Constructs a concrete WMG for a map that should have land in roughly the same places as the
          * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
          * Takes an initial seed and the GreasedRegion containing land positions. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -2303,7 +2303,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * Constructs a concrete WMG for a map that should have land in roughly the same places as the
          * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
          * Takes an initial seed, the GreasedRegion containing land positions, and a multiplier that affects the level
          * of detail by increasing or decreasing the number of octaves of noise used. The {@code initialSeed}
@@ -2320,7 +2320,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * Constructs a concrete WMG for a map that should have land in roughly the same places as the
          * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
          * Takes an initial seed, the GreasedRegion containing land positions, and parameters for noise generation (a
          * {@link Noise3D} implementation, which is usually {@link WhirlingNoise#instance}. The {@code initialSeed}
@@ -2340,7 +2340,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * Constructs a concrete WMG for a map that can be used to wrap a sphere (as with a texture on a
          * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
          * have significantly-exaggerated-in-size features while the equator is not distorted.
          * Takes an initial seed, the GreasedRegion containing land positions, parameters for noise generation (a
@@ -2617,14 +2617,14 @@ public abstract class WorldMapGenerator implements Serializable {
 
     }
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that imitates an infinite-distance perspective view of a
+     * A concrete implementation of {@link WMG} that imitates an infinite-distance perspective view of a
      * world, showing only one hemisphere, that should be as wide as it is tall (its outline is a circle). This uses an
      * <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
      * the latitude always at the equator.
      * <a href="https://tommyettinger.github.io/DorpBorx/worlds7/index.html">Example views of 50 planets</a>.
      */
     @Beta
-    public static class SpaceViewMap extends WorldMapGenerator {
+    public static class SpaceViewMap extends WMG {
 //        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
@@ -2639,7 +2639,7 @@ public abstract class WorldMapGenerator implements Serializable {
         protected final int[] edges;
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Always makes a 100x100 map.
          * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -2651,7 +2651,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -2666,7 +2666,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -2682,7 +2682,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -2699,7 +2699,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -2716,7 +2716,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed, the width/height of the map, and parameters for noise
          * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
@@ -2951,7 +2951,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
     }
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto a shape with a flat top
+     * A concrete implementation of {@link WMG} that projects the world map onto a shape with a flat top
      * and bottom but near-circular sides. This is an equal-area projection, like EllipticalMap, so effects that fill
      * areas on a map like {@link PoliticalMapper} will fill (almost) equally on any part of the map. This has less
      * distortion on the far left and far right edges of the map than EllipticalMap, but the flat top and bottom are
@@ -2960,7 +2960,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="https://squidpony.github.io/SquidLib/RoundSideWorldMap.png">Example map</a>
      */
     @Beta
-    public static class RoundSideMap extends WorldMapGenerator {
+    public static class RoundSideMap extends WMG {
 //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
@@ -2976,7 +2976,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
          * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -2988,7 +2988,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -3003,7 +3003,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -3019,7 +3019,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -3036,7 +3036,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -3054,7 +3054,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
          * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
@@ -3331,7 +3331,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
     }
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto a shape that resembles a
+     * A concrete implementation of {@link WMG} that projects the world map onto a shape that resembles a
      * mix part-way between an ellipse and a rectangle. This is an equal-area projection, like EllipticalMap, so effects that fill
      * areas on a map like {@link PoliticalMapper} will fill (almost) equally on any part of the map. This has less
      * distortion around all the edges than the other maps here, especially when comparing the North and South poles
@@ -3340,7 +3340,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="">Example map</a>
      */
     @Beta
-    public static class HyperellipticalMap extends WorldMapGenerator {
+    public static class HyperellipticalMap extends WMG {
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
@@ -3356,7 +3356,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
          * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -3368,7 +3368,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -3383,7 +3383,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -3399,7 +3399,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -3416,7 +3416,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -3434,7 +3434,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
          * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
@@ -3460,7 +3460,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
          * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
@@ -3736,16 +3736,16 @@ public abstract class WorldMapGenerator implements Serializable {
     }
 
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto an ellipse that should be
+     * A concrete implementation of {@link WMG} that projects the world map onto an ellipse that should be
      * twice as wide as it is tall (although you can stretch it by width and height that don't have that ratio).
      * This uses the <a href="https://en.wikipedia.org/wiki/Hammer_projection">Hammer projection</a>, so the latitude
-     * lines are curved instead of flat. The Mollweide projection that {@link WorldMapGenerator.EllipticalMap} uses has flat lines, but
+     * lines are curved instead of flat. The Mollweide projection that {@link WMG.EllipticalMap} uses has flat lines, but
      * the two projection are otherwise very similar, and are both equal-area (Hammer tends to have less significant
      * distortion around the edges, but the curvature of the latitude lines can be hard to visualize).
      * <a href="https://i.imgur.com/nmN6lMK.gifv">Preview image link of a world rotating</a>.
      */
     @Beta
-    public static class EllipticalHammerMap extends WorldMapGenerator {
+    public static class EllipticalHammerMap extends WMG {
 //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
@@ -3761,7 +3761,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape. This is very
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
@@ -3775,7 +3775,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape. This is very
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
@@ -3792,7 +3792,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape. This is very
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
@@ -3810,7 +3810,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape. This is very
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
@@ -3829,7 +3829,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape. This is very
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
@@ -3849,7 +3849,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape. This is very
          * similar to {@link EllipticalMap}, but has curved latitude lines instead of flat ones (it also may see more
          * internal usage because some operations on this projection are much faster and simpler).
@@ -4129,7 +4129,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that imitates an infinite-distance perspective view of a
+     * A concrete implementation of {@link WMG} that imitates an infinite-distance perspective view of a
      * world, showing only one hemisphere, that should be as wide as it is tall (its outline is a circle). It should
      * look as a world would when viewed from space, and implements rotation differently to allow the planet to be
      * rotated without recalculating all the data, though it cannot zoom. Note that calling
@@ -4137,7 +4137,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * {@link #generate()} in those classes, since it doesn't remake the map data at a slightly different rotation and
      * instead keeps a single map in use the whole time, using sections of it. This uses an
      * <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
-     * the latitude always at the equator; the internal map is stored as a {@link WorldMapGenerator.SphereMap}, which uses a
+     * the latitude always at the equator; the internal map is stored as a {@link WMG.SphereMap}, which uses a
      * <a href="https://en.wikipedia.org/wiki/Cylindrical_equal-area_projection#Discussion">cylindrical equal-area
      * projection</a>, specifically the Smyth equal-surface projection.
      * <br>
@@ -4145,7 +4145,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="https://i.imgur.com/NV5IMd6.gifv">Another example</a>.
      */
     @Beta
-    public static class RotatingSpaceMap extends WorldMapGenerator {
+    public static class RotatingSpaceMap extends WMG {
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -4156,7 +4156,7 @@ public abstract class WorldMapGenerator implements Serializable {
         protected final int[] edges;
         public final SphereMap storedMap;
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Always makes a 100x100 map.
          * Uses WhirlingNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -4168,7 +4168,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -4183,7 +4183,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -4199,7 +4199,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -4216,7 +4216,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -4233,7 +4233,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
+         * Constructs a concrete WMG for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
          * Takes an initial seed, the width/height of the map, and parameters for noise
          * generation (a {@link Noise3D} implementation, which is usually {@link SeededNoise#instance}, and a
@@ -4388,7 +4388,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
     }
     /**
-     * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto a shape that resembles a
+     * A concrete implementation of {@link WMG} that projects the world map onto a shape that resembles a
      * mix part-way between an ellipse and a rectangle. This is an equal-area projection, like EllipticalMap, so effects that fill
      * areas on a map like {@link PoliticalMapper} will fill (almost) equally on any part of the map. This has less
      * distortion around all the edges than the other maps here, especially when comparing the North and South poles
@@ -4397,7 +4397,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * <a href="">Example map</a>
      */
     @Beta
-    public static class HyperellipticalFNMap extends WorldMapGenerator {
+    public static class HyperellipticalFNMap extends WMG {
         protected static final float terrainFreq = 1.45f, terrainRidgedFreq = 3.1f, heatFreq = 2.1f, moistureFreq = 2.125f, otherFreq = 3.375f, riverRidgedFreq = 21.7f;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
@@ -4413,7 +4413,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Always makes a 200x100 map.
          * Uses ClassicNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
@@ -4425,7 +4425,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes only the width/height of the map. The initial seed is set to the same large long
          * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
@@ -4440,7 +4440,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -4456,7 +4456,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed and the width/height of the map. The {@code initialSeed}
          * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
@@ -4473,7 +4473,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         /**
-         * Constructs a concrete WorldMapGenerator for a map that can be used to display a projection of a globe onto an
+         * Constructs a concrete WMG for a map that can be used to display a projection of a globe onto an
          * ellipse without distortion of the sizes of features but with significant distortion of shape.
          * Takes an initial seed, the width/height of the map, and parameters for noise generation (a
          * {@link Noise3D} implementation, where {@link ClassicNoise#instance} is suggested, and a
