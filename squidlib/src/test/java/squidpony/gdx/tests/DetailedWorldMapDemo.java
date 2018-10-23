@@ -389,14 +389,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         seed = 0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, width, height, WhirlingNoise.instance, 1.25);
-        //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.8);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.875);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
 //        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, FastNoise.instance, 0.6);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.6, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.7, 0.0625, 2.5);
+//        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
