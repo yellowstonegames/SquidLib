@@ -39,6 +39,7 @@ import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.performance.alternate.mapping.WorldMapGenerator;
+import squidpony.squidmath.WhirlingNoise;
 
 import java.util.concurrent.TimeUnit;
 
@@ -56,10 +57,10 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Fork(1)
-@Warmup(iterations = 5, time = 5, timeUnit = TimeUnit.SECONDS)
-@Measurement(iterations = 5, time = 10, timeUnit = TimeUnit.SECONDS)
+@Warmup(iterations = 5, time = 5)
+@Measurement(iterations = 5, time = 5)
 public class WorldBenchmark {
-    private WorldMapGenerator.HyperellipticalMap hem = new WorldMapGenerator.HyperellipticalMap();
+    private WorldMapGenerator.HyperellipticalMap hem = new WorldMapGenerator.HyperellipticalMap(0x1337L, 1000, 500, WhirlingNoise.instance, 1.5);
     
     @Benchmark
     public void measureHyperelliptical(Blackhole blackhole)
@@ -69,7 +70,7 @@ public class WorldBenchmark {
     }
     
     
-    private WorldMapGenerator.HyperellipticalFNMap fnm = new WorldMapGenerator.HyperellipticalFNMap();
+    private WorldMapGenerator.HyperellipticalFNMap fnm = new WorldMapGenerator.HyperellipticalFNMap(0x1337L, 1000, 500, 1.5);
 
     @Benchmark
     public void measureHyperellipticalFN(Blackhole blackhole)

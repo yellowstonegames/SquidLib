@@ -214,7 +214,6 @@ public static final char[]  terrainChars = {
         //world = new WorldMapGenerator.EllipticalMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.8);
         world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
-        world.generateRivers = false;
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         pm = new PoliticalMapper(FakeLanguageGen.SIMPLISH.word(rng, true));
         cities = new OrderedMap<>(96);

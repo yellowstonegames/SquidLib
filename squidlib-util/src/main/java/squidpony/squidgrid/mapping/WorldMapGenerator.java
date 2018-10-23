@@ -21,14 +21,7 @@ import java.util.Arrays;
  * {@link #moistureData} field, and a special map that stores ints representing the codes for various ranges of
  * elevation (0 to 8 inclusive, with 0 the deepest ocean and 8 the highest mountains) with {@link #heightCodeData}. The
  * last map should be noted as being the simplest way to find what is land and what is water; any height code 4 or
- * greater is land, and any height code 3 or less is water. This can produce rivers, and keeps that information in a
- * GreasedRegion (alongside a GreasedRegion containing lake positions) instead of in the other map data. This class does
- * not use Coord at all, but if you want maps with width and/or height greater than 256, and you want to use the river
- * or lake data as a Collection of Coord, then you should call {@link Coord#expandPoolTo(int, int)}
- * with your width and height so the Coords remain safely pooled. If you're fine with keeping rivers and lakes as
- * GreasedRegions and not requesting Coord values from them, then you don't need to do anything with Coord. Certain
- * parts of this class are not necessary to generate. For example, you can enable river generation if you want by
- * setting {@link #generateRivers} to true, but it doesn't produce very good results right now.
+ * greater is land, and any height code 3 or less is water.
  * <br>
  * The main trade-off this makes to obtain better quality is reduced speed; generating a 512x512 map on a circa-2016
  * laptop (i7-6700HQ processor at 2.6 GHz) takes about 1 second (about 1.15 seconds for an un-zoomed map, 0.95 or so
@@ -40,11 +33,10 @@ public abstract class WorldMapGenerator implements Serializable {
     public final int width, height;
     public long seed, cachedState;
     public StatefulRNG rng;
-    public boolean generateRivers = false;
-    public final double[][] heightData, heatData, moistureData, freshwaterData;
+    public final double[][] heightData, heatData, moistureData;
     public final GreasedRegion landData
             ;//, riverData, lakeData,
-            //partialRiverData, partialLakeData;
+    //partialRiverData, partialLakeData;
     //protected transient GreasedRegion workingData;
     public final int[][] heightCodeData;
     public double landModifier = -1.0, coolingModifier = 1.0,
@@ -157,7 +149,6 @@ public abstract class WorldMapGenerator implements Serializable {
         heightData = new double[width][height];
         heatData = new double[width][height];
         moistureData = new double[width][height];
-        freshwaterData = new double[width][height];
         landData = new GreasedRegion(width, height);
 //        riverData = new GreasedRegion(width, height);
 //        lakeData = new GreasedRegion(width, height);
@@ -346,7 +337,7 @@ public abstract class WorldMapGenerator implements Serializable {
     }
 
     protected abstract void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                              double landMod, double coolMod, long state);
+                                       double landMod, double coolMod, long state);
     /**
      * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
      * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
@@ -841,16 +832,15 @@ public abstract class WorldMapGenerator implements Serializable {
             final double i_hot = (world.maxHeat == world.minHeat) ? 1.0 : 1.0 / (world.maxHeat - world.minHeat);
             for (int x = 0; x < world.width; x++) {
                 for (int y = 0; y < world.height; y++) {
-                    final double hot = (world.heatData[x][y] - world.minHeat) * i_hot, moist = world.moistureData[x][y],
-                            fresh = world.freshwaterData[x][y];
+                    final double hot = (world.heatData[x][y] - world.minHeat) * i_hot, moist = world.moistureData[x][y];
                     final int heightCode = world.heightCodeData[x][y];
                     if(heightCode == 1000) {
                         biomeCodeData[x][y] = 60;
                         continue;
                     }
                     int hc, mc;
-                    boolean isLake = world.generateRivers && heightCode >= 4 && fresh > 0.65 && fresh + moist * 2.35 > 2.75,//world.partialLakeData.contains(x, y) && heightCode >= 4,
-                            isRiver = world.generateRivers && !isLake && heightCode >= 4 && fresh > 0.55 && fresh + moist * 2.2 > 2.15;//world.partialRiverData.contains(x, y) && heightCode >= 4;
+                    boolean isLake = false,// world.generateRivers && heightCode >= 4 && fresh > 0.65 && fresh + moist * 2.35 > 2.75,//world.partialLakeData.contains(x, y) && heightCode >= 4,
+                            isRiver = false;// world.generateRivers && !isLake && heightCode >= 4 && fresh > 0.55 && fresh + moist * 2.2 > 2.15;//world.partialRiverData.contains(x, y) && heightCode >= 4;
                     if(heightCode < 4) {
                         mc = 9;
                     }
@@ -1103,9 +1093,9 @@ public abstract class WorldMapGenerator implements Serializable {
                     hot = heatData[x][y];
                     moist = moistureData[x][y];
                     high = heightData[x][y];
-                    fresh = world.freshwaterData[x][y];
-                    boolean isLake = world.generateRivers && heightCode >= 4 && fresh > 0.65 && fresh + moist * 2.35 > 2.75,//world.partialLakeData.contains(x, y) && heightCode >= 4,
-                            isRiver = world.generateRivers && !isLake && heightCode >= 4 && fresh > 0.55 && fresh + moist * 2.2 > 2.15;//world.partialRiverData.contains(x, y) && heightCode >= 4;
+//                    fresh = world.freshwaterData[x][y];
+                    boolean isLake = false,//world.generateRivers && heightCode >= 4 && fresh > 0.65 && fresh + moist * 2.35 > 2.75,//world.partialLakeData.contains(x, y) && heightCode >= 4,
+                            isRiver = false;//world.generateRivers && !isLake && heightCode >= 4 && fresh > 0.55 && fresh + moist * 2.2 > 2.15;//world.partialRiverData.contains(x, y) && heightCode >= 4;
                     if (moist >= (wettestValueUpper - (wetterValueUpper - wetterValueLower) * 0.2)) {
                         mc = 5;
                     } else if (moist >= (wetterValueUpper - (wetValueUpper - wetValueLower) * 0.2)) {
@@ -1176,7 +1166,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     else if (isRiver || isLake)
                         biomeCodeData[x][y] = bc | (int)(moist * 358.4 + 665.0) << 20;
                     else
-                        biomeCodeData[x][y] = bc | (int) ((heightCode == 4) 
+                        biomeCodeData[x][y] = bc | (int) ((heightCode == 4)
                                 ? (sandUpper - high) * 10240.0 // multiplier affected by changes to sandLower
                                 : NumberTools.sway((high + moist) * (4.1 + high - hot)) * 512 + 512) << 20;
                 }
@@ -1186,24 +1176,24 @@ public abstract class WorldMapGenerator implements Serializable {
 
     /**
      * A concrete implementation of {@link WorldMapGenerator} that tiles both east-to-west and north-to-south. It tends
-     * to not appear distorted like {@link SphereMap} does in some areas, even though this is inaccurate for a
+     * to not appear distorted like {@link WorldMapGenerator.SphereMap} does in some areas, even though this is inaccurate for a
      * rectangular projection of a spherical world (that inaccuracy is likely what players expect in a map, though).
      * <a href="http://squidpony.github.io/SquidLib/DetailedWorldMapRiverDemo.png" >Example map</a>.
      */
     public static class TilingMap extends WorldMapGenerator {
         //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
-        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise4D terrain, terrainRidged, heat, moisture, otherRidged, riverRidged;
+        public final Noise4D terrain, terrainRidged, heat, moisture, otherRidged;
 
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well
          * as north-to-south. Always makes a 256x256 map.
          * Uses SeededNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
-         * If you were using {@link WorldMapGenerator.TilingMap#TilingMap(long, int, int, Noise.Noise4D, double)}, then this would be the
+         * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the
          * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, SeededNoise.instance, 1.0}.
          */
         public TilingMap() {
@@ -1289,7 +1279,6 @@ public abstract class WorldMapGenerator implements Serializable {
             heat = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);
             moisture = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);
             otherRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
-            riverRidged = new Noise.Ridged4D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
@@ -1349,10 +1338,6 @@ public abstract class WorldMapGenerator implements Serializable {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qc, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qc * 0.46,qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qc, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
-
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -1494,18 +1479,18 @@ public abstract class WorldMapGenerator implements Serializable {
      * permit a choice of {@link Noise4D}, but does allow choosing a {@link Noise3D}, which is used for most of the
      * generation. This is ideal for projecting onto a 3D sphere, which could squash the poles to counteract the stretch
      * this does. You might also want to produce an oval map that more-accurately represents the changes in the diameter
-     * of a latitude line on a spherical world; you should use {@link EllipticalMap} or {@link EllipticalHammerMap} for
+     * of a latitude line on a spherical world; you should use {@link WorldMapGenerator.EllipticalMap} or {@link WorldMapGenerator.EllipticalHammerMap} for
      * this. <a href="http://i.imgur.com/wth01QD.png">Example map, showing distortion</a>
      */
     @Beta
     public static class SphereMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         //protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
+        public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
         public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
@@ -1629,7 +1614,6 @@ public abstract class WorldMapGenerator implements Serializable {
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
-            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
         @Override
         public int wrapY(final int x, final int y)  {
@@ -1720,9 +1704,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
+
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -1870,14 +1852,14 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     @Beta
     public static class EllipticalMap extends WorldMapGenerator {
-//        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
-//        public final Noise4D terrain4D;
+        public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
+        //        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -1992,12 +1974,9 @@ public abstract class WorldMapGenerator implements Serializable {
             edges = new int[height << 1];
             terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);
             terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
-//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);
-//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
-            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
 
         @Override
@@ -2044,7 +2023,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
             landModifier = (landMod <= 0) ? rng.nextDouble(0.2) + 0.91 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
-            
+
             double p,
                     ps, pc,
                     qs, qc,
@@ -2086,35 +2065,15 @@ public abstract class WorldMapGenerator implements Serializable {
                     xPositions[x][y] = pc;
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
-//                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
-//                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
-//                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-//                            seedA) + landModifier - 1.0);
-//                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-//                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
-//                            , qs, seedB));
-//                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
-//                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
-//                            , seedC));
-//                    freshwaterData[x][y] = (ps = Math.min(
-//                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-//                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
                                     terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
-//                    heightData[x][y] = (h = terrain4D.getNoiseWithSeed(pc, ps, qs,
-//                            (terrainLayered.getNoiseWithSeed(pc, ps, qs, seedB - seedA)
-//                                    + terrain.getNoiseWithSeed(pc, ps, qs, seedC - seedB)) * 0.5,
-//                            seedA) * landModifier);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -2212,49 +2171,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet = pc;
             }
             landData.refill(heightCodeData, 4, 999);
-            /*
-            if(generateRivers) {
-                if (fresh) {
-                    addRivers();
-                    riverData.connect8way().thin().thin();
-                    lakeData.connect8way().thin();
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                } else {
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                    int stx = Math.min(Math.max((zoomStartX >> zoom) - (width >> 2), 0), width),
-                            sty = Math.min(Math.max((zoomStartY >> zoom) - (height >> 2), 0), height);
-                    for (int i = 1; i <= zoom; i++) {
-                        int stx2 = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
-                                sty2 = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
-                        //(zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom)
-
-//                        Map is 200x100, GreasedRegions have that size too.
-//                        Zoom 0 only allows 100,50 as the center, 0,0 as the corner
-//                        Zoom 1 allows 100,50 to 300,150 as the center (x2 coordinates), 0,0 to 200,100 (refers to 200,100) as the corner
-//                        Zoom 2 allows 100,50 to 700,350 as the center (x4 coordinates), 0,0 to 200,100 (refers to 600,300) as the corner
-
-
-                        System.out.printf("zoomStartX: %d zoomStartY: %d, stx: %d sty: %d, stx2: %d, sty2: %d\n", zoomStartX, zoomStartY, stx, sty, stx2, sty2);
-                        if ((i & 3) == 3) {
-                            partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
-                            partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
-                        } else {
-                            partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
-                            partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
-                        }
-                        //stx = (width >> 1) ;//Math.min(Math.max(, 0), width);
-                        //sty = (height >> 1);//Math.min(Math.max(, 0), height);
-                    }
-                    System.out.println();
-                }
-            }
-            */
         }
     }
 
@@ -2401,7 +2317,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 return edges[y << 1];
             else return x;
         }
-        
+
         @Override
         public int wrapY(final int x, final int y)  {
             return Math.max(0, Math.min(y, height - 1));
@@ -2447,7 +2363,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 coast.remake(earth).not().fringe(2 << zoom).expand().fray(0.5);
                 shallow.remake(earth).fringe(2 << zoom).expand().fray(0.5);
             }
-            else 
+            else
             {
                 coast.remake(earth).not().fringe(2);
                 shallow.remake(earth).fringe(2);
@@ -2519,9 +2435,6 @@ public abstract class WorldMapGenerator implements Serializable {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -2637,14 +2550,13 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     @Beta
     public static class SpaceViewMap extends WorldMapGenerator {
-//        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        //        protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
-        //public final Noise4D terrain4D;
+        public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -2761,7 +2673,6 @@ public abstract class WorldMapGenerator implements Serializable {
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
-            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
 
         @Override
@@ -2843,7 +2754,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     qc = NumberTools.cos(lat);
                     qs = NumberTools.sin(lat);
-                    
+
                     pc = NumberTools.cos(lon) * qc;
                     ps = NumberTools.sin(lon) * qc;
 
@@ -2863,9 +2774,6 @@ public abstract class WorldMapGenerator implements Serializable {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -2976,13 +2884,13 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     @Beta
     public static class RoundSideMap extends WorldMapGenerator {
-//        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
+        public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
         //        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
@@ -3103,7 +3011,6 @@ public abstract class WorldMapGenerator implements Serializable {
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
-            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
 
         @Override
@@ -3203,9 +3110,6 @@ public abstract class WorldMapGenerator implements Serializable {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -3303,49 +3207,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet = pc;
             }
             landData.refill(heightCodeData, 4, 999);
-            /*
-            if(generateRivers) {
-                if (fresh) {
-                    addRivers();
-                    riverData.connect8way().thin().thin();
-                    lakeData.connect8way().thin();
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                } else {
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                    int stx = Math.min(Math.max((zoomStartX >> zoom) - (width >> 2), 0), width),
-                            sty = Math.min(Math.max((zoomStartY >> zoom) - (height >> 2), 0), height);
-                    for (int i = 1; i <= zoom; i++) {
-                        int stx2 = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
-                                sty2 = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
-                        //(zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom)
-
-//                        Map is 200x100, GreasedRegions have that size too.
-//                        Zoom 0 only allows 100,50 as the center, 0,0 as the corner
-//                        Zoom 1 allows 100,50 to 300,150 as the center (x2 coordinates), 0,0 to 200,100 (refers to 200,100) as the corner
-//                        Zoom 2 allows 100,50 to 700,350 as the center (x4 coordinates), 0,0 to 200,100 (refers to 600,300) as the corner
-
-
-                        System.out.printf("zoomStartX: %d zoomStartY: %d, stx: %d sty: %d, stx2: %d, sty2: %d\n", zoomStartX, zoomStartY, stx, sty, stx2, sty2);
-                        if ((i & 3) == 3) {
-                            partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
-                            partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
-                        } else {
-                            partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
-                            partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
-                        }
-                        //stx = (width >> 1) ;//Math.min(Math.max(, 0), width);
-                        //sty = (height >> 1);//Math.min(Math.max(, 0), height);
-                    }
-                    System.out.println();
-                }
-            }
-            */
         }
     }
     /**
@@ -3359,13 +3220,12 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     @Beta
     public static class HyperellipticalMap extends WorldMapGenerator {
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
-        //        public final Noise4D terrain4D;
+        public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -3514,7 +3374,6 @@ public abstract class WorldMapGenerator implements Serializable {
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
-            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
             this.alpha = alpha;
             this.kappa = kappa;
             this.Z = new double[height << 2];
@@ -3562,7 +3421,7 @@ public abstract class WorldMapGenerator implements Serializable {
             else
                 y = ((z0-Z[-i-2])/(Z[-i-1]-Z[-i-2]) + (-i-2))/(Z.length-1.);
             final int xx = (int)(((longitude - getCenterLongitude() + 12.566370614359172) % 6.283185307179586) * Math.abs(alpha + (1-alpha)*Math.pow(1 - Math.pow(Math.abs(y),kappa), 1/kappa)) + 0.5);
-            final int yy = (int)(y * Math.signum(latitude) * height * 0.5 + 0.5); 
+            final int yy = (int)(y * Math.signum(latitude) * height * 0.5 + 0.5);
             return Coord.get(wrapX(xx, yy), wrapY(xx, yy));
         }
 
@@ -3617,7 +3476,7 @@ public abstract class WorldMapGenerator implements Serializable {
 //                lat = asin(qs);
 //
 //                qc = NumberTools.cos(lat);
-                
+
                 lon = asin(Z[(int)(0.5 + Math.abs(yPos*iry)*(Z.length-1))])*Math.signum(yPos);
                 qs = NumberTools.sin(lon);
                 qc = NumberTools.cos(lon);
@@ -3628,7 +3487,7 @@ public abstract class WorldMapGenerator implements Serializable {
                     //th = lon * xPos;
                     th = xPos * irx / Math.abs(alpha + (1-alpha)*ProjectionTools.hyperellipse(yPos * iry, kappa));
                     if(th < -3.141592653589793 || th > 3.141592653589793) {
-                    //if(th < -2.0 || th > 2.0) {
+                        //if(th < -2.0 || th > 2.0) {
                         heightCodeData[x][y] = 10000;
                         inSpace = true;
                         continue;
@@ -3654,9 +3513,6 @@ public abstract class WorldMapGenerator implements Serializable {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -3761,20 +3617,20 @@ public abstract class WorldMapGenerator implements Serializable {
      * A concrete implementation of {@link WorldMapGenerator} that projects the world map onto an ellipse that should be
      * twice as wide as it is tall (although you can stretch it by width and height that don't have that ratio).
      * This uses the <a href="https://en.wikipedia.org/wiki/Hammer_projection">Hammer projection</a>, so the latitude
-     * lines are curved instead of flat. The Mollweide projection that {@link EllipticalMap} uses has flat lines, but
+     * lines are curved instead of flat. The Mollweide projection that {@link WorldMapGenerator.EllipticalMap} uses has flat lines, but
      * the two projection are otherwise very similar, and are both equal-area (Hammer tends to have less significant
      * distortion around the edges, but the curvature of the latitude lines can be hard to visualize).
      * <a href="https://i.imgur.com/nmN6lMK.gifv">Preview image link of a world rotating</a>.
      */
     @Beta
     public static class EllipticalHammerMap extends WorldMapGenerator {
-//        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
-        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        //        protected static final double terrainFreq = 1.35, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final Noise3D terrain, heat, moisture, otherRidged, riverRidged, terrainLayered;
+        public final Noise3D terrain, heat, moisture, otherRidged, terrainLayered;
         //        public final Noise4D terrain4D;
         public final double[][] xPositions,
                 yPositions,
@@ -3907,7 +3763,6 @@ public abstract class WorldMapGenerator implements Serializable {
             heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
             moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
             otherRidged = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
-            riverRidged = new Noise.Ridged3D(noiseGenerator, (int)(0.5 + octaveMultiplier * 4), riverRidgedFreq);
         }
 
         @Override
@@ -4005,9 +3860,6 @@ public abstract class WorldMapGenerator implements Serializable {
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
                             , seedC));
-                    freshwaterData[x][y] = (ps = Math.min(
-                            NumberTools.sway(riverRidged.getNoiseWithSeed(pc * 0.46, ps * 0.46, qs * 0.46, seedC - seedA - seedB) + 0.38),
-                            NumberTools.sway( riverRidged.getNoiseWithSeed(pc, ps, qs, seedC - seedA - seedB) + 0.5))) * ps * ps * 45.42;
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -4105,49 +3957,6 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet = pc;
             }
             landData.refill(heightCodeData, 4, 999);
-            /*
-            if(generateRivers) {
-                if (fresh) {
-                    addRivers();
-                    riverData.connect8way().thin().thin();
-                    lakeData.connect8way().thin();
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                } else {
-                    partialRiverData.remake(riverData);
-                    partialLakeData.remake(lakeData);
-                    int stx = Math.min(Math.max((zoomStartX >> zoom) - (width >> 2), 0), width),
-                            sty = Math.min(Math.max((zoomStartY >> zoom) - (height >> 2), 0), height);
-                    for (int i = 1; i <= zoom; i++) {
-                        int stx2 = (startCacheX.get(i) - startCacheX.get(i - 1)) << (i - 1),
-                                sty2 = (startCacheY.get(i) - startCacheY.get(i - 1)) << (i - 1);
-                        //(zoomStartX >> zoom) - (width >> 1 + zoom), (zoomStartY >> zoom) - (height >> 1 + zoom)
-
-//                        Map is 200x100, GreasedRegions have that size too.
-//                        Zoom 0 only allows 100,50 as the center, 0,0 as the corner
-//                        Zoom 1 allows 100,50 to 300,150 as the center (x2 coordinates), 0,0 to 200,100 (refers to 200,100) as the corner
-//                        Zoom 2 allows 100,50 to 700,350 as the center (x4 coordinates), 0,0 to 200,100 (refers to 600,300) as the corner
-
-
-                        System.out.printf("zoomStartX: %d zoomStartY: %d, stx: %d sty: %d, stx2: %d, sty2: %d\n", zoomStartX, zoomStartY, stx, sty, stx2, sty2);
-                        if ((i & 3) == 3) {
-                            partialRiverData.zoom(stx, sty).connect8way();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.4));
-                            partialLakeData.zoom(stx, sty).connect8way();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.55));
-                        } else {
-                            partialRiverData.zoom(stx, sty).connect8way().thin();
-                            partialRiverData.or(workingData.remake(partialRiverData).fringe().quasiRandomRegion(0.5));
-                            partialLakeData.zoom(stx, sty).connect8way().thin();
-                            partialLakeData.or(workingData.remake(partialLakeData).fringe().quasiRandomRegion(0.7));
-                        }
-                        //stx = (width >> 1) ;//Math.min(Math.max(, 0), width);
-                        //sty = (height >> 1);//Math.min(Math.max(, 0), height);
-                    }
-                    System.out.println();
-                }
-            }
-            */
         }
     }
 
@@ -4162,7 +3971,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * {@link #generate()} in those classes, since it doesn't remake the map data at a slightly different rotation and
      * instead keeps a single map in use the whole time, using sections of it. This uses an
      * <a href="https://en.wikipedia.org/wiki/Orthographic_projection_in_cartography">Orthographic projection</a> with
-     * the latitude always at the equator; the internal map is stored as a {@link SphereMap}, which uses a
+     * the latitude always at the equator; the internal map is stored as a {@link WorldMapGenerator.SphereMap}, which uses a
      * <a href="https://en.wikipedia.org/wiki/Cylindrical_equal-area_projection#Discussion">cylindrical equal-area
      * projection</a>, specifically the Smyth equal-surface projection.
      * <br>
@@ -4342,7 +4151,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
                     pc = NumberTools.cos(lon);
                     ps = NumberTools.sin(lon);
-                    
+
                     ax = (int)((lon * i_pi + 1.0) * width);
                     ay = (int)((qs + 1.0) * ry);
 //                    // Hammer projection, not an inverse projection like we usually use
@@ -4364,12 +4173,11 @@ public abstract class WorldMapGenerator implements Serializable {
                     xPositions[x][y] = pc * qc;
                     yPositions[x][y] = ps * qc;
                     zPositions[x][y] = qs;
-                    
+
                     heightData[x][y] = h = storedMap.heightData[ax][ay];
                     heightCodeData[x][y] = codeHeight(h);
                     heatData[x][y] = storedMap.heatData[ax][ay];
                     moistureData[x][y] = storedMap.moistureData[ax][ay];
-                    freshwaterData[x][y] = storedMap.freshwaterData[ax][ay];
 
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
@@ -4388,7 +4196,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 storedMap.regenerate(0, 0, width << 1, height, landMod, coolMod, state);
                 minHeightActual = Double.POSITIVE_INFINITY;
                 maxHeightActual = Double.NEGATIVE_INFINITY;
-                
+
                 minHeight = storedMap.minHeight;
                 maxHeight = storedMap.maxHeight;
 
@@ -4406,12 +4214,11 @@ public abstract class WorldMapGenerator implements Serializable {
 
                 minWet = storedMap.minWet;
                 maxWet = storedMap.maxWet;
-                
+
                 cachedState = state;
             }
             setCenterLongitude(centerLongitude);
             landData.refill(heightCodeData, 4, 999);
         }
     }
-
 }
