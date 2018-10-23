@@ -16,10 +16,7 @@ import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
-import squidpony.squidmath.ClassicNoise;
-import squidpony.squidmath.LinnormRNG;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.*;
 
 import static squidpony.squidgrid.gui.gdx.SColor.*;
 
@@ -48,14 +45,14 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
             Empty                  = 14;
 
     //private static final int width = 314 * 3, height = 300;
-//    private static final int width = 1024, height = 512;
+    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
 //    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
     ///private static final int width = 1000, height = 1000;
 //    private static final int width = 700, height = 700;
-    private static final int width = 512, height = 512;
+//    private static final int width = 512, height = 512;
 //    private static final int width = 128, height = 128;
     
     private SpriteBatch batch;
@@ -397,9 +394,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
         //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, ClassicNoise.instance, 0.55);
+//        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, FastNoise.instance, 0.6);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.7, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.6, 0.0625, 2.5);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
