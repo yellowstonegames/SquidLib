@@ -56,7 +56,12 @@ public enum Radius {
      * movement scheme with all movement cost the same based on distance from
      * the source
      */
-    SPHERE;
+    SPHERE,
+    /**
+     * Like {@link #CIRCLE}, but always uses a rough approximation of distance instead of a more expensive (but more
+     * accurate) Euclidean calculation.
+     */
+    ROUGH_CIRCLE;
 
     private static final double PI2 = Math.PI * 2;
     public double radius(int startx, int starty, int startz, int endx, int endy, int endz) {
@@ -78,21 +83,20 @@ public enum Radius {
         dx = Math.abs(dx);
         dy = Math.abs(dy);
         dz = Math.abs(dz);
-        double radius = 0;
         switch (this) {
             case SQUARE:
             case CUBE:
-                radius = Math.max(dx, Math.max(dy, dz));//radius is longest axial distance
-                break;
-            case DIAMOND:
-            case OCTAHEDRON:
-                radius = dx + dy + dz;//radius is the manhattan distance
-                break;
+                return Math.max(dx, Math.max(dy, dz));//radius is longest axial distance
             case CIRCLE:
             case SPHERE:
-                radius = Math.sqrt(dx * dx + dy * dy + dz * dz);//standard spherical radius
+                return Math.sqrt(dx * dx + dy * dy + dz * dz);//standard spherical radius
+            case ROUGH_CIRCLE: // ignores z
+                if(dx == dy) return 1.5 * dx;
+                else if(dx < dy) return 1.5 * dx + (dy - dx);
+                else return 1.5 * dy + (dx - dy);
+            default:
+                return dx + dy + dz;//radius is the manhattan distance
         }
-        return radius;
     }
 
     public double radius(int startx, int starty, int endx, int endy) {
@@ -116,7 +120,22 @@ public enum Radius {
     }
 
     public double radius(double dx, double dy) {
-        return radius(dx, dy, 0);
+        dx = Math.abs(dx);
+        dy = Math.abs(dy);
+        switch (this) {
+            case SQUARE:
+            case CUBE:
+                return Math.max(dx, dy);//radius is longest axial distance
+            case ROUGH_CIRCLE: // radius is an approximation, roughly octagonal
+                if(dx == dy) return 1.5 * dx;
+                else if(dx < dy) return 1.5 * dx + (dy - dx);
+                else return 1.5 * dy + (dx - dy);
+            case CIRCLE:
+            case SPHERE:
+                return Math.sqrt(dx * dx + dy * dy);//standard spherical radius
+            default:
+                return dx + dy;//radius is the manhattan distance
+        }
     }
 
     public Coord onUnitShape(double distance, IRNG rng) {
@@ -151,9 +170,8 @@ public enum Radius {
                     }
                 }
                 break;
-            case CIRCLE:
-            case SPHERE:
-                double radius = distance * Math.sqrt(rng.between(0.0, 1.0));
+            default: // includes CIRCLE, SPHERE, and ROUGH_CIRCLE
+                double radius = distance * Math.sqrt(rng.nextDouble());
                 double theta = rng.between(0, PI2);
                 x = (int) Math.round(NumberTools.cos(theta) * radius);
                 y = (int) Math.round(NumberTools.sin(theta) * radius);
@@ -168,6 +186,7 @@ public enum Radius {
             case SQUARE:
             case DIAMOND:
             case CIRCLE:
+            case ROUGH_CIRCLE:
                 Coord p = onUnitShape(distance, rng);
                 return new Coord3D(p.x, p.y, 0);//2D strategies
             case CUBE:
@@ -406,6 +425,8 @@ public enum Radius {
     {
         switch (this)
         {
+            case ROUGH_CIRCLE:
+                return other == ROUGH_CIRCLE;
             case CIRCLE:
             case SPHERE:
                 return other == CIRCLE || other == SPHERE;
@@ -427,13 +448,11 @@ public enum Radius {
         switch (this) {
             case CIRCLE:
             case SPHERE:
+            case ROUGH_CIRCLE:
             {
-                if(x == y)
-                    return 3 * x;
-                else if(x < y)
-                    return 3 * x + 2 * (y - x);
-                else
-                    return 3 * y + 2 * (x - y);
+                if(x == y) return 3 * x;
+                else if(x < y) return 3 * x + 2 * (y - x);
+                else return 3 * y + 2 * (x - y);
             }
             case DIAMOND:
             case OCTAHEDRON:
@@ -643,7 +662,7 @@ public enum Radius {
     public Set<Coord> expand(int distance, int width, int height, Iterable<Coord> points)
     {
         List<Coord> around = pointsInside(Coord.get(distance, distance), distance, false, width, height);
-        OrderedSet<Coord> expanded = new OrderedSet<>(around.size() * 16);
+        UnorderedSet<Coord> expanded = new UnorderedSet<>(around.size() * 16);
         int tx, ty;
         for(Coord pt : points)
         {

@@ -386,15 +386,19 @@ public class ArrayTools {
      */
     public static void fill(boolean[][] array2d, boolean value) {
         final int width = array2d.length;
-        final int height = width == 0 ? 0 : array2d[0].length;
-        if(width > 0) {
-            for (int i = 0; i < height; i++) {
-                array2d[0][i] = value;
-            }
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(array2d[i], value);
         }
-        for (int x = 1; x < width; x++) {
-            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
-        }
+//        final int width = array2d.length;
+//        final int height = width == 0 ? 0 : array2d[0].length;
+//        if(width > 0) {
+//            for (int i = 0; i < height; i++) {
+//                array2d[0][i] = value;
+//            }
+//        }
+//        for (int x = 1; x < width; x++) {
+//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+//        }
     }
 
     /**
@@ -405,15 +409,19 @@ public class ArrayTools {
      */
     public static void fill(char[][] array2d, char value) {
         final int width = array2d.length;
-        final int height = width == 0 ? 0 : array2d[0].length;
-        if(width > 0) {
-            for (int i = 0; i < height; i++) {
-                array2d[0][i] = value;
-            }
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(array2d[i], value);
         }
-        for (int x = 1; x < width; x++) {
-            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
-        }
+//        final int width = array2d.length;
+//        final int height = width == 0 ? 0 : array2d[0].length;
+//        if(width > 0) {
+//            for (int i = 0; i < height; i++) {
+//                array2d[0][i] = value;
+//            }
+//        }
+//        for (int x = 1; x < width; x++) {
+//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+//        }
     }
 
     /**
@@ -424,15 +432,19 @@ public class ArrayTools {
      */
     public static void fill(float[][] array2d, float value) {
         final int width = array2d.length;
-        final int height = width == 0 ? 0 : array2d[0].length;
-        if(width > 0) {
-            for (int i = 0; i < height; i++) {
-                array2d[0][i] = value;
-            }
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(array2d[i], value);
         }
-        for (int x = 1; x < width; x++) {
-            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
-        }
+//        final int width = array2d.length;
+//        final int height = width == 0 ? 0 : array2d[0].length;
+//        if(width > 0) {
+//            for (int i = 0; i < height; i++) {
+//                array2d[0][i] = value;
+//            }
+//        }
+//        for (int x = 1; x < width; x++) {
+//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+//        }
     }
 
 
@@ -444,15 +456,18 @@ public class ArrayTools {
      */
     public static void fill(double[][] array2d, double value) {
         final int width = array2d.length;
-        final int height = width == 0 ? 0 : array2d[0].length;
-        if(width > 0) {
-            for (int i = 0; i < height; i++) {
-                array2d[0][i] = value;
-            }
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(array2d[i], value);
         }
-        for (int x = 1; x < width; x++) {
-            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
-        }
+//        final int height = width == 0 ? 0 : array2d[0].length;
+//        if(width > 0) {
+//            for (int i = 0; i < height; i++) {
+//                array2d[0][i] = value;
+//            }
+//        }
+//        for (int x = 1; x < width; x++) {
+//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+//        }
     }
 
     /**
@@ -467,16 +482,10 @@ public class ArrayTools {
         final int width = depth == 0 ? 0 : array3d[0].length;
         final int height = width == 0 ? 0 : array3d[0][0].length;
         if(depth > 0 && width > 0) {
-            for (int i = 0; i < height; i++) {
-                array3d[0][0][i] = value;
-            }
-        }
-        for (int x = 1; x < width; x++) {
-            System.arraycopy(array3d[0][0], 0, array3d[0][x], 0, height);
-        }
-        for (int z = 1; z < depth; z++) {
-            for (int x = 0; x < width; x++) {
-                System.arraycopy(array3d[0][0], 0, array3d[z][x], 0, height);
+            for (int i = 0; i < width; i++) {
+                for (int j = 0; j < height; j++) {
+                    Arrays.fill(array3d[i][j], value);
+                }
             }
         }
     }
@@ -489,15 +498,20 @@ public class ArrayTools {
      */
     public static void fill(int[][] array2d, int value) {
         final int width = array2d.length;
-        final int height = width == 0 ? 0 : array2d[0].length;
-        if(width > 0) {
-            for (int i = 0; i < height; i++) {
-                array2d[0][i] = value;
-            }
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(array2d[i], value);
         }
-        for (int x = 1; x < width; x++) {
-            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
-        }
+
+//        final int width = array2d.length;
+//        final int height = width == 0 ? 0 : array2d[0].length;
+//        if(width > 0) {
+//            for (int i = 0; i < height; i++) {
+//                array2d[0][i] = value;
+//            }
+//        }
+//        for (int x = 1; x < width; x++) {
+//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+//        }
     }
 
     /**
@@ -508,15 +522,19 @@ public class ArrayTools {
      */
     public static void fill(byte[][] array2d, byte value) {
         final int width = array2d.length;
-        final int height = width == 0 ? 0 : array2d[0].length;
-        if(width > 0) {
-            for (int i = 0; i < height; i++) {
-                array2d[0][i] = value;
-            }
+        for (int i = 0; i < width; i++) {
+            Arrays.fill(array2d[i], value);
         }
-        for (int x = 1; x < width; x++) {
-            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
-        }
+//        final int width = array2d.length;
+//        final int height = width == 0 ? 0 : array2d[0].length;
+//        if(width > 0) {
+//            for (int i = 0; i < height; i++) {
+//                array2d[0][i] = value;
+//            }
+//        }
+//        for (int x = 1; x < width; x++) {
+//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);
+//        }
     }
 
 
