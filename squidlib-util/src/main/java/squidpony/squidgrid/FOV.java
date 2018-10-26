@@ -695,18 +695,18 @@ public class FOV implements Serializable {
         return light;
     }
 
-    private static double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+    private static void shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
                                          double radius, int startx, int starty, double decay, double[][] lightMap,
                                          double[][] map, Radius radiusStrategy) {
-	    return shadowCast(row, start, end, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, false);
+	    shadowCast(row, start, end, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, false);
     }
 
-    private static double[][] shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
-                                         double radius, int startx, int starty, double decay, double[][] lightMap,
-                                         double[][] map, Radius radiusStrategy, boolean binary) {
+    private static void shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                   double radius, int startx, int starty, double decay, double[][] lightMap,
+                                   double[][] map, Radius radiusStrategy, boolean binary) {
         double newStart = 0;
         if (start < end) {
-            return lightMap;
+            return;
         }
         int width = lightMap.length;
         int height = lightMap[0].length;
@@ -731,8 +731,7 @@ public class FOV implements Serializable {
                     if (binary)
                         lightMap[currentX][currentY] = 1.0;
                     else {
-                        double bright = 1 - decay * deltaRadius;
-                        lightMap[currentX][currentY] = bright;
+                        lightMap[currentX][currentY] = 1.0 - decay * deltaRadius;
                     }
                 }
 
@@ -746,13 +745,12 @@ public class FOV implements Serializable {
                 } else {
                     if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
                         blocked = true;
-                        lightMap = shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy);
+                        shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, binary);
                         newStart = rightSlope;
                     }
                 }
             }
         }
-        return lightMap;
     }
     private static double[][] shadowCastLimited(int row, double start, double end, int xx, int xy, int yx, int yy,
                                                 double radius, int startx, int starty, double decay, double[][] lightMap,

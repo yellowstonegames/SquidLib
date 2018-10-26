@@ -394,522 +394,522 @@
 <span class="sourceLineNo">386</span>     */<a name="line.386"></a>
 <span class="sourceLineNo">387</span>    public static void fill(boolean[][] array2d, boolean value) {<a name="line.387"></a>
 <span class="sourceLineNo">388</span>        final int width = array2d.length;<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.389"></a>
-<span class="sourceLineNo">390</span>        if(width &gt; 0) {<a name="line.390"></a>
-<span class="sourceLineNo">391</span>            for (int i = 0; i &lt; height; i++) {<a name="line.391"></a>
-<span class="sourceLineNo">392</span>                array2d[0][i] = value;<a name="line.392"></a>
-<span class="sourceLineNo">393</span>            }<a name="line.393"></a>
-<span class="sourceLineNo">394</span>        }<a name="line.394"></a>
-<span class="sourceLineNo">395</span>        for (int x = 1; x &lt; width; x++) {<a name="line.395"></a>
-<span class="sourceLineNo">396</span>            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.396"></a>
-<span class="sourceLineNo">397</span>        }<a name="line.397"></a>
-<span class="sourceLineNo">398</span>    }<a name="line.398"></a>
-<span class="sourceLineNo">399</span><a name="line.399"></a>
-<span class="sourceLineNo">400</span>    /**<a name="line.400"></a>
-<span class="sourceLineNo">401</span>     * Fills {@code array2d} with {@code value}.<a name="line.401"></a>
-<span class="sourceLineNo">402</span>     * Not to be confused with {@link #fill(char, int, int)}, which makes a new 2D array.<a name="line.402"></a>
-<span class="sourceLineNo">403</span>     * @param array2d a 2D array that will be modified in-place<a name="line.403"></a>
-<span class="sourceLineNo">404</span>     * @param value the value to fill all of array2D with<a name="line.404"></a>
-<span class="sourceLineNo">405</span>     */<a name="line.405"></a>
-<span class="sourceLineNo">406</span>    public static void fill(char[][] array2d, char value) {<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        final int width = array2d.length;<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        if(width &gt; 0) {<a name="line.409"></a>
-<span class="sourceLineNo">410</span>            for (int i = 0; i &lt; height; i++) {<a name="line.410"></a>
-<span class="sourceLineNo">411</span>                array2d[0][i] = value;<a name="line.411"></a>
-<span class="sourceLineNo">412</span>            }<a name="line.412"></a>
-<span class="sourceLineNo">413</span>        }<a name="line.413"></a>
-<span class="sourceLineNo">414</span>        for (int x = 1; x &lt; width; x++) {<a name="line.414"></a>
-<span class="sourceLineNo">415</span>            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.415"></a>
-<span class="sourceLineNo">416</span>        }<a name="line.416"></a>
-<span class="sourceLineNo">417</span>    }<a name="line.417"></a>
-<span class="sourceLineNo">418</span><a name="line.418"></a>
-<span class="sourceLineNo">419</span>    /**<a name="line.419"></a>
-<span class="sourceLineNo">420</span>     * Fills {@code array2d} with {@code value}.<a name="line.420"></a>
-<span class="sourceLineNo">421</span>     * Not to be confused with {@link #fill(float, int, int)}, which makes a new 2D array.<a name="line.421"></a>
-<span class="sourceLineNo">422</span>     * @param array2d a 2D array that will be modified in-place<a name="line.422"></a>
-<span class="sourceLineNo">423</span>     * @param value the value to fill all of array2D with<a name="line.423"></a>
-<span class="sourceLineNo">424</span>     */<a name="line.424"></a>
-<span class="sourceLineNo">425</span>    public static void fill(float[][] array2d, float value) {<a name="line.425"></a>
-<span class="sourceLineNo">426</span>        final int width = array2d.length;<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        if(width &gt; 0) {<a name="line.428"></a>
-<span class="sourceLineNo">429</span>            for (int i = 0; i &lt; height; i++) {<a name="line.429"></a>
-<span class="sourceLineNo">430</span>                array2d[0][i] = value;<a name="line.430"></a>
-<span class="sourceLineNo">431</span>            }<a name="line.431"></a>
-<span class="sourceLineNo">432</span>        }<a name="line.432"></a>
-<span class="sourceLineNo">433</span>        for (int x = 1; x &lt; width; x++) {<a name="line.433"></a>
-<span class="sourceLineNo">434</span>            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.434"></a>
-<span class="sourceLineNo">435</span>        }<a name="line.435"></a>
-<span class="sourceLineNo">436</span>    }<a name="line.436"></a>
-<span class="sourceLineNo">437</span><a name="line.437"></a>
-<span class="sourceLineNo">438</span><a name="line.438"></a>
-<span class="sourceLineNo">439</span>    /**<a name="line.439"></a>
-<span class="sourceLineNo">440</span>     * Fills {@code array2d} with {@code value}.<a name="line.440"></a>
-<span class="sourceLineNo">441</span>     * Not to be confused with {@link #fill(double, int, int)}, which makes a new 2D array.<a name="line.441"></a>
-<span class="sourceLineNo">442</span>     * @param array2d a 2D array that will be modified in-place<a name="line.442"></a>
-<span class="sourceLineNo">443</span>     * @param value the value to fill all of array2D with<a name="line.443"></a>
-<span class="sourceLineNo">444</span>     */<a name="line.444"></a>
-<span class="sourceLineNo">445</span>    public static void fill(double[][] array2d, double value) {<a name="line.445"></a>
-<span class="sourceLineNo">446</span>        final int width = array2d.length;<a name="line.446"></a>
-<span class="sourceLineNo">447</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.447"></a>
-<span class="sourceLineNo">448</span>        if(width &gt; 0) {<a name="line.448"></a>
-<span class="sourceLineNo">449</span>            for (int i = 0; i &lt; height; i++) {<a name="line.449"></a>
-<span class="sourceLineNo">450</span>                array2d[0][i] = value;<a name="line.450"></a>
-<span class="sourceLineNo">451</span>            }<a name="line.451"></a>
-<span class="sourceLineNo">452</span>        }<a name="line.452"></a>
-<span class="sourceLineNo">453</span>        for (int x = 1; x &lt; width; x++) {<a name="line.453"></a>
-<span class="sourceLineNo">454</span>            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.454"></a>
-<span class="sourceLineNo">455</span>        }<a name="line.455"></a>
-<span class="sourceLineNo">456</span>    }<a name="line.456"></a>
-<span class="sourceLineNo">457</span><a name="line.457"></a>
-<span class="sourceLineNo">458</span>    /**<a name="line.458"></a>
-<span class="sourceLineNo">459</span>     * Fills {@code array3d} with {@code value}.<a name="line.459"></a>
-<span class="sourceLineNo">460</span>     * Not to be confused with {@link #fill(double[][], double)}, which fills a 2D array instead of a 3D one, or with<a name="line.460"></a>
-<span class="sourceLineNo">461</span>     * {@link #fill(double, int, int)}, which makes a new 2D array.<a name="line.461"></a>
-<span class="sourceLineNo">462</span>     * @param array3d a 3D array that will be modified in-place<a name="line.462"></a>
-<span class="sourceLineNo">463</span>     * @param value the value to fill all of array3d with<a name="line.463"></a>
-<span class="sourceLineNo">464</span>     */<a name="line.464"></a>
-<span class="sourceLineNo">465</span>    public static void fill(double[][][] array3d, double value) {<a name="line.465"></a>
-<span class="sourceLineNo">466</span>        final int depth = array3d.length;<a name="line.466"></a>
-<span class="sourceLineNo">467</span>        final int width = depth == 0 ? 0 : array3d[0].length;<a name="line.467"></a>
-<span class="sourceLineNo">468</span>        final int height = width == 0 ? 0 : array3d[0][0].length;<a name="line.468"></a>
-<span class="sourceLineNo">469</span>        if(depth &gt; 0 &amp;&amp; width &gt; 0) {<a name="line.469"></a>
-<span class="sourceLineNo">470</span>            for (int i = 0; i &lt; height; i++) {<a name="line.470"></a>
-<span class="sourceLineNo">471</span>                array3d[0][0][i] = value;<a name="line.471"></a>
-<span class="sourceLineNo">472</span>            }<a name="line.472"></a>
-<span class="sourceLineNo">473</span>        }<a name="line.473"></a>
-<span class="sourceLineNo">474</span>        for (int x = 1; x &lt; width; x++) {<a name="line.474"></a>
-<span class="sourceLineNo">475</span>            System.arraycopy(array3d[0][0], 0, array3d[0][x], 0, height);<a name="line.475"></a>
-<span class="sourceLineNo">476</span>        }<a name="line.476"></a>
-<span class="sourceLineNo">477</span>        for (int z = 1; z &lt; depth; z++) {<a name="line.477"></a>
-<span class="sourceLineNo">478</span>            for (int x = 0; x &lt; width; x++) {<a name="line.478"></a>
-<span class="sourceLineNo">479</span>                System.arraycopy(array3d[0][0], 0, array3d[z][x], 0, height);<a name="line.479"></a>
-<span class="sourceLineNo">480</span>            }<a name="line.480"></a>
-<span class="sourceLineNo">481</span>        }<a name="line.481"></a>
-<span class="sourceLineNo">482</span>    }<a name="line.482"></a>
-<span class="sourceLineNo">483</span><a name="line.483"></a>
-<span class="sourceLineNo">484</span>    /**<a name="line.484"></a>
-<span class="sourceLineNo">485</span>     * Fills {@code array2d} with {@code value}.<a name="line.485"></a>
-<span class="sourceLineNo">486</span>     * Not to be confused with {@link #fill(int, int, int)}, which makes a new 2D array.<a name="line.486"></a>
-<span class="sourceLineNo">487</span>     * @param array2d a 2D array that will be modified in-place<a name="line.487"></a>
-<span class="sourceLineNo">488</span>     * @param value the value to fill all of array2D with<a name="line.488"></a>
-<span class="sourceLineNo">489</span>     */<a name="line.489"></a>
-<span class="sourceLineNo">490</span>    public static void fill(int[][] array2d, int value) {<a name="line.490"></a>
-<span class="sourceLineNo">491</span>        final int width = array2d.length;<a name="line.491"></a>
-<span class="sourceLineNo">492</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.492"></a>
-<span class="sourceLineNo">493</span>        if(width &gt; 0) {<a name="line.493"></a>
-<span class="sourceLineNo">494</span>            for (int i = 0; i &lt; height; i++) {<a name="line.494"></a>
-<span class="sourceLineNo">495</span>                array2d[0][i] = value;<a name="line.495"></a>
-<span class="sourceLineNo">496</span>            }<a name="line.496"></a>
-<span class="sourceLineNo">497</span>        }<a name="line.497"></a>
-<span class="sourceLineNo">498</span>        for (int x = 1; x &lt; width; x++) {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.499"></a>
-<span class="sourceLineNo">500</span>        }<a name="line.500"></a>
-<span class="sourceLineNo">501</span>    }<a name="line.501"></a>
-<span class="sourceLineNo">502</span><a name="line.502"></a>
-<span class="sourceLineNo">503</span>    /**<a name="line.503"></a>
-<span class="sourceLineNo">504</span>     * Fills {@code array2d} with {@code value}.<a name="line.504"></a>
-<span class="sourceLineNo">505</span>     * Not to be confused with {@link #fill(byte, int, int)}, which makes a new 2D array.<a name="line.505"></a>
-<span class="sourceLineNo">506</span>     * @param array2d a 2D array that will be modified in-place<a name="line.506"></a>
-<span class="sourceLineNo">507</span>     * @param value the value to fill all of array2D with<a name="line.507"></a>
-<span class="sourceLineNo">508</span>     */<a name="line.508"></a>
-<span class="sourceLineNo">509</span>    public static void fill(byte[][] array2d, byte value) {<a name="line.509"></a>
-<span class="sourceLineNo">510</span>        final int width = array2d.length;<a name="line.510"></a>
-<span class="sourceLineNo">511</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.511"></a>
-<span class="sourceLineNo">512</span>        if(width &gt; 0) {<a name="line.512"></a>
-<span class="sourceLineNo">513</span>            for (int i = 0; i &lt; height; i++) {<a name="line.513"></a>
-<span class="sourceLineNo">514</span>                array2d[0][i] = value;<a name="line.514"></a>
-<span class="sourceLineNo">515</span>            }<a name="line.515"></a>
-<span class="sourceLineNo">516</span>        }<a name="line.516"></a>
-<span class="sourceLineNo">517</span>        for (int x = 1; x &lt; width; x++) {<a name="line.517"></a>
-<span class="sourceLineNo">518</span>            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.518"></a>
-<span class="sourceLineNo">519</span>        }<a name="line.519"></a>
-<span class="sourceLineNo">520</span>    }<a name="line.520"></a>
-<span class="sourceLineNo">521</span><a name="line.521"></a>
-<span class="sourceLineNo">522</span><a name="line.522"></a>
-<span class="sourceLineNo">523</span>    /**<a name="line.523"></a>
-<span class="sourceLineNo">524</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.524"></a>
-<span class="sourceLineNo">525</span>     * Not to be confused with {@link #fill(boolean, int, int)}, which makes a new 2D array.<a name="line.525"></a>
-<span class="sourceLineNo">526</span>     * @param array2d a 2D array that will be modified in-place<a name="line.526"></a>
-<span class="sourceLineNo">527</span>     * @param value the value to fill all of array2D with<a name="line.527"></a>
-<span class="sourceLineNo">528</span>     * @param startX the first x position to fill (inclusive)<a name="line.528"></a>
-<span class="sourceLineNo">529</span>     * @param startY the first y position to fill (inclusive)<a name="line.529"></a>
-<span class="sourceLineNo">530</span>     * @param endX the last x position to fill (inclusive)<a name="line.530"></a>
-<span class="sourceLineNo">531</span>     * @param endY the last y position to fill (inclusive)<a name="line.531"></a>
-<span class="sourceLineNo">532</span>     */<a name="line.532"></a>
-<span class="sourceLineNo">533</span>    public static void fill(boolean[][] array2d, boolean value, int startX, int startY, int endX, int endY) {<a name="line.533"></a>
-<span class="sourceLineNo">534</span>        final int width = array2d.length;<a name="line.534"></a>
-<span class="sourceLineNo">535</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.535"></a>
-<span class="sourceLineNo">536</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.536"></a>
-<span class="sourceLineNo">537</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.537"></a>
-<span class="sourceLineNo">538</span>                array2d[x][y] = value;<a name="line.538"></a>
-<span class="sourceLineNo">539</span>            }<a name="line.539"></a>
-<span class="sourceLineNo">540</span>        }<a name="line.540"></a>
-<span class="sourceLineNo">541</span>    }<a name="line.541"></a>
-<span class="sourceLineNo">542</span><a name="line.542"></a>
-<span class="sourceLineNo">543</span>    /**<a name="line.543"></a>
-<span class="sourceLineNo">544</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.544"></a>
-<span class="sourceLineNo">545</span>     * Not to be confused with {@link #fill(char, int, int)}, which makes a new 2D array.<a name="line.545"></a>
-<span class="sourceLineNo">546</span>     * @param array2d a 2D array that will be modified in-place<a name="line.546"></a>
-<span class="sourceLineNo">547</span>     * @param value the value to fill all of array2D with<a name="line.547"></a>
-<span class="sourceLineNo">548</span>     * @param startX the first x position to fill (inclusive)<a name="line.548"></a>
-<span class="sourceLineNo">549</span>     * @param startY the first y position to fill (inclusive)<a name="line.549"></a>
-<span class="sourceLineNo">550</span>     * @param endX the last x position to fill (inclusive)<a name="line.550"></a>
-<span class="sourceLineNo">551</span>     * @param endY the last y position to fill (inclusive)<a name="line.551"></a>
-<span class="sourceLineNo">552</span>     */<a name="line.552"></a>
-<span class="sourceLineNo">553</span>    public static void fill(char[][] array2d, char value, int startX, int startY, int endX, int endY) {<a name="line.553"></a>
-<span class="sourceLineNo">554</span>        final int width = array2d.length;<a name="line.554"></a>
-<span class="sourceLineNo">555</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.555"></a>
-<span class="sourceLineNo">556</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.556"></a>
-<span class="sourceLineNo">557</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.557"></a>
-<span class="sourceLineNo">558</span>                array2d[x][y] = value;<a name="line.558"></a>
-<span class="sourceLineNo">559</span>            }<a name="line.559"></a>
-<span class="sourceLineNo">560</span>        }<a name="line.560"></a>
-<span class="sourceLineNo">561</span>    }<a name="line.561"></a>
-<span class="sourceLineNo">562</span><a name="line.562"></a>
-<span class="sourceLineNo">563</span>    /**<a name="line.563"></a>
-<span class="sourceLineNo">564</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.564"></a>
-<span class="sourceLineNo">565</span>     * Not to be confused with {@link #fill(float, int, int)}, which makes a new 2D array.<a name="line.565"></a>
-<span class="sourceLineNo">566</span>     * @param array2d a 2D array that will be modified in-place<a name="line.566"></a>
-<span class="sourceLineNo">567</span>     * @param value the value to fill all of array2D with<a name="line.567"></a>
-<span class="sourceLineNo">568</span>     * @param startX the first x position to fill (inclusive)<a name="line.568"></a>
-<span class="sourceLineNo">569</span>     * @param startY the first y position to fill (inclusive)<a name="line.569"></a>
-<span class="sourceLineNo">570</span>     * @param endX the last x position to fill (inclusive)<a name="line.570"></a>
-<span class="sourceLineNo">571</span>     * @param endY the last y position to fill (inclusive)<a name="line.571"></a>
-<span class="sourceLineNo">572</span>     */<a name="line.572"></a>
-<span class="sourceLineNo">573</span>    public static void fill(float[][] array2d, float value, int startX, int startY, int endX, int endY) {<a name="line.573"></a>
-<span class="sourceLineNo">574</span>        final int width = array2d.length;<a name="line.574"></a>
-<span class="sourceLineNo">575</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.575"></a>
-<span class="sourceLineNo">576</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.576"></a>
-<span class="sourceLineNo">577</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.577"></a>
-<span class="sourceLineNo">578</span>                array2d[x][y] = value;<a name="line.578"></a>
-<span class="sourceLineNo">579</span>            }<a name="line.579"></a>
-<span class="sourceLineNo">580</span>        }<a name="line.580"></a>
-<span class="sourceLineNo">581</span>    }<a name="line.581"></a>
-<span class="sourceLineNo">582</span><a name="line.582"></a>
-<span class="sourceLineNo">583</span>    /**<a name="line.583"></a>
-<span class="sourceLineNo">584</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.584"></a>
-<span class="sourceLineNo">585</span>     * Not to be confused with {@link #fill(double, int, int)}, which makes a new 2D array.<a name="line.585"></a>
-<span class="sourceLineNo">586</span>     * @param array2d a 2D array that will be modified in-place<a name="line.586"></a>
-<span class="sourceLineNo">587</span>     * @param value the value to fill all of array2D with<a name="line.587"></a>
-<span class="sourceLineNo">588</span>     * @param startX the first x position to fill (inclusive)<a name="line.588"></a>
-<span class="sourceLineNo">589</span>     * @param startY the first y position to fill (inclusive)<a name="line.589"></a>
-<span class="sourceLineNo">590</span>     * @param endX the last x position to fill (inclusive)<a name="line.590"></a>
-<span class="sourceLineNo">591</span>     * @param endY the last y position to fill (inclusive)<a name="line.591"></a>
-<span class="sourceLineNo">592</span>     */<a name="line.592"></a>
-<span class="sourceLineNo">593</span>    public static void fill(double[][] array2d, double value, int startX, int startY, int endX, int endY) {<a name="line.593"></a>
-<span class="sourceLineNo">594</span>        final int width = array2d.length;<a name="line.594"></a>
-<span class="sourceLineNo">595</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.595"></a>
-<span class="sourceLineNo">596</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.596"></a>
-<span class="sourceLineNo">597</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.597"></a>
-<span class="sourceLineNo">598</span>                array2d[x][y] = value;<a name="line.598"></a>
-<span class="sourceLineNo">599</span>            }<a name="line.599"></a>
-<span class="sourceLineNo">600</span>        }<a name="line.600"></a>
-<span class="sourceLineNo">601</span>    }<a name="line.601"></a>
-<span class="sourceLineNo">602</span><a name="line.602"></a>
-<span class="sourceLineNo">603</span>    /**<a name="line.603"></a>
-<span class="sourceLineNo">604</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.604"></a>
-<span class="sourceLineNo">605</span>     * Not to be confused with {@link #fill(int, int, int)}, which makes a new 2D array.<a name="line.605"></a>
-<span class="sourceLineNo">606</span>     * @param array2d a 2D array that will be modified in-place<a name="line.606"></a>
-<span class="sourceLineNo">607</span>     * @param value the value to fill all of array2D with<a name="line.607"></a>
-<span class="sourceLineNo">608</span>     * @param startX the first x position to fill (inclusive)<a name="line.608"></a>
-<span class="sourceLineNo">609</span>     * @param startY the first y position to fill (inclusive)<a name="line.609"></a>
-<span class="sourceLineNo">610</span>     * @param endX the last x position to fill (inclusive)<a name="line.610"></a>
-<span class="sourceLineNo">611</span>     * @param endY the last y position to fill (inclusive)<a name="line.611"></a>
-<span class="sourceLineNo">612</span>     */<a name="line.612"></a>
-<span class="sourceLineNo">613</span>    public static void fill(int[][] array2d, int value, int startX, int startY, int endX, int endY) {<a name="line.613"></a>
-<span class="sourceLineNo">614</span>        final int width = array2d.length;<a name="line.614"></a>
-<span class="sourceLineNo">615</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.615"></a>
-<span class="sourceLineNo">616</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.616"></a>
-<span class="sourceLineNo">617</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.617"></a>
-<span class="sourceLineNo">618</span>                array2d[x][y] = value;<a name="line.618"></a>
-<span class="sourceLineNo">619</span>            }<a name="line.619"></a>
-<span class="sourceLineNo">620</span>        }<a name="line.620"></a>
-<span class="sourceLineNo">621</span>    }<a name="line.621"></a>
-<span class="sourceLineNo">622</span><a name="line.622"></a>
-<span class="sourceLineNo">623</span>    /**<a name="line.623"></a>
-<span class="sourceLineNo">624</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.624"></a>
-<span class="sourceLineNo">625</span>     * any long, positive or negative.<a name="line.625"></a>
-<span class="sourceLineNo">626</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.626"></a>
-<span class="sourceLineNo">627</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.627"></a>
-<span class="sourceLineNo">628</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.628"></a>
-<span class="sourceLineNo">629</span>     * @param array2d a 2D array that will be modified in-place<a name="line.629"></a>
-<span class="sourceLineNo">630</span>     * @param seed the seed for the random values, as a long<a name="line.630"></a>
-<span class="sourceLineNo">631</span>     */<a name="line.631"></a>
-<span class="sourceLineNo">632</span>    public static void randomFill(long[][] array2d, final long seed)<a name="line.632"></a>
-<span class="sourceLineNo">633</span>    {<a name="line.633"></a>
-<span class="sourceLineNo">634</span>        final int width = array2d.length;<a name="line.634"></a>
-<span class="sourceLineNo">635</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.635"></a>
-<span class="sourceLineNo">636</span>        long r0 = seed, z;<a name="line.636"></a>
-<span class="sourceLineNo">637</span>        for (int x = 0; x &lt; width; x++) {<a name="line.637"></a>
-<span class="sourceLineNo">638</span>            for (int y = 0; y &lt; height; y++) {<a name="line.638"></a>
-<span class="sourceLineNo">639</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.639"></a>
-<span class="sourceLineNo">640</span>                array2d[x][y] = z ^ (z &gt;&gt;&gt; 29);<a name="line.640"></a>
-<span class="sourceLineNo">641</span>            }<a name="line.641"></a>
-<span class="sourceLineNo">642</span>        }<a name="line.642"></a>
-<span class="sourceLineNo">643</span>    }<a name="line.643"></a>
-<span class="sourceLineNo">644</span>    /**<a name="line.644"></a>
-<span class="sourceLineNo">645</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.645"></a>
-<span class="sourceLineNo">646</span>     * any int, positive or negative.<a name="line.646"></a>
-<span class="sourceLineNo">647</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.647"></a>
-<span class="sourceLineNo">648</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.648"></a>
-<span class="sourceLineNo">649</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.649"></a>
-<span class="sourceLineNo">650</span>     * @param array2d a 2D array that will be modified in-place<a name="line.650"></a>
-<span class="sourceLineNo">651</span>     * @param seed the seed for the random values, as a long<a name="line.651"></a>
-<span class="sourceLineNo">652</span>     */<a name="line.652"></a>
-<span class="sourceLineNo">653</span>    public static void randomFill(int[][] array2d, final long seed)<a name="line.653"></a>
-<span class="sourceLineNo">654</span>    {<a name="line.654"></a>
-<span class="sourceLineNo">655</span>        final int width = array2d.length;<a name="line.655"></a>
-<span class="sourceLineNo">656</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.656"></a>
-<span class="sourceLineNo">657</span>        long r0 = seed, z;<a name="line.657"></a>
-<span class="sourceLineNo">658</span>        for (int x = 0; x &lt; width; x++) {<a name="line.658"></a>
-<span class="sourceLineNo">659</span>            for (int y = 0; y &lt; height; y++) {<a name="line.659"></a>
-<span class="sourceLineNo">660</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.660"></a>
-<span class="sourceLineNo">661</span>                array2d[x][y] = (int)(z ^ (z &gt;&gt;&gt; 29));<a name="line.661"></a>
-<span class="sourceLineNo">662</span>            }<a name="line.662"></a>
-<span class="sourceLineNo">663</span>        }<a name="line.663"></a>
-<span class="sourceLineNo">664</span>    }<a name="line.664"></a>
-<span class="sourceLineNo">665</span>    /**<a name="line.665"></a>
-<span class="sourceLineNo">666</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between<a name="line.666"></a>
-<span class="sourceLineNo">667</span>     * 0 and {@code bound}, exclusive.<a name="line.667"></a>
-<span class="sourceLineNo">668</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.668"></a>
-<span class="sourceLineNo">669</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.669"></a>
-<span class="sourceLineNo">670</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.670"></a>
-<span class="sourceLineNo">671</span>     * @param array2d a 2D array that will be modified in-place<a name="line.671"></a>
-<span class="sourceLineNo">672</span>     * @param bound the upper exclusive limit for the ints this can produce<a name="line.672"></a>
-<span class="sourceLineNo">673</span>     * @param seed the seed for the random values, as a long<a name="line.673"></a>
-<span class="sourceLineNo">674</span>     */<a name="line.674"></a>
-<span class="sourceLineNo">675</span>    public static void randomFill(int[][] array2d, final int bound, final long seed)<a name="line.675"></a>
-<span class="sourceLineNo">676</span>    {<a name="line.676"></a>
-<span class="sourceLineNo">677</span>        final int width = array2d.length;<a name="line.677"></a>
-<span class="sourceLineNo">678</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.678"></a>
-<span class="sourceLineNo">679</span>        long r0 = seed, z;<a name="line.679"></a>
-<span class="sourceLineNo">680</span>        for (int x = 0; x &lt; width; x++) {<a name="line.680"></a>
-<span class="sourceLineNo">681</span>            for (int y = 0; y &lt; height; y++) {<a name="line.681"></a>
-<span class="sourceLineNo">682</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.682"></a>
-<span class="sourceLineNo">683</span>                array2d[x][y] = (int) ((bound * ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.683"></a>
-<span class="sourceLineNo">684</span>            }<a name="line.684"></a>
-<span class="sourceLineNo">685</span>        }<a name="line.685"></a>
-<span class="sourceLineNo">686</span>    }<a name="line.686"></a>
-<span class="sourceLineNo">687</span>    /**<a name="line.687"></a>
-<span class="sourceLineNo">688</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, choosing chars to place in<a name="line.688"></a>
-<span class="sourceLineNo">689</span>     * the given 2D array by selecting them at random from the given 1D char array {@code values}.<a name="line.689"></a>
-<span class="sourceLineNo">690</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.690"></a>
-<span class="sourceLineNo">691</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.691"></a>
-<span class="sourceLineNo">692</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.692"></a>
-<span class="sourceLineNo">693</span>     * @param array2d a 2D array that will be modified in-place<a name="line.693"></a>
-<span class="sourceLineNo">694</span>     * @param values a 1D char array containing the possible char values that can be chosen to fill array2d<a name="line.694"></a>
-<span class="sourceLineNo">695</span>     * @param seed the seed for the random values, as a long<a name="line.695"></a>
-<span class="sourceLineNo">696</span>     */<a name="line.696"></a>
-<span class="sourceLineNo">697</span>    public static void randomFill(char[][] array2d, final char[] values, final long seed)<a name="line.697"></a>
-<span class="sourceLineNo">698</span>    {<a name="line.698"></a>
-<span class="sourceLineNo">699</span>        final int width = array2d.length;<a name="line.699"></a>
-<span class="sourceLineNo">700</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.700"></a>
-<span class="sourceLineNo">701</span>        final int bound = values.length;<a name="line.701"></a>
-<span class="sourceLineNo">702</span>        long r0 = seed + bound, z;<a name="line.702"></a>
-<span class="sourceLineNo">703</span>        for (int x = 0; x &lt; width; x++) {<a name="line.703"></a>
-<span class="sourceLineNo">704</span>            for (int y = 0; y &lt; height; y++) {<a name="line.704"></a>
-<span class="sourceLineNo">705</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.705"></a>
-<span class="sourceLineNo">706</span>                array2d[x][y] = values[(int) ((bound * ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFFFL)) &gt;&gt;&gt; 32)];<a name="line.706"></a>
-<span class="sourceLineNo">707</span>            }<a name="line.707"></a>
-<span class="sourceLineNo">708</span>        }<a name="line.708"></a>
-<span class="sourceLineNo">709</span>    }<a name="line.709"></a>
-<span class="sourceLineNo">710</span><a name="line.710"></a>
-<span class="sourceLineNo">711</span>    /**<a name="line.711"></a>
-<span class="sourceLineNo">712</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, choosing chars to place in<a name="line.712"></a>
-<span class="sourceLineNo">713</span>     * the given 2D array by selecting them at random from the given 1D char array {@code values}.<a name="line.713"></a>
-<span class="sourceLineNo">714</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.714"></a>
-<span class="sourceLineNo">715</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.715"></a>
-<span class="sourceLineNo">716</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.716"></a>
-<span class="sourceLineNo">717</span>     * @param array2d a 2D array that will be modified in-place<a name="line.717"></a>
-<span class="sourceLineNo">718</span>     * @param values a 1D char array containing the possible char values that can be chosen to fill array2d<a name="line.718"></a>
-<span class="sourceLineNo">719</span>     * @param seed the seed for the random values, as a long<a name="line.719"></a>
-<span class="sourceLineNo">720</span>     */<a name="line.720"></a>
-<span class="sourceLineNo">721</span>    public static void randomFill(char[][] array2d, final CharSequence values, final long seed)<a name="line.721"></a>
-<span class="sourceLineNo">722</span>    {<a name="line.722"></a>
-<span class="sourceLineNo">723</span>        final int width = array2d.length;<a name="line.723"></a>
-<span class="sourceLineNo">724</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.724"></a>
-<span class="sourceLineNo">725</span>        final int bound = values.length();<a name="line.725"></a>
-<span class="sourceLineNo">726</span>        long r0 = seed + bound, z;<a name="line.726"></a>
-<span class="sourceLineNo">727</span>        for (int x = 0; x &lt; width; x++) {<a name="line.727"></a>
-<span class="sourceLineNo">728</span>            for (int y = 0; y &lt; height; y++) {<a name="line.728"></a>
-<span class="sourceLineNo">729</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.729"></a>
-<span class="sourceLineNo">730</span>                array2d[x][y] = values.charAt((int) ((bound * ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFFFL)) &gt;&gt;&gt; 32));<a name="line.730"></a>
-<span class="sourceLineNo">731</span>            }<a name="line.731"></a>
-<span class="sourceLineNo">732</span>        }<a name="line.732"></a>
-<span class="sourceLineNo">733</span>    }<a name="line.733"></a>
-<span class="sourceLineNo">734</span><a name="line.734"></a>
-<span class="sourceLineNo">735</span>    /**<a name="line.735"></a>
-<span class="sourceLineNo">736</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.736"></a>
-<span class="sourceLineNo">737</span>     * any float between 0.0 inclusive and 1.0 exclusive.<a name="line.737"></a>
-<span class="sourceLineNo">738</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.738"></a>
-<span class="sourceLineNo">739</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.739"></a>
-<span class="sourceLineNo">740</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.740"></a>
-<span class="sourceLineNo">741</span>     * @param array2d a 2D array that will be modified in-place<a name="line.741"></a>
-<span class="sourceLineNo">742</span>     * @param seed the seed for the random values, as a long<a name="line.742"></a>
-<span class="sourceLineNo">743</span>     */<a name="line.743"></a>
-<span class="sourceLineNo">744</span>    public static void randomFill(float[][] array2d, final long seed)<a name="line.744"></a>
-<span class="sourceLineNo">745</span>    {<a name="line.745"></a>
-<span class="sourceLineNo">746</span>        final int width = array2d.length;<a name="line.746"></a>
-<span class="sourceLineNo">747</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.747"></a>
-<span class="sourceLineNo">748</span>        long r0 = seed, z;<a name="line.748"></a>
-<span class="sourceLineNo">749</span>        for (int x = 0; x &lt; width; x++) {<a name="line.749"></a>
-<span class="sourceLineNo">750</span>            for (int y = 0; y &lt; height; y++) {<a name="line.750"></a>
-<span class="sourceLineNo">751</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.751"></a>
-<span class="sourceLineNo">752</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFL) * 0x1p-24f;<a name="line.752"></a>
-<span class="sourceLineNo">753</span>            }<a name="line.753"></a>
-<span class="sourceLineNo">754</span>        }<a name="line.754"></a>
-<span class="sourceLineNo">755</span>    }<a name="line.755"></a>
-<span class="sourceLineNo">756</span>    /**<a name="line.756"></a>
-<span class="sourceLineNo">757</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between<a name="line.757"></a>
-<span class="sourceLineNo">758</span>     * 0 and {@code bound}, exclusive.<a name="line.758"></a>
-<span class="sourceLineNo">759</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.759"></a>
-<span class="sourceLineNo">760</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.760"></a>
-<span class="sourceLineNo">761</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.761"></a>
-<span class="sourceLineNo">762</span>     * @param array2d a 2D array that will be modified in-place<a name="line.762"></a>
-<span class="sourceLineNo">763</span>     * @param bound the upper exclusive limit for the floats this can produce<a name="line.763"></a>
-<span class="sourceLineNo">764</span>     * @param seed the seed for the random values, as a long<a name="line.764"></a>
-<span class="sourceLineNo">765</span>     */<a name="line.765"></a>
-<span class="sourceLineNo">766</span>    public static void randomFill(float[][] array2d, final float bound, final long seed) {<a name="line.766"></a>
-<span class="sourceLineNo">767</span>        final int width = array2d.length;<a name="line.767"></a>
-<span class="sourceLineNo">768</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.768"></a>
-<span class="sourceLineNo">769</span>        long r0 = seed, z;<a name="line.769"></a>
-<span class="sourceLineNo">770</span>        final float mul = 0x1p-24f * bound;<a name="line.770"></a>
-<span class="sourceLineNo">771</span>        for (int x = 0; x &lt; width; x++) {<a name="line.771"></a>
-<span class="sourceLineNo">772</span>            for (int y = 0; y &lt; height; y++) {<a name="line.772"></a>
-<span class="sourceLineNo">773</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.773"></a>
-<span class="sourceLineNo">774</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFL) * mul;<a name="line.774"></a>
-<span class="sourceLineNo">775</span>            }<a name="line.775"></a>
-<span class="sourceLineNo">776</span>        }<a name="line.776"></a>
-<span class="sourceLineNo">777</span>    }<a name="line.777"></a>
-<span class="sourceLineNo">778</span><a name="line.778"></a>
-<span class="sourceLineNo">779</span>    /**<a name="line.779"></a>
-<span class="sourceLineNo">780</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.780"></a>
-<span class="sourceLineNo">781</span>     * any double between 0.0 inclusive and 1.0 exclusive.<a name="line.781"></a>
-<span class="sourceLineNo">782</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.782"></a>
-<span class="sourceLineNo">783</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.783"></a>
-<span class="sourceLineNo">784</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.784"></a>
-<span class="sourceLineNo">785</span>     * @param array2d a 2D array that will be modified in-place<a name="line.785"></a>
-<span class="sourceLineNo">786</span>     * @param seed the seed for the random values, as a long<a name="line.786"></a>
-<span class="sourceLineNo">787</span>     */<a name="line.787"></a>
-<span class="sourceLineNo">788</span>    public static void randomFill(double[][] array2d, final long seed)<a name="line.788"></a>
-<span class="sourceLineNo">789</span>    {<a name="line.789"></a>
-<span class="sourceLineNo">790</span>        final int width = array2d.length;<a name="line.790"></a>
-<span class="sourceLineNo">791</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.791"></a>
-<span class="sourceLineNo">792</span>        long r0 = seed, z;<a name="line.792"></a>
-<span class="sourceLineNo">793</span>        for (int x = 0; x &lt; width; x++) {<a name="line.793"></a>
-<span class="sourceLineNo">794</span>            for (int y = 0; y &lt; height; y++) {<a name="line.794"></a>
-<span class="sourceLineNo">795</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.795"></a>
-<span class="sourceLineNo">796</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.796"></a>
-<span class="sourceLineNo">797</span>            }<a name="line.797"></a>
-<span class="sourceLineNo">798</span>        }<a name="line.798"></a>
-<span class="sourceLineNo">799</span>    }<a name="line.799"></a>
-<span class="sourceLineNo">800</span>    /**<a name="line.800"></a>
-<span class="sourceLineNo">801</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between<a name="line.801"></a>
-<span class="sourceLineNo">802</span>     * 0 and {@code bound}, exclusive.<a name="line.802"></a>
-<span class="sourceLineNo">803</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.803"></a>
-<span class="sourceLineNo">804</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.804"></a>
-<span class="sourceLineNo">805</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.805"></a>
-<span class="sourceLineNo">806</span>     * @param array2d a 2D array that will be modified in-place<a name="line.806"></a>
-<span class="sourceLineNo">807</span>     * @param bound the upper exclusive limit for the doubles this can produce<a name="line.807"></a>
-<span class="sourceLineNo">808</span>     * @param seed the seed for the random values, as a long<a name="line.808"></a>
-<span class="sourceLineNo">809</span>     */<a name="line.809"></a>
-<span class="sourceLineNo">810</span>    public static void randomFill(double[][] array2d, final double bound, final long seed)<a name="line.810"></a>
-<span class="sourceLineNo">811</span>    {<a name="line.811"></a>
-<span class="sourceLineNo">812</span>        final int width = array2d.length;<a name="line.812"></a>
-<span class="sourceLineNo">813</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.813"></a>
-<span class="sourceLineNo">814</span>        long r0 = seed, z;<a name="line.814"></a>
-<span class="sourceLineNo">815</span>        final double mul = 0x1p-53 * bound;<a name="line.815"></a>
-<span class="sourceLineNo">816</span>        for (int x = 0; x &lt; width; x++) {<a name="line.816"></a>
-<span class="sourceLineNo">817</span>            for (int y = 0; y &lt; height; y++) {<a name="line.817"></a>
-<span class="sourceLineNo">818</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.818"></a>
-<span class="sourceLineNo">819</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0x1FFFFFFFFFFFFFL) * mul;<a name="line.819"></a>
-<span class="sourceLineNo">820</span>            }<a name="line.820"></a>
-<span class="sourceLineNo">821</span>        }<a name="line.821"></a>
-<span class="sourceLineNo">822</span><a name="line.822"></a>
-<span class="sourceLineNo">823</span>    }<a name="line.823"></a>
-<span class="sourceLineNo">824</span><a name="line.824"></a>
-<span class="sourceLineNo">825</span>    /**<a name="line.825"></a>
-<span class="sourceLineNo">826</span>     * Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with<a name="line.826"></a>
-<span class="sourceLineNo">827</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int)} or<a name="line.827"></a>
-<span class="sourceLineNo">828</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}. These orderings will never repeat an earlier element,<a name="line.828"></a>
-<span class="sourceLineNo">829</span>     * and the returned ArrayList may be shorter than the original if {@code ordering} isn't as long as {@code list}.<a name="line.829"></a>
-<span class="sourceLineNo">830</span>     * Using a random ordering is like shuffling, but allows you to repeat the shuffle exactly on other collections of<a name="line.830"></a>
-<span class="sourceLineNo">831</span>     * the same size. A reordering can also be inverted with {@link #invertOrdering(int[])} or<a name="line.831"></a>
-<span class="sourceLineNo">832</span>     * {@link #invertOrdering(int[], int[])}, getting the change that will undo another ordering.<a name="line.832"></a>
-<span class="sourceLineNo">833</span>     *<a name="line.833"></a>
-<span class="sourceLineNo">834</span>     * @param list     an ArrayList that you want a reordered version of; will not be modified.<a name="line.834"></a>
-<span class="sourceLineNo">835</span>     * @param ordering an ordering, typically produced by one of RNG's randomOrdering methods.<a name="line.835"></a>
-<span class="sourceLineNo">836</span>     * @param &lt;T&gt;      any generic type<a name="line.836"></a>
-<span class="sourceLineNo">837</span>     * @return a modified copy of {@code list} with its ordering changed to match {@code ordering}.<a name="line.837"></a>
-<span class="sourceLineNo">838</span>     */<a name="line.838"></a>
-<span class="sourceLineNo">839</span>    public static &lt;T&gt; ArrayList&lt;T&gt; reorder(ArrayList&lt;T&gt; list, int... ordering) {<a name="line.839"></a>
-<span class="sourceLineNo">840</span>        int ol;<a name="line.840"></a>
-<span class="sourceLineNo">841</span>        if (list == null || ordering == null || (ol = Math.min(list.size(), ordering.length)) == 0)<a name="line.841"></a>
-<span class="sourceLineNo">842</span>            return list;<a name="line.842"></a>
-<span class="sourceLineNo">843</span>        ArrayList&lt;T&gt; alt = new ArrayList&lt;T&gt;(ol);<a name="line.843"></a>
-<span class="sourceLineNo">844</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.844"></a>
-<span class="sourceLineNo">845</span>            alt.add(list.get((ordering[i] % ol + ol) % ol));<a name="line.845"></a>
-<span class="sourceLineNo">846</span>        }<a name="line.846"></a>
-<span class="sourceLineNo">847</span>        return alt;<a name="line.847"></a>
-<span class="sourceLineNo">848</span>    }<a name="line.848"></a>
-<span class="sourceLineNo">849</span><a name="line.849"></a>
-<span class="sourceLineNo">850</span>    /**<a name="line.850"></a>
-<span class="sourceLineNo">851</span>     * Given an ordering such as one produced by {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}, this finds<a name="line.851"></a>
-<span class="sourceLineNo">852</span>     * its inverse, able to reverse the reordering and vice versa.<a name="line.852"></a>
-<span class="sourceLineNo">853</span>     *<a name="line.853"></a>
-<span class="sourceLineNo">854</span>     * @param ordering the ordering to find the inverse for<a name="line.854"></a>
-<span class="sourceLineNo">855</span>     * @return the inverse of ordering<a name="line.855"></a>
+<span class="sourceLineNo">389</span>        for (int i = 0; i &lt; width; i++) {<a name="line.389"></a>
+<span class="sourceLineNo">390</span>            Arrays.fill(array2d[i], value);<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        }<a name="line.391"></a>
+<span class="sourceLineNo">392</span>//        final int width = array2d.length;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>//        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.393"></a>
+<span class="sourceLineNo">394</span>//        if(width &gt; 0) {<a name="line.394"></a>
+<span class="sourceLineNo">395</span>//            for (int i = 0; i &lt; height; i++) {<a name="line.395"></a>
+<span class="sourceLineNo">396</span>//                array2d[0][i] = value;<a name="line.396"></a>
+<span class="sourceLineNo">397</span>//            }<a name="line.397"></a>
+<span class="sourceLineNo">398</span>//        }<a name="line.398"></a>
+<span class="sourceLineNo">399</span>//        for (int x = 1; x &lt; width; x++) {<a name="line.399"></a>
+<span class="sourceLineNo">400</span>//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.400"></a>
+<span class="sourceLineNo">401</span>//        }<a name="line.401"></a>
+<span class="sourceLineNo">402</span>    }<a name="line.402"></a>
+<span class="sourceLineNo">403</span><a name="line.403"></a>
+<span class="sourceLineNo">404</span>    /**<a name="line.404"></a>
+<span class="sourceLineNo">405</span>     * Fills {@code array2d} with {@code value}.<a name="line.405"></a>
+<span class="sourceLineNo">406</span>     * Not to be confused with {@link #fill(char, int, int)}, which makes a new 2D array.<a name="line.406"></a>
+<span class="sourceLineNo">407</span>     * @param array2d a 2D array that will be modified in-place<a name="line.407"></a>
+<span class="sourceLineNo">408</span>     * @param value the value to fill all of array2D with<a name="line.408"></a>
+<span class="sourceLineNo">409</span>     */<a name="line.409"></a>
+<span class="sourceLineNo">410</span>    public static void fill(char[][] array2d, char value) {<a name="line.410"></a>
+<span class="sourceLineNo">411</span>        final int width = array2d.length;<a name="line.411"></a>
+<span class="sourceLineNo">412</span>        for (int i = 0; i &lt; width; i++) {<a name="line.412"></a>
+<span class="sourceLineNo">413</span>            Arrays.fill(array2d[i], value);<a name="line.413"></a>
+<span class="sourceLineNo">414</span>        }<a name="line.414"></a>
+<span class="sourceLineNo">415</span>//        final int width = array2d.length;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>//        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.416"></a>
+<span class="sourceLineNo">417</span>//        if(width &gt; 0) {<a name="line.417"></a>
+<span class="sourceLineNo">418</span>//            for (int i = 0; i &lt; height; i++) {<a name="line.418"></a>
+<span class="sourceLineNo">419</span>//                array2d[0][i] = value;<a name="line.419"></a>
+<span class="sourceLineNo">420</span>//            }<a name="line.420"></a>
+<span class="sourceLineNo">421</span>//        }<a name="line.421"></a>
+<span class="sourceLineNo">422</span>//        for (int x = 1; x &lt; width; x++) {<a name="line.422"></a>
+<span class="sourceLineNo">423</span>//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.423"></a>
+<span class="sourceLineNo">424</span>//        }<a name="line.424"></a>
+<span class="sourceLineNo">425</span>    }<a name="line.425"></a>
+<span class="sourceLineNo">426</span><a name="line.426"></a>
+<span class="sourceLineNo">427</span>    /**<a name="line.427"></a>
+<span class="sourceLineNo">428</span>     * Fills {@code array2d} with {@code value}.<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     * Not to be confused with {@link #fill(float, int, int)}, which makes a new 2D array.<a name="line.429"></a>
+<span class="sourceLineNo">430</span>     * @param array2d a 2D array that will be modified in-place<a name="line.430"></a>
+<span class="sourceLineNo">431</span>     * @param value the value to fill all of array2D with<a name="line.431"></a>
+<span class="sourceLineNo">432</span>     */<a name="line.432"></a>
+<span class="sourceLineNo">433</span>    public static void fill(float[][] array2d, float value) {<a name="line.433"></a>
+<span class="sourceLineNo">434</span>        final int width = array2d.length;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        for (int i = 0; i &lt; width; i++) {<a name="line.435"></a>
+<span class="sourceLineNo">436</span>            Arrays.fill(array2d[i], value);<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        }<a name="line.437"></a>
+<span class="sourceLineNo">438</span>//        final int width = array2d.length;<a name="line.438"></a>
+<span class="sourceLineNo">439</span>//        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.439"></a>
+<span class="sourceLineNo">440</span>//        if(width &gt; 0) {<a name="line.440"></a>
+<span class="sourceLineNo">441</span>//            for (int i = 0; i &lt; height; i++) {<a name="line.441"></a>
+<span class="sourceLineNo">442</span>//                array2d[0][i] = value;<a name="line.442"></a>
+<span class="sourceLineNo">443</span>//            }<a name="line.443"></a>
+<span class="sourceLineNo">444</span>//        }<a name="line.444"></a>
+<span class="sourceLineNo">445</span>//        for (int x = 1; x &lt; width; x++) {<a name="line.445"></a>
+<span class="sourceLineNo">446</span>//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.446"></a>
+<span class="sourceLineNo">447</span>//        }<a name="line.447"></a>
+<span class="sourceLineNo">448</span>    }<a name="line.448"></a>
+<span class="sourceLineNo">449</span><a name="line.449"></a>
+<span class="sourceLineNo">450</span><a name="line.450"></a>
+<span class="sourceLineNo">451</span>    /**<a name="line.451"></a>
+<span class="sourceLineNo">452</span>     * Fills {@code array2d} with {@code value}.<a name="line.452"></a>
+<span class="sourceLineNo">453</span>     * Not to be confused with {@link #fill(double, int, int)}, which makes a new 2D array.<a name="line.453"></a>
+<span class="sourceLineNo">454</span>     * @param array2d a 2D array that will be modified in-place<a name="line.454"></a>
+<span class="sourceLineNo">455</span>     * @param value the value to fill all of array2D with<a name="line.455"></a>
+<span class="sourceLineNo">456</span>     */<a name="line.456"></a>
+<span class="sourceLineNo">457</span>    public static void fill(double[][] array2d, double value) {<a name="line.457"></a>
+<span class="sourceLineNo">458</span>        final int width = array2d.length;<a name="line.458"></a>
+<span class="sourceLineNo">459</span>        for (int i = 0; i &lt; width; i++) {<a name="line.459"></a>
+<span class="sourceLineNo">460</span>            Arrays.fill(array2d[i], value);<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        }<a name="line.461"></a>
+<span class="sourceLineNo">462</span>//        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.462"></a>
+<span class="sourceLineNo">463</span>//        if(width &gt; 0) {<a name="line.463"></a>
+<span class="sourceLineNo">464</span>//            for (int i = 0; i &lt; height; i++) {<a name="line.464"></a>
+<span class="sourceLineNo">465</span>//                array2d[0][i] = value;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>//            }<a name="line.466"></a>
+<span class="sourceLineNo">467</span>//        }<a name="line.467"></a>
+<span class="sourceLineNo">468</span>//        for (int x = 1; x &lt; width; x++) {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.469"></a>
+<span class="sourceLineNo">470</span>//        }<a name="line.470"></a>
+<span class="sourceLineNo">471</span>    }<a name="line.471"></a>
+<span class="sourceLineNo">472</span><a name="line.472"></a>
+<span class="sourceLineNo">473</span>    /**<a name="line.473"></a>
+<span class="sourceLineNo">474</span>     * Fills {@code array3d} with {@code value}.<a name="line.474"></a>
+<span class="sourceLineNo">475</span>     * Not to be confused with {@link #fill(double[][], double)}, which fills a 2D array instead of a 3D one, or with<a name="line.475"></a>
+<span class="sourceLineNo">476</span>     * {@link #fill(double, int, int)}, which makes a new 2D array.<a name="line.476"></a>
+<span class="sourceLineNo">477</span>     * @param array3d a 3D array that will be modified in-place<a name="line.477"></a>
+<span class="sourceLineNo">478</span>     * @param value the value to fill all of array3d with<a name="line.478"></a>
+<span class="sourceLineNo">479</span>     */<a name="line.479"></a>
+<span class="sourceLineNo">480</span>    public static void fill(double[][][] array3d, double value) {<a name="line.480"></a>
+<span class="sourceLineNo">481</span>        final int depth = array3d.length;<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        final int width = depth == 0 ? 0 : array3d[0].length;<a name="line.482"></a>
+<span class="sourceLineNo">483</span>        final int height = width == 0 ? 0 : array3d[0][0].length;<a name="line.483"></a>
+<span class="sourceLineNo">484</span>        if(depth &gt; 0 &amp;&amp; width &gt; 0) {<a name="line.484"></a>
+<span class="sourceLineNo">485</span>            for (int i = 0; i &lt; width; i++) {<a name="line.485"></a>
+<span class="sourceLineNo">486</span>                for (int j = 0; j &lt; height; j++) {<a name="line.486"></a>
+<span class="sourceLineNo">487</span>                    Arrays.fill(array3d[i][j], value);<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                }<a name="line.488"></a>
+<span class="sourceLineNo">489</span>            }<a name="line.489"></a>
+<span class="sourceLineNo">490</span>        }<a name="line.490"></a>
+<span class="sourceLineNo">491</span>    }<a name="line.491"></a>
+<span class="sourceLineNo">492</span><a name="line.492"></a>
+<span class="sourceLineNo">493</span>    /**<a name="line.493"></a>
+<span class="sourceLineNo">494</span>     * Fills {@code array2d} with {@code value}.<a name="line.494"></a>
+<span class="sourceLineNo">495</span>     * Not to be confused with {@link #fill(int, int, int)}, which makes a new 2D array.<a name="line.495"></a>
+<span class="sourceLineNo">496</span>     * @param array2d a 2D array that will be modified in-place<a name="line.496"></a>
+<span class="sourceLineNo">497</span>     * @param value the value to fill all of array2D with<a name="line.497"></a>
+<span class="sourceLineNo">498</span>     */<a name="line.498"></a>
+<span class="sourceLineNo">499</span>    public static void fill(int[][] array2d, int value) {<a name="line.499"></a>
+<span class="sourceLineNo">500</span>        final int width = array2d.length;<a name="line.500"></a>
+<span class="sourceLineNo">501</span>        for (int i = 0; i &lt; width; i++) {<a name="line.501"></a>
+<span class="sourceLineNo">502</span>            Arrays.fill(array2d[i], value);<a name="line.502"></a>
+<span class="sourceLineNo">503</span>        }<a name="line.503"></a>
+<span class="sourceLineNo">504</span><a name="line.504"></a>
+<span class="sourceLineNo">505</span>//        final int width = array2d.length;<a name="line.505"></a>
+<span class="sourceLineNo">506</span>//        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.506"></a>
+<span class="sourceLineNo">507</span>//        if(width &gt; 0) {<a name="line.507"></a>
+<span class="sourceLineNo">508</span>//            for (int i = 0; i &lt; height; i++) {<a name="line.508"></a>
+<span class="sourceLineNo">509</span>//                array2d[0][i] = value;<a name="line.509"></a>
+<span class="sourceLineNo">510</span>//            }<a name="line.510"></a>
+<span class="sourceLineNo">511</span>//        }<a name="line.511"></a>
+<span class="sourceLineNo">512</span>//        for (int x = 1; x &lt; width; x++) {<a name="line.512"></a>
+<span class="sourceLineNo">513</span>//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.513"></a>
+<span class="sourceLineNo">514</span>//        }<a name="line.514"></a>
+<span class="sourceLineNo">515</span>    }<a name="line.515"></a>
+<span class="sourceLineNo">516</span><a name="line.516"></a>
+<span class="sourceLineNo">517</span>    /**<a name="line.517"></a>
+<span class="sourceLineNo">518</span>     * Fills {@code array2d} with {@code value}.<a name="line.518"></a>
+<span class="sourceLineNo">519</span>     * Not to be confused with {@link #fill(byte, int, int)}, which makes a new 2D array.<a name="line.519"></a>
+<span class="sourceLineNo">520</span>     * @param array2d a 2D array that will be modified in-place<a name="line.520"></a>
+<span class="sourceLineNo">521</span>     * @param value the value to fill all of array2D with<a name="line.521"></a>
+<span class="sourceLineNo">522</span>     */<a name="line.522"></a>
+<span class="sourceLineNo">523</span>    public static void fill(byte[][] array2d, byte value) {<a name="line.523"></a>
+<span class="sourceLineNo">524</span>        final int width = array2d.length;<a name="line.524"></a>
+<span class="sourceLineNo">525</span>        for (int i = 0; i &lt; width; i++) {<a name="line.525"></a>
+<span class="sourceLineNo">526</span>            Arrays.fill(array2d[i], value);<a name="line.526"></a>
+<span class="sourceLineNo">527</span>        }<a name="line.527"></a>
+<span class="sourceLineNo">528</span>//        final int width = array2d.length;<a name="line.528"></a>
+<span class="sourceLineNo">529</span>//        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.529"></a>
+<span class="sourceLineNo">530</span>//        if(width &gt; 0) {<a name="line.530"></a>
+<span class="sourceLineNo">531</span>//            for (int i = 0; i &lt; height; i++) {<a name="line.531"></a>
+<span class="sourceLineNo">532</span>//                array2d[0][i] = value;<a name="line.532"></a>
+<span class="sourceLineNo">533</span>//            }<a name="line.533"></a>
+<span class="sourceLineNo">534</span>//        }<a name="line.534"></a>
+<span class="sourceLineNo">535</span>//        for (int x = 1; x &lt; width; x++) {<a name="line.535"></a>
+<span class="sourceLineNo">536</span>//            System.arraycopy(array2d[0], 0, array2d[x], 0, height);<a name="line.536"></a>
+<span class="sourceLineNo">537</span>//        }<a name="line.537"></a>
+<span class="sourceLineNo">538</span>    }<a name="line.538"></a>
+<span class="sourceLineNo">539</span><a name="line.539"></a>
+<span class="sourceLineNo">540</span><a name="line.540"></a>
+<span class="sourceLineNo">541</span>    /**<a name="line.541"></a>
+<span class="sourceLineNo">542</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.542"></a>
+<span class="sourceLineNo">543</span>     * Not to be confused with {@link #fill(boolean, int, int)}, which makes a new 2D array.<a name="line.543"></a>
+<span class="sourceLineNo">544</span>     * @param array2d a 2D array that will be modified in-place<a name="line.544"></a>
+<span class="sourceLineNo">545</span>     * @param value the value to fill all of array2D with<a name="line.545"></a>
+<span class="sourceLineNo">546</span>     * @param startX the first x position to fill (inclusive)<a name="line.546"></a>
+<span class="sourceLineNo">547</span>     * @param startY the first y position to fill (inclusive)<a name="line.547"></a>
+<span class="sourceLineNo">548</span>     * @param endX the last x position to fill (inclusive)<a name="line.548"></a>
+<span class="sourceLineNo">549</span>     * @param endY the last y position to fill (inclusive)<a name="line.549"></a>
+<span class="sourceLineNo">550</span>     */<a name="line.550"></a>
+<span class="sourceLineNo">551</span>    public static void fill(boolean[][] array2d, boolean value, int startX, int startY, int endX, int endY) {<a name="line.551"></a>
+<span class="sourceLineNo">552</span>        final int width = array2d.length;<a name="line.552"></a>
+<span class="sourceLineNo">553</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.553"></a>
+<span class="sourceLineNo">554</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.554"></a>
+<span class="sourceLineNo">555</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.555"></a>
+<span class="sourceLineNo">556</span>                array2d[x][y] = value;<a name="line.556"></a>
+<span class="sourceLineNo">557</span>            }<a name="line.557"></a>
+<span class="sourceLineNo">558</span>        }<a name="line.558"></a>
+<span class="sourceLineNo">559</span>    }<a name="line.559"></a>
+<span class="sourceLineNo">560</span><a name="line.560"></a>
+<span class="sourceLineNo">561</span>    /**<a name="line.561"></a>
+<span class="sourceLineNo">562</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.562"></a>
+<span class="sourceLineNo">563</span>     * Not to be confused with {@link #fill(char, int, int)}, which makes a new 2D array.<a name="line.563"></a>
+<span class="sourceLineNo">564</span>     * @param array2d a 2D array that will be modified in-place<a name="line.564"></a>
+<span class="sourceLineNo">565</span>     * @param value the value to fill all of array2D with<a name="line.565"></a>
+<span class="sourceLineNo">566</span>     * @param startX the first x position to fill (inclusive)<a name="line.566"></a>
+<span class="sourceLineNo">567</span>     * @param startY the first y position to fill (inclusive)<a name="line.567"></a>
+<span class="sourceLineNo">568</span>     * @param endX the last x position to fill (inclusive)<a name="line.568"></a>
+<span class="sourceLineNo">569</span>     * @param endY the last y position to fill (inclusive)<a name="line.569"></a>
+<span class="sourceLineNo">570</span>     */<a name="line.570"></a>
+<span class="sourceLineNo">571</span>    public static void fill(char[][] array2d, char value, int startX, int startY, int endX, int endY) {<a name="line.571"></a>
+<span class="sourceLineNo">572</span>        final int width = array2d.length;<a name="line.572"></a>
+<span class="sourceLineNo">573</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.573"></a>
+<span class="sourceLineNo">574</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.574"></a>
+<span class="sourceLineNo">575</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.575"></a>
+<span class="sourceLineNo">576</span>                array2d[x][y] = value;<a name="line.576"></a>
+<span class="sourceLineNo">577</span>            }<a name="line.577"></a>
+<span class="sourceLineNo">578</span>        }<a name="line.578"></a>
+<span class="sourceLineNo">579</span>    }<a name="line.579"></a>
+<span class="sourceLineNo">580</span><a name="line.580"></a>
+<span class="sourceLineNo">581</span>    /**<a name="line.581"></a>
+<span class="sourceLineNo">582</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.582"></a>
+<span class="sourceLineNo">583</span>     * Not to be confused with {@link #fill(float, int, int)}, which makes a new 2D array.<a name="line.583"></a>
+<span class="sourceLineNo">584</span>     * @param array2d a 2D array that will be modified in-place<a name="line.584"></a>
+<span class="sourceLineNo">585</span>     * @param value the value to fill all of array2D with<a name="line.585"></a>
+<span class="sourceLineNo">586</span>     * @param startX the first x position to fill (inclusive)<a name="line.586"></a>
+<span class="sourceLineNo">587</span>     * @param startY the first y position to fill (inclusive)<a name="line.587"></a>
+<span class="sourceLineNo">588</span>     * @param endX the last x position to fill (inclusive)<a name="line.588"></a>
+<span class="sourceLineNo">589</span>     * @param endY the last y position to fill (inclusive)<a name="line.589"></a>
+<span class="sourceLineNo">590</span>     */<a name="line.590"></a>
+<span class="sourceLineNo">591</span>    public static void fill(float[][] array2d, float value, int startX, int startY, int endX, int endY) {<a name="line.591"></a>
+<span class="sourceLineNo">592</span>        final int width = array2d.length;<a name="line.592"></a>
+<span class="sourceLineNo">593</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.593"></a>
+<span class="sourceLineNo">594</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.594"></a>
+<span class="sourceLineNo">595</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.595"></a>
+<span class="sourceLineNo">596</span>                array2d[x][y] = value;<a name="line.596"></a>
+<span class="sourceLineNo">597</span>            }<a name="line.597"></a>
+<span class="sourceLineNo">598</span>        }<a name="line.598"></a>
+<span class="sourceLineNo">599</span>    }<a name="line.599"></a>
+<span class="sourceLineNo">600</span><a name="line.600"></a>
+<span class="sourceLineNo">601</span>    /**<a name="line.601"></a>
+<span class="sourceLineNo">602</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.602"></a>
+<span class="sourceLineNo">603</span>     * Not to be confused with {@link #fill(double, int, int)}, which makes a new 2D array.<a name="line.603"></a>
+<span class="sourceLineNo">604</span>     * @param array2d a 2D array that will be modified in-place<a name="line.604"></a>
+<span class="sourceLineNo">605</span>     * @param value the value to fill all of array2D with<a name="line.605"></a>
+<span class="sourceLineNo">606</span>     * @param startX the first x position to fill (inclusive)<a name="line.606"></a>
+<span class="sourceLineNo">607</span>     * @param startY the first y position to fill (inclusive)<a name="line.607"></a>
+<span class="sourceLineNo">608</span>     * @param endX the last x position to fill (inclusive)<a name="line.608"></a>
+<span class="sourceLineNo">609</span>     * @param endY the last y position to fill (inclusive)<a name="line.609"></a>
+<span class="sourceLineNo">610</span>     */<a name="line.610"></a>
+<span class="sourceLineNo">611</span>    public static void fill(double[][] array2d, double value, int startX, int startY, int endX, int endY) {<a name="line.611"></a>
+<span class="sourceLineNo">612</span>        final int width = array2d.length;<a name="line.612"></a>
+<span class="sourceLineNo">613</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.613"></a>
+<span class="sourceLineNo">614</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.614"></a>
+<span class="sourceLineNo">615</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.615"></a>
+<span class="sourceLineNo">616</span>                array2d[x][y] = value;<a name="line.616"></a>
+<span class="sourceLineNo">617</span>            }<a name="line.617"></a>
+<span class="sourceLineNo">618</span>        }<a name="line.618"></a>
+<span class="sourceLineNo">619</span>    }<a name="line.619"></a>
+<span class="sourceLineNo">620</span><a name="line.620"></a>
+<span class="sourceLineNo">621</span>    /**<a name="line.621"></a>
+<span class="sourceLineNo">622</span>     * Fills a sub-section of {@code array2d} with {@code value}, with the section defined by start/end x/y.<a name="line.622"></a>
+<span class="sourceLineNo">623</span>     * Not to be confused with {@link #fill(int, int, int)}, which makes a new 2D array.<a name="line.623"></a>
+<span class="sourceLineNo">624</span>     * @param array2d a 2D array that will be modified in-place<a name="line.624"></a>
+<span class="sourceLineNo">625</span>     * @param value the value to fill all of array2D with<a name="line.625"></a>
+<span class="sourceLineNo">626</span>     * @param startX the first x position to fill (inclusive)<a name="line.626"></a>
+<span class="sourceLineNo">627</span>     * @param startY the first y position to fill (inclusive)<a name="line.627"></a>
+<span class="sourceLineNo">628</span>     * @param endX the last x position to fill (inclusive)<a name="line.628"></a>
+<span class="sourceLineNo">629</span>     * @param endY the last y position to fill (inclusive)<a name="line.629"></a>
+<span class="sourceLineNo">630</span>     */<a name="line.630"></a>
+<span class="sourceLineNo">631</span>    public static void fill(int[][] array2d, int value, int startX, int startY, int endX, int endY) {<a name="line.631"></a>
+<span class="sourceLineNo">632</span>        final int width = array2d.length;<a name="line.632"></a>
+<span class="sourceLineNo">633</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.633"></a>
+<span class="sourceLineNo">634</span>        for (int x = startX; x &lt;= endX &amp;&amp; x &lt; width; x++) {<a name="line.634"></a>
+<span class="sourceLineNo">635</span>            for (int y = startY; y &lt;= endY &amp;&amp; y &lt; height; y++) {<a name="line.635"></a>
+<span class="sourceLineNo">636</span>                array2d[x][y] = value;<a name="line.636"></a>
+<span class="sourceLineNo">637</span>            }<a name="line.637"></a>
+<span class="sourceLineNo">638</span>        }<a name="line.638"></a>
+<span class="sourceLineNo">639</span>    }<a name="line.639"></a>
+<span class="sourceLineNo">640</span><a name="line.640"></a>
+<span class="sourceLineNo">641</span>    /**<a name="line.641"></a>
+<span class="sourceLineNo">642</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.642"></a>
+<span class="sourceLineNo">643</span>     * any long, positive or negative.<a name="line.643"></a>
+<span class="sourceLineNo">644</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.644"></a>
+<span class="sourceLineNo">645</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.645"></a>
+<span class="sourceLineNo">646</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.646"></a>
+<span class="sourceLineNo">647</span>     * @param array2d a 2D array that will be modified in-place<a name="line.647"></a>
+<span class="sourceLineNo">648</span>     * @param seed the seed for the random values, as a long<a name="line.648"></a>
+<span class="sourceLineNo">649</span>     */<a name="line.649"></a>
+<span class="sourceLineNo">650</span>    public static void randomFill(long[][] array2d, final long seed)<a name="line.650"></a>
+<span class="sourceLineNo">651</span>    {<a name="line.651"></a>
+<span class="sourceLineNo">652</span>        final int width = array2d.length;<a name="line.652"></a>
+<span class="sourceLineNo">653</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.653"></a>
+<span class="sourceLineNo">654</span>        long r0 = seed, z;<a name="line.654"></a>
+<span class="sourceLineNo">655</span>        for (int x = 0; x &lt; width; x++) {<a name="line.655"></a>
+<span class="sourceLineNo">656</span>            for (int y = 0; y &lt; height; y++) {<a name="line.656"></a>
+<span class="sourceLineNo">657</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.657"></a>
+<span class="sourceLineNo">658</span>                array2d[x][y] = z ^ (z &gt;&gt;&gt; 29);<a name="line.658"></a>
+<span class="sourceLineNo">659</span>            }<a name="line.659"></a>
+<span class="sourceLineNo">660</span>        }<a name="line.660"></a>
+<span class="sourceLineNo">661</span>    }<a name="line.661"></a>
+<span class="sourceLineNo">662</span>    /**<a name="line.662"></a>
+<span class="sourceLineNo">663</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.663"></a>
+<span class="sourceLineNo">664</span>     * any int, positive or negative.<a name="line.664"></a>
+<span class="sourceLineNo">665</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.665"></a>
+<span class="sourceLineNo">666</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.666"></a>
+<span class="sourceLineNo">667</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.667"></a>
+<span class="sourceLineNo">668</span>     * @param array2d a 2D array that will be modified in-place<a name="line.668"></a>
+<span class="sourceLineNo">669</span>     * @param seed the seed for the random values, as a long<a name="line.669"></a>
+<span class="sourceLineNo">670</span>     */<a name="line.670"></a>
+<span class="sourceLineNo">671</span>    public static void randomFill(int[][] array2d, final long seed)<a name="line.671"></a>
+<span class="sourceLineNo">672</span>    {<a name="line.672"></a>
+<span class="sourceLineNo">673</span>        final int width = array2d.length;<a name="line.673"></a>
+<span class="sourceLineNo">674</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.674"></a>
+<span class="sourceLineNo">675</span>        long r0 = seed, z;<a name="line.675"></a>
+<span class="sourceLineNo">676</span>        for (int x = 0; x &lt; width; x++) {<a name="line.676"></a>
+<span class="sourceLineNo">677</span>            for (int y = 0; y &lt; height; y++) {<a name="line.677"></a>
+<span class="sourceLineNo">678</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.678"></a>
+<span class="sourceLineNo">679</span>                array2d[x][y] = (int)(z ^ (z &gt;&gt;&gt; 29));<a name="line.679"></a>
+<span class="sourceLineNo">680</span>            }<a name="line.680"></a>
+<span class="sourceLineNo">681</span>        }<a name="line.681"></a>
+<span class="sourceLineNo">682</span>    }<a name="line.682"></a>
+<span class="sourceLineNo">683</span>    /**<a name="line.683"></a>
+<span class="sourceLineNo">684</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between<a name="line.684"></a>
+<span class="sourceLineNo">685</span>     * 0 and {@code bound}, exclusive.<a name="line.685"></a>
+<span class="sourceLineNo">686</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.686"></a>
+<span class="sourceLineNo">687</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.687"></a>
+<span class="sourceLineNo">688</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.688"></a>
+<span class="sourceLineNo">689</span>     * @param array2d a 2D array that will be modified in-place<a name="line.689"></a>
+<span class="sourceLineNo">690</span>     * @param bound the upper exclusive limit for the ints this can produce<a name="line.690"></a>
+<span class="sourceLineNo">691</span>     * @param seed the seed for the random values, as a long<a name="line.691"></a>
+<span class="sourceLineNo">692</span>     */<a name="line.692"></a>
+<span class="sourceLineNo">693</span>    public static void randomFill(int[][] array2d, final int bound, final long seed)<a name="line.693"></a>
+<span class="sourceLineNo">694</span>    {<a name="line.694"></a>
+<span class="sourceLineNo">695</span>        final int width = array2d.length;<a name="line.695"></a>
+<span class="sourceLineNo">696</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.696"></a>
+<span class="sourceLineNo">697</span>        long r0 = seed, z;<a name="line.697"></a>
+<span class="sourceLineNo">698</span>        for (int x = 0; x &lt; width; x++) {<a name="line.698"></a>
+<span class="sourceLineNo">699</span>            for (int y = 0; y &lt; height; y++) {<a name="line.699"></a>
+<span class="sourceLineNo">700</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.700"></a>
+<span class="sourceLineNo">701</span>                array2d[x][y] = (int) ((bound * ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.701"></a>
+<span class="sourceLineNo">702</span>            }<a name="line.702"></a>
+<span class="sourceLineNo">703</span>        }<a name="line.703"></a>
+<span class="sourceLineNo">704</span>    }<a name="line.704"></a>
+<span class="sourceLineNo">705</span>    /**<a name="line.705"></a>
+<span class="sourceLineNo">706</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, choosing chars to place in<a name="line.706"></a>
+<span class="sourceLineNo">707</span>     * the given 2D array by selecting them at random from the given 1D char array {@code values}.<a name="line.707"></a>
+<span class="sourceLineNo">708</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.708"></a>
+<span class="sourceLineNo">709</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.709"></a>
+<span class="sourceLineNo">710</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.710"></a>
+<span class="sourceLineNo">711</span>     * @param array2d a 2D array that will be modified in-place<a name="line.711"></a>
+<span class="sourceLineNo">712</span>     * @param values a 1D char array containing the possible char values that can be chosen to fill array2d<a name="line.712"></a>
+<span class="sourceLineNo">713</span>     * @param seed the seed for the random values, as a long<a name="line.713"></a>
+<span class="sourceLineNo">714</span>     */<a name="line.714"></a>
+<span class="sourceLineNo">715</span>    public static void randomFill(char[][] array2d, final char[] values, final long seed)<a name="line.715"></a>
+<span class="sourceLineNo">716</span>    {<a name="line.716"></a>
+<span class="sourceLineNo">717</span>        final int width = array2d.length;<a name="line.717"></a>
+<span class="sourceLineNo">718</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.718"></a>
+<span class="sourceLineNo">719</span>        final int bound = values.length;<a name="line.719"></a>
+<span class="sourceLineNo">720</span>        long r0 = seed + bound, z;<a name="line.720"></a>
+<span class="sourceLineNo">721</span>        for (int x = 0; x &lt; width; x++) {<a name="line.721"></a>
+<span class="sourceLineNo">722</span>            for (int y = 0; y &lt; height; y++) {<a name="line.722"></a>
+<span class="sourceLineNo">723</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.723"></a>
+<span class="sourceLineNo">724</span>                array2d[x][y] = values[(int) ((bound * ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFFFL)) &gt;&gt;&gt; 32)];<a name="line.724"></a>
+<span class="sourceLineNo">725</span>            }<a name="line.725"></a>
+<span class="sourceLineNo">726</span>        }<a name="line.726"></a>
+<span class="sourceLineNo">727</span>    }<a name="line.727"></a>
+<span class="sourceLineNo">728</span><a name="line.728"></a>
+<span class="sourceLineNo">729</span>    /**<a name="line.729"></a>
+<span class="sourceLineNo">730</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, choosing chars to place in<a name="line.730"></a>
+<span class="sourceLineNo">731</span>     * the given 2D array by selecting them at random from the given 1D char array {@code values}.<a name="line.731"></a>
+<span class="sourceLineNo">732</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.732"></a>
+<span class="sourceLineNo">733</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.733"></a>
+<span class="sourceLineNo">734</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.734"></a>
+<span class="sourceLineNo">735</span>     * @param array2d a 2D array that will be modified in-place<a name="line.735"></a>
+<span class="sourceLineNo">736</span>     * @param values a 1D char array containing the possible char values that can be chosen to fill array2d<a name="line.736"></a>
+<span class="sourceLineNo">737</span>     * @param seed the seed for the random values, as a long<a name="line.737"></a>
+<span class="sourceLineNo">738</span>     */<a name="line.738"></a>
+<span class="sourceLineNo">739</span>    public static void randomFill(char[][] array2d, final CharSequence values, final long seed)<a name="line.739"></a>
+<span class="sourceLineNo">740</span>    {<a name="line.740"></a>
+<span class="sourceLineNo">741</span>        final int width = array2d.length;<a name="line.741"></a>
+<span class="sourceLineNo">742</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.742"></a>
+<span class="sourceLineNo">743</span>        final int bound = values.length();<a name="line.743"></a>
+<span class="sourceLineNo">744</span>        long r0 = seed + bound, z;<a name="line.744"></a>
+<span class="sourceLineNo">745</span>        for (int x = 0; x &lt; width; x++) {<a name="line.745"></a>
+<span class="sourceLineNo">746</span>            for (int y = 0; y &lt; height; y++) {<a name="line.746"></a>
+<span class="sourceLineNo">747</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.747"></a>
+<span class="sourceLineNo">748</span>                array2d[x][y] = values.charAt((int) ((bound * ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFFFL)) &gt;&gt;&gt; 32));<a name="line.748"></a>
+<span class="sourceLineNo">749</span>            }<a name="line.749"></a>
+<span class="sourceLineNo">750</span>        }<a name="line.750"></a>
+<span class="sourceLineNo">751</span>    }<a name="line.751"></a>
+<span class="sourceLineNo">752</span><a name="line.752"></a>
+<span class="sourceLineNo">753</span>    /**<a name="line.753"></a>
+<span class="sourceLineNo">754</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.754"></a>
+<span class="sourceLineNo">755</span>     * any float between 0.0 inclusive and 1.0 exclusive.<a name="line.755"></a>
+<span class="sourceLineNo">756</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.756"></a>
+<span class="sourceLineNo">757</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.757"></a>
+<span class="sourceLineNo">758</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.758"></a>
+<span class="sourceLineNo">759</span>     * @param array2d a 2D array that will be modified in-place<a name="line.759"></a>
+<span class="sourceLineNo">760</span>     * @param seed the seed for the random values, as a long<a name="line.760"></a>
+<span class="sourceLineNo">761</span>     */<a name="line.761"></a>
+<span class="sourceLineNo">762</span>    public static void randomFill(float[][] array2d, final long seed)<a name="line.762"></a>
+<span class="sourceLineNo">763</span>    {<a name="line.763"></a>
+<span class="sourceLineNo">764</span>        final int width = array2d.length;<a name="line.764"></a>
+<span class="sourceLineNo">765</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.765"></a>
+<span class="sourceLineNo">766</span>        long r0 = seed, z;<a name="line.766"></a>
+<span class="sourceLineNo">767</span>        for (int x = 0; x &lt; width; x++) {<a name="line.767"></a>
+<span class="sourceLineNo">768</span>            for (int y = 0; y &lt; height; y++) {<a name="line.768"></a>
+<span class="sourceLineNo">769</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.769"></a>
+<span class="sourceLineNo">770</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFL) * 0x1p-24f;<a name="line.770"></a>
+<span class="sourceLineNo">771</span>            }<a name="line.771"></a>
+<span class="sourceLineNo">772</span>        }<a name="line.772"></a>
+<span class="sourceLineNo">773</span>    }<a name="line.773"></a>
+<span class="sourceLineNo">774</span>    /**<a name="line.774"></a>
+<span class="sourceLineNo">775</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between<a name="line.775"></a>
+<span class="sourceLineNo">776</span>     * 0 and {@code bound}, exclusive.<a name="line.776"></a>
+<span class="sourceLineNo">777</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.777"></a>
+<span class="sourceLineNo">778</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.778"></a>
+<span class="sourceLineNo">779</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.779"></a>
+<span class="sourceLineNo">780</span>     * @param array2d a 2D array that will be modified in-place<a name="line.780"></a>
+<span class="sourceLineNo">781</span>     * @param bound the upper exclusive limit for the floats this can produce<a name="line.781"></a>
+<span class="sourceLineNo">782</span>     * @param seed the seed for the random values, as a long<a name="line.782"></a>
+<span class="sourceLineNo">783</span>     */<a name="line.783"></a>
+<span class="sourceLineNo">784</span>    public static void randomFill(float[][] array2d, final float bound, final long seed) {<a name="line.784"></a>
+<span class="sourceLineNo">785</span>        final int width = array2d.length;<a name="line.785"></a>
+<span class="sourceLineNo">786</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.786"></a>
+<span class="sourceLineNo">787</span>        long r0 = seed, z;<a name="line.787"></a>
+<span class="sourceLineNo">788</span>        final float mul = 0x1p-24f * bound;<a name="line.788"></a>
+<span class="sourceLineNo">789</span>        for (int x = 0; x &lt; width; x++) {<a name="line.789"></a>
+<span class="sourceLineNo">790</span>            for (int y = 0; y &lt; height; y++) {<a name="line.790"></a>
+<span class="sourceLineNo">791</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.791"></a>
+<span class="sourceLineNo">792</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0xFFFFFFL) * mul;<a name="line.792"></a>
+<span class="sourceLineNo">793</span>            }<a name="line.793"></a>
+<span class="sourceLineNo">794</span>        }<a name="line.794"></a>
+<span class="sourceLineNo">795</span>    }<a name="line.795"></a>
+<span class="sourceLineNo">796</span><a name="line.796"></a>
+<span class="sourceLineNo">797</span>    /**<a name="line.797"></a>
+<span class="sourceLineNo">798</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}; can fill an element with<a name="line.798"></a>
+<span class="sourceLineNo">799</span>     * any double between 0.0 inclusive and 1.0 exclusive.<a name="line.799"></a>
+<span class="sourceLineNo">800</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.800"></a>
+<span class="sourceLineNo">801</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.801"></a>
+<span class="sourceLineNo">802</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.802"></a>
+<span class="sourceLineNo">803</span>     * @param array2d a 2D array that will be modified in-place<a name="line.803"></a>
+<span class="sourceLineNo">804</span>     * @param seed the seed for the random values, as a long<a name="line.804"></a>
+<span class="sourceLineNo">805</span>     */<a name="line.805"></a>
+<span class="sourceLineNo">806</span>    public static void randomFill(double[][] array2d, final long seed)<a name="line.806"></a>
+<span class="sourceLineNo">807</span>    {<a name="line.807"></a>
+<span class="sourceLineNo">808</span>        final int width = array2d.length;<a name="line.808"></a>
+<span class="sourceLineNo">809</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.809"></a>
+<span class="sourceLineNo">810</span>        long r0 = seed, z;<a name="line.810"></a>
+<span class="sourceLineNo">811</span>        for (int x = 0; x &lt; width; x++) {<a name="line.811"></a>
+<span class="sourceLineNo">812</span>            for (int y = 0; y &lt; height; y++) {<a name="line.812"></a>
+<span class="sourceLineNo">813</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.813"></a>
+<span class="sourceLineNo">814</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.814"></a>
+<span class="sourceLineNo">815</span>            }<a name="line.815"></a>
+<span class="sourceLineNo">816</span>        }<a name="line.816"></a>
+<span class="sourceLineNo">817</span>    }<a name="line.817"></a>
+<span class="sourceLineNo">818</span>    /**<a name="line.818"></a>
+<span class="sourceLineNo">819</span>     * Randomly fills all of {@code array2d} with random values generated from {@code seed}, limiting results to between<a name="line.819"></a>
+<span class="sourceLineNo">820</span>     * 0 and {@code bound}, exclusive.<a name="line.820"></a>
+<span class="sourceLineNo">821</span>     * Fairly efficient; uses a fast random number generation algorithm that can avoid some unnecessary work in this<a name="line.821"></a>
+<span class="sourceLineNo">822</span>     * context, and improves quality by seeding each column differently. Generates {@code (height + 1) * width} random<a name="line.822"></a>
+<span class="sourceLineNo">823</span>     * values to fill the {@code height * width} elements in array2d.<a name="line.823"></a>
+<span class="sourceLineNo">824</span>     * @param array2d a 2D array that will be modified in-place<a name="line.824"></a>
+<span class="sourceLineNo">825</span>     * @param bound the upper exclusive limit for the doubles this can produce<a name="line.825"></a>
+<span class="sourceLineNo">826</span>     * @param seed the seed for the random values, as a long<a name="line.826"></a>
+<span class="sourceLineNo">827</span>     */<a name="line.827"></a>
+<span class="sourceLineNo">828</span>    public static void randomFill(double[][] array2d, final double bound, final long seed)<a name="line.828"></a>
+<span class="sourceLineNo">829</span>    {<a name="line.829"></a>
+<span class="sourceLineNo">830</span>        final int width = array2d.length;<a name="line.830"></a>
+<span class="sourceLineNo">831</span>        final int height = width == 0 ? 0 : array2d[0].length;<a name="line.831"></a>
+<span class="sourceLineNo">832</span>        long r0 = seed, z;<a name="line.832"></a>
+<span class="sourceLineNo">833</span>        final double mul = 0x1p-53 * bound;<a name="line.833"></a>
+<span class="sourceLineNo">834</span>        for (int x = 0; x &lt; width; x++) {<a name="line.834"></a>
+<span class="sourceLineNo">835</span>            for (int y = 0; y &lt; height; y++) {<a name="line.835"></a>
+<span class="sourceLineNo">836</span>                z = r0 ^ (((r0 &gt;&gt;&gt; 23) ^ (r0 += 0xA99635D5B8597AE5L)) * 0xAD5DE9A61A9C3D95L);<a name="line.836"></a>
+<span class="sourceLineNo">837</span>                array2d[x][y] = ((z ^ (z &gt;&gt;&gt; 29)) &amp; 0x1FFFFFFFFFFFFFL) * mul;<a name="line.837"></a>
+<span class="sourceLineNo">838</span>            }<a name="line.838"></a>
+<span class="sourceLineNo">839</span>        }<a name="line.839"></a>
+<span class="sourceLineNo">840</span><a name="line.840"></a>
+<span class="sourceLineNo">841</span>    }<a name="line.841"></a>
+<span class="sourceLineNo">842</span><a name="line.842"></a>
+<span class="sourceLineNo">843</span>    /**<a name="line.843"></a>
+<span class="sourceLineNo">844</span>     * Rearranges an ArrayList to use the given ordering, returning a copy; random orderings can be produced with<a name="line.844"></a>
+<span class="sourceLineNo">845</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int)} or<a name="line.845"></a>
+<span class="sourceLineNo">846</span>     * {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}. These orderings will never repeat an earlier element,<a name="line.846"></a>
+<span class="sourceLineNo">847</span>     * and the returned ArrayList may be shorter than the original if {@code ordering} isn't as long as {@code list}.<a name="line.847"></a>
+<span class="sourceLineNo">848</span>     * Using a random ordering is like shuffling, but allows you to repeat the shuffle exactly on other collections of<a name="line.848"></a>
+<span class="sourceLineNo">849</span>     * the same size. A reordering can also be inverted with {@link #invertOrdering(int[])} or<a name="line.849"></a>
+<span class="sourceLineNo">850</span>     * {@link #invertOrdering(int[], int[])}, getting the change that will undo another ordering.<a name="line.850"></a>
+<span class="sourceLineNo">851</span>     *<a name="line.851"></a>
+<span class="sourceLineNo">852</span>     * @param list     an ArrayList that you want a reordered version of; will not be modified.<a name="line.852"></a>
+<span class="sourceLineNo">853</span>     * @param ordering an ordering, typically produced by one of RNG's randomOrdering methods.<a name="line.853"></a>
+<span class="sourceLineNo">854</span>     * @param &lt;T&gt;      any generic type<a name="line.854"></a>
+<span class="sourceLineNo">855</span>     * @return a modified copy of {@code list} with its ordering changed to match {@code ordering}.<a name="line.855"></a>
 <span class="sourceLineNo">856</span>     */<a name="line.856"></a>
-<span class="sourceLineNo">857</span>    public static int[] invertOrdering(int[] ordering) {<a name="line.857"></a>
-<span class="sourceLineNo">858</span>        int ol = 0;<a name="line.858"></a>
-<span class="sourceLineNo">859</span>        if (ordering == null || (ol = ordering.length) == 0) return ordering;<a name="line.859"></a>
-<span class="sourceLineNo">860</span>        int[] next = new int[ol];<a name="line.860"></a>
-<span class="sourceLineNo">861</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.861"></a>
-<span class="sourceLineNo">862</span>            if (ordering[i] &lt; 0 || ordering[i] &gt;= ol) return next;<a name="line.862"></a>
-<span class="sourceLineNo">863</span>            next[ordering[i]] = i;<a name="line.863"></a>
+<span class="sourceLineNo">857</span>    public static &lt;T&gt; ArrayList&lt;T&gt; reorder(ArrayList&lt;T&gt; list, int... ordering) {<a name="line.857"></a>
+<span class="sourceLineNo">858</span>        int ol;<a name="line.858"></a>
+<span class="sourceLineNo">859</span>        if (list == null || ordering == null || (ol = Math.min(list.size(), ordering.length)) == 0)<a name="line.859"></a>
+<span class="sourceLineNo">860</span>            return list;<a name="line.860"></a>
+<span class="sourceLineNo">861</span>        ArrayList&lt;T&gt; alt = new ArrayList&lt;T&gt;(ol);<a name="line.861"></a>
+<span class="sourceLineNo">862</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.862"></a>
+<span class="sourceLineNo">863</span>            alt.add(list.get((ordering[i] % ol + ol) % ol));<a name="line.863"></a>
 <span class="sourceLineNo">864</span>        }<a name="line.864"></a>
-<span class="sourceLineNo">865</span>        return next;<a name="line.865"></a>
+<span class="sourceLineNo">865</span>        return alt;<a name="line.865"></a>
 <span class="sourceLineNo">866</span>    }<a name="line.866"></a>
 <span class="sourceLineNo">867</span><a name="line.867"></a>
 <span class="sourceLineNo">868</span>    /**<a name="line.868"></a>
 <span class="sourceLineNo">869</span>     * Given an ordering such as one produced by {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}, this finds<a name="line.869"></a>
-<span class="sourceLineNo">870</span>     * its inverse, able to reverse the reordering and vice versa. This overload doesn't allocate a new int<a name="line.870"></a>
-<span class="sourceLineNo">871</span>     * array, and instead relies on having an int array of the same size as ordering passed to it as an<a name="line.871"></a>
-<span class="sourceLineNo">872</span>     * additional argument.<a name="line.872"></a>
-<span class="sourceLineNo">873</span>     *<a name="line.873"></a>
-<span class="sourceLineNo">874</span>     * @param ordering the ordering to find the inverse for<a name="line.874"></a>
-<span class="sourceLineNo">875</span>     * @param dest     the int array to put the inverse reordering into; should have the same length as ordering<a name="line.875"></a>
-<span class="sourceLineNo">876</span>     * @return the inverse of ordering; will have the same value as dest<a name="line.876"></a>
-<span class="sourceLineNo">877</span>     */<a name="line.877"></a>
-<span class="sourceLineNo">878</span>    public static int[] invertOrdering(int[] ordering, int[] dest) {<a name="line.878"></a>
-<span class="sourceLineNo">879</span>        int ol = 0;<a name="line.879"></a>
-<span class="sourceLineNo">880</span>        if (ordering == null || dest == null || (ol = Math.min(ordering.length, dest.length)) == 0)<a name="line.880"></a>
-<span class="sourceLineNo">881</span>            return ordering;<a name="line.881"></a>
-<span class="sourceLineNo">882</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.882"></a>
-<span class="sourceLineNo">883</span>            if (ordering[i] &lt; 0 || ordering[i] &gt;= ol) return dest;<a name="line.883"></a>
-<span class="sourceLineNo">884</span>            dest[ordering[i]] = i;<a name="line.884"></a>
-<span class="sourceLineNo">885</span>        }<a name="line.885"></a>
-<span class="sourceLineNo">886</span>        return dest;<a name="line.886"></a>
-<span class="sourceLineNo">887</span>    }<a name="line.887"></a>
-<span class="sourceLineNo">888</span><a name="line.888"></a>
-<span class="sourceLineNo">889</span>    /**<a name="line.889"></a>
-<span class="sourceLineNo">890</span>     * Reverses the array given as a parameter, in-place, and returns the modified original.<a name="line.890"></a>
-<span class="sourceLineNo">891</span>     * @param data an array that will be reversed in-place<a name="line.891"></a>
-<span class="sourceLineNo">892</span>     * @return the array passed in, after reversal<a name="line.892"></a>
-<span class="sourceLineNo">893</span>     */<a name="line.893"></a>
-<span class="sourceLineNo">894</span>    public static boolean[] reverse(boolean[] data)<a name="line.894"></a>
-<span class="sourceLineNo">895</span>    {<a name="line.895"></a>
-<span class="sourceLineNo">896</span>        int sz;<a name="line.896"></a>
-<span class="sourceLineNo">897</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.897"></a>
-<span class="sourceLineNo">898</span>        boolean t;<a name="line.898"></a>
-<span class="sourceLineNo">899</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.899"></a>
-<span class="sourceLineNo">900</span>            t = data[j];<a name="line.900"></a>
-<span class="sourceLineNo">901</span>            data[j] = data[i];<a name="line.901"></a>
-<span class="sourceLineNo">902</span>            data[i] = t;<a name="line.902"></a>
+<span class="sourceLineNo">870</span>     * its inverse, able to reverse the reordering and vice versa.<a name="line.870"></a>
+<span class="sourceLineNo">871</span>     *<a name="line.871"></a>
+<span class="sourceLineNo">872</span>     * @param ordering the ordering to find the inverse for<a name="line.872"></a>
+<span class="sourceLineNo">873</span>     * @return the inverse of ordering<a name="line.873"></a>
+<span class="sourceLineNo">874</span>     */<a name="line.874"></a>
+<span class="sourceLineNo">875</span>    public static int[] invertOrdering(int[] ordering) {<a name="line.875"></a>
+<span class="sourceLineNo">876</span>        int ol = 0;<a name="line.876"></a>
+<span class="sourceLineNo">877</span>        if (ordering == null || (ol = ordering.length) == 0) return ordering;<a name="line.877"></a>
+<span class="sourceLineNo">878</span>        int[] next = new int[ol];<a name="line.878"></a>
+<span class="sourceLineNo">879</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.879"></a>
+<span class="sourceLineNo">880</span>            if (ordering[i] &lt; 0 || ordering[i] &gt;= ol) return next;<a name="line.880"></a>
+<span class="sourceLineNo">881</span>            next[ordering[i]] = i;<a name="line.881"></a>
+<span class="sourceLineNo">882</span>        }<a name="line.882"></a>
+<span class="sourceLineNo">883</span>        return next;<a name="line.883"></a>
+<span class="sourceLineNo">884</span>    }<a name="line.884"></a>
+<span class="sourceLineNo">885</span><a name="line.885"></a>
+<span class="sourceLineNo">886</span>    /**<a name="line.886"></a>
+<span class="sourceLineNo">887</span>     * Given an ordering such as one produced by {@link squidpony.squidmath.RNG#randomOrdering(int, int[])}, this finds<a name="line.887"></a>
+<span class="sourceLineNo">888</span>     * its inverse, able to reverse the reordering and vice versa. This overload doesn't allocate a new int<a name="line.888"></a>
+<span class="sourceLineNo">889</span>     * array, and instead relies on having an int array of the same size as ordering passed to it as an<a name="line.889"></a>
+<span class="sourceLineNo">890</span>     * additional argument.<a name="line.890"></a>
+<span class="sourceLineNo">891</span>     *<a name="line.891"></a>
+<span class="sourceLineNo">892</span>     * @param ordering the ordering to find the inverse for<a name="line.892"></a>
+<span class="sourceLineNo">893</span>     * @param dest     the int array to put the inverse reordering into; should have the same length as ordering<a name="line.893"></a>
+<span class="sourceLineNo">894</span>     * @return the inverse of ordering; will have the same value as dest<a name="line.894"></a>
+<span class="sourceLineNo">895</span>     */<a name="line.895"></a>
+<span class="sourceLineNo">896</span>    public static int[] invertOrdering(int[] ordering, int[] dest) {<a name="line.896"></a>
+<span class="sourceLineNo">897</span>        int ol = 0;<a name="line.897"></a>
+<span class="sourceLineNo">898</span>        if (ordering == null || dest == null || (ol = Math.min(ordering.length, dest.length)) == 0)<a name="line.898"></a>
+<span class="sourceLineNo">899</span>            return ordering;<a name="line.899"></a>
+<span class="sourceLineNo">900</span>        for (int i = 0; i &lt; ol; i++) {<a name="line.900"></a>
+<span class="sourceLineNo">901</span>            if (ordering[i] &lt; 0 || ordering[i] &gt;= ol) return dest;<a name="line.901"></a>
+<span class="sourceLineNo">902</span>            dest[ordering[i]] = i;<a name="line.902"></a>
 <span class="sourceLineNo">903</span>        }<a name="line.903"></a>
-<span class="sourceLineNo">904</span>        return data;<a name="line.904"></a>
+<span class="sourceLineNo">904</span>        return dest;<a name="line.904"></a>
 <span class="sourceLineNo">905</span>    }<a name="line.905"></a>
 <span class="sourceLineNo">906</span><a name="line.906"></a>
 <span class="sourceLineNo">907</span>    /**<a name="line.907"></a>
@@ -917,11 +917,11 @@
 <span class="sourceLineNo">909</span>     * @param data an array that will be reversed in-place<a name="line.909"></a>
 <span class="sourceLineNo">910</span>     * @return the array passed in, after reversal<a name="line.910"></a>
 <span class="sourceLineNo">911</span>     */<a name="line.911"></a>
-<span class="sourceLineNo">912</span>    public static char[] reverse(char[] data)<a name="line.912"></a>
+<span class="sourceLineNo">912</span>    public static boolean[] reverse(boolean[] data)<a name="line.912"></a>
 <span class="sourceLineNo">913</span>    {<a name="line.913"></a>
 <span class="sourceLineNo">914</span>        int sz;<a name="line.914"></a>
 <span class="sourceLineNo">915</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.915"></a>
-<span class="sourceLineNo">916</span>        char t;<a name="line.916"></a>
+<span class="sourceLineNo">916</span>        boolean t;<a name="line.916"></a>
 <span class="sourceLineNo">917</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.917"></a>
 <span class="sourceLineNo">918</span>            t = data[j];<a name="line.918"></a>
 <span class="sourceLineNo">919</span>            data[j] = data[i];<a name="line.919"></a>
@@ -935,11 +935,11 @@
 <span class="sourceLineNo">927</span>     * @param data an array that will be reversed in-place<a name="line.927"></a>
 <span class="sourceLineNo">928</span>     * @return the array passed in, after reversal<a name="line.928"></a>
 <span class="sourceLineNo">929</span>     */<a name="line.929"></a>
-<span class="sourceLineNo">930</span>    public static float[] reverse(float[] data)<a name="line.930"></a>
+<span class="sourceLineNo">930</span>    public static char[] reverse(char[] data)<a name="line.930"></a>
 <span class="sourceLineNo">931</span>    {<a name="line.931"></a>
 <span class="sourceLineNo">932</span>        int sz;<a name="line.932"></a>
 <span class="sourceLineNo">933</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.933"></a>
-<span class="sourceLineNo">934</span>        float t;<a name="line.934"></a>
+<span class="sourceLineNo">934</span>        char t;<a name="line.934"></a>
 <span class="sourceLineNo">935</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.935"></a>
 <span class="sourceLineNo">936</span>            t = data[j];<a name="line.936"></a>
 <span class="sourceLineNo">937</span>            data[j] = data[i];<a name="line.937"></a>
@@ -953,11 +953,11 @@
 <span class="sourceLineNo">945</span>     * @param data an array that will be reversed in-place<a name="line.945"></a>
 <span class="sourceLineNo">946</span>     * @return the array passed in, after reversal<a name="line.946"></a>
 <span class="sourceLineNo">947</span>     */<a name="line.947"></a>
-<span class="sourceLineNo">948</span>    public static double[] reverse(double[] data)<a name="line.948"></a>
+<span class="sourceLineNo">948</span>    public static float[] reverse(float[] data)<a name="line.948"></a>
 <span class="sourceLineNo">949</span>    {<a name="line.949"></a>
 <span class="sourceLineNo">950</span>        int sz;<a name="line.950"></a>
 <span class="sourceLineNo">951</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.951"></a>
-<span class="sourceLineNo">952</span>        double t;<a name="line.952"></a>
+<span class="sourceLineNo">952</span>        float t;<a name="line.952"></a>
 <span class="sourceLineNo">953</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.953"></a>
 <span class="sourceLineNo">954</span>            t = data[j];<a name="line.954"></a>
 <span class="sourceLineNo">955</span>            data[j] = data[i];<a name="line.955"></a>
@@ -971,11 +971,11 @@
 <span class="sourceLineNo">963</span>     * @param data an array that will be reversed in-place<a name="line.963"></a>
 <span class="sourceLineNo">964</span>     * @return the array passed in, after reversal<a name="line.964"></a>
 <span class="sourceLineNo">965</span>     */<a name="line.965"></a>
-<span class="sourceLineNo">966</span>    public static int[] reverse(int[] data)<a name="line.966"></a>
+<span class="sourceLineNo">966</span>    public static double[] reverse(double[] data)<a name="line.966"></a>
 <span class="sourceLineNo">967</span>    {<a name="line.967"></a>
 <span class="sourceLineNo">968</span>        int sz;<a name="line.968"></a>
 <span class="sourceLineNo">969</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.969"></a>
-<span class="sourceLineNo">970</span>        int t;<a name="line.970"></a>
+<span class="sourceLineNo">970</span>        double t;<a name="line.970"></a>
 <span class="sourceLineNo">971</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.971"></a>
 <span class="sourceLineNo">972</span>            t = data[j];<a name="line.972"></a>
 <span class="sourceLineNo">973</span>            data[j] = data[i];<a name="line.973"></a>
@@ -989,11 +989,11 @@
 <span class="sourceLineNo">981</span>     * @param data an array that will be reversed in-place<a name="line.981"></a>
 <span class="sourceLineNo">982</span>     * @return the array passed in, after reversal<a name="line.982"></a>
 <span class="sourceLineNo">983</span>     */<a name="line.983"></a>
-<span class="sourceLineNo">984</span>    public static byte[] reverse(byte[] data)<a name="line.984"></a>
+<span class="sourceLineNo">984</span>    public static int[] reverse(int[] data)<a name="line.984"></a>
 <span class="sourceLineNo">985</span>    {<a name="line.985"></a>
 <span class="sourceLineNo">986</span>        int sz;<a name="line.986"></a>
 <span class="sourceLineNo">987</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.987"></a>
-<span class="sourceLineNo">988</span>        byte t;<a name="line.988"></a>
+<span class="sourceLineNo">988</span>        int t;<a name="line.988"></a>
 <span class="sourceLineNo">989</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.989"></a>
 <span class="sourceLineNo">990</span>            t = data[j];<a name="line.990"></a>
 <span class="sourceLineNo">991</span>            data[j] = data[i];<a name="line.991"></a>
@@ -1001,24 +1001,42 @@
 <span class="sourceLineNo">993</span>        }<a name="line.993"></a>
 <span class="sourceLineNo">994</span>        return data;<a name="line.994"></a>
 <span class="sourceLineNo">995</span>    }<a name="line.995"></a>
-<span class="sourceLineNo">996</span>    /**<a name="line.996"></a>
-<span class="sourceLineNo">997</span>     * Reverses the array given as a parameter, in-place, and returns the modified original.<a name="line.997"></a>
-<span class="sourceLineNo">998</span>     * @param data an array that will be reversed in-place<a name="line.998"></a>
-<span class="sourceLineNo">999</span>     * @return the array passed in, after reversal<a name="line.999"></a>
-<span class="sourceLineNo">1000</span>     */<a name="line.1000"></a>
-<span class="sourceLineNo">1001</span>    public static&lt;T&gt; T[] reverse(T[] data)<a name="line.1001"></a>
-<span class="sourceLineNo">1002</span>    {<a name="line.1002"></a>
-<span class="sourceLineNo">1003</span>        int sz;<a name="line.1003"></a>
-<span class="sourceLineNo">1004</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.1004"></a>
-<span class="sourceLineNo">1005</span>        T t;<a name="line.1005"></a>
-<span class="sourceLineNo">1006</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.1006"></a>
-<span class="sourceLineNo">1007</span>            t = data[j];<a name="line.1007"></a>
-<span class="sourceLineNo">1008</span>            data[j] = data[i];<a name="line.1008"></a>
-<span class="sourceLineNo">1009</span>            data[i] = t;<a name="line.1009"></a>
-<span class="sourceLineNo">1010</span>        }<a name="line.1010"></a>
-<span class="sourceLineNo">1011</span>        return data;<a name="line.1011"></a>
-<span class="sourceLineNo">1012</span>    }<a name="line.1012"></a>
-<span class="sourceLineNo">1013</span>}<a name="line.1013"></a>
+<span class="sourceLineNo">996</span><a name="line.996"></a>
+<span class="sourceLineNo">997</span>    /**<a name="line.997"></a>
+<span class="sourceLineNo">998</span>     * Reverses the array given as a parameter, in-place, and returns the modified original.<a name="line.998"></a>
+<span class="sourceLineNo">999</span>     * @param data an array that will be reversed in-place<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>     * @return the array passed in, after reversal<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>     */<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span>    public static byte[] reverse(byte[] data)<a name="line.1002"></a>
+<span class="sourceLineNo">1003</span>    {<a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>        int sz;<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>        byte t;<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>            t = data[j];<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>            data[j] = data[i];<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>            data[i] = t;<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>        }<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>        return data;<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>    }<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>    /**<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>     * Reverses the array given as a parameter, in-place, and returns the modified original.<a name="line.1015"></a>
+<span class="sourceLineNo">1016</span>     * @param data an array that will be reversed in-place<a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>     * @return the array passed in, after reversal<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>     */<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>    public static&lt;T&gt; T[] reverse(T[] data)<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span>    {<a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>        int sz;<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>        if(data == null || (sz = data.length) &lt;= 0) return data;<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span>        T t;<a name="line.1023"></a>
+<span class="sourceLineNo">1024</span>        for (int i = 0, j = sz - 1; i &lt; j; i++, j--) {<a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>            t = data[j];<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>            data[j] = data[i];<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span>            data[i] = t;<a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>        }<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>        return data;<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>    }<a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>}<a name="line.1031"></a>
 
 
 
