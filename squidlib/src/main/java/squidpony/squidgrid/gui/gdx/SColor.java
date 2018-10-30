@@ -11324,20 +11324,21 @@ public class SColor extends Color implements Serializable {
     public static final SColor TEAD_GARDEN_CONTEMPLATION = new SColor(0x665343, "Tead Garden Contemplation");
 
     /**
-     * A color constant that is fully transparent. The RGB portion is 000000 (black), but
-     * should not render when used in a method that respects alpha values. When transitioning between colors
-     * and ending or starting on transparent, you should prefer making a color that has the correct RGB values
-     * and also has 0 for the alpha component unless you are transitioning from opaque black to this SColor.
-     * Using {@link #SColor(int, int, int, int)} will work, as will copying the SColor with {@link #cpy()} to
-     * get a Color and setting the copy's {@link #a} to 0. It can be represented as a packed float with the constant 
-     * 0x0.0p0F.
+     * A color constant that is fully transparent. The RGB portion is 000000 (black), but should not render when used in
+     * a method that respects alpha values. When transitioning between colors and ending or starting on transparent, you
+     * should prefer making a color that has the correct RGB values and also has 0 for the alpha component unless you
+     * are transitioning from opaque black to this SColor. Using {@link #SColor(int, int, int, int)} will work, as will
+     * copying the SColor with {@link #cpy()} to get a Color and setting the copy's {@link #a} to 0. If you want to
+     * obtain a packed float color that has a reduced alpha, you can use {@link #translucentColor(Color, float)} if you
+     * have a Color or SColor, or its overload that takes a packed float color. This color can be represented as a
+     * packed float with the constant 0x0.0p0F.
      */
     public static final SColor TRANSPARENT = new SColor(0, 0, 0, 0, "Transparent");
 
     /**
      * This array is loaded with the colors found in the rainbow, in the
      * standard ROYGBIV order. You may want to consider {@link #COLOR_WHEEL_PALETTE}
-     * if you want more hues or varying saturation/lightness.
+     * if you want more hues or varying saturation/lightness; this is close to {@link #COLOR_WHEEL_PALETTE_BRIGHT}.
      */
     public static final SColor[] RAINBOW = {
             RED_PIGMENT, ORANGE_PEEL, YELLOW, GREEN, BLUE, INDIGO_DYE, VIOLET};
@@ -11507,7 +11508,14 @@ public class SColor extends Color implements Serializable {
      * Aurora is available in <a href="http://pixeljoint.com/forum/forum_posts.asp?TID=26080&KW=">this set of tools</a>
      * for a pixel art editor, but it is usable for lots of high-color purposes. The original palette did not have
      * names. Naming 256 colors was an ordeal, since many of these colors are well-described by the same name, even when
-     * two or more can be distinguished visually from each other.
+     * two or more can be distinguished visually from each other. Aurora is a good option as a broad-purpose palette
+     * when using {@link PaletteReducer}, and it is the default there if no palette is specified. For pixel art or
+     * low-color edits of traditional art, this palette can reproduce a lot of realistic colors and slight changes on
+     * those colors, with many skin tones (mostly, these are numbered so 1 is the darkest skin tone in a group and
+     * higher numbers get progressively lighter; the lightest tones are {@link #AURORA_LIGHT_SKIN_9},
+     * {@link #AURORA_PINK_SKIN_4}, {@link #AURORA_BRONZE_SKIN_4}, and {@link #AURORA_DARK_SKIN_3}, with the LIGHT skin
+     * tones steadily going from warm and saturated colors at {@link #AURORA_LIGHT_SKIN_1} to more pale at 9, and the
+     * PINK skin tones meant for accents on some body parts that aren't quite skin-colored, like the lips and ears).
      * <a href="https://i.imgur.com/CrI1LyU.png">Preview of all 256 colors, each with the hex number for its index in
      * this array.</a>
      */
@@ -12145,6 +12153,38 @@ public class SColor extends Color implements Serializable {
             CW_MAGENTA, CW_FADED_MAGENTA, CW_FLUSH_MAGENTA, CW_LIGHT_MAGENTA, CW_PALE_MAGENTA, CW_BRIGHT_MAGENTA, CW_DARK_MAGENTA, CW_DRAB_MAGENTA, CW_RICH_MAGENTA,
             CW_ROSE, CW_FADED_ROSE, CW_FLUSH_ROSE, CW_LIGHT_ROSE, CW_PALE_ROSE, CW_BRIGHT_ROSE, CW_DARK_ROSE, CW_DRAB_ROSE, CW_RICH_ROSE,
             CW_BLACK, CW_ALMOST_BLACK, CW_GRAY_BLACK, CW_DARK_GRAY, CW_GRAY, CW_LIGHT_GRAY, CW_GRAY_WHITE, CW_ALMOST_WHITE, CW_WHITE,
+            AURORA_PITCH_BLACK, AURORA_COAL_BLACK, AURORA_SHADOW, AURORA_GRAPHITE, AURORA_SMOKE, AURORA_LEAD, AURORA_IRON,
+            AURORA_ELEPHANT, AURORA_CHINCHILLA, AURORA_GREYHOUND, AURORA_SILVER, AURORA_FOG, AURORA_PLATINUM, AURORA_CLOUD, AURORA_SHINING_WHITE,
+            AURORA_SEAWATER, AURORA_HOSPITAL_GREEN, AURORA_CYAN, AURORA_BUBBLE, AURORA_PERIWINKLE, AURORA_ULTRAMARINE, AURORA_FADED_BLUE, AURORA_OCEAN_BLUE,
+            AURORA_STYGIAN_BLUE, AURORA_DEEP_PURPLE, AURORA_TYRIAN_PURPLE, AURORA_MAGENTA, AURORA_BUBBLEGUM_PINK, AURORA_PORK_CHOP, AURORA_RAW_MEAT, AURORA_FRESH_BLOOD,
+            AURORA_PUTTY, AURORA_SIENNA, AURORA_SEAL_BROWN, AURORA_MUMMY_BROWN, AURORA_FAWN, AURORA_ORANGE, AURORA_PEACH, AURORA_CREAM,
+            AURORA_LEMON, AURORA_EARWAX, AURORA_UMBER, AURORA_IVY_GREEN, AURORA_JADE, AURORA_SHAMROCK_GREEN, AURORA_CELADON, AURORA_PUCE,
+            AURORA_BEIGE, AURORA_WET_STONE, AURORA_SLOW_CREEK, AURORA_SLATE_GRAY, AURORA_LIGHT_SKIN_1, AURORA_LIGHT_SKIN_2, AURORA_LIGHT_SKIN_3, AURORA_LIGHT_SKIN_4,
+            AURORA_LIGHT_SKIN_5, AURORA_LIGHT_SKIN_6, AURORA_LIGHT_SKIN_7, AURORA_LIGHT_SKIN_8, AURORA_LIGHT_SKIN_9, AURORA_DARK_SKIN_1, AURORA_DARK_SKIN_2, AURORA_DARK_SKIN_3,
+            AURORA_PINK_SKIN_1, AURORA_PINK_SKIN_2, AURORA_PINK_SKIN_3, AURORA_PINK_SKIN_4, AURORA_BRONZE_SKIN_4, AURORA_BRONZE_SKIN_3, AURORA_BRONZE_SKIN_2, AURORA_BRONZE_SKIN_1,
+            AURORA_TAUPE, AURORA_DRAB_GREEN, AURORA_LIZARD_SCALES, AURORA_CRICKET, AURORA_OLIVE_OIL, AURORA_DUN, AURORA_CORN_SILK, AURORA_TAN,
+            AURORA_STRAW, AURORA_HONEYDEW, AURORA_TARNISH, AURORA_PEA_SOUP, AURORA_MARSH, AURORA_ASPARAGUS, AURORA_PEAT_BOG, AURORA_DEEP_JUNGLE,
+            AURORA_PINE_GREEN, AURORA_OLIVE_GREEN, AURORA_GRAY_GREEN, AURORA_MAIDENHAIR_FERN, AURORA_KELLY_GREEN, AURORA_DUSTY_GREEN, AURORA_GARTER_SNAKE, AURORA_SILVER_GREEN,
+            AURORA_PISTACHIO, AURORA_ANGEL_WING, AURORA_SAGE_GREEN, AURORA_DRIED_SAGE, AURORA_ARTICHOKE, AURORA_VIRIDIAN, AURORA_FLORAL_FOAM, AURORA_HUNTER_GREEN,
+            AURORA_DARK_TEAL, AURORA_KYANITE, AURORA_SPEARMINT, AURORA_AMAZONITE, AURORA_PASTEL_SKY, AURORA_AQUAMARINE, AURORA_DUST_BUNNY, AURORA_PATINA,
+            AURORA_CHIPPED_GRANITE, AURORA_BLUE_SMOKE, AURORA_AIR_FORCE_BLUE, AURORA_COLD_IRON, AURORA_DREARY_BLUE, AURORA_MURK, AURORA_NINJA, AURORA_WATERCOLOR_BLACK,
+            AURORA_IOLITE, AURORA_BOYSENBERRY, AURORA_WATERCOLOR_GRAY, AURORA_BLUE_STEEL, AURORA_TWILIGHT_CLOUD, AURORA_SMOG, AURORA_TROPIC_MIST, AURORA_FEATHER_DOWN,
+            AURORA_MILD_VIOLET, AURORA_VIOLET_CUSHIONS, AURORA_DULL_VIOLET, AURORA_ROYAL_VIOLET, AURORA_EMINENCE, AURORA_PRUNE, AURORA_DUSTY_GRAPE, AURORA_PINK_VIOLET,
+            AURORA_RIPE_PLUM, AURORA_MAUVE, AURORA_HAM, AURORA_COTTON_CANDY, AURORA_SILVER_PINK, AURORA_TEA_ROSE, AURORA_OLD_ROSE, AURORA_DUSTY_PINK,
+            AURORA_ROSEATE_SPOONBILL, AURORA_THULIAN_PINK, AURORA_BROWN_VELVET, AURORA_NIGHTSHADE, AURORA_SCRIBE_INK, AURORA_VARNISH, AURORA_CEDAR_WOOD, AURORA_HOT_SAUCE_,
+            AURORA_LURID_RED, AURORA_BRICK, AURORA_FUSION_RED, AURORA_EMBERS, AURORA_SALMON, AURORA_TAXICAB_YELLOW, AURORA_APRICOT, AURORA_BURNT_YELLOW,
+            AURORA_DRY_PEPPER, AURORA_REDWOOD, AURORA_KOA, AURORA_OCHRE, AURORA_DULL_GREEN, AURORA_ARMY_GREEN, AURORA_DRIFTWOOD, AURORA_DRY_BRUSH,
+            AURORA_MUSH, AURORA_BANANA_PUDDING, AURORA_SAFFRON, AURORA_PENCIL_YELLOW, AURORA_CHARTREUSE, AURORA_ABSINTHE, AURORA_INFECTION, AURORA_FROG_GREEN,
+            AURORA_AVOCADO, AURORA_WOODLANDS, AURORA_DARK_PINE, AURORA_MOSS_GREEN, AURORA_FERN_GREEN, AURORA_FOREST_GLEN, AURORA_MALACHITE, AURORA_APPLE_GREEN,
+            AURORA_CELERY, AURORA_MINT_GREEN, AURORA_EMERALD, AURORA_PRASE, AURORA_EUCALYPTUS, AURORA_ZUCCHINI, AURORA_SOFT_TEAL, AURORA_MEDIUM_TEAL,
+            AURORA_SPRING_GREEN, AURORA_TURQUOISE, AURORA_SEAFOAM, AURORA_VARISCITE, AURORA_REFRESHING_MIST, AURORA_SHINING_SKY, AURORA_STEAM, AURORA_ROBIN_EGG_BLUE,
+            AURORA_DENIM_BLUE, AURORA_DEEP_TEAL, AURORA_NAVY_BLUE, AURORA_BLUEBERRY, AURORA_PRUSSIAN_BLUE, AURORA_DESERT_RAIN, AURORA_ELECTRIC_BLUE, AURORA_HIDDEN_BLUE,
+            AURORA_DULL_AZURE, AURORA_RIPPED_DENIM, AURORA_CALM_SKY, AURORA_VAPOR, AURORA_POWDER_BLUE, AURORA_SUDS, AURORA_STRONG_CYAN, AURORA_SHARP_AZURE,
+            AURORA_BLUE_EYE, AURORA_SUBTLETY, AURORA_ROUGH_SAPPHIRE, AURORA_IRIS, AURORA_CORNFLOWER_BLUE, AURORA_POLISHED_SAPPHIRE, AURORA_ROYAL_BLUE, AURORA_INDIGO,
+            AURORA_SPACE_BLUE, AURORA_THICK_AMETHYST, AURORA_JUICY_GRAPE, AURORA_BLACKLIGHT_GLOW, AURORA_PURPLE_FREESIA, AURORA_THIN_AMETHYST, AURORA_ORCHID, AURORA_LAVENDER,
+            AURORA_LILAC, AURORA_SOAP, AURORA_PINK_TUTU, AURORA_THISTLE, AURORA_HELIOTROPE, AURORA_LIGHT_PLUM, AURORA_WISTERIA, AURORA_MEDIUM_PLUM,
+            AURORA_VIOLET, AURORA_GRAPE_LOLLIPOP, AURORA_MULBERRY, AURORA_GRAPE_SODA, AURORA_EGGPLANT, AURORA_CHERRY_SYRUP, AURORA_PLUM_JUICE, AURORA_FRUIT_PUNCH,
+            AURORA_BUBBLE_GUM, AURORA_PINK_LEMONADE, AURORA_SHRIMP, AURORA_FLAMINGO, AURORA_LIPSTICK, AURORA_CARMINE, AURORA_BOLOGNA, AURORA_RASPBERRY,
     };
     /**
      * This array is loaded with all of the colors defined in SColor, in

@@ -3493,10 +3493,10 @@ public abstract class WorldMapGenerator implements Serializable {
                     yPositions[x][y] = ps;
                     zPositions[x][y] = qs;
                     heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +
-                                    terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,
+                                    terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA) * 0.5,
                             ps, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
-                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
+                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedB + seedC)
                             , qs, seedB));
                     moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)
