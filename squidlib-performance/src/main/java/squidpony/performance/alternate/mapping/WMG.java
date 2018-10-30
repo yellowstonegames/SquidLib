@@ -4403,7 +4403,7 @@ public abstract class WMG implements Serializable {
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
 
-        public final FastNoise terrain, heat, moisture, otherRidged, otherRidged2, terrainLayered;
+        public final FastNoise terrain, heat, moisture, heatRidged, moistureRidged, terrainLayered;
         public final double[][] xPositions,
                 yPositions,
                 zPositions;
@@ -4507,10 +4507,10 @@ public abstract class WMG implements Serializable {
             terrainLayered = new FastNoise(rng.nextInt(), terrainRidgedFreq * 0.325f, FastNoise.SIMPLEX_FRACTAL, (int) (1 + octaveMultiplier * 6), 0.5f, 2f);
             heat = new FastNoise(rng.nextInt(), heatFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + octaveMultiplier * 3), 0.75f, 1f / 0.75f);
             moisture = new FastNoise(rng.nextInt(), moistureFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + octaveMultiplier * 4), 0.55f, 1f / 0.55f);
-            otherRidged = new FastNoise(rng.nextInt(), otherFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + octaveMultiplier * 6));
-            otherRidged.setFractalType(FastNoise.RIDGED_MULTI);
-            otherRidged2 = new FastNoise(rng.nextInt(), otherFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + octaveMultiplier * 6));
-            otherRidged2.setFractalType(FastNoise.RIDGED_MULTI);
+            heatRidged = new FastNoise(rng.nextInt(), otherFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + octaveMultiplier * 6));
+            heatRidged.setFractalType(FastNoise.RIDGED_MULTI);
+            moistureRidged = new FastNoise(rng.nextInt(), otherFreq, FastNoise.SIMPLEX_FRACTAL, (int) (0.5 + octaveMultiplier * 6));
+            moistureRidged.setFractalType(FastNoise.RIDGED_MULTI);
             this.alpha = alpha;
             this.kappa = kappa;
             this.Z = new double[height << 2];
@@ -4590,8 +4590,8 @@ public abstract class WMG implements Serializable {
             terrainLayered.setSeed(rng.nextInt());
             heat.setSeed(rng.nextInt());
             moisture.setSeed(rng.nextInt());
-            otherRidged.setSeed(rng.nextInt());
-            otherRidged2.setSeed(rng.nextInt());
+            heatRidged.setSeed(rng.nextInt());
+            moistureRidged.setSeed(rng.nextInt());
 
             int t;
 
@@ -4649,10 +4649,10 @@ public abstract class WMG implements Serializable {
                                     terrain.getSimplexFractal(pc, ps, qs) * 0.5f,
                             ps, qs) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getSimplexFractal(pc, ps
-                                    + otherRidged.getSimplexFractal(pc, ps, qs)
+                                    + heatRidged.getSimplexFractal(pc, ps, qs)
                             , qs));
                     moistureData[x][y] = (temp = moisture.getSimplexFractal(pc, ps, qs
-                                    + otherRidged.getSimplexFractal(pc, ps, qs)));
+                                    + moistureRidged.getSimplexFractal(pc, ps, qs)));
                     minHeightActual = Math.min(minHeightActual, h);
                     maxHeightActual = Math.max(maxHeightActual, h);
                     if(fresh) {
@@ -4666,10 +4666,9 @@ public abstract class WMG implements Serializable {
                         maxWet0 = Math.max(maxWet0, temp);
                     }
                 }
-                minHeightActual = Math.min(minHeightActual, minHeight);
-                maxHeightActual = Math.max(maxHeightActual, maxHeight);
-
             }
+            minHeightActual = Math.min(minHeightActual, minHeight);
+            maxHeightActual = Math.max(maxHeightActual, maxHeight);
             double  heatDiff = 0.8 / (maxHeat0 - minHeat0),
                     wetDiff = 1.0 / (maxWet0 - minWet0),
                     hMod,

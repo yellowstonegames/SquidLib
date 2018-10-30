@@ -478,7 +478,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private static float cubicLerp(float a, float b, float c, float d, float t) {
         float p = (d - c) - (a - b);
-        return t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b;
+        return t * (t * t * p + t * ((a - b) - p) + (c - a)) + b;
     }
 
     private void calculateFractalBounding() {
