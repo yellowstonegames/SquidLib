@@ -173,14 +173,13 @@ public class FOV implements Serializable {
      * @return the computed light grid
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius, Radius radiusTechnique) {
-        double rad = Math.max(1, radius);
-        double decay = 1.0 / rad;
+        double decay = 1.0 / radius;
 
         int width = resistanceMap.length;
         int height = resistanceMap[0].length;
 
         initializeLightMap(width, height);
-        light[startX][startY] = 1;//make the starting space full power
+        light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
 
         switch (type) {
             case RIPPLE:
@@ -188,12 +187,12 @@ public class FOV implements Serializable {
             case RIPPLE_TIGHT:
             case RIPPLE_VERY_LOOSE:
                 initializeNearLight(width, height);
-                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, rad, resistanceMap, nearLight, radiusTechnique);
+                doRippleFOV(light, rippleValue(type), startX, startY, startX, startY, decay, radius, resistanceMap, nearLight, radiusTechnique);
                 break;
             case SHADOW:
                 for (Direction d : Direction.DIAGONALS) {
-                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
-                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, radiusTechnique);
+                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
                 }
                 break;
         }
@@ -221,11 +220,7 @@ public class FOV implements Serializable {
      */
     public double[][] calculateFOV(double[][] resistanceMap, int startX, int startY, double radius,
                                    Radius radiusTechnique, double angle, double span) {
-
-        radius = Math.max(1, radius);
-
-        double decay = 1.0 / (radius + 1);
-
+        double decay = 1.0 / radius;
         angle = ((angle >= 360.0 || angle < 0.0)
                 ? MathExtras.remainder(angle, 360.0) : angle) * 0.002777777777777778;
         span = span * 0.002777777777777778;
@@ -233,7 +228,7 @@ public class FOV implements Serializable {
         int height = resistanceMap[0].length;
 
         initializeLightMap(width, height);
-        light[startX][startY] = 1;//make the starting space full power
+        light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
 
         switch (type) {
             case RIPPLE:
@@ -331,10 +326,9 @@ public class FOV implements Serializable {
      */
     public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY, double radius, Radius radiusTechnique)
     {
-        radius = Math.max(1, radius);
         double decay = 1.0 / radius;
         ArrayTools.fill(light, 0);
-        light[startX][startY] = 1;//make the starting space full power
+        light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
 
 
         shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
@@ -419,11 +413,9 @@ public class FOV implements Serializable {
      */
     public static double[][] reuseFOV(double[][] resistanceMap, double[][] light, int startX, int startY,
                                           double radius, Radius radiusTechnique, double angle, double span) {
-
-        radius = Math.max(1, radius);
-        double decay = 1.0 / (radius + 1.0);
+        double decay = 1.0 / radius;
         ArrayTools.fill(light, 0);
-        light[startX][startY] = 1;//make the starting space full power
+        light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
         angle = ((angle >= 360.0 || angle < 0.0)
                 ? MathExtras.remainder(angle, 360.0) : angle) * 0.002777777777777778;
         span = span * 0.002777777777777778;
