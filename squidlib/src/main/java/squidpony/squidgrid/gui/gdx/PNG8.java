@@ -61,10 +61,8 @@ import static squidpony.squidgrid.gui.gdx.PaletteReducer.randomXi;
  * @author Tommy Ettinger (PNG-8 parts only) */
 
 // If you're porting this into libGDX, remove the GwtIncompatible annotation and exclude this from GWT reflection.
-// You'll also need to include the PaletteReducer class, and unless someone figures out a better way to store the 
-// palette analysis data in PaletteReducer, you'll need IntIntOrderedMap and its dependencies from squidlib-util
-// (HashCommon, mostly, but IntVLA would need to be changed into IntArray). A better approach would be to make libGDX's
-// IntIntMap.Entries implement toArray(), which would remove the need for IntIntOrderedMap.
+// You'll also need to include the PaletteReducer class, which only depends on libGDX and the JDK, and does not need to
+// be excluded from GWT in any way. 
 @GwtIncompatible
 public class PNG8 implements Disposable {
     static private final byte[] SIGNATURE = {(byte)137, 80, 78, 71, 13, 10, 26, 10};
