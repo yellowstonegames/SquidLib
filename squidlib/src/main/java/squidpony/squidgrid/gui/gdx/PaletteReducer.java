@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ByteArray;
+import com.badlogic.gdx.utils.IntIntMap;
 import com.badlogic.gdx.utils.NumberUtils;
-import squidpony.squidmath.IntIntOrderedMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -295,12 +295,6 @@ public class PaletteReducer {
             }
         }
     }
-    private Comparator<IntIntOrderedMap.MapEntry> entryComparator = new Comparator<IntIntOrderedMap.MapEntry>() {
-        @Override
-        public int compare(IntIntOrderedMap.MapEntry o1, IntIntOrderedMap.MapEntry o2) {
-            return o2.getValue() - o1.getValue();
-        }
-    };
     /**
      * Analyzes {@code pixmap} for color count and frequency, building a palette with at most 256 colors if there are
      * too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
@@ -319,7 +313,15 @@ public class PaletteReducer {
     public void analyze(Pixmap pixmap) {
         analyze(pixmap, 400);
     }
-    
+
+    private static final Comparator<IntIntMap.Entry> entryComparator = new Comparator<IntIntMap.Entry>() {
+        @Override
+        public int compare(IntIntMap.Entry o1, IntIntMap.Entry o2) {
+            return o2.value - o1.value;
+        }
+    };
+
+
     /**
      * Analyzes {@code pixmap} for color count and frequency, building a palette with at most 256 colors if there are
      * too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
@@ -342,8 +344,7 @@ public class PaletteReducer {
         Arrays.fill(paletteMapping, (byte) 0);
         int color;
         final int width = pixmap.getWidth(), height = pixmap.getHeight();
-        IntIntOrderedMap counts = new IntIntOrderedMap(256);
-        counts.defaultReturnValue(0);
+        IntIntMap counts = new IntIntMap(256);
         int hasTransparent = 0;
         int[] reds = new int[256], greens = new int[256], blues = new int[256];
         for (int y = 0; y < height; y++) {
@@ -351,17 +352,17 @@ public class PaletteReducer {
                 color = pixmap.getPixel(x, y);
                 if ((color & 0x80) != 0) {
                     color |= (color >>> 5 & 0x07070700) | 0xFE;
-                    counts.getAndIncrement(color, 1);
+                    counts.getAndIncrement(color, 0, 1);
                 } else {
                     hasTransparent = 1;
                 }
             }
         }
-        final int cs = counts.size();
+        final int cs = counts.size;
         if (cs + hasTransparent <= 256) {
             int i = hasTransparent;
-            for (int j = 0; j < cs; j++) {
-                color = counts.keyAt(j);
+            for(IntIntMap.Entry e : counts) {
+                color = e.key;
                 paletteArray[i] = color;
                 color = (color >>> 17 & 0x7C00) | (color >>> 14 & 0x3E0) | (color >>> 11 & 0x1F);
                 paletteMapping[color] = (byte) i;
@@ -372,12 +373,19 @@ public class PaletteReducer {
             }
         } else // reduce color count
         {
-            ArrayList<IntIntOrderedMap.MapEntry> es = new ArrayList<>(counts.entrySet());
+            ArrayList<IntIntMap.Entry> es = new ArrayList<>(cs);
+            for(IntIntMap.Entry e : counts)
+            {
+                IntIntMap.Entry e2 = new IntIntMap.Entry();
+                e2.key = e.key;
+                e2.value = e.value;
+                es.add(e2);
+            }
             Collections.sort(es, entryComparator);
             int i = 1, c = 0;
             PER_BEST:
             for (; i < 256 && c < cs;) {
-                color = es.get(c++).getKey();
+                color = es.get(c++).key;
                 for (int j = 1; j < i; j++) {
                     if (difference(color, paletteArray[j]) < threshold)
                         continue PER_BEST;

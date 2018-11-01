@@ -36,7 +36,7 @@ public class QuantizeDemo extends ApplicationAdapter {
     private SpriteBatch batch;
     private SquidInput input;
     private Viewport view;
-    private int mode = 0, maxModes = 27;
+    private int mode = 17, maxModes = 27;
     private Pixmap edit, bivaOriginal, monaOriginal, colors;
     private ByteBuffer pixels;
     private Texture pt;
@@ -51,14 +51,16 @@ public class QuantizeDemo extends ApplicationAdapter {
         bivaOriginal.setBlending(Pixmap.Blending.None);
         monaOriginal = new Pixmap(Gdx.files.internal("special/Mona_Lisa_404x600.jpg"));
         monaOriginal.setBlending(Pixmap.Blending.None);
-        colors = new Pixmap(width, height, Pixmap.Format.RGBA8888);
-//        RNG shuffler = new RNG(1337);
-        SColor[] full = SColor.FULL_PALETTE;
-        int idx = 0, len = full.length;
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                colors.drawPixel(x, y, Color.rgba8888(full[idx++]));
-                idx %= len;
+        colors = new Pixmap(512, 512, Pixmap.Format.RGBA8888);
+//        SColor[] full = FULL_PALETTE;
+        int idx = 0;
+        //int len = full.length;
+        for (int x = 0; x < 256; x++) {
+            for (int y = 0; y < 256; y++) {
+                colors.drawPixel(x, y, idx=(y+256>>>1)<<16|(x+255>>>1)<<8|0x880000FF);
+//                colors.drawPixel(x+256, y, idx|0xAA0000FF);
+//                colors.drawPixel(x, y+256, idx|0xCC0000FF);
+//                colors.drawPixel(x+256, y+256, idx|0xEE0000FF);
             }
         }
         edit = new Pixmap(width, height, Pixmap.Format.RGBA8888);
@@ -100,29 +102,29 @@ public class QuantizeDemo extends ApplicationAdapter {
         bivaPalette = new PaletteReducer(bivaOriginal, 400);
         monaPalette = new PaletteReducer(monaOriginal, 400);
         colorsPalette = new PaletteReducer(colors, 400);
-        png8.palette = bivaPalette;
-        try {
-            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
-        } catch (IOException ex) {
-            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
-        }
-        png8.palette = monaPalette;
-        try {
-            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
-        } catch (IOException ex) {
-            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
-        }
-        try {
-            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
-        } catch (IOException ex) {
-            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Mona.png", ex);
-        }
-        png8.palette = bivaPalette;
-        try {
-            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Biva.png"), monaOriginal, false);
-        } catch (IOException ex) {
-            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Biva.png", ex);
-        }
+//        png8.palette = bivaPalette;
+//        try {
+//            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
+//        } catch (IOException ex) {
+//            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
+//        }
+//        png8.palette = monaPalette;
+//        try {
+//            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
+//        } catch (IOException ex) {
+//            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
+//        }
+//        try {
+//            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
+//        } catch (IOException ex) {
+//            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Mona.png", ex);
+//        }
+//        png8.palette = bivaPalette;
+//        try {
+//            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Biva.png"), monaOriginal, false);
+//        } catch (IOException ex) {
+//            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Biva.png", ex);
+//        }
 
 //        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         input = new SquidInput(new SquidInput.KeyHandler() {
