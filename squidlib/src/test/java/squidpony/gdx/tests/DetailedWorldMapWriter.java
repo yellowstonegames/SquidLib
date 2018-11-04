@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.FakeLanguageGen;
+import squidpony.Thesaurus;
 import squidpony.squidgrid.gui.gdx.PNG8;
 import squidpony.squidgrid.gui.gdx.PaletteReducer;
 import squidpony.squidgrid.gui.gdx.SColor;
@@ -52,16 +52,33 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
     //private static final int width = 512, height = 256; // mimic, elliptical
     private static final int width = 1000, height = 1000; // space view
+    private static final int LIMIT = 20;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
 
     private SpriteBatch batch;
-    //private SquidPanel display;//, overlay;
-//    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
+    OrderedSet<String> adjective = new OrderedSet<>(256), noun = new OrderedSet<>(256);
+    private String makeName()
+    {
+        String a = adjective.randomItem(rng);
+        while (a.contains("'"))
+            a = adjective.randomItem(rng);
+        String b = noun.randomItem(rng);
+        while (b.contains("'"))
+            b = noun.randomItem(rng);
+        final int al = a.length(), bl = b.length();
+        final char[] ch = new char[al + bl];
+        a.getChars(1, al, ch, 1);
+        b.getChars(1, bl, ch, al+1);
+        ch[0] = Character.toUpperCase(a.charAt(0));
+        ch[al] = Character.toUpperCase(b.charAt(0));
+        return String.valueOf(ch);
+    }
+
+    //    private FakeLanguageGen lang = FakeLanguageGen.randomLanguage(-1234567890L).removeAccents()
 //            .mix(FakeLanguageGen.SIMPLISH, 0.6);
-    private FakeLanguageGen lang = FakeLanguageGen.mixAll(FakeLanguageGen.SIMPLISH, 6.0, FakeLanguageGen.FANTASY_NAME, 5.0, FakeLanguageGen.JAPANESE_ROMANIZED, 2.0);
-    //private GreasedRegion earth = GreasedRegion.deserializeFromString("256,128,-1,-2,72057594037927935,-256,9007199254740991,-4096,2251799813685247,-16384,562949953421311,-65536,140737488355327,-262144,35184372088831,-1048576,8796093022207,-2097152,4398046511103,-8388608,2199023255551,-16777216,1099511627775,-33554432,274877906943,-67108864,137438953471,-134217728,68719476735,-536870912,34359738367,-1073741824,17179869183,-2147483648,8589934591,-2147483648,4294967295,-4294967296,4294967295,-8589934592,2147483647,-17179869184,1073741823,-34359738368,536870911,-68719476736,268435455,-68719476736,268435455,-137438953472,134217727,-274877906944,67108863,-274877906944,67108863,-549755813888,33554431,-1099511627776,16777215,-1099511627776,16777215,-2199023255552,8388607,-4398046511104,8388607,-4398046511104,4194303,-8796093022208,2097151,-8796093022208,2097151,-17592186044416,1048575,-17592186044416,1048575,-35184372088832,524287,-35184372088832,524287,-70368744177664,262143,-70368744177664,262143,-140737488355328,131071,-140737488355328,131071,-281474976710656,65535,-281474976710656,65535,-562949953421312,65535,-562949953421312,32767,-1125899906842624,32767,-1125899906842624,16383,-1125899906842624,16383,-2251799813685248,16383,-2251799813685248,8191,-4503599627370496,8191,-4503599627370496,1404454309887,-4503599627370496,136365314047,-9007199254740992,961535905791,-9007199254740992,8795824646143,-9007199254740992,281474842544127,-18014398509481984,562949886337023,-18014398509481984,1125899873305599,-18014398509481984,1125899898483711,-36028797018963968,2251799801132031,-36028797018963968,862017115156991,-36028797018963968,567347999470079,-72057594037927936,4223224162286079,-72057594037927936,4223224162286079,-72057594037927936,8867011522198783,-72057594037927936,7248530406112511,-144115188075855872,69876712724233471,-144115188075855872,51791945470573823,-144115188075855872,274877906559,-144115188075855872,144115462953762431,-288230376151711694,-9223371761976869249,-288230376151711617,-4467552963287581057,-288230376151711233,-144111339785159105,-288230376151709697,-72057319160021441,-576460752303415297,-35958290835833281,-576460752303407105,-18014329790006209,-576460752303407105,-54043161168708577,-576460752303390721,-17873626661389281,-1152921504606781441,-36028779839095777,-1152921504606715905,-36028792723997665,-1152921504602652673,-72057591890445281,-1152921504472629249,-36028794871481329,-1152921500311879681,-72057592964383729,-2305842974853955585,-144115187539477489,-2305842974853955585,-144115187542623729,-2305842734335787009,-576460752037070321,-2017611533550354433,-576460752170238201,-2017608235015471105,-576460752186499193,-1441143084665536513,-1152921504540255481,-3746978156779667457,-1152921504548381433,-3746984985777668099,-9223372036779341817,-3746994882456059908,4169479,-1441151879684816898,4178503,-288230375614840834,4178435,-2594073385298296834,4064771,-2594073385361211396,29229059,-7061644215714840584,10039555,-4755801206502195208,4355,-4755801206502195208,4483,-4755801206502981640,1987,-4899916394579097616,3907,-4890909195324357664,835,-4899916394579099456,1,-4863887597560135680,33,-828662331436171264,33,8286623314361712640,30721,8574853690513424384,30737,8502796096475496448,15361,6917529027641081856,7721,6917529027641081856,4073,6917529027641081856,4073,6917529027641081856,4081,-2305843009213693952,2033,-4611686018427387904,2033,-4611686018427387904,1017,-3458764513820540928,17697739160683513,-3458764513820540928,36020000925942777,-4611686018427387904,144112989052604664,-4611686018427387904,288229276640088440,-1729382256910270464,576459652791799928,-576460752303423488,1152921367167893528,-576460752303423488,1152921444208869384,-144115188075855872,1152921478570180608,-144115188075855872,1152921495748476928,-144115188075855872,1152921478571098112,-72057594037927936,1152921491473956864,-72057594037927936,576460736191004672,-72057594037927936,576460744246165504,-72057594037927936,576460743977730048,-72057594037927936,576460743979941904,-72057594037927936,1152921496150196240,-72057594037927936,1152921496150142976,-72057594037927936,1152921496150341632,-72057594037927936,-6917529095891584000,-72057594037927929,-68653408768,-72057594037927921,-136768909824,-72057594037669825,-274609967615,-72057594029539329,-274341266431,-36028796985409537,-273804198911,-36028795945222145,-133144022015,-36028795945222145,-67645742079,-36028796482093057,-136365217791,-36028796482093057,-135559913471,9205357638882164735,-267328162815,9205357638882164735,-267328161791,9205357638613729279,-266757736447,9205357638479511551,-266791289855,9214364837667143679,-266791289855,9214364837633589247,-1366739125247,-9007199250546689,-7697386701823,-18014398505287681,-32986154140415,-18014398509350913,-61572651155965,-54043195528380417,-545357767377917,-72057594037895169,-2181431136616509,-36028797018931201,-4362862642335037,-4647714815446348281,-3940650714137661,-4647714815446351869,-13510802908643389,-4629700416932937728,9196350431037489091,-4629700416932708352,4584662488464752579,-18014398508449792,2274313959236435907,-2323857407722921984,1121393008680369927,-2323857407723147264,128337196217270151,-2323857407723175936,1110506744053511,-2323857407723175936,560750930165639,-3476778912330022912,549755813887751,-3467771713075281920,268280837177095,-1161928703861587968,39582418599695,-1161928703861587968,4398046510863,-1161928703861587968,4398046510863,-1161928703861587968,4398046510863,-1747396655419752448,4398046510607,-1738389456165011456,8796093021711,-585467951558164480,17592186043935,-594475150812905472,17592186043935,-882705526964617216,70368744177439,-882705526964617216,70368744177439,-882705526964617216,281474976710431,-297237575406452736,1125899906842175,-306244774661193728,4503599627370047,-441352763482308608,18014398509481535,-441352763482308608,144115188075855423,-153122387330596864,72057594037927551,-153122387330596864,1125899906842239,-162129586585337856,432908514180988543,-252201579132747776,140737488354431,-144115188075855872,35184372088063,-144115188075855872,35184372088063,-144115188075855872,17592186043647,-144115188075855872,35184372088063,-72057594037927936,70368744177151,-72057594037927936,140737488354815,-72057594037927936,562949953420799,-72057594037927936,1125899906842623,-36028797018963968,562949953224703,-36028797018963968,1155173304419548159,-36028797018963968,3467771713074297855,-18014398509481984,7066147815343308799,-18014398509481984,-8926134461449357313,-18014398509481983,-5170132375443589121,-9007199254740985,4647222226718851071,-9007198717870065,71002060723646463,-9007198449434596,33988070143557631,-4503598587183104,9042317046603775,-4503599092596672,35049315901439,-2251799277862912,-9223354715117043713,-2251799277338623,-4611677763499442177,-2251799545773945,-4611686018426847233,-1125899638669177,-1152912708512743425,-1125899638669305,-576460752169172993,-562949685247993,-2882022269226254337,-562949819334655,2814766947041279,-562949819269120,27917418495,-281474708307962,30064902143,-281440080134130,131071,-140695075569664,432345564227829759,-140728898428928,262143,-70360154251264,524287,-70360154251264,524287,-35180077125632,1048575,-35180077123584,1048575,-17590038562816,2097151,-17591112312830,4194303,-8795556182008,4194303,-8520678309880,8388607,-4397778141156,8388607,-2061450100676,16777215,-2198956150536,33554431,-1099478081288,33554431,-1099504287624,67108863,-549755813776,67108863,-274877906848,134217727,-274877906688,268435455,-137438953472,536870911,-60129542112,536870911,-34359738368,1073741823,-32212254720,2147483647,-17179869184,4294967295,-8589934592,8589934591,-4294967296,17179869183,-2147221504,17179869183,-1073741824,34359738367,-536870912,68719476735,-268435456,274877906943,-134217728,549755813887,-67108864,1099511627775,-33554432,2199023255551,-16777216,4398046511103,-4194304,17592186044415,-2097152,35184372088831,-524288,140737488355327,-262144,562949953421311,-65536,2251799813685247,-16384,18014398509481983,-2048,288230376151711743,-128"),
+//    private FakeLanguageGen lang = FakeLanguageGen.mixAll(FakeLanguageGen.SIMPLISH, 6.0, FakeLanguageGen.FANTASY_NAME, 5.0, FakeLanguageGen.JAPANESE_ROMANIZED, 2.0);
     //greasedWorld = new GreasedRegion(width, height);
     //private final int voidCount = 7036;
     //private double earthCount, worldCount, intersectionCount;
@@ -70,7 +87,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private Pixmap pm;
     private Texture pt;
     private int counter = 0;
-    private int octaveCounter = 250;
+    //private int octaveCounter = 250;
 //    private Color tempColor = Color.WHITE.cpy();
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
@@ -213,11 +230,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Ellipse " + date + "/";
         //path = "out/worlds/Mimic " + date + "/";
         //path = "out/worlds/Dump " + date + "/";
-        //path = "out/worlds/SpaceView " + date + "/";
+        path = "out/worlds/SpaceView " + date + "/";
         //path = "out/worlds/RoundSide " + date + "/";
 //        path = "out/worlds/Hyperellipse " + date + "/";
 //        path = "out/worlds/EllipseHammer " + date + "/";
-        path = "out/worlds/SpaceCompare " + date + "/";
+        //path = "out/worlds/SpaceCompare " + date + "/";
 //        path = "out/worlds/HyperCompare " + date + "/";
 //        path = "out/worlds/EllipseCompare " + date + "/";
         
@@ -242,12 +259,21 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.625);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, FastNoise.instance, 1.0);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.5, 0.0625, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.5);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
+
+        for (int i = 0; i < Thesaurus.adjective.size(); i++) {
+            adjective.addAll(Thesaurus.adjective.getAt(i));
+        }
+        for (int i = 0; i < Thesaurus.noun.size(); i++) {
+            noun.addAll(Thesaurus.noun.getAt(i));
+        }
+
+
         input = new SquidInput(new SquidInput.KeyHandler() {
             @Override
             public void handle(char key, boolean alt, boolean ctrl, boolean shift) {
@@ -328,7 +354,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //randomizeColors(seed);
 //        world.generate(1, 1.125, seed); // mimic of Earth favors too-cold planets
 //        dbm.makeBiomes(world);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001);
+        //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001, 0.0625, 2.5);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001);
         world.generate(0.95 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.15,
@@ -339,12 +365,15 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     public void putMap() {
         ++counter;
-        String name = octaveCounter + "_" + lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
+        String name = makeName(); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
         while (Gdx.files.local(path + name + ".png").exists())
-            name = octaveCounter + "_" + lang.word(rng, true);
+            name = makeName();
+//        String name = octaveCounter + "_" + lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
+//        while (Gdx.files.local(path + name + ".png").exists())
+//            name = octaveCounter + "_" + lang.word(rng, true);
 
-        generate(0x1337BEEFCAFEL);
-        octaveCounter += 200;
+        generate(CrossHash.hash64(name));
+        //octaveCounter += 200;
 
         //display.erase();
         int hc, tc, bc;
@@ -450,8 +479,8 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //            }
 //        }
 
-        writer.palette.analyze(pm);
-        writer.palette.reduceWithNoise(pm);
+//        writer.palette.analyze(pm);
+//        writer.palette.reduceWithNoise(pm);
 
         batch.begin();
         pt.draw(pm, 0, 0);
@@ -460,12 +489,12 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
         //        PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
         try {
-            writer.write(Gdx.files.local(path + name + ".png"), pm, false);
+            writer.writePrecisely(Gdx.files.local(path + name + ".png"), pm, false);
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: " + path + name + ".png", ex);
         }
 
-        //PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
+//PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
 //        int dist = Long.bitCount(earthHash[0] ^ worldHash[0]) + Long.bitCount(earthHash[1] ^ worldHash[1])
 //                + Long.bitCount(earthHash[2] ^ worldHash[2]) + Long.bitCount(earthHash[3] ^ worldHash[3]);
 //        Gdx.files.local(path + StringKit.bin((long)(jaccard * 0x100000000000L)) + " " + name +".txt").writeString(
@@ -564,7 +593,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        csv.append(csv2).append(csv3).append(csv4);
 //        Gdx.files.local(path + name + ".java").writeString(csv.toString(), false);
         //if(counter >= 1000000 || jaccard >= 0.4)
-        if(counter >= 10)
+        if(counter >= LIMIT)
                 Gdx.app.exit();
     }
     @Override
