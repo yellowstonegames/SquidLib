@@ -52,7 +52,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
     //private static final int width = 512, height = 256; // mimic, elliptical
     private static final int width = 1000, height = 1000; // space view
-    private static final int LIMIT = 20;
+    private static final int LIMIT = 10;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
     //private static final int width = 512, height = 512;
@@ -87,7 +87,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private Pixmap pm;
     private Texture pt;
     private int counter = 0;
-    //private int octaveCounter = 250;
+    private int octaveCounter = 250;
 //    private Color tempColor = Color.WHITE.cpy();
     private static final int cellWidth = 1, cellHeight = 1;
     private SquidInput input;
@@ -128,8 +128,6 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private static float shallowColor = baseShallowColor;
     private static float coastalColor = baseCoastalColor;
     private static float foamColor = baseFoamColor;
-    
-    private static float desertAlt = SColor.floatGetI(253, 226, 160);
     
     private static float[] biomeColors = {
             desert,
@@ -230,11 +228,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Ellipse " + date + "/";
         //path = "out/worlds/Mimic " + date + "/";
         //path = "out/worlds/Dump " + date + "/";
-        path = "out/worlds/SpaceView " + date + "/";
+//        path = "out/worlds/SpaceView " + date + "/";
         //path = "out/worlds/RoundSide " + date + "/";
 //        path = "out/worlds/Hyperellipse " + date + "/";
 //        path = "out/worlds/EllipseHammer " + date + "/";
-        //path = "out/worlds/SpaceCompare " + date + "/";
+        path = "out/worlds/SpaceCompare " + date + "/";
 //        path = "out/worlds/HyperCompare " + date + "/";
 //        path = "out/worlds/EllipseCompare " + date + "/";
         
@@ -252,6 +250,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         writer.palette = new PaletteReducer();
         writer.palette.setDitherStrength(1.75f);
         rng = new StatefulRNG(CrossHash.hash64(date));
+        //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
         seed = rng.getState();
         ///world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 0.9);
@@ -259,7 +258,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.625);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, FastNoise.instance, 1.0);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, FastNoise.instance, 0.95);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.5, 0.0625, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
@@ -354,7 +353,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //randomizeColors(seed);
 //        world.generate(1, 1.125, seed); // mimic of Earth favors too-cold planets
 //        dbm.makeBiomes(world);
-        //world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001);
+        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, FastNoise.instance, octaveCounter * 0.001);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001, 0.0625, 2.5);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001);
         world.generate(0.95 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.15,
@@ -365,15 +364,17 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
     public void putMap() {
         ++counter;
-        String name = makeName(); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
-        while (Gdx.files.local(path + name + ".png").exists())
-            name = makeName();
+//        String name = makeName();
+//        while (Gdx.files.local(path + name + ".png").exists())
+//            name = makeName();
+        String name = octaveCounter + "_" + "Fast";
 //        String name = octaveCounter + "_" + lang.word(rng, true); //, Math.min(3 - rng.next(1), rng.betweenWeighted(1, 5, 4))
 //        while (Gdx.files.local(path + name + ".png").exists())
 //            name = octaveCounter + "_" + lang.word(rng, true);
-
-        generate(CrossHash.hash64(name));
-        //octaveCounter += 200;
+//        generate(0x1337BEEFCAFEL);
+//        generate(CrossHash.hash64(name));
+        generate(CrossHash.hash64(path));
+        octaveCounter += 100;
 
         //display.erase();
         int hc, tc, bc;
