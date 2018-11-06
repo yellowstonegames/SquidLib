@@ -81,6 +81,151 @@
 </a>
 <h3>Class <a href="squidpony/squidgrid/gui/gdx/ColorNoise.html" title="class in squidpony.squidgrid.gui.gdx">squidpony.squidgrid.gui.gdx.ColorNoise</a> extends <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/WhirlingNoise.html?is-external=true" title="class or interface in squidpony.squidmath">WhirlingNoise</a> implements Serializable</h3>
 </li>
+<li class="blockList"><a name="squidpony.squidgrid.gui.gdx.LightingHandler">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">squidpony.squidgrid.gui.gdx.LightingHandler</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>radiusStrategy</h4>
+<pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true" title="class or interface in squidpony.squidgrid">Radius</a> radiusStrategy</pre>
+<div class="block">How light should spread; usually <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true#CIRCLE" title="class or interface in squidpony.squidgrid"><code>Radius.CIRCLE</code></a> unless gameplay reasons need it to be SQUARE or DIAMOND.</div>
+</li>
+<li class="blockList">
+<h4>resistances</h4>
+<pre>double[][] resistances</pre>
+<div class="block">The 2D array of light-resistance values from 0.0 to 1.0 for each cell on the map, as produced by
+ <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/DungeonUtility.html?is-external=true#generateResistances(char[][])" title="class or interface in squidpony.squidgrid.mapping"><code>DungeonUtility</code></a>.</div>
+</li>
+<li class="blockList">
+<h4>fovResult</h4>
+<pre>double[][] fovResult</pre>
+<div class="block">What the "viewer" (as passed to <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>LightingHandler.calculateFOV(Coord)</code></a>) can see either nearby without light or because an
+ area in line-of-sight has light in it. Edited by <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>LightingHandler.calculateFOV(Coord)</code></a> and <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-"><code>LightingHandler.update(Coord)</code></a>, but
+ not <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#updateUI-squidpony.squidmath.Coord-squidpony.squidgrid.gui.gdx.Radiance-"><code>LightingHandler.updateUI(Coord, Radiance)</code></a> (which is meant for effects that are purely user-interface).</div>
+</li>
+<li class="blockList">
+<h4>losResult</h4>
+<pre>double[][] losResult</pre>
+<div class="block">A 2D array of doubles that are either 0.0 if a cell has an obstruction between it and the viewer, or greater than
+ 0.0 otherwise.</div>
+</li>
+<li class="blockList">
+<h4>tempFOV</h4>
+<pre>double[][] tempFOV</pre>
+<div class="block">Temporary storage array used for calculations involving <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#fovResult"><code>LightingHandler.fovResult</code></a>; it sometimes may make sense for other
+ code to use this as temporary storage as well.</div>
+</li>
+<li class="blockList">
+<h4>colorLighting</h4>
+<pre>float[][][] colorLighting</pre>
+<div class="block">A pair of 2D float arrays with different usages; <code>colorLighting[0]</code> is a 2D array that stores the strength
+ of light in each cell, and <code>colorLighting[1]</code> is a 2D array that stores the color of light in each cell, as
+ a packed float color. Both 2D arrays are the size of the map, as defined by <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances"><code>LightingHandler.resistances</code></a> initially and
+ later available in <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#width"><code>LightingHandler.width</code></a> and <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#height"><code>LightingHandler.height</code></a>.</div>
+</li>
+<li class="blockList">
+<h4>tempColorLighting</h4>
+<pre>float[][][] tempColorLighting</pre>
+<div class="block">Temporary storage array used for calculations involving <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>LightingHandler.colorLighting</code></a>; it sometimes may make sense for
+ other code to use this as temporary storage as well.</div>
+</li>
+<li class="blockList">
+<h4>width</h4>
+<pre>int width</pre>
+<div class="block">Width of the 2D arrays used in this, as obtained from <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances"><code>LightingHandler.resistances</code></a>.</div>
+</li>
+<li class="blockList">
+<h4>height</h4>
+<pre>int height</pre>
+<div class="block">Height of the 2D arrays used in this, as obtained from <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances"><code>LightingHandler.resistances</code></a>.</div>
+</li>
+<li class="blockList">
+<h4>backgroundColor</h4>
+<pre>float backgroundColor</pre>
+<div class="block">The packed float color to mix background cells with when a cell has lighting and is within line-of-sight, but has
+ no background color to start with (its color is 0f as a packed float, or <a href="squidpony/squidgrid/gui/gdx/SColor.html#TRANSPARENT"><code>SColor.TRANSPARENT</code></a>).</div>
+</li>
+<li class="blockList">
+<h4>viewerRange</h4>
+<pre>double viewerRange</pre>
+<div class="block">How far the viewer can see without light; defaults to 4.0 cells, and you are encouraged to change this member
+ field if the vision range changes after construction.</div>
+</li>
+<li class="blockListLast">
+<h4>lights</h4>
+<pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">K</a>,<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">V</a>&gt; lights</pre>
+<div class="block">A mapping from positions as <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath"><code>Coord</code></a> objects to <a href="squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects that describe the color, lighting
+ radius, and changes over time of any in-game lights that should be shown on the map and change FOV. You can edit
+ this manually or by using <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#moveLight-int-int-int-int-"><code>LightingHandler.moveLight(int, int, int, int)</code></a>, <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#addLight-int-int-squidpony.squidgrid.gui.gdx.Radiance-"><code>LightingHandler.addLight(int, int, Radiance)</code></a>, and
+ <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#removeLight-int-int-"><code>LightingHandler.removeLight(int, int)</code></a>.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.gui.gdx.Radiance">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">squidpony.squidgrid.gui.gdx.Radiance</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>range</h4>
+<pre>float range</pre>
+<div class="block">How far the radiated light extends; 0f is "just this cell", anything higher can go into neighboring cells.
+ This is permitted to be a non-integer value, which will make this extend into further cells partially.</div>
+</li>
+<li class="blockList">
+<h4>color</h4>
+<pre>float color</pre>
+<div class="block">The color of light as a float; typically opaque and lighter than the glowing object's symbol.</div>
+</li>
+<li class="blockList">
+<h4>flicker</h4>
+<pre>float flicker</pre>
+<div class="block">The rate of random continuous change to radiance range, like the light from a campfire. The random component of
+ the change is determined by the <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/System.html?is-external=true#identityHashCode-java.lang.Object-" title="class or interface in java.lang"><code>System.identityHashCode(Object)</code></a> of this Radiance, which will probably
+ make all flicker effects different when flicker is non-0.</div>
+</li>
+<li class="blockList">
+<h4>strobe</h4>
+<pre>float strobe</pre>
+<div class="block">The rate of non-random continuous change to radiance range, like a mechanical strobe effect. This looks like a
+ strobe light when the value is high enough, but at lower values it will smoothly pulse, which can be less
+ distracting to players.</div>
+</li>
+<li class="blockList">
+<h4>delay</h4>
+<pre>float delay</pre>
+<div class="block">A time delay that applies to when the strobe and flicker effects change; useful with strobe to make a strobe
+ expand its lit radius at one point, then expand at a slightly later time at another Radiance with a delay. The
+ range for delay should be considered 0f to 1f, with 0f the default (no delay) and values between 0 and 1f that
+ fraction of a full strobe delayed from that default.</div>
+</li>
+<li class="blockListLast">
+<h4>flare</h4>
+<pre>float flare</pre>
+<div class="block">A temporary increase to the minimum radiance range, meant to brighten a glow during an effect.
+ This should be a float between 0f and 1f, with 0f meaning no change and 1f meaning always max radius.</div>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid.gui.gdx.SColor">
 <!--   -->
 </a>

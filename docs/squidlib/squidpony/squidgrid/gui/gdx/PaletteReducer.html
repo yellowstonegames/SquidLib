@@ -615,7 +615,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>analyze</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.319">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.313">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Analyzes <code>pixmap</code> for color count and frequency, building a palette with at most 256 colors if there are
  too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
  (although with at most one transparent color, and no alpha for other colors); if there are more than 256 colors
@@ -639,7 +639,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>analyze</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.340">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.342">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                     int&nbsp;threshold)</pre>
 <div class="block">Analyzes <code>pixmap</code> for color count and frequency, building a palette with at most 256 colors if there are
  too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
@@ -666,7 +666,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setDitherStrength</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.417">setDitherStrength</a>(float&nbsp;ditherStrength)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.425">setDitherStrength</a>(float&nbsp;ditherStrength)</pre>
 <div class="block">Changes the "strength" of the dither effect applied during <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduce-com.badlogic.gdx.graphics.Pixmap-"><code>reduce(Pixmap)</code></a> calls. The default is 1f,
  and while both values higher than 1f and lower than 1f are valid, they should not be negative. If you want dither
  to be eliminated, don't set dither strength to 0; use <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduceSolid-com.badlogic.gdx.graphics.Pixmap-"><code>reduceSolid(Pixmap)</code></a> instead of reduce().</div>
@@ -682,7 +682,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>reduce</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.434">reduce</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.442">reduce</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can.
  If you want to reduce the colors in a Pixmap based on what it currently contains, call
  <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#analyze-com.badlogic.gdx.graphics.Pixmap-"><code>analyze(Pixmap)</code></a> with <code>pixmap</code> as its argument, then call this method with the same
@@ -705,7 +705,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>reduceSolid</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.530">reduceSolid</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.538">reduceSolid</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, without dithering. This produces
  blocky solid sections of color in most images where the palette isn't exact, instead of checkerboard-like
  dithering patterns. If you want to reduce the colors in a Pixmap based on what it currently contains, call
@@ -726,7 +726,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>reduceBurkes</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.572">reduceBurkes</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.580">reduceBurkes</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can using
  Burkes dithering instead of the Sierra Lite dithering that <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduce-com.badlogic.gdx.graphics.Pixmap-"><code>reduce(Pixmap)</code></a> uses.
  If you want to reduce the colors in a Pixmap based on what it currently contains, call
@@ -752,7 +752,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>reduceWithNoise</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.720">reduceWithNoise</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.728">reduceWithNoise</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can using a
  modified version of the algorithm presented in "Simple gradient-based error-diffusion method" by Xaingyu Y. Hu in
  the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated noise to adjust

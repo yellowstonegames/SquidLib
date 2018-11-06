@@ -486,7 +486,7 @@
 <span class="sourceLineNo">478</span><a name="line.478"></a>
 <span class="sourceLineNo">479</span>    private static float cubicLerp(float a, float b, float c, float d, float t) {<a name="line.479"></a>
 <span class="sourceLineNo">480</span>        float p = (d - c) - (a - b);<a name="line.480"></a>
-<span class="sourceLineNo">481</span>        return t * t * t * p + t * t * ((a - b) - p) + t * (c - a) + b;<a name="line.481"></a>
+<span class="sourceLineNo">481</span>        return t * (t * t * p + t * ((a - b) - p) + (c - a)) + b;<a name="line.481"></a>
 <span class="sourceLineNo">482</span>    }<a name="line.482"></a>
 <span class="sourceLineNo">483</span><a name="line.483"></a>
 <span class="sourceLineNo">484</span>    private void calculateFractalBounding() {<a name="line.484"></a>

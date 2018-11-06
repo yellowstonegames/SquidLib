@@ -496,6 +496,11 @@
 <dd>
 <div class="block">Sets this factory to use a default 12x12 font, which...</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/Radiance.html#delay">delay</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a></dt>
+<dd>
+<div class="block">A time delay that applies to when the strobe and flicker effects change; useful with strobe to make a strobe
+ expand its lit radius at one point, then expand at a slightly later time at another Radiance with a delay.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#DENIM">DENIM</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">This color constant "Denim" has RGB code <code>0x1560BD</code>, red 0.08235294, green 0.3764706, blue 0.7411765, alpha 1, hue 0.59226215, saturation 0.8888889, and value 0.7411765.</div>
@@ -523,6 +528,8 @@
 <div class="block">Gets a fully-desaturated version of the given color (keeping its brightness, but making it grayscale).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#descent">descent</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/Radiance.html#deserializeFromString-java.lang.String-">deserializeFromString(String)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#difference-int-int-">difference(int, int)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
 <dd>
@@ -759,6 +766,23 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw(Batch, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/ImageSquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">ImageSquidPanel</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-squidpony.squidgrid.gui.gdx.SparseLayers-">draw(SparseLayers)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">Given a SparseLayers, fills the SparseLayers with different colors based on what lights are present in line of
+ sight of the viewer and the various flicker or strobe effects that Radiance light sources can do.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-squidpony.squidgrid.gui.gdx.SquidPanel-">draw(SquidPanel)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers) and a position for
+ the viewer (typically the player), fills the SquidPanel with different colors based on what lights are present in
+ line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-">draw(float[][])</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">Given a 2D array of packed float colors, fills the 2D array with different colors based on what lights are
+ present in line of sight of the viewer and the various flicker or strobe effects that Radiance light sources can
+ do.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw(Batch, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LinesPanel.html" title="class in squidpony.squidgrid.gui.gdx">LinesPanel</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw(Batch, float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></dt>

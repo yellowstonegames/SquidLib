@@ -151,6 +151,10 @@
 <dd>
 <div class="block">Converts a TextureRegion into an Image, or if the argument s is null, creates an Image of a solid block.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/Radiance.html#makeChain-int-float-float-float-">makeChain(int, float, float, float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a></dt>
+<dd>
+<div class="block">Makes a chain of Radiance objects that will pulse in a sequence, expanding from one to the next.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#makeDirectionMarker-java.util.Collection-float-boolean-">makeDirectionMarker(Collection&lt;Color&gt;, float, boolean)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
 <dd>
 <div class="block">Creates a ColorChangeImage Actor that should look like the glyph '^' in this font, but will be rotate-able.</div>
@@ -276,6 +280,12 @@
 <dd>
 <div class="block">This color constant "Misty Rose" has RGB code <code>0xFFE4E1</code>, red 1.0, green 0.89411765, blue 0.88235295, alpha 1, hue 0.01666677, saturation 0.11764705, and value 1.0.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#mixColoredLighting-float-">mixColoredLighting(float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">Edits <a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>LightingHandler.colorLighting</code></a> by adding in and mixing the colors in <a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#tempColorLighting"><code>LightingHandler.tempColorLighting</code></a>, with the strength
+ of light in tempColorLighting boosted by flare (which can be any finite float greater than -1f, but is usually
+ from 0f to 1f when increasing strength).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#mixColoredLighting-float:A:A:A-float:A:A:A-">mixColoredLighting(float[][][], float[][][])</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Adds two 3D arrays produced by <a href="../squidpony/squidgrid/gui/gdx/SColor.html#colorLighting-double:A:A-float-"><code>SColor.colorLighting(double[][], float)</code></a> or this method and modifies the basis
@@ -314,6 +324,16 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#MOUSY_WISTERIA">MOUSY_WISTERIA</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">This color constant "Mousy Wisteria" has RGB code <code>0x766980</code>, red 0.4627451, green 0.4117647, blue 0.5019608, alpha 1, hue 0.76086974, saturation 0.17968754, and value 0.5019608.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#moveLight-int-int-int-int-">moveLight(int, int, int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">If a Radiance is present at oldX,oldY, this will move it to newX,newY and overwrite any existing Radiance at
+ newX,newY.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#moveLight-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">moveLight(Coord, Coord)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">If a Radiance is present at oldPosition, this will move it to newPosition and overwrite any existing Radiance at
+ newPosition.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html#msdf">msdf</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a></dt>
 <dd>&nbsp;</dd>

@@ -1613,7 +1613,7 @@
 <span class="sourceLineNo">1605</span>            yPositions = new double[width][height];<a name="line.1605"></a>
 <span class="sourceLineNo">1606</span>            zPositions = new double[width][height];<a name="line.1606"></a>
 <span class="sourceLineNo">1607</span><a name="line.1607"></a>
-<span class="sourceLineNo">1608</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);<a name="line.1608"></a>
+<span class="sourceLineNo">1608</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);<a name="line.1608"></a>
 <span class="sourceLineNo">1609</span>            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);<a name="line.1609"></a>
 <span class="sourceLineNo">1610</span>            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);<a name="line.1610"></a>
 <span class="sourceLineNo">1611</span>            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);<a name="line.1611"></a>
@@ -1972,7 +1972,7 @@
 <span class="sourceLineNo">1964</span>            yPositions = new double[width][height];<a name="line.1964"></a>
 <span class="sourceLineNo">1965</span>            zPositions = new double[width][height];<a name="line.1965"></a>
 <span class="sourceLineNo">1966</span>            edges = new int[height &lt;&lt; 1];<a name="line.1966"></a>
-<span class="sourceLineNo">1967</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);<a name="line.1967"></a>
+<span class="sourceLineNo">1967</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);<a name="line.1967"></a>
 <span class="sourceLineNo">1968</span>            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);<a name="line.1968"></a>
 <span class="sourceLineNo">1969</span>            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);<a name="line.1969"></a>
 <span class="sourceLineNo">1970</span>            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);<a name="line.1970"></a>
@@ -2666,7 +2666,7 @@
 <span class="sourceLineNo">2658</span>            yPositions = new double[width][height];<a name="line.2658"></a>
 <span class="sourceLineNo">2659</span>            zPositions = new double[width][height];<a name="line.2659"></a>
 <span class="sourceLineNo">2660</span>            edges = new int[height &lt;&lt; 1];<a name="line.2660"></a>
-<span class="sourceLineNo">2661</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);<a name="line.2661"></a>
+<span class="sourceLineNo">2661</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);<a name="line.2661"></a>
 <span class="sourceLineNo">2662</span>            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325, 0.475);<a name="line.2662"></a>
 <span class="sourceLineNo">2663</span>//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);<a name="line.2663"></a>
 <span class="sourceLineNo">2664</span>//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25, 0.475);<a name="line.2664"></a>
@@ -3002,7 +3002,7 @@
 <span class="sourceLineNo">2994</span>            yPositions = new double[width][height];<a name="line.2994"></a>
 <span class="sourceLineNo">2995</span>            zPositions = new double[width][height];<a name="line.2995"></a>
 <span class="sourceLineNo">2996</span>            edges = new int[height &lt;&lt; 1];<a name="line.2996"></a>
-<span class="sourceLineNo">2997</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);<a name="line.2997"></a>
+<span class="sourceLineNo">2997</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);<a name="line.2997"></a>
 <span class="sourceLineNo">2998</span>            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);<a name="line.2998"></a>
 <span class="sourceLineNo">2999</span>//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);<a name="line.2999"></a>
 <span class="sourceLineNo">3000</span>//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);<a name="line.3000"></a>
@@ -3365,7 +3365,7 @@
 <span class="sourceLineNo">3357</span>            yPositions = new double[width][height];<a name="line.3357"></a>
 <span class="sourceLineNo">3358</span>            zPositions = new double[width][height];<a name="line.3358"></a>
 <span class="sourceLineNo">3359</span>            edges = new int[height &lt;&lt; 1];<a name="line.3359"></a>
-<span class="sourceLineNo">3360</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);<a name="line.3360"></a>
+<span class="sourceLineNo">3360</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);<a name="line.3360"></a>
 <span class="sourceLineNo">3361</span>            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);<a name="line.3361"></a>
 <span class="sourceLineNo">3362</span>            heat = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);<a name="line.3362"></a>
 <span class="sourceLineNo">3363</span>            moisture = new Noise.InverseLayered3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);<a name="line.3363"></a>
@@ -3501,10 +3501,10 @@
 <span class="sourceLineNo">3493</span>                    yPositions[x][y] = ps;<a name="line.3493"></a>
 <span class="sourceLineNo">3494</span>                    zPositions[x][y] = qs;<a name="line.3494"></a>
 <span class="sourceLineNo">3495</span>                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(pc +<a name="line.3495"></a>
-<span class="sourceLineNo">3496</span>                                    terrain.getNoiseWithSeed(pc, ps, qs,seedB - seedA) * 0.5,<a name="line.3496"></a>
+<span class="sourceLineNo">3496</span>                                    terrain.getNoiseWithSeed(pc, ps, qs, seedB - seedA) * 0.5,<a name="line.3496"></a>
 <span class="sourceLineNo">3497</span>                            ps, qs, seedA) + landModifier - 1.0);<a name="line.3497"></a>
 <span class="sourceLineNo">3498</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps<a name="line.3498"></a>
-<span class="sourceLineNo">3499</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)<a name="line.3499"></a>
+<span class="sourceLineNo">3499</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedB + seedC)<a name="line.3499"></a>
 <span class="sourceLineNo">3500</span>                            , qs, seedB));<a name="line.3500"></a>
 <span class="sourceLineNo">3501</span>                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(pc, ps, qs<a name="line.3501"></a>
 <span class="sourceLineNo">3502</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qs, seedC + seedA)<a name="line.3502"></a>
@@ -3750,7 +3750,7 @@
 <span class="sourceLineNo">3742</span>            yPositions = new double[width][height];<a name="line.3742"></a>
 <span class="sourceLineNo">3743</span>            zPositions = new double[width][height];<a name="line.3743"></a>
 <span class="sourceLineNo">3744</span>            edges = new int[height &lt;&lt; 1];<a name="line.3744"></a>
-<span class="sourceLineNo">3745</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq * 0.8);<a name="line.3745"></a>
+<span class="sourceLineNo">3745</span>            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);<a name="line.3745"></a>
 <span class="sourceLineNo">3746</span>            terrainLayered = new Noise.InverseLayered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);<a name="line.3746"></a>
 <span class="sourceLineNo">3747</span>//            terrain = new Noise.Ridged3D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);<a name="line.3747"></a>
 <span class="sourceLineNo">3748</span>//            terrainLayered = new Noise.Layered3D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 5.25);<a name="line.3748"></a>

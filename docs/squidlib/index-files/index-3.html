@@ -95,6 +95,14 @@
 <div class="block">Gets a modifier that should be given to <a href="../squidpony/squidgrid/gui/gdx/SparseLayers.html#calculateConsistentLightAmount-float-float-"><code>SparseLayers.calculateConsistentLightAmount(float, float)</code></a>; this only needs to
  be called at most once per frame.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-">calculateFOV(Coord)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-int-int-">calculateFOV(int, int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#CAMO_GREEN">CAMO_GREEN</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">This color constant "Camo Green" has RGB code <code>0x78866B</code>, red 0.47058824, green 0.5254902, blue 0.41960785, alpha 1, hue 0.25308633, saturation 0.20149258, and value 0.5254902.</div>
@@ -469,6 +477,10 @@
 <dd>
 <div class="block">The color used for the projectile as a packed float; defaults to white.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/Radiance.html#color">color</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a></dt>
+<dd>
+<div class="block">The color of light as a float; typically opaque and lighter than the glowing object's symbol.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/VisualInput.html#color">color</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/VisualInput.html" title="class in squidpony.squidgrid.gui.gdx">VisualInput</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE">COLOR_WHEEL_PALETTE</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
@@ -656,6 +668,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/FloatFilters.ColorizeFilter.html#ColorizeFilter-float-float-float-">ColorizeFilter(float, float, float)</a></span> - Constructor for class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/FloatFilters.ColorizeFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.ColorizeFilter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting">colorLighting</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></dt>
+<dd>
+<div class="block">A pair of 2D float arrays with different usages; <code>colorLighting[0]</code> is a 2D array that stores the strength
+ of light in each cell, and <code>colorLighting[1]</code> is a 2D array that stores the color of light in each cell, as
+ a packed float color.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#colorLighting-double:A:A-float-">colorLighting(double[][], float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Given a 2D double array that was probably produced by FOV and a packed color as a float, this gets a 3D float
@@ -847,6 +865,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html#crMul">crMul</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.YCbCrFilter</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/Radiance.html#currentRange--">currentRange()</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a></dt>
+<dd>
+<div class="block">Provides the calculated current range adjusted for flicker and strobe at the current time in milliseconds, with
+ flicker seeded with the identity hash code of this Radiance.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#CW_ALMOST_BLACK">CW_ALMOST_BLACK</a></span> - Static variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">This color constant "CW Almost Black" has RGB code <code>0x1F1F1F</code>, red 0.12156863, green 0.12156863, blue 0.12156863, alpha 1, hue 0.0, saturation 0.0, and value 0.12156863.</div>
