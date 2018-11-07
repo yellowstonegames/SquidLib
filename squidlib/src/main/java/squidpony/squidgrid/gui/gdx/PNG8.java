@@ -26,11 +26,15 @@ import static squidpony.squidgrid.gui.gdx.PaletteReducer.randomXi;
  * {@link PaletteReducer} object that is allowed to be null and can be reused. The methods
  * {@link PaletteReducer#exact(Color[])} or {@link PaletteReducer#analyze(Pixmap)} can be used to make the target
  * palette match a specific set of colors or the colors in an existing image. You can use
- * {@link PaletteReducer#setDitherStrength(float)} to reduce (or maybe increase) dither strength; the dithering
- * algorithm used here is a modified version of the algorithm presented in "Simple gradient-based error-diffusion
- * method" by Xaingyu Y. Hu in the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated
- * noise (it is deterministic, and is seeded using the color information) to adjust Floyd-Steinberg dithering. It yields
+ * {@link PaletteReducer#setDitherStrength(float)} to reduce (or increase) dither strength; the dithering algorithm used
+ * here is a modified version of the algorithm presented in "Simple gradient-based error-diffusion method" by Xaingyu Y.
+ * Hu in the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated noise (it is
+ * deterministic, and is seeded using the color information) to adjust Floyd-Steinberg dithering. It yields
  * surprisingly non-random-looking dithers, but still manages to break up artificial patterns most of the time.
+ * Note that much of the time you will want to use {@link #writePrecisely(FileHandle, Pixmap, boolean)} instead of
+ * {@link #write(FileHandle, Pixmap, boolean, boolean)}, since writePrecisely will attempt to reproduce the exact colors
+ * if there are 256 colors or less in the Pixmap, and will automatically change to calling write() if there are more
+ * than 256 colors.
  * <br>
  * From LibGDX in the class PixmapIO, with modifications to support indexed-mode files, dithering, and other features.
  * <pre>
@@ -81,81 +85,6 @@ public class PNG8 implements Disposable {
     private int lastLineLen;
 
     public PaletteReducer palette;
-//    /**
-//     * A lookup table from 32 possible levels in the red channel to 6 possible values in the red channel.
-//     */
-//    private static final int[]
-//            redLUT =   {
-//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE00003A,
-//            0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE00003A, 0xFE000074, 0xFE000074,
-//            0xFE000074, 0xFE000074, 0xFE000074, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6, 0xFE0000B6,
-//            0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000E0, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF, 0xFE0000FF,};
-//    /**
-//     * The 6 possible values that can be used in the red channel with {@link #redLUT}.
-//     */
-//    private static final byte[] redPossibleLUT = {0x00, 0x3A, 0x74, (byte)0xB6, (byte)0xE0, (byte)0xFF};
-//
-//    /**
-//     * A lookup table from 32 possible levels in the green channel to 7 possible values in the green channel.
-//     */
-//    private static final int[]
-//            greenLUT = {
-//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE003800,
-//            0xFE003800, 0xFE003800, 0xFE003800, 0xFE003800, 0xFE006000, 0xFE006000, 0xFE006000, 0xFE006000,
-//            0xFE006000, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE009800, 0xFE00C400, 0xFE00C400, 0xFE00C400,
-//            0xFE00C400, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00EE00, 0xFE00FF00, 0xFE00FF00, 0xFE00FF00,};
-//    /**
-//     * The 7 possible values that can be used in the green channel with {@link #greenLUT}.
-//     */
-//    private static final byte[] greenPossibleLUT = {0x00, 0x38, 0x60, (byte)0x98, (byte)0xC4, (byte)0xEE, (byte)0xFF};
-//    /**
-//     * A lookup table from 32 possible levels in the blue channel to 6 possible values in the blue channel.
-//     */
-//    private static final int[]
-//            blueLUT =  {
-//            0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE000000, 0xFE380000,
-//            0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE380000, 0xFE760000, 0xFE760000, 0xFE760000,
-//            0xFE760000, 0xFE760000, 0xFE760000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000, 0xFEAC0000,
-//            0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEEA0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000, 0xFEFF0000,};
-//    /**
-//     * The 6 possible values that can be used in the blue channel with {@link #blueLUT}.
-//     */
-//    private static final byte[] bluePossibleLUT = {0x00, 0x38, 0x76, (byte)0xAC, (byte)0xEA, (byte)0xFF};
-    
-//    public void build253Palette()
-//    {
-//        Arrays.fill(paletteArray, 0);
-//        int i = 0, j, rl, gl, bl, rMin, rMax=0, gMin, gMax, bMin, bMax;
-//        for (int r = 0; r < 6; r++) {
-//            rl = redPossibleLUT[r] & 0xFF;
-//            rMin=rMax;
-//            for (j = rMin; j < 32 && (redLUT[j] & 0xFF) == rl; j++) { }
-//            rMax=j;
-//            gMax = 0;
-//            for (int g = 0; g < 7; g++) {
-//                gl = greenPossibleLUT[g] & 0xFF;
-//                gMin=gMax;
-//                for (j = gMin; j < 32 && (greenLUT[j] >> 8 & 0xFF) == gl; j++) { }
-//                gMax=j;
-//                bMax = 0;
-//                for (int b = 0; b < 6; b++) {
-//                    bl = bluePossibleLUT[b] & 0xFF;
-//                    bMin=bMax;
-//                    for (j = bMin; j < 32 && (blueLUT[j] >> 16 & 0xFF) == bl; j++) { }
-//                    bMax=j;
-//                    paletteArray[++i] =
-//                            (rl << 24
-//                                    | (gl << 16 & 0xFF0000)
-//                                    | (bl << 8 & 0xFF00) | 0xFE);
-//                    for (int rm = rMin; rm < rMax; rm++) {
-//                        for (int gm = gMin; gm < gMax; gm++) {
-//                            Arrays.fill(paletteMapping, (rm << 10) + (gm << 5) + (bMin), (rm << 10) + (gm << 5) + (bMax), (byte)i);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
     
     public PNG8() {
         this(128 * 128);
@@ -228,13 +157,36 @@ public class PNG8 implements Disposable {
             StreamUtils.closeQuietly(output);
         }
     }
+    /**
+     * Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
+     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a PaletteReducer value), this will
+     * compute a palette from the given Pixmap regardless of computePalette. Uses the given threshold while analyzing
+     * the palette if this needs to compute a palette; threshold values can be as low as 0 to try to use as many colors
+     * as possible (prefer {@link  #writePrecisely(FileHandle, Pixmap, boolean, int)} for that, though) and can range up
+     * to very high numbers if very few colors should be used; usually threshold is from 100 to 800. Optionally dithers
+     * the result if {@code dither} is true.
+     * @param file a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image
+     * @param pixmap a Pixmap to write to the given output stream
+     * @param computePalette if true, this will analyze the Pixmap and use the most common colors
+     * @param dither true if this should dither colors that can't be represented exactly
+     * @param threshold the analysis threshold to use if computePalette is true (min 0, practical max is over 100000)
+     * @throws IOException if file writing fails for any reason
+     */
+    public void write (FileHandle file, Pixmap pixmap, boolean computePalette, boolean dither, int threshold) throws IOException {
+        OutputStream output = file.write(false);
+        try {
+            write(output, pixmap, computePalette, dither, threshold);
+        } finally {
+            StreamUtils.closeQuietly(output);
+        }
+    }
 
     /** Writes the pixmap to the stream without closing the stream and computes an 8-bit palette from the Pixmap.
      * @param output an OutputStream that will not be closed
      * @param pixmap a Pixmap to write to the given output stream
      */
     public void write (OutputStream output, Pixmap pixmap) throws IOException {
-        write(output, pixmap, true);
+        writePrecisely(output, pixmap, true);
     }
 
     /**
@@ -247,7 +199,10 @@ public class PNG8 implements Disposable {
      */
     public void write (OutputStream output, Pixmap pixmap, boolean computePalette) throws IOException     
     {
-        write(output, pixmap, computePalette, true);
+        if(computePalette)
+            writePrecisely(output, pixmap, true);
+        else
+            write(output, pixmap, false, true);
     }
 
     /**
@@ -261,13 +216,27 @@ public class PNG8 implements Disposable {
      */
     public void write (OutputStream output, Pixmap pixmap, boolean computePalette, boolean dither) throws IOException
     {
+        write(output, pixmap, computePalette, dither, 400);
+    }
+    /**
+     * Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
+     * Pixmap. If {@link #palette} is null (the default unless it has been assigned a PaletteReducer value), this will
+     * compute a palette from the given Pixmap regardless of computePalette.
+     * @param output an OutputStream that will not be closed
+     * @param pixmap a Pixmap to write to the given output stream
+     * @param computePalette if true, this will analyze the Pixmap and use the most common colors
+     * @param dither true if this should dither colors that can't be represented exactly
+     * @param threshold the analysis threshold to use if computePalette is true (min 0, practical max is over 100000)
+     */
+    public void write (OutputStream output, Pixmap pixmap, boolean computePalette, boolean dither, int threshold) throws IOException
+    {
         if(palette == null)
         {
-            palette = new PaletteReducer(pixmap);
+            palette = new PaletteReducer(pixmap, threshold);
         }
         else if(computePalette)
         {
-            palette.analyze(pixmap);
+            palette.analyze(pixmap, threshold);
         }
 
         if(dither) writeDithered(output, pixmap);
@@ -287,9 +256,27 @@ public class PNG8 implements Disposable {
      * @throws IOException if file writing fails for any reason
      */
     public void writePrecisely (FileHandle file, Pixmap pixmap, boolean ditherFallback) throws IOException {
+        writePrecisely(file, pixmap, ditherFallback, 400);
+    }
+    /**
+     * Attempts to write the given Pixmap exactly as a PNG-8 image to file; this attempt will only succeed if there
+     * are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+     * If the attempt fails, this falls back to calling {@link #write(FileHandle, Pixmap, boolean, boolean)}, which
+     * can dither the image to use no more than 255 colors (plus fully transparent) based on ditherFallback and will
+     * always analyze the Pixmap to get an accurate-enough palette, using the given threshold for analysis (which is
+     * typically between 1 and 1000, and most often near 200-400). All other write() methods in this class will
+     * reduce the color depth somewhat, but as long as the color count stays at 256 or less, this will keep the
+     * non-alpha components of colors exactly.
+     * @param file a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image
+     * @param pixmap a Pixmap to write to the given output stream
+     * @param ditherFallback if the Pixmap contains too many colors, this determines whether it will dither the output
+     * @param threshold the analysis threshold to use if there are too many colors (min 0, practical max is over 100000)
+     * @throws IOException if file writing fails for any reason
+     */
+    public void writePrecisely (FileHandle file, Pixmap pixmap, boolean ditherFallback, int threshold) throws IOException {
         OutputStream output = file.write(false);
         try {
-            writePrecisely(output, pixmap, ditherFallback);
+            writePrecisely(output, pixmap, ditherFallback, threshold);
         } finally {
             StreamUtils.closeQuietly(output);
         }
@@ -309,6 +296,25 @@ public class PNG8 implements Disposable {
      * @throws IOException if OutputStream things fail for any reason
      */
     public void writePrecisely(OutputStream output, Pixmap pixmap, boolean ditherFallback) throws IOException {
+        writePrecisely(output, pixmap, ditherFallback, 400);
+    }
+
+    /**
+     * Attempts to write the given Pixmap exactly as a PNG-8 image to output; this attempt will only succeed if there
+     * are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+     * If the attempt fails, this falls back to calling {@link #write(OutputStream, Pixmap, boolean, boolean)}, which
+     * can dither the image to use no more than 255 colors (plus fully transparent) based on ditherFallback and will
+     * always analyze the Pixmap to get an accurate-enough palette, using the given threshold for analysis (which is
+     * typically between 1 and 1000, and most often near 200-400). All other write() methods in this class will
+     * reduce the color depth somewhat, but as long as the color count stays at 256 or less, this will keep the
+     * non-alpha components of colors exactly.
+     * @param output an OutputStream that will not be closed
+     * @param pixmap a Pixmap to write to the given output stream
+     * @param ditherFallback if the Pixmap contains too many colors, this determines whether it will dither the output
+     * @param threshold the analysis threshold to use if there are too many colors (min 0, practical max is over 100000)
+     * @throws IOException if OutputStream things fail for any reason
+     */
+    public void writePrecisely(OutputStream output, Pixmap pixmap, boolean ditherFallback, int threshold) throws IOException {
         IntIntMap colorToIndex = new IntIntMap(256);
         colorToIndex.put(0, 0);
         int color;
@@ -321,21 +327,21 @@ public class PNG8 implements Disposable {
                 if((color & 0xFE) != 0xFE) {
                     if(hasTransparent == 0 && colorToIndex.size >= 256)                     
                     {
-                        write(output, pixmap, true, ditherFallback);
+                        write(output, pixmap, true, ditherFallback, threshold);
                         return;
                     }
                     hasTransparent = 1;
                 }
                 else if(!colorToIndex.containsKey(color))
                 {
-                    colorToIndex.put(color, colorToIndex.size + 1 & 255);
+                    colorToIndex.put(color, colorToIndex.size & 255);
                     if(colorToIndex.size == 257 && hasTransparent == 0)
                     {
                         colorToIndex.remove(0, 0);
                     }
                     if(colorToIndex.size > 256)
                     {
-                        write(output, pixmap, true, ditherFallback);
+                        write(output, pixmap, true, ditherFallback, threshold);
                         return;
                     }
                 }
