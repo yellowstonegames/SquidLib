@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.Direction;
 import squidpony.squidgrid.FOV;
+import squidpony.squidgrid.Radius;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.FlowingCaveGenerator;
@@ -34,7 +35,7 @@ public class LightingTest extends ApplicationAdapter{
 
     private SquidLayers layers;
     private char[][] map, displayedMap;
-    private float[][] fgColors, bgColors;
+    private Color[][] fgColors, bgColors;
     private StatefulRNG rng;
     private Stage stage;
     private SpriteBatch batch;
@@ -45,9 +46,10 @@ public class LightingTest extends ApplicationAdapter{
     private AnimatedEntity[] markers;
     private double[][] resMap;
     private float ctr = 0;
-    private final double[][] tempLit = new double[gridWidth][gridHeight];
-    private final float[][][] colorful = SColor.blankColoredLighting(gridWidth, gridHeight),
-            tempColorful = new float[2][gridWidth][gridHeight];
+    private LightingHandler lighting;
+//    private final double[][] tempLit = new double[gridWidth][gridHeight];
+//    private final float[][][] colorful = SColor.blankColoredLighting(gridWidth, gridHeight),
+//            tempColorful = new float[2][gridWidth][gridHeight];
     @Override
     public void create() {
         super.create();
@@ -79,9 +81,10 @@ public class LightingTest extends ApplicationAdapter{
         displayedMap = DungeonUtility.hashesToLines(map, true);
         SColor.LIMITED_PALETTE[0] = SColor.DB_GRAPHITE;
         SColor.LIMITED_PALETTE[2] = SColor.DB_CAPPUCCINO;
-        fgColors = MapUtility.generateDefaultColorsFloat(map);
-        bgColors = MapUtility.generateDefaultBGColorsFloat(map);
+        fgColors = MapUtility.generateDefaultColors(map);
+        bgColors = MapUtility.generateDefaultBGColors(map);
         resMap = DungeonUtility.generateResistances(map);
+        lighting = new LightingHandler(resMap, SColor.FLOAT_BLACK, Radius.CIRCLE, Double.POSITIVE_INFINITY);
         GreasedRegion packed = new GreasedRegion(gen.getBareDungeon(), '.');
         points = packed.randomScatter(rng, 7, 32).asCoords();
         offsets = new int[points.length];
@@ -91,12 +94,14 @@ public class LightingTest extends ApplicationAdapter{
         {
             offsets[c] = (Integer.reverse(c + 1) >>> 23); // similar to VanDerCorputQRNG.determine2()
             pt = points[c];
-            FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 8.5);
-            SColor.colorLightingInto(tempColorful, tempLit, colors.get((colorIndex + offsets[c]) & 511).toFloatBits());
-            SColor.mixColoredLighting(colorful, tempColorful);
+            lighting.addLight(pt, new Radiance(rng.between(5, 11), colors.get((colorIndex + offsets[c]) & 511).toFloatBits(), 0f, rng.nextFloat()+0.1f));
+//            FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 8.5);
+//            SColor.colorLightingInto(tempColorful, tempLit, colors.get((colorIndex + offsets[c]) & 511).toFloatBits());
+//            SColor.mixColoredLighting(colorful, tempColorful);
             markers[c] = layers.directionMarker(pt.x, pt.y, mColors, 4f, 2, false);
         }
 
+        lighting.update();
         batch = new SpriteBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(layers);
@@ -115,9 +120,8 @@ public class LightingTest extends ApplicationAdapter{
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         ctr += Gdx.graphics.getDeltaTime();
-        if(ctr > 0.6) {
-            ctr -= 0.6;
-            SColor.eraseColoredLighting(colorful);
+        if(ctr > 1.5) {
+            ctr -= 1.5;
             Direction[] dirs = new Direction[4];
             Coord alter;
             for (int i = 0; i < points.length; i++) {
@@ -126,6 +130,7 @@ public class LightingTest extends ApplicationAdapter{
                 for (Direction d : dirs) {
                     alter = pt.translate(d);
                     if (map[alter.x][alter.y] == '.') {
+                        lighting.moveLight(pt, alter);
                         pt = alter;
                         points[i] = pt;
                         markers[i].setDirection(d);
@@ -133,18 +138,18 @@ public class LightingTest extends ApplicationAdapter{
                         break;
                     }
                 }
-                FOV.reuseFOV(resMap, tempLit, pt.x, pt.y, 8.5);
-                SColor.colorLightingInto(tempColorful, tempLit, colors.get((colorIndex + offsets[i]) & 511).toFloatBits());
-                SColor.mixColoredLighting(colorful, tempColorful);
             }
         }
+        lighting.update();
+        layers.put(0, 0, displayedMap, fgColors, bgColors);
+        lighting.draw(layers.getBackgroundLayer());
         //layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));
-        for (int x = 0; x < gridWidth; x++) {
-            for (int y = 0; y < gridHeight; y++) {
-                layers.put(x, y, displayedMap[x][y], fgColors[x][y],
-                        bgColors[x][y], colorful[0][x][y], colorful[1][x][y]);
-            }
-        }
+//        for (int x = 0; x < gridWidth; x++) {
+//            for (int y = 0; y < gridHeight; y++) {
+//                layers.put(x, y, displayedMap[x][y], fgColors[x][y],
+//                        bgColors[x][y], colorful[0][x][y], colorful[1][x][y]);
+//            }
+//        }
         stage.getViewport().apply(false);
         stage.draw();
         stage.act();
@@ -162,6 +167,7 @@ public class LightingTest extends ApplicationAdapter{
         config.width = gridWidth * cellWidth;
         config.height = gridHeight * cellHeight;
         config.foregroundFPS = 0;
+        config.vSyncEnabled = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-128.png", Files.FileType.Internal);
