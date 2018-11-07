@@ -337,6 +337,47 @@ public class LightingHandler implements Serializable {
         }
     }
     /**
+     * Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
+     * changes in lighting color and strength to the various fields of this LightingHandler. This method is usually
+     * called before each call to {@link #draw(float[][])}, but other code may be between the calls and may
+     * affect the lighting in customized ways. This overload has no viewer, so all cells are considered visible unless
+     * they are fully obstructed (solid cells behind walls, for example).
+     */
+    public void update()
+    {
+        Radiance radiance;
+        for (int x = 0; x < width; x++) {
+            PER_CELL:
+            for (int y = 0; y < height; y++) {
+                for (int xx = Math.max(0, x - 1), xi = 0; xi < 3 && xx < width; xi++, xx++) {
+                    for (int yy = Math.max(0, y - 1), yi = 0; yi < 3 && yy < height; yi++, yy++) {
+                        if(resistances[xx][yy] <= 1.0){
+                            losResult[x][y] = 1.0;
+                            continue PER_CELL;
+                        }
+                    }
+                }
+            }
+        }
+        SColor.eraseColoredLighting(colorLighting);
+        final int sz = lights.size();
+        Coord pos;
+        for (int i = 0; i < sz; i++) {
+            pos = lights.keyAt(i);
+            radiance = lights.getAt(i);
+            FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
+            SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
+            mixColoredLighting(radiance.flare);
+        }
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (losResult[x][y] > 0.0) {
+                    fovResult[x][y] = MathUtils.clamp(losResult[x][y] + colorLighting[0][x][y], 0, 1);
+                }
+            }
+        }
+    }
+    /**
      * Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
      * just the {@link #colorLighting} field, without changing FOV. This method is meant to be used for GUI effects that
      * aren't representative of something a character in the game could interact with. It is usually called after
