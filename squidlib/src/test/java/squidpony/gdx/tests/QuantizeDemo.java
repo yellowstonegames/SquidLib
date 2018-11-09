@@ -102,29 +102,29 @@ public class QuantizeDemo extends ApplicationAdapter {
         bivaPalette = new PaletteReducer(bivaOriginal, 400);
         monaPalette = new PaletteReducer(monaOriginal, 400);
         colorsPalette = new PaletteReducer(colors, 400);
-//        png8.palette = bivaPalette;
-//        try {
-//            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
-//        }
-//        png8.palette = monaPalette;
-//        try {
-//            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
-//        }
-//        try {
-//            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Mona.png", ex);
-//        }
-//        png8.palette = bivaPalette;
-//        try {
-//            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Biva.png"), monaOriginal, false);
-//        } catch (IOException ex) {
-//            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Biva.png", ex);
-//        }
+        png8.palette = bivaPalette;
+        try {
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8.png"), bivaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
+        }
+        png8.palette = monaPalette;
+        try {
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8.png", ex);
+        }
+        try {
+            png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Mona.png", ex);
+        }
+        png8.palette = bivaPalette;
+        try {
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Biva.png"), monaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Biva.png", ex);
+        }
 
 //        pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         input = new SquidInput(new SquidInput.KeyHandler() {
@@ -198,7 +198,7 @@ public class QuantizeDemo extends ApplicationAdapter {
                 auroraPalette.reduce(edit);
                 break;
             case 7:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based Lite dither)  Étang en Ile de France by Henri Biva");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither)  Étang en Ile de France by Henri Biva");
                 edit.drawPixmap(bivaOriginal, 0, 0, width1, height1, width - width1 >> 1, height - height1 >> 1, width1, height1);
                 auroraPalette.reduceWithNoise(edit);
                 break;
@@ -346,7 +346,7 @@ public class QuantizeDemo extends ApplicationAdapter {
                 auroraPalette.reduce(edit);
                 break;
             case 25:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based Lite dither)  SColor Full Palette");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither)  SColor Full Palette");
                 edit.drawPixmap(colors, 0, 0);
                 auroraPalette.reduceWithNoise(edit);
                 break;
