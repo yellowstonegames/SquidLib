@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidgrid.FOV;
 import squidpony.squidgrid.Radius;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.NumberTools;
 import squidpony.squidmath.OrderedMap;
 
@@ -21,14 +22,15 @@ import static squidpony.squidgrid.gui.gdx.SColor.lerpFloatColorsBlended;
  * level, you should add all light sources with their positions, either using {@link #addLight(int, int, Radiance)} or
  * by directly putting keys and values into {@link #lights}. Then you can calculate the visible cells once lighting is
  * considered (which may include distant lit cells with unseen but unobstructing cells between the viewer and the light)
- * using {@link #calculateFOV(Coord)}, which. You can update the flicker and strobe effects on all Radiance objects,
- * which is typically done every frame, using {@link #update(Coord)} (usually with the player as the viewer), and once
- * that update() call has been made you can call {@link #draw(SparseLayers)} to change the background colors of a
- * SparseLayers, {@link #draw(SquidPanel)} to change the colors of a SquidPanel (typically the background layer of a
- * SquidLayers, as from {@link SquidLayers#getBackgroundLayer()}), or {@link #draw(float[][])} to change a 2D float
- * array that holds packed float colors (which may be used in some custom setup). To place user-interface lighting
- * effects that don't affect the actual FOV of creatures in the game, you can use {@link #updateUI(Coord, Radiance)},
- * which is called after {@link #update(Coord)} but before {@link #draw(float[][])}.
+ * using {@link #calculateFOV(Coord)}, which should be called every time the viewer moves. You can update the flicker
+ * and strobe effects on all Radiance objects, which is typically done every frame, using {@link #update()} or
+ * {@link #updateAll()} (updateAll() is for when there is no viewer), and once that update() call has been made you can
+ * call {@link #draw(SparseLayers)} to change the background colors of a SparseLayers, {@link #draw(SquidPanel)} to
+ * change the colors of a SquidPanel (typically the background layer of a SquidLayers, as from
+ * {@link SquidLayers#getBackgroundLayer()}), or {@link #draw(float[][])} to change a 2D float array that holds packed
+ * float colors (which may be used in some custom setup). To place user-interface lighting effects that don't affect the
+ * actual FOV of creatures in the game, you can use {@link #updateUI(Coord, Radiance)}, which is called after
+ * {@link #update()} but before {@link #draw(float[][])}.
  * <br>
  * Created by Tommy Ettinger on 11/2/2018.
  */
@@ -46,7 +48,7 @@ public class LightingHandler implements Serializable {
     public double[][] resistances;
     /**
      * What the "viewer" (as passed to {@link #calculateFOV(Coord)}) can see either nearby without light or because an
-     * area in line-of-sight has light in it. Edited by {@link #calculateFOV(Coord)} and {@link  #update(Coord)}, but
+     * area in line-of-sight has light in it. Edited by {@link #calculateFOV(Coord)} and {@link  #update()}, but
      * not {@link #updateUI(Coord, Radiance)} (which is meant for effects that are purely user-interface).
      */
     public double[][] fovResult;
@@ -97,6 +99,12 @@ public class LightingHandler implements Serializable {
      * {@link #removeLight(int, int)}.
      */
     public OrderedMap<Coord, Radiance> lights;
+
+    /**
+     * A GreasedRegion that stores any cells that are in line-of-sight or are close enough to a cell in line-of-sight to
+     * potentially cast light into such a cell. Depends on the highest {@link Radiance#range} in {@link #lights}.
+     */
+    public GreasedRegion noticeable;
     
     /**
      * Unlikely to be used except during serialization; makes a LightingHandler for a 20x20 fully visible level.
@@ -158,6 +166,7 @@ public class LightingHandler implements Serializable {
         tempColorLighting = new float[2][width][height];
         Coord.expandPoolTo(width, height);
         lights = new OrderedMap<>(32);
+        noticeable = new GreasedRegion(width, height);
     }
 
     /**
@@ -291,59 +300,40 @@ public class LightingHandler implements Serializable {
             }
         }
     }
-
-
+    
     /**
      * Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
-     * changes in lighting color and strength to the various fields of this LightingHandler. This method is usually
-     * called before each call to {@link #draw(float[][])}, but other code may be between the calls and may
-     * affect the lighting in customized ways.
-     * @param viewerPosition the position of the player or other viewer
+     * changes in lighting color and strength to the various fields of this LightingHandler. This will only have an
+     * effect if {@link #calculateFOV(Coord)} or {@link #calculateFOV(int, int)} was called during the last time the
+     * viewer position changed; typically calculateFOV() only needs to be called once per move, while update() needs to
+     * be called once per frame. This method is usually called before each call to {@link #draw(float[][])}, but other
+     * code may be between the calls and may affect the lighting in customized ways.
      */
-    public void update(Coord viewerPosition)
-    {
-        update(viewerPosition.x, viewerPosition.y);
-    }
-
-    /**
-     * Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
-     * changes in lighting color and strength to the various fields of this LightingHandler. This method is usually
-     * called before each call to {@link #draw(float[][])}, but other code may be between the calls and may
-     * affect the lighting in customized ways.
-     * @param viewerX the x-position of the player or other viewer
-     * @param viewerY the y-position of the player or other viewer
-     */
-    public void update(int viewerX, int viewerY)
+    public void update()
     {
         Radiance radiance;
-        FOV.reuseFOV(resistances, fovResult, viewerX, viewerY, viewerRange, radiusStrategy);
-        FOV.reuseLOS(resistances, losResult, viewerX, viewerY);
         SColor.eraseColoredLighting(colorLighting);
         final int sz = lights.size();
         Coord pos;
         for (int i = 0; i < sz; i++) {
             pos = lights.keyAt(i);
+            if(!noticeable.contains(pos))
+                continue;
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
             SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
             mixColoredLighting(radiance.flare);
         }
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                if (losResult[x][y] > 0.0) {
-                    fovResult[x][y] = MathUtils.clamp(fovResult[x][y] + colorLighting[0][x][y], 0, 1);
-                }
-            }
-        }
     }
     /**
-     * Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
-     * changes in lighting color and strength to the various fields of this LightingHandler. This method is usually
-     * called before each call to {@link #draw(float[][])}, but other code may be between the calls and may
-     * affect the lighting in customized ways. This overload has no viewer, so all cells are considered visible unless
-     * they are fully obstructed (solid cells behind walls, for example).
+     * Typically called every frame when there isn't a single viewer, this updates the flicker and strobe effects of
+     * Radiance objects and applies those changes in lighting color and strength to the various fields of this
+     * LightingHandler. This method is usually called before each call to {@link #draw(float[][])}, but other code may
+     * be between the calls and may affect the lighting in customized ways. This overload has no viewer, so all cells
+     * are considered visible unless they are fully obstructed (solid cells behind walls, for example). Unlike update(),
+     * this method does not need {@link #calculateFOV(Coord)} to be called for it to work properly.
      */
-    public void update()
+    public void updateAll()
     {
         Radiance radiance;
         for (int x = 0; x < width; x++) {
@@ -381,7 +371,7 @@ public class LightingHandler implements Serializable {
      * Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
      * just the {@link #colorLighting} field, without changing FOV. This method is meant to be used for GUI effects that
      * aren't representative of something a character in the game could interact with. It is usually called after
-     * {@link #update(Coord)} and before each call to {@link #draw(float[][])}, but other code may be between the calls
+     * {@link #update()} and before each call to {@link #draw(float[][])}, but other code may be between the calls
      * and may affect the lighting in customized ways.
      * @param pos the position of the light effect
      * @param radiance the Radiance to update standalone, which does not need to be already added to this 
@@ -395,7 +385,7 @@ public class LightingHandler implements Serializable {
      * Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
      * just the {@link #colorLighting} field, without changing FOV. This method is meant to be used for GUI effects that
      * aren't representative of something a character in the game could interact with. It is usually called after
-     * {@link #update(Coord)} and before each call to {@link #draw(float[][])}, but other code may be between the calls
+     * {@link #update()} and before each call to {@link #draw(float[][])}, but other code may be between the calls
      * and may affect the lighting in customized ways.
      * @param lightX the x-position of the light effect
      * @param lightY the y-position of the light effect
@@ -411,7 +401,7 @@ public class LightingHandler implements Serializable {
     /**
      * Given a SparseLayers, fills the SparseLayers with different colors based on what lights are present in line of
      * sight of the viewer and the various flicker or strobe effects that Radiance light sources can do. You should
-     * usually call {@link #update(int, int)} before each call to draw(), but you may want to make custom changes to the
+     * usually call {@link #update()} before each call to draw(), but you may want to make custom changes to the
      * lighting in between those two calls (that is the only place those changes will be noticed).
      * @param layers a SparseLayers that may have existing background colors (these will be mixed in)
      */
@@ -425,7 +415,7 @@ public class LightingHandler implements Serializable {
      * line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do. 
      * Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers), fills the
      * SquidPanel with different colors based on what lights are present in line of sight of the viewer and the various
-     * flicker or strobe effects that Radiance light sources can do. You should usually call {@link #update(int, int)}
+     * flicker or strobe effects that Radiance light sources can do. You should usually call {@link #update()}
      * before each call to draw(), but you may want to make custom changes to the lighting in between those two calls
      * (that is the only place those changes will be noticed).
      * @param background a SquidPanel used as a background, such as the back Panel of a SquidLayers
@@ -438,7 +428,7 @@ public class LightingHandler implements Serializable {
     /**
      * Given a 2D array of packed float colors, fills the 2D array with different colors based on what lights are
      * present in line of sight of the viewer and the various flicker or strobe effects that Radiance light sources can
-     * do. You should usually call {@link #update(int, int)} before each call to draw(), but you may want to make custom
+     * do. You should usually call {@link #update()} before each call to draw(), but you may want to make custom
      * changes to the lighting in between those two calls (that is the only place those changes will be noticed).
      * @param backgrounds a 2D float array, typically obtained from {@link squidpony.squidgrid.gui.gdx.SquidPanel#colors} or {@link squidpony.squidgrid.gui.gdx.SparseLayers#backgrounds}
      */
@@ -460,7 +450,12 @@ public class LightingHandler implements Serializable {
     /**
      * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.
      * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.
-     * Sets {@link #fovResult} and {@link #losResult} based on the given viewer position and any lights.
+     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at
+     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets
+     * important information on what lights might need to be calculated during each update(Coord) call; it does not need
+     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. Sets
+     * {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the given viewer position and any lights
+     * in {@link #lights}.
      * @param viewer the position of the player or other viewer
      * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}
      */
@@ -472,7 +467,12 @@ public class LightingHandler implements Serializable {
     /**
      * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.
      * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.
-     * Sets {@link #fovResult} and {@link #losResult} based on the given viewer position and any lights.
+     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at
+     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets
+     * important information on what lights might need to be calculated during each update(Coord) call; it does not need
+     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. Sets
+     * {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the given viewer position and any lights
+     * in {@link #lights}.
      * @param viewerX the x-position of the player or other viewer
      * @param viewerY the y-position of the player or other viewer
      * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}
@@ -484,9 +484,16 @@ public class LightingHandler implements Serializable {
         FOV.reuseLOS(resistances, losResult, viewerX, viewerY);
         SColor.eraseColoredLighting(colorLighting);
         final int sz = lights.size();
+        float maxRange = 0;
+        for (int i = 0; i < sz; i++) {
+            maxRange = Math.max(maxRange, lights.getAt(i).range);
+        }
+        noticeable.refill(losResult, 0.0001, Double.POSITIVE_INFINITY).expand8way((int) Math.ceil(maxRange));
         Coord pos;
         for (int i = 0; i < sz; i++) {
             pos = lights.keyAt(i);
+            if(!noticeable.contains(pos))
+                continue;
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.range);
             SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
