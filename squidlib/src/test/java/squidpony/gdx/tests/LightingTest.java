@@ -101,7 +101,7 @@ public class LightingTest extends ApplicationAdapter{
             markers[c] = layers.directionMarker(pt.x, pt.y, mColors, 4f, 2, false);
         }
 
-        lighting.update();
+        lighting.updateAll();
         batch = new SpriteBatch();
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight), batch);
         stage.addActor(layers);
@@ -140,7 +140,7 @@ public class LightingTest extends ApplicationAdapter{
                 }
             }
         }
-        lighting.update();
+        lighting.updateAll();
         layers.put(0, 0, displayedMap, fgColors, bgColors);
         lighting.draw(layers.getBackgroundLayer());
         //layers.setLightingColor(colors.get(colorIndex = (colorIndex + 1) % colors.size()));

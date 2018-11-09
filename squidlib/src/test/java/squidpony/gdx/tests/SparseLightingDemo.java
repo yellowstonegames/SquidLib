@@ -253,7 +253,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
         //no parameters are given to generate().
         lineDungeon = DungeonUtility.hashesToLines(decoDungeon);
 
-        lighting = new LightingHandler(DungeonUtility.generateResistances(decoDungeon), GRAY_FLOAT, Radius.CIRCLE, 9.0);
+        lighting = new LightingHandler(DungeonUtility.generateResistances(decoDungeon), SColor.FLOAT_WHITE, Radius.CIRCLE, 9.0);
 
         //Coord is the type we use as a general 2D point, usually in a dungeon.
         //Because we know dungeons won't be incredibly huge, Coord performs best for x and y values less than 256, but
@@ -617,7 +617,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
                 if(lighting.fovResult[x][y] > 0)
                     display.put(x, y, prunedDungeon[x][y], colors[x][y], bgColors[x][y]);
                 else if (seen.contains(x, y))
-                    display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], GRAY_FLOAT, 0.45f));
+                    display.put(x, y, prunedDungeon[x][y], colors[x][y], SColor.lerpFloatColors(bgColors[x][y], SColor.FLOAT_BLACK, 0.45f));
             }
         }
         lighting.draw(display);
@@ -641,7 +641,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
 
         stage.getCamera().position.x = pg.getX();
         stage.getCamera().position.y =  pg.getY();
-        lighting.update(player);
+        lighting.update();
         putMap();
         // if the user clicked, we have a list of moves to perform.
         if(!awaitedMoves.isEmpty())
