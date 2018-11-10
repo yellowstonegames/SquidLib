@@ -274,10 +274,56 @@ public class LightingHandler implements Serializable {
         float b0, b1, o0, o1;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
+                if (losResult[x][y] > 0 && resistances[x][y] >= 1) {
+                    o0 = 0f;
+                    o1 = 0f;
+                    if(y > 0)
+                    {
+                        if(losResult[x][y-1] > 0 && resistances[x][y-1] < 1) 
+                        {
+                            if(o0 != (o0 = Math.max(o0, other[0][x][y-1]))) o1 = other[1][x][y-1];
+                        }
+                        if(x > 0 && losResult[x - 1][y - 1] > 0 && resistances[x-1][y-1] < 1)
+                        {
+                            if(o0 != (o0 = Math.max(o0, other[0][x-1][y-1]))) o1 = other[1][x-1][y-1];
+                        }
+                        if(x < width - 1 && losResult[x + 1][y - 1] > 0 && resistances[x+1][y-1] < 1)
+                        {
+                            if(o0 != (o0 = Math.max(o0, other[0][x+1][y-1]))) o1 = other[1][x+1][y-1];
+                        }
+                    }
+                    if(y < height - 1)
+                    {
+                        if(losResult[x][y+1] > 0 && resistances[x][y+1] < 1)
+                        {
+                            if(o0 != (o0 = Math.max(o0, other[0][x][y+1]))) o1 = other[1][x][y+1];
+                        }
+                        if(x > 0 && losResult[x - 1][y + 1] > 0 && resistances[x-1][y+1] < 1)
+                        {
+                            if(o0 != (o0 = Math.max(o0, other[0][x-1][y+1]))) o1 = other[1][x-1][y+1];
+                        }
+                        if(x < width - 1 && losResult[x + 1][y + 1] > 0 && resistances[x+1][y+1] < 1)
+                        {
+                            if(o0 != (o0 = Math.max(o0, other[0][x+1][y+1]))) o1 = other[1][x+1][y+1];
+                        }
+                    }
+                    if(x > 0 && losResult[x-1][y] > 0 && resistances[x-1][y] < 1)
+                    {
+                        if(o0 != (o0 = Math.max(o0, other[0][x-1][y]))) o1 = other[1][x-1][y];
+                    }
+                    if(x < width - 1 && losResult[x+1][y] > 0 && resistances[x+1][y] < 1)
+                    {
+                        if(o0 != (o0 = Math.max(o0, other[0][x+1][y]))) o1 = other[1][x+1][y];
+                    }
+                    if(o0 == 0f || o1 == 0f)
+                        continue;
+                }
+                else {
+                    o0 = other[0][x][y];
+                    o1 = other[1][x][y];
+                }
                 b0 = basis[0][x][y];
                 b1 = basis[1][x][y];
-                o0 = other[0][x][y];
-                o1 = other[1][x][y];
                 if (b1 == FLOAT_WHITE) {
                     basis[1][x][y] = o1;
                     basis[0][x][y] = Math.min(1.0f, b0 + o0 * flare);
@@ -341,7 +387,7 @@ public class LightingHandler implements Serializable {
             for (int y = 0; y < height; y++) {
                 for (int xx = Math.max(0, x - 1), xi = 0; xi < 3 && xx < width; xi++, xx++) {
                     for (int yy = Math.max(0, y - 1), yi = 0; yi < 3 && yy < height; yi++, yy++) {
-                        if(resistances[xx][yy] <= 1.0){
+                        if(resistances[xx][yy] < 1.0){
                             losResult[x][y] = 1.0;
                             continue PER_CELL;
                         }
