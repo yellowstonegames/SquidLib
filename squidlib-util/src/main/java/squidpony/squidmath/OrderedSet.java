@@ -1744,21 +1744,20 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         }
     }*/
     private int alterEntry(final int pos) {
-        size--;
         int idx = fixOrder(pos);
+        size--;
         shiftKeys(pos);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
-            rehash(n / 2);
+        if (size < maxFill >> 2 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n >> 1);
         return idx;
     }
 
     private int alterNullEntry() {
-        containsNull = false;
-        key[n] = null;
-        size--;
         int idx = fixOrder(n);
-        if (size < maxFill / 4 && n > DEFAULT_INITIAL_SIZE)
-            rehash(n / 2);
+        containsNull = false;
+        size--;
+        if (size < maxFill >> 2 && n > DEFAULT_INITIAL_SIZE)
+            rehash(n >> 1);
         return idx;
     }
 

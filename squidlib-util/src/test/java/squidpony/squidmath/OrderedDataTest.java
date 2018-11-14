@@ -1,5 +1,9 @@
 package squidpony.squidmath;
 
+import org.junit.Test;
+
+import static squidpony.examples.LanguageGenTest.PRINTING;
+
 /**
  * Created by Tommy Ettinger on 6/19/2017.
  */
@@ -61,5 +65,40 @@ public class OrderedDataTest {
             }
             System.out.println();
         }
+    }
+    @Test
+    public void testSmallMap()
+    {
+        if(!PRINTING)
+            return;
+        OrderedMap<Coord, Integer> small = OrderedMap.makeMap(Coord.get(28, 28), 0);
+        System.out.println(small);
+        small.alterAtCarefully(0, Coord.get(27, 29));
+        System.out.println(small);
+        small.alterAtCarefully(0, null);
+        System.out.println(small);
+        small.alterAtCarefully(0, Coord.get(27, 28));
+        System.out.println(small);
+        small.put(Coord.get(1, 1), 2);
+        small.alterAtCarefully(0, Coord.get(28, 27));
+        System.out.println(small);
+    }
+    @Test
+    public void testSmallSet()
+    {
+        if(!PRINTING)
+            return;
+        OrderedSet<Coord> small = new OrderedSet<>(1);
+        small.add(Coord.get(28, 28));
+        System.out.println(small);
+        small.alterAt(0, Coord.get(27, 29));
+        System.out.println(small);
+        small.alterAt(0, null);
+        System.out.println(small);
+        small.alterAt(0, Coord.get(27, 28));
+        System.out.println(small);
+        small.add(Coord.get(1, 1));
+        small.alterAt(0, Coord.get(28, 27));
+        System.out.println(small);
     }
 }

@@ -337,12 +337,8 @@ public class DungeonGeneratorTest {
         gr.insert(-5, -5, dbg.region);
         dbg.generate(TilesetType.LIMITED_CONNECTIVITY, width + 3, height + 3);
         gr.not().insert(-2, -2, dbg.region);
-//        System.out.println(gr.show('.', '#'));
-//        System.out.println("End GreasedRegion");
         dungeonGenerator.clearEffects();
-        dungeon = gr.toChars();
-//        DungeonUtility.debugPrint(dungeon);
-        dungeon = dungeonGenerator.generate(dungeon);
+        dungeon = dungeonGenerator.generate(gr.toChars());
         
         dungeon[dungeonGenerator.stairsUp.x][dungeonGenerator.stairsUp.y] = '<';
         dungeon[dungeonGenerator.stairsDown.x][dungeonGenerator.stairsDown.y] = '>';

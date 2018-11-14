@@ -2098,15 +2098,16 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         return this;
     }
     private int alterEntry(final int pos) {
-        size--;
         int idx = fixOrder(pos);
+        size--;
         shiftKeys(pos);
         return idx;
     }
     private int alterNullEntry() {
+        int idx = fixOrder(n);
         containsNullKey = false;
         size--;
-        return fixOrder(n);
+        return idx;
     }
     /**
      * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration

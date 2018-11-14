@@ -2395,18 +2395,18 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         return this;
     }
     private int alterEntry(final int pos) {
+        int idx = fixOrder(pos);
         value[pos] = null;
         size--;
-        int idx = fixOrder(pos);
         shiftKeys(pos);
         return idx;
     }
     private int alterNullEntry() {
+        int idx = fixOrder(n);
         containsNullKey = false;
-        key[n] = null;
         value[n] = null;
         size--;
-        return fixOrder(n);
+        return idx;
     }
     /**
      * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration
