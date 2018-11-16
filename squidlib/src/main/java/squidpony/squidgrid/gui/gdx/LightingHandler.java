@@ -306,11 +306,89 @@ public class LightingHandler implements Serializable {
                         if (x < width - 1 && losResult[x + 1][y] > 0 && resistances[x + 1][y] < 1) {
                             if (o0 != (o0 = Math.max(o0, other[0][x + 1][y]))) o1 = other[1][x + 1][y];
                         }
-                        if (o0 == 0f || o1 == 0f)
-                            continue;
                     } else {
                         o0 = other[0][x][y];
                         o1 = other[1][x][y];
+                    }
+                    if (o0 == 0f || o1 == 0f)
+                        continue;
+                    b0 = basis[0][x][y];
+                    b1 = basis[1][x][y];
+                    if (b1 == FLOAT_WHITE) {
+                        basis[1][x][y] = o1;
+                        basis[0][x][y] = Math.min(1.0f, b0 + o0 * flare);
+                    } else {
+                        if (o1 != FLOAT_WHITE) {
+                            float change = (o0 - b0) * 0.5f + 0.5f;
+                            final int s = NumberTools.floatToIntBits(b1), e = NumberTools.floatToIntBits(o1),
+                                    rs = (s & 0xFF), gs = (s >>> 8) & 0xFF, bs = (s >>> 16) & 0xFF, as = s & 0xFE000000,
+                                    re = (e & 0xFF), ge = (e >>> 8) & 0xFF, be = (e >>> 16) & 0xFF, ae = (e >>> 25);
+                            change *= ae * 0.007874016f;
+                            basis[1][x][y] = NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) & 0xFF)
+                                    | ((int) (gs + change * (ge - gs)) & 0xFF) << 8
+                                    | (((int) (bs + change * (be - bs)) & 0xFF) << 16)
+                                    | as);
+                            basis[0][x][y] = Math.min(1.0f, b0 + o0 * change * flare);
+                        } else {
+                            basis[0][x][y] = Math.min(1.0f, b0 + o0 * flare);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Edits {@link #colorLighting} by adding in and mixing the given color where the light strength in {@link #tempFOV}
+     * is greater than 0, with that strengt boosted by flare (which can be any finite float greater than -1f, but is
+     * usually from 0f to 1f when increasing strength).
+     * Primarily used internally, but exposed so outside code can do the same things this class can.
+     * @param flare boosts the effective strength of lighting in {@link #tempColorLighting}; usually from 0 to 1
+     */
+    public void mixColoredLighting(float flare, float color)
+    {
+        final float[][][] basis = colorLighting;
+        final double[][] otherStrength = tempFOV;
+        flare += 1f;
+        float b0, b1, o0, o1;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                if (losResult[x][y] > 0) {
+                    if (resistances[x][y] >= 1) {
+                        o0 = 0f;
+                        if (y > 0) {
+                            if (losResult[x][y - 1] > 0 && resistances[x][y - 1] < 1) {
+                                o0 = Math.max(o0, (float) otherStrength[x][y - 1]);
+                            }
+                            if (x > 0 && losResult[x - 1][y - 1] > 0 && resistances[x - 1][y - 1] < 1) {
+                                o0 = Math.max(o0, (float) otherStrength[x - 1][y - 1]);
+                            }
+                            if (x < width - 1 && losResult[x + 1][y - 1] > 0 && resistances[x + 1][y - 1] < 1) {
+                                o0 = Math.max(o0, (float) otherStrength[x + 1][y - 1]);
+                            }
+                        }
+                        if (y < height - 1) {
+                            if (losResult[x][y + 1] > 0 && resistances[x][y + 1] < 1) {
+                                o0 = Math.max(o0, (float) otherStrength[x][y + 1]);
+                            }
+                            if (x > 0 && losResult[x - 1][y + 1] > 0 && resistances[x - 1][y + 1] < 1) {
+                                o0 = Math.max(o0, (float) otherStrength[x - 1][y + 1]);
+                            }
+                            if (x < width - 1 && losResult[x + 1][y + 1] > 0 && resistances[x + 1][y + 1] < 1) {
+                                o0 = Math.max(o0, (float) otherStrength[x + 1][y + 1]);
+                            }
+                        }
+                        if (x > 0 && losResult[x - 1][y] > 0 && resistances[x - 1][y] < 1) {
+                            o0 = Math.max(o0, (float) otherStrength[x - 1][y]);
+                        }
+                        if (x < width - 1 && losResult[x + 1][y] > 0 && resistances[x + 1][y] < 1) {
+                            o0 = Math.max(o0, (float) otherStrength[x + 1][y]);
+                        }
+                        if(o0 != 0) o1 = color;
+                        else continue;
+                    } else {
+                        if((o0 = (float) otherStrength[x][y]) != 0) o1 = color;
+                        else continue;
                     }
                     b0 = basis[0][x][y];
                     b1 = basis[1][x][y];
@@ -337,7 +415,7 @@ public class LightingHandler implements Serializable {
             }
         }
     }
-    
+
     /**
      * Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
      * changes in lighting color and strength to the various fields of this LightingHandler. This will only have an
@@ -358,8 +436,8 @@ public class LightingHandler implements Serializable {
                 continue;
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
-            SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
-            mixColoredLighting(radiance.flare);
+            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
+            mixColoredLighting(radiance.flare, radiance.color);
         }
     }
     /**
@@ -393,8 +471,8 @@ public class LightingHandler implements Serializable {
             pos = lights.keyAt(i);
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.currentRange());
-            SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
-            mixColoredLighting(radiance.flare);
+            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
+            mixColoredLighting(radiance.flare, radiance.color);
         }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -431,8 +509,8 @@ public class LightingHandler implements Serializable {
     public void updateUI(int lightX, int lightY, Radiance radiance)
     {
         FOV.reuseFOV(resistances, tempFOV, lightX, lightY, radiance.currentRange());
-        SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
-        mixColoredLighting(radiance.flare);
+        //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
+        mixColoredLighting(radiance.flare, radiance.color);
     }
 
     /**
@@ -533,8 +611,8 @@ public class LightingHandler implements Serializable {
                 continue;
             radiance = lights.getAt(i);
             FOV.reuseFOV(resistances, tempFOV, pos.x, pos.y, radiance.range);
-            SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
-            mixColoredLighting(radiance.flare);
+            //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
+            mixColoredLighting(radiance.flare, radiance.color);
         }
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {

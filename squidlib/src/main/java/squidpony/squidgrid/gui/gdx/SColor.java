@@ -14048,7 +14048,7 @@ B = t - Co;
             for (int y = 0; y < lights[0].length; y++) {
                 reuse[1][x][y] = ((reuse[0][x][y] = (float) lights[x][y]) > 0f)
                         ? color
-                        : FLOAT_WHITE; // the color white as a float
+                        : FLOAT_WHITE;
             }
         }
         return reuse;
