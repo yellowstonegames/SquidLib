@@ -13,15 +13,14 @@ import java.io.Serializable;
  * amount of space all possible ints would use) without finding any failures. Some big-name number generators sometimes
  * fail PractRand tests at only 256 MB, so this should be pretty good, except that this generator isn't capable of
  * producing all ints, and is only capable of producing a tiny fraction of all possible longs (less than 2 to the 32
- * possible longs can be generated). Like ThrustRNG and LightRNG, this changes its state with a steady fixed increment,
- * and does cipher-like adjustments to the current state to randomize it, although the changes here are necessarily more
- * involved than those in ThrustAltRNG because there are less bits of state to use to randomize output. The period on
- * ThrustAlt32RNG is 2 to the 32. Unlike some generators (like PermutedRNG), changing the seed even slightly generally
- * produces completely different results, which applies primarily to determine() but also the first number generated in
- * a series of nextInt() calls.
+ * possible longs can be generated). Like ThrustAltRNG and LightRNG, this changes its state with a steady fixed
+ * increment, and does cipher-like adjustments to the current state to randomize it, although the changes here are
+ * necessarily more involved than those in ThrustAltRNG because there are less bits of state to use to randomize output.
+ * The period on ThrustAlt32RNG is 2 to the 32.Changing the seed even slightly generally produces completely different
+ * results, which applies primarily to determine() but also the first number generated in a series of nextInt() calls.
  * <br>
  * This generator is meant to function the same on GWT as on desktop, server, or Android JREs, and unlike
- * {@link Light32RNG} or {@link PintRNG}, the implementation of ints on GWT is accounted for here. On GWT, ints are
+ * some earlier generators, the implementation of ints on GWT is accounted for here. On GWT, ints are
  * just JavaScript doubles, and can go beyond the typical range of an int without overflowing but are locked back down
  * into the 32-bit signed integer range when bitwise operations are used. To make sure multiplication stays within the
  * precise range for JavaScript doubles (with a maximum of 2 to the 53), any multiplications are limited to at most
@@ -29,8 +28,9 @@ import java.io.Serializable;
  * alternate implementation that replaces {@code foo += bar} with the normally-pointless {@code foo = foo + bar | 0}; on
  * GWR this enforces overflow wrapping to the int range, and similar bitwise code is used elsewhere in the super-sourced
  * version. This should be enough to ensure consistent behavior across platforms. The same techniques are used by
- * {@link Zag32RNG}, which is slightly slower but has a much larger period and similarly maintains high quality over the
- * tested span of that period.
+ * various other GWT-safe RNGs, such as {@link GWTRNG}, which uses the same algorithm as {@link Starfish32RNG}, and that
+ * algorithm is currently preferred to the one here because either of those classes can produce all possible ints with
+ * nextInt() but also all possible longs (except one) with nextLong().
  * <br>
  * Created by Tommy Ettinger on 2/13/2017.
  */

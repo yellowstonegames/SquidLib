@@ -9,18 +9,20 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.ColorNoise;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidInput;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
 import java.util.Random;
 
 import static squidpony.squidgrid.gui.gdx.SColor.*;
-import static squidpony.squidmath.Noise.PointHash.*;
+import static squidpony.squidmath.Noise.PointHash.hashAll;
 import static squidpony.squidmath.NumberTools.swayTight;
 
 /**
@@ -79,15 +81,13 @@ public class HashVisualizer extends ApplicationAdapter {
     
     private TextCellFactory tcf;
     private static final int width = 512, height = 512;
-    private static final int cellWidth = 1, cellHeight = 1;
     private static final float[][] back = new float[width][height];
 
     private SquidInput input;
     
-    private Stage stage;
     private Viewport view;
     
-    private CrossHash.Mist Mist_, Mist_A, Mist_B, Mist_C;
+    private CrossHash.Mist Mist_, Mist_C;
     private CrossHash.Mist mist, mistA, mistB, mistC;
     private NLFSR nlfsr = new NLFSR();
     private FlapRNG flap = new FlapRNG();
@@ -101,10 +101,10 @@ public class HashVisualizer extends ApplicationAdapter {
     private ThunderRNG thunder = new ThunderRNG();
     private XoRoRNG xoRo = new XoRoRNG();
     private XorRNG xor = new XorRNG();
-    private VortexRNG vortex = new VortexRNG();
-    private ThrustRNG thrust = new ThrustRNG();
+    private BasicRandom64 basic64 = new BasicRandom64();
+    private LinnormRNG linnorm = new LinnormRNG();
     private ThrustAltRNG ta = new ThrustAltRNG();
-    private Zag32RNG zag = new Zag32RNG();
+    private Starfish32RNG starfish = new Starfish32RNG();
 
 
     private final int[] coordinates = new int[2];
@@ -179,12 +179,12 @@ public class HashVisualizer extends ApplicationAdapter {
 
 
     private final long
-            seedX0 = thrust.nextLong(), seedX1 = thrust.nextLong(), seedX2 = thrust.nextLong(), seedX3 = thrust.nextLong(),
-            seedY0 = thrust.nextLong(), seedY1 = thrust.nextLong(), seedY2 = thrust.nextLong(), seedY3 = thrust.nextLong(),
-            seedZ0 = thrust.nextLong(), seedZ1 = thrust.nextLong(), seedZ2 = thrust.nextLong(), seedZ3 = thrust.nextLong(),
-            seedW0 = thrust.nextLong(), seedW1 = thrust.nextLong(), seedW2 = thrust.nextLong(), seedW3 = thrust.nextLong(),
-            seedU0 = thrust.nextLong(), seedU1 = thrust.nextLong(), seedU2 = thrust.nextLong(), seedU3 = thrust.nextLong(),
-            seedV0 = thrust.nextLong(), seedV1 = thrust.nextLong(), seedV2 = thrust.nextLong(), seedV3 = thrust.nextLong();
+            seedX0 = linnorm.nextLong(), seedX1 = linnorm.nextLong(), seedX2 = linnorm.nextLong(), seedX3 = linnorm.nextLong(),
+            seedY0 = linnorm.nextLong(), seedY1 = linnorm.nextLong(), seedY2 = linnorm.nextLong(), seedY3 = linnorm.nextLong(),
+            seedZ0 = linnorm.nextLong(), seedZ1 = linnorm.nextLong(), seedZ2 = linnorm.nextLong(), seedZ3 = linnorm.nextLong(),
+            seedW0 = linnorm.nextLong(), seedW1 = linnorm.nextLong(), seedW2 = linnorm.nextLong(), seedW3 = linnorm.nextLong(),
+            seedU0 = linnorm.nextLong(), seedU1 = linnorm.nextLong(), seedU2 = linnorm.nextLong(), seedU3 = linnorm.nextLong(),
+            seedV0 = linnorm.nextLong(), seedV1 = linnorm.nextLong(), seedV2 = linnorm.nextLong(), seedV3 = linnorm.nextLong();
 
     private final double[] turing = TuringPattern.initialize(width, height);
     private final int[][] turingActivate = TuringPattern.offsetsCircle(width, height, 4),
@@ -1069,8 +1069,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 //                filter4 = new Filters.PaletteFilter(new SColor[]{SColor.NAVAJO_WHITE, SColor.CAPE_JASMINE, SColor.LEMON_CHIFFON, SColor.PEACH_YELLOW}),
 //                filter5 = new Filters.PaletteFilter(new SColor[]{SColor.CORAL_RED, SColor.MEDIUM_SPRING_GREEN, SColor.PSYCHEDELIC_PURPLE, SColor.EGYPTIAN_BLUE});
         Mist_ = CrossHash.Mist.omicron_.randomize();
-        Mist_A = CrossHash.Mist.alpha_;
-        Mist_B = CrossHash.Mist.beta_;
         Mist_C = CrossHash.Mist.chi_;
         mist = new CrossHash.Mist();
         mistA = CrossHash.Mist.alpha;
@@ -1778,7 +1776,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 coordinates[1] = y;
-                                code = CrossHash.Mist.predefined[Light32RNG.determine(x + Light32RNG.determine(y)) & 31].hash(coordinates) & 0xFFFFFF00L | 255L;
+                                code = CrossHash.Mist.predefined[Noise.HastyPointHash.hash32(x, y, 123456789L)].hash(coordinates) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -4790,24 +4788,24 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("ThrustAltRNG (low bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 32:
-                        vortex.setState(System.nanoTime());
+                        basic64.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                code = vortex.nextLong() | 255L;
+                                code = basic64.nextLong() | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
-                        Gdx.graphics.setTitle("VortexRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 33:
-                        vortex.setState(System.nanoTime());
+                        basic64.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = vortex.next(8);
+                                iBright = basic64.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("VortexRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("BasicRandom64 at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 34:
                         jab.setState(System.nanoTime());
@@ -4850,44 +4848,44 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("NLFSR at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 38:
-                        thrust.setState(System.nanoTime());
+                        linnorm.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = floatGet(thrust.nextLong() | 255L);
+                                back[x][y] = floatGet(linnorm.nextLong() | 255L);
                             }
                         }
-                        Gdx.graphics.setTitle("ThrustRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LinnormRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 39:
-                        thrust.setState(System.nanoTime());
+                        linnorm.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = thrust.next(8);
+                                iBright = linnorm.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("ThrustRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LinnormRNG at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 40:
-                        code = ThrustRNG.determine(System.nanoTime());
+                        code = LinnormRNG.determine(System.nanoTime());
                         for (int x = 0; x < width; x++) {
-                            extra = ThrustRNG.determine(code + x);
+                            extra = LinnormRNG.determine(code + x);
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = floatGet(ThrustRNG.determine(extra + y) >>> 32 | 255);
+                                back[x][y] = floatGet(LinnormRNG.determine(extra + y) >>> 32 | 255);
                             }
                         }
-                        Gdx.graphics.setTitle("ThrustRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LinnormRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 41:
-                        code = ThrustRNG.determine(System.nanoTime());
+                        code = LinnormRNG.determine(System.nanoTime());
                         for (int x = 0; x < width; x++) {
-                            extra = ThrustRNG.determine(code + x);
+                            extra = LinnormRNG.determine(code + x);
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)(ThrustRNG.determine(extra + y) >>> 56);
+                                iBright = (int)(LinnormRNG.determine(extra + y) >>> 56);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("ThrustRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("LinnormRNG (determine(), highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 42:
                         ta.setState(System.nanoTime());
@@ -4932,39 +4930,37 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     case 46:
                         extra = System.nanoTime();
                         for (int x = 0; x < width; x++) {
-                            code = VortexRNG.determine(extra + x, x);
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = floatGet(VortexRNG.determine(code + y, y) >>> 32 | 255);
+                                back[x][y] = floatGet(Noise.PointHash.hashAll(x, y, extra) >>> 32 | 255);
                             }
                         }
-                        Gdx.graphics.setTitle("Vortex color (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("PointHash color (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 47:
                         extra = System.nanoTime();
                         for (int x = 0; x < width; x++) {
-                            code = VortexRNG.determine(extra + x, x);
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)(VortexRNG.determine(code + y, y) >>> 56);
+                                iBright = Noise.PointHash.hash256(x, y, extra);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("Vortex gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("PointHash gray (highest bits) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 48:
-                        zag.setState(System.nanoTime());
+                        starfish.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = zag.nextInt() | 255;
+                                iBright = starfish.nextInt() | 255;
                                 back[x][y] = floatGet(iBright);
                             }
                         }
                         Gdx.graphics.setTitle("Zag32RNG using higher bits at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 49:
-                        zag.setState(System.nanoTime());
+                        starfish.setState(System.nanoTime());
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = zag.next(8);
+                                iBright = starfish.next(8);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }

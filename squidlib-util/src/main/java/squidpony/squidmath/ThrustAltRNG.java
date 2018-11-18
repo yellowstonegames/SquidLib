@@ -6,38 +6,33 @@ import java.io.Serializable;
 
 
 /**
- * A variant on {@link ThrustRNG} that gives up a small amount of speed to attain better quality. ThrustAltRNG is
- * expected to pass BigCrush, which is a difficult statistical quality test that is part of TestU01, because it does so
- * well on other statistical tests. On <a href="http://gjrand.sourceforge.net/">gjrand</a>'s "testunif" checks, this
- * does very well on 100GB of tested data, with the "Overall summary one sided P-value P = 0.981", where 1 is perfect
- * and 0.1 or less is a failure. On <a href="http://pracrand.sourceforge.net/">PractRand</a>, this runs past 4TB of
- * generated numbers without finding any failures, and this version avoids issues with Gap-16 tests that cause ThrustRNG
- * to fail at 32GB and can cause slight variations on the code here to fail at 256GB. Like ThrustRNG and LightRNG, this
- * changes its state with a steady fixed increment, and does cipher-like adjustments to the current state to randomize
- * it. The period on ThrustAltRNG is 2 to the 64. ThrustAltRNG is a bit slower than ThrustRNG (but seems to have better
- * quality), while it is faster than LightRNG, XoRoRNG, and most other very-high-quality generators (not counting
- * ThrustRNG). Similarly to other cipher-like PRNGs, ThrustAltRNG has a {@link #determine(long)} method that takes a
- * state as a long and returns a deterministic random number (each input has one output). Unlike some generators (like
- * PermutedRNG), changing the seed even slightly generally produces completely different results, which applies
- * primarily to determine() but also the first number generated in a series of nextLong() calls.
+ * A random number generator that is extremely fast but can't return all possible results. ThrustAltRNG passes TestU01's
+ * BigCrush, which is a difficult statistical quality test. On <a href="http://gjrand.sourceforge.net/">gjrand</a>'s
+ * "testunif" checks, this does very well on 100GB of tested data, with the "Overall summary one sided P-value P =
+ * 0.981", where 1 is perfect and 0.1 or less is a failure. On <a href="http://pracrand.sourceforge.net/">PractRand</a>,
+ * this passes all 32TB of generated numbers without finding any failures (and very rarely finding anomalies). Like
+ * {@link LightRNG}, this changes its state with a steady fixed increment, and does cipher-like adjustments to the
+ * current state to randomize it (the change is not a true cipher because it is not reversible; this may be an advantage
+ * for some usage). The period on ThrustAltRNG is 2 to the 64. ThrustAltRNG is very strong on speed, outpacing the
+ * default generator for {@link RNG}, {@link LinnormRNG}, by a small margin, and most other RandomnessSources in
+ * SquidLib by a larger margin (it is slower than {@link JabRNG}, but JabRNG fails some statistical tests). Similarly to
+ * other cipher-like PRNGs, ThrustAltRNG has a {@link #determine(long)} method that takes a state as a long and returns
+ * a deterministic random number (each input has one output, though in this case the reverse isn't true and some outputs
+ * will be returned by multiple inputs). Like LightRNG, but unlike an LCG such as {@link java.util.Random}, changing the
+ * seed even slightly generally produces completely different results, which applies primarily to determine() but also
+ * the first number generated in a series of nextLong() calls. This generator is GWT-safe but will be much slower on GWT
+ * than generators designed for usage there, such as {@link GWTRNG} or {@link Lathe32RNG}.
  * <br>
- * As an aside, this generator has probably been adjusted more by me than any other generator in the library, and it
- * only recently was discovered that it can't produce all longs (it is not equidistributed). This is enough to discount
- * its use in some (mainly scientific) scenarios, although it passes all major testing suites (TestU01's BigCrush,
- * PractRand over the full 32TB of tests, and gjrand to some degree, at least better than most). LightRNG is back to
- * being the default generator after ThrustAltRNG was used extensively for some time, since LightRNG is known to be
- * high-quality (at the very least, high enough), is fairly fast (possibly faster than ThrustAltRNG on some benchmarks),
- * and is known to produce all longs over the course of its period.
+ * Because this generator can't produce all longs (it is not equidistributed), that alone is enough to discount its use
+ * in some (mainly scientific) scenarios, although it passes all major testing suites (TestU01's BigCrush, PractRand
+ * over the full 32TB of tests, and gjrand to some degree, at least better than most). LinnormRNG is the default
+ * generator after ThrustAltRNG was used extensively for some time, since LinnormRNG passes the same tests (not quite as
+ * well on gjrand, notably), is almost as fast, and is known to produce all longs over the course of its period.
  * <br>
- * This generator has changed since its introduction; the initial version used both the current and subsequent states
- * during each calculation, while this version only uses the current state (which it updates as it reads it). This makes
- * the {@link #skip(long)} method much simpler and (because it requires less operations in general) probably faster as
- * well, while it seems to have no performance impact on the normal {@link #nextLong()} and {@link #next(int)} methods.
- * Quality is very high, actually better than the first version according to gjrand (the earlier one had a P-value of
- * 0.904, while this has 0.981), but this goes even further on PractRand tests than the previous one (passing 4TB after
- * almost a day of testing), while the earlier version was showing signs of imminent failure around 2TB. This high
- * tested quality doesn't notice that this can't produce some longs, however, since no generators test 2 to the 67 bytes
- * of data to verify them fully.
+ * There was a ThrustRNG in SquidLib, but it failed statistical tests badly in roughly a minute of testing, so even
+ * though it was faster it probably wasn't a good idea to use it. ThrustAltRNG modifies ThrustRNG's algorithm very
+ * heavily, and isn't especially similar, but the name stuck, I guess. The idea behind the name is that the generator is
+ * acting like a thrust in fencing, pushing quickly but leaving a hole (not in the quality, but in the distribution).
  * <br>
  * Created by Tommy Ettinger on 10/18/2017.
  */

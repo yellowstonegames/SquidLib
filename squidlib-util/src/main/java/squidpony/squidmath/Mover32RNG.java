@@ -442,7 +442,7 @@ public final class Mover32RNG implements RandomnessSource {
 //        System.out.println(lin.getState());
 //        Random rand = new RNG(lin).asRandom();
 //        for (int c = 1; c <= 200; c++) {
-//            //final int r = (Light32RNG.determine(20007 + c) & 0xFFFF)|1;
+//            //final int r = (ThrustAlt32RNG.determine(20007 + c) & 0xFFFF)|1;
 //            final int r = BigInteger.probablePrime(20, rand).intValue();
 //            //System.out.printf("(x ^ x << %d) + 0xC68E9CB7\n", c);
 //            System.out.printf("%03d/200, testing r = 0x%08X\n", c, r);
