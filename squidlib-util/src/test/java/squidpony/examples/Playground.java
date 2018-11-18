@@ -315,7 +315,7 @@ public class Playground {
     {
         ShortSet sset = new ShortSet(65536);
         short s;
-        long mod = ThrustRNG.determine(n2 + n1) | 1L, state;
+        long mod = ThrustAltRNG.determine(n2 + n1) | 1L, state;
         for (int i = 0; i < 65536; i++) {
             //s = (short)(i * 0x9E37 + 0xDE4D);
             //s = (short) ((state = i * 0x5851F42D4C957F2DL + 0x14057B7EF767814FL) + (state >> n2) >>> n1);

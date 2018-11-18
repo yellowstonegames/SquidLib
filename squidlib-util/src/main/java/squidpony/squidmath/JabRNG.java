@@ -10,10 +10,8 @@ import java.io.Serializable;
  * A very fast and high-quality generator, but one that is not equidistributed because it produces 64-bit longs from 63
  * bits of state (meaning at least half of all possible long values cannot be returned by this generator). This still
  * passes gjrand with no failures on 100 GB of test data, and PractRand with 1TB (possibly more), while sometimes being
- * significantly faster than {@link ThrustRNG} and {@link ThrustAltRNG}. ThrustRNG fails PractRand at 32GB, so this
- * seems to be a substantial improvement in some ways, but ThrustAltRNG passes PractRand at the normal limit of 32TB,
- * which this may as well despite having a limited distribution. This does not pass all of PractRand in the current
- * version, failing at 2TB, so this class is expected to change if an improvement is found. The inlined version of
+ * significantly faster than {@link ThrustAltRNG}. ThrustAltRNG passes PractRand at the normal limit of 32TB, but this
+ * fails it at 2TB, so this class is expected to change if an improvement is found. The inlined version of
  * {@link #nextLong()} is the fastest generator in all of SquidLib, even counting deeply-flawed generators like
  * {@link LapRNG}. The name comes from its origin with Thrust, but as opposed to a full-body movement for a thrust in
  * fencing, this only "moves" some of its bits, like a jab in boxing.

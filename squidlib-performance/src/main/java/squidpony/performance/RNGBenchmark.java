@@ -32,7 +32,6 @@
 package squidpony.performance;
 
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.RandomXS128;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
@@ -41,8 +40,8 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
 import squidpony.squidmath.*;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -478,28 +477,28 @@ public class RNGBenchmark {
     }
 
 
-    private ThrustRNG Thrust = new ThrustRNG(9999L);
-    private RNG ThrustR = new RNG(Thrust);
-    @Benchmark
-    public long measureThrust()
-    {
-        return Thrust.nextLong();
-    }
-    @Benchmark
-    public int measureThrustInt()
-    {
-        return Thrust.next(32);
-    }
-    @Benchmark
-    public long measureThrustR()
-    {
-        return ThrustR.nextLong();
-    }
-    @Benchmark
-    public int measureThrustIntR()
-    {
-        return ThrustR.nextInt();
-    }
+//    private ThrustRNG Thrust = new ThrustRNG(9999L);
+//    private RNG ThrustR = new RNG(Thrust);
+//    @Benchmark
+//    public long measureThrust()
+//    {
+//        return Thrust.nextLong();
+//    }
+//    @Benchmark
+//    public int measureThrustInt()
+//    {
+//        return Thrust.next(32);
+//    }
+//    @Benchmark
+//    public long measureThrustR()
+//    {
+//        return ThrustR.nextLong();
+//    }
+//    @Benchmark
+//    public int measureThrustIntR()
+//    {
+//        return ThrustR.nextInt();
+//    }
 
     private ThrustAltRNG ThrustAlt = new ThrustAltRNG(9999L);
     private RNG ThrustAltR = new RNG(ThrustAlt);
@@ -525,28 +524,28 @@ public class RNGBenchmark {
     }
 
 
-    private VortexRNG Vortex = new VortexRNG(9999L);
-    private RNG VortexR = new RNG(Vortex);
-    @Benchmark
-    public long measureVortex()
-    {
-        return Vortex.nextLong();
-    }
-    @Benchmark
-    public int measureVortexInt()
-    {
-        return Vortex.next(32);
-    }
-    @Benchmark
-    public long measureVortexR()
-    {
-        return VortexR.nextLong();
-    }
-    @Benchmark
-    public int measureVortexIntR()
-    {
-        return VortexR.nextInt();
-    }
+//    private VortexRNG Vortex = new VortexRNG(9999L);
+//    private RNG VortexR = new RNG(Vortex);
+//    @Benchmark
+//    public long measureVortex()
+//    {
+//        return Vortex.nextLong();
+//    }
+//    @Benchmark
+//    public int measureVortexInt()
+//    {
+//        return Vortex.next(32);
+//    }
+//    @Benchmark
+//    public long measureVortexR()
+//    {
+//        return VortexR.nextLong();
+//    }
+//    @Benchmark
+//    public int measureVortexIntR()
+//    {
+//        return VortexR.nextInt();
+//    }
 
 
 
@@ -597,28 +596,28 @@ public class RNGBenchmark {
         return ThrustAlt32R.nextInt();
     }
 
-    private Light32RNG Light32 = new Light32RNG(9999);
-    private RNG Light32R = new RNG(Light32);
-    @Benchmark
-    public long measureLight32()
-    {
-        return Light32.nextLong();
-    }
-    @Benchmark
-    public int measureLight32Int()
-    {
-        return Light32.next(32);
-    }
-    @Benchmark
-    public long measureLight32R()
-    {
-        return Light32R.nextLong();
-    }
-    @Benchmark
-    public int measureLight32IntR()
-    {
-        return Light32R.nextInt();
-    }
+//    private Light32RNG Light32 = new Light32RNG(9999);
+//    private RNG Light32R = new RNG(Light32);
+//    @Benchmark
+//    public long measureLight32()
+//    {
+//        return Light32.nextLong();
+//    }
+//    @Benchmark
+//    public int measureLight32Int()
+//    {
+//        return Light32.next(32);
+//    }
+//    @Benchmark
+//    public long measureLight32R()
+//    {
+//        return Light32R.nextLong();
+//    }
+//    @Benchmark
+//    public int measureLight32IntR()
+//    {
+//        return Light32R.nextInt();
+//    }
 
     private Zag32RNG Zag32 = new Zag32RNG(9999L);
     private RNG Zag32R = new RNG(Zag32);

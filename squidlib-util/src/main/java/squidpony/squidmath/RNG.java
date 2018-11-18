@@ -81,12 +81,16 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * RNG) doesn't work with ints as expected, but does with GWT's implementation of longs.
  * If targeting GWT, {@link Lathe32RNG} is significantly faster at producing int values
  * than any long-based generator, and will produce the same results on GWT as on desktop
- * or Android (not all 32-bit generators do this). {@link ThrustAlt32RNG},
+ * or Android (not all 32-bit generators do this). {@link Starfish32RNG} goes one step
+ * further than Lathe32RNG at an even distribution, and has better quality, but is
+ * slightly slower. While Lathe32RNG can produce all ints over the course of its period,
+ * it will produce some pairs of ints, or longs, more often than others and will never
+ * produce some longs. Starfish32RNG will produce all longs but one. {@link ThrustAlt32RNG},
  * {@link Zag32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators that
  * were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,
- * but should not be used on GWT: {@link PintRNG}, {@link Light32RNG},
- * and {@link FlapRNG}. All other generators use longs, and so will be
- * slower than the recommended Lathe32RNG on GWT, but much faster on 64-bit JREs.
+ * but should not be used on GWT: {@link PintRNG} and {@link FlapRNG}. All other generators
+ * use longs, and so will be slower than the recommended Starfish32RNG or Lathe32RNG on GWT,
+ * but much faster on 64-bit JREs.
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
  * @author Tommy Ettinger
  * @author smelC
@@ -812,7 +816,7 @@ public class RNG implements Serializable, IRNG {
     /**
      * Get a random bit of state, interpreted as true or false with approximately equal likelihood.
      * This may have better behavior than {@code rng.next(1)}, depending on the RandomnessSource implementation; the
-     * default LinnormRNG will behave fine, as will ThrustRNG and ThrustAltRNG (these all use similar algorithms), but
+     * default LinnormRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
      * the  normally-high-quality XoRoRNG will produce very predictable output with {@code rng.next(1)} and very good
      * output with {@code rng.nextBoolean()}. This is a known and considered flaw of Xoroshiro128+, the algorithm used
      * by XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-
