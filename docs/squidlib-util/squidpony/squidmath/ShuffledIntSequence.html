@@ -118,7 +118,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.36">ShuffledIntSequence</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.38">ShuffledIntSequence</a>
 extends <a href="../../squidpony/squidmath/LowStorageShuffler.html" title="class in squidpony.squidmath">LowStorageShuffler</a>
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">An infinite sequence of pseudo-random ints (typically used as indices) from 0 to some bound, with all possible ints
@@ -144,8 +144,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  <br>
  This class extends <a href="../../squidpony/squidmath/LowStorageShuffler.html" title="class in squidpony.squidmath"><code>LowStorageShuffler</code></a>, changing it from producing a unique set of ints once, to producing
  many sets of ints one after the next. It is very similar to <a href="../../squidpony/squidmath/SNShuffledIntSequence.html" title="class in squidpony.squidmath"><code>SNShuffledIntSequence</code></a>, which is just like this
- class but extends <a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath"><code>SwapOrNotShuffler</code></a> instead. This class and LowStorageShuffler are optimized for GWT, while
- SNShuffledIntSequence and SwapOrNotShuffler are not but may have higher quality.
+ class but extends <a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath"><code>SwapOrNotShuffler</code></a> instead. This class and LowStorageShuffler perform slightly better than
+ SwapOrNotShuffler and SNShuffledIntSequence when the bound is equal to a power of 4 or slightly less, but perform
+ drastically worse when the bound is slightly greater than a power of 4. SNShuffledIntSequence should usually be
+ preferred over this class when the bound is unknown or known to be a problem for this class.
  <br>
  Created by Tommy Ettinger on 9/30/2018.</div>
 <dl>
@@ -283,7 +285,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>seed</h4>
-<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.38">seed</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.40">seed</a></pre>
 </li>
 </ul>
 </li>
@@ -300,7 +302,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ShuffledIntSequence</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.42">ShuffledIntSequence</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.44">ShuffledIntSequence</a>()</pre>
 <div class="block">Constructs a ShuffledIntSequence with a random seed and a bound of 10.</div>
 </li>
 </ul>
@@ -310,7 +312,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>ShuffledIntSequence</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.50">ShuffledIntSequence</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.52">ShuffledIntSequence</a>(int&nbsp;bound)</pre>
 <div class="block">Constructs a ShuffledIntSequence with the given exclusive upper bound and a random seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -324,7 +326,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ShuffledIntSequence</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.60">ShuffledIntSequence</a>(int&nbsp;bound,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.62">ShuffledIntSequence</a>(int&nbsp;bound,
                            int&nbsp;seed)</pre>
 <div class="block">Constructs a ShuffledIntSequence with the given exclusive upper bound and int seed.</div>
 <dl>
@@ -348,7 +350,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.71">next</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.73">next</a>()</pre>
 <div class="block">Gets the next distinct int in the sequence, shuffling the sequence if it has been exhausted so it never runs out.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -364,7 +366,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>previous</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.88">previous</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.90">previous</a>()</pre>
 <div class="block">Gets the previous returned int from the sequence (as yielded by <a href="../../squidpony/squidmath/ShuffledIntSequence.html#next--"><code>next()</code></a>), restarting the sequence in a
  correctly-ordered way if it would go to before the "start" of the sequence (it is actually close to infinite both
  going forwards and backwards).</div>
@@ -382,7 +384,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>restart</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.113">restart</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ShuffledIntSequence.html#line.115">restart</a>(int&nbsp;seed)</pre>
 <div class="block">Starts the sequence over, but can change the seed (completely changing the sequence). If <code>seed</code> is the same
  as the seed given in the constructor, this will use the same sequence, acting like <a href="../../squidpony/squidmath/LowStorageShuffler.html#restart--"><code>LowStorageShuffler.restart()</code></a>.</div>
 <dl>

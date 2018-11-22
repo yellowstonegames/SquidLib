@@ -1752,83 +1752,82 @@
 <span class="sourceLineNo">1744</span>        }<a name="line.1744"></a>
 <span class="sourceLineNo">1745</span>    }*/<a name="line.1745"></a>
 <span class="sourceLineNo">1746</span>    private int alterEntry(final int pos) {<a name="line.1746"></a>
-<span class="sourceLineNo">1747</span>        size--;<a name="line.1747"></a>
-<span class="sourceLineNo">1748</span>        int idx = fixOrder(pos);<a name="line.1748"></a>
+<span class="sourceLineNo">1747</span>        int idx = fixOrder(pos);<a name="line.1747"></a>
+<span class="sourceLineNo">1748</span>        size--;<a name="line.1748"></a>
 <span class="sourceLineNo">1749</span>        shiftKeys(pos);<a name="line.1749"></a>
-<span class="sourceLineNo">1750</span>        if (size &lt; maxFill / 4 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1750"></a>
-<span class="sourceLineNo">1751</span>            rehash(n / 2);<a name="line.1751"></a>
+<span class="sourceLineNo">1750</span>        if (size &lt; maxFill &gt;&gt; 2 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1750"></a>
+<span class="sourceLineNo">1751</span>            rehash(n &gt;&gt; 1);<a name="line.1751"></a>
 <span class="sourceLineNo">1752</span>        return idx;<a name="line.1752"></a>
 <span class="sourceLineNo">1753</span>    }<a name="line.1753"></a>
 <span class="sourceLineNo">1754</span><a name="line.1754"></a>
 <span class="sourceLineNo">1755</span>    private int alterNullEntry() {<a name="line.1755"></a>
-<span class="sourceLineNo">1756</span>        containsNull = false;<a name="line.1756"></a>
-<span class="sourceLineNo">1757</span>        key[n] = null;<a name="line.1757"></a>
+<span class="sourceLineNo">1756</span>        int idx = fixOrder(n);<a name="line.1756"></a>
+<span class="sourceLineNo">1757</span>        containsNull = false;<a name="line.1757"></a>
 <span class="sourceLineNo">1758</span>        size--;<a name="line.1758"></a>
-<span class="sourceLineNo">1759</span>        int idx = fixOrder(n);<a name="line.1759"></a>
-<span class="sourceLineNo">1760</span>        if (size &lt; maxFill / 4 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1760"></a>
-<span class="sourceLineNo">1761</span>            rehash(n / 2);<a name="line.1761"></a>
-<span class="sourceLineNo">1762</span>        return idx;<a name="line.1762"></a>
-<span class="sourceLineNo">1763</span>    }<a name="line.1763"></a>
-<span class="sourceLineNo">1764</span><a name="line.1764"></a>
-<span class="sourceLineNo">1765</span>    /**<a name="line.1765"></a>
-<span class="sourceLineNo">1766</span>     * Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.<a name="line.1766"></a>
-<span class="sourceLineNo">1767</span>     *<a name="line.1767"></a>
-<span class="sourceLineNo">1768</span>     * @param original    a K value that will be removed from this Set if present, and its iteration index remembered<a name="line.1768"></a>
-<span class="sourceLineNo">1769</span>     * @param replacement another K value that will replace original at the remembered index<a name="line.1769"></a>
-<span class="sourceLineNo">1770</span>     * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)<a name="line.1770"></a>
-<span class="sourceLineNo">1771</span>     */<a name="line.1771"></a>
-<span class="sourceLineNo">1772</span>    public boolean alter(K original, K replacement) {<a name="line.1772"></a>
-<span class="sourceLineNo">1773</span>        int idx;<a name="line.1773"></a>
-<span class="sourceLineNo">1774</span>        if (original == null) {<a name="line.1774"></a>
-<span class="sourceLineNo">1775</span>            if (containsNull) {<a name="line.1775"></a>
-<span class="sourceLineNo">1776</span>                if (replacement != null) {<a name="line.1776"></a>
-<span class="sourceLineNo">1777</span>                    idx = alterNullEntry();<a name="line.1777"></a>
-<span class="sourceLineNo">1778</span>                    addAt(replacement, idx);<a name="line.1778"></a>
-<span class="sourceLineNo">1779</span>                    return true;<a name="line.1779"></a>
-<span class="sourceLineNo">1780</span>                } else<a name="line.1780"></a>
-<span class="sourceLineNo">1781</span>                    return false;<a name="line.1781"></a>
-<span class="sourceLineNo">1782</span>            }<a name="line.1782"></a>
-<span class="sourceLineNo">1783</span>            ;<a name="line.1783"></a>
-<span class="sourceLineNo">1784</span>            return false;<a name="line.1784"></a>
-<span class="sourceLineNo">1785</span>        }<a name="line.1785"></a>
-<span class="sourceLineNo">1786</span>        if (hasher.areEqual(original, replacement))<a name="line.1786"></a>
-<span class="sourceLineNo">1787</span>            return false;<a name="line.1787"></a>
-<span class="sourceLineNo">1788</span>        K curr;<a name="line.1788"></a>
-<span class="sourceLineNo">1789</span>        final K[] key = this.key;<a name="line.1789"></a>
-<span class="sourceLineNo">1790</span>        int pos;<a name="line.1790"></a>
-<span class="sourceLineNo">1791</span>        // The starting point.<a name="line.1791"></a>
-<span class="sourceLineNo">1792</span>        if ((curr = key[pos = (hasher.hash(original)) &amp; mask]) == null)<a name="line.1792"></a>
-<span class="sourceLineNo">1793</span>            return false;<a name="line.1793"></a>
-<span class="sourceLineNo">1794</span>        if (hasher.areEqual(original, curr)) {<a name="line.1794"></a>
-<span class="sourceLineNo">1795</span>            idx = alterEntry(pos);<a name="line.1795"></a>
-<span class="sourceLineNo">1796</span>            addAt(replacement, idx);<a name="line.1796"></a>
-<span class="sourceLineNo">1797</span>            return true;<a name="line.1797"></a>
-<span class="sourceLineNo">1798</span>        }<a name="line.1798"></a>
-<span class="sourceLineNo">1799</span>        while (true) {<a name="line.1799"></a>
-<span class="sourceLineNo">1800</span>            if ((curr = key[pos = pos + 1 &amp; mask]) == null)<a name="line.1800"></a>
-<span class="sourceLineNo">1801</span>                return false;<a name="line.1801"></a>
-<span class="sourceLineNo">1802</span>            if (hasher.areEqual(original, curr)) {<a name="line.1802"></a>
-<span class="sourceLineNo">1803</span>                idx = alterEntry(pos);<a name="line.1803"></a>
-<span class="sourceLineNo">1804</span>                addAt(replacement, idx);<a name="line.1804"></a>
-<span class="sourceLineNo">1805</span>                return true;<a name="line.1805"></a>
-<span class="sourceLineNo">1806</span>            }<a name="line.1806"></a>
-<span class="sourceLineNo">1807</span>        }<a name="line.1807"></a>
-<span class="sourceLineNo">1808</span>    }<a name="line.1808"></a>
-<span class="sourceLineNo">1809</span><a name="line.1809"></a>
-<span class="sourceLineNo">1810</span>    /**<a name="line.1810"></a>
-<span class="sourceLineNo">1811</span>     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.<a name="line.1811"></a>
-<span class="sourceLineNo">1812</span>     *<a name="line.1812"></a>
-<span class="sourceLineNo">1813</span>     * @param index       an index to replace the K item at<a name="line.1813"></a>
-<span class="sourceLineNo">1814</span>     * @param replacement another K value that will replace the original at the remembered index<a name="line.1814"></a>
-<span class="sourceLineNo">1815</span>     * @return true if the Set changed, or false if it didn't (such as if the replacement was already present at the given index)<a name="line.1815"></a>
-<span class="sourceLineNo">1816</span>     */<a name="line.1816"></a>
-<span class="sourceLineNo">1817</span>    public boolean alterAt(int index, K replacement)<a name="line.1817"></a>
-<span class="sourceLineNo">1818</span>    {<a name="line.1818"></a>
-<span class="sourceLineNo">1819</span>        return alter(getAt(index), replacement);<a name="line.1819"></a>
-<span class="sourceLineNo">1820</span>    }<a name="line.1820"></a>
+<span class="sourceLineNo">1759</span>        if (size &lt; maxFill &gt;&gt; 2 &amp;&amp; n &gt; DEFAULT_INITIAL_SIZE)<a name="line.1759"></a>
+<span class="sourceLineNo">1760</span>            rehash(n &gt;&gt; 1);<a name="line.1760"></a>
+<span class="sourceLineNo">1761</span>        return idx;<a name="line.1761"></a>
+<span class="sourceLineNo">1762</span>    }<a name="line.1762"></a>
+<span class="sourceLineNo">1763</span><a name="line.1763"></a>
+<span class="sourceLineNo">1764</span>    /**<a name="line.1764"></a>
+<span class="sourceLineNo">1765</span>     * Changes a K, original, to another, replacement, while keeping replacement at the same point in the ordering.<a name="line.1765"></a>
+<span class="sourceLineNo">1766</span>     *<a name="line.1766"></a>
+<span class="sourceLineNo">1767</span>     * @param original    a K value that will be removed from this Set if present, and its iteration index remembered<a name="line.1767"></a>
+<span class="sourceLineNo">1768</span>     * @param replacement another K value that will replace original at the remembered index<a name="line.1768"></a>
+<span class="sourceLineNo">1769</span>     * @return true if the Set changed, or false if it didn't (such as if the two arguments are equal, or replacement was already in the Set but original was not)<a name="line.1769"></a>
+<span class="sourceLineNo">1770</span>     */<a name="line.1770"></a>
+<span class="sourceLineNo">1771</span>    public boolean alter(K original, K replacement) {<a name="line.1771"></a>
+<span class="sourceLineNo">1772</span>        int idx;<a name="line.1772"></a>
+<span class="sourceLineNo">1773</span>        if (original == null) {<a name="line.1773"></a>
+<span class="sourceLineNo">1774</span>            if (containsNull) {<a name="line.1774"></a>
+<span class="sourceLineNo">1775</span>                if (replacement != null) {<a name="line.1775"></a>
+<span class="sourceLineNo">1776</span>                    idx = alterNullEntry();<a name="line.1776"></a>
+<span class="sourceLineNo">1777</span>                    addAt(replacement, idx);<a name="line.1777"></a>
+<span class="sourceLineNo">1778</span>                    return true;<a name="line.1778"></a>
+<span class="sourceLineNo">1779</span>                } else<a name="line.1779"></a>
+<span class="sourceLineNo">1780</span>                    return false;<a name="line.1780"></a>
+<span class="sourceLineNo">1781</span>            }<a name="line.1781"></a>
+<span class="sourceLineNo">1782</span>            ;<a name="line.1782"></a>
+<span class="sourceLineNo">1783</span>            return false;<a name="line.1783"></a>
+<span class="sourceLineNo">1784</span>        }<a name="line.1784"></a>
+<span class="sourceLineNo">1785</span>        if (hasher.areEqual(original, replacement))<a name="line.1785"></a>
+<span class="sourceLineNo">1786</span>            return false;<a name="line.1786"></a>
+<span class="sourceLineNo">1787</span>        K curr;<a name="line.1787"></a>
+<span class="sourceLineNo">1788</span>        final K[] key = this.key;<a name="line.1788"></a>
+<span class="sourceLineNo">1789</span>        int pos;<a name="line.1789"></a>
+<span class="sourceLineNo">1790</span>        // The starting point.<a name="line.1790"></a>
+<span class="sourceLineNo">1791</span>        if ((curr = key[pos = (hasher.hash(original)) &amp; mask]) == null)<a name="line.1791"></a>
+<span class="sourceLineNo">1792</span>            return false;<a name="line.1792"></a>
+<span class="sourceLineNo">1793</span>        if (hasher.areEqual(original, curr)) {<a name="line.1793"></a>
+<span class="sourceLineNo">1794</span>            idx = alterEntry(pos);<a name="line.1794"></a>
+<span class="sourceLineNo">1795</span>            addAt(replacement, idx);<a name="line.1795"></a>
+<span class="sourceLineNo">1796</span>            return true;<a name="line.1796"></a>
+<span class="sourceLineNo">1797</span>        }<a name="line.1797"></a>
+<span class="sourceLineNo">1798</span>        while (true) {<a name="line.1798"></a>
+<span class="sourceLineNo">1799</span>            if ((curr = key[pos = pos + 1 &amp; mask]) == null)<a name="line.1799"></a>
+<span class="sourceLineNo">1800</span>                return false;<a name="line.1800"></a>
+<span class="sourceLineNo">1801</span>            if (hasher.areEqual(original, curr)) {<a name="line.1801"></a>
+<span class="sourceLineNo">1802</span>                idx = alterEntry(pos);<a name="line.1802"></a>
+<span class="sourceLineNo">1803</span>                addAt(replacement, idx);<a name="line.1803"></a>
+<span class="sourceLineNo">1804</span>                return true;<a name="line.1804"></a>
+<span class="sourceLineNo">1805</span>            }<a name="line.1805"></a>
+<span class="sourceLineNo">1806</span>        }<a name="line.1806"></a>
+<span class="sourceLineNo">1807</span>    }<a name="line.1807"></a>
+<span class="sourceLineNo">1808</span><a name="line.1808"></a>
+<span class="sourceLineNo">1809</span>    /**<a name="line.1809"></a>
+<span class="sourceLineNo">1810</span>     * Changes the K at the given index to replacement while keeping replacement at the same point in the ordering.<a name="line.1810"></a>
+<span class="sourceLineNo">1811</span>     *<a name="line.1811"></a>
+<span class="sourceLineNo">1812</span>     * @param index       an index to replace the K item at<a name="line.1812"></a>
+<span class="sourceLineNo">1813</span>     * @param replacement another K value that will replace the original at the remembered index<a name="line.1813"></a>
+<span class="sourceLineNo">1814</span>     * @return true if the Set changed, or false if it didn't (such as if the replacement was already present at the given index)<a name="line.1814"></a>
+<span class="sourceLineNo">1815</span>     */<a name="line.1815"></a>
+<span class="sourceLineNo">1816</span>    public boolean alterAt(int index, K replacement)<a name="line.1816"></a>
+<span class="sourceLineNo">1817</span>    {<a name="line.1817"></a>
+<span class="sourceLineNo">1818</span>        return alter(getAt(index), replacement);<a name="line.1818"></a>
+<span class="sourceLineNo">1819</span>    }<a name="line.1819"></a>
+<span class="sourceLineNo">1820</span><a name="line.1820"></a>
 <span class="sourceLineNo">1821</span><a name="line.1821"></a>
-<span class="sourceLineNo">1822</span><a name="line.1822"></a>
-<span class="sourceLineNo">1823</span>}<a name="line.1823"></a>
+<span class="sourceLineNo">1822</span>}<a name="line.1822"></a>
 
 
 

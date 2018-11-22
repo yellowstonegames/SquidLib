@@ -2841,67 +2841,6 @@
 </ul>
 </li>
 <li class="blockList">
-<h2 title="Package">Package&nbsp;squidpony.squidgrid.mapping.locks.generators</h2>
-<ul class="blockList">
-<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.generators.LayoutGenerator.OutOfRoomsException">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.OutOfRoomsException.html" title="class in squidpony.squidgrid.mapping.locks.generators">squidpony.squidgrid.mapping.locks.generators.LayoutGenerator.OutOfRoomsException</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-</li>
-<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.generators.LayoutGenerator.RetryException">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators">squidpony.squidgrid.mapping.locks.generators.LayoutGenerator.RetryException</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h2 title="Package">Package&nbsp;squidpony.squidgrid.mapping.locks.util</h2>
-<ul class="blockList">
-<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.util.GenerationFailureException">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidgrid/mapping/locks/util/GenerationFailureException.html" title="class in squidpony.squidgrid.mapping.locks.util">squidpony.squidgrid.mapping.locks.util.GenerationFailureException</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/RuntimeException.html?is-external=true" title="class or interface in java.lang">RuntimeException</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-</li>
-<li class="blockList"><a name="squidpony.squidgrid.mapping.locks.util.Rect2I">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidgrid/mapping/locks/util/Rect2I.html" title="class in squidpony.squidgrid.mapping.locks.util">squidpony.squidgrid.mapping.locks.util.Rect2I</a> extends <a href="squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a> implements Serializable</h3>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>topLeft</h4>
-<pre><a href="squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a> topLeft</pre>
-</li>
-<li class="blockList">
-<h4>width</h4>
-<pre>int width</pre>
-</li>
-<li class="blockListLast">
-<h4>height</h4>
-<pre>int height</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList">
 <h2 title="Package">Package&nbsp;squidpony.squidgrid.zone</h2>
 <ul class="blockList">
 <li class="blockList"><a name="squidpony.squidgrid.zone.CoordPackerZone">
@@ -4194,30 +4133,6 @@
 </li>
 </ul>
 </li>
-<li class="blockList"><a name="squidpony.squidmath.Light32RNG">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">squidpony.squidmath.Light32RNG</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>-374415589203474497L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>state</h4>
-<pre>int state</pre>
-</li>
-<li class="blockListLast">
-<h4>inc</h4>
-<pre>int inc</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="blockList"><a name="squidpony.squidmath.LightRNG">
 <!--   -->
 </a>
@@ -5217,7 +5132,7 @@
 <ul class="blockList">
 <li class="blockListLast">
 <h4>seed</h4>
-<pre>long seed</pre>
+<pre>int seed</pre>
 </li>
 </ul>
 </li>
@@ -5341,8 +5256,8 @@
 <pre>int[] keys</pre>
 </li>
 <li class="blockListLast">
-<h4>functions</h4>
-<pre>long[] functions</pre>
+<h4>func</h4>
+<pre>int func</pre>
 </li>
 </ul>
 </li>
@@ -5402,27 +5317,6 @@
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>3L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>state</h4>
-<pre>long state</pre>
-<div class="block">Can be any long value.</div>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="squidpony.squidmath.ThrustRNG">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/ThrustRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.ThrustRNG</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -5679,38 +5573,6 @@
 <li class="blockListLast">
 <h4>scramble</h4>
 <pre>boolean scramble</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="squidpony.squidmath.VortexRNG">
-<!--   -->
-</a>
-<h3>Class <a href="squidpony/squidmath/VortexRNG.html" title="class in squidpony.squidmath">squidpony.squidmath.VortexRNG</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>3L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>state</h4>
-<pre>long state</pre>
-<div class="block">Can be any long value.</div>
-</li>
-<li class="blockListLast">
-<h4>stream</h4>
-<pre>long stream</pre>
-<div class="block">A long that decides which stream this VortexRNG will generate numbers with; the stream changes in a Weyl
- sequence (adding a large odd number), and the relationship between the Weyl sequence and the state determines how
- numbers will be generated differently when stream or state changes. It's perfectly fine to supply a value of 0
- for stream, since it won't be used verbatim and will also change during the first number generation.
- <br>
- This can be changed after construction but not with any guarantees of quality staying the same
- relative to previously-generated numbers on a different stream.</div>
 </li>
 </ul>
 </li>

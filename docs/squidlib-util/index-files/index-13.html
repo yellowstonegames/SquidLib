@@ -389,25 +389,6 @@
 <dd>
 <div class="block">Use this tag when logging things about the screen's layout.</div>
 </dd>
-<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator</span></a> - Class in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
-<dd>
-<div class="block">The default and reference implementation of an <a href="../squidpony/squidgrid/mapping/locks/generators/ILayoutGenerator.html" title="interface in squidpony.squidgrid.mapping.locks.generators"><code>ILayoutGenerator</code></a>.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html#LayoutGenerator-squidpony.squidmath.IRNG-squidpony.squidgrid.mapping.locks.constraints.ILayoutConstraints-">LayoutGenerator(IRNG, ILayoutConstraints)</a></span> - Constructor for class squidpony.squidgrid.mapping.locks.generators.<a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.html" title="class in squidpony.squidgrid.mapping.locks.generators">LayoutGenerator</a></dt>
-<dd>
-<div class="block">Creates a LayoutGenerator with a given random seed and places
- specific constraints on <a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks"><code>IRoomLayout</code></a>s it generates.</div>
-</dd>
-<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.KeyLevelRoomMapping.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator.KeyLevelRoomMapping</span></a> - Class in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
-<dd>
-<div class="block">Maps 'keyLevel' to the set of rooms within that keyLevel.</div>
-</dd>
-<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.OutOfRoomsException.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator.OutOfRoomsException</span></a> - Exception in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
-<dd>&nbsp;</dd>
-<dt><a href="../squidpony/squidgrid/mapping/locks/generators/LayoutGenerator.RetryException.html" title="class in squidpony.squidgrid.mapping.locks.generators"><span class="typeNameLink">LayoutGenerator.RetryException</span></a> - Exception in <a href="../squidpony/squidgrid/mapping/locks/generators/package-summary.html">squidpony.squidgrid.mapping.locks.generators</a></dt>
-<dd>
-<div class="block">Thrown by several ILayoutGenerator methods that can fail.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/Messaging.html#learnIrregularWord-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">learnIrregularWord(String, String, String, String, String, String, String)</a></span> - Static method in class squidpony.<a href="../squidpony/Messaging.html" title="class in squidpony">Messaging</a></dt>
 <dd>
 <div class="block">Adds a given <code>word</code>, which should start with a lower-case letter and use lower-case letters and underscores
@@ -426,8 +407,6 @@
 <div class="block">Adds translation pairs to vocabulary so it can be used in decipher, giving a correct translation for sourceWords.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/iterator/SquidIterators.Left.html#Left-int-int-int-int-">Left(int, int, int, int)</a></span> - Constructor for class squidpony.squidgrid.iterator.<a href="../squidpony/squidgrid/iterator/SquidIterators.Left.html" title="class in squidpony.squidgrid.iterator">SquidIterators.Left</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/util/Rect2I.html#left--">left()</a></span> - Method in class squidpony.squidgrid.mapping.locks.util.<a href="../squidpony/squidgrid/mapping/locks/util/Rect2I.html" title="class in squidpony.squidgrid.mapping.locks.util">Rect2I</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MapModule.html#leftDoors">leftDoors</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MapModule.html" title="class in squidpony.squidgrid.mapping">MapModule</a></dt>
 <dd>&nbsp;</dd>
@@ -516,28 +495,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/LineKit.html#light">light</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/LineKit.html" title="class in squidpony.squidgrid.mapping">LineKit</a></dt>
 <dd>&nbsp;</dd>
-<dt><a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Light32RNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
-<dd>
-<div class="block">Based on the same SplitMix algorithm <a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> uses, but a 32-bit variant, this RandomnessSource has 63 bits
- of state and should have a period of 2 to the 63.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG--">Light32RNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
-<dd>
-<div class="block">Constructs a Light32RNG with a random state, using two calls to Math.random().</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG-int-int-">Light32RNG(int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
-<dd>
-<div class="block">Constructs a Light32RNG with the exact state A given and a similar state B (the least significant bit of state B
- will always be 1 internally, so even values for state B will be incremented and odd values will be kept as-is).</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG-int-">Light32RNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
-<dd>
-<div class="block">Takes 32 bits of state and uses it to randomly fill the 63 bits of state this uses.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Light32RNG.html#Light32RNG-long-">Light32RNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Light32RNG.html" title="class in squidpony.squidmath">Light32RNG</a></dt>
-<dd>
-<div class="block">Constructs a Light32RNG using a long that combines the two parts of state, as from <a href="../squidpony/squidmath/Light32RNG.html#getState--"><code>Light32RNG.getState()</code></a>.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/LineKit.html#lightAlt">lightAlt</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/LineKit.html" title="class in squidpony.squidgrid.mapping">LineKit</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#lightBrightnesses">lightBrightnesses</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
@@ -721,38 +678,10 @@
 <dd>
 <div class="block">Reverses most of the effects of hashesToLines().</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">link(Room, Room)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
-<dd>
-<div class="block">Adds a two-way unconditional edge between the given rooms.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">link(Room, Room, int)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
-<dd>
-<div class="block">Adds a two-way conditional edge between the given rooms.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">link(Room, Room)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#link-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">link(Room, Room, int)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#link">link</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>
 <div class="block">For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/Room.html#linkCount--">linkCount()</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/Room.html" title="class in squidpony.squidgrid.mapping.locks">Room</a></dt>
-<dd>
-<div class="block">Gets the number of Rooms this Room is linked to.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">linkOneWay(Room, Room)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
-<dd>
-<div class="block">Adds a one-way unconditional edge between the given rooms.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">linkOneWay(Room, Room, int)</a></span> - Method in interface squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/IRoomLayout.html" title="interface in squidpony.squidgrid.mapping.locks">IRoomLayout</a></dt>
-<dd>
-<div class="block">Adds a one-way conditional edge between the given rooms.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-">linkOneWay(Room, Room)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html#linkOneWay-squidpony.squidgrid.mapping.locks.Room-squidpony.squidgrid.mapping.locks.Room-int-">linkOneWay(Room, Room, int)</a></span> - Method in class squidpony.squidgrid.mapping.locks.<a href="../squidpony/squidgrid/mapping/locks/RoomLayout.html" title="class in squidpony.squidgrid.mapping.locks">RoomLayout</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">LinnormRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">A very-high-quality StatefulRandomness that is the fastest 64-bit generator in this library that passes statistical

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -112,7 +112,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.67">PNG8</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.71">PNG8</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements com.badlogic.gdx.utils.Disposable</pre>
 <div class="block">PNG-8 encoder with compression. An instance can be reused to encode multiple PNGs with minimal allocation.
@@ -120,11 +120,15 @@ implements com.badlogic.gdx.utils.Disposable</pre>
  <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx"><code>PaletteReducer</code></a> object that is allowed to be null and can be reused. The methods
  <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#exact-com.badlogic.gdx.graphics.Color:A-"><code>PaletteReducer.exact(Color[])</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#analyze-com.badlogic.gdx.graphics.Pixmap-"><code>PaletteReducer.analyze(Pixmap)</code></a> can be used to make the target
  palette match a specific set of colors or the colors in an existing image. You can use
- <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#setDitherStrength-float-"><code>PaletteReducer.setDitherStrength(float)</code></a> to reduce (or maybe increase) dither strength; the dithering
- algorithm used here is a modified version of the algorithm presented in "Simple gradient-based error-diffusion
- method" by Xaingyu Y. Hu in the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated
- noise (it is deterministic, and is seeded using the color information) to adjust Floyd-Steinberg dithering. It yields
+ <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#setDitherStrength-float-"><code>PaletteReducer.setDitherStrength(float)</code></a> to reduce (or increase) dither strength; the dithering algorithm used
+ here is a modified version of the algorithm presented in "Simple gradient-based error-diffusion method" by Xaingyu Y.
+ Hu in the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated noise (it is
+ deterministic, and is seeded using the color information) to adjust Floyd-Steinberg dithering. It yields
  surprisingly non-random-looking dithers, but still manages to break up artificial patterns most of the time.
+ Note that much of the time you will want to use <a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#writePrecisely-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-"><code>writePrecisely(FileHandle, Pixmap, boolean)</code></a> instead of
+ <a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-"><code>write(FileHandle, Pixmap, boolean, boolean)</code></a>, since writePrecisely will attempt to reproduce the exact colors
+ if there are 256 colors or less in the Pixmap, and will automatically change to calling write() if there are more
+ than 256 colors.
  <br>
  From LibGDX in the class PixmapIO, with modifications to support indexed-mode files, dithering, and other features.
  <pre>
@@ -258,12 +262,23 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-int-">write</a></span>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+     com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+     boolean&nbsp;computePalette,
+     boolean&nbsp;dither,
+     int&nbsp;threshold)</code>
+<div class="block">Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
+ Pixmap.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-">write</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
      com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</code>
 <div class="block">Writes the pixmap to the stream without closing the stream and computes an 8-bit palette from the Pixmap.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-">write</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
      com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
@@ -272,7 +287,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
  Pixmap.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-">write</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
      com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
@@ -282,7 +297,18 @@ implements com.badlogic.gdx.utils.Disposable</pre>
  Pixmap.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-int-">write</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+     com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+     boolean&nbsp;computePalette,
+     boolean&nbsp;dither,
+     int&nbsp;threshold)</code>
+<div class="block">Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
+ Pixmap.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#writePrecisely-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-">writePrecisely</a></span>(com.badlogic.gdx.files.FileHandle&nbsp;file,
               com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
@@ -291,11 +317,31 @@ implements com.badlogic.gdx.utils.Disposable</pre>
  are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#writePrecisely-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-int-">writePrecisely</a></span>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+              com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+              boolean&nbsp;ditherFallback,
+              int&nbsp;threshold)</code>
+<div class="block">Attempts to write the given Pixmap exactly as a PNG-8 image to file; this attempt will only succeed if there
+ are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).</div>
+</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#writePrecisely-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-">writePrecisely</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
               com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
               boolean&nbsp;ditherFallback)</code>
+<div class="block">Attempts to write the given Pixmap exactly as a PNG-8 image to output; this attempt will only succeed if there
+ are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).</div>
+</td>
+</tr>
+<tr id="i14" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#writePrecisely-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-int-">writePrecisely</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+              com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+              boolean&nbsp;ditherFallback,
+              int&nbsp;threshold)</code>
 <div class="block">Attempts to write the given Pixmap exactly as a PNG-8 image to output; this attempt will only succeed if there
  are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).</div>
 </td>
@@ -328,7 +374,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>palette</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.83">palette</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.87">palette</a></pre>
 </li>
 </ul>
 </li>
@@ -345,7 +391,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>PNG8</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.160">PNG8</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.89">PNG8</a>()</pre>
 </li>
 </ul>
 <a name="PNG8-int-">
@@ -354,7 +400,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PNG8</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.164">PNG8</a>(int&nbsp;initialBufferSize)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.93">PNG8</a>(int&nbsp;initialBufferSize)</pre>
 </li>
 </ul>
 </li>
@@ -371,7 +417,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setFlipY</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.170">setFlipY</a>(boolean&nbsp;flipY)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.99">setFlipY</a>(boolean&nbsp;flipY)</pre>
 <div class="block">If true, the resulting PNG is flipped vertically. Default is true.</div>
 </li>
 </ul>
@@ -381,7 +427,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setCompression</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.175">setCompression</a>(int&nbsp;level)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.104">setCompression</a>(int&nbsp;level)</pre>
 <div class="block">Sets the deflate compression level. Default is <a href="https://docs.oracle.com/javase/7/docs/api/java/util/zip/Deflater.html?is-external=true#DEFAULT_COMPRESSION" title="class or interface in java.util.zip"><code>Deflater.DEFAULT_COMPRESSION</code></a>.</div>
 </li>
 </ul>
@@ -391,7 +437,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.188">write</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.117">write</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
                   com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)
            throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Writes the given Pixmap to the requested FileHandle, computing an 8-bit palette from the most common colors in
@@ -413,7 +459,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.204">write</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.133">write</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
                   com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                   boolean&nbsp;computePalette)
            throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
@@ -439,7 +485,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.223">write</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.152">write</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
                   com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                   boolean&nbsp;computePalette,
                   boolean&nbsp;dither)
@@ -459,13 +505,44 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 </dl>
 </li>
 </ul>
+<a name="write-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>write</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.175">write</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+                  com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+                  boolean&nbsp;computePalette,
+                  boolean&nbsp;dither,
+                  int&nbsp;threshold)
+           throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
+ Pixmap. If <a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#palette"><code>palette</code></a> is null (the default unless it has been assigned a PaletteReducer value), this will
+ compute a palette from the given Pixmap regardless of computePalette. Uses the given threshold while analyzing
+ the palette if this needs to compute a palette; threshold values can be as low as 0 to try to use as many colors
+ as possible (prefer <a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#writePrecisely-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-int-"><code>writePrecisely(FileHandle, Pixmap, boolean, int)</code></a> for that, though) and can range up
+ to very high numbers if very few colors should be used; usually threshold is from 100 to 800. Optionally dithers
+ the result if <code>dither</code> is true.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>file</code> - a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image</dd>
+<dd><code>pixmap</code> - a Pixmap to write to the given output stream</dd>
+<dd><code>computePalette</code> - if true, this will analyze the Pixmap and use the most common colors</dd>
+<dd><code>dither</code> - true if this should dither colors that can't be represented exactly</dd>
+<dd><code>threshold</code> - the analysis threshold to use if computePalette is true (min 0, practical max is over 100000)</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if file writing fails for any reason</dd>
+</dl>
+</li>
+</ul>
 <a name="write-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.236">write</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.188">write</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
                   com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)
            throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <div class="block">Writes the pixmap to the stream without closing the stream and computes an 8-bit palette from the Pixmap.</div>
@@ -484,7 +561,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.248">write</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.200">write</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
                   com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                   boolean&nbsp;computePalette)
            throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
@@ -507,7 +584,7 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.262">write</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.217">write</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
                   com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                   boolean&nbsp;computePalette,
                   boolean&nbsp;dither)
@@ -526,13 +603,40 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 </dl>
 </li>
 </ul>
+<a name="write-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>write</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.231">write</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                  com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+                  boolean&nbsp;computePalette,
+                  boolean&nbsp;dither,
+                  int&nbsp;threshold)
+           throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Writes the pixmap to the stream without closing the stream, optionally computing an 8-bit palette from the given
+ Pixmap. If <a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#palette"><code>palette</code></a> is null (the default unless it has been assigned a PaletteReducer value), this will
+ compute a palette from the given Pixmap regardless of computePalette.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>output</code> - an OutputStream that will not be closed</dd>
+<dd><code>pixmap</code> - a Pixmap to write to the given output stream</dd>
+<dd><code>computePalette</code> - if true, this will analyze the Pixmap and use the most common colors</dd>
+<dd><code>dither</code> - true if this should dither colors that can't be represented exactly</dd>
+<dd><code>threshold</code> - the analysis threshold to use if computePalette is true (min 0, practical max is over 100000)</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="writePrecisely-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writePrecisely</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.289">writePrecisely</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.258">writePrecisely</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
                            com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                            boolean&nbsp;ditherFallback)
                     throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
@@ -553,13 +657,43 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 </dl>
 </li>
 </ul>
+<a name="writePrecisely-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writePrecisely</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.276">writePrecisely</a>(com.badlogic.gdx.files.FileHandle&nbsp;file,
+                           com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+                           boolean&nbsp;ditherFallback,
+                           int&nbsp;threshold)
+                    throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Attempts to write the given Pixmap exactly as a PNG-8 image to file; this attempt will only succeed if there
+ are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+ If the attempt fails, this falls back to calling <a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-com.badlogic.gdx.files.FileHandle-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-"><code>write(FileHandle, Pixmap, boolean, boolean)</code></a>, which
+ can dither the image to use no more than 255 colors (plus fully transparent) based on ditherFallback and will
+ always analyze the Pixmap to get an accurate-enough palette, using the given threshold for analysis (which is
+ typically between 1 and 1000, and most often near 200-400). All other write() methods in this class will
+ reduce the color depth somewhat, but as long as the color count stays at 256 or less, this will keep the
+ non-alpha components of colors exactly.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>file</code> - a FileHandle that must be writable, and will have the given Pixmap written as a PNG-8 image</dd>
+<dd><code>pixmap</code> - a Pixmap to write to the given output stream</dd>
+<dd><code>ditherFallback</code> - if the Pixmap contains too many colors, this determines whether it will dither the output</dd>
+<dd><code>threshold</code> - the analysis threshold to use if there are too many colors (min 0, practical max is over 100000)</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if file writing fails for any reason</dd>
+</dl>
+</li>
+</ul>
 <a name="writePrecisely-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>writePrecisely</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.311">writePrecisely</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.298">writePrecisely</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
                            com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                            boolean&nbsp;ditherFallback)
                     throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
@@ -580,13 +714,43 @@ implements com.badlogic.gdx.utils.Disposable</pre>
 </dl>
 </li>
 </ul>
+<a name="writePrecisely-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writePrecisely</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.317">writePrecisely</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/OutputStream.html?is-external=true" title="class or interface in java.io">OutputStream</a>&nbsp;output,
+                           com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+                           boolean&nbsp;ditherFallback,
+                           int&nbsp;threshold)
+                    throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Attempts to write the given Pixmap exactly as a PNG-8 image to output; this attempt will only succeed if there
+ are no more than 256 colors in the Pixmap (treating all partially transparent colors as fully transparent).
+ If the attempt fails, this falls back to calling <a href="../../../../squidpony/squidgrid/gui/gdx/PNG8.html#write-java.io.OutputStream-com.badlogic.gdx.graphics.Pixmap-boolean-boolean-"><code>write(OutputStream, Pixmap, boolean, boolean)</code></a>, which
+ can dither the image to use no more than 255 colors (plus fully transparent) based on ditherFallback and will
+ always analyze the Pixmap to get an accurate-enough palette, using the given threshold for analysis (which is
+ typically between 1 and 1000, and most often near 200-400). All other write() methods in this class will
+ reduce the color depth somewhat, but as long as the color count stays at 256 or less, this will keep the
+ non-alpha components of colors exactly.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>output</code> - an OutputStream that will not be closed</dd>
+<dd><code>pixmap</code> - a Pixmap to write to the given output stream</dd>
+<dd><code>ditherFallback</code> - if the Pixmap contains too many colors, this determines whether it will dither the output</dd>
+<dd><code>threshold</code> - the analysis threshold to use if there are too many colors (min 0, practical max is over 100000)</dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code> - if OutputStream things fail for any reason</dd>
+</dl>
+</li>
+</ul>
 <a name="dispose--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>dispose</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.737">dispose</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PNG8.html#line.743">dispose</a>()</pre>
 <div class="block">Disposal will happen automatically in <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang"><code>Object.finalize()</code></a> but can be done explicitly if desired.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

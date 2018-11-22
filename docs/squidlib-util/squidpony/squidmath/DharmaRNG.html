@@ -793,7 +793,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/RNG.html#nextBoolean--">RNG</a></code></span></div>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
  This may have better behavior than <code>rng.next(1)</code>, depending on the RandomnessSource implementation; the
- default LinnormRNG will behave fine, as will ThrustRNG and ThrustAltRNG (these all use similar algorithms), but
+ default LinnormRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
  the  normally-high-quality XoRoRNG will produce very predictable output with <code>rng.next(1)</code> and very good
  output with <code>rng.nextBoolean()</code>. This is a known and considered flaw of Xoroshiro128+, the algorithm used
  by XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-

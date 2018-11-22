@@ -118,13 +118,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.23">SNShuffledIntSequence</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.27">SNShuffledIntSequence</a>
 extends <a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a>
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">An infinite sequence of pseudo-random ints (typically used as indices) from 0 to some bound, with all possible ints
  returned in a shuffled order before re-shuffling for the next result. Does not store the sequence in memory. Uses a
- Swap-Or-Not network with 7 rounds using on a non-power-of-two domain, as described in
- <a href="https://arxiv.org/abs/1208.1176">this paper by Viet Tung Hoang, Ben Morris, and Phillip Rogaway</a>.
+ Swap-Or-Not shuffle with 6 rounds on a non-power-of-two domain (0 inclusive to bound exclusive), as described
+ in <a href="https://arxiv.org/abs/1208.1176">this paper by Viet Tung Hoang, Ben Morris, and Phillip Rogaway</a>.
  The API is very simple; you construct a SNShuffledIntSequence by specifying how many items it should shuffle (the
  actual sequence is boundless, but the items it can return are limited to between 0 and some bound), and you can
  optionally use a seed (it will be random if you don't specify one). Call <a href="../../squidpony/squidmath/SNShuffledIntSequence.html#next--"><code>next()</code></a> on a SNShuffledIntSequence
@@ -132,7 +132,11 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  possible results. You can go back to the previous item with <a href="../../squidpony/squidmath/SNShuffledIntSequence.html#previous--"><code>previous()</code></a>, which is allowed to go earlier than
  the first result generated (it will jump back to what is effectively the previous shuffled sequence). You can restart
  the sequence with <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#restart--"><code>SwapOrNotShuffler.restart()</code></a> to use the same sequence over again (which doesn't make much sense here, since
- this makes many sequences by re-shuffling), or <a href="../../squidpony/squidmath/SNShuffledIntSequence.html#restart-long-"><code>restart(long)</code></a> to use a different seed (the bound is fixed).
+ this makes many sequences by re-shuffling), or <a href="../../squidpony/squidmath/SNShuffledIntSequence.html#restart-int-"><code>restart(int)</code></a> to use a different seed (the bound is fixed).
+ <br>
+ Like <a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath"><code>SwapOrNotShuffler</code></a>, which this is based on, don't use this for cryptographic purposes. While the
+ Swap-or-Not Shuffle algorithm is capable of strong security guarantees, this implementation emphasizes speed and does
+ not offer any hope of security against a competent attacker.
  <br>
  Created by Tommy Ettinger on 10/6/2018.</div>
 <dl>
@@ -160,7 +164,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected long</code></td>
+<td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SNShuffledIntSequence.html#seed">seed</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -169,7 +173,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></h3>
-<code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html#bound">bound</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#functions">functions</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#index">index</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#keys">keys</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#ROUNDS">ROUNDS</a></code></li>
+<code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html#bound">bound</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#func">func</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#index">index</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#keys">keys</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#ROUNDS">ROUNDS</a></code></li>
 </ul>
 </li>
 </ul>
@@ -195,8 +199,8 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SNShuffledIntSequence.html#SNShuffledIntSequence-int-long-">SNShuffledIntSequence</a></span>(int&nbsp;bound,
-                     long&nbsp;seed)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SNShuffledIntSequence.html#SNShuffledIntSequence-int-int-">SNShuffledIntSequence</a></span>(int&nbsp;bound,
+                     int&nbsp;seed)</code>
 <div class="block">Constructs a ShuffledIntSequence with the given exclusive upper bound and int seed.</div>
 </td>
 </tr>
@@ -231,7 +235,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SNShuffledIntSequence.html#restart-long-">restart</a></span>(long&nbsp;seed)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/SNShuffledIntSequence.html#restart-int-">restart</a></span>(int&nbsp;seed)</code>
 <div class="block">Starts the sequence over, but can change the seed (completely changing the sequence).</div>
 </td>
 </tr>
@@ -241,7 +245,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></h3>
-<code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html#encode-int-">encode</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#restart--">restart</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#round-int-int-long-">round</a></code></li>
+<code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html#encode-int-">encode</a>, <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#restart--">restart</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -270,7 +274,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>seed</h4>
-<pre>protected&nbsp;long <a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.25">seed</a></pre>
+<pre>protected&nbsp;int <a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.29">seed</a></pre>
 </li>
 </ul>
 </li>
@@ -287,7 +291,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>SNShuffledIntSequence</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.29">SNShuffledIntSequence</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.33">SNShuffledIntSequence</a>()</pre>
 <div class="block">Constructs a ShuffledIntSequence with a random seed and a bound of 10.</div>
 </li>
 </ul>
@@ -297,7 +301,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>SNShuffledIntSequence</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.37">SNShuffledIntSequence</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.41">SNShuffledIntSequence</a>(int&nbsp;bound)</pre>
 <div class="block">Constructs a ShuffledIntSequence with the given exclusive upper bound and a random seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -305,14 +309,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </dl>
 </li>
 </ul>
-<a name="SNShuffledIntSequence-int-long-">
+<a name="SNShuffledIntSequence-int-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SNShuffledIntSequence</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.48">SNShuffledIntSequence</a>(int&nbsp;bound,
-                             long&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.51">SNShuffledIntSequence</a>(int&nbsp;bound,
+                             int&nbsp;seed)</pre>
 <div class="block">Constructs a ShuffledIntSequence with the given exclusive upper bound and int seed.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -335,7 +339,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.59">next</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.62">next</a>()</pre>
 <div class="block">Gets the next distinct int in the sequence, shuffling the sequence if it has been exhausted so it never runs out.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
@@ -351,7 +355,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>previous</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.77">previous</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.80">previous</a>()</pre>
 <div class="block">Gets the previous returned int from the sequence (as yielded by <a href="../../squidpony/squidmath/SNShuffledIntSequence.html#next--"><code>next()</code></a>), restarting the sequence in a
  correctly-ordered way if it would go to before the "start" of the sequence (it is actually close to infinite both
  going forwards and backwards).</div>
@@ -363,20 +367,20 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </dl>
 </li>
 </ul>
-<a name="restart-long-">
+<a name="restart-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>restart</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.95">restart</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/SNShuffledIntSequence.html#line.98">restart</a>(int&nbsp;seed)</pre>
 <div class="block">Starts the sequence over, but can change the seed (completely changing the sequence). If <code>seed</code> is the same
  as the seed given in the constructor, this will use the same sequence, acting like <a href="../../squidpony/squidmath/SwapOrNotShuffler.html#restart--"><code>SwapOrNotShuffler.restart()</code></a>.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html#restart-long-">restart</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></code></dd>
+<dd><code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html#restart-int-">restart</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/SwapOrNotShuffler.html" title="class in squidpony.squidmath">SwapOrNotShuffler</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - any int; will be used to get several seeds used internally</dd>
+<dd><code>seed</code> - any long; will be used to get several seeds used internally</dd>
 </dl>
 </li>
 </ul>

@@ -394,9 +394,7 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
             return null;
         encoded %= totalPermutations;
         int[] sequence = factoradicDecode(encoded);
-        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements
 
-        //char[] permuted = new char[n]; //change for destination
         boolean[] set = new boolean[elements.length];
 
         for (int i = 0; i < elements.length; i++)
@@ -458,9 +456,7 @@ public class PermutationGenerator<T> implements Iterable<List<T>>, Serializable
             return null;
         encoded %= totalPermutations;
         int[] sequence = factoradicDecode(encoded);
-        //char[] list = new char[] { 'a', 'b', 'c', 'd', 'e' }; //change for elements
 
-        //char[] permuted = new char[n]; //change for destination
         boolean[] set = new boolean[elements.length];
 
         for (int i = 0; i < elements.length; i++)

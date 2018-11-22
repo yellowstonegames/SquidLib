@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -112,7 +112,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.35">LightingHandler</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.37">LightingHandler</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">A convenience class that makes dealing with multiple colored light sources easier.
@@ -122,14 +122,15 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  level, you should add all light sources with their positions, either using <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#addLight-int-int-squidpony.squidgrid.gui.gdx.Radiance-"><code>addLight(int, int, Radiance)</code></a> or
  by directly putting keys and values into <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#lights"><code>lights</code></a>. Then you can calculate the visible cells once lighting is
  considered (which may include distant lit cells with unseen but unobstructing cells between the viewer and the light)
- using <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>calculateFOV(Coord)</code></a>, which. You can update the flicker and strobe effects on all Radiance objects,
- which is typically done every frame, using <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-"><code>update(Coord)</code></a> (usually with the player as the viewer), and once
- that update() call has been made you can call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-squidpony.squidgrid.gui.gdx.SparseLayers-"><code>draw(SparseLayers)</code></a> to change the background colors of a
- SparseLayers, <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-squidpony.squidgrid.gui.gdx.SquidPanel-"><code>draw(SquidPanel)</code></a> to change the colors of a SquidPanel (typically the background layer of a
- SquidLayers, as from <a href="../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#getBackgroundLayer--"><code>SquidLayers.getBackgroundLayer()</code></a>), or <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a> to change a 2D float
- array that holds packed float colors (which may be used in some custom setup). To place user-interface lighting
- effects that don't affect the actual FOV of creatures in the game, you can use <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateUI-squidpony.squidmath.Coord-squidpony.squidgrid.gui.gdx.Radiance-"><code>updateUI(Coord, Radiance)</code></a>,
- which is called after <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-"><code>update(Coord)</code></a> but before <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>.
+ using <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>calculateFOV(Coord)</code></a>, which should be called every time the viewer moves. You can update the flicker
+ and strobe effects on all Radiance objects, which is typically done every frame, using <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> or
+ <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateAll--"><code>updateAll()</code></a> (updateAll() is for when there is no viewer), and once that update() call has been made you can
+ call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-squidpony.squidgrid.gui.gdx.SparseLayers-"><code>draw(SparseLayers)</code></a> to change the background colors of a SparseLayers, <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-squidpony.squidgrid.gui.gdx.SquidPanel-"><code>draw(SquidPanel)</code></a> to
+ change the colors of a SquidPanel (typically the background layer of a SquidLayers, as from
+ <a href="../../../../squidpony/squidgrid/gui/gdx/SquidLayers.html#getBackgroundLayer--"><code>SquidLayers.getBackgroundLayer()</code></a>), or <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a> to change a 2D float array that holds packed
+ float colors (which may be used in some custom setup). To place user-interface lighting effects that don't affect the
+ actual FOV of creatures in the game, you can use <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateUI-squidpony.squidmath.Coord-squidpony.squidgrid.gui.gdx.Radiance-"><code>updateUI(Coord, Radiance)</code></a>, which is called after
+ <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> but before <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>.
  <br>
  Created by Tommy Ettinger on 11/2/2018.</div>
 <dl>
@@ -197,40 +198,47 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#noticeable">noticeable</a></span></code>
+<div class="block">A GreasedRegion that stores any cells that are in line-of-sight or are close enough to a cell in line-of-sight to
+ potentially cast light into such a cell.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true" title="class or interface in squidpony.squidgrid">Radius</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#radiusStrategy">radiusStrategy</a></span></code>
 <div class="block">How light should spread; usually <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true#CIRCLE" title="class or interface in squidpony.squidgrid"><code>Radius.CIRCLE</code></a> unless gameplay reasons need it to be SQUARE or DIAMOND.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances">resistances</a></span></code>
 <div class="block">The 2D array of light-resistance values from 0.0 to 1.0 for each cell on the map, as produced by
  <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/DungeonUtility.html?is-external=true#generateResistances(char[][])" title="class or interface in squidpony.squidgrid.mapping"><code>DungeonUtility</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>float[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#tempColorLighting">tempColorLighting</a></span></code>
 <div class="block">Temporary storage array used for calculations involving <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a>; it sometimes may make sense for
  other code to use this as temporary storage as well.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#tempFOV">tempFOV</a></span></code>
 <div class="block">Temporary storage array used for calculations involving <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#fovResult"><code>fovResult</code></a>; it sometimes may make sense for other
  code to use this as temporary storage as well.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#viewerRange">viewerRange</a></span></code>
 <div class="block">How far the viewer can see without light; defaults to 4.0 cells, and you are encouraged to change this member
  field if the vision range changes after construction.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#width">width</a></span></code>
 <div class="block">Width of the 2D arrays used in this, as obtained from <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances"><code>resistances</code></a>.</div>
@@ -370,6 +378,15 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#mixColoredLighting-float-float-">mixColoredLighting</a></span>(float&nbsp;flare,
+                  float&nbsp;color)</code>
+<div class="block">Edits <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a> by adding in and mixing the given color where the light strength in <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#tempFOV"><code>tempFOV</code></a>
+ is greater than 0, with that strengt boosted by flare (which can be any finite float greater than -1f, but is
+ usually from 0f to 1f when increasing strength).</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#moveLight-squidpony.squidmath.Coord-squidpony.squidmath.Coord-">moveLight</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;oldPosition,
          <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;newPosition)</code>
@@ -377,7 +394,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  newPosition.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#moveLight-int-int-int-int-">moveLight</a></span>(int&nbsp;oldX,
          int&nbsp;oldY,
@@ -387,35 +404,35 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  newX,newY.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#removeLight-squidpony.squidmath.Coord-">removeLight</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;position)</code>
 <div class="block">Removes a Radiance as a light source from the given position, if any is present.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#removeLight-int-int-">removeLight</a></span>(int&nbsp;x,
            int&nbsp;y)</code>
 <div class="block">Removes a Radiance as a light source from the given position, if any is present.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-">update</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;viewerPosition)</code>
-<div class="block">Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
- changes in lighting color and strength to the various fields of this LightingHandler.</div>
-</td>
-</tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-int-int-">update</a></span>(int&nbsp;viewerX,
-      int&nbsp;viewerY)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--">update</a></span>()</code>
 <div class="block">Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
  changes in lighting color and strength to the various fields of this LightingHandler.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateAll--">updateAll</a></span>()</code>
+<div class="block">Typically called every frame when there isn't a single viewer, this updates the flicker and strobe effects of
+ Radiance objects and applies those changes in lighting color and strength to the various fields of this
+ LightingHandler.</div>
+</td>
+</tr>
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateUI-squidpony.squidmath.Coord-squidpony.squidgrid.gui.gdx.Radiance-">updateUI</a></span>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;pos,
         <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;radiance)</code>
@@ -423,7 +440,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  just the <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a> field, without changing FOV.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateUI-int-int-squidpony.squidgrid.gui.gdx.Radiance-">updateUI</a></span>(int&nbsp;lightX,
         int&nbsp;lightY,
@@ -460,7 +477,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>radiusStrategy</h4>
-<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true" title="class or interface in squidpony.squidgrid">Radius</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.41">radiusStrategy</a></pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true" title="class or interface in squidpony.squidgrid">Radius</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.43">radiusStrategy</a></pre>
 <div class="block">How light should spread; usually <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true#CIRCLE" title="class or interface in squidpony.squidgrid"><code>Radius.CIRCLE</code></a> unless gameplay reasons need it to be SQUARE or DIAMOND.</div>
 </li>
 </ul>
@@ -470,7 +487,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>resistances</h4>
-<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.46">resistances</a></pre>
+<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.48">resistances</a></pre>
 <div class="block">The 2D array of light-resistance values from 0.0 to 1.0 for each cell on the map, as produced by
  <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/DungeonUtility.html?is-external=true#generateResistances(char[][])" title="class or interface in squidpony.squidgrid.mapping"><code>DungeonUtility</code></a>.</div>
 </li>
@@ -481,9 +498,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>fovResult</h4>
-<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.52">fovResult</a></pre>
+<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.54">fovResult</a></pre>
 <div class="block">What the "viewer" (as passed to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>calculateFOV(Coord)</code></a>) can see either nearby without light or because an
- area in line-of-sight has light in it. Edited by <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>calculateFOV(Coord)</code></a> and <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-"><code>update(Coord)</code></a>, but
+ area in line-of-sight has light in it. Edited by <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>calculateFOV(Coord)</code></a> and <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a>, but
  not <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateUI-squidpony.squidmath.Coord-squidpony.squidgrid.gui.gdx.Radiance-"><code>updateUI(Coord, Radiance)</code></a> (which is meant for effects that are purely user-interface).</div>
 </li>
 </ul>
@@ -493,7 +510,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>losResult</h4>
-<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.57">losResult</a></pre>
+<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.59">losResult</a></pre>
 <div class="block">A 2D array of doubles that are either 0.0 if a cell has an obstruction between it and the viewer, or greater than
  0.0 otherwise.</div>
 </li>
@@ -504,7 +521,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>tempFOV</h4>
-<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.62">tempFOV</a></pre>
+<pre>public&nbsp;double[][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.64">tempFOV</a></pre>
 <div class="block">Temporary storage array used for calculations involving <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#fovResult"><code>fovResult</code></a>; it sometimes may make sense for other
  code to use this as temporary storage as well.</div>
 </li>
@@ -515,7 +532,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>colorLighting</h4>
-<pre>public&nbsp;float[][][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.69">colorLighting</a></pre>
+<pre>public&nbsp;float[][][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.71">colorLighting</a></pre>
 <div class="block">A pair of 2D float arrays with different usages; <code>colorLighting[0]</code> is a 2D array that stores the strength
  of light in each cell, and <code>colorLighting[1]</code> is a 2D array that stores the color of light in each cell, as
  a packed float color. Both 2D arrays are the size of the map, as defined by <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances"><code>resistances</code></a> initially and
@@ -528,7 +545,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>tempColorLighting</h4>
-<pre>public&nbsp;float[][][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.74">tempColorLighting</a></pre>
+<pre>public&nbsp;float[][][] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.76">tempColorLighting</a></pre>
 <div class="block">Temporary storage array used for calculations involving <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a>; it sometimes may make sense for
  other code to use this as temporary storage as well.</div>
 </li>
@@ -539,7 +556,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.78">width</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.80">width</a></pre>
 <div class="block">Width of the 2D arrays used in this, as obtained from <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances"><code>resistances</code></a>.</div>
 </li>
 </ul>
@@ -549,7 +566,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.82">height</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.84">height</a></pre>
 <div class="block">Height of the 2D arrays used in this, as obtained from <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#resistances"><code>resistances</code></a>.</div>
 </li>
 </ul>
@@ -559,7 +576,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>backgroundColor</h4>
-<pre>public&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.87">backgroundColor</a></pre>
+<pre>public&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.89">backgroundColor</a></pre>
 <div class="block">The packed float color to mix background cells with when a cell has lighting and is within line-of-sight, but has
  no background color to start with (its color is 0f as a packed float, or <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#TRANSPARENT"><code>SColor.TRANSPARENT</code></a>).</div>
 </li>
@@ -570,7 +587,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>viewerRange</h4>
-<pre>public&nbsp;double <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.92">viewerRange</a></pre>
+<pre>public&nbsp;double <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.94">viewerRange</a></pre>
 <div class="block">How far the viewer can see without light; defaults to 4.0 cells, and you are encouraged to change this member
  field if the vision range changes after construction.</div>
 </li>
@@ -578,14 +595,25 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <a name="lights">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>lights</h4>
-<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>,<a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.99">lights</a></pre>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>,<a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.101">lights</a></pre>
 <div class="block">A mapping from positions as <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath"><code>Coord</code></a> objects to <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects that describe the color, lighting
  radius, and changes over time of any in-game lights that should be shown on the map and change FOV. You can edit
  this manually or by using <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#moveLight-int-int-int-int-"><code>moveLight(int, int, int, int)</code></a>, <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#addLight-int-int-squidpony.squidgrid.gui.gdx.Radiance-"><code>addLight(int, int, Radiance)</code></a>, and
  <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#removeLight-int-int-"><code>removeLight(int, int)</code></a>.</div>
+</li>
+</ul>
+<a name="noticeable">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>noticeable</h4>
+<pre>public&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.107">noticeable</a></pre>
+<div class="block">A GreasedRegion that stores any cells that are in line-of-sight or are close enough to a cell in line-of-sight to
+ potentially cast light into such a cell. Depends on the highest <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html#range"><code>Radiance.range</code></a> in <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#lights"><code>lights</code></a>.</div>
 </li>
 </ul>
 </li>
@@ -602,7 +630,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>LightingHandler</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.105">LightingHandler</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.113">LightingHandler</a>()</pre>
 <div class="block">Unlikely to be used except during serialization; makes a LightingHandler for a 20x20 fully visible level.
  The viewer vision range will be 4.0, and lights will use a circular shape.</div>
 </li>
@@ -613,7 +641,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>LightingHandler</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.118">LightingHandler</a>(double[][]&nbsp;resistance)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.126">LightingHandler</a>(double[][]&nbsp;resistance)</pre>
 <div class="block">Given a resistance array as produced by <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/DungeonUtility.html?is-external=true#generateResistances(char[][])" title="class or interface in squidpony.squidgrid.mapping"><code>DungeonUtility</code></a>
  or <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/mapping/DungeonUtility.html?is-external=true#generateSimpleResistances(char[][])" title="class or interface in squidpony.squidgrid.mapping"><code>DungeonUtility</code></a>, makes a
  LightingHandler that can have <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects added to it in various locations. This will use a solid
@@ -631,7 +659,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>LightingHandler</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.132">LightingHandler</a>(double[][]&nbsp;resistance,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.140">LightingHandler</a>(double[][]&nbsp;resistance,
                        com.badlogic.gdx.graphics.Color&nbsp;backgroundColor,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true" title="class or interface in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy,
                        double&nbsp;viewerVisionRange)</pre>
@@ -654,7 +682,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>LightingHandler</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.146">LightingHandler</a>(double[][]&nbsp;resistance,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.154">LightingHandler</a>(double[][]&nbsp;resistance,
                        float&nbsp;backgroundColor,
                        <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidgrid/Radius.html?is-external=true" title="class or interface in squidpony.squidgrid">Radius</a>&nbsp;radiusStrategy,
                        double&nbsp;viewerVisionRange)</pre>
@@ -685,7 +713,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>addLight</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.170">addLight</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.179">addLight</a>(int&nbsp;x,
                                 int&nbsp;y,
                                 <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;light)</pre>
 <div class="block">Adds a Radiance as a light source at the given position. Overwrites any existing Radiance at the same position.</div>
@@ -705,7 +733,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>addLight</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.180">addLight</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;position,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.189">addLight</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;position,
                                 <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;light)</pre>
 <div class="block">Adds a Radiance as a light source at the given position. Overwrites any existing Radiance at the same position.</div>
 <dl>
@@ -723,7 +751,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>removeLight</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.192">removeLight</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.201">removeLight</a>(int&nbsp;x,
                                    int&nbsp;y)</pre>
 <div class="block">Removes a Radiance as a light source from the given position, if any is present.</div>
 <dl>
@@ -741,7 +769,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>removeLight</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.201">removeLight</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.210">removeLight</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
 <div class="block">Removes a Radiance as a light source from the given position, if any is present.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -757,7 +785,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>moveLight</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.215">moveLight</a>(int&nbsp;oldX,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.224">moveLight</a>(int&nbsp;oldX,
                                  int&nbsp;oldY,
                                  int&nbsp;newX,
                                  int&nbsp;newY)</pre>
@@ -780,7 +808,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>moveLight</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.226">moveLight</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;oldPosition,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html" title="class in squidpony.squidgrid.gui.gdx">LightingHandler</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.235">moveLight</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;oldPosition,
                                  <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;newPosition)</pre>
 <div class="block">If a Radiance is present at oldPosition, this will move it to newPosition and overwrite any existing Radiance at
  newPosition. If no Radiance is present at oldPosition, this does nothing.</div>
@@ -799,7 +827,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.240">get</a>(int&nbsp;x,
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.249">get</a>(int&nbsp;x,
                     int&nbsp;y)</pre>
 <div class="block">Gets the Radiance at the given position, if present, or null if there is no light source there.</div>
 <dl>
@@ -817,7 +845,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.249">get</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.258">get</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;position)</pre>
 <div class="block">Gets the Radiance at the given position, if present, or null if there is no light source there.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -833,7 +861,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>mixColoredLighting</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.261">mixColoredLighting</a>(float&nbsp;flare)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.270">mixColoredLighting</a>(float&nbsp;flare)</pre>
 <div class="block">Edits <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a> by adding in and mixing the colors in <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#tempColorLighting"><code>tempColorLighting</code></a>, with the strength
  of light in tempColorLighting boosted by flare (which can be any finite float greater than -1f, but is usually
  from 0f to 1f when increasing strength).
@@ -844,40 +872,52 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </dl>
 </li>
 </ul>
-<a name="update-squidpony.squidmath.Coord-">
+<a name="mixColoredLighting-float-float-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>update</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.303">update</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;viewerPosition)</pre>
-<div class="block">Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
- changes in lighting color and strength to the various fields of this LightingHandler. This method is usually
- called before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other code may be between the calls and may
- affect the lighting in customized ways.</div>
+<h4>mixColoredLighting</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.348">mixColoredLighting</a>(float&nbsp;flare,
+                               float&nbsp;color)</pre>
+<div class="block">Edits <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a> by adding in and mixing the given color where the light strength in <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#tempFOV"><code>tempFOV</code></a>
+ is greater than 0, with that strengt boosted by flare (which can be any finite float greater than -1f, but is
+ usually from 0f to 1f when increasing strength).
+ Primarily used internally, but exposed so outside code can do the same things this class can.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>viewerPosition</code> - the position of the player or other viewer</dd>
+<dd><code>flare</code> - boosts the effective strength of lighting in <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#tempColorLighting"><code>tempColorLighting</code></a>; usually from 0 to 1</dd>
 </dl>
 </li>
 </ul>
-<a name="update-int-int-">
+<a name="update--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>update</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.316">update</a>(int&nbsp;viewerX,
-                   int&nbsp;viewerY)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.427">update</a>()</pre>
 <div class="block">Typically called every frame, this updates the flicker and strobe effects of Radiance objects and applies those
- changes in lighting color and strength to the various fields of this LightingHandler. This method is usually
- called before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other code may be between the calls and may
- affect the lighting in customized ways.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>viewerX</code> - the x-position of the player or other viewer</dd>
-<dd><code>viewerY</code> - the y-position of the player or other viewer</dd>
-</dl>
+ changes in lighting color and strength to the various fields of this LightingHandler. This will only have an
+ effect if <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>calculateFOV(Coord)</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-int-int-"><code>calculateFOV(int, int)</code></a> was called during the last time the
+ viewer position changed; typically calculateFOV() only needs to be called once per move, while update() needs to
+ be called once per frame. This method is usually called before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other
+ code may be between the calls and may affect the lighting in customized ways.</div>
+</li>
+</ul>
+<a name="updateAll--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>updateAll</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.451">updateAll</a>()</pre>
+<div class="block">Typically called every frame when there isn't a single viewer, this updates the flicker and strobe effects of
+ Radiance objects and applies those changes in lighting color and strength to the various fields of this
+ LightingHandler. This method is usually called before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other code may
+ be between the calls and may affect the lighting in customized ways. This overload has no viewer, so all cells
+ are considered visible unless they are fully obstructed (solid cells behind walls, for example). Unlike update(),
+ this method does not need <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>calculateFOV(Coord)</code></a> to be called for it to work properly.</div>
 </li>
 </ul>
 <a name="updateUI-squidpony.squidmath.Coord-squidpony.squidgrid.gui.gdx.Radiance-">
@@ -886,12 +926,12 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>updateUI</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.348">updateUI</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;pos,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.494">updateUI</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;pos,
                      <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;radiance)</pre>
 <div class="block">Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
  just the <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a> field, without changing FOV. This method is meant to be used for GUI effects that
  aren't representative of something a character in the game could interact with. It is usually called after
- <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-"><code>update(Coord)</code></a> and before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other code may be between the calls
+ <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> and before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other code may be between the calls
  and may affect the lighting in customized ways.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -906,13 +946,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>updateUI</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.363">updateUI</a>(int&nbsp;lightX,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.509">updateUI</a>(int&nbsp;lightX,
                      int&nbsp;lightY,
                      <a href="../../../../squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx">Radiance</a>&nbsp;radiance)</pre>
 <div class="block">Updates the flicker and strobe effects of a Radiance object and applies the lighting from just that Radiance to
  just the <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#colorLighting"><code>colorLighting</code></a> field, without changing FOV. This method is meant to be used for GUI effects that
  aren't representative of something a character in the game could interact with. It is usually called after
- <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-"><code>update(Coord)</code></a> and before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other code may be between the calls
+ <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> and before each call to <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#draw-float:A:A-"><code>draw(float[][])</code></a>, but other code may be between the calls
  and may affect the lighting in customized ways.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -928,10 +968,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.377">draw</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a>&nbsp;layers)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.523">draw</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a>&nbsp;layers)</pre>
 <div class="block">Given a SparseLayers, fills the SparseLayers with different colors based on what lights are present in line of
  sight of the viewer and the various flicker or strobe effects that Radiance light sources can do. You should
- usually call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-int-int-"><code>update(int, int)</code></a> before each call to draw(), but you may want to make custom changes to the
+ usually call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> before each call to draw(), but you may want to make custom changes to the
  lighting in between those two calls (that is the only place those changes will be noticed).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -945,13 +985,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.392">draw</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;background)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.538">draw</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a>&nbsp;background)</pre>
 <div class="block">Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers) and a position for
  the viewer (typically the player), fills the SquidPanel with different colors based on what lights are present in
  line of sight of the viewer and the various flickering or pulsing effects that Radiance light sources can do. 
  Given a SquidPanel that should be only solid blocks (such as the background of a SquidLayers), fills the
  SquidPanel with different colors based on what lights are present in line of sight of the viewer and the various
- flicker or strobe effects that Radiance light sources can do. You should usually call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-int-int-"><code>update(int, int)</code></a>
+ flicker or strobe effects that Radiance light sources can do. You should usually call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a>
  before each call to draw(), but you may want to make custom changes to the lighting in between those two calls
  (that is the only place those changes will be noticed).</div>
 <dl>
@@ -966,10 +1006,10 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.404">draw</a>(float[][]&nbsp;backgrounds)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.550">draw</a>(float[][]&nbsp;backgrounds)</pre>
 <div class="block">Given a 2D array of packed float colors, fills the 2D array with different colors based on what lights are
  present in line of sight of the viewer and the various flicker or strobe effects that Radiance light sources can
- do. You should usually call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update-int-int-"><code>update(int, int)</code></a> before each call to draw(), but you may want to make custom
+ do. You should usually call <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> before each call to draw(), but you may want to make custom
  changes to the lighting in between those two calls (that is the only place those changes will be noticed).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -983,10 +1023,15 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.426">calculateFOV</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;viewer)</pre>
+<pre>public&nbsp;double[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.577">calculateFOV</a>(<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath">Coord</a>&nbsp;viewer)</pre>
 <div class="block">Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.
  Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.
- Sets <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#fovResult"><code>fovResult</code></a> and <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#losResult"><code>losResult</code></a> based on the given viewer position and any lights.</div>
+ This should be called any time the viewer moves to a different cell, and it is critical that this is called (at
+ least) once after a move but before <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> gets called to change lighting at the new cell. This sets
+ important information on what lights might need to be calculated during each update(Coord) call; it does not need
+ to be called before <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateAll--"><code>updateAll()</code></a> (with no arguments) because that doesn't need a viewer. Sets
+ <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#fovResult"><code>fovResult</code></a>, <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#losResult"><code>losResult</code></a>, and <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#noticeable"><code>noticeable</code></a> based on the given viewer position and any lights
+ in <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#lights"><code>lights</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>viewer</code> - the position of the player or other viewer</dd>
@@ -1001,11 +1046,16 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>calculateFOV</h4>
-<pre>public&nbsp;double[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.439">calculateFOV</a>(int&nbsp;viewerX,
+<pre>public&nbsp;double[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/LightingHandler.html#line.595">calculateFOV</a>(int&nbsp;viewerX,
                                int&nbsp;viewerY)</pre>
 <div class="block">Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.
  Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.
- Sets <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#fovResult"><code>fovResult</code></a> and <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#losResult"><code>losResult</code></a> based on the given viewer position and any lights.</div>
+ This should be called any time the viewer moves to a different cell, and it is critical that this is called (at
+ least) once after a move but before <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>update()</code></a> gets called to change lighting at the new cell. This sets
+ important information on what lights might need to be calculated during each update(Coord) call; it does not need
+ to be called before <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#updateAll--"><code>updateAll()</code></a> (with no arguments) because that doesn't need a viewer. Sets
+ <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#fovResult"><code>fovResult</code></a>, <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#losResult"><code>losResult</code></a>, and <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#noticeable"><code>noticeable</code></a> based on the given viewer position and any lights
+ in <a href="../../../../squidpony/squidgrid/gui/gdx/LightingHandler.html#lights"><code>lights</code></a>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>viewerX</code> - the x-position of the player or other viewer</dd>

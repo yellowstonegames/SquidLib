@@ -133,7 +133,7 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
  it correctly has 9 repeats compared to an expected 10, using the Skipping adapter to check one out of every 65536
  outputs for duplicates. A generator that failed that test would have 0 repeats or more than 20, so Tangle passes.
  ThrustAltRNG probably also passes (or its structure allows it to potentially do so), but LightRNG, LinnormRNG,
- MizuchiRNG, and even ThrustRNG will fail it by never repeating an output. Truncating the output bits of any of these
+ and many others will fail it by never repeating an output. Truncating the output bits of any of these
  generators will allow them to pass this test, at the cost of reducing the size of the output to an int instead of a
  long (less than ideal). Notably, an individual Tangle generator tends to be able to produce about 2/3 of all possible
  long outputs, with roughly 1/3 of all outputs not possible to produce and another 1/3 produced exactly once. These

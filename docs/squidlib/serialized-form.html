@@ -108,7 +108,7 @@
 <h4>fovResult</h4>
 <pre>double[][] fovResult</pre>
 <div class="block">What the "viewer" (as passed to <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>LightingHandler.calculateFOV(Coord)</code></a>) can see either nearby without light or because an
- area in line-of-sight has light in it. Edited by <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>LightingHandler.calculateFOV(Coord)</code></a> and <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#update-squidpony.squidmath.Coord-"><code>LightingHandler.update(Coord)</code></a>, but
+ area in line-of-sight has light in it. Edited by <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#calculateFOV-squidpony.squidmath.Coord-"><code>LightingHandler.calculateFOV(Coord)</code></a> and <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#update--"><code>LightingHandler.update()</code></a>, but
  not <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#updateUI-squidpony.squidmath.Coord-squidpony.squidgrid.gui.gdx.Radiance-"><code>LightingHandler.updateUI(Coord, Radiance)</code></a> (which is meant for effects that are purely user-interface).</div>
 </li>
 <li class="blockList">
@@ -159,13 +159,19 @@
 <div class="block">How far the viewer can see without light; defaults to 4.0 cells, and you are encouraged to change this member
  field if the vision range changes after construction.</div>
 </li>
-<li class="blockListLast">
+<li class="blockList">
 <h4>lights</h4>
 <pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">OrderedMap</a>&lt;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">K</a>,<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/OrderedMap.html?is-external=true" title="class or interface in squidpony.squidmath">V</a>&gt; lights</pre>
 <div class="block">A mapping from positions as <a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/Coord.html?is-external=true" title="class or interface in squidpony.squidmath"><code>Coord</code></a> objects to <a href="squidpony/squidgrid/gui/gdx/Radiance.html" title="class in squidpony.squidgrid.gui.gdx"><code>Radiance</code></a> objects that describe the color, lighting
  radius, and changes over time of any in-game lights that should be shown on the map and change FOV. You can edit
  this manually or by using <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#moveLight-int-int-int-int-"><code>LightingHandler.moveLight(int, int, int, int)</code></a>, <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#addLight-int-int-squidpony.squidgrid.gui.gdx.Radiance-"><code>LightingHandler.addLight(int, int, Radiance)</code></a>, and
  <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#removeLight-int-int-"><code>LightingHandler.removeLight(int, int)</code></a>.</div>
+</li>
+<li class="blockListLast">
+<h4>noticeable</h4>
+<pre><a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/GreasedRegion.html?is-external=true" title="class or interface in squidpony.squidmath">GreasedRegion</a> noticeable</pre>
+<div class="block">A GreasedRegion that stores any cells that are in line-of-sight or are close enough to a cell in line-of-sight to
+ potentially cast light into such a cell. Depends on the highest <a href="squidpony/squidgrid/gui/gdx/Radiance.html#range"><code>Radiance.range</code></a> in <a href="squidpony/squidgrid/gui/gdx/LightingHandler.html#lights"><code>LightingHandler.lights</code></a>.</div>
 </li>
 </ul>
 </li>

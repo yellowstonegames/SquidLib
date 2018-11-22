@@ -2403,18 +2403,18 @@
 <span class="sourceLineNo">2395</span>        return this;<a name="line.2395"></a>
 <span class="sourceLineNo">2396</span>    }<a name="line.2396"></a>
 <span class="sourceLineNo">2397</span>    private int alterEntry(final int pos) {<a name="line.2397"></a>
-<span class="sourceLineNo">2398</span>        value[pos] = null;<a name="line.2398"></a>
-<span class="sourceLineNo">2399</span>        size--;<a name="line.2399"></a>
-<span class="sourceLineNo">2400</span>        int idx = fixOrder(pos);<a name="line.2400"></a>
+<span class="sourceLineNo">2398</span>        int idx = fixOrder(pos);<a name="line.2398"></a>
+<span class="sourceLineNo">2399</span>        value[pos] = null;<a name="line.2399"></a>
+<span class="sourceLineNo">2400</span>        size--;<a name="line.2400"></a>
 <span class="sourceLineNo">2401</span>        shiftKeys(pos);<a name="line.2401"></a>
 <span class="sourceLineNo">2402</span>        return idx;<a name="line.2402"></a>
 <span class="sourceLineNo">2403</span>    }<a name="line.2403"></a>
 <span class="sourceLineNo">2404</span>    private int alterNullEntry() {<a name="line.2404"></a>
-<span class="sourceLineNo">2405</span>        containsNullKey = false;<a name="line.2405"></a>
-<span class="sourceLineNo">2406</span>        key[n] = null;<a name="line.2406"></a>
+<span class="sourceLineNo">2405</span>        int idx = fixOrder(n);<a name="line.2405"></a>
+<span class="sourceLineNo">2406</span>        containsNullKey = false;<a name="line.2406"></a>
 <span class="sourceLineNo">2407</span>        value[n] = null;<a name="line.2407"></a>
 <span class="sourceLineNo">2408</span>        size--;<a name="line.2408"></a>
-<span class="sourceLineNo">2409</span>        return fixOrder(n);<a name="line.2409"></a>
+<span class="sourceLineNo">2409</span>        return idx;<a name="line.2409"></a>
 <span class="sourceLineNo">2410</span>    }<a name="line.2410"></a>
 <span class="sourceLineNo">2411</span>    /**<a name="line.2411"></a>
 <span class="sourceLineNo">2412</span>     * Swaps a key, original, for another key, replacement, while keeping replacement at the same point in the iteration<a name="line.2412"></a>
