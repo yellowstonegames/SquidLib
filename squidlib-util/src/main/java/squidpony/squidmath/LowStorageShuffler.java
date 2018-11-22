@@ -23,10 +23,14 @@ import java.io.Serializable;
  * small multiplications included to increase randomness significantly. Using 4 rounds turns out to be overkill in this
  * case. This also uses a different seed for each round.
  * <br>
- * This class is extremely similar to {@link SwapOrNotShuffler}, but LowStorageShuffler is optimized for usage on GWT
- * while SwapOrNotShuffler is meant to have higher quality in general. There's also {@link ShuffledIntSequence}, which
- * extends this class and uses different behavior so it "re-shuffles" the results when all results have been produced,
- * and {@link SNShuffledIntSequence}, which extends SwapOrNotShuffler but is otherwise like ShuffledIntSequence.
+ * This class is extremely similar to {@link SwapOrNotShuffler}; both are optimized for usage on GWT but
+ * SwapOrNotShuffler is meant to have higher quality in general. SwapOrNotShuffler also performs much better for some
+ * values of bound; this class slows down drastically when bound is just slightly more than a power of 4, but can be
+ * slightly faster when bound is equal to a power of 4. There's also {@link ShuffledIntSequence}, which extends this
+ * class and uses different behavior so it "re-shuffles" the results when all results have been produced, and
+ * {@link SNShuffledIntSequence}, which extends SwapOrNotShuffler but is otherwise like ShuffledIntSequence.
+ * SwapOrNotShuffler should usually be preferred over this class when the bound is unknown or known to be a problem for
+ * this class.
  * <br>
  * Created by Tommy Ettinger on 9/22/2018.
  * @author Alan Wolfe

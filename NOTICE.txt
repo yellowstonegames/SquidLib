@@ -37,21 +37,23 @@ The JRotation class (no longer in SquidLib) was based on code by Savvas Dalkitsi
 The RNG class is based on the Mersenne Twister implementation by Daniel Dyer as part of the Uncommons Maths library,
 which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura. Also from Uncommon Maths,
 the CombinationGenerator and PermutationGenerator classes; changes were made to PermutationGenerator based on techniques
-from user Joren on StackOverflow, http://stackoverflow.com/a/1506337 .
+from user Joren on StackOverflow, http://stackoverflow.com/a/1506337 . The MersenneTwister class is no longer based on
+Uncommon Maths, instead using Nick Galbreath's implementation from https://github.com/javabeanz/javarng/blob/master/com/modp/random/MersenneTwister64.java .
 
 The squidpony.squidgrid.mapping.styled package and the JSON resources are derived from Sean T. Barrett's Herringbone
 Wang Tiles library, part of the nothings set of libraries, which were released into the public domain.
 
 The LightRNG class is based on SplitMix64.c by Sebastiano Vigna, released into the public domain and made available on
-http://xorshift.di.unimi.it/
+http://xorshift.di.unimi.it/ . It uses the SplitMix64 algorithm as published by Guy L. Steele Jr, Doug Lea, and
+Christine H. Flood.
 
 The XorRNG class is based on the C implementation of XorShift 128+ by Sebastiano Vigna, released into the public domain
 and made available on http://xorshift.di.unimi.it/
 LongPeriodRNG is based on XorShift 1024* , XoRoRNG is based on XoRoShiRo 64+ , and the other credit for these is the
 same as XorRNG.
 
-The PermutedRNG and PintRNG classes are based on the aforementioned SplitMix64.c by Sebastiano Vigna and on the paper,
-http://www.pcg-random.org/paper.html , describing PCG-Random and its methodology written by Melissa E. O'Neill.
+The PermutedRNG and PintRNG classes are based on the paper http://www.pcg-random.org/paper.html , describing PCG-Random
+and its methodology written by Melissa E. O'Neill.
 
 The SobolQRNG class and the resource in the resources/qrng folder were ported from Apache Commons Math, where Stephen
 Joe and Frances Kuo are credited for the implementation.
@@ -71,7 +73,7 @@ ShortSet, ShortVLA, IntVLA, and SparseTextMap are based closely off primitive-ba
 Apache-licensed.
 
 IntDoubleOrderedMap, OrderedMap, and OrderedSet are based on similar code from Sebastiano Vigna's fastutil library,
-https://github.com/vigna/fastutil . Arrangement, K2, and K2V1 have been based on those.
+https://github.com/vigna/fastutil . Arrangement, K2, K2V1, UnorderedMap, and UnorderedSet have been based on those.
 
 The DijkstraMap class is original but owes substantial credit to Edsger Dijkstra
 for creating the algorithm that shares his name, Brian Pender and Joshua Day for
@@ -115,7 +117,8 @@ make use of MixedGenerator, and the Drunkard's Walk technique is very versatile.
 
 MimicFill and DetailedMimic are direct ports of https://github.com/mxgmn/ConvChain and
 https://github.com/mxgmn/SynTex from C# to Java; the former is public domain while the
-latter is MIT-licensed.
+latter is MIT-licensed. MimicWFC is a direct port of https://github.com/mxgmn/WaveFunctionCollapse
+by the same author, and also MIT-licensed.
 
 ProjectionTools and parts of WorldMapGenerator.HyperellipticalMap are derived from
 Justin Kunimune's work on Map-Projections, https://github.com/jkunimune15/Map-Projections ,
@@ -149,8 +152,8 @@ Ettinger and released into the public domain, except:
     They were originally the work of Donald Knuth for the TeX typesetting system.
   * Gentium is SIL OFL, originally by SIL, and has had minimal modification, if any. The original site is
     http://software.sil.org/gentium/ .
-  * Noto Sans is SIL OFL, originally by Google, Inc., and has had minimal modification. The original files, as
-    well as Noto Serif and specialized versions, can be obtained from https://www.google.com/get/noto/ .
+  * Noto Sans and Noto Serif are SIL OFL, originally by Google, Inc., and has had minimal modification. The original
+    files, as well as specialized versions, can be obtained from https://www.google.com/get/noto/ .
   * Orbitron is SIL OFL 1.1, originally by The League of Movable Type, and can be obtained from
     http://www.theleagueofmoveabletype.com/fonts/12-orbitron .
   * The .png images containing the name Tentacle are public domain, originally by Henrique Lazarini (also known
@@ -158,7 +161,16 @@ Ettinger and released into the public domain, except:
     original pixel art.
   * icons.png is derived from the many icons supplied by http://game-icons.net/ ; it has its own license and
     people to credit in a file distributed with it, icons-license.txt .
-  * BoxedIn is Creative Commons Zero-licensed, originally by FontStruct user samw3.
+  * BoxedIn is Creative Commons Zero-licensed, originally by FontStruct user samw3. It does not require its license to
+    be redistributed, as per CC0.
+  * GoMono is BSD-licensed (3-clause) by Bigelow & Holmes Inc. for the Go project, and must be redistributed with
+    GoMono-License.txt in the same folder.
+  * Font Awesome Free, which is used in the files awesome-solid-msdf.fnt and awesome-solid-msdf.png, is OFL-licensed,
+    and its license must be distributed with those files (it is in Font-Awesome-license.txt).
+  * Source Code Pro and Source Han Code JP are OFL-licensed by Adobe Systems Incorporated, with the licenses for each in
+    SourceCodePro-License.txt and SourceHanCodeJP-license.txt , respectively.
+  * The font square by Wouter van Oortmerssen is licensed under a Creative Commons Attribution 3.0 Unported License,
+    and it must be redistributed with square-License.txt .
 
 libtcod 1.5.2 license text:
 Copyright (c) 2008,2009,2010,2012 Jice & Mingos

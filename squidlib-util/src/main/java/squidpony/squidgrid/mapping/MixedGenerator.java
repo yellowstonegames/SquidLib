@@ -1,14 +1,12 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
-import squidpony.squidgrid.mapping.locks.Edge;
-import squidpony.squidgrid.mapping.locks.IRoomLayout;
-import squidpony.squidgrid.mapping.locks.Room;
-import squidpony.squidgrid.mapping.locks.util.Rect2I;
 import squidpony.squidmath.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A dungeon generator that can use a mix of techniques to have part-cave, part-room dungeons. Not entirely intended for
@@ -263,77 +261,7 @@ public class MixedGenerator implements IDungeonGenerator {
         }
         carvers = new double[5];
     }
-
-    /**
-     * This prepares a map generator that will generate a map with the given width and height, using the given IRNG.
-     * This version of the constructor uses an {@link squidpony.squidgrid.mapping.locks.IRoomLayout} to set up rooms,
-     * almost always produced by {@link squidpony.squidgrid.mapping.locks.generators.LayoutGenerator}. This method does
-     * alter the individual Room objects inside layout, making the center of each room match where that center is placed
-     * in the dungeon this generates. You call the different carver-adding methods to affect what the dungeon will look
-     * like, i.e. {@link #putCaveCarvers(int)}, {@link #putBoxRoomCarvers(int)} , {@link #putRoundRoomCarvers(int)},
-     * {@link #putWalledBoxRoomCarvers(int)}, and {@link #putWalledRoundRoomCarvers(int)}, defaulting to only caves if
-     * none are called (using rooms is recommended for this constructor). You call generate() after adding carvers,
-     * which returns a char[][] for a map and sets the environment to be fetched with {@link #getEnvironment()}, which
-     * is usually needed for {@link SectionDungeonGenerator} to correctly place doors and various other features.
-     * @param width the width of the final map in cells
-     * @param height the height of the final map in cells
-     * @param rng an IRNG object to use for random choices; this make a lot of random choices.
-     * @param layout an IRoomLayout that will almost always be produced by LayoutGenerator; the rooms will be altered
-     * @param roomSizeMultiplier a float multiplier that will be applied to each room's width and height
-     */
-    public MixedGenerator(int width, int height, IRNG rng, IRoomLayout layout,
-                          float roomSizeMultiplier) {
-        this.width = width;
-        this.height = height;
-        Rect2I bounds = layout.getExtentBounds();
-        int offX = bounds.getBottomLeft().x, offY = bounds.getBottomLeft().y;
-        float rw = (width) / (bounds.width+1f), rh = (height) / (bounds.height+1f);
-        this.roomWidth = roomSizeMultiplier * rw * 0.125f;
-        this.roomHeight = roomSizeMultiplier * rh * 0.125f;
-        if(width <= 2 || height <= 2)
-            throw new IllegalStateException("width and height must be greater than 2");
-        this.rng = rng;
-        dungeon = new char[width][height];
-        environment = new int[width][height];
-        marked = new boolean[width][height];
-        walled = new boolean[width][height];
-        fixedRooms = new boolean[width][height];
-        ArrayTools.fill(dungeon, '#');
-        ArrayTools.fill(environment, DungeonUtility.UNTOUCHED);
-        totalPoints = layout.roomCount();
-        points = new IntVLA(totalPoints);
-        Coord c2;
-        Set<Room> rooms = layout.getRooms(), removing = new HashSet<>(rooms);
-        Room t;
-        for (Room room : rooms) {
-            Coord c1 = room.getCenter();
-            if (!bounds.contains(c1)) {
-                removing.remove(room);
-            }
-            else {
-                room.setCenter(Coord.get(
-                        (int) ((c1.x - offX + 0.75f) * (rw)) & 0xff,
-                        (int) ((c1.y - offY + 0.75f) * (rh)) & 0xff));
-            }
-        }
-
-        for (Room room : rooms) {
-            Coord c1 = room.getCenter();
-            for (Edge e : room.getEdges()) {
-                if (removing.contains(t = layout.get(e.getTargetRoomId()))) {
-                    c2 = t.getCenter();
-                    points.add((c1.x << 24)
-                            | (c1.y << 16)
-                            | (c2.x << 8)
-                            | c2.y);
-                }
-            }
-            removing.remove(room);
-        }
-        totalPoints = points.size;
-        carvers = new double[5];
-    }
-
+    
     /**
      * Changes the number of "carvers" that will create caves from one room to the next. If count is 0 or less, no caves
      * will be made. If count is at least 1, caves are possible, and higher numbers relative to the other carvers make
