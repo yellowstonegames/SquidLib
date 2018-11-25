@@ -5062,18 +5062,18 @@ public class CoordPacker {
         return hilbertDistances[x + (y << 8)] & 0xffff;
     }
     /**
-     * Takes an x, y, z position and returns the length to travel along the 32x32x32 Hilbert curve to reach that
-     * position. This assumes x, y, and z are between 0 and 31, inclusive.
-     * This uses a lookup table for the 32x32x32 Hilbert Curve, which should make it faster than calculating the
+     * Takes an x, y, z position and returns the length to travel along the 8x8x8 Hilbert curve to reach that
+     * position. This assumes x, y, and z are between 0 and 7, inclusive.
+     * This uses a lookup table for the 8x8x8 Hilbert Curve, which should make it faster than calculating the
      * distance along the Hilbert Curve repeatedly.
      * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html
-     * @param x between 0 and 31 inclusive
-     * @param y between 0 and 31 inclusive
-     * @param z between 0 and 31 inclusive
-     * @return the distance to travel along the 32x32x32 Hilbert Curve to get to the given x, y, z point.
+     * @param x between 0 and 7 inclusive
+     * @param y between 0 and 7 inclusive
+     * @param z between 0 and 7 inclusive
+     * @return the distance to travel along the 8x8x8 Hilbert Curve to get to the given x, y, z point.
      */
     public static int posToHilbert3D( final int x, final int y, final int z ) {
-        return hilbert3Distances[x + (y << 5) + (z << 10)];
+        return hilbert3Distances[x | y << 3 | z << 6];
     }
     /**
      * Takes an x, y position and returns the length to travel along the 16x16 Moore curve to reach that position.
@@ -5447,7 +5447,7 @@ public class CoordPacker {
         hilbert3X[hilbert] = (short)x;
         hilbert3Y[hilbert] = (short)y;
         hilbert3Z[hilbert] = (short)z;
-        hilbert3Distances[x | (y << 3) | (z << 6)] = (short)hilbert;
+        hilbert3Distances[x | y << 3 | z << 6] = (short)hilbert;
     }
 
     /**
@@ -5497,9 +5497,9 @@ public class CoordPacker {
         int hilbert = index & 0x1ff;
         int sector = index >> 9;
         if (((sector / n) & 1) == 0)
-            return hilbert3Z[hilbert] + 8 * (sector % n);
+            return hilbert3Z[hilbert] + ((sector % n) << 3);
         else
-            return (8 * n - 1) - hilbert3Z[hilbert] - 8 * (sector % n);
+            return (n << 3) - 1 - hilbert3Z[hilbert] - ((sector % n) << 3);
     }
 
 

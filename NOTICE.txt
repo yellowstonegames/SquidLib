@@ -35,10 +35,12 @@ probably from Google's GWT library or its documentation, but may also be from Gu
 The JRotation class (no longer in SquidLib) was based on code by Savvas Dalkitsis on stackoverflow.com.
 
 The RNG class is based on the Mersenne Twister implementation by Daniel Dyer as part of the Uncommons Maths library,
-which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura. Also from Uncommon Maths,
+which is in turn based on the original C algorithm by Makoto Matsumoto and Takuji Nishimura. Also from Uncommon Maths:
 the CombinationGenerator and PermutationGenerator classes; changes were made to PermutationGenerator based on techniques
 from user Joren on StackOverflow, http://stackoverflow.com/a/1506337 . The MersenneTwister class is no longer based on
 Uncommon Maths, instead using Nick Galbreath's implementation from https://github.com/javabeanz/javarng/blob/master/com/modp/random/MersenneTwister64.java .
+Certain methods in RNG and various RandomnessSource implementations are based on Daniel Lemire's integer-multiplication
+method for fast ranged random number reduction, as from https://lemire.me/blog/2016/06/27/a-fast-alternative-to-the-modulo-reduction/ .
 
 The squidpony.squidgrid.mapping.styled package and the JSON resources are derived from Sean T. Barrett's Herringbone
 Wang Tiles library, part of the nothings set of libraries, which were released into the public domain.
@@ -47,10 +49,12 @@ The LightRNG class is based on SplitMix64.c by Sebastiano Vigna, released into t
 http://xorshift.di.unimi.it/ . It uses the SplitMix64 algorithm as published by Guy L. Steele Jr, Doug Lea, and
 Christine H. Flood.
 
-The XorRNG class is based on the C implementation of XorShift 128+ by Sebastiano Vigna, released into the public domain
+The XorRNG class is based on the C implementation of xorshift128+ by Sebastiano Vigna, released into the public domain
 and made available on http://xorshift.di.unimi.it/
-LongPeriodRNG is based on XorShift 1024* , XoRoRNG is based on XoRoShiRo 64+ , and the other credit for these is the
-same as XorRNG.
+LongPeriodRNG is based on xorshift1024*phi, XoRoRNG is based on xoroshiro128+ , and the other credit for these is the
+same as XorRNG. Starfish32RNG, Lathe32RNG, Oriole32RNG, and GWTRNG are based on modifications to xoroshiro64, the 32-bit
+version of the 64-bit xoroshiro128; they all use different scramblers from xoroshiro128+, but use the same fundamental
+structure for how they change their state.
 
 The PermutedRNG and PintRNG classes are based on the paper http://www.pcg-random.org/paper.html , describing PCG-Random
 and its methodology written by Melissa E. O'Neill.
@@ -59,13 +63,19 @@ The SobolQRNG class and the resource in the resources/qrng folder were ported fr
 Joe and Frances Kuo are credited for the implementation.
 
 The VanDerCorputQRNG class implements the sequence discovered by J.G. van der Corput in 1935, as well as the closely
-related Halton sequence; no other previous code is used here.
+related Halton sequence; the class also includes an implementation of Martin Roberts' multi-dimensional quasi-random
+point sequence from http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/ .
 
 The IsaacRNG class is based off a Java implementation given for the Isaac cipher/RNG (usable for either) from
 http://www.burtleburtle.net/bob/rand/isaacafa.html (public domain); the version uses here is a mix of the C code in
 isaac64.c and the Java implementation by Bob Jenkins for 32-bit generation, and it produces 64 bits at a time in Java.
 
 The JavaRNG class was contributed by Ben McLean to help compare the default JDK Random class with SquidLib's RNGs.
+
+Most RandomnessSource implementations in SquidLib, and all recommended ones, have been tested with PractRand by Chris
+Doty-Humphrey, from http://pracrand.sourceforge.net/ . PractRand has been an invaluable tool in assessing the quality
+of home-made RNGs. The earlier TestU01 framework by Pierre L'Ecuyer has also been used,
+http://simul.iro.umontreal.ca/testu01/tu01.html , as has nda by Geronimo Jones, http://gjrand.sourceforge.net/ .
 
 The NeuralParticle and WeightedLetterNamegen classes are based on work by Ebyan Alvarez-Buylla .
 
@@ -96,6 +106,8 @@ to Brian Pender and Joshua Day.
 The hashing techniques used in CrossHash are not derived (at least not
 intentionally) from any other hashing algorithms; earlier versions contained
 code derived from FNV-1a and Daniel Lemire's StronglyUniversalStringHashing projects.
+Some of the hashes in CrossHash have been tested with smhasher to verify their quality;
+the fork of smhasher used is available at https://github.com/rurban/smhasher .
 
 The phonetic locality-sensitive hashing of word sounds in NaturalLanguageCipher
 owes some credit to eudex, a Rust library for the same type of hashing which can
