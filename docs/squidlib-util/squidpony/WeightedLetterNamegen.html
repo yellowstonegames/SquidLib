@@ -187,9 +187,9 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#WeightedLetterNamegen-java.lang.String:A-int-squidpony.squidmath.StatefulRNG-">WeightedLetterNamegen</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;names,
+<td class="colOne"><code><span class="memberNameLink"><a href="../squidpony/WeightedLetterNamegen.html#WeightedLetterNamegen-java.lang.String:A-int-squidpony.squidmath.IStatefulRNG-">WeightedLetterNamegen</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;names,
                      int&nbsp;consonantLimit,
-                     <a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng)</code>
+                     <a href="../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng)</code>
 <div class="block">Creates the generator by seeding the provided list of names.</div>
 </td>
 </tr>
@@ -340,7 +340,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="WeightedLetterNamegen-java.lang.String:A-int-squidpony.squidmath.StatefulRNG-">
+<a name="WeightedLetterNamegen-java.lang.String:A-int-squidpony.squidmath.IStatefulRNG-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -348,7 +348,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <h4>WeightedLetterNamegen</h4>
 <pre>public&nbsp;<a href="../src-html/squidpony/WeightedLetterNamegen.html#line.315">WeightedLetterNamegen</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;names,
                              int&nbsp;consonantLimit,
-                             <a href="../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng)</pre>
+                             <a href="../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng)</pre>
 <div class="block">Creates the generator by seeding the provided list of names. The given RNG will be used for
  all random decisions this has to make, so if it has the same state (and RandomnessSource) on
  different runs through the program, it will produce the same names reliably.</div>

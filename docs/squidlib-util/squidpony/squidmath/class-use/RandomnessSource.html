@@ -113,12 +113,19 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span></code>
+<div class="block">Simply groups the two interfaces <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a> and <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><code>StatefulRandomness</code></a> so some implementations of IRNG can have
+ their states read from and written to.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SkippingRandomness.html" title="interface in squidpony.squidmath">SkippingRandomness</a></span></code>
 <div class="block">A simple interface for RandomnessSources that have the additional capability to skip forward or backward in their
  generated number stream.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></span></code>
 <div class="block">A simple interface for RandomnessSources that have the additional property of a state that can be re-set.</div>
@@ -423,24 +430,31 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
-<td class="colLast"><span class="typeNameLabel">RandomnessSource.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/RandomnessSource.html#copy--">copy</a></span>()</code>
-<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+<td class="colLast"><span class="typeNameLabel">StatefulRandomness.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/StatefulRandomness.html#copy--">copy</a></span>()</code>
+<div class="block">Produces a copy of this StatefulRandomness that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
-<td class="colLast"><span class="typeNameLabel">RNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/RNG.html#getRandomness--">getRandomness</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RandomnessSource.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/RandomnessSource.html#copy--">copy</a></span>()</code>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
-<td class="colLast"><span class="typeNameLabel">EditRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/EditRNG.html#getRandomness--">getRandomness</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">RNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/RNG.html#getRandomness--">getRandomness</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DharmaRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DharmaRNG.html#getRandomness--">getRandomness</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">EditRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/EditRNG.html#getRandomness--">getRandomness</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DharmaRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DharmaRNG.html#getRandomness--">getRandomness</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a></code></td>
 <td class="colLast"><span class="typeNameLabel">DeckRNG.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DeckRNG.html#getRandomness--">getRandomness</a></span>()</code>&nbsp;</td>
 </tr>
@@ -609,11 +623,17 @@
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#ProbabilityTable-squidpony.squidmath.RandomnessSource-">ProbabilityTable</a></span>(<a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;rng)</code>
+<div class="block">Creates a new probability table with the provided source of randomness
+ used.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/RNG.html#RNG-squidpony.squidmath.RandomnessSource-">RNG</a></span>(<a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</code>
 <div class="block">Uses the provided source of randomness for all calculations.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-squidpony.squidmath.RandomnessSource-">StatefulRNG</a></span>(<a href="../../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</code>&nbsp;</td>
 </tr>
 </tbody>

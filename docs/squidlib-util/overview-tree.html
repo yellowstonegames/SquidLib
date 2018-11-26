@@ -112,8 +112,8 @@
 </li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">AbstractRNG</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>)
 <ul>
-<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">GWTRNG</span></a> (implements java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)</li>
-<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">MoonwalkRNG</span></a> (implements java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, squidpony.squidmath.<a href="squidpony/squidmath/SkippingRandomness.html" title="interface in squidpony.squidmath">SkippingRandomness</a>, squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)</li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">GWTRNG</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>, java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">MoonwalkRNG</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>, java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, squidpony.squidmath.<a href="squidpony/squidmath/SkippingRandomness.html" title="interface in squidpony.squidmath">SkippingRandomness</a>)</li>
 </ul>
 </li>
 <li type="circle">squidpony.squidgrid.<a href="squidpony/squidgrid/Adjacency.html" title="class in squidpony.squidgrid"><span class="typeNameLink">Adjacency</span></a> (implements java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)
@@ -391,7 +391,7 @@
 <ul>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">CriticalRNG</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">DharmaRNG</span></a> (implements java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
-<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">StatefulRNG</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>, java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">StatefulRNG</span></a> (implements squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>, java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)
 <ul>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">DeckRNG</span></a> (implements java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/EditRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">EditRNG</span></a> (implements java.io.<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
@@ -543,18 +543,36 @@
 <li type="circle">squidpony.squidai.<a href="squidpony/squidai/AOE.html" title="interface in squidpony.squidai"><span class="typeNameLink">AOE</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath"><span class="typeNameLink">CrossHash.IHasher</span></a></li>
 <li type="circle">squidpony.squidgrid.zone.<a href="squidpony/squidgrid/zone/ImmutableZone.html" title="interface in squidpony.squidgrid.zone"><span class="typeNameLink">ImmutableZone</span></a></li>
-<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IRNG</span></a></li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IRNG</span></a>
+<ul>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IStatefulRNG</span></a> (also extends squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)</li>
+</ul>
+</li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IStatefulRNG</span></a> (also extends squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>, squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)</li>
 <li type="circle">squidpony.squidgrid.zone.<a href="squidpony/squidgrid/zone/MutableZone.html" title="interface in squidpony.squidgrid.zone"><span class="typeNameLink">MutableZone</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath"><span class="typeNameLink">RandomnessSource</span></a>
 <ul>
-<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IRNG</span></a></li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IRNG</span></a>
+<ul>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IStatefulRNG</span></a> (also extends squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)</li>
+</ul>
+</li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IStatefulRNG</span></a> (also extends squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>, squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>)</li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/SkippingRandomness.html" title="interface in squidpony.squidmath"><span class="typeNameLink">SkippingRandomness</span></a></li>
-<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><span class="typeNameLink">StatefulRandomness</span></a></li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><span class="typeNameLink">StatefulRandomness</span></a>
+<ul>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IStatefulRNG</span></a> (also extends squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>)</li>
+</ul>
+</li>
 </ul>
 </li>
 <li type="circle">squidpony.squidgrid.mapping.<a href="squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping"><span class="typeNameLink">Rectangle</span></a></li>
 <li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/SkippingRandomness.html" title="interface in squidpony.squidmath"><span class="typeNameLink">SkippingRandomness</span></a></li>
-<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><span class="typeNameLink">StatefulRandomness</span></a></li>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><span class="typeNameLink">StatefulRandomness</span></a>
+<ul>
+<li type="circle">squidpony.squidmath.<a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath"><span class="typeNameLink">IStatefulRNG</span></a> (also extends squidpony.squidmath.<a href="squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>)</li>
+</ul>
+</li>
 <li type="circle">squidpony.squidgrid.zone.<a href="squidpony/squidgrid/zone/Zone.html" title="interface in squidpony.squidgrid.zone"><span class="typeNameLink">Zone</span></a> (also extends java.lang.<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;T&gt;)
 <ul>
 <li type="circle">squidpony.squidgrid.zone.<a href="squidpony/squidgrid/zone/ImmutableZone.html" title="interface in squidpony.squidgrid.zone"><span class="typeNameLink">ImmutableZone</span></a></li>

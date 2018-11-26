@@ -236,7 +236,7 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre><a href="squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> rng</pre>
+<pre><a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a> rng</pre>
 </li>
 <li class="blockList">
 <h4>minWords</h4>
@@ -1859,13 +1859,9 @@
 </li>
 <li class="blockList">
 <h4>rng</h4>
-<pre><a href="squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> rng</pre>
-<div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
-</li>
-<li class="blockList">
-<h4>sr</h4>
-<pre><a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> sr</pre>
-<div class="block">The StatefulRandomness, usually a LightRNG, that this uses. Can have its state read and set.</div>
+<pre><a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a> rng</pre>
+<div class="block">The IStatefulRNG used to decide which one of multiple equally-short paths to take. Typically, this is a
+ <a href="squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> or <a href="squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath"><code>StatefulRNG</code></a>.</div>
 </li>
 <li class="blockListLast">
 <h4>initialized</h4>
@@ -2140,7 +2136,7 @@
 </li>
 <li class="blockList">
 <h4>rng</h4>
-<pre><a href="squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> rng</pre>
+<pre><a href="squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a> rng</pre>
 </li>
 <li class="blockList">
 <h4>heightData</h4>
@@ -4851,7 +4847,7 @@
 </li>
 <li class="blockList">
 <h4>rng</h4>
-<pre><a href="squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> rng</pre>
+<pre><a href="squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a> rng</pre>
 </li>
 <li class="blockList">
 <h4>total</h4>

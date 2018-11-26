@@ -80,13 +80,10 @@ public class Spill implements Serializable {
     public int filled = 0;
     private OrderedSet<Coord> fresh;
     /**
-     * The RNG used to decide which one of multiple equally-short paths to take.
+     * The IStatefulRNG used to decide which one of multiple equally-short paths to take. Typically, this is a
+     * {@link GWTRNG} or {@link StatefulRNG}.
      */
-    public StatefulRNG rng;
-    /**
-     * The StatefulRandomness, usually a LightRNG, that this uses. Can have its state read and set.
-     */
-    public StatefulRandomness sr;
+    public IStatefulRNG rng;
 
     private boolean initialized = false;
     /**
@@ -94,21 +91,19 @@ public class Spill implements Serializable {
      * initialize() method before using this class.
      */
     public Spill() {
-        sr = new LightRNG();
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG();
 
         fresh = new OrderedSet<>();
     }
     /**
      * Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
-     * RandomnessSource the RNG that this object uses will not be identical to the one passed as random (64 bits will
+     * RandomnessSource the RNG that this object uses will not be identical to the one passed as random (two ints will
      * be requested from the passed RNG, and that will be used to seed this class' RNG).
      *
      * If you use this constructor, you must call an  initialize() method before using this class.
      */
     public Spill(IRNG random) {
-        sr = new LightRNG(random.nextLong());
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG(random.nextInt(), random.nextInt());
 
         fresh = new OrderedSet<>();
     }
@@ -120,9 +115,8 @@ public class Spill implements Serializable {
      *
      * If you use this constructor, you must call an  initialize() method before using this class.
      */
-    public Spill(StatefulRandomness random) {
-        sr = random;
-        rng = new StatefulRNG(sr);
+    public Spill(IStatefulRNG random) {
+        rng = random;
 
         fresh = new OrderedSet<>();
     }
@@ -132,8 +126,7 @@ public class Spill implements Serializable {
      * @param level the level as a 2D rectangular boolean array, using {@code false} to represent walls
      */
     public Spill(final boolean[][] level) {
-        sr = new LightRNG();
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG();
 
         initialize(level);
     }
@@ -143,8 +136,7 @@ public class Spill implements Serializable {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final boolean[][] level, Measurement measurement) {
-        sr = new LightRNG();
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG();
 
         this.measurement = measurement;
 
@@ -160,8 +152,7 @@ public class Spill implements Serializable {
      * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
      */
     public Spill(final char[][] level) {
-        sr = new LightRNG();
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG();
 
         initialize(level);
     }
@@ -175,8 +166,7 @@ public class Spill implements Serializable {
      * @param alternateWall the char that will be interpreted as a wall in {@code level}
      */
     public Spill(final char[][] level, char alternateWall) {
-        sr = new LightRNG();
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG();
 
         initialize(level, alternateWall);
     }
@@ -191,8 +181,7 @@ public class Spill implements Serializable {
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement) {
-        sr = new LightRNG();
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG();
         this.measurement = measurement;
 
         initialize(level);
@@ -204,15 +193,14 @@ public class Spill implements Serializable {
      * map that can be used here. This constructor specifies a distance measurement.
      *
      * This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses
-     * will not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will
+     * will not be identical to the one passed as random (two ints will be requested from the passed RNG, and that will
      * be used to seed this class' RNG).
      *
      * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
     public Spill(final char[][] level, Measurement measurement, RNG random) {
-        sr = new LightRNG(random.nextLong());
-        rng = new StatefulRNG(sr);
+        rng = new GWTRNG(random.nextInt(), random.nextInt());
         this.measurement = measurement;
 
         initialize(level);
@@ -223,15 +211,14 @@ public class Spill implements Serializable {
      * a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
      * map that can be used here. This constructor specifies a distance measurement.
      *
-     * This constructor allows you to specify a StatefulRandomness, which will be referenced in
+     * This constructor allows you to specify an IStatefulRNG such as GWTRNG or StatefulRNG, which will be referenced in
      * this class (if the state of random changes because this object needed a random number, the state change will be
      * reflected in the code that passed random to here).
      * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
-    public Spill(final char[][] level, Measurement measurement, StatefulRandomness random) {
-        sr = random;
-        rng = new StatefulRNG(sr);
+    public Spill(final char[][] level, Measurement measurement, IStatefulRNG random) {
+        rng = random;
         this.measurement = measurement;
 
         initialize(level);

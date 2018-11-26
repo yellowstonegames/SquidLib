@@ -5070,18 +5070,18 @@
 <span class="sourceLineNo">5062</span>        return hilbertDistances[x + (y &lt;&lt; 8)] &amp; 0xffff;<a name="line.5062"></a>
 <span class="sourceLineNo">5063</span>    }<a name="line.5063"></a>
 <span class="sourceLineNo">5064</span>    /**<a name="line.5064"></a>
-<span class="sourceLineNo">5065</span>     * Takes an x, y, z position and returns the length to travel along the 32x32x32 Hilbert curve to reach that<a name="line.5065"></a>
-<span class="sourceLineNo">5066</span>     * position. This assumes x, y, and z are between 0 and 31, inclusive.<a name="line.5066"></a>
-<span class="sourceLineNo">5067</span>     * This uses a lookup table for the 32x32x32 Hilbert Curve, which should make it faster than calculating the<a name="line.5067"></a>
+<span class="sourceLineNo">5065</span>     * Takes an x, y, z position and returns the length to travel along the 8x8x8 Hilbert curve to reach that<a name="line.5065"></a>
+<span class="sourceLineNo">5066</span>     * position. This assumes x, y, and z are between 0 and 7, inclusive.<a name="line.5066"></a>
+<span class="sourceLineNo">5067</span>     * This uses a lookup table for the 8x8x8 Hilbert Curve, which should make it faster than calculating the<a name="line.5067"></a>
 <span class="sourceLineNo">5068</span>     * distance along the Hilbert Curve repeatedly.<a name="line.5068"></a>
 <span class="sourceLineNo">5069</span>     * Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html<a name="line.5069"></a>
-<span class="sourceLineNo">5070</span>     * @param x between 0 and 31 inclusive<a name="line.5070"></a>
-<span class="sourceLineNo">5071</span>     * @param y between 0 and 31 inclusive<a name="line.5071"></a>
-<span class="sourceLineNo">5072</span>     * @param z between 0 and 31 inclusive<a name="line.5072"></a>
-<span class="sourceLineNo">5073</span>     * @return the distance to travel along the 32x32x32 Hilbert Curve to get to the given x, y, z point.<a name="line.5073"></a>
+<span class="sourceLineNo">5070</span>     * @param x between 0 and 7 inclusive<a name="line.5070"></a>
+<span class="sourceLineNo">5071</span>     * @param y between 0 and 7 inclusive<a name="line.5071"></a>
+<span class="sourceLineNo">5072</span>     * @param z between 0 and 7 inclusive<a name="line.5072"></a>
+<span class="sourceLineNo">5073</span>     * @return the distance to travel along the 8x8x8 Hilbert Curve to get to the given x, y, z point.<a name="line.5073"></a>
 <span class="sourceLineNo">5074</span>     */<a name="line.5074"></a>
 <span class="sourceLineNo">5075</span>    public static int posToHilbert3D( final int x, final int y, final int z ) {<a name="line.5075"></a>
-<span class="sourceLineNo">5076</span>        return hilbert3Distances[x + (y &lt;&lt; 5) + (z &lt;&lt; 10)];<a name="line.5076"></a>
+<span class="sourceLineNo">5076</span>        return hilbert3Distances[x | y &lt;&lt; 3 | z &lt;&lt; 6];<a name="line.5076"></a>
 <span class="sourceLineNo">5077</span>    }<a name="line.5077"></a>
 <span class="sourceLineNo">5078</span>    /**<a name="line.5078"></a>
 <span class="sourceLineNo">5079</span>     * Takes an x, y position and returns the length to travel along the 16x16 Moore curve to reach that position.<a name="line.5079"></a>
@@ -5455,7 +5455,7 @@
 <span class="sourceLineNo">5447</span>        hilbert3X[hilbert] = (short)x;<a name="line.5447"></a>
 <span class="sourceLineNo">5448</span>        hilbert3Y[hilbert] = (short)y;<a name="line.5448"></a>
 <span class="sourceLineNo">5449</span>        hilbert3Z[hilbert] = (short)z;<a name="line.5449"></a>
-<span class="sourceLineNo">5450</span>        hilbert3Distances[x | (y &lt;&lt; 3) | (z &lt;&lt; 6)] = (short)hilbert;<a name="line.5450"></a>
+<span class="sourceLineNo">5450</span>        hilbert3Distances[x | y &lt;&lt; 3 | z &lt;&lt; 6] = (short)hilbert;<a name="line.5450"></a>
 <span class="sourceLineNo">5451</span>    }<a name="line.5451"></a>
 <span class="sourceLineNo">5452</span><a name="line.5452"></a>
 <span class="sourceLineNo">5453</span>    /**<a name="line.5453"></a>
@@ -5505,9 +5505,9 @@
 <span class="sourceLineNo">5497</span>        int hilbert = index &amp; 0x1ff;<a name="line.5497"></a>
 <span class="sourceLineNo">5498</span>        int sector = index &gt;&gt; 9;<a name="line.5498"></a>
 <span class="sourceLineNo">5499</span>        if (((sector / n) &amp; 1) == 0)<a name="line.5499"></a>
-<span class="sourceLineNo">5500</span>            return hilbert3Z[hilbert] + 8 * (sector % n);<a name="line.5500"></a>
+<span class="sourceLineNo">5500</span>            return hilbert3Z[hilbert] + ((sector % n) &lt;&lt; 3);<a name="line.5500"></a>
 <span class="sourceLineNo">5501</span>        else<a name="line.5501"></a>
-<span class="sourceLineNo">5502</span>            return (8 * n - 1) - hilbert3Z[hilbert] - 8 * (sector % n);<a name="line.5502"></a>
+<span class="sourceLineNo">5502</span>            return (n &lt;&lt; 3) - 1 - hilbert3Z[hilbert] - ((sector % n) &lt;&lt; 3);<a name="line.5502"></a>
 <span class="sourceLineNo">5503</span>    }<a name="line.5503"></a>
 <span class="sourceLineNo">5504</span><a name="line.5504"></a>
 <span class="sourceLineNo">5505</span><a name="line.5505"></a>

@@ -57,7 +57,7 @@ public class DungeonUtility {
         rng = new StatefulRNG();
     }
 
-    public DungeonUtility(StatefulRNG rng) {
+    public DungeonUtility(IStatefulRNG rng) {
         this.rng = rng;
     }
 
@@ -68,7 +68,7 @@ public class DungeonUtility {
     /**
      * The random number generator that will be used for all methods in this class with a random component.
      */
-    public StatefulRNG rng;
+    public IStatefulRNG rng;
     
 
     /**

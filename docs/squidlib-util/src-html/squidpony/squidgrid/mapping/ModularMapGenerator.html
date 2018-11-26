@@ -27,134 +27,134 @@
 <span class="sourceLineNo">019</span>public class ModularMapGenerator implements IDungeonGenerator {<a name="line.19"></a>
 <span class="sourceLineNo">020</span>    public DungeonUtility utility;<a name="line.20"></a>
 <span class="sourceLineNo">021</span>    protected int height, width;<a name="line.21"></a>
-<span class="sourceLineNo">022</span>    public StatefulRNG rng;<a name="line.22"></a>
+<span class="sourceLineNo">022</span>    public IStatefulRNG rng;<a name="line.22"></a>
 <span class="sourceLineNo">023</span>    protected long rebuildSeed;<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    protected boolean seedFixed = false;<a name="line.24"></a>
-<span class="sourceLineNo">025</span><a name="line.25"></a>
-<span class="sourceLineNo">026</span>    protected char[][] map = null;<a name="line.26"></a>
-<span class="sourceLineNo">027</span>    protected int[][] environment = null;<a name="line.27"></a>
-<span class="sourceLineNo">028</span>    //public RegionMap&lt;MapModule&gt; layout, modules, inverseModules;<a name="line.28"></a>
-<span class="sourceLineNo">029</span>    public RegionMap&lt;MapModule&gt; layout;<a name="line.29"></a>
-<span class="sourceLineNo">030</span>    public OrderedMap&lt;Integer, ArrayList&lt;MapModule&gt;&gt; modules;<a name="line.30"></a>
-<span class="sourceLineNo">031</span>    public OrderedMap&lt;Coord, MapModule&gt; displacement;<a name="line.31"></a>
-<span class="sourceLineNo">032</span><a name="line.32"></a>
-<span class="sourceLineNo">033</span>    private void putModule(short[] module) {<a name="line.33"></a>
-<span class="sourceLineNo">034</span>        char[][] unp = CoordPacker.unpackChar(module, '.', '#');<a name="line.34"></a>
-<span class="sourceLineNo">035</span>        MapModule mm = new MapModule(ArrayTools.insert(unp,<a name="line.35"></a>
-<span class="sourceLineNo">036</span>                ArrayTools.fill('#', unp.length + 2, unp[0].length + 2), 1, 1));<a name="line.36"></a>
-<span class="sourceLineNo">037</span>        //short[] b = CoordPacker.rectangle(1 + mm.max.x, 1 + mm.max.y);<a name="line.37"></a>
-<span class="sourceLineNo">038</span>        //modules.put(b, mm);<a name="line.38"></a>
-<span class="sourceLineNo">039</span>        //inverseModules.put(CoordPacker.negatePacked(b), mm);<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        ArrayList&lt;MapModule&gt; mms = modules.get(mm.category);<a name="line.40"></a>
-<span class="sourceLineNo">041</span>        if (mms == null) {<a name="line.41"></a>
-<span class="sourceLineNo">042</span>            mms = new ArrayList&lt;&gt;(16);<a name="line.42"></a>
-<span class="sourceLineNo">043</span>            mms.add(mm);<a name="line.43"></a>
-<span class="sourceLineNo">044</span>            modules.put(mm.category, mms);<a name="line.44"></a>
-<span class="sourceLineNo">045</span>        } else<a name="line.45"></a>
-<span class="sourceLineNo">046</span>            mms.add(mm);<a name="line.46"></a>
-<span class="sourceLineNo">047</span>    }<a name="line.47"></a>
-<span class="sourceLineNo">048</span><a name="line.48"></a>
-<span class="sourceLineNo">049</span>    private void putRectangle(int width, int height, float multiplier) {<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        putModule(CoordPacker.rectangle(Math.round(width * multiplier), Math.round(height * multiplier)));<a name="line.50"></a>
-<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
-<span class="sourceLineNo">052</span><a name="line.52"></a>
-<span class="sourceLineNo">053</span>    private void putCircle(int radius, float multiplier) {<a name="line.53"></a>
-<span class="sourceLineNo">054</span>        putModule(CoordPacker.circle(Coord.get(Math.round(radius * multiplier + 1), Math.round(radius * multiplier + 1)),<a name="line.54"></a>
-<span class="sourceLineNo">055</span>                Math.round(radius * multiplier),<a name="line.55"></a>
-<span class="sourceLineNo">056</span>                Math.round((radius + 1) * 2 * multiplier + 1), Math.round((radius + 1) * 2 * multiplier + 1)));<a name="line.56"></a>
-<span class="sourceLineNo">057</span>    }<a name="line.57"></a>
-<span class="sourceLineNo">058</span><a name="line.58"></a>
-<span class="sourceLineNo">059</span>    private void initModules() {<a name="line.59"></a>
-<span class="sourceLineNo">060</span>        layout = new RegionMap&lt;&gt;(64);<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        //modules = new RegionMap&lt;&gt;(64);<a name="line.61"></a>
-<span class="sourceLineNo">062</span>        //inverseModules = new RegionMap&lt;&gt;(64);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>        modules = new OrderedMap&lt;&gt;(64);<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        for (int i = 1; i &lt;= 64; i &lt;&lt;= 1) {<a name="line.64"></a>
-<span class="sourceLineNo">065</span>            ArrayList&lt;MapModule&gt; mms = new ArrayList&lt;&gt;(16);<a name="line.65"></a>
-<span class="sourceLineNo">066</span>            modules.put(i, mms);<a name="line.66"></a>
-<span class="sourceLineNo">067</span>        }<a name="line.67"></a>
-<span class="sourceLineNo">068</span>        displacement = new OrderedMap&lt;&gt;(64);<a name="line.68"></a>
-<span class="sourceLineNo">069</span>        float multiplier = 1;//(float) Math.sqrt(Math.max(1f, Math.min(width, height) / 24f));<a name="line.69"></a>
-<span class="sourceLineNo">070</span>        putRectangle(2, 2, multiplier);<a name="line.70"></a>
-<span class="sourceLineNo">071</span>        putRectangle(3, 3, multiplier);<a name="line.71"></a>
-<span class="sourceLineNo">072</span>        putRectangle(4, 4, multiplier);<a name="line.72"></a>
-<span class="sourceLineNo">073</span>        putRectangle(4, 2, multiplier);<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        putRectangle(2, 4, multiplier);<a name="line.74"></a>
-<span class="sourceLineNo">075</span>        putRectangle(6, 6, multiplier);<a name="line.75"></a>
-<span class="sourceLineNo">076</span>        putRectangle(6, 3, multiplier);<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        putRectangle(3, 6, multiplier);<a name="line.77"></a>
-<span class="sourceLineNo">078</span>        putCircle(2, multiplier);<a name="line.78"></a>
-<span class="sourceLineNo">079</span><a name="line.79"></a>
-<span class="sourceLineNo">080</span>        putRectangle(8, 8, multiplier);<a name="line.80"></a>
-<span class="sourceLineNo">081</span>        putRectangle(6, 12, multiplier);<a name="line.81"></a>
-<span class="sourceLineNo">082</span>        putRectangle(12, 6, multiplier);<a name="line.82"></a>
-<span class="sourceLineNo">083</span>        putCircle(4, multiplier);<a name="line.83"></a>
-<span class="sourceLineNo">084</span><a name="line.84"></a>
-<span class="sourceLineNo">085</span>        putRectangle(14, 14, multiplier);<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        putRectangle(9, 18, multiplier);<a name="line.86"></a>
-<span class="sourceLineNo">087</span>        putRectangle(18, 9, multiplier);<a name="line.87"></a>
-<span class="sourceLineNo">088</span>        putRectangle(14, 18, multiplier);<a name="line.88"></a>
-<span class="sourceLineNo">089</span>        putRectangle(18, 14, multiplier);<a name="line.89"></a>
-<span class="sourceLineNo">090</span>        putCircle(7, multiplier);<a name="line.90"></a>
-<span class="sourceLineNo">091</span>    }<a name="line.91"></a>
-<span class="sourceLineNo">092</span><a name="line.92"></a>
-<span class="sourceLineNo">093</span>    /**<a name="line.93"></a>
-<span class="sourceLineNo">094</span>     * Make a ModularMapGenerator with a StatefulRNG (backed by LightRNG) using a random seed, height 30, and width 60.<a name="line.94"></a>
-<span class="sourceLineNo">095</span>     */<a name="line.95"></a>
-<span class="sourceLineNo">096</span>    public ModularMapGenerator() {<a name="line.96"></a>
-<span class="sourceLineNo">097</span>        this(60, 30);<a name="line.97"></a>
-<span class="sourceLineNo">098</span>    }<a name="line.98"></a>
-<span class="sourceLineNo">099</span><a name="line.99"></a>
-<span class="sourceLineNo">100</span>    /**<a name="line.100"></a>
-<span class="sourceLineNo">101</span>     * Make a ModularMapGenerator with the given height and width; the RNG used for generating a dungeon and<a name="line.101"></a>
-<span class="sourceLineNo">102</span>     * adding features will be a StatefulRNG (backed by LightRNG) using a random seed.<a name="line.102"></a>
-<span class="sourceLineNo">103</span>     *<a name="line.103"></a>
-<span class="sourceLineNo">104</span>     * @param width  The width of the dungeon in cells<a name="line.104"></a>
-<span class="sourceLineNo">105</span>     * @param height The height of the dungeon in cells<a name="line.105"></a>
-<span class="sourceLineNo">106</span>     */<a name="line.106"></a>
-<span class="sourceLineNo">107</span>    public ModularMapGenerator(int width, int height) {<a name="line.107"></a>
-<span class="sourceLineNo">108</span>        this(width, height, new StatefulRNG());<a name="line.108"></a>
-<span class="sourceLineNo">109</span>    }<a name="line.109"></a>
-<span class="sourceLineNo">110</span><a name="line.110"></a>
-<span class="sourceLineNo">111</span>    /**<a name="line.111"></a>
-<span class="sourceLineNo">112</span>     * Make a ModularMapGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.<a name="line.112"></a>
-<span class="sourceLineNo">113</span>     *<a name="line.113"></a>
-<span class="sourceLineNo">114</span>     * @param width  The width of the dungeon in cells<a name="line.114"></a>
-<span class="sourceLineNo">115</span>     * @param height The height of the dungeon in cells<a name="line.115"></a>
-<span class="sourceLineNo">116</span>     * @param rng    The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.116"></a>
-<span class="sourceLineNo">117</span>     *               but if it is not a StatefulRNG, a new StatefulRNG will be used, randomly seeded by this parameter<a name="line.117"></a>
-<span class="sourceLineNo">118</span>     */<a name="line.118"></a>
-<span class="sourceLineNo">119</span>    public ModularMapGenerator(int width, int height, RNG rng) {<a name="line.119"></a>
-<span class="sourceLineNo">120</span>        CoordPacker.init();<a name="line.120"></a>
-<span class="sourceLineNo">121</span>        this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());<a name="line.121"></a>
-<span class="sourceLineNo">122</span>        utility = new DungeonUtility(this.rng);<a name="line.122"></a>
-<span class="sourceLineNo">123</span>        rebuildSeed = this.rng.getState();<a name="line.123"></a>
-<span class="sourceLineNo">124</span>        this.height = height;<a name="line.124"></a>
-<span class="sourceLineNo">125</span>        this.width = width;<a name="line.125"></a>
-<span class="sourceLineNo">126</span>        map = new char[width][height];<a name="line.126"></a>
-<span class="sourceLineNo">127</span>        environment = new int[width][height];<a name="line.127"></a>
-<span class="sourceLineNo">128</span>        for (int x = 0; x &lt; this.width; x++) {<a name="line.128"></a>
-<span class="sourceLineNo">129</span>            Arrays.fill(map[x], '#');<a name="line.129"></a>
-<span class="sourceLineNo">130</span>        }<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        initModules();<a name="line.131"></a>
-<span class="sourceLineNo">132</span>    }<a name="line.132"></a>
-<span class="sourceLineNo">133</span><a name="line.133"></a>
-<span class="sourceLineNo">134</span>    /**<a name="line.134"></a>
-<span class="sourceLineNo">135</span>     * Copies all fields from copying and makes a new DungeonGenerator.<a name="line.135"></a>
-<span class="sourceLineNo">136</span>     *<a name="line.136"></a>
-<span class="sourceLineNo">137</span>     * @param copying the DungeonGenerator to copy<a name="line.137"></a>
-<span class="sourceLineNo">138</span>     */<a name="line.138"></a>
-<span class="sourceLineNo">139</span>    public ModularMapGenerator(ModularMapGenerator copying) {<a name="line.139"></a>
-<span class="sourceLineNo">140</span>        CoordPacker.init();<a name="line.140"></a>
-<span class="sourceLineNo">141</span>        rng = new StatefulRNG(copying.rng.getState());<a name="line.141"></a>
-<span class="sourceLineNo">142</span>        utility = new DungeonUtility(rng);<a name="line.142"></a>
-<span class="sourceLineNo">143</span>        rebuildSeed = rng.getState();<a name="line.143"></a>
-<span class="sourceLineNo">144</span>        height = copying.height;<a name="line.144"></a>
-<span class="sourceLineNo">145</span>        width = copying.width;<a name="line.145"></a>
-<span class="sourceLineNo">146</span>        map = ArrayTools.copy(copying.map);<a name="line.146"></a>
-<span class="sourceLineNo">147</span>        environment = ArrayTools.copy(copying.environment);<a name="line.147"></a>
-<span class="sourceLineNo">148</span>        layout = new RegionMap&lt;&gt;(copying.layout);<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        modules = new OrderedMap&lt;&gt;(copying.modules);<a name="line.149"></a>
+<span class="sourceLineNo">024</span><a name="line.24"></a>
+<span class="sourceLineNo">025</span>    protected char[][] map = null;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    protected int[][] environment = null;<a name="line.26"></a>
+<span class="sourceLineNo">027</span>    //public RegionMap&lt;MapModule&gt; layout, modules, inverseModules;<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    public RegionMap&lt;MapModule&gt; layout;<a name="line.28"></a>
+<span class="sourceLineNo">029</span>    public OrderedMap&lt;Integer, ArrayList&lt;MapModule&gt;&gt; modules;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    public OrderedMap&lt;Coord, MapModule&gt; displacement;<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>    private void putModule(short[] module) {<a name="line.32"></a>
+<span class="sourceLineNo">033</span>        char[][] unp = CoordPacker.unpackChar(module, '.', '#');<a name="line.33"></a>
+<span class="sourceLineNo">034</span>        MapModule mm = new MapModule(ArrayTools.insert(unp,<a name="line.34"></a>
+<span class="sourceLineNo">035</span>                ArrayTools.fill('#', unp.length + 2, unp[0].length + 2), 1, 1));<a name="line.35"></a>
+<span class="sourceLineNo">036</span>        //short[] b = CoordPacker.rectangle(1 + mm.max.x, 1 + mm.max.y);<a name="line.36"></a>
+<span class="sourceLineNo">037</span>        //modules.put(b, mm);<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        //inverseModules.put(CoordPacker.negatePacked(b), mm);<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        ArrayList&lt;MapModule&gt; mms = modules.get(mm.category);<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        if (mms == null) {<a name="line.40"></a>
+<span class="sourceLineNo">041</span>            mms = new ArrayList&lt;&gt;(16);<a name="line.41"></a>
+<span class="sourceLineNo">042</span>            mms.add(mm);<a name="line.42"></a>
+<span class="sourceLineNo">043</span>            modules.put(mm.category, mms);<a name="line.43"></a>
+<span class="sourceLineNo">044</span>        } else<a name="line.44"></a>
+<span class="sourceLineNo">045</span>            mms.add(mm);<a name="line.45"></a>
+<span class="sourceLineNo">046</span>    }<a name="line.46"></a>
+<span class="sourceLineNo">047</span><a name="line.47"></a>
+<span class="sourceLineNo">048</span>    private void putRectangle(int width, int height, float multiplier) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        putModule(CoordPacker.rectangle(Math.round(width * multiplier), Math.round(height * multiplier)));<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    }<a name="line.50"></a>
+<span class="sourceLineNo">051</span><a name="line.51"></a>
+<span class="sourceLineNo">052</span>    private void putCircle(int radius, float multiplier) {<a name="line.52"></a>
+<span class="sourceLineNo">053</span>        putModule(CoordPacker.circle(Coord.get(Math.round(radius * multiplier + 1), Math.round(radius * multiplier + 1)),<a name="line.53"></a>
+<span class="sourceLineNo">054</span>                Math.round(radius * multiplier),<a name="line.54"></a>
+<span class="sourceLineNo">055</span>                Math.round((radius + 1) * 2 * multiplier + 1), Math.round((radius + 1) * 2 * multiplier + 1)));<a name="line.55"></a>
+<span class="sourceLineNo">056</span>    }<a name="line.56"></a>
+<span class="sourceLineNo">057</span><a name="line.57"></a>
+<span class="sourceLineNo">058</span>    private void initModules() {<a name="line.58"></a>
+<span class="sourceLineNo">059</span>        layout = new RegionMap&lt;&gt;(64);<a name="line.59"></a>
+<span class="sourceLineNo">060</span>        //modules = new RegionMap&lt;&gt;(64);<a name="line.60"></a>
+<span class="sourceLineNo">061</span>        //inverseModules = new RegionMap&lt;&gt;(64);<a name="line.61"></a>
+<span class="sourceLineNo">062</span>        modules = new OrderedMap&lt;&gt;(64);<a name="line.62"></a>
+<span class="sourceLineNo">063</span>        for (int i = 1; i &lt;= 64; i &lt;&lt;= 1) {<a name="line.63"></a>
+<span class="sourceLineNo">064</span>            ArrayList&lt;MapModule&gt; mms = new ArrayList&lt;&gt;(16);<a name="line.64"></a>
+<span class="sourceLineNo">065</span>            modules.put(i, mms);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        }<a name="line.66"></a>
+<span class="sourceLineNo">067</span>        displacement = new OrderedMap&lt;&gt;(64);<a name="line.67"></a>
+<span class="sourceLineNo">068</span>        float multiplier = 1;//(float) Math.sqrt(Math.max(1f, Math.min(width, height) / 24f));<a name="line.68"></a>
+<span class="sourceLineNo">069</span>        putRectangle(2, 2, multiplier);<a name="line.69"></a>
+<span class="sourceLineNo">070</span>        putRectangle(3, 3, multiplier);<a name="line.70"></a>
+<span class="sourceLineNo">071</span>        putRectangle(4, 4, multiplier);<a name="line.71"></a>
+<span class="sourceLineNo">072</span>        putRectangle(4, 2, multiplier);<a name="line.72"></a>
+<span class="sourceLineNo">073</span>        putRectangle(2, 4, multiplier);<a name="line.73"></a>
+<span class="sourceLineNo">074</span>        putRectangle(6, 6, multiplier);<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        putRectangle(6, 3, multiplier);<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        putRectangle(3, 6, multiplier);<a name="line.76"></a>
+<span class="sourceLineNo">077</span>        putCircle(2, multiplier);<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>        putRectangle(8, 8, multiplier);<a name="line.79"></a>
+<span class="sourceLineNo">080</span>        putRectangle(6, 12, multiplier);<a name="line.80"></a>
+<span class="sourceLineNo">081</span>        putRectangle(12, 6, multiplier);<a name="line.81"></a>
+<span class="sourceLineNo">082</span>        putCircle(4, multiplier);<a name="line.82"></a>
+<span class="sourceLineNo">083</span><a name="line.83"></a>
+<span class="sourceLineNo">084</span>        putRectangle(14, 14, multiplier);<a name="line.84"></a>
+<span class="sourceLineNo">085</span>        putRectangle(9, 18, multiplier);<a name="line.85"></a>
+<span class="sourceLineNo">086</span>        putRectangle(18, 9, multiplier);<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        putRectangle(14, 18, multiplier);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        putRectangle(18, 14, multiplier);<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        putCircle(7, multiplier);<a name="line.89"></a>
+<span class="sourceLineNo">090</span>    }<a name="line.90"></a>
+<span class="sourceLineNo">091</span><a name="line.91"></a>
+<span class="sourceLineNo">092</span>    /**<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * Make a ModularMapGenerator with a GWTRNG using a random seed, height 30, and width 60.<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     */<a name="line.94"></a>
+<span class="sourceLineNo">095</span>    public ModularMapGenerator() {<a name="line.95"></a>
+<span class="sourceLineNo">096</span>        this(60, 30);<a name="line.96"></a>
+<span class="sourceLineNo">097</span>    }<a name="line.97"></a>
+<span class="sourceLineNo">098</span><a name="line.98"></a>
+<span class="sourceLineNo">099</span>    /**<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * Make a ModularMapGenerator with the given height and width; the RNG used for generating a dungeon and<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * adding features will be a GWTRNG using a random seed.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     *<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     * @param width  The width of the dungeon in cells<a name="line.103"></a>
+<span class="sourceLineNo">104</span>     * @param height The height of the dungeon in cells<a name="line.104"></a>
+<span class="sourceLineNo">105</span>     */<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    public ModularMapGenerator(int width, int height) {<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        this(width, height, new GWTRNG());<a name="line.107"></a>
+<span class="sourceLineNo">108</span>    }<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>    /**<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * Make a ModularMapGenerator with the given height, width, and RNG. Use this if you want to seed the RNG.<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     *<a name="line.112"></a>
+<span class="sourceLineNo">113</span>     * @param width  The width of the dungeon in cells<a name="line.113"></a>
+<span class="sourceLineNo">114</span>     * @param height The height of the dungeon in cells<a name="line.114"></a>
+<span class="sourceLineNo">115</span>     * @param rng    The RNG to use for all purposes in this class; if it is any kind of IStatefulRNG, then it will be<a name="line.115"></a>
+<span class="sourceLineNo">116</span>     *               used as-is; otherwise, a new GWTRNG will be used, randomly seeded by this parameter<a name="line.116"></a>
+<span class="sourceLineNo">117</span>     */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>    public ModularMapGenerator(int width, int height, IRNG rng) {<a name="line.118"></a>
+<span class="sourceLineNo">119</span>        CoordPacker.init();<a name="line.119"></a>
+<span class="sourceLineNo">120</span>        this.rng = (rng instanceof IStatefulRNG) ? (IStatefulRNG) rng : new GWTRNG(rng.nextLong());<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        utility = new DungeonUtility(this.rng);<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        rebuildSeed = this.rng.getState();<a name="line.122"></a>
+<span class="sourceLineNo">123</span>        this.height = height;<a name="line.123"></a>
+<span class="sourceLineNo">124</span>        this.width = width;<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        map = new char[width][height];<a name="line.125"></a>
+<span class="sourceLineNo">126</span>        environment = new int[width][height];<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        for (int x = 0; x &lt; this.width; x++) {<a name="line.127"></a>
+<span class="sourceLineNo">128</span>            Arrays.fill(map[x], '#');<a name="line.128"></a>
+<span class="sourceLineNo">129</span>        }<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        initModules();<a name="line.130"></a>
+<span class="sourceLineNo">131</span>    }<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>    /**<a name="line.133"></a>
+<span class="sourceLineNo">134</span>     * Copies all fields from copying and makes a new DungeonGenerator.<a name="line.134"></a>
+<span class="sourceLineNo">135</span>     *<a name="line.135"></a>
+<span class="sourceLineNo">136</span>     * @param copying the DungeonGenerator to copy<a name="line.136"></a>
+<span class="sourceLineNo">137</span>     */<a name="line.137"></a>
+<span class="sourceLineNo">138</span>    public ModularMapGenerator(ModularMapGenerator copying) {<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        CoordPacker.init();<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        rng = new StatefulRNG(copying.rng.getState());<a name="line.140"></a>
+<span class="sourceLineNo">141</span>        utility = new DungeonUtility(rng);<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        rebuildSeed = rng.getState();<a name="line.142"></a>
+<span class="sourceLineNo">143</span>        height = copying.height;<a name="line.143"></a>
+<span class="sourceLineNo">144</span>        width = copying.width;<a name="line.144"></a>
+<span class="sourceLineNo">145</span>        map = ArrayTools.copy(copying.map);<a name="line.145"></a>
+<span class="sourceLineNo">146</span>        environment = ArrayTools.copy(copying.environment);<a name="line.146"></a>
+<span class="sourceLineNo">147</span>        layout = new RegionMap&lt;&gt;(copying.layout);<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        modules = new OrderedMap&lt;&gt;(copying.modules);<a name="line.148"></a>
+<span class="sourceLineNo">149</span>        displacement = new OrderedMap&lt;&gt;(copying.displacement);<a name="line.149"></a>
 <span class="sourceLineNo">150</span>    }<a name="line.150"></a>
 <span class="sourceLineNo">151</span><a name="line.151"></a>
 <span class="sourceLineNo">152</span>    /**<a name="line.152"></a>

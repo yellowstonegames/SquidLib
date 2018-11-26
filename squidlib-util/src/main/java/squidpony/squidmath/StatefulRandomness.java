@@ -26,5 +26,5 @@ public interface StatefulRandomness extends RandomnessSource {
      * @return a copy of this StatefulRandomness
      */
     @Override
-    StatefulRandomness copy();
+    RandomnessSource copy();
 }

@@ -93,7 +93,7 @@
 <span class="sourceLineNo">085</span>    public DungeonUtility utility;<a name="line.85"></a>
 <span class="sourceLineNo">086</span>    protected int height, width;<a name="line.86"></a>
 <span class="sourceLineNo">087</span>    public Coord stairsUp = null, stairsDown = null;<a name="line.87"></a>
-<span class="sourceLineNo">088</span>    public StatefulRNG rng;<a name="line.88"></a>
+<span class="sourceLineNo">088</span>    public IStatefulRNG rng;<a name="line.88"></a>
 <span class="sourceLineNo">089</span>    protected long rebuildSeed;<a name="line.89"></a>
 <span class="sourceLineNo">090</span>    protected boolean seedFixed = false;<a name="line.90"></a>
 <span class="sourceLineNo">091</span><a name="line.91"></a>
@@ -151,11 +151,11 @@
 <span class="sourceLineNo">143</span><a name="line.143"></a>
 <span class="sourceLineNo">144</span><a name="line.144"></a>
 <span class="sourceLineNo">145</span>    /**<a name="line.145"></a>
-<span class="sourceLineNo">146</span>     * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.<a name="line.146"></a>
+<span class="sourceLineNo">146</span>     * Make a DungeonGenerator with a GWTRNG using a random seed, height 40, and width 40.<a name="line.146"></a>
 <span class="sourceLineNo">147</span>     */<a name="line.147"></a>
 <span class="sourceLineNo">148</span>    public DungeonGenerator()<a name="line.148"></a>
 <span class="sourceLineNo">149</span>    {<a name="line.149"></a>
-<span class="sourceLineNo">150</span>        rng = new StatefulRNG();<a name="line.150"></a>
+<span class="sourceLineNo">150</span>        rng = new GWTRNG();<a name="line.150"></a>
 <span class="sourceLineNo">151</span>        gen = new DungeonBoneGen(rng);<a name="line.151"></a>
 <span class="sourceLineNo">152</span>        utility = new DungeonUtility(rng);<a name="line.152"></a>
 <span class="sourceLineNo">153</span>        rebuildSeed = rng.getState();<a name="line.153"></a>
@@ -192,7 +192,7 @@
 <span class="sourceLineNo">184</span>    public DungeonGenerator(int width, int height, IRNG rng)<a name="line.184"></a>
 <span class="sourceLineNo">185</span>    {<a name="line.185"></a>
 <span class="sourceLineNo">186</span>        Coord.expandPoolTo(width, height);<a name="line.186"></a>
-<span class="sourceLineNo">187</span>        this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());<a name="line.187"></a>
+<span class="sourceLineNo">187</span>        this.rng = (rng instanceof IStatefulRNG) ? (IStatefulRNG) rng : new GWTRNG(rng.nextLong());<a name="line.187"></a>
 <span class="sourceLineNo">188</span>        gen = new DungeonBoneGen(this.rng);<a name="line.188"></a>
 <span class="sourceLineNo">189</span>        utility = new DungeonUtility(this.rng);<a name="line.189"></a>
 <span class="sourceLineNo">190</span>        rebuildSeed = this.rng.getState();<a name="line.190"></a>
@@ -207,7 +207,7 @@
 <span class="sourceLineNo">199</span>     */<a name="line.199"></a>
 <span class="sourceLineNo">200</span>    public DungeonGenerator(DungeonGenerator copying)<a name="line.200"></a>
 <span class="sourceLineNo">201</span>    {<a name="line.201"></a>
-<span class="sourceLineNo">202</span>        rng = new StatefulRNG(copying.rng.getState());<a name="line.202"></a>
+<span class="sourceLineNo">202</span>        rng = new GWTRNG(copying.rng.getState());<a name="line.202"></a>
 <span class="sourceLineNo">203</span>        gen = new DungeonBoneGen(rng);<a name="line.203"></a>
 <span class="sourceLineNo">204</span>        utility = new DungeonUtility(rng);<a name="line.204"></a>
 <span class="sourceLineNo">205</span>        rebuildSeed = rng.getState();<a name="line.205"></a>

@@ -38,24 +38,24 @@
 <span class="sourceLineNo">030</span>     */<a name="line.30"></a>
 <span class="sourceLineNo">031</span>    public final ArrayList&lt;ProbabilityTable&lt;T&gt;&gt; extraTable;<a name="line.31"></a>
 <span class="sourceLineNo">032</span>    public final IntVLA weights;<a name="line.32"></a>
-<span class="sourceLineNo">033</span>    public StatefulRandomness rng;<a name="line.33"></a>
+<span class="sourceLineNo">033</span>    public GWTRNG rng;<a name="line.33"></a>
 <span class="sourceLineNo">034</span>    protected int total, normalTotal;<a name="line.34"></a>
 <span class="sourceLineNo">035</span><a name="line.35"></a>
 <span class="sourceLineNo">036</span>    /**<a name="line.36"></a>
 <span class="sourceLineNo">037</span>     * Creates a new probability table with a random seed.<a name="line.37"></a>
 <span class="sourceLineNo">038</span>     */<a name="line.38"></a>
 <span class="sourceLineNo">039</span>    public ProbabilityTable() {<a name="line.39"></a>
-<span class="sourceLineNo">040</span>        this(new LightRNG());<a name="line.40"></a>
+<span class="sourceLineNo">040</span>        this((RandomnessSource) null);<a name="line.40"></a>
 <span class="sourceLineNo">041</span>    }<a name="line.41"></a>
 <span class="sourceLineNo">042</span><a name="line.42"></a>
 <span class="sourceLineNo">043</span>    /**<a name="line.43"></a>
 <span class="sourceLineNo">044</span>     * Creates a new probability table with the provided source of randomness<a name="line.44"></a>
-<span class="sourceLineNo">045</span>     * used. Gets one random long from rng to use as an internal identifier.<a name="line.45"></a>
+<span class="sourceLineNo">045</span>     * used.<a name="line.45"></a>
 <span class="sourceLineNo">046</span>     *<a name="line.46"></a>
 <span class="sourceLineNo">047</span>     * @param rng the source of randomness<a name="line.47"></a>
 <span class="sourceLineNo">048</span>     */<a name="line.48"></a>
-<span class="sourceLineNo">049</span>    public ProbabilityTable(StatefulRandomness rng) {<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        this.rng = rng;<a name="line.50"></a>
+<span class="sourceLineNo">049</span>    public ProbabilityTable(RandomnessSource rng) {<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        this.rng = rng == null ? new GWTRNG() : new GWTRNG(rng.next(32), rng.next(32));<a name="line.50"></a>
 <span class="sourceLineNo">051</span>        table = new Arrangement&lt;&gt;(64, 0.75f);<a name="line.51"></a>
 <span class="sourceLineNo">052</span>        extraTable = new ArrayList&lt;&gt;(16);<a name="line.52"></a>
 <span class="sourceLineNo">053</span>        weights = new IntVLA(64);<a name="line.53"></a>
@@ -69,7 +69,7 @@
 <span class="sourceLineNo">061</span>     * @param seed the RNG seed as a long<a name="line.61"></a>
 <span class="sourceLineNo">062</span>     */<a name="line.62"></a>
 <span class="sourceLineNo">063</span>    public ProbabilityTable(long seed) {<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        this.rng = new LightRNG(seed);<a name="line.64"></a>
+<span class="sourceLineNo">064</span>        this.rng = new GWTRNG(seed);<a name="line.64"></a>
 <span class="sourceLineNo">065</span>        table = new Arrangement&lt;&gt;(64, 0.75f);<a name="line.65"></a>
 <span class="sourceLineNo">066</span>        extraTable = new ArrayList&lt;&gt;(16);<a name="line.66"></a>
 <span class="sourceLineNo">067</span>        weights = new IntVLA(64);<a name="line.67"></a>
@@ -349,75 +349,73 @@
 <span class="sourceLineNo">341</span>    }<a name="line.341"></a>
 <span class="sourceLineNo">342</span><a name="line.342"></a>
 <span class="sourceLineNo">343</span>    /**<a name="line.343"></a>
-<span class="sourceLineNo">344</span>     * Sets the current RNG to the given RNG. You may prefer using a StatefulRNG (typically passing one in the<a name="line.344"></a>
-<span class="sourceLineNo">345</span>     * constructor, but you can pass one here too) and setting its state in other code, which does not require calling<a name="line.345"></a>
-<span class="sourceLineNo">346</span>     * this method again when the StatefulRNG has its state set.<a name="line.346"></a>
-<span class="sourceLineNo">347</span>     * @param random an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass<a name="line.347"></a>
-<span class="sourceLineNo">348</span>     */<a name="line.348"></a>
-<span class="sourceLineNo">349</span>    public void setRandom(StatefulRNG random)<a name="line.349"></a>
-<span class="sourceLineNo">350</span>    {<a name="line.350"></a>
-<span class="sourceLineNo">351</span>        if(random != null &amp;&amp; random.getRandomness() instanceof StatefulRandomness)<a name="line.351"></a>
-<span class="sourceLineNo">352</span>            rng = (StatefulRandomness) random.getRandomness();<a name="line.352"></a>
-<span class="sourceLineNo">353</span>    }<a name="line.353"></a>
-<span class="sourceLineNo">354</span><a name="line.354"></a>
-<span class="sourceLineNo">355</span>    /**<a name="line.355"></a>
-<span class="sourceLineNo">356</span>     * Gets the random number generator (a StatefulRandomness) this uses.<a name="line.356"></a>
-<span class="sourceLineNo">357</span>     * @return the StatefulRandomness used by this class, which is often (but not always) a LightRNG<a name="line.357"></a>
-<span class="sourceLineNo">358</span>     */<a name="line.358"></a>
-<span class="sourceLineNo">359</span>    public StatefulRandomness getRandom()<a name="line.359"></a>
-<span class="sourceLineNo">360</span>    {<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        return rng;<a name="line.361"></a>
-<span class="sourceLineNo">362</span>    }<a name="line.362"></a>
-<span class="sourceLineNo">363</span><a name="line.363"></a>
-<span class="sourceLineNo">364</span>    /**<a name="line.364"></a>
-<span class="sourceLineNo">365</span>     * Copies this ProbabilityTable so nothing in the copy is shared with the original, except for the T items (which<a name="line.365"></a>
-<span class="sourceLineNo">366</span>     * might not be possible to copy). The RNG is also copied.<a name="line.366"></a>
-<span class="sourceLineNo">367</span>     * @return a copy of this ProbabilityTable; no references should be shared except for T items<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     */<a name="line.368"></a>
-<span class="sourceLineNo">369</span>    public ProbabilityTable&lt;T&gt; copy()<a name="line.369"></a>
-<span class="sourceLineNo">370</span>    {<a name="line.370"></a>
-<span class="sourceLineNo">371</span>        ProbabilityTable&lt;T&gt; n = new ProbabilityTable&lt;&gt;(rng.copy());<a name="line.371"></a>
-<span class="sourceLineNo">372</span>        n.weights.addAll(weights);<a name="line.372"></a>
-<span class="sourceLineNo">373</span>        n.table.putAll(table);<a name="line.373"></a>
-<span class="sourceLineNo">374</span>        for (int i = 0; i &lt; extraTable.size(); i++) {<a name="line.374"></a>
-<span class="sourceLineNo">375</span>            n.extraTable.add(extraTable.get(i).copy());<a name="line.375"></a>
-<span class="sourceLineNo">376</span>        }<a name="line.376"></a>
-<span class="sourceLineNo">377</span>        n.total = total;<a name="line.377"></a>
-<span class="sourceLineNo">378</span>        n.normalTotal = normalTotal;<a name="line.378"></a>
-<span class="sourceLineNo">379</span>        return n;<a name="line.379"></a>
-<span class="sourceLineNo">380</span>    }<a name="line.380"></a>
-<span class="sourceLineNo">381</span><a name="line.381"></a>
-<span class="sourceLineNo">382</span>    @Override<a name="line.382"></a>
-<span class="sourceLineNo">383</span>    public boolean equals(Object o) {<a name="line.383"></a>
-<span class="sourceLineNo">384</span>        if (this == o) return true;<a name="line.384"></a>
-<span class="sourceLineNo">385</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.385"></a>
+<span class="sourceLineNo">344</span>     * Sets the current random number generator to the given GWTRNG.<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * @param random an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     */<a name="line.346"></a>
+<span class="sourceLineNo">347</span>    public void setRandom(GWTRNG random)<a name="line.347"></a>
+<span class="sourceLineNo">348</span>    {<a name="line.348"></a>
+<span class="sourceLineNo">349</span>        if(random != null)<a name="line.349"></a>
+<span class="sourceLineNo">350</span>            rng = random;<a name="line.350"></a>
+<span class="sourceLineNo">351</span>    }<a name="line.351"></a>
+<span class="sourceLineNo">352</span><a name="line.352"></a>
+<span class="sourceLineNo">353</span>    /**<a name="line.353"></a>
+<span class="sourceLineNo">354</span>     * Gets the random number generator (a RandomnessSource) this uses.<a name="line.354"></a>
+<span class="sourceLineNo">355</span>     * @return the RandomnessSource used by this class, which is always a GWTRNG<a name="line.355"></a>
+<span class="sourceLineNo">356</span>     */<a name="line.356"></a>
+<span class="sourceLineNo">357</span>    public GWTRNG getRandom()<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    {<a name="line.358"></a>
+<span class="sourceLineNo">359</span>        return rng;<a name="line.359"></a>
+<span class="sourceLineNo">360</span>    }<a name="line.360"></a>
+<span class="sourceLineNo">361</span><a name="line.361"></a>
+<span class="sourceLineNo">362</span>    /**<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     * Copies this ProbabilityTable so nothing in the copy is shared with the original, except for the T items (which<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     * might not be possible to copy). The RNG is also copied.<a name="line.364"></a>
+<span class="sourceLineNo">365</span>     * @return a copy of this ProbabilityTable; no references should be shared except for T items<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     */<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    public ProbabilityTable&lt;T&gt; copy()<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    {<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        ProbabilityTable&lt;T&gt; n = new ProbabilityTable&lt;&gt;(rng.getState());<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        n.weights.addAll(weights);<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        n.table.putAll(table);<a name="line.371"></a>
+<span class="sourceLineNo">372</span>        for (int i = 0; i &lt; extraTable.size(); i++) {<a name="line.372"></a>
+<span class="sourceLineNo">373</span>            n.extraTable.add(extraTable.get(i).copy());<a name="line.373"></a>
+<span class="sourceLineNo">374</span>        }<a name="line.374"></a>
+<span class="sourceLineNo">375</span>        n.total = total;<a name="line.375"></a>
+<span class="sourceLineNo">376</span>        n.normalTotal = normalTotal;<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        return n;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>    }<a name="line.378"></a>
+<span class="sourceLineNo">379</span><a name="line.379"></a>
+<span class="sourceLineNo">380</span>    @Override<a name="line.380"></a>
+<span class="sourceLineNo">381</span>    public boolean equals(Object o) {<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        if (this == o) return true;<a name="line.382"></a>
+<span class="sourceLineNo">383</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.383"></a>
+<span class="sourceLineNo">384</span><a name="line.384"></a>
+<span class="sourceLineNo">385</span>        ProbabilityTable&lt;?&gt; that = (ProbabilityTable&lt;?&gt;) o;<a name="line.385"></a>
 <span class="sourceLineNo">386</span><a name="line.386"></a>
-<span class="sourceLineNo">387</span>        ProbabilityTable&lt;?&gt; that = (ProbabilityTable&lt;?&gt;) o;<a name="line.387"></a>
-<span class="sourceLineNo">388</span><a name="line.388"></a>
-<span class="sourceLineNo">389</span>        if (!table.equals(that.table)) return false;<a name="line.389"></a>
-<span class="sourceLineNo">390</span>        if (!extraTable.equals(that.extraTable)) return false;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>        if (!weights.equals(that.weights)) return false;<a name="line.391"></a>
-<span class="sourceLineNo">392</span>        return rng != null ? rng.equals(that.rng) : that.rng == null;<a name="line.392"></a>
-<span class="sourceLineNo">393</span>    }<a name="line.393"></a>
-<span class="sourceLineNo">394</span><a name="line.394"></a>
-<span class="sourceLineNo">395</span>    public boolean contentEquals(ProbabilityTable&lt;T&gt; o) {<a name="line.395"></a>
-<span class="sourceLineNo">396</span>        if (this == o) return true;<a name="line.396"></a>
-<span class="sourceLineNo">397</span>        if (o == null) return false;<a name="line.397"></a>
-<span class="sourceLineNo">398</span><a name="line.398"></a>
-<span class="sourceLineNo">399</span>        if (!table.equals(o.table)) return false;<a name="line.399"></a>
-<span class="sourceLineNo">400</span>        if (!extraTable.equals(o.extraTable)) return false;<a name="line.400"></a>
-<span class="sourceLineNo">401</span>        return weights.equals(o.weights);<a name="line.401"></a>
-<span class="sourceLineNo">402</span>    }<a name="line.402"></a>
-<span class="sourceLineNo">403</span><a name="line.403"></a>
-<span class="sourceLineNo">404</span>    @Override<a name="line.404"></a>
-<span class="sourceLineNo">405</span>    public int hashCode() {<a name="line.405"></a>
-<span class="sourceLineNo">406</span>        int result = table.hashCode();<a name="line.406"></a>
-<span class="sourceLineNo">407</span>        result = 31 * result + extraTable.hashCode();<a name="line.407"></a>
-<span class="sourceLineNo">408</span>        result = 31 * result + weights.hashWisp();<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        result = 31 * result + (rng != null ? rng.hashCode() : 0);<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        return result;<a name="line.410"></a>
-<span class="sourceLineNo">411</span>    }<a name="line.411"></a>
-<span class="sourceLineNo">412</span>}<a name="line.412"></a>
+<span class="sourceLineNo">387</span>        if (!table.equals(that.table)) return false;<a name="line.387"></a>
+<span class="sourceLineNo">388</span>        if (!extraTable.equals(that.extraTable)) return false;<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        if (!weights.equals(that.weights)) return false;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        return rng != null ? rng.equals(that.rng) : that.rng == null;<a name="line.390"></a>
+<span class="sourceLineNo">391</span>    }<a name="line.391"></a>
+<span class="sourceLineNo">392</span><a name="line.392"></a>
+<span class="sourceLineNo">393</span>    public boolean contentEquals(ProbabilityTable&lt;T&gt; o) {<a name="line.393"></a>
+<span class="sourceLineNo">394</span>        if (this == o) return true;<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        if (o == null) return false;<a name="line.395"></a>
+<span class="sourceLineNo">396</span><a name="line.396"></a>
+<span class="sourceLineNo">397</span>        if (!table.equals(o.table)) return false;<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        if (!extraTable.equals(o.extraTable)) return false;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>        return weights.equals(o.weights);<a name="line.399"></a>
+<span class="sourceLineNo">400</span>    }<a name="line.400"></a>
+<span class="sourceLineNo">401</span><a name="line.401"></a>
+<span class="sourceLineNo">402</span>    @Override<a name="line.402"></a>
+<span class="sourceLineNo">403</span>    public int hashCode() {<a name="line.403"></a>
+<span class="sourceLineNo">404</span>        int result = table.hashCode();<a name="line.404"></a>
+<span class="sourceLineNo">405</span>        result = 31 * result + extraTable.hashCode() | 0;<a name="line.405"></a>
+<span class="sourceLineNo">406</span>        result = 31 * result + weights.hashWisp() | 0;<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        result = 31 * result + (rng != null ? rng.hashCode() : 0) | 0;<a name="line.407"></a>
+<span class="sourceLineNo">408</span>        return result;<a name="line.408"></a>
+<span class="sourceLineNo">409</span>    }<a name="line.409"></a>
+<span class="sourceLineNo">410</span>}<a name="line.410"></a>
 
 
 

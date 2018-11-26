@@ -96,7 +96,7 @@
 <span class="sourceLineNo">088</span>            @Override<a name="line.88"></a>
 <span class="sourceLineNo">089</span>            public String stringify(ProbabilityTable&lt;K&gt; item) {<a name="line.89"></a>
 <span class="sourceLineNo">090</span>                StringBuilder sb = new StringBuilder(256);<a name="line.90"></a>
-<span class="sourceLineNo">091</span>                appendQuoted(sb, convertStatefulRandomness.stringify(item.getRandom()));<a name="line.91"></a>
+<span class="sourceLineNo">091</span>                appendQuoted(sb, StringKit.hex(item.getRandom().getState()));<a name="line.91"></a>
 <span class="sourceLineNo">092</span>                sb.append(' ');<a name="line.92"></a>
 <span class="sourceLineNo">093</span>                appendQuoted(sb, convertIntVLA.stringify(item.weights));<a name="line.93"></a>
 <span class="sourceLineNo">094</span>                sb.append(' ');<a name="line.94"></a>
@@ -113,7 +113,7 @@
 <span class="sourceLineNo">105</span>                ObText.ContentMatcher m = makeMatcher(text);<a name="line.105"></a>
 <span class="sourceLineNo">106</span>                if(!m.find() || !m.hasMatch())<a name="line.106"></a>
 <span class="sourceLineNo">107</span>                    return null;<a name="line.107"></a>
-<span class="sourceLineNo">108</span>                ProbabilityTable&lt;K&gt; pt = new ProbabilityTable&lt;&gt;(convertStatefulRandomness.restore(m.getMatch()));<a name="line.108"></a>
+<span class="sourceLineNo">108</span>                ProbabilityTable&lt;K&gt; pt = new ProbabilityTable&lt;&gt;(StringKit.longFromHex(m.getMatch()));<a name="line.108"></a>
 <span class="sourceLineNo">109</span>                if(!m.find() || !m.hasMatch())<a name="line.109"></a>
 <span class="sourceLineNo">110</span>                    return pt;<a name="line.110"></a>
 <span class="sourceLineNo">111</span>                pt.weights.addAll(convertIntVLA.restore(m.getMatch()));<a name="line.111"></a>

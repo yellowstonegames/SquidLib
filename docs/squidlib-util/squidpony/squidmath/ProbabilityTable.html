@@ -162,7 +162,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#normalTotal">normalTotal</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -204,7 +204,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#ProbabilityTable-squidpony.squidmath.StatefulRandomness-">ProbabilityTable</a></span>(<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;rng)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#ProbabilityTable-squidpony.squidmath.RandomnessSource-">ProbabilityTable</a></span>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;rng)</code>
 <div class="block">Creates a new probability table with the provided source of randomness
  used.</div>
 </td>
@@ -273,9 +273,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#equals-java.lang.Object-">equals</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#getRandom--">getRandom</a></span>()</code>
-<div class="block">Gets the random number generator (a StatefulRandomness) this uses.</div>
+<div class="block">Gets the random number generator (a RandomnessSource) this uses.</div>
 </td>
 </tr>
 <tr id="i8" class="altColor">
@@ -325,8 +325,8 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#setRandom-squidpony.squidmath.StatefulRNG-">setRandom</a></span>(<a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;random)</code>
-<div class="block">Sets the current RNG to the given RNG.</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#setRandom-squidpony.squidmath.GWTRNG-">setRandom</a></span>(<a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a>&nbsp;random)</code>
+<div class="block">Sets the current random number generator to the given GWTRNG.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -413,7 +413,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.33">rng</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a> <a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.33">rng</a></pre>
 </li>
 </ul>
 <a name="total">
@@ -452,15 +452,15 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <div class="block">Creates a new probability table with a random seed.</div>
 </li>
 </ul>
-<a name="ProbabilityTable-squidpony.squidmath.StatefulRandomness-">
+<a name="ProbabilityTable-squidpony.squidmath.RandomnessSource-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>ProbabilityTable</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.49">ProbabilityTable</a>(<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;rng)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.49">ProbabilityTable</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;rng)</pre>
 <div class="block">Creates a new probability table with the provided source of randomness
- used. Gets one random long from rng to use as an internal identifier.</div>
+ used.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>rng</code> - the source of randomness</dd>
@@ -777,16 +777,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </dl>
 </li>
 </ul>
-<a name="setRandom-squidpony.squidmath.StatefulRNG-">
+<a name="setRandom-squidpony.squidmath.GWTRNG-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setRandom</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.349">setRandom</a>(<a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;random)</pre>
-<div class="block">Sets the current RNG to the given RNG. You may prefer using a StatefulRNG (typically passing one in the
- constructor, but you can pass one here too) and setting its state in other code, which does not require calling
- this method again when the StatefulRNG has its state set.</div>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.347">setRandom</a>(<a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a>&nbsp;random)</pre>
+<div class="block">Sets the current random number generator to the given GWTRNG.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>random</code> - an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass</dd>
@@ -799,11 +797,11 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getRandom</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.359">getRandom</a>()</pre>
-<div class="block">Gets the random number generator (a StatefulRandomness) this uses.</div>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.357">getRandom</a>()</pre>
+<div class="block">Gets the random number generator (a RandomnessSource) this uses.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the StatefulRandomness used by this class, which is often (but not always) a LightRNG</dd>
+<dd>the RandomnessSource used by this class, which is always a GWTRNG</dd>
 </dl>
 </li>
 </ul>
@@ -813,7 +811,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.369">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.367">copy</a>()</pre>
 <div class="block">Copies this ProbabilityTable so nothing in the copy is shared with the original, except for the T items (which
  might not be possible to copy). The RNG is also copied.</div>
 <dl>
@@ -828,7 +826,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.383">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.381">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -841,7 +839,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>contentEquals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.395">contentEquals</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.393">contentEquals</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</pre>
 </li>
 </ul>
 <a name="hashCode--">
@@ -850,7 +848,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.405">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.403">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

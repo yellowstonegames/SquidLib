@@ -1001,7 +1001,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordPacker.html#posToHilbert3D-int-int-int-">posToHilbert3D</a></span>(int&nbsp;x,
               int&nbsp;y,
               int&nbsp;z)</code>
-<div class="block">Takes an x, y, z position and returns the length to travel along the 32x32x32 Hilbert curve to reach that
+<div class="block">Takes an x, y, z position and returns the length to travel along the 8x8x8 Hilbert curve to reach that
  position.</div>
 </td>
 </tr>
@@ -4221,18 +4221,18 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CoordPacker.html#line.5075">posToHilbert3D</a>(int&nbsp;x,
                                  int&nbsp;y,
                                  int&nbsp;z)</pre>
-<div class="block">Takes an x, y, z position and returns the length to travel along the 32x32x32 Hilbert curve to reach that
- position. This assumes x, y, and z are between 0 and 31, inclusive.
- This uses a lookup table for the 32x32x32 Hilbert Curve, which should make it faster than calculating the
+<div class="block">Takes an x, y, z position and returns the length to travel along the 8x8x8 Hilbert curve to reach that
+ position. This assumes x, y, and z are between 0 and 7, inclusive.
+ This uses a lookup table for the 8x8x8 Hilbert Curve, which should make it faster than calculating the
  distance along the Hilbert Curve repeatedly.
  Source: http://and-what-happened.blogspot.com/2011/08/fast-2d-and-3d-hilbert-curves-and.html</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>x</code> - between 0 and 31 inclusive</dd>
-<dd><code>y</code> - between 0 and 31 inclusive</dd>
-<dd><code>z</code> - between 0 and 31 inclusive</dd>
+<dd><code>x</code> - between 0 and 7 inclusive</dd>
+<dd><code>y</code> - between 0 and 7 inclusive</dd>
+<dd><code>z</code> - between 0 and 7 inclusive</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the distance to travel along the 32x32x32 Hilbert Curve to get to the given x, y, z point.</dd>
+<dd>the distance to travel along the 8x8x8 Hilbert Curve to get to the given x, y, z point.</dd>
 </dl>
 </li>
 </ul>

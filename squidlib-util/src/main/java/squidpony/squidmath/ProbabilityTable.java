@@ -30,24 +30,24 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public final ArrayList<ProbabilityTable<T>> extraTable;
     public final IntVLA weights;
-    public StatefulRandomness rng;
+    public GWTRNG rng;
     protected int total, normalTotal;
 
     /**
      * Creates a new probability table with a random seed.
      */
     public ProbabilityTable() {
-        this(new LightRNG());
+        this((RandomnessSource) null);
     }
 
     /**
      * Creates a new probability table with the provided source of randomness
-     * used. Gets one random long from rng to use as an internal identifier.
+     * used.
      *
      * @param rng the source of randomness
      */
-    public ProbabilityTable(StatefulRandomness rng) {
-        this.rng = rng;
+    public ProbabilityTable(RandomnessSource rng) {
+        this.rng = rng == null ? new GWTRNG() : new GWTRNG(rng.next(32), rng.next(32));
         table = new Arrangement<>(64, 0.75f);
         extraTable = new ArrayList<>(16);
         weights = new IntVLA(64);
@@ -61,7 +61,7 @@ public class ProbabilityTable<T> implements Serializable {
      * @param seed the RNG seed as a long
      */
     public ProbabilityTable(long seed) {
-        this.rng = new LightRNG(seed);
+        this.rng = new GWTRNG(seed);
         table = new Arrangement<>(64, 0.75f);
         extraTable = new ArrayList<>(16);
         weights = new IntVLA(64);
@@ -341,22 +341,20 @@ public class ProbabilityTable<T> implements Serializable {
     }
 
     /**
-     * Sets the current RNG to the given RNG. You may prefer using a StatefulRNG (typically passing one in the
-     * constructor, but you can pass one here too) and setting its state in other code, which does not require calling
-     * this method again when the StatefulRNG has its state set.
+     * Sets the current random number generator to the given GWTRNG.
      * @param random an RNG, typically with a seed you want control over; may be a StatefulRNG or some other subclass
      */
-    public void setRandom(StatefulRNG random)
+    public void setRandom(GWTRNG random)
     {
-        if(random != null && random.getRandomness() instanceof StatefulRandomness)
-            rng = (StatefulRandomness) random.getRandomness();
+        if(random != null)
+            rng = random;
     }
 
     /**
-     * Gets the random number generator (a StatefulRandomness) this uses.
-     * @return the StatefulRandomness used by this class, which is often (but not always) a LightRNG
+     * Gets the random number generator (a RandomnessSource) this uses.
+     * @return the RandomnessSource used by this class, which is always a GWTRNG
      */
-    public StatefulRandomness getRandom()
+    public GWTRNG getRandom()
     {
         return rng;
     }
@@ -368,7 +366,7 @@ public class ProbabilityTable<T> implements Serializable {
      */
     public ProbabilityTable<T> copy()
     {
-        ProbabilityTable<T> n = new ProbabilityTable<>(rng.copy());
+        ProbabilityTable<T> n = new ProbabilityTable<>(rng.getState());
         n.weights.addAll(weights);
         n.table.putAll(table);
         for (int i = 0; i < extraTable.size(); i++) {
@@ -404,9 +402,9 @@ public class ProbabilityTable<T> implements Serializable {
     @Override
     public int hashCode() {
         int result = table.hashCode();
-        result = 31 * result + extraTable.hashCode();
-        result = 31 * result + weights.hashWisp();
-        result = 31 * result + (rng != null ? rng.hashCode() : 0);
+        result = 31 * result + extraTable.hashCode() | 0;
+        result = 31 * result + weights.hashWisp() | 0;
+        result = 31 * result + (rng != null ? rng.hashCode() : 0) | 0;
         return result;
     }
 }

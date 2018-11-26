@@ -83,12 +83,6 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></td>
-<td class="colLast">
-<div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -99,51 +93,26 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
-<li class="blockList"><a name="squidpony.squidgrid">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> in <a href="../../../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
-<caption><span>Fields in <a href="../../../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a> declared as <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
-<td class="colLast"><span class="typeNameLabel">Spill.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Spill.html#sr">sr</a></span></code>
-<div class="block">The StatefulRandomness, usually a LightRNG, that this uses.</div>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a> with parameters of type <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.StatefulRandomness-">Spill</a></span>(char[][]&nbsp;level,
-     <a href="../../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
-     <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
- char[][] where '#' means a wall and anything else is a walkable tile.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.StatefulRandomness-">Spill</a></span>(<a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</code>
-<div class="block">Construct a Spill without a level to actually scan.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></span></code>
+<div class="block">Simply groups the two interfaces <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a> and <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><code>StatefulRandomness</code></a> so some implementations of IRNG can have
+ their states read from and written to.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that implement <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -282,55 +251,6 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></span></code>
 <div class="block">A 32-bit generator that needs no math on 64-bit values to calculate high-quality pseudo-random numbers, and has been
  adapted to meet the needs of GWT while maintaining compatibility with other JDK platforms.</div>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
-<caption><span>Fields in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> declared as <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#rng">rng</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> that return <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
-<td class="colLast"><span class="typeNameLabel">StatefulRandomness.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/StatefulRandomness.html#copy--">copy</a></span>()</code>
-<div class="block">Produces a copy of this StatefulRandomness that, if next() and/or nextLong() are called on this object and the
- copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
-<td class="colLast"><span class="typeNameLabel">ProbabilityTable.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#getRandom--">getRandom</a></span>()</code>
-<div class="block">Gets the random number generator (a StatefulRandomness) this uses.</div>
-</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> with parameters of type <a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ProbabilityTable.html#ProbabilityTable-squidpony.squidmath.StatefulRandomness-">ProbabilityTable</a></span>(<a href="../../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;rng)</code>
-<div class="block">Creates a new probability table with the provided source of randomness
- used.</div>
 </td>
 </tr>
 </tbody>

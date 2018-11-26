@@ -10,9 +10,9 @@
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import regexodus.Category;<a name="line.3"></a>
 <span class="sourceLineNo">004</span>import squidpony.annotation.Beta;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import squidpony.squidmath.ProbabilityTable;<a name="line.5"></a>
-<span class="sourceLineNo">006</span>import squidpony.squidmath.StatefulRNG;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import squidpony.squidmath.StatefulRandomness;<a name="line.7"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidmath.GWTRNG;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import squidpony.squidmath.IStatefulRNG;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import squidpony.squidmath.ProbabilityTable;<a name="line.7"></a>
 <span class="sourceLineNo">008</span><a name="line.8"></a>
 <span class="sourceLineNo">009</span>import java.util.ArrayList;<a name="line.9"></a>
 <span class="sourceLineNo">010</span>import java.util.HashMap;<a name="line.10"></a>
@@ -282,7 +282,7 @@
 <span class="sourceLineNo">274</span>    private static final char[] vowels = {'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names<a name="line.274"></a>
 <span class="sourceLineNo">275</span>    private static final int LAST_LETTER_CANDIDATES_MAX = 52;<a name="line.275"></a>
 <span class="sourceLineNo">276</span><a name="line.276"></a>
-<span class="sourceLineNo">277</span>    private StatefulRNG rng;<a name="line.277"></a>
+<span class="sourceLineNo">277</span>    private IStatefulRNG rng;<a name="line.277"></a>
 <span class="sourceLineNo">278</span>    private String[] names;<a name="line.278"></a>
 <span class="sourceLineNo">279</span>    private int consonantLimit;<a name="line.279"></a>
 <span class="sourceLineNo">280</span>    private ArrayList&lt;Integer&gt; sizes;<a name="line.280"></a>
@@ -308,7 +308,7 @@
 <span class="sourceLineNo">300</span>     * @param consonantLimit the maximum allowed consonants in a row<a name="line.300"></a>
 <span class="sourceLineNo">301</span>     */<a name="line.301"></a>
 <span class="sourceLineNo">302</span>    public WeightedLetterNamegen(String[] names, int consonantLimit) {<a name="line.302"></a>
-<span class="sourceLineNo">303</span>        this(names, consonantLimit, new StatefulRNG());<a name="line.303"></a>
+<span class="sourceLineNo">303</span>        this(names, consonantLimit, new GWTRNG());<a name="line.303"></a>
 <span class="sourceLineNo">304</span>    }<a name="line.304"></a>
 <span class="sourceLineNo">305</span><a name="line.305"></a>
 <span class="sourceLineNo">306</span>    /**<a name="line.306"></a>
@@ -320,7 +320,7 @@
 <span class="sourceLineNo">312</span>     * @param consonantLimit the maximum allowed consonants in a row<a name="line.312"></a>
 <span class="sourceLineNo">313</span>     * @param rng            the source of randomness to be used<a name="line.313"></a>
 <span class="sourceLineNo">314</span>     */<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    public WeightedLetterNamegen(String[] names, int consonantLimit, StatefulRNG rng) {<a name="line.315"></a>
+<span class="sourceLineNo">315</span>    public WeightedLetterNamegen(String[] names, int consonantLimit, IStatefulRNG rng) {<a name="line.315"></a>
 <span class="sourceLineNo">316</span>        this.names = names;<a name="line.316"></a>
 <span class="sourceLineNo">317</span>        this.consonantLimit = consonantLimit;<a name="line.317"></a>
 <span class="sourceLineNo">318</span>        this.rng = rng;<a name="line.318"></a>
@@ -364,7 +364,7 @@
 <span class="sourceLineNo">356</span>                }<a name="line.356"></a>
 <span class="sourceLineNo">357</span>                ProbabilityTable&lt;Character&gt; wlg = wl.get(letter);<a name="line.357"></a>
 <span class="sourceLineNo">358</span>                if (wlg == null) {<a name="line.358"></a>
-<span class="sourceLineNo">359</span>                    wlg = new ProbabilityTable&lt;&gt;((StatefulRandomness) rng.getRandomness());<a name="line.359"></a>
+<span class="sourceLineNo">359</span>                    wlg = new ProbabilityTable&lt;&gt;(rng.getState());<a name="line.359"></a>
 <span class="sourceLineNo">360</span>                    wl.put(letter, wlg);<a name="line.360"></a>
 <span class="sourceLineNo">361</span>                }<a name="line.361"></a>
 <span class="sourceLineNo">362</span>                wlg.add(nextLetter, 1);<a name="line.362"></a>
@@ -375,7 +375,7 @@
 <span class="sourceLineNo">367</span><a name="line.367"></a>
 <span class="sourceLineNo">368</span>                    wlg = wl.get(letter);<a name="line.368"></a>
 <span class="sourceLineNo">369</span>                    if (wlg == null) {<a name="line.369"></a>
-<span class="sourceLineNo">370</span>                        wlg = new ProbabilityTable&lt;&gt;((StatefulRandomness) rng.getRandomness());<a name="line.370"></a>
+<span class="sourceLineNo">370</span>                        wlg = new ProbabilityTable&lt;&gt;(rng.getState());<a name="line.370"></a>
 <span class="sourceLineNo">371</span>                        wl.put(letter, wlg);<a name="line.371"></a>
 <span class="sourceLineNo">372</span>                    }<a name="line.372"></a>
 <span class="sourceLineNo">373</span>                    wlg.add(nextLetter, 1);<a name="line.373"></a>
@@ -560,7 +560,7 @@
 <span class="sourceLineNo">552</span>        if (letters.containsKey(letter)) {<a name="line.552"></a>
 <span class="sourceLineNo">553</span>            return letters.get(letter).get(letter).random();<a name="line.553"></a>
 <span class="sourceLineNo">554</span>        } else {<a name="line.554"></a>
-<span class="sourceLineNo">555</span>            return vowels[rng.nextIntHasty(4)];<a name="line.555"></a>
+<span class="sourceLineNo">555</span>            return vowels[rng.next(2)]; // 2 bits, so ranging from 0 to 3<a name="line.555"></a>
 <span class="sourceLineNo">556</span>        }<a name="line.556"></a>
 <span class="sourceLineNo">557</span>    }<a name="line.557"></a>
 <span class="sourceLineNo">558</span>}<a name="line.558"></a>

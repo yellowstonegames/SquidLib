@@ -2,9 +2,9 @@ package squidpony;
 
 import regexodus.Category;
 import squidpony.annotation.Beta;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.IStatefulRNG;
 import squidpony.squidmath.ProbabilityTable;
-import squidpony.squidmath.StatefulRNG;
-import squidpony.squidmath.StatefulRandomness;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -274,7 +274,7 @@ public class WeightedLetterNamegen {
     private static final char[] vowels = {'a', 'e', 'i', 'o'};//not using y because it looks strange as a vowel in names
     private static final int LAST_LETTER_CANDIDATES_MAX = 52;
 
-    private StatefulRNG rng;
+    private IStatefulRNG rng;
     private String[] names;
     private int consonantLimit;
     private ArrayList<Integer> sizes;
@@ -300,7 +300,7 @@ public class WeightedLetterNamegen {
      * @param consonantLimit the maximum allowed consonants in a row
      */
     public WeightedLetterNamegen(String[] names, int consonantLimit) {
-        this(names, consonantLimit, new StatefulRNG());
+        this(names, consonantLimit, new GWTRNG());
     }
 
     /**
@@ -312,7 +312,7 @@ public class WeightedLetterNamegen {
      * @param consonantLimit the maximum allowed consonants in a row
      * @param rng            the source of randomness to be used
      */
-    public WeightedLetterNamegen(String[] names, int consonantLimit, StatefulRNG rng) {
+    public WeightedLetterNamegen(String[] names, int consonantLimit, IStatefulRNG rng) {
         this.names = names;
         this.consonantLimit = consonantLimit;
         this.rng = rng;
@@ -356,7 +356,7 @@ public class WeightedLetterNamegen {
                 }
                 ProbabilityTable<Character> wlg = wl.get(letter);
                 if (wlg == null) {
-                    wlg = new ProbabilityTable<>((StatefulRandomness) rng.getRandomness());
+                    wlg = new ProbabilityTable<>(rng.getState());
                     wl.put(letter, wlg);
                 }
                 wlg.add(nextLetter, 1);
@@ -367,7 +367,7 @@ public class WeightedLetterNamegen {
 
                     wlg = wl.get(letter);
                     if (wlg == null) {
-                        wlg = new ProbabilityTable<>((StatefulRandomness) rng.getRandomness());
+                        wlg = new ProbabilityTable<>(rng.getState());
                         wl.put(letter, wlg);
                     }
                     wlg.add(nextLetter, 1);
@@ -552,7 +552,7 @@ public class WeightedLetterNamegen {
         if (letters.containsKey(letter)) {
             return letters.get(letter).get(letter).random();
         } else {
-            return vowels[rng.nextIntHasty(4)];
+            return vowels[rng.next(2)]; // 2 bits, so ranging from 0 to 3
         }
     }
 }

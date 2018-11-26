@@ -407,8 +407,6 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#seedFixed">seedFixed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html#seedFixed">seedFixed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ModularMapGenerator.html" title="class in squidpony.squidgrid.mapping">ModularMapGenerator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#seedFixed">seedFixed</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CosmicNumbering.html#seeds">seeds</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></dt>
@@ -488,10 +486,10 @@
 <div class="block">Builds a SentenceForm with all fields specified except for <a href="../squidpony/FakeLanguageGen.SentenceForm.html#rng"><code>FakeLanguageGen.SentenceForm.rng</code></a>, which will be made based on
  FakeLanguageGen's static <a href="../squidpony/FakeLanguageGen.html#srng"><code>FakeLanguageGen.srng</code></a> field.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.IStatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm(FakeLanguageGen, IStatefulRNG, int, int, String[], String[], double, int)</a></span> - Constructor for class squidpony.<a href="../squidpony/FakeLanguageGen.SentenceForm.html" title="class in squidpony">FakeLanguageGen.SentenceForm</a></dt>
 <dd>
 <div class="block">Builds a SentenceForm with all fields specified; each value is referenced directly except for <code>rng</code>,
- which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).</div>
+ which will not change or be directly referenced (a new GWTRNG will be used with the same state value).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Region.html#separated-int-">separated(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Region.html" title="class in squidpony.squidmath">Region</a></dt>
 <dd>
@@ -1082,9 +1080,9 @@
 <dd>
 <div class="block">Sets the random number generator to be used.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ProbabilityTable.html#setRandom-squidpony.squidmath.StatefulRNG-">setRandom(StatefulRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/ProbabilityTable.html#setRandom-squidpony.squidmath.GWTRNG-">setRandom(GWTRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a></dt>
 <dd>
-<div class="block">Sets the current RNG to the given RNG.</div>
+<div class="block">Sets the current random number generator to the given GWTRNG.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#setRandomness-squidpony.squidmath.RandomnessSource-">setRandomness(RandomnessSource)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>
@@ -2337,7 +2335,7 @@
 <dd>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.StatefulRandomness-">Spill(StatefulRandomness)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.IStatefulRNG-">Spill(IStatefulRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </dd>
@@ -2369,7 +2367,7 @@
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.StatefulRandomness-">Spill(char[][], Spill.Measurement, StatefulRandomness)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IStatefulRNG-">Spill(char[][], Spill.Measurement, IStatefulRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
@@ -2593,10 +2591,6 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/SquidTags.html#SquidTags--">SquidTags()</a></span> - Constructor for class squidpony.<a href="../squidpony/SquidTags.html" title="class in squidpony">SquidTags</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#sr">sr</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
-<dd>
-<div class="block">The StatefulRandomness, usually a LightRNG, that this uses.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#srng">srng</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#srng">srng</a></span> - Static variable in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>

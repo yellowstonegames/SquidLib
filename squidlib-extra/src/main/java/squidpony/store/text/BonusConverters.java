@@ -88,7 +88,7 @@ public class BonusConverters {
             @Override
             public String stringify(ProbabilityTable<K> item) {
                 StringBuilder sb = new StringBuilder(256);
-                appendQuoted(sb, convertStatefulRandomness.stringify(item.getRandom()));
+                appendQuoted(sb, StringKit.hex(item.getRandom().getState()));
                 sb.append(' ');
                 appendQuoted(sb, convertIntVLA.stringify(item.weights));
                 sb.append(' ');
@@ -105,7 +105,7 @@ public class BonusConverters {
                 ObText.ContentMatcher m = makeMatcher(text);
                 if(!m.find() || !m.hasMatch())
                     return null;
-                ProbabilityTable<K> pt = new ProbabilityTable<>(convertStatefulRandomness.restore(m.getMatch()));
+                ProbabilityTable<K> pt = new ProbabilityTable<>(StringKit.longFromHex(m.getMatch()));
                 if(!m.find() || !m.hasMatch())
                     return pt;
                 pt.weights.addAll(convertIntVLA.restore(m.getMatch()));

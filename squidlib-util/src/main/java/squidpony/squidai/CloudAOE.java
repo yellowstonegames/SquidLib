@@ -231,7 +231,7 @@ public class CloudAOE implements AOE, Serializable {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.sr.setState(seed);
+            sp.rng.setState(seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
@@ -253,7 +253,7 @@ public class CloudAOE implements AOE, Serializable {
 
             t = ts[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.sr.setState(seed);
+            sp.rng.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -376,7 +376,7 @@ public class CloudAOE implements AOE, Serializable {
         for (int i = 0; i < exs.length; ++i) {
             t = exs[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.sr.setState(seed);
+            sp.rng.setState(seed);
 
             sp.start(t, volume, null);
             for (int x = 0; x < dungeon.length; x++) {
@@ -400,7 +400,7 @@ public class CloudAOE implements AOE, Serializable {
 
             t = pts[i];
             sp = new Spill(dungeon, spill.measurement);
-            sp.sr.setState(seed);
+            sp.rng.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -449,7 +449,7 @@ public class CloudAOE implements AOE, Serializable {
 
             t = lts[i - pts.length];
             sp = new Spill(dungeon, spill.measurement);
-            sp.sr.setState(seed);
+            sp.rng.setState(seed);
 
             sp.start(t, volume, null);
 
@@ -643,7 +643,7 @@ public class CloudAOE implements AOE, Serializable {
         if(!expanding)
         {
             spill.reset();
-            spill.sr.setState(seed);
+            spill.rng.setState(seed);
         }
         return r;
     }

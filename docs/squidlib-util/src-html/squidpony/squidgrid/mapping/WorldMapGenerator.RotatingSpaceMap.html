@@ -40,7 +40,7 @@
 <span class="sourceLineNo">032</span>public abstract class WorldMapGenerator implements Serializable {<a name="line.32"></a>
 <span class="sourceLineNo">033</span>    public final int width, height;<a name="line.33"></a>
 <span class="sourceLineNo">034</span>    public long seed, cachedState;<a name="line.34"></a>
-<span class="sourceLineNo">035</span>    public StatefulRNG rng;<a name="line.35"></a>
+<span class="sourceLineNo">035</span>    public IStatefulRNG rng;<a name="line.35"></a>
 <span class="sourceLineNo">036</span>    public final double[][] heightData, heatData, moistureData;<a name="line.36"></a>
 <span class="sourceLineNo">037</span>    public final GreasedRegion landData<a name="line.37"></a>
 <span class="sourceLineNo">038</span>            ;//, riverData, lakeData,<a name="line.38"></a>

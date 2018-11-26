@@ -32,7 +32,7 @@ import java.util.Arrays;
 public abstract class WorldMapGenerator implements Serializable {
     public final int width, height;
     public long seed, cachedState;
-    public StatefulRNG rng;
+    public IStatefulRNG rng;
     public final double[][] heightData, heatData, moistureData;
     public final GreasedRegion landData
             ;//, riverData, lakeData,

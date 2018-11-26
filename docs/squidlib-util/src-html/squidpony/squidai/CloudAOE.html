@@ -239,7 +239,7 @@
 <span class="sourceLineNo">231</span>        for (int i = 0; i &lt; exs.length; ++i) {<a name="line.231"></a>
 <span class="sourceLineNo">232</span>            t = exs[i];<a name="line.232"></a>
 <span class="sourceLineNo">233</span>            sp = new Spill(dungeon, spill.measurement);<a name="line.233"></a>
-<span class="sourceLineNo">234</span>            sp.sr.setState(seed);<a name="line.234"></a>
+<span class="sourceLineNo">234</span>            sp.rng.setState(seed);<a name="line.234"></a>
 <span class="sourceLineNo">235</span><a name="line.235"></a>
 <span class="sourceLineNo">236</span>            sp.start(t, volume, null);<a name="line.236"></a>
 <span class="sourceLineNo">237</span>            for (int x = 0; x &lt; dungeon.length; x++) {<a name="line.237"></a>
@@ -261,7 +261,7 @@
 <span class="sourceLineNo">253</span><a name="line.253"></a>
 <span class="sourceLineNo">254</span>            t = ts[i];<a name="line.254"></a>
 <span class="sourceLineNo">255</span>            sp = new Spill(dungeon, spill.measurement);<a name="line.255"></a>
-<span class="sourceLineNo">256</span>            sp.sr.setState(seed);<a name="line.256"></a>
+<span class="sourceLineNo">256</span>            sp.rng.setState(seed);<a name="line.256"></a>
 <span class="sourceLineNo">257</span><a name="line.257"></a>
 <span class="sourceLineNo">258</span>            sp.start(t, volume, null);<a name="line.258"></a>
 <span class="sourceLineNo">259</span><a name="line.259"></a>
@@ -384,7 +384,7 @@
 <span class="sourceLineNo">376</span>        for (int i = 0; i &lt; exs.length; ++i) {<a name="line.376"></a>
 <span class="sourceLineNo">377</span>            t = exs[i];<a name="line.377"></a>
 <span class="sourceLineNo">378</span>            sp = new Spill(dungeon, spill.measurement);<a name="line.378"></a>
-<span class="sourceLineNo">379</span>            sp.sr.setState(seed);<a name="line.379"></a>
+<span class="sourceLineNo">379</span>            sp.rng.setState(seed);<a name="line.379"></a>
 <span class="sourceLineNo">380</span><a name="line.380"></a>
 <span class="sourceLineNo">381</span>            sp.start(t, volume, null);<a name="line.381"></a>
 <span class="sourceLineNo">382</span>            for (int x = 0; x &lt; dungeon.length; x++) {<a name="line.382"></a>
@@ -408,7 +408,7 @@
 <span class="sourceLineNo">400</span><a name="line.400"></a>
 <span class="sourceLineNo">401</span>            t = pts[i];<a name="line.401"></a>
 <span class="sourceLineNo">402</span>            sp = new Spill(dungeon, spill.measurement);<a name="line.402"></a>
-<span class="sourceLineNo">403</span>            sp.sr.setState(seed);<a name="line.403"></a>
+<span class="sourceLineNo">403</span>            sp.rng.setState(seed);<a name="line.403"></a>
 <span class="sourceLineNo">404</span><a name="line.404"></a>
 <span class="sourceLineNo">405</span>            sp.start(t, volume, null);<a name="line.405"></a>
 <span class="sourceLineNo">406</span><a name="line.406"></a>
@@ -457,7 +457,7 @@
 <span class="sourceLineNo">449</span><a name="line.449"></a>
 <span class="sourceLineNo">450</span>            t = lts[i - pts.length];<a name="line.450"></a>
 <span class="sourceLineNo">451</span>            sp = new Spill(dungeon, spill.measurement);<a name="line.451"></a>
-<span class="sourceLineNo">452</span>            sp.sr.setState(seed);<a name="line.452"></a>
+<span class="sourceLineNo">452</span>            sp.rng.setState(seed);<a name="line.452"></a>
 <span class="sourceLineNo">453</span><a name="line.453"></a>
 <span class="sourceLineNo">454</span>            sp.start(t, volume, null);<a name="line.454"></a>
 <span class="sourceLineNo">455</span><a name="line.455"></a>
@@ -651,7 +651,7 @@
 <span class="sourceLineNo">643</span>        if(!expanding)<a name="line.643"></a>
 <span class="sourceLineNo">644</span>        {<a name="line.644"></a>
 <span class="sourceLineNo">645</span>            spill.reset();<a name="line.645"></a>
-<span class="sourceLineNo">646</span>            spill.sr.setState(seed);<a name="line.646"></a>
+<span class="sourceLineNo">646</span>            spill.rng.setState(seed);<a name="line.646"></a>
 <span class="sourceLineNo">647</span>        }<a name="line.647"></a>
 <span class="sourceLineNo">648</span>        return r;<a name="line.648"></a>
 <span class="sourceLineNo">649</span>    }<a name="line.649"></a>

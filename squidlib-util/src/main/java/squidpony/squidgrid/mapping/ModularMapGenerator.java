@@ -19,9 +19,8 @@ import java.util.*;
 public class ModularMapGenerator implements IDungeonGenerator {
     public DungeonUtility utility;
     protected int height, width;
-    public StatefulRNG rng;
+    public IStatefulRNG rng;
     protected long rebuildSeed;
-    protected boolean seedFixed = false;
 
     protected char[][] map = null;
     protected int[][] environment = null;
@@ -91,7 +90,7 @@ public class ModularMapGenerator implements IDungeonGenerator {
     }
 
     /**
-     * Make a ModularMapGenerator with a StatefulRNG (backed by LightRNG) using a random seed, height 30, and width 60.
+     * Make a ModularMapGenerator with a GWTRNG using a random seed, height 30, and width 60.
      */
     public ModularMapGenerator() {
         this(60, 30);
@@ -99,13 +98,13 @@ public class ModularMapGenerator implements IDungeonGenerator {
 
     /**
      * Make a ModularMapGenerator with the given height and width; the RNG used for generating a dungeon and
-     * adding features will be a StatefulRNG (backed by LightRNG) using a random seed.
+     * adding features will be a GWTRNG using a random seed.
      *
      * @param width  The width of the dungeon in cells
      * @param height The height of the dungeon in cells
      */
     public ModularMapGenerator(int width, int height) {
-        this(width, height, new StatefulRNG());
+        this(width, height, new GWTRNG());
     }
 
     /**
@@ -113,12 +112,12 @@ public class ModularMapGenerator implements IDungeonGenerator {
      *
      * @param width  The width of the dungeon in cells
      * @param height The height of the dungeon in cells
-     * @param rng    The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
-     *               but if it is not a StatefulRNG, a new StatefulRNG will be used, randomly seeded by this parameter
+     * @param rng    The RNG to use for all purposes in this class; if it is any kind of IStatefulRNG, then it will be
+     *               used as-is; otherwise, a new GWTRNG will be used, randomly seeded by this parameter
      */
-    public ModularMapGenerator(int width, int height, RNG rng) {
+    public ModularMapGenerator(int width, int height, IRNG rng) {
         CoordPacker.init();
-        this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
+        this.rng = (rng instanceof IStatefulRNG) ? (IStatefulRNG) rng : new GWTRNG(rng.nextLong());
         utility = new DungeonUtility(this.rng);
         rebuildSeed = this.rng.getState();
         this.height = height;
@@ -147,6 +146,7 @@ public class ModularMapGenerator implements IDungeonGenerator {
         environment = ArrayTools.copy(copying.environment);
         layout = new RegionMap<>(copying.layout);
         modules = new OrderedMap<>(copying.modules);
+        displacement = new OrderedMap<>(copying.displacement);
     }
 
     /**

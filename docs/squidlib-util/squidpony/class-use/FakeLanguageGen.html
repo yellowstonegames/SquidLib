@@ -594,8 +594,8 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.StatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
-            <a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a>&nbsp;rng,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/FakeLanguageGen.SentenceForm.html#SentenceForm-squidpony.FakeLanguageGen-squidpony.squidmath.IStatefulRNG-int-int-java.lang.String:A-java.lang.String:A-double-int-">SentenceForm</a></span>(<a href="../../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a>&nbsp;language,
+            <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;rng,
             int&nbsp;minWords,
             int&nbsp;maxWords,
             <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;midPunctuation,
@@ -603,7 +603,7 @@
             double&nbsp;midPunctuationFrequency,
             int&nbsp;maxChars)</code>
 <div class="block">Builds a SentenceForm with all fields specified; each value is referenced directly except for <code>rng</code>,
- which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).</div>
+ which will not change or be directly referenced (a new GWTRNG will be used with the same state value).</div>
 </td>
 </tr>
 </tbody>

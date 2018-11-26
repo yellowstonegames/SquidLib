@@ -190,9 +190,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#rng">rng</a></span></code>
-<div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
+<div class="block">The IStatefulRNG used to decide which one of multiple equally-short paths to take.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -209,12 +209,6 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#sr">sr</a></span></code>
-<div class="block">The StatefulRandomness, usually a LightRNG, that this uses.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#width">width</a></span></code>
 <div class="block">Width of the map.</div>
@@ -271,17 +265,17 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill</a></span>(char[][]&nbsp;level,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IStatefulRNG-">Spill</a></span>(char[][]&nbsp;level,
      <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
-     <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+     <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</code>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.StatefulRandomness-">Spill</a></span>(char[][]&nbsp;level,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill</a></span>(char[][]&nbsp;level,
      <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
-     <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</code>
+     <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
@@ -292,7 +286,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.StatefulRandomness-">Spill</a></span>(<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/Spill.html#Spill-squidpony.squidmath.IStatefulRNG-">Spill</a></span>(<a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</code>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </td>
 </tr>
@@ -485,21 +479,12 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <a name="rng">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>rng</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a> <a href="../../src-html/squidpony/squidgrid/Spill.html#line.85">rng</a></pre>
-<div class="block">The RNG used to decide which one of multiple equally-short paths to take.</div>
-</li>
-</ul>
-<a name="sr">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>sr</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a> <a href="../../src-html/squidpony/squidgrid/Spill.html#line.89">sr</a></pre>
-<div class="block">The StatefulRandomness, usually a LightRNG, that this uses. Can have its state read and set.</div>
+<h4>rng</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a> <a href="../../src-html/squidpony/squidgrid/Spill.html#line.86">rng</a></pre>
+<div class="block">The IStatefulRNG used to decide which one of multiple equally-short paths to take. Typically, this is a
+ <a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath"><code>GWTRNG</code></a> or <a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath"><code>StatefulRNG</code></a>.</div>
 </li>
 </ul>
 </li>
@@ -516,7 +501,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.96">Spill</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.93">Spill</a>()</pre>
 <div class="block">Construct a Spill without a level to actually scan. If you use this constructor, you must call an
  initialize() method before using this class.</div>
 </li>
@@ -527,21 +512,21 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.109">Spill</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.105">Spill</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</pre>
 <div class="block">Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
- RandomnessSource the RNG that this object uses will not be identical to the one passed as random (64 bits will
+ RandomnessSource the RNG that this object uses will not be identical to the one passed as random (two ints will
  be requested from the passed RNG, and that will be used to seed this class' RNG).
 
  If you use this constructor, you must call an  initialize() method before using this class.</div>
 </li>
 </ul>
-<a name="Spill-squidpony.squidmath.StatefulRandomness-">
+<a name="Spill-squidpony.squidmath.IStatefulRNG-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.123">Spill</a>(<a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.118">Spill</a>(<a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</pre>
 <div class="block">Construct a Spill without a level to actually scan. This constructor allows you to specify a StatefulRandomness
  such as Lathe32RNG, which will be referenced in this class (if the state of random changes because this
  object needed a random number, the state change will be reflected in the code that passed random to here).
@@ -555,7 +540,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.134">Spill</a>(boolean[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.128">Spill</a>(boolean[][]&nbsp;level)</pre>
 <div class="block">Used to construct a Spill from the output of another.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -569,7 +554,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.145">Spill</a>(boolean[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.138">Spill</a>(boolean[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Used to construct a Spill from the output of another, specifying a distance calculation.</div>
 <dl>
@@ -585,7 +570,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.162">Spill</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.154">Spill</a>(char[][]&nbsp;level)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
@@ -602,7 +587,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.177">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.168">Spill</a>(char[][]&nbsp;level,
              char&nbsp;alternateWall)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where one char means a wall and anything else is a walkable tile. If you only have
@@ -621,7 +606,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.193">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.183">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
@@ -640,7 +625,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.213">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.202">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
              <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
@@ -649,7 +634,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  map that can be used here. This constructor specifies a distance measurement.
 
  This constructor allows you to specify an RNG, but the actual RandomnessSource the RNG that this object uses
- will not be identical to the one passed as random (64 bits will be requested from the passed RNG, and that will
+ will not be identical to the one passed as random (two ints will be requested from the passed RNG, and that will
  be used to seed this class' RNG).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -658,21 +643,21 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </dl>
 </li>
 </ul>
-<a name="Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.StatefulRandomness-">
+<a name="Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IStatefulRNG-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Spill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.232">Spill</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.220">Spill</a>(char[][]&nbsp;level,
              <a href="../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
-             <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a>&nbsp;random)</pre>
+             <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</pre>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile. If you only have
  a map that uses box-drawing characters, use DungeonUtility.linesToHashes() to get a
  map that can be used here. This constructor specifies a distance measurement.
 
- This constructor allows you to specify a StatefulRandomness, which will be referenced in
+ This constructor allows you to specify an IStatefulRNG such as GWTRNG or StatefulRNG, which will be referenced in
  this class (if the state of random changes because this object needed a random number, the state change will be
  reflected in the code that passed random to here).</div>
 <dl>
@@ -696,7 +681,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.246">initialize</a>(boolean[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.233">initialize</a>(boolean[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl>
@@ -713,7 +698,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.268">initialize</a>(char[][]&nbsp;level)</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.255">initialize</a>(char[][]&nbsp;level)</pre>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently.</div>
 <dl>
@@ -730,7 +715,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>initialize</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.292">initialize</a>(char[][]&nbsp;level,
+<pre>public&nbsp;<a href="../../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a>&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.279">initialize</a>(char[][]&nbsp;level,
                         char&nbsp;alternateWall)</pre>
 <div class="block">Used to initialize or re-initialize a Spill that needs a new PhysicalMap because it either wasn't given
  one when it was constructed, or because the contents of the terrain have changed permanently. This
@@ -750,7 +735,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>resetMap</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.311">resetMap</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.298">resetMap</a>()</pre>
 <div class="block">Resets the spillMap to being empty.</div>
 </li>
 </ul>
@@ -760,7 +745,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>reset</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.323">reset</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.310">reset</a>()</pre>
 <div class="block">Resets this Spill to a state with an empty spillMap and an empty spreadPattern.</div>
 </li>
 </ul>
@@ -770,7 +755,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.334">resetCell</a>(int&nbsp;x,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.321">resetCell</a>(int&nbsp;x,
                       int&nbsp;y)</pre>
 <div class="block">Reverts a cell to an unfilled state (false in spillMap).</div>
 <dl>
@@ -786,7 +771,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>resetCell</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.343">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.330">resetCell</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 <div class="block">Reverts a cell to an unfilled state (false in spillMap).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -800,7 +785,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.353">setFresh</a>(int&nbsp;x,
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.340">setFresh</a>(int&nbsp;x,
                         int&nbsp;y)</pre>
 <div class="block">Used internally to mark a cell as just-now being expanded from.</div>
 <dl>
@@ -816,7 +801,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>setFresh</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.362">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.349">setFresh</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;pt)</pre>
 <div class="block">Used internally to mark a cell as just-now being expanded from.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -830,7 +815,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>start</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.384">start</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidgrid/Spill.html#line.371">start</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;entry,
                               int&nbsp;volume,
                               <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&gt;&nbsp;impassable)</pre>
 <div class="block">Recalculate the spillMap and return the spreadPattern. The cell corresponding to entry will be true,

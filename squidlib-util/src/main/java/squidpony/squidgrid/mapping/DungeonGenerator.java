@@ -85,7 +85,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     public DungeonUtility utility;
     protected int height, width;
     public Coord stairsUp = null, stairsDown = null;
-    public StatefulRNG rng;
+    public IStatefulRNG rng;
     protected long rebuildSeed;
     protected boolean seedFixed = false;
 
@@ -143,11 +143,11 @@ public class DungeonGenerator implements IDungeonGenerator {
 
 
     /**
-     * Make a DungeonGenerator with a LightRNG using a random seed, height 40, and width 40.
+     * Make a DungeonGenerator with a GWTRNG using a random seed, height 40, and width 40.
      */
     public DungeonGenerator()
     {
-        rng = new StatefulRNG();
+        rng = new GWTRNG();
         gen = new DungeonBoneGen(rng);
         utility = new DungeonUtility(rng);
         rebuildSeed = rng.getState();
@@ -184,7 +184,7 @@ public class DungeonGenerator implements IDungeonGenerator {
     public DungeonGenerator(int width, int height, IRNG rng)
     {
         Coord.expandPoolTo(width, height);
-        this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());
+        this.rng = (rng instanceof IStatefulRNG) ? (IStatefulRNG) rng : new GWTRNG(rng.nextLong());
         gen = new DungeonBoneGen(this.rng);
         utility = new DungeonUtility(this.rng);
         rebuildSeed = this.rng.getState();
@@ -199,7 +199,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      */
     public DungeonGenerator(DungeonGenerator copying)
     {
-        rng = new StatefulRNG(copying.rng.getState());
+        rng = new GWTRNG(copying.rng.getState());
         gen = new DungeonBoneGen(rng);
         utility = new DungeonUtility(rng);
         rebuildSeed = rng.getState();
