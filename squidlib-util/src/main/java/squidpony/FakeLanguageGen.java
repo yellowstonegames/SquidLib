@@ -25,7 +25,7 @@ public class FakeLanguageGen implements Serializable {
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
-    public static final StatefulRNG srng = new StatefulRNG();
+    public static final IStatefulRNG srng = new GWTRNG();
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64);
     protected String summary = null;
     private String name = "Nameless Language";
@@ -2869,7 +2869,7 @@ public class FakeLanguageGen implements Serializable {
     }
 
     public static FakeLanguageGen randomLanguage(long seed) {
-        StatefulRNG rng = new StatefulRNG(seed);
+        GWTRNG rng = new GWTRNG(seed);
         int[] lengths = new int[rng.between(3, 5)];
         System.arraycopy(new int[]{1, 2, 3, 4}, 0, lengths, 0, lengths.length);
         double[] chances = new double[lengths.length];
@@ -3336,7 +3336,7 @@ public class FakeLanguageGen implements Serializable {
      * @param reseeds an array or varargs of additional long seeds to seed {@code rng} with mid-generation 
      * @return a word in the fake language as a String
      */
-    public String word(StatefulRNG rng, boolean capitalize, int approxSyllables, long... reseeds) {
+    public String word(IStatefulRNG rng, boolean capitalize, int approxSyllables, long... reseeds) {
         if (approxSyllables <= 0) {
             StringBuilder sb = new StringBuilder(rng.getRandomElement(openingVowels));
             for (Modifier mod : modifiers) {
@@ -4811,13 +4811,13 @@ public class FakeLanguageGen implements Serializable {
      * {@link FakeLanguageGen#sentence(IRNG, int, int, String[], String[], double, int)} or one of its overloads.
      * You can call {@link #sentence()} on this to produce another String sentence with the parameters it was given
      * at construction. The parameters to
-     * {@link #SentenceForm(FakeLanguageGen, StatefulRNG, int, int, String[], String[], double, int)} are stored in fields of
+     * {@link #SentenceForm(FakeLanguageGen, IStatefulRNG, int, int, String[], String[], double, int)} are stored in fields of
      * the same name, and all fields in this class are public and modifiable.
      */
     public static class SentenceForm implements Serializable
     {
         private static final long serialVersionUID = 1246527948419533147L;
-        public StatefulRNG rng;
+        public IStatefulRNG rng;
         public int minWords, maxWords, maxChars;
         public String[] midPunctuation, endPunctuation;
         public double midPunctuationFrequency;
@@ -4887,9 +4887,7 @@ public class FakeLanguageGen implements Serializable {
 
         /**
          * Builds a SentenceForm with all fields specified; each value is referenced directly except for {@code rng},
-         * which will not change or be directly referenced (a new StatefulRNG will be used with the same state value).
-         * Note that the StatefulRandomness used by this class' rng field will always be LinnormRNG, even if the given
-         * rng parameter used a different StatefulRandomness implementation.
+         * which will not change or be directly referenced (a new GWTRNG will be used with the same state value).
          * @param language A FakeLanguageGen to use to generate words
          * @param rng a StatefulRNG that will not be directly referenced; the state will be copied into a new StatefulRNG
          * @param minWords minimum words per sentence
@@ -4899,12 +4897,12 @@ public class FakeLanguageGen implements Serializable {
          * @param midPunctuationFrequency the probability that two words will be separated by a String from midPunctuation, between 0.0 and 1.0
          * @param maxChars the maximum number of chars to use in a sentence, or -1 for no hard limit
          */
-        public SentenceForm(FakeLanguageGen language, StatefulRNG rng, int minWords, int maxWords,
+        public SentenceForm(FakeLanguageGen language, IStatefulRNG rng, int minWords, int maxWords,
                             String[] midPunctuation, String[] endPunctuation,
                             double midPunctuationFrequency, int maxChars)
         {
             this.language = language;
-            this.rng = new StatefulRNG(rng.getState());
+            this.rng = new GWTRNG(rng.getState());
             this.minWords = minWords;
             this.maxWords = maxWords;
             this.midPunctuation = midPunctuation;
@@ -4932,7 +4930,7 @@ public class FakeLanguageGen implements Serializable {
         {
             int gap = ser.indexOf('℘');
             FakeLanguageGen lang = FakeLanguageGen.deserializeFromString(ser.substring(0, gap));
-            StatefulRNG rng = new StatefulRNG(
+            GWTRNG rng = new GWTRNG(
                     StringKit.longFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1)));
             int minWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));
             int maxWords = StringKit.intFromDec(ser,gap + 1, gap = ser.indexOf('℘', gap + 1));

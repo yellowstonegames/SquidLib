@@ -67,9 +67,9 @@ public class MultiSpill {
     public int filled = 0;
     private ArrayList<OrderedSet<Coord>> fresh;
     /**
-     * The StatefulRNG used to decide how to randomly fill a space; can have its state set and read.
+     * The IStatefulRNG used to decide how to randomly fill a space; can have its state set and read.
      */
-    public StatefulRNG rng;
+    public IStatefulRNG rng;
 
     private boolean initialized = false;
     /**
@@ -90,8 +90,30 @@ public class MultiSpill {
      * @param random an RNG that will be converted to a StatefulRNG if it is not one already
      */
     public MultiSpill(RNG random) {
-        rng = new StatefulRNG(random.nextLong());
+        this(random.nextLong());
+    }
 
+    /**
+     * Construct a Spill without a level to actually scan. This constructor allows you to specify the state to be used
+     * for the RNG without actually passing an RNG, since this will use its own anyway.
+     *
+     * If you use this constructor, you must call an  initialize() method before using this class.
+     * @param state the state to use for this class' random number generator
+     */
+    public MultiSpill(long state) {
+        rng = new StatefulRNG(state);
+        fresh = new ArrayList<>();
+    }
+    /**
+     * Construct a Spill without a level to actually scan. This constructor allows you to specify an IStatefulRNG that
+     * will be used exactly, without copying the generator. This permits using {@link GWTRNG} instead of the default
+     * {@link StatefulRNG} if optimal performance on GWT is desirable at the expense of some performance on desktop.
+     *
+     * If you use this constructor, you must call an  initialize() method before using this class.
+     * @param random an IStatefulRNG that will be used exactly, without copying
+     */
+    public MultiSpill(IStatefulRNG random) {
+        rng = random;
         fresh = new ArrayList<>();
     }
 

@@ -32,7 +32,7 @@ import java.io.Serializable;
  * <br>
  * Created by Tommy Ettinger on 4/14/2018.
  */
-public class MoonwalkRNG extends AbstractRNG implements StatefulRandomness, SkippingRandomness, Serializable {
+public class MoonwalkRNG extends AbstractRNG implements IStatefulRNG, SkippingRandomness, Serializable {
     private static final long serialVersionUID = 1L;
 
     private long state;

@@ -32,7 +32,7 @@ import java.io.Serializable;
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)
  */
-public final class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializable {
+public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {
     private static final long serialVersionUID = 1L;
 
     private int stateA, stateB;

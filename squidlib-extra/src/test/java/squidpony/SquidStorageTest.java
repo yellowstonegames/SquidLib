@@ -146,6 +146,9 @@ public class SquidStorageTest extends ApplicationAdapter {
             System.out.println(em);
             System.out.println(yesCompression.get("Compressed", "enum_map", TestClass.class));
 
+            System.out.println(table.random());
+            System.out.println(yesCompression.get("Compressed", "table", ProbabilityTable.class).random());
+
             //note, these are different because EnumMap needs the enum's Class to be constructed, and an empty EnumMap
             //can't have any keys' Class queried (no keys are present). EnumMap has a field that stores the Class as a
             //final field, but it's private so we can't safely use it.
