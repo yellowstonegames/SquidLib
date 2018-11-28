@@ -1182,7 +1182,8 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     public static class TilingMap extends WorldMapGenerator {
         //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;
-        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5;
+//        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5;
+        protected static final double terrainFreq = 0.95, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
         private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
                 minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
                 minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
@@ -1303,7 +1304,7 @@ public abstract class WorldMapGenerator implements Serializable {
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
-            landModifier = (landMod <= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.1875) + 0.99 : landMod;
             coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
 
             double p, q,
@@ -1325,10 +1326,9 @@ public abstract class WorldMapGenerator implements Serializable {
                 for (int x = 0, xt = 0; x < width; x++) {
                     ps = trigTable[xt++];//NumberTools.sin(p);
                     pc = trigTable[xt++];//NumberTools.cos(p);
-                    h = terrain.getNoiseWithSeed(pc +
-                                    terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),
-                            ps, qc, qs, seedA) + landModifier - 1.0;
-                    heightData[x][y] = h;
+                    heightData[x][y] = (h = terrain.getNoiseWithSeed(pc +
+                                    terrainRidged.getNoiseWithSeed(pc, ps, qc, qs,seedB - seedA) * 0.25,
+                            ps, qc, qs, seedA) + landModifier - 1.0);
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc
                                     + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)
                             , qs, seedB));
