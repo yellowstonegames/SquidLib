@@ -4,7 +4,7 @@ import squidpony.StringKit;
 
 import java.io.Serializable;
 
-public final class GWTRNG extends AbstractRNG implements StatefulRandomness, Serializable {
+public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {
     private static final long serialVersionUID = 1L;
 
     private int stateA, stateB;
