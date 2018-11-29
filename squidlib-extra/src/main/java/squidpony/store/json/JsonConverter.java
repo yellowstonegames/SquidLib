@@ -127,6 +127,24 @@ public class JsonConverter extends Json {
                 return Pattern.deserializeFromString(data);
             }
         });
+        json.setSerializer(Coord.class, new Serializer<Coord>() {
+            @Override
+            public void write(Json json, Coord object, Class knownType) {
+                if(object == null)
+                {
+                    json.writeValue(null);
+                    return;
+                }
+                json.writeValue("x", object.x, int.class);
+                json.writeValue("y", object.y, int.class);
+            }
+
+            @Override
+            public Coord read(Json json, JsonValue jsonData, Class type) {
+                if(jsonData == null || jsonData.isNull()) return null;
+                return Coord.get(jsonData.getInt("x"), jsonData.getInt("y"));
+            }
+        });
 
         json.setSerializer(GreasedRegion.class, new Serializer<GreasedRegion>() {
             @Override
