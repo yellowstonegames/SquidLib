@@ -135,14 +135,16 @@ public class JsonConverter extends Json {
                     json.writeValue(null);
                     return;
                 }
-                json.writeValue("x", object.x, int.class);
-                json.writeValue("y", object.y, int.class);
+                json.writeArrayStart();
+                json.writeValue(object.x, int.class);
+                json.writeValue(object.y, int.class);
+                json.writeArrayEnd();
             }
 
             @Override
             public Coord read(Json json, JsonValue jsonData, Class type) {
                 if(jsonData == null || jsonData.isNull()) return null;
-                return Coord.get(jsonData.getInt("x"), jsonData.getInt("y"));
+                return Coord.get(jsonData.getInt(0), jsonData.getInt(1));
             }
         });
 
