@@ -384,6 +384,10 @@
 <dd>
 <div class="block">Returns up to 32 random bits.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MiniMover64RNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MoonwalkRNG.html#next-int-">next(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></dt>
 <dd>
 <div class="block">Get up to 32 bits (inclusive) of random output; the int this produces
@@ -516,6 +520,10 @@
 <dd>
 <div class="block">Gets a random value, true or false.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextBoolean--">nextBoolean()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Gets a random value, true or false.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MoonwalkRNG.html#nextBoolean--">nextBoolean()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></dt>
 <dd>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.</div>
@@ -546,6 +554,11 @@
  in-place).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LinnormRNG.html#nextBytes-byte:A-">nextBytes(byte[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath">LinnormRNG</a></dt>
+<dd>
+<div class="block">Given a byte array as a parameter, this will fill the array with random bytes (modifying it
+ in-place).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextBytes-byte:A-">nextBytes(byte[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
 <dd>
 <div class="block">Given a byte array as a parameter, this will fill the array with random bytes (modifying it
  in-place).</div>
@@ -665,6 +678,14 @@
 <dd>
 <div class="block">Gets a uniform random double in the range [0.0,outer) given a positive parameter outer.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextDouble--">nextDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Gets a uniform random double in the range [0.0,1.0)</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextDouble-double-">nextDouble(double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Gets a uniform random double in the range [0.0,outer) given a positive parameter outer.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MoonwalkRNG.html#nextDouble--">nextDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></dt>
 <dd>
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.</div>
@@ -760,6 +781,10 @@
 <div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LinnormRNG.html#nextFloat--">nextFloat()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath">LinnormRNG</a></dt>
+<dd>
+<div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextFloat--">nextFloat()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
 <dd>
 <div class="block">Gets a uniform random float in the range [0.0,1.0)</div>
 </dd>
@@ -932,6 +957,20 @@
 <div class="block">Exclusive on the outer bound.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LinnormRNG.html#nextInt-int-int-">nextInt(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath">LinnormRNG</a></dt>
+<dd>
+<div class="block">Inclusive inner, exclusive outer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MiniMover64RNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Can return any int, positive or negative, of any size permissible in a 32-bit signed integer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextInt-int-">nextInt(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Exclusive on the outer bound.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextInt-int-int-">nextInt(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
 <dd>
 <div class="block">Inclusive inner, exclusive outer.</div>
 </dd>
@@ -1185,6 +1224,20 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MersenneTwister.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MersenneTwister.html" title="class in squidpony.squidmath">MersenneTwister</a></dt>
 <dd>
 <div class="block">Returns 64 random bits.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MiniMover64RNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Can return any long, positive or negative, of any size permissible in a 64-bit signed integer.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextLong-long-">nextLong(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Exclusive on the upper bound.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/MizuchiRNG.html#nextLong-long-long-">nextLong(long, long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></dt>
+<dd>
+<div class="block">Inclusive lower, exclusive upper.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MoonwalkRNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></dt>
 <dd>

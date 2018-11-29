@@ -1190,153 +1190,153 @@
 <span class="sourceLineNo">1182</span>     */<a name="line.1182"></a>
 <span class="sourceLineNo">1183</span>    public static class TilingMap extends WorldMapGenerator {<a name="line.1183"></a>
 <span class="sourceLineNo">1184</span>        //protected static final double terrainFreq = 1.5, terrainRidgedFreq = 1.3, heatFreq = 2.8, moistureFreq = 2.9, otherFreq = 4.5;<a name="line.1184"></a>
-<span class="sourceLineNo">1185</span>        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5;<a name="line.1185"></a>
-<span class="sourceLineNo">1186</span>        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,<a name="line.1186"></a>
-<span class="sourceLineNo">1187</span>                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,<a name="line.1187"></a>
-<span class="sourceLineNo">1188</span>                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1188"></a>
-<span class="sourceLineNo">1189</span><a name="line.1189"></a>
-<span class="sourceLineNo">1190</span>        public final Noise4D terrain, terrainRidged, heat, moisture, otherRidged;<a name="line.1190"></a>
-<span class="sourceLineNo">1191</span><a name="line.1191"></a>
-<span class="sourceLineNo">1192</span>        /**<a name="line.1192"></a>
-<span class="sourceLineNo">1193</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1193"></a>
-<span class="sourceLineNo">1194</span>         * as north-to-south. Always makes a 256x256 map.<a name="line.1194"></a>
-<span class="sourceLineNo">1195</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1195"></a>
-<span class="sourceLineNo">1196</span>         * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the<a name="line.1196"></a>
-<span class="sourceLineNo">1197</span>         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0}.<a name="line.1197"></a>
-<span class="sourceLineNo">1198</span>         */<a name="line.1198"></a>
-<span class="sourceLineNo">1199</span>        public TilingMap() {<a name="line.1199"></a>
-<span class="sourceLineNo">1200</span>            this(0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0);<a name="line.1200"></a>
-<span class="sourceLineNo">1201</span>        }<a name="line.1201"></a>
-<span class="sourceLineNo">1202</span><a name="line.1202"></a>
-<span class="sourceLineNo">1203</span>        /**<a name="line.1203"></a>
-<span class="sourceLineNo">1204</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1204"></a>
-<span class="sourceLineNo">1205</span>         * as north-to-south.<a name="line.1205"></a>
-<span class="sourceLineNo">1206</span>         * Takes only the width/height of the map. The initial seed is set to the same large long<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and<a name="line.1207"></a>
-<span class="sourceLineNo">1208</span>         * height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1208"></a>
-<span class="sourceLineNo">1209</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1209"></a>
-<span class="sourceLineNo">1210</span>         *<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>         * @param mapWidth  the width of the map(s) to generate; cannot be changed later<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span>         */<a name="line.1213"></a>
-<span class="sourceLineNo">1214</span>        public TilingMap(int mapWidth, int mapHeight) {<a name="line.1214"></a>
-<span class="sourceLineNo">1215</span>            this(0x1337BABE1337D00DL, mapWidth, mapHeight, FastNoise.instance, 1.0);<a name="line.1215"></a>
-<span class="sourceLineNo">1216</span>        }<a name="line.1216"></a>
-<span class="sourceLineNo">1217</span><a name="line.1217"></a>
-<span class="sourceLineNo">1218</span>        /**<a name="line.1218"></a>
-<span class="sourceLineNo">1219</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1219"></a>
-<span class="sourceLineNo">1220</span>         * as north-to-south.<a name="line.1220"></a>
-<span class="sourceLineNo">1221</span>         * Takes an initial seed and the width/height of the map. The {@code initialSeed}<a name="line.1221"></a>
-<span class="sourceLineNo">1222</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.1222"></a>
-<span class="sourceLineNo">1223</span>         * The width and height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1223"></a>
-<span class="sourceLineNo">1224</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1224"></a>
-<span class="sourceLineNo">1225</span>         *<a name="line.1225"></a>
-<span class="sourceLineNo">1226</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1226"></a>
-<span class="sourceLineNo">1227</span>         * @param mapWidth    the width of the map(s) to generate; cannot be changed later<a name="line.1227"></a>
-<span class="sourceLineNo">1228</span>         * @param mapHeight   the height of the map(s) to generate; cannot be changed later<a name="line.1228"></a>
-<span class="sourceLineNo">1229</span>         */<a name="line.1229"></a>
-<span class="sourceLineNo">1230</span>        public TilingMap(long initialSeed, int mapWidth, int mapHeight) {<a name="line.1230"></a>
-<span class="sourceLineNo">1231</span>            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);<a name="line.1231"></a>
-<span class="sourceLineNo">1232</span>        }<a name="line.1232"></a>
-<span class="sourceLineNo">1233</span><a name="line.1233"></a>
-<span class="sourceLineNo">1234</span>        /**<a name="line.1234"></a>
-<span class="sourceLineNo">1235</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1235"></a>
-<span class="sourceLineNo">1236</span>         * as north-to-south. Takes an initial seed, the width/height of the map, and a noise generator (a<a name="line.1236"></a>
-<span class="sourceLineNo">1237</span>         * {@link Noise4D} implementation, which is usually {@link FastNoise#instance}. The {@code initialSeed}<a name="line.1237"></a>
-<span class="sourceLineNo">1238</span>         * parameter may or may not be used, since you can specify the seed to use when you call<a name="line.1238"></a>
-<span class="sourceLineNo">1239</span>         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom<a name="line.1239"></a>
-<span class="sourceLineNo">1240</span>         * in. Any seed supplied to the Noise4D given to this (if it takes one) will be ignored, and<a name="line.1240"></a>
-<span class="sourceLineNo">1241</span>         * {@link Noise4D#getNoiseWithSeed(double, double, double, double, long)} will be used to specify the seed many<a name="line.1241"></a>
-<span class="sourceLineNo">1242</span>         * times. The detail level, which is the {@code octaveMultiplier} parameter that can be passed to another<a name="line.1242"></a>
-<span class="sourceLineNo">1243</span>         * constructor, is always 1.0 with this constructor.<a name="line.1243"></a>
-<span class="sourceLineNo">1244</span>         *<a name="line.1244"></a>
-<span class="sourceLineNo">1245</span>         * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1245"></a>
-<span class="sourceLineNo">1246</span>         * @param mapWidth         the width of the map(s) to generate; cannot be changed later<a name="line.1246"></a>
-<span class="sourceLineNo">1247</span>         * @param mapHeight        the height of the map(s) to generate; cannot be changed later<a name="line.1247"></a>
-<span class="sourceLineNo">1248</span>         * @param noiseGenerator   an instance of a noise generator capable of 4D noise, recommended to be {@link FastNoise#instance}<a name="line.1248"></a>
-<span class="sourceLineNo">1249</span>         */<a name="line.1249"></a>
-<span class="sourceLineNo">1250</span>        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator) {<a name="line.1250"></a>
-<span class="sourceLineNo">1251</span>            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);<a name="line.1251"></a>
-<span class="sourceLineNo">1252</span>        }<a name="line.1252"></a>
-<span class="sourceLineNo">1253</span><a name="line.1253"></a>
-<span class="sourceLineNo">1254</span>        /**<a name="line.1254"></a>
-<span class="sourceLineNo">1255</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1255"></a>
-<span class="sourceLineNo">1256</span>         * as north-to-south. Takes an initial seed, the width/height of the map, and parameters for noise<a name="line.1256"></a>
-<span class="sourceLineNo">1257</span>         * generation (a {@link Noise4D} implementation, which is usually {@link FastNoise#instance}, and a<a name="line.1257"></a>
-<span class="sourceLineNo">1258</span>         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers<a name="line.1258"></a>
-<span class="sourceLineNo">1259</span>         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,<a name="line.1259"></a>
-<span class="sourceLineNo">1260</span>         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map<a name="line.1260"></a>
-<span class="sourceLineNo">1261</span>         * cannot be changed after the fact, but you can zoom in. Any seed supplied to the Noise4D given to this (if it takes one) will be ignored, and<a name="line.1261"></a>
-<span class="sourceLineNo">1262</span>         * {@link Noise4D#getNoiseWithSeed(double, double, double, double, long)} will be used to specify the seed many<a name="line.1262"></a>
-<span class="sourceLineNo">1263</span>         * times. The {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily<a name="line.1263"></a>
-<span class="sourceLineNo">1264</span>         * high if you're willing to spend much more time on generating detail only noticeable at very high zoom;<a name="line.1264"></a>
-<span class="sourceLineNo">1265</span>         * normally 1.0 is fine and may even be too high for maps that don't require zooming.<a name="line.1265"></a>
-<span class="sourceLineNo">1266</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1266"></a>
-<span class="sourceLineNo">1267</span>         * @param mapWidth the width of the map(s) to generate; cannot be changed later<a name="line.1267"></a>
-<span class="sourceLineNo">1268</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1268"></a>
-<span class="sourceLineNo">1269</span>         * @param noiseGenerator an instance of a noise generator capable of 4D noise, almost always {@link FastNoise}<a name="line.1269"></a>
-<span class="sourceLineNo">1270</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.1270"></a>
-<span class="sourceLineNo">1271</span>         */<a name="line.1271"></a>
-<span class="sourceLineNo">1272</span>        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator, double octaveMultiplier) {<a name="line.1272"></a>
-<span class="sourceLineNo">1273</span>            super(initialSeed, mapWidth, mapHeight);<a name="line.1273"></a>
-<span class="sourceLineNo">1274</span>            terrain = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);<a name="line.1274"></a>
-<span class="sourceLineNo">1275</span>            terrainRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);<a name="line.1275"></a>
-<span class="sourceLineNo">1276</span>            heat = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);<a name="line.1276"></a>
-<span class="sourceLineNo">1277</span>            moisture = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);<a name="line.1277"></a>
-<span class="sourceLineNo">1278</span>            otherRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);<a name="line.1278"></a>
-<span class="sourceLineNo">1279</span>        }<a name="line.1279"></a>
-<span class="sourceLineNo">1280</span><a name="line.1280"></a>
-<span class="sourceLineNo">1281</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.1281"></a>
-<span class="sourceLineNo">1282</span>                                  double landMod, double coolMod, long state)<a name="line.1282"></a>
-<span class="sourceLineNo">1283</span>        {<a name="line.1283"></a>
-<span class="sourceLineNo">1284</span>            boolean fresh = false;<a name="line.1284"></a>
-<span class="sourceLineNo">1285</span>            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)<a name="line.1285"></a>
-<span class="sourceLineNo">1286</span>            {<a name="line.1286"></a>
-<span class="sourceLineNo">1287</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.1287"></a>
-<span class="sourceLineNo">1288</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.1288"></a>
-<span class="sourceLineNo">1289</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.1289"></a>
-<span class="sourceLineNo">1290</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.1290"></a>
-<span class="sourceLineNo">1291</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.1291"></a>
-<span class="sourceLineNo">1292</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.1292"></a>
-<span class="sourceLineNo">1293</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.1293"></a>
-<span class="sourceLineNo">1294</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.1294"></a>
-<span class="sourceLineNo">1295</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.1295"></a>
-<span class="sourceLineNo">1296</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.1297"></a>
-<span class="sourceLineNo">1298</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>                cachedState = state;<a name="line.1299"></a>
-<span class="sourceLineNo">1300</span>                fresh = true;<a name="line.1300"></a>
-<span class="sourceLineNo">1301</span>            }<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>            rng.setState(state);<a name="line.1302"></a>
-<span class="sourceLineNo">1303</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>            int t;<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span><a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;<a name="line.1306"></a>
-<span class="sourceLineNo">1307</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1307"></a>
-<span class="sourceLineNo">1308</span><a name="line.1308"></a>
-<span class="sourceLineNo">1309</span>            double p, q,<a name="line.1309"></a>
-<span class="sourceLineNo">1310</span>                    ps, pc,<a name="line.1310"></a>
-<span class="sourceLineNo">1311</span>                    qs, qc,<a name="line.1311"></a>
-<span class="sourceLineNo">1312</span>                    h, temp,<a name="line.1312"></a>
-<span class="sourceLineNo">1313</span>                    i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,<a name="line.1313"></a>
-<span class="sourceLineNo">1314</span>                    xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;<a name="line.1314"></a>
-<span class="sourceLineNo">1315</span>            double[] trigTable = new double[width &lt;&lt; 1];<a name="line.1315"></a>
-<span class="sourceLineNo">1316</span>            for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.1316"></a>
-<span class="sourceLineNo">1317</span>                p = xPos * i_w;<a name="line.1317"></a>
-<span class="sourceLineNo">1318</span>                trigTable[x&lt;&lt;1]   = NumberTools.sin(p);<a name="line.1318"></a>
-<span class="sourceLineNo">1319</span>                trigTable[x&lt;&lt;1|1] = NumberTools.cos(p);<a name="line.1319"></a>
-<span class="sourceLineNo">1320</span>            }<a name="line.1320"></a>
-<span class="sourceLineNo">1321</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1321"></a>
-<span class="sourceLineNo">1322</span>                q = yPos * i_h;<a name="line.1322"></a>
-<span class="sourceLineNo">1323</span>                qs = NumberTools.sin(q);<a name="line.1323"></a>
-<span class="sourceLineNo">1324</span>                qc = NumberTools.cos(q);<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>                for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span>                    ps = trigTable[xt++];//NumberTools.sin(p);<a name="line.1326"></a>
-<span class="sourceLineNo">1327</span>                    pc = trigTable[xt++];//NumberTools.cos(p);<a name="line.1327"></a>
-<span class="sourceLineNo">1328</span>                    h = terrain.getNoiseWithSeed(pc +<a name="line.1328"></a>
-<span class="sourceLineNo">1329</span>                                    terrainRidged.getNoiseWithSeed(pc, ps, qc, qs, seedA + seedB),<a name="line.1329"></a>
-<span class="sourceLineNo">1330</span>                            ps, qc, qs, seedA) + landModifier - 1.0;<a name="line.1330"></a>
-<span class="sourceLineNo">1331</span>                    heightData[x][y] = h;<a name="line.1331"></a>
+<span class="sourceLineNo">1185</span>//        protected static final double terrainFreq = 1.175, terrainRidgedFreq = 1.3, heatFreq = 2.3, moistureFreq = 2.4, otherFreq = 3.5;<a name="line.1185"></a>
+<span class="sourceLineNo">1186</span>        protected static final double terrainFreq = 0.95, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;<a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>        private double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span><a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>        public final Noise4D terrain, terrainRidged, heat, moisture, otherRidged;<a name="line.1191"></a>
+<span class="sourceLineNo">1192</span><a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>        /**<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1194"></a>
+<span class="sourceLineNo">1195</span>         * as north-to-south. Always makes a 256x256 map.<a name="line.1195"></a>
+<span class="sourceLineNo">1196</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1196"></a>
+<span class="sourceLineNo">1197</span>         * If you were using {@link TilingMap#TilingMap(long, int, int, Noise4D, double)}, then this would be the<a name="line.1197"></a>
+<span class="sourceLineNo">1198</span>         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0}.<a name="line.1198"></a>
+<span class="sourceLineNo">1199</span>         */<a name="line.1199"></a>
+<span class="sourceLineNo">1200</span>        public TilingMap() {<a name="line.1200"></a>
+<span class="sourceLineNo">1201</span>            this(0x1337BABE1337D00DL, 256, 256, FastNoise.instance, 1.0);<a name="line.1201"></a>
+<span class="sourceLineNo">1202</span>        }<a name="line.1202"></a>
+<span class="sourceLineNo">1203</span><a name="line.1203"></a>
+<span class="sourceLineNo">1204</span>        /**<a name="line.1204"></a>
+<span class="sourceLineNo">1205</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1205"></a>
+<span class="sourceLineNo">1206</span>         * as north-to-south.<a name="line.1206"></a>
+<span class="sourceLineNo">1207</span>         * Takes only the width/height of the map. The initial seed is set to the same large long<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>         * height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1210"></a>
+<span class="sourceLineNo">1211</span>         *<a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>         * @param mapWidth  the width of the map(s) to generate; cannot be changed later<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1213"></a>
+<span class="sourceLineNo">1214</span>         */<a name="line.1214"></a>
+<span class="sourceLineNo">1215</span>        public TilingMap(int mapWidth, int mapHeight) {<a name="line.1215"></a>
+<span class="sourceLineNo">1216</span>            this(0x1337BABE1337D00DL, mapWidth, mapHeight, FastNoise.instance, 1.0);<a name="line.1216"></a>
+<span class="sourceLineNo">1217</span>        }<a name="line.1217"></a>
+<span class="sourceLineNo">1218</span><a name="line.1218"></a>
+<span class="sourceLineNo">1219</span>        /**<a name="line.1219"></a>
+<span class="sourceLineNo">1220</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1220"></a>
+<span class="sourceLineNo">1221</span>         * as north-to-south.<a name="line.1221"></a>
+<span class="sourceLineNo">1222</span>         * Takes an initial seed and the width/height of the map. The {@code initialSeed}<a name="line.1222"></a>
+<span class="sourceLineNo">1223</span>         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.<a name="line.1223"></a>
+<span class="sourceLineNo">1224</span>         * The width and height of the map cannot be changed after the fact, but you can zoom in.<a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.<a name="line.1225"></a>
+<span class="sourceLineNo">1226</span>         *<a name="line.1226"></a>
+<span class="sourceLineNo">1227</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1227"></a>
+<span class="sourceLineNo">1228</span>         * @param mapWidth    the width of the map(s) to generate; cannot be changed later<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span>         * @param mapHeight   the height of the map(s) to generate; cannot be changed later<a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>         */<a name="line.1230"></a>
+<span class="sourceLineNo">1231</span>        public TilingMap(long initialSeed, int mapWidth, int mapHeight) {<a name="line.1231"></a>
+<span class="sourceLineNo">1232</span>            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);<a name="line.1232"></a>
+<span class="sourceLineNo">1233</span>        }<a name="line.1233"></a>
+<span class="sourceLineNo">1234</span><a name="line.1234"></a>
+<span class="sourceLineNo">1235</span>        /**<a name="line.1235"></a>
+<span class="sourceLineNo">1236</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1236"></a>
+<span class="sourceLineNo">1237</span>         * as north-to-south. Takes an initial seed, the width/height of the map, and a noise generator (a<a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>         * {@link Noise4D} implementation, which is usually {@link FastNoise#instance}. The {@code initialSeed}<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span>         * parameter may or may not be used, since you can specify the seed to use when you call<a name="line.1239"></a>
+<span class="sourceLineNo">1240</span>         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact, but you can zoom<a name="line.1240"></a>
+<span class="sourceLineNo">1241</span>         * in. Any seed supplied to the Noise4D given to this (if it takes one) will be ignored, and<a name="line.1241"></a>
+<span class="sourceLineNo">1242</span>         * {@link Noise4D#getNoiseWithSeed(double, double, double, double, long)} will be used to specify the seed many<a name="line.1242"></a>
+<span class="sourceLineNo">1243</span>         * times. The detail level, which is the {@code octaveMultiplier} parameter that can be passed to another<a name="line.1243"></a>
+<span class="sourceLineNo">1244</span>         * constructor, is always 1.0 with this constructor.<a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>         *<a name="line.1245"></a>
+<span class="sourceLineNo">1246</span>         * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1246"></a>
+<span class="sourceLineNo">1247</span>         * @param mapWidth         the width of the map(s) to generate; cannot be changed later<a name="line.1247"></a>
+<span class="sourceLineNo">1248</span>         * @param mapHeight        the height of the map(s) to generate; cannot be changed later<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>         * @param noiseGenerator   an instance of a noise generator capable of 4D noise, recommended to be {@link FastNoise#instance}<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>         */<a name="line.1250"></a>
+<span class="sourceLineNo">1251</span>        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator) {<a name="line.1251"></a>
+<span class="sourceLineNo">1252</span>            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);<a name="line.1252"></a>
+<span class="sourceLineNo">1253</span>        }<a name="line.1253"></a>
+<span class="sourceLineNo">1254</span><a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>        /**<a name="line.1255"></a>
+<span class="sourceLineNo">1256</span>         * Constructs a concrete WorldMapGenerator for a map that can be used as a tiling, wrapping east-to-west as well<a name="line.1256"></a>
+<span class="sourceLineNo">1257</span>         * as north-to-south. Takes an initial seed, the width/height of the map, and parameters for noise<a name="line.1257"></a>
+<span class="sourceLineNo">1258</span>         * generation (a {@link Noise4D} implementation, which is usually {@link FastNoise#instance}, and a<a name="line.1258"></a>
+<span class="sourceLineNo">1259</span>         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers<a name="line.1259"></a>
+<span class="sourceLineNo">1260</span>         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,<a name="line.1260"></a>
+<span class="sourceLineNo">1261</span>         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map<a name="line.1261"></a>
+<span class="sourceLineNo">1262</span>         * cannot be changed after the fact, but you can zoom in. Any seed supplied to the Noise4D given to this (if it takes one) will be ignored, and<a name="line.1262"></a>
+<span class="sourceLineNo">1263</span>         * {@link Noise4D#getNoiseWithSeed(double, double, double, double, long)} will be used to specify the seed many<a name="line.1263"></a>
+<span class="sourceLineNo">1264</span>         * times. The {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily<a name="line.1264"></a>
+<span class="sourceLineNo">1265</span>         * high if you're willing to spend much more time on generating detail only noticeable at very high zoom;<a name="line.1265"></a>
+<span class="sourceLineNo">1266</span>         * normally 1.0 is fine and may even be too high for maps that don't require zooming.<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate<a name="line.1267"></a>
+<span class="sourceLineNo">1268</span>         * @param mapWidth the width of the map(s) to generate; cannot be changed later<a name="line.1268"></a>
+<span class="sourceLineNo">1269</span>         * @param mapHeight the height of the map(s) to generate; cannot be changed later<a name="line.1269"></a>
+<span class="sourceLineNo">1270</span>         * @param noiseGenerator an instance of a noise generator capable of 4D noise, almost always {@link FastNoise}<a name="line.1270"></a>
+<span class="sourceLineNo">1271</span>         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal<a name="line.1271"></a>
+<span class="sourceLineNo">1272</span>         */<a name="line.1272"></a>
+<span class="sourceLineNo">1273</span>        public TilingMap(long initialSeed, int mapWidth, int mapHeight, final Noise4D noiseGenerator, double octaveMultiplier) {<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span>            super(initialSeed, mapWidth, mapHeight);<a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>            terrain = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 8), terrainFreq);<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>            terrainRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainRidgedFreq);<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>            heat = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq);<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>            moisture = new Noise.InverseLayered4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq);<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>            otherRidged = new Noise.Ridged4D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>        }<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span><a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>                                  double landMod, double coolMod, long state)<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span>        {<a name="line.1284"></a>
+<span class="sourceLineNo">1285</span>            boolean fresh = false;<a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>            {<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>                minHeight = Double.POSITIVE_INFINITY;<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>                maxHeight = Double.NEGATIVE_INFINITY;<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>                minHeat0 = Double.POSITIVE_INFINITY;<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>                maxHeat0 = Double.NEGATIVE_INFINITY;<a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>                minHeat1 = Double.POSITIVE_INFINITY;<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>                maxHeat1 = Double.NEGATIVE_INFINITY;<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span>                minHeat = Double.POSITIVE_INFINITY;<a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>                maxHeat = Double.NEGATIVE_INFINITY;<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>                minWet0 = Double.POSITIVE_INFINITY;<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>                maxWet0 = Double.NEGATIVE_INFINITY;<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>                minWet = Double.POSITIVE_INFINITY;<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>                maxWet = Double.NEGATIVE_INFINITY;<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>                cachedState = state;<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>                fresh = true;<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span>            }<a name="line.1302"></a>
+<span class="sourceLineNo">1303</span>            rng.setState(state);<a name="line.1303"></a>
+<span class="sourceLineNo">1304</span>            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();<a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>            int t;<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span><a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>            landModifier = (landMod &lt;= 0) ? rng.nextDouble(0.1875) + 0.99 : landMod;<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>            coolingModifier = (coolMod &lt;= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span><a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>            double p, q,<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>                    ps, pc,<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>                    qs, qc,<a name="line.1312"></a>
+<span class="sourceLineNo">1313</span>                    h, temp,<a name="line.1313"></a>
+<span class="sourceLineNo">1314</span>                    i_w = 6.283185307179586 / width, i_h = 6.283185307179586 / height,<a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>                    xPos = startX, yPos = startY, i_uw = usedWidth / (double)width, i_uh = usedHeight / (double)height;<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>            double[] trigTable = new double[width &lt;&lt; 1];<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>            for (int x = 0; x &lt; width; x++, xPos += i_uw) {<a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>                p = xPos * i_w;<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>                trigTable[x&lt;&lt;1]   = NumberTools.sin(p);<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>                trigTable[x&lt;&lt;1|1] = NumberTools.cos(p);<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>            }<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>            for (int y = 0; y &lt; height; y++, yPos += i_uh) {<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>                q = yPos * i_h;<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>                qs = NumberTools.sin(q);<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>                qc = NumberTools.cos(q);<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>                for (int x = 0, xt = 0; x &lt; width; x++) {<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span>                    ps = trigTable[xt++];//NumberTools.sin(p);<a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>                    pc = trigTable[xt++];//NumberTools.cos(p);<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>                    heightData[x][y] = (h = terrain.getNoiseWithSeed(pc +<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>                                    terrainRidged.getNoiseWithSeed(pc, ps, qc, qs,seedB - seedA) * 0.25,<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>                            ps, qc, qs, seedA) + landModifier - 1.0);<a name="line.1331"></a>
 <span class="sourceLineNo">1332</span>                    heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps, qc<a name="line.1332"></a>
 <span class="sourceLineNo">1333</span>                                    + otherRidged.getNoiseWithSeed(pc, ps, qc, qs, seedB + seedC)<a name="line.1333"></a>
 <span class="sourceLineNo">1334</span>                            , qs, seedB));<a name="line.1334"></a>
