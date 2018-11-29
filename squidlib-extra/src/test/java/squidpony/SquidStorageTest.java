@@ -100,11 +100,13 @@ public class SquidStorageTest extends ApplicationAdapter {
             noCompression.json.setElementType(TestClass.class, "em", String.class);
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme");
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new LinnormRNG(75L), 75, 75);
+            GreasedRegion grease = new GreasedRegion(75, 75);
+            grease.insertRectangle(10, 10, 55, 55).removeRectangle(20, 20, 45, 45);
             String text = randomLanguage.sentence(srng.copy(), 5, 8);
             ProbabilityTable<String> table = new ProbabilityTable<>("I heard you like JSON...");
             table.add("well", 1).add("this", 2).add("ain't", 3).add("real", 4).add("JSON!", 5);
             //String text = table.random();
+            Coord point = Coord.get(42, 23);
 
             noCompression.put("rng", srng);
             noCompression.put("language", randomLanguage);
@@ -116,7 +118,8 @@ public class SquidStorageTest extends ApplicationAdapter {
             noCompression.put("enum_map", em);
             noCompression.put("empty_enum_map", empty);
             noCompression.put("empty_eom", empty2);
-
+            noCompression.put("coord", point);
+            
             yesCompression.put("rng", srng);
             yesCompression.put("language", randomLanguage);
             yesCompression.put("generated", text);
@@ -127,6 +130,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             yesCompression.put("enum_map", em);
             yesCompression.put("empty_enum_map", empty);
             yesCompression.put("empty_eom", empty2);
+            yesCompression.put("coord", point);
 
             System.out.println(text);
 
@@ -156,6 +160,9 @@ public class SquidStorageTest extends ApplicationAdapter {
             System.out.println(yesCompression.get("Compressed", "empty_enum_map", EnumMap.class));
             System.out.println(empty2);
             System.out.println(yesCompression.get("Compressed", "empty_eom", EnumOrderedMap.class));
+            System.out.println(point);
+            System.out.println(yesCompression.get("Compressed", "coord", Coord.class));
+            System.out.println(yesCompression.get("Compressed", "grease", GreasedRegion.class).andNot(grease).isEmpty());
             yesCompression.preferences.clear();
             yesCompression.preferences.flush();
             Gdx.app.exit();
