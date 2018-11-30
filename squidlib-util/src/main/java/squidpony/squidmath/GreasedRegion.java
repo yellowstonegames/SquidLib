@@ -1080,8 +1080,8 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     data[a] &= yEndMask;
                 }
             }
-
         }
+        tallied = false;
         return this;
     }
 
@@ -1130,6 +1130,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         counts = new int[width * ySections];
+        tallied = false;
     }
 
     /**
@@ -1155,7 +1156,11 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
         final int ySections2 = (dataHeight + 63) >> 6;
         if(ySections2 == 0)
+        {
+            counts = new int[0];
+            tallied = false;
             return;
+        }
         if(ySections == 1) {
             System.arraycopy(data2, 0, data, 0, dataWidth);
         }
@@ -1179,6 +1184,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             }
         }
         counts = new int[width * ySections];
+        tallied = false;
     }
     /**
      * Primarily for internal use, this method copies data2 into the internal long array the new GreasedRegion will
