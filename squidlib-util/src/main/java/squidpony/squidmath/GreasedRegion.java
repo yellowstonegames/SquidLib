@@ -4392,7 +4392,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         int[] xCounts = new int[width];
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                t = data[x * ySections + s];
+                t = data[x * ySections + s] | 0L;
                 if (t != 0) {
                     tmp = Long.bitCount(t);
                     xCounts[x] += tmp;
@@ -4416,9 +4416,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         yTarget = (int)(yTotal * yFraction);
 
         for (int s = 0, y = 0; s < ySections; s++) {
-            t = data[bestX * ySections + s];
-            for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
-                if((t & cy) != 0 && --yTarget < 0)
+            t = data[bestX * ySections + s] | 0L;
+            for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
+                if((t & (cy | 0L)) != 0 && --yTarget < 0)
                 {
                     return Coord.get(bestX, y);
                 }
@@ -4433,12 +4433,12 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         int[][] next = ArrayTools.fill(defaultValue, width, height);
         if(basis == null || basis.length <= 0 || basis[0] == null || basis[0].length <= 0)
             return next;
-        int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX = -1, oX = basis.length, oY = basis[0].length, ao;
+        int tmp, xTotal = 0, yTotal = 0, xTarget, yTarget, bestX, oX = basis.length, oY = basis[0].length, ao;
         long t;
         int[] xCounts = new int[width];
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                t = data[x * ySections + s];
+                t = data[x * ySections + s] | 0L;
                 if (t != 0) {
                     tmp = Long.bitCount(t);
                     xCounts[x] += tmp;
@@ -4461,9 +4461,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                         yTotal = xCounts[x];
                         yTarget = yTotal * aY / oY;
                         for (int s = 0, y = 0; s < ySections; s++) {
-                            t = data[bestX * ySections + s];
-                            for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
-                                if((t & cy) != 0 && --yTarget < 0)
+                            t = data[bestX * ySections + s] | 0L;
+                            for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
+                                if((t & (cy|0L)) != 0 && --yTarget < 0)
                                 {
                                     next[bestX][y] = ao;
                                     continue CELL_WISE;
@@ -4498,7 +4498,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         int[] xCounts = new int[width];
         for (int s = 0; s < ySections; s++) {
             for (int x = 0; x < width; x++) {
-                t = data[x * ySections + s];
+                t = data[x * ySections + s] | 0L;
                 if (t != 0) {
                     tmp = Long.bitCount(t);
                     xCounts[x] += tmp;
@@ -4524,9 +4524,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             yTarget = (int) (yTotal * vec[1]);
 
             for (int s = 0, y = 0; s < ySections; s++) {
-                t = data[bestX * ySections + s];
-                for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
-                    if ((t & cy) != 0 && --yTarget < 0) {
+                t = data[bestX * ySections + s] | 0L;
+                for (long cy = 1L; cy != 0L && y < height; y++, cy <<= 1) {
+                    if ((t & (cy|0L)) != 0 && --yTarget < 0) {
                         vl[i] = Coord.get(bestX, y);
                         continue EACH_SOBOL;
                     }
@@ -4568,7 +4568,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         int[] xCounts = new int[width];
         for (int x = 0; x < width; x++) {
             for (int s = 0; s < ySections; s++) {
-                t = data[x * ySections + s];
+                t = data[x * ySections + s] | 0L;
                 if (t != 0) {
                     tmp = Long.bitCount(t);
                     xCounts[x] += tmp;
@@ -4597,9 +4597,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             yTarget = (int) (yTotal * vec[1]);
 
             for (int s = 0, y = 0; s < ySections; s++) {
-                t = data[bestX * ySections + s];
+                t = data[bestX * ySections + s] | 0L;
                 for (long cy = 1; cy != 0 && y < height; y++, cy <<= 1) {
-                    if ((t & cy) != 0 && --yTarget < 0) {
+                    if ((t & (cy|0L)) != 0 && --yTarget < 0) {
                         vl[i] = Coord.get(bestX, y);
                         continue EACH_SOBOL;
                     }
@@ -4677,9 +4677,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
                     if ((ic = counts[x * ySections + s]) > tmp) {
-                        t = data[x * ySections + s];
+                        t = data[x * ySections + s]|0L;
                         for (--ic; t != 0; ic--) {
-                            w = t & -t;
+                            w = NumberTools.lowestOneBit(t);
                             if (ic == tmp) {
                                 vl[i] = Coord.get(x, (s << 6) | Long.bitCount(w - 1));
                                 continue EACH_QUASI;
@@ -4770,7 +4770,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         ALL:
         for (int s = 0; s < ySections; s++) {
             for (int x = 0; x < width; x++) {
-                if ((t = data[x * ySections + s]) != 0) {
+                if ((t = data[x * ySections + s]|0L) != 0L) {
                     w = NumberTools.lowestOneBit(t);
                     while (w != 0) {
                         if (run++ == order[idx]) {
@@ -5372,9 +5372,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         for (int s = 0; s < ySections; s++) {
             for (int x = 0; x < width; x++) {
                 if ((ct = counts[x * ySections + s]) > tmp) {
-                    t = data[x * ySections + s];
+                    t = data[x * ySections + s] | 0L;
                     for (--ct; t != 0; ct--) {
-                        w = t & -t;
+                        w = NumberTools.lowestOneBit(t);
                         if (ct == tmp)
                             return Coord.get(x, (s << 6) | Long.bitCount(w-1));
                         t ^= w;
@@ -6557,7 +6557,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     if ((ic = counts[x * ySections + s]) > tmp) {
                         t = data[x * ySections + s];
                         for (--ic; t != 0; ic--) {
-                            w = t & -t;
+                            w = NumberTools.lowestOneBit(t);
                             if (ic == tmp)
                             {
                                 vl[i] = Coord.get(x, (s << 6) | Long.bitCount(w-1));
@@ -6595,9 +6595,9 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             for (int s = 0; s < ySections; s++) {
                 for (int x = 0; x < width; x++) {
                     if ((c = counts[x * ySections + s]) > index) {
-                        t = data[x * ySections + s];
+                        t = data[x * ySections + s] | 0L;
                         for (--c; t != 0; c--) {
-                            w = t & -t;
+                            w = NumberTools.lowestOneBit(t);
                             if (c == index)
                             {
                                 index++;
