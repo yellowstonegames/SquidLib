@@ -673,7 +673,7 @@ public class PNG8 implements Disposable {
                     state += (color + 0x41C64E6D) ^ color >>> 7;
                     state = (state << 21 | state >>> 11);
                     xi1 = randomXi(state);
-                    state = (state << 15 | state >>> 17) ^ 0x9E3779B9;
+                    state ^= (state << 15 | state >>> 17) + 0x9E3779B9;
                     xi2 = randomXi(state);
                     if(px < w - 1)
                     {
