@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.IntIntMap;
-import com.badlogic.gdx.utils.NumberUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -134,11 +133,12 @@ public class PaletteReducer {
      * @return the difference between the given colors, as a positive int
      */
     public static int difference(final int color1, final int color2) {
-        int rmean = ((color1 >>> 24) + (color2 >>> 24)) >> 1;
+        int rmean = ((color1 >>> 24) + (color2 >>> 24));
         int r = (color1 >>> 24) - (color2 >>> 24);
         int g = (color1 >>> 16 & 0xFF) - (color2 >>> 16 & 0xFF) << 1;
         int b = (color1 >>> 8 & 0xFF) - (color2 >>> 8 & 0xFF);
-        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
+//        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
+        return (((1024 + rmean) * r * r) >> 9) + g * g + (((767 - rmean) * b * b) >> 8);
     }
 
     /**
@@ -155,11 +155,11 @@ public class PaletteReducer {
 //        r2 = (r2 << 3 | r2 >>> 2);
 //        g2 = (g2 << 3 | g2 >>> 2);
 //        b2 = (b2 << 3 | b2 >>> 2);
-        final int rmean = ((color1 >>> 24) + r2) >> 1,
+        final int rmean = ((color1 >>> 24) + r2),
                 r = (color1 >>> 24) - r2,
                 g = (color1 >>> 16 & 0xFF) - g2 << 1,
                 b = (color1 >>> 8 & 0xFF) - b2;
-        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
+        return (((1024 + rmean) * r * r) >> 9) + g * g + (((767 - rmean) * b * b) >> 8);
     }
 
     /**
@@ -175,25 +175,27 @@ public class PaletteReducer {
      * @return the difference between the given colors, as a positive int
      */
     public static int difference(final int r1, final int r2, final int g1, final int g2, final int b1, final int b2) {
-        final int rmean = (r1 + r2) >> 1,
+        final int rmean = (r1 + r2),
                 r = r1 - r2,
                 g = g1 - g2 << 1,
                 b = b1 - b2;
-        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
+//        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
+        return (((1024 + rmean) * r * r) >> 9) + g * g + (((767 - rmean) * b * b) >> 8);
     }
 
     /**
-     * Gets a pseudo-random float between -0.3f and 0.7f, determined by the lower 23 bits and upper 2 bits of seed.
-     * The average value this returns will be less than 0f, despite its upper bound being further from 0 than its
-     * lower bound, because values between 0.2f and 0.7f are a third as likely to appear as values less than 0.125f,
-     * and even for values less than 0.2f, the range between -0.05f and 0.2f is a third as likely as the range from
-     * -0.3f to 0.05f. This introduced bias can be useful for adding some order to otherwise-random dithering.
-     * @param seed any int, but only the least-significant 23 bits will be used
-     * @return a float between -0.3f and 0.7f, weighted toward the lower end of the range
+     * Gets a pseudo-random float between -0.65625f and 0.65625f, determined by the upper 23 bits of seed.
+     * This currently uses a uniform distribution for its output, but earlier versions intentionally used a non-uniform
+     * one; a non-uniform distribution can sometimes work well but is very dependent on how error propagates through a
+     * dithered image, and in bad cases can produce bands of bright mistakenly-error-adjusted colors.
+     * @param seed any int, but only the most-significant 23 bits will be used
+     * @return a float between -0.65625f and 0.65625f, with fairly uniform distribution as long as seed is uniform
      */
     public static float randomXi(int seed)
     {
-        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & ((seed >>> 11 & 0x600000)|0x1FFFFF)) | 0x3f800000) - 1.3f;
+        return ((seed >> 9) * 0x1.5p-23f);
+//        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & ((seed >>> 11 & 0x400000)|0x3FFFFF)) | 0x3f800000) - 1.4f;
+//        return NumberUtils.intBitsToFloat((seed & 0x7FFFFF & ((seed >>> 11 & 0x600000)|0x1FFFFF)) | 0x3f800000) - 1.3f;
     }
 
     /**
@@ -720,8 +722,9 @@ public class PaletteReducer {
      * subcycle generators</a> (which are usually paired, but that isn't the case here), but because it's
      * constantly being adjusted by additional colors as input, it may be more comparable to a rolling hash. This uses
      * {@link #randomXi(int)} to get the parameter in Hu's paper that's marked as {@code aξ}, but our randomXi() is
-     * adjusted so it has a higher range into positive values but produces them less frequently than negative ones. That
-     * quirk ends up getting rather high quality for this method.
+     * adjusted so it has half the range (from -0.5 to 0.5 instead of -1 to 1). That quirk ends up getting rather high
+     * quality for this method, though it may have some grainy appearance in certain zones with mid-level intensity (an
+     * acknowledged issue with the type of noise-based approach Hu uses, and not a very severe problem).
      * @param pixmap a Pixmap that will be modified in place
      * @return the given Pixmap, for chaining
      */
@@ -791,7 +794,7 @@ public class PaletteReducer {
                     state += (color + 0x41C64E6D) ^ color >>> 7;
                     state = (state << 21 | state >>> 11);
                     xi1 = randomXi(state);
-                    state = (state << 15 | state >>> 17) ^ 0x9E3779B9;
+                    state ^= (state << 15 | state >>> 17) + 0x9E3779B9;
                     xi2 = randomXi(state);
 
 //                    state += rdiff ^ rdiff << 9;
