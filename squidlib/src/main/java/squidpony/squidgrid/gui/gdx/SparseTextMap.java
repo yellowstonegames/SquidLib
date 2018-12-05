@@ -21,6 +21,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import squidpony.StringKit;
 import squidpony.squidmath.HashCommon;
 import squidpony.squidmath.NumberTools;
 
@@ -37,7 +38,6 @@ import java.util.NoSuchElementException;
  * @author Tommy Ettinger
  */
 public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
-    //private static final int PRIME1 = 0xbe1f14b1;
     private static final int PRIME2 = 0x1EBF69;//0xb4b82e39;
     private static final int PRIME3 = 0x1A3491;//0xced1c241;
     private static final int EMPTY = 0;
@@ -818,7 +818,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         return defaultValue;
     }
 
-    void removeStashIndex(int index) {
+    private void removeStashIndex(int index) {
         // If the removed location was not last, move the last tuple to the removed location.
         stashSize--;
         int lastIndex = capacity + stashSize;
@@ -986,7 +986,8 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
     public int hashCode() {
         int h = 0;
         if (hasZeroValue) {
-            h += zeroChar * 31 + NumberTools.floatToIntBits(zeroFloat);
+            // 0x1FFF is a Mersenne prime; multiplication by powers of 2 plus or minus 1 is often optimized
+            h = NumberTools.floatToIntBits(zeroFloat) ^ (zeroChar * 0x1FFF);
         }
         int[] keyTable = this.keyTable;
         char[] charTable = this.charValueTable;
@@ -994,9 +995,8 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         for (int i = 0, n = capacity + stashSize; i < n; i++) {
             int key = keyTable[i];
             if (key != EMPTY) {
-                h += key * 421;
-                h += charTable[i] * 31;
-                h += NumberTools.floatToIntBits(floatTable[i]);
+                h += key * 31 + NumberTools.floatToIntBits(floatTable[i]);
+                h ^= charTable[i] * 0x1FFF;
             }
         }
         return h;
@@ -1034,19 +1034,19 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
         float[] floatTable = this.floatValueTable;
         int i = keyTable.length;
         if (hasZeroValue) {
-            buffer.append("0=").append(zeroChar).append(',').append(zeroFloat);
+            StringKit.appendHex(buffer.append("0=").append(zeroChar).append(','), zeroFloat);
         } else {
             while (i-- > 0) {
                 int key = keyTable[i];
                 if (key == EMPTY) continue;
-                buffer.append(key).append('=').append(charTable[i]).append(',').append(floatTable[i]);
+                StringKit.appendHex(buffer.append(key).append('=').append(charTable[i]).append(','), floatTable[i]);
                 break;
             }
         }
         while (i-- > 0) {
             int key = keyTable[i];
             if (key == EMPTY) continue;
-            buffer.append(", ").append(key).append('=').append(charTable[i]).append(',').append(floatTable[i]);
+            StringKit.appendHex(buffer.append("; ").append(key).append('=').append(charTable[i]).append(','), floatTable[i]);
         }
         buffer.append('}');
         return buffer.toString();
