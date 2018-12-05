@@ -378,29 +378,109 @@ public class StringKit {
                     62, 0, 0, 0, 63, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 0, 0, 0, 64, 0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
                     0, 0, 0, 0, 0, 0, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 0, 0, 0, 0, 0};
 
+    private static StringBuilder hexBuilder = new StringBuilder(16).append("0000000000000000");
     public static String hex(long number) {
-        String h = Long.toHexString(number);
-        return mask16.substring(0, 16 - h.length()) + h;
+        for (int i = 0; i < 16; i++) {
+            hexBuilder.setCharAt(15 - i, hexDigits[(int)(number >> (i << 2) & 15)]);
+        }
+        return hexBuilder.toString();
+    }
+
+    public static String hex(double number) {
+        // avoids creating temporary long values, which can be slow on GWT
+        int h = NumberTools.doubleToLowIntBits(number);
+        for (int i = 0; i < 8; i++) {
+            hexBuilder.setCharAt(15 - i, hexDigits[(h >> (i << 2) & 15)]);
+        }
+        h = NumberTools.doubleToHighIntBits(number);
+        for (int i = 0; i < 8; i++) {
+            hexBuilder.setCharAt(7 - i, hexDigits[(h >> (i << 2) & 15)]);
+        }
+        return hexBuilder.toString();
     }
 
     public static String hex(int number) {
-        String h = Integer.toHexString(number);
-        return mask8.substring(0, 8 - h.length()) + h;
+        for (int i = 0; i < 8; i++) {
+            hexBuilder.setCharAt(7 - i, hexDigits[(number >> (i << 2) & 15)]);
+        }
+        return hexBuilder.substring(0, 8);
+    }
+    
+    public static String hex(float number) {
+        final int h = NumberTools.floatToIntBits(number);
+        for (int i = 0; i < 8; i++) {
+            hexBuilder.setCharAt(7 - i, hexDigits[(h >> (i << 2) & 15)]);
+        }
+        return hexBuilder.substring(0, 8);
     }
 
     public static String hex(short number) {
-        String h = Integer.toHexString(number & 0xffff);
-        return mask8.substring(4, 8 - h.length()) + h;
+        for (int i = 0; i < 4; i++) {
+            hexBuilder.setCharAt(3 - i, hexDigits[(number >> (i << 2) & 15)]);
+        }
+        return hexBuilder.substring(0, 4);
     }
 
     public static String hex(char number) {
-        String h = Integer.toHexString(number & 0xffff);
-        return mask8.substring(4, 8 - h.length()) + h;
+        for (int i = 0; i < 4; i++) {
+            hexBuilder.setCharAt(3 - i, hexDigits[(number >> (i << 2) & 15)]);
+        }
+        return hexBuilder.substring(0, 4);
     }
 
     public static String hex(byte number) {
-        String h = Integer.toHexString(number & 0xff);
-        return mask8.substring(6, 8 - h.length()) + h;
+        hexBuilder.setCharAt(0, hexDigits[(number >> 4 & 15)]);
+        hexBuilder.setCharAt(1, hexDigits[(number & 15)]);
+        return hexBuilder.substring(0, 2);
+    }
+
+    public static StringBuilder appendHex(StringBuilder builder, long number){
+        for (int i = 60; i >= 0; i -= 4) {
+            builder.append(hexDigits[(int)(number >> i & 15)]);
+        }
+        return builder;
+    }
+    public static StringBuilder appendHex(StringBuilder builder, double number){
+        // avoids creating temporary long values, which can be slow on GWT
+        int h = NumberTools.doubleToHighIntBits(number);
+        for (int i = 28; i >= 0; i -= 4) {
+            builder.append(hexDigits[(h >> i & 15)]);
+        }
+        h = NumberTools.doubleToLowIntBits(number);
+        for (int i = 28; i >= 0; i -= 4) {
+            builder.append(hexDigits[(h >> i & 15)]);
+        }
+        return builder;
+    }
+    public static StringBuilder appendHex(StringBuilder builder, int number){
+        for (int i = 28; i >= 0; i -= 4) {
+            builder.append(hexDigits[(number >> i & 15)]);
+        }
+        return builder;
+    }
+    public static StringBuilder appendHex(StringBuilder builder, float number){
+        final int h = NumberTools.floatToIntBits(number);
+        for (int i = 28; i >= 0; i -= 4) {
+            builder.append(hexDigits[(h >> i & 15)]);
+        }
+        return builder;
+    }
+    public static StringBuilder appendHex(StringBuilder builder, short number){
+        for (int i = 12; i >= 0; i -= 4) {
+            builder.append(hexDigits[(number >> i & 15)]);
+        }
+        return builder;
+    }
+    public static StringBuilder appendHex(StringBuilder builder, char number){
+        for (int i = 12; i >= 0; i -= 4) {
+            builder.append(hexDigits[(number >> i & 15)]);
+        }
+        return builder;
+    }
+    public static StringBuilder appendHex(StringBuilder builder, byte number){
+        builder.append(hexDigits[(number >> 4 & 15)]);
+        builder.append(hexDigits[(number & 15)]);
+        return builder;
     }
 
     public static String hex(long[] numbers) {
@@ -408,7 +488,17 @@ public class StringKit {
         if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 4);
         for (int i = 0; i < len; i++) {
-            sb.append(hex(numbers[i]));
+            appendHex(sb, numbers[i]);
+        }
+        return sb.toString();
+    }
+
+    public static String hex(double[] numbers) {
+        int len;
+        if (numbers == null || (len = numbers.length) <= 0) return "";
+        StringBuilder sb = new StringBuilder(numbers.length << 4);
+        for (int i = 0; i < len; i++) {
+            appendHex(sb, numbers[i]);
         }
         return sb.toString();
     }
@@ -418,7 +508,18 @@ public class StringKit {
         if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 3);
         for (int i = 0; i < len; i++) {
-            sb.append(hex(numbers[i]));
+            appendHex(sb, numbers[i]);
+        }
+        return sb.toString();
+    }
+
+
+    public static String hex(float[] numbers) {
+        int len;
+        if (numbers == null || (len = numbers.length) <= 0) return "";
+        StringBuilder sb = new StringBuilder(numbers.length << 3);
+        for (int i = 0; i < len; i++) {
+            appendHex(sb, numbers[i]);
         }
         return sb.toString();
     }
@@ -428,7 +529,7 @@ public class StringKit {
         if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 2);
         for (int i = 0; i < len; i++) {
-            sb.append(hex(numbers[i]));
+            appendHex(sb, numbers[i]);
         }
         return sb.toString();
     }
@@ -438,7 +539,7 @@ public class StringKit {
         if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 2);
         for (int i = 0; i < len; i++) {
-            sb.append(hex(numbers[i]));
+            appendHex(sb, numbers[i]);
         }
         return sb.toString();
     }
@@ -448,7 +549,7 @@ public class StringKit {
         if (numbers == null || (len = numbers.length) <= 0) return "";
         StringBuilder sb = new StringBuilder(numbers.length << 1);
         for (int i = 0; i < len; i++) {
-            sb.append(hex(numbers[i]));
+            appendHex(sb, numbers[i]);
         }
         return sb.toString();
     }
