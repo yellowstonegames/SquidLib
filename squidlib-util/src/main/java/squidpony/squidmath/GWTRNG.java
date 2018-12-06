@@ -35,7 +35,7 @@ import java.io.Serializable;
 public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {
     private static final long serialVersionUID = 1L;
 
-    private int stateA, stateB;
+    public int stateA, stateB;
 
     /**
      * Creates a new generator seeded using two calls to Math.random().
@@ -68,6 +68,16 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
      */
     public GWTRNG(final int stateA, final int stateB) {
         setState(stateA, stateB);
+    }
+
+    /**
+     * Hashes {@code seed} using both {@link CrossHash#hash(CharSequence)} and {@link String#hashCode()} and uses those
+     * two results as the two states with {@link #setState(int, int)}. If seed is null, this won't call
+     * String.hashCode() on it and will instead use 1 as that state (to avoid the forbidden double-zero case).
+     * @param seed any String; may be null
+     */
+    public GWTRNG(String seed) {
+        setState(CrossHash.hash(seed), seed == null ? 1 : seed.hashCode());
     }
 
     /**

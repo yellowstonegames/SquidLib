@@ -227,7 +227,7 @@ public class DijkstraMap implements Serializable {
      * initialize() method before using this class.
      */
     public DijkstraMap() {
-        rng = new RNG();
+        rng = new GWTRNG();
         path = new ArrayList<>();
     }
 

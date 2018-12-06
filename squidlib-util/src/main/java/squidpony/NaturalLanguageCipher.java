@@ -406,13 +406,13 @@ se$->z
         nounicSuffix = addPart("-ic", 0);
         nouniveSuffix = addPart("-ive", 0);
         nounistSuffix = addPart("-ist", 0);
-        nounismSuffix = addPart("-ism", 1 + (rng.nextIntHasty(3) >> 1));
+        nounismSuffix = addPart("-ism", 1 + (rng.nextSignedInt(3) >> 1));
         nounenSuffix = addPart("-en", 0);
         verbedSuffix = addPart("-ed", 0);
         verberSuffix = addPart("-er", 0);
         verbingSuffix = addPart("-ing", 1);
         verbmentSuffix = addPart("-ment", 0);
-        verbationSuffix = addPart("-ation", rng.nextIntHasty(2) + 1);
+        verbationSuffix = addPart("-ation", rng.nextSignedInt(2) + 1);
         adjectivelySuffix = addPart("-ly", 0);
         adjectivestSuffix = addPart("-est", 0);
         reverbPrefix = addPart("re-", 0);
@@ -420,7 +420,7 @@ se$->z
         preverbPrefix = addPart("pre-", 0);
         proverbPrefix = addPart("pro-", 0);
         postverbPrefix = addPart("post-", 0);
-        antiverbPrefix = addPart("anti-", 2 - (rng.nextIntHasty(3) >> 1));
+        antiverbPrefix = addPart("anti-", 2 - (rng.nextSignedInt(3) >> 1));
         disnounPrefix = addPart("dis-", 0);
         table.clear();
         reverse.clear();

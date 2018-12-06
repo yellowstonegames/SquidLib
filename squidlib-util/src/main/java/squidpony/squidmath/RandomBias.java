@@ -95,7 +95,7 @@ public class RandomBias implements Serializable {
     public RandomBias()
     {
         biases = new OrderedMap<>(32);
-        rng = new RNG();
+        rng = new GWTRNG();
     }
     public RandomBias(IRNG rng)
     {

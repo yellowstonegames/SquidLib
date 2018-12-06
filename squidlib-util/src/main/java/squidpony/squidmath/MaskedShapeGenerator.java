@@ -21,8 +21,7 @@ public class MaskedShapeGenerator {
     public static final GreasedRegion potentialBody = new GreasedRegion(spaceship, 1), // can be body or empty
             potentialSolid = new GreasedRegion(spaceship, 2, 4), // can be solid or body, never empty
             alwaysSolid = new GreasedRegion(spaceship, 3); // must be solid
-    public LinnormRNG randomness = new LinnormRNG(123456789L);
-    public RNG rng = new RNG(randomness);
+    public Starfish32RNG randomness = new Starfish32RNG(1234567890, 987654321);
     public final GreasedRegion randomRegion = new GreasedRegion(randomness, 6, 12);
     private final GreasedRegion workingBody = new GreasedRegion(6, 12),
             workingSolid = new GreasedRegion(6, 12),
@@ -49,7 +48,7 @@ public class MaskedShapeGenerator {
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
-        randomRegion.refill(rng, 0.75, w, h);
+        randomRegion.refill(randomness, 0.75, w, h);
         workingSolid.remake(potentialSolid);
         workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);
         workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe());
@@ -103,7 +102,7 @@ public class MaskedShapeGenerator {
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
-        randomRegion.refill(rng, 0.75, w, h);
+        randomRegion.refill(randomness, 0.75, w, h);
         workingSolid.remake(potentialSolid);
         workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);
         workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe());
@@ -140,7 +139,7 @@ public class MaskedShapeGenerator {
         if(changing.length < w * 2 || changing[0].length < h
                 || xPos + w * 2 >= changing.length || yPos + h >= changing[0].length)
             return changing;
-        randomRegion.refill(rng, 0.75, w, h);
+        randomRegion.refill(randomness, 0.75, w, h);
         workingSolid.remake(potentialSolid);
         workingBody.remake(potentialBody).or(potentialSolid).andNot(alwaysSolid).and(randomRegion);
         workingSolid.andNot(workingBody).or(randomRegion.remake(workingBody).fringe8way());

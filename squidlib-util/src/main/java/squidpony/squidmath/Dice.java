@@ -31,7 +31,7 @@ public class Dice implements Serializable {
      * Creates a new dice roller that uses a random RNG seed for an RNG that it owns.
      */
     public Dice() {
-        rng = new RNG();
+        rng = new GWTRNG();
     }
 
     /**
@@ -51,7 +51,7 @@ public class Dice implements Serializable {
      */
     public Dice(long seed)
     {
-        rng = new RNG(seed);
+        rng = new GWTRNG(seed);
     }
     /**
      * Creates a new dice roller that will use its own RNG, seeded with the given seed.
@@ -59,7 +59,7 @@ public class Dice implements Serializable {
      */
     public Dice(String seed)
     {
-        rng = new RNG(seed);
+        rng = new GWTRNG(seed);
     }
     /**
      * Sets the random number generator to be used.

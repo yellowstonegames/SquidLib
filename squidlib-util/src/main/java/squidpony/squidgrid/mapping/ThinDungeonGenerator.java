@@ -1,8 +1,8 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
+import squidpony.squidmath.IRNG;
 import squidpony.squidmath.PerlinNoise;
-import squidpony.squidmath.RNG;
 
 /**
  * Created by Tommy Ettinger on 8/7/2016.
@@ -38,7 +38,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
      * @param height The height of the dungeon in cells
      * @param rng    The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
      */
-    public ThinDungeonGenerator(int width, int height, RNG rng) {
+    public ThinDungeonGenerator(int width, int height, IRNG rng) {
         super(width, height, rng);
     }
 
@@ -90,7 +90,7 @@ public class ThinDungeonGenerator extends SectionDungeonGenerator {
      * @param caveShape     expected to be an int constant: CAVE_WALL_EXPAND, CAVE_WALL_RETRACT, or CAVE_WALL_CHAOTIC
      * @param rng           The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
      */
-    public ThinDungeonGenerator(int width, int height, RNG rng, int roomShape, int corridorShape, int caveShape) {
+    public ThinDungeonGenerator(int width, int height, IRNG rng, int roomShape, int corridorShape, int caveShape) {
         super(width, height, rng);
         wallShapes = roomShape | corridorShape | caveShape;
         if ((wallShapes & 0xF) == 0 || (wallShapes & 0xF0) == 0 || (wallShapes & 0xF00) == 0

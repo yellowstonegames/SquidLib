@@ -240,7 +240,7 @@ public class SectionDungeonGenerator implements IDungeonGenerator{
      * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,
      *            but if it is not a StatefulRNG, a new StatefulRNG will be used, randomly seeded by this parameter
      */
-    public SectionDungeonGenerator(int width, int height, RNG rng)
+    public SectionDungeonGenerator(int width, int height, IRNG rng)
     {
         Coord.expandPoolTo(width, height);
         this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());

@@ -6,9 +6,10 @@ import com.badlogic.gdx.utils.IntMap;
 import com.badlogic.gdx.utils.ObjectMap;
 import squidpony.squidmath.Bresenham;
 import squidpony.squidmath.Coord3D;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.GWTRNG;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Queue;
 
 /**
  * Provides utilities for working with colors as well as caching operations for
@@ -24,12 +25,11 @@ import java.util.*;
  */
 public class SColorFactory {
 
-    private final ObjectMap<String, SColor> nameLookup;
     private final IntMap<SColor> valueLookup;
-    private RNG rng;
+    private GWTRNG rng;
     private IntMap<SColor> colorBag;
     private ObjectMap<String, ArrayList<SColor>> palettes;
-    private int floor = 1;//what multiple to floor rgb values to in order to reduce total colors
+    private int floor;//what multiple to floor rgb values to in order to reduce total colors
 
     /**
      * Constructs a new SColorFactory with an empty cache.
@@ -46,40 +46,14 @@ public class SColorFactory {
      */
     public SColorFactory() {
 
-        nameLookup = new ObjectMap<>();
         valueLookup = new IntMap<>();
-        rng = DefaultResources.getGuiRandom();
+        rng = new GWTRNG();
         colorBag = new IntMap<>();
         palettes = new ObjectMap<>();
         floor = 1;
 
     }
-
-    /**
-     * DEPRECATED: You should use the Colors class from libGDX instead; it has all named SColors registered, though
-     * calling its {@link com.badlogic.gdx.graphics.Colors#get(String)} method returns a Color, not an SColor.
-     * Since Colors has a map registering all named SColor objects (and some Color objects) already, it is rather
-     * wasteful to store another map of all SColors for this method (and only this method) to use.
-     * <br>
-     * Returns the SColor Constant whose name is the one provided. If one cannot be found then null is returned.
-     * <br>
-     * This method constructs a list of the SColor constants the first time it is called.
-     *
-     * @param s the name
-     * @return  the SColor by name s
-     * @deprecated You should use the Colors class from libGDX instead; it has all named SColors registered
-     */
-    @Deprecated
-    public SColor colorForName(String s) {
-        if (nameLookup.size == 0) {
-            for (SColor sc : SColor.FULL_PALETTE) {
-                nameLookup.put(sc.getName(), sc);
-            }
-        }
-
-        return nameLookup.get(s);
-    }
-
+    
     /**
      * Returns the SColor whose value matches the one passed in. If no SColor
      * constant matches that value, then a cached or new SColor is returned that
@@ -294,7 +268,6 @@ public class SColorFactory {
      * @return an SColor with an unspecified name and the given a, r, g, and b values
      */
     public SColor asSColor(float a, float r, float g, float b) {
-        int working = 0;
         int aa = MathUtils.round(255 * a);
         aa -= aa % floor;
         int rr = MathUtils.round(255 * r);
@@ -305,7 +278,7 @@ public class SColorFactory {
         bb -= bb % floor;
 
         //put back together
-        working = ((aa & 0xFF) << 24)
+        final int working = ((aa & 0xFF) << 24)
                 | ((rr & 0xFF) << 16)
                 | ((gg & 0xFF) << 8)
                 | (bb & 0xFF);

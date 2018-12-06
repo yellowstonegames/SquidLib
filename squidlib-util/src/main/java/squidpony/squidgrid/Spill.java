@@ -199,7 +199,7 @@ public class Spill implements Serializable {
      * @param level the level as a 2D rectangular char array, using {@code '#'} to represent walls
      * @param measurement a {@link Measurement} enum; usually {@link Measurement#MANHATTAN} is ideal
      */
-    public Spill(final char[][] level, Measurement measurement, RNG random) {
+    public Spill(final char[][] level, Measurement measurement, IRNG random) {
         rng = new GWTRNG(random.nextInt(), random.nextInt());
         this.measurement = measurement;
 

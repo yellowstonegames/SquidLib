@@ -2,9 +2,9 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.IRNG;
-import squidpony.squidmath.RNG;
 
 /**
  * Map generator that constructs a large number of overlapping rectangular rooms.
@@ -24,11 +24,11 @@ public class DenseRoomMapGenerator implements IDungeonGenerator {
     protected int width, height;
     public DenseRoomMapGenerator()
     {
-        this(80, 30, new RNG());
+        this(80, 30, new GWTRNG());
     }
     public DenseRoomMapGenerator(int width, int height)
     {
-        this(width, height, new RNG());
+        this(width, height, new GWTRNG());
     }
     public DenseRoomMapGenerator(int width, int height, IRNG rng)
     {

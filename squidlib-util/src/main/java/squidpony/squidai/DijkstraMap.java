@@ -226,7 +226,7 @@ public class DijkstraMap implements Serializable {
      * initialize() method before using this class.
      */
     public DijkstraMap() {
-        rng = new RNG();
+        rng = new GWTRNG();
         path = new ArrayList<>();
     }
 
@@ -256,7 +256,7 @@ public class DijkstraMap implements Serializable {
      * @param measurement
      */
     public DijkstraMap(final double[][] level, Measurement measurement) {
-        rng = new RNG();
+        rng = new GWTRNG();
         this.measurement = measurement;
         path = new ArrayList<>();
         initialize(level);
@@ -271,7 +271,7 @@ public class DijkstraMap implements Serializable {
      * @param level
      */
     public DijkstraMap(final char[][] level) {
-        this(level, Measurement.MANHATTAN, new RNG());
+        this(level, Measurement.MANHATTAN, new GWTRNG());
     }
 
     /**
@@ -297,7 +297,7 @@ public class DijkstraMap implements Serializable {
      * @param level
      */
     public DijkstraMap(final char[][] level, char alternateWall) {
-        rng = new RNG();
+        rng = new GWTRNG();
         path = new ArrayList<>();
 
         initialize(level, alternateWall);
@@ -313,7 +313,7 @@ public class DijkstraMap implements Serializable {
      * @param measurement
      */
     public DijkstraMap(final char[][] level, Measurement measurement) {
-        this(level, measurement, new RNG());
+        this(level, measurement, new GWTRNG());
     }
 
     /**

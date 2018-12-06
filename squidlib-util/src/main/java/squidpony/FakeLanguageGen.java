@@ -3908,8 +3908,7 @@ public class FakeLanguageGen implements Serializable {
         otherInfluence = Math.max(0.0, Math.min(otherInfluence, 1.0));
         double myInfluence = 1.0 - otherInfluence;
 
-        RNG rng = new RNG((hash64() & 0xffffffffL) | ((other.hash64() & 0xffffffffL) << 32)
-                ^ NumberTools.doubleToLongBits(otherInfluence));
+        GWTRNG rng = new GWTRNG(hashCode(), other.hashCode() ^ NumberTools.doubleToMixedIntBits(otherInfluence));
 
         String[] ov = merge1000(rng, openingVowels, other.openingVowels, otherInfluence),
                 mv = merge1000(rng, midVowels, other.midVowels, otherInfluence),
@@ -4073,9 +4072,9 @@ public class FakeLanguageGen implements Serializable {
     public FakeLanguageGen addAccents(double vowelInfluence, double consonantInfluence) {
         vowelInfluence = Math.max(0.0, Math.min(vowelInfluence, 1.0));
         consonantInfluence = Math.max(0.0, Math.min(consonantInfluence, 1.0));
-
-        RNG rng = new RNG((hash64() & 0xffffffffL) ^
-                ((NumberTools.doubleToLongBits(vowelInfluence) & 0xffffffffL) | (NumberTools.doubleToLongBits(consonantInfluence) << 32)));
+        GWTRNG rng = new GWTRNG(hashCode(),
+                NumberTools.doubleToMixedIntBits(vowelInfluence)
+                        ^ NumberTools.doubleToMixedIntBits(consonantInfluence));
         String[] ov = accentVowels(rng, openingVowels, vowelInfluence),
                 mv = accentVowels(rng, midVowels, vowelInfluence),
                 oc = accentConsonants(rng, openingConsonants, consonantInfluence),
@@ -4248,26 +4247,28 @@ public class FakeLanguageGen implements Serializable {
 
     @Override
     public int hashCode() {
-        int result;
-        result = CrossHash.hash(openingVowels);
-        result = 31 * result + CrossHash.hash(midVowels);
-        result = 31 * result + CrossHash.hash(openingConsonants);
-        result = 31 * result + CrossHash.hash(midConsonants);
-        result = 31 * result + CrossHash.hash(closingConsonants);
-        result = 31 * result + CrossHash.hash(vowelSplitters);
-        result = 31 * result + CrossHash.hash(closingSyllables);
-        result = 31 * result + (clean ? 1 : 0);
-        result = 31 * result + syllableFrequencies.hashCode();
-        result = 31 * result + NumberTools.doubleToMixedIntBits(totalSyllableFrequency);
-        result = 31 * result + NumberTools.doubleToMixedIntBits(vowelStartFrequency);
-        result = 31 * result + NumberTools.doubleToMixedIntBits(vowelEndFrequency);
-        result = 31 * result + NumberTools.doubleToMixedIntBits(vowelSplitFrequency);
-        result = 31 * result + NumberTools.doubleToMixedIntBits(syllableEndFrequency);
-        result = 31 * result + (sanityChecks != null ? sanityChecks.length + 1 : 0);
-        result *= 31;
+        int result = 31 * 31 * 31 * 31 +
+                31 * 31 * 31 * CrossHash.hash(openingVowels) +
+                31 * 31 * CrossHash.hash(midVowels) +
+                31 * CrossHash.hash(openingConsonants) +
+                CrossHash.hash(midConsonants) | 0;
+        result = 31 * 31 * 31 * 31 * result +
+                31 * 31 * 31 * CrossHash.hash(closingConsonants) +
+                31 * 31 * CrossHash.hash(vowelSplitters) +
+                31 * CrossHash.hash(closingSyllables) ^
+                (clean ? 1 : 0);
+        result = 31 * 31 * 31 * 31 * result +
+                31 * 31 * 31 * syllableFrequencies.hashCode() +
+                31 * 31 * NumberTools.doubleToMixedIntBits(totalSyllableFrequency) +
+                31 * NumberTools.doubleToMixedIntBits(vowelStartFrequency) +
+                NumberTools.doubleToMixedIntBits(vowelEndFrequency) | 0;
+        result = 31 * 31 * 31 * 31 * result +
+                31 * 31 * 31 * (sanityChecks != null ? sanityChecks.length + 1 : 0) +
+                31 * 31 * NumberTools.doubleToMixedIntBits(syllableEndFrequency) +                 
+                31 * NumberTools.doubleToMixedIntBits(vowelSplitFrequency) | 0;
         if(modifiers != null) {
             for (int i = 0; i < modifiers.size(); i++) {
-                result += 7 * (i + 1) * modifiers.get(i).hashCode();
+                result = result + 7 * (i + 1) * modifiers.get(i).hashCode() | 0;
             }
         }
         return result;

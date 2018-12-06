@@ -345,7 +345,7 @@ public class MimicWFC {
         if (wave == null) init();
 
         clear();
-        random = new RNG(seed);
+        random = new GWTRNG(seed);
 
         for (int l = 0; l < limit || limit == 0; l++)
         {

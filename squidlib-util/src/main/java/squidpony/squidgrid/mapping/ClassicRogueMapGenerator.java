@@ -3,9 +3,9 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
 
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -90,7 +90,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
      */
     public ClassicRogueMapGenerator(int horizontalRooms, int verticalRooms, int dungeonWidth, int dungeonHeight,
                                     int minRoomWidth, int maxRoomWidth, int minRoomHeight, int maxRoomHeight) {
-        this(horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, new RNG());
+        this(horizontalRooms, verticalRooms, dungeonWidth, dungeonHeight, minRoomWidth, maxRoomWidth, minRoomHeight, maxRoomHeight, new GWTRNG());
     }
 
     /**

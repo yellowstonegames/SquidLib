@@ -1,9 +1,9 @@
 package squidpony.squidgrid;
 
 import squidpony.squidmath.Coord;
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.RNG;
 
 import java.util.Map;
 import java.util.Set;
@@ -88,7 +88,7 @@ public class SoundMap
      * initialize() method before using this class.
      */
     public SoundMap() {
-        rng = new RNG();
+        rng = new GWTRNG();
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -110,7 +110,7 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final double[][] level) {
-        rng = new RNG();
+        rng = new GWTRNG();
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -122,7 +122,7 @@ public class SoundMap
      * @param measurement
      */
     public SoundMap(final double[][] level, Measurement measurement) {
-        rng = new RNG();
+        rng = new GWTRNG();
         this.measurement = measurement;
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
@@ -139,7 +139,7 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final char[][] level) {
-        rng = new RNG();
+        rng = new GWTRNG();
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -154,7 +154,7 @@ public class SoundMap
      * @param level
      */
     public SoundMap(final char[][] level, char alternateWall) {
-        rng = new RNG();
+        rng = new GWTRNG();
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
         sounds = new OrderedMap<>();
@@ -171,7 +171,7 @@ public class SoundMap
      * @param measurement
      */
     public SoundMap(final char[][] level, Measurement measurement) {
-        rng = new RNG();
+        rng = new GWTRNG();
         this.measurement = measurement;
         alerted = new OrderedMap<>();
         fresh = new OrderedMap<>();
