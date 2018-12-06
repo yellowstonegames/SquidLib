@@ -52,7 +52,7 @@ public class DetailedMimic {
      */
     public DetailedMimic(AestheticDifference diff)
     {
-        this(diff, new RNG());
+        this(diff, new GWTRNG());
     }
 
     /**

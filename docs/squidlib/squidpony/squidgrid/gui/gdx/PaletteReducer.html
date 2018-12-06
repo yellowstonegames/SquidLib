@@ -108,7 +108,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.22">PaletteReducer</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.21">PaletteReducer</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Data that can be used to limit the colors present in a Pixmap or other image, here with the goal of using 256 or less
  colors in the image (for saving indexed-mode images).
@@ -275,7 +275,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#randomXi-int-">randomXi</a></span>(int&nbsp;seed)</code>
-<div class="block">Gets a pseudo-random float between -0.3f and 0.7f, determined by the lower 23 bits and upper 2 bits of seed.</div>
+<div class="block">Gets a pseudo-random float between -0.65625f and 0.65625f, determined by the upper 23 bits of seed.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
@@ -338,7 +338,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>paletteMapping</h4>
-<pre>public final&nbsp;byte[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.23">paletteMapping</a></pre>
+<pre>public final&nbsp;byte[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.22">paletteMapping</a></pre>
 </li>
 </ul>
 <a name="paletteArray">
@@ -347,7 +347,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>paletteArray</h4>
-<pre>public final&nbsp;int[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.24">paletteArray</a></pre>
+<pre>public final&nbsp;int[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.23">paletteArray</a></pre>
 </li>
 </ul>
 <a name="auroraPalette">
@@ -356,7 +356,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>auroraPalette</h4>
-<pre>public static final&nbsp;int[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.32">auroraPalette</a></pre>
+<pre>public static final&nbsp;int[] <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.31">auroraPalette</a></pre>
 <div class="block">DawnBringer's 256-color Aurora palette, modified slightly to fit one transparent color by removing one gray.
  Aurora is available in <a href="http://pixeljoint.com/forum/forum_posts.asp?TID=26080&KW=">this set of tools</a>
  for a pixel art editor, but it is usable for lots of high-color purposes.</div>
@@ -376,7 +376,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteReducer</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.70">PaletteReducer</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.69">PaletteReducer</a>()</pre>
 <div class="block">Constructs a default PaletteReducer that uses the DawnBringer Aurora palette.</div>
 </li>
 </ul>
@@ -386,7 +386,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteReducer</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.80">PaletteReducer</a>(int[]&nbsp;rgbaPalette)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.79">PaletteReducer</a>(int[]&nbsp;rgbaPalette)</pre>
 <div class="block">Constructs a PaletteReducer that uses the given array of RGBA8888 ints as a palette (see <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#exact-int:A-"><code>exact(int[])</code></a>
  for more info).</div>
 <dl>
@@ -401,7 +401,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteReducer</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.90">PaletteReducer</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colorPalette)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.89">PaletteReducer</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colorPalette)</pre>
 <div class="block">Constructs a PaletteReducer that uses the given array of Color objects as a palette (see <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#exact-com.badlogic.gdx.graphics.Color:A-"><code>exact(Color[])</code></a>
  for more info).</div>
 <dl>
@@ -416,7 +416,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteReducer</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.100">PaletteReducer</a>(com.badlogic.gdx.utils.Array&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colorPalette)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.99">PaletteReducer</a>(com.badlogic.gdx.utils.Array&lt;com.badlogic.gdx.graphics.Color&gt;&nbsp;colorPalette)</pre>
 <div class="block">Constructs a PaletteReducer that uses the given Array of Color objects as a palette (see <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#exact-com.badlogic.gdx.graphics.Color:A-"><code>exact(Color[])</code></a>
  for more info).</div>
 <dl>
@@ -431,7 +431,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteReducer</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.113">PaletteReducer</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.112">PaletteReducer</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Constructs a PaletteReducer that analyzes the given Pixmap for color count and frequency to generate a palette
  (see <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#analyze-com.badlogic.gdx.graphics.Pixmap-"><code>analyze(Pixmap)</code></a> for more info).</div>
 <dl>
@@ -446,7 +446,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PaletteReducer</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.124">PaletteReducer</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.123">PaletteReducer</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                       int&nbsp;threshold)</pre>
 <div class="block">Constructs a PaletteReducer that analyzes the given Pixmap for color count and frequency to generate a palette
  (see <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#analyze-com.badlogic.gdx.graphics.Pixmap-int-"><code>analyze(Pixmap, int)</code></a> for more info).</div>
@@ -471,7 +471,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>difference</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.136">difference</a>(int&nbsp;color1,
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.135">difference</a>(int&nbsp;color1,
                              int&nbsp;color2)</pre>
 <div class="block">Color difference metric; returns large numbers even for smallish differences.
  If this returns 250 or more, the colors may be perceptibly different; 500 or more almost guarantees it.</div>
@@ -541,16 +541,15 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <li class="blockList">
 <h4>randomXi</h4>
 <pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.194">randomXi</a>(int&nbsp;seed)</pre>
-<div class="block">Gets a pseudo-random float between -0.3f and 0.7f, determined by the lower 23 bits and upper 2 bits of seed.
- The average value this returns will be less than 0f, despite its upper bound being further from 0 than its
- lower bound, because values between 0.2f and 0.7f are a third as likely to appear as values less than 0.125f,
- and even for values less than 0.2f, the range between -0.05f and 0.2f is a third as likely as the range from
- -0.3f to 0.05f. This introduced bias can be useful for adding some order to otherwise-random dithering.</div>
+<div class="block">Gets a pseudo-random float between -0.65625f and 0.65625f, determined by the upper 23 bits of seed.
+ This currently uses a uniform distribution for its output, but earlier versions intentionally used a non-uniform
+ one; a non-uniform distribution can sometimes work well but is very dependent on how error propagates through a
+ dithered image, and in bad cases can produce bands of bright mistakenly-error-adjusted colors.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>seed</code> - any int, but only the least-significant 23 bits will be used</dd>
+<dd><code>seed</code> - any int, but only the most-significant 23 bits will be used</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a float between -0.3f and 0.7f, weighted toward the lower end of the range</dd>
+<dd>a float between -0.65625f and 0.65625f, with fairly uniform distribution as long as seed is uniform</dd>
 </dl>
 </li>
 </ul>
@@ -560,7 +559,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>exact</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.207">exact</a>(int[]&nbsp;rgbaPalette)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.209">exact</a>(int[]&nbsp;rgbaPalette)</pre>
 <div class="block">Builds the palette information this PNG8 stores from the RGBA8888 ints in <code>rgbaPalette</code>, up to 256 colors.
  Alpha is not preserved except for the first item in rgbaPalette, and only if it is <code>0</code> (fully transparent
  black); otherwise all items are treated as opaque. If rgbaPalette is null, empty, or only has one color, then
@@ -577,7 +576,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>exact</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.250">exact</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colorPalette)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.252">exact</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colorPalette)</pre>
 <div class="block">Builds the palette information this PNG8 stores from the Color objects in <code>colorPalette</code>, up to 256 colors.
  Alpha is not preserved except for the first item in colorPalette, and only if its r, g, b, and a values are all
  0f (fully transparent black); otherwise all items are treated as opaque. If rgbaPalette is null, empty, or only
@@ -595,7 +594,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>exact</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.264">exact</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colorPalette,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.266">exact</a>(com.badlogic.gdx.graphics.Color[]&nbsp;colorPalette,
                   int&nbsp;limit)</pre>
 <div class="block">Builds the palette information this PNG8 stores from the Color objects in <code>colorPalette</code>, up to 256 colors.
  Alpha is not preserved except for the first item in colorPalette, and only if its r, g, b, and a values are all
@@ -615,7 +614,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>analyze</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.313">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.315">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Analyzes <code>pixmap</code> for color count and frequency, building a palette with at most 256 colors if there are
  too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
  (although with at most one transparent color, and no alpha for other colors); if there are more than 256 colors
@@ -639,7 +638,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>analyze</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.342">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.344">analyze</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap,
                     int&nbsp;threshold)</pre>
 <div class="block">Analyzes <code>pixmap</code> for color count and frequency, building a palette with at most 256 colors if there are
  too many colors to store in a PNG-8 palette. If there are 256 or less colors, this uses the exact colors
@@ -666,7 +665,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setDitherStrength</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.425">setDitherStrength</a>(float&nbsp;ditherStrength)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.427">setDitherStrength</a>(float&nbsp;ditherStrength)</pre>
 <div class="block">Changes the "strength" of the dither effect applied during <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduce-com.badlogic.gdx.graphics.Pixmap-"><code>reduce(Pixmap)</code></a> calls. The default is 1f,
  and while both values higher than 1f and lower than 1f are valid, they should not be negative. If you want dither
  to be eliminated, don't set dither strength to 0; use <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduceSolid-com.badlogic.gdx.graphics.Pixmap-"><code>reduceSolid(Pixmap)</code></a> instead of reduce().</div>
@@ -682,7 +681,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>reduce</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.442">reduce</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.444">reduce</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can.
  If you want to reduce the colors in a Pixmap based on what it currently contains, call
  <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#analyze-com.badlogic.gdx.graphics.Pixmap-"><code>analyze(Pixmap)</code></a> with <code>pixmap</code> as its argument, then call this method with the same
@@ -705,7 +704,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>reduceSolid</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.538">reduceSolid</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.540">reduceSolid</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, without dithering. This produces
  blocky solid sections of color in most images where the palette isn't exact, instead of checkerboard-like
  dithering patterns. If you want to reduce the colors in a Pixmap based on what it currently contains, call
@@ -726,7 +725,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>reduceBurkes</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.580">reduceBurkes</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.582">reduceBurkes</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can using
  Burkes dithering instead of the Sierra Lite dithering that <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduce-com.badlogic.gdx.graphics.Pixmap-"><code>reduce(Pixmap)</code></a> uses.
  If you want to reduce the colors in a Pixmap based on what it currently contains, call
@@ -752,7 +751,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>reduceWithNoise</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.728">reduceWithNoise</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Pixmap&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/PaletteReducer.html#line.731">reduceWithNoise</a>(com.badlogic.gdx.graphics.Pixmap&nbsp;pixmap)</pre>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can using a
  modified version of the algorithm presented in "Simple gradient-based error-diffusion method" by Xaingyu Y. Hu in
  the Journal of Electronic Imaging, 2016. This algorithm uses pseudo-randomly-generated noise to adjust
@@ -773,8 +772,9 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  subcycle generators</a> (which are usually paired, but that isn't the case here), but because it's
  constantly being adjusted by additional colors as input, it may be more comparable to a rolling hash. This uses
  <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#randomXi-int-"><code>randomXi(int)</code></a> to get the parameter in Hu's paper that's marked as <code>aξ</code>, but our randomXi() is
- adjusted so it has a higher range into positive values but produces them less frequently than negative ones. That
- quirk ends up getting rather high quality for this method.</div>
+ adjusted so it has half the range (from -0.5 to 0.5 instead of -1 to 1). That quirk ends up getting rather high
+ quality for this method, though it may have some grainy appearance in certain zones with mid-level intensity (an
+ acknowledged issue with the type of noise-based approach Hu uses, and not a very severe problem).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>pixmap</code> - a Pixmap that will be modified in place</dd>

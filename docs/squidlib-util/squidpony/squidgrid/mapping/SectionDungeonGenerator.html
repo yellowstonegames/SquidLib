@@ -359,9 +359,9 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#SectionDungeonGenerator-int-int-squidpony.squidmath.RNG-">SectionDungeonGenerator</a></span>(int&nbsp;width,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#SectionDungeonGenerator-int-int-squidpony.squidmath.IRNG-">SectionDungeonGenerator</a></span>(int&nbsp;width,
                        int&nbsp;height,
-                       <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+                       <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
 <div class="block">Make a SectionDungeonGenerator with the given height, width, and RNG.</div>
 </td>
 </tr>
@@ -899,7 +899,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 </dl>
 </li>
 </ul>
-<a name="SectionDungeonGenerator-int-int-squidpony.squidmath.RNG-">
+<a name="SectionDungeonGenerator-int-int-squidpony.squidmath.IRNG-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -907,7 +907,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <h4>SectionDungeonGenerator</h4>
 <pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/SectionDungeonGenerator.html#line.243">SectionDungeonGenerator</a>(int&nbsp;width,
                                int&nbsp;height,
-                               <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+                               <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 <div class="block">Make a SectionDungeonGenerator with the given height, width, and RNG. Use this if you want to seed the RNG. If
  width or height is greater than 256, then this will expand the Coord pool from its 256x256 default so it stores a
  reference to each Coord that might be used in the creation of the dungeon (if width and height are 300 and 300,

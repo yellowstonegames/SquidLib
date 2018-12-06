@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -156,6 +156,29 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GWTRNG.html#stateA">stateA</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GWTRNG.html#stateB">stateB</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -189,6 +212,12 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GWTRNG.html#GWTRNG-long-">GWTRNG</a></span>(long&nbsp;seed)</code>
 <div class="block">Constructs this GWTRNG by splitting the given seed across the two parts of state this has with
  <a href="../../squidpony/squidmath/GWTRNG.html#setState-long-"><code>setState(long)</code></a>.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/GWTRNG.html#GWTRNG-java.lang.String-">GWTRNG</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</code>
+<div class="block">Hashes <code>seed</code> using both <a href="../../squidpony/squidmath/CrossHash.html#hash-java.lang.CharSequence-"><code>CrossHash.hash(CharSequence)</code></a> and <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>String.hashCode()</code></a> and uses those
+ two results as the two states with <a href="../../squidpony/squidmath/GWTRNG.html#setState-int-int-"><code>setState(int, int)</code></a>.</div>
 </td>
 </tr>
 </table>
@@ -345,6 +374,32 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="stateA">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>stateA</h4>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.38">stateA</a></pre>
+</li>
+</ul>
+<a name="stateB">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>stateB</h4>
+<pre>public&nbsp;int <a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.38">stateB</a></pre>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -394,7 +449,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <a name="GWTRNG-int-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>GWTRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.69">GWTRNG</a>(int&nbsp;stateA,
@@ -405,6 +460,22 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>stateA</code> - the number to use as the first part of the state; this will be 1 instead if both seeds are 0</dd>
 <dd><code>stateB</code> - the number to use as the second part of the state</dd>
+</dl>
+</li>
+</ul>
+<a name="GWTRNG-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>GWTRNG</h4>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.79">GWTRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seed)</pre>
+<div class="block">Hashes <code>seed</code> using both <a href="../../squidpony/squidmath/CrossHash.html#hash-java.lang.CharSequence-"><code>CrossHash.hash(CharSequence)</code></a> and <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>String.hashCode()</code></a> and uses those
+ two results as the two states with <a href="../../squidpony/squidmath/GWTRNG.html#setState-int-int-"><code>setState(int, int)</code></a>. If seed is null, this won't call
+ String.hashCode() on it and will instead use 1 as that state (to avoid the forbidden double-zero case).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>seed</code> - any String; may be null</dd>
 </dl>
 </li>
 </ul>
@@ -422,7 +493,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.81">next</a>(int&nbsp;bits)</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.91">next</a>(int&nbsp;bits)</pre>
 <div class="block">Get up to 32 bits (inclusive) of random output; the int this produces
  will not require more than <code>bits</code> bits to represent.</div>
 <dl>
@@ -445,7 +516,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.96">nextInt</a>()</pre>
+<pre>public final&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.106">nextInt</a>()</pre>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -463,7 +534,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextLong</h4>
-<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.111">nextLong</a>()</pre>
+<pre>public final&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.121">nextLong</a>()</pre>
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -483,7 +554,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextBoolean</h4>
-<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.132">nextBoolean</a>()</pre>
+<pre>public final&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.142">nextBoolean</a>()</pre>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
  This implementation uses a sign check as a safeguard, since its algorithm is based on (but is not equivalent to)
  xoroshiro, which recommends a sign check instead of using the least significant bit.</div>
@@ -503,7 +574,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextDouble</h4>
-<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.151">nextDouble</a>()</pre>
+<pre>public final&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.161">nextDouble</a>()</pre>
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.
  This returns a maximum of 0.9999999999999999 because that is the largest double value that is less than 1.0 .
  <br>
@@ -526,7 +597,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>nextFloat</h4>
-<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.178">nextFloat</a>()</pre>
+<pre>public final&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.188">nextFloat</a>()</pre>
 <div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.
  This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .
  <br>
@@ -551,7 +622,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.195">copy</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.205">copy</a>()</pre>
 <div class="block">Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
  IRNG at the point copy() is called. The copy will not share references with this IRNG. This implementation will
  faithfully reproduce this generator as a copied GWTRNG.</div>
@@ -575,7 +646,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>toSerializable</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.204">toSerializable</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.214">toSerializable</a>()</pre>
 <div class="block">Gets a view of this IRNG in a way that implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io"><code>Serializable</code></a>, which is simply this IRNG.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -593,7 +664,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setSeed</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.212">setSeed</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.222">setSeed</a>(int&nbsp;seed)</pre>
 <div class="block">Sets the state of this generator using one int, running it through Zog32RNG's algorithm two times to get 
  two ints. If the states would both be 0, state A is assigned 1 instead.</div>
 <dl>
@@ -608,7 +679,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateA</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.227">getStateA</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.237">getStateA</a>()</pre>
 </li>
 </ul>
 <a name="setStateA-int-">
@@ -617,7 +688,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateA</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.239">setStateA</a>(int&nbsp;stateA)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.249">setStateA</a>(int&nbsp;stateA)</pre>
 <div class="block">Sets the first part of the state to the given int. As a special case, if the parameter is 0 and stateB is
  already 0, this will set stateA to 1 instead, since both states cannot be 0 at the same time. Usually, you
  should use <a href="../../squidpony/squidmath/GWTRNG.html#setState-int-int-"><code>setState(int, int)</code></a> to set both states at once, but the result will be the same if you call
@@ -634,7 +705,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getStateB</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.243">getStateB</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.253">getStateB</a>()</pre>
 </li>
 </ul>
 <a name="setStateB-int-">
@@ -643,7 +714,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setStateB</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.255">setStateB</a>(int&nbsp;stateB)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.265">setStateB</a>(int&nbsp;stateB)</pre>
 <div class="block">Sets the second part of the state to the given int. As a special case, if the parameter is 0 and stateA is
  already 0, this will set stateA to 1 and stateB to 0, since both cannot be 0 at the same time. Usually, you
  should use <a href="../../squidpony/squidmath/GWTRNG.html#setState-int-int-"><code>setState(int, int)</code></a> to set both states at once, but the result will be the same if you call
@@ -660,7 +731,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.267">setState</a>(int&nbsp;stateA,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.277">setState</a>(int&nbsp;stateA,
                      int&nbsp;stateB)</pre>
 <div class="block">Sets the current internal state of this GWTRNG with three ints, where stateA and stateB can each be any int
  unless they are both 0 (which will be treated as if stateA is 1 and stateB is 0).</div>
@@ -677,7 +748,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.279">getState</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.289">getState</a>()</pre>
 <div class="block">Get the current internal state of the StatefulRandomness as a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -693,7 +764,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.289">setState</a>(long&nbsp;state)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.299">setState</a>(long&nbsp;state)</pre>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -709,7 +780,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.295">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.305">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -722,7 +793,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.306">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.316">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -735,7 +806,7 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.311">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/GWTRNG.html#line.321">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -796,13 +867,13 @@ implements <a href="../../squidpony/squidmath/IStatefulRNG.html" title="interfac
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

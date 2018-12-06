@@ -38,9 +38,9 @@ public class CloudAOE implements AOE, Serializable {
 
     public CloudAOE(Coord center, int volume, Radius radiusType)
     {
-        ThrustAltRNG tar = new ThrustAltRNG();
-        seed = tar.getState();
-        spill = new Spill(new RNG(tar));
+        GWTRNG rng = new GWTRNG();
+        seed = rng.getState();
+        spill = new Spill(rng);
         this.center = center;
         this.volume = volume;
         expanding = false;
@@ -63,9 +63,9 @@ public class CloudAOE implements AOE, Serializable {
 
     public CloudAOE(Coord center, int volume, Radius radiusType, int minRange, int maxRange)
     {
-        ThrustAltRNG tar = new ThrustAltRNG();
-        seed = tar.getState();
-        spill = new Spill(new RNG(tar));
+        GWTRNG rng = new GWTRNG();
+        seed = rng.getState();
+        spill = new Spill(rng);
         this.center = center;
         this.volume = volume;
         expanding = false;
@@ -90,7 +90,7 @@ public class CloudAOE implements AOE, Serializable {
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed)
     {
         seed = rngSeed;
-        spill = new Spill(new RNG(rngSeed));
+        spill = new Spill(new GWTRNG(rngSeed));
         this.center = center;
         this.volume = volume;
         expanding = false;
@@ -113,7 +113,7 @@ public class CloudAOE implements AOE, Serializable {
     public CloudAOE(Coord center, int volume, Radius radiusType, long rngSeed, int minRange, int maxRange)
     {
         seed = rngSeed;
-        spill = new Spill(new RNG(rngSeed));
+        spill = new Spill(new GWTRNG(rngSeed));
         this.center = center;
         this.volume = volume;
         expanding = false;

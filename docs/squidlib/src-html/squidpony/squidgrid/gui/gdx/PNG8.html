@@ -681,7 +681,7 @@
 <span class="sourceLineNo">673</span>                    state += (color + 0x41C64E6D) ^ color &gt;&gt;&gt; 7;<a name="line.673"></a>
 <span class="sourceLineNo">674</span>                    state = (state &lt;&lt; 21 | state &gt;&gt;&gt; 11);<a name="line.674"></a>
 <span class="sourceLineNo">675</span>                    xi1 = randomXi(state);<a name="line.675"></a>
-<span class="sourceLineNo">676</span>                    state = (state &lt;&lt; 15 | state &gt;&gt;&gt; 17) ^ 0x9E3779B9;<a name="line.676"></a>
+<span class="sourceLineNo">676</span>                    state ^= (state &lt;&lt; 15 | state &gt;&gt;&gt; 17) + 0x9E3779B9;<a name="line.676"></a>
 <span class="sourceLineNo">677</span>                    xi2 = randomXi(state);<a name="line.677"></a>
 <span class="sourceLineNo">678</span>                    if(px &lt; w - 1)<a name="line.678"></a>
 <span class="sourceLineNo">679</span>                    {<a name="line.679"></a>

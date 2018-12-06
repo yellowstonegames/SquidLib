@@ -2003,12 +2003,11 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             while (key[i] == 0)
                 i++;
             t = key[i];
-            t ^= NumberTools.doubleToMixedIntBits(value[i]);
-            h += t;
+            h = h + (t ^ NumberTools.doubleToMixedIntBits(value[i])) | 0;
             i++;
         }
         // Zero / null keys have hash zero.
-        if (containsNullKey) h += NumberTools.doubleToMixedIntBits(value[n]);
+        if (containsNullKey) h = h + NumberTools.doubleToMixedIntBits(value[n]) | 0;
         return h;
     }
     public long hash64()

@@ -1,5 +1,6 @@
 package squidpony.squidgrid.mapping.styled;
 
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.RNG;
@@ -45,7 +46,7 @@ public class DungeonBoneGen {
      * Sets the current RNG.
      * @param rng
      */
-    public void setRng(RNG rng) {
+    public void setRng(IRNG rng) {
         this.rng = rng;
     }
 
@@ -117,12 +118,12 @@ public class DungeonBoneGen {
      *               be used to generate a seed for the internal RNG this class uses.
      */
     public DungeonBoneGen(Random random) {
-        this(new RNG(random.nextLong()));
+        this(new GWTRNG(random.nextInt(), random.nextInt()));
     }
     /**
-     * Constructs a DungeonBoneGen that uses the given squidpony.squidmath.RNG.
+     * Constructs a DungeonBoneGen that uses the given IRNG.
      *
-     * @param random A squidpony.squidmath.RNG to be used during the dungeon generation.
+     * @param random An IRNG to be used during the dungeon generation, such as an {@link RNG} or {@link GWTRNG}
      */
     public DungeonBoneGen(IRNG random) {
         rng = random;
@@ -135,7 +136,7 @@ public class DungeonBoneGen {
      * Constructs a DungeonBoneGen that uses a default RNG, randomly seeded.
      */
     public DungeonBoneGen() {
-        this(new RNG());
+        this(new GWTRNG());
     }
 
     /*

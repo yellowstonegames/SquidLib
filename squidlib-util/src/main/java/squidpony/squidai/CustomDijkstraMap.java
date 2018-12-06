@@ -116,7 +116,7 @@ public class CustomDijkstraMap implements Serializable {
      * initialize() method before using this class.
      */
     public CustomDijkstraMap() {
-        rng = new RNG();
+        rng = new GWTRNG();
         path = new IntVLA();
     }
 
@@ -146,7 +146,7 @@ public class CustomDijkstraMap implements Serializable {
      * @param adjacency
      */
     public CustomDijkstraMap(final double[] level, Adjacency adjacency) {
-        rng = new RNG();
+        rng = new GWTRNG();
         this.adjacency = adjacency;
         path = new IntVLA();
 
@@ -162,7 +162,7 @@ public class CustomDijkstraMap implements Serializable {
      * @param level
      */
     public CustomDijkstraMap(final char[][] level) {
-        this(level, new BasicAdjacency(level.length, level[0].length, Measurement.MANHATTAN), new RNG());
+        this(level, new BasicAdjacency(level.length, level[0].length, Measurement.MANHATTAN), new GWTRNG());
     }
 
     /**
@@ -188,7 +188,7 @@ public class CustomDijkstraMap implements Serializable {
      * @param level
      */
     public CustomDijkstraMap(final char[][] level, char alternateWall) {
-        rng = new RNG();
+        rng = new GWTRNG();
         path = new IntVLA();
         adjacency = new BasicAdjacency(level.length, level[0].length, Measurement.MANHATTAN);
 
@@ -205,7 +205,7 @@ public class CustomDijkstraMap implements Serializable {
      * @param adjacency
      */
     public CustomDijkstraMap(final char[][] level, Adjacency adjacency) {
-        this(level, adjacency, new RNG());
+        this(level, adjacency, new GWTRNG());
     }
 
     /**

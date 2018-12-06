@@ -89,7 +89,7 @@ public class MultiSpill {
      * If you use this constructor, you must call an  initialize() method before using this class.
      * @param random an RNG that will be converted to a StatefulRNG if it is not one already
      */
-    public MultiSpill(RNG random) {
+    public MultiSpill(IRNG random) {
         this(random.nextLong());
     }
 

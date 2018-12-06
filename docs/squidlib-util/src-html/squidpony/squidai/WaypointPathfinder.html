@@ -41,7 +41,7 @@
 <span class="sourceLineNo">033</span>     * @param measurement a Radius that should correspond to how you want path distance calculated.<a name="line.33"></a>
 <span class="sourceLineNo">034</span>     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)<a name="line.34"></a>
 <span class="sourceLineNo">035</span>     */<a name="line.35"></a>
-<span class="sourceLineNo">036</span>    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng)<a name="line.36"></a>
+<span class="sourceLineNo">036</span>    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng)<a name="line.36"></a>
 <span class="sourceLineNo">037</span>    {<a name="line.37"></a>
 <span class="sourceLineNo">038</span>        if(rng == null)<a name="line.38"></a>
 <span class="sourceLineNo">039</span>            this.rng = new StatefulRNG();<a name="line.39"></a>
@@ -140,7 +140,7 @@
 <span class="sourceLineNo">132</span>     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)<a name="line.132"></a>
 <span class="sourceLineNo">133</span>     * @param thickCorridors true if most chokepoints on the map are 2 cells wide instead of 1<a name="line.133"></a>
 <span class="sourceLineNo">134</span>     */<a name="line.134"></a>
-<span class="sourceLineNo">135</span>    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, boolean thickCorridors)<a name="line.135"></a>
+<span class="sourceLineNo">135</span>    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, boolean thickCorridors)<a name="line.135"></a>
 <span class="sourceLineNo">136</span>    {<a name="line.136"></a>
 <span class="sourceLineNo">137</span>        if(rng == null)<a name="line.137"></a>
 <span class="sourceLineNo">138</span>            this.rng = new StatefulRNG();<a name="line.138"></a>
@@ -261,7 +261,7 @@
 <span class="sourceLineNo">253</span>     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)<a name="line.253"></a>
 <span class="sourceLineNo">254</span>     * @param fraction the fractional denominator of passable cells to assign as waypoints; use 29 if you aren't sure<a name="line.254"></a>
 <span class="sourceLineNo">255</span>     */<a name="line.255"></a>
-<span class="sourceLineNo">256</span>    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, int fraction)<a name="line.256"></a>
+<span class="sourceLineNo">256</span>    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, int fraction)<a name="line.256"></a>
 <span class="sourceLineNo">257</span>    {<a name="line.257"></a>
 <span class="sourceLineNo">258</span>        if(rng == null)<a name="line.258"></a>
 <span class="sourceLineNo">259</span>            this.rng = new StatefulRNG();<a name="line.259"></a>
@@ -311,7 +311,7 @@
 <span class="sourceLineNo">303</span>     * @param dijkstra a DijkstraMap that will be used to find paths; may have costs but they will not be used<a name="line.303"></a>
 <span class="sourceLineNo">304</span>     * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)<a name="line.304"></a>
 <span class="sourceLineNo">305</span>     */<a name="line.305"></a>
-<span class="sourceLineNo">306</span>    public WaypointPathfinder(char[][] map, DijkstraMap dijkstra, RNG rng)<a name="line.306"></a>
+<span class="sourceLineNo">306</span>    public WaypointPathfinder(char[][] map, DijkstraMap dijkstra, IRNG rng)<a name="line.306"></a>
 <span class="sourceLineNo">307</span>    {<a name="line.307"></a>
 <span class="sourceLineNo">308</span>        if(rng == null)<a name="line.308"></a>
 <span class="sourceLineNo">309</span>            this.rng = new StatefulRNG();<a name="line.309"></a>

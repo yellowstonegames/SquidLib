@@ -151,31 +151,31 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidai.DijkstraMap-squidpony.squidmath.RNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidai.DijkstraMap-squidpony.squidmath.IRNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
                   <a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;dijkstra,
-                  <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+                  <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
                   <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                  <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
+                  <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-boolean-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-boolean-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
                   <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                  <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+                  <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                   boolean&nbsp;thickCorridors)</code>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-int-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-int-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
                   <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                  <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+                  <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                   int&nbsp;fraction)</code>
 <div class="block">Calculates and stores the specified fraction of walkable points from map as waypoints.</div>
 </td>
@@ -253,7 +253,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-">
+<a name="WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -261,7 +261,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <h4>WaypointPathfinder</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.36">WaypointPathfinder</a>(char[][]&nbsp;map,
                           <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                          <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+                          <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
  Will use the given Radius enum to determine how to handle DijkstraMap measurement in future pathfinding.
  Uses a new RNG for all random choices, which will be seeded with <code>rng.nextLong()</code>, or unseeded if
@@ -274,7 +274,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-boolean-">
+<a name="WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -282,7 +282,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <h4>WaypointPathfinder</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.135">WaypointPathfinder</a>(char[][]&nbsp;map,
                           <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                          <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+                          <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                           boolean&nbsp;thickCorridors)</pre>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
  Will use the given Radius enum to determine how to handle DijkstraMap measurement in future pathfinding.
@@ -297,7 +297,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-int-">
+<a name="WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-int-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -305,7 +305,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <h4>WaypointPathfinder</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.256">WaypointPathfinder</a>(char[][]&nbsp;map,
                           <a href="../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                          <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
+                          <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
                           int&nbsp;fraction)</pre>
 <div class="block">Calculates and stores the specified fraction of walkable points from map as waypoints. Does not perform any
  analysis of chokepoints and acts as a more brute-force solution when maps may be unpredictable. The lack of an
@@ -325,7 +325,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
-<a name="WaypointPathfinder-char:A:A-squidpony.squidai.DijkstraMap-squidpony.squidmath.RNG-">
+<a name="WaypointPathfinder-char:A:A-squidpony.squidai.DijkstraMap-squidpony.squidmath.IRNG-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -333,7 +333,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <h4>WaypointPathfinder</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidai/WaypointPathfinder.html#line.306">WaypointPathfinder</a>(char[][]&nbsp;map,
                           <a href="../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;dijkstra,
-                          <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</pre>
+                          <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 <div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.
  Will use the given DijkstraMap for pathfinding after construction (and during some initial calculations).
  The dijkstra parameter will be mutated by this class, so it should not be reused elsewhere.

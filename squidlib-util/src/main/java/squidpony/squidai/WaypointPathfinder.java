@@ -33,7 +33,7 @@ public class WaypointPathfinder {
      * @param measurement a Radius that should correspond to how you want path distance calculated.
      * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      */
-    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng)
+    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
@@ -132,7 +132,7 @@ public class WaypointPathfinder {
      * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      * @param thickCorridors true if most chokepoints on the map are 2 cells wide instead of 1
      */
-    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, boolean thickCorridors)
+    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, boolean thickCorridors)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
@@ -253,7 +253,7 @@ public class WaypointPathfinder {
      * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      * @param fraction the fractional denominator of passable cells to assign as waypoints; use 29 if you aren't sure
      */
-    public WaypointPathfinder(char[][] map, Radius measurement, RNG rng, int fraction)
+    public WaypointPathfinder(char[][] map, Radius measurement, IRNG rng, int fraction)
     {
         if(rng == null)
             this.rng = new StatefulRNG();
@@ -303,7 +303,7 @@ public class WaypointPathfinder {
      * @param dijkstra a DijkstraMap that will be used to find paths; may have costs but they will not be used
      * @param rng an RNG object or null (this will always use a new RNG, but it may be seeded by a given RNG's next result)
      */
-    public WaypointPathfinder(char[][] map, DijkstraMap dijkstra, RNG rng)
+    public WaypointPathfinder(char[][] map, DijkstraMap dijkstra, IRNG rng)
     {
         if(rng == null)
             this.rng = new StatefulRNG();

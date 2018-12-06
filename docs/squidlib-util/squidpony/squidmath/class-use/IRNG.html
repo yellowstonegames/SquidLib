@@ -322,6 +322,36 @@
 <div class="block">Construct a DijkstraMap without a level to actually scan.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidai.DijkstraMap-squidpony.squidmath.IRNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+                  <a href="../../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;dijkstra,
+                  <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
+<div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+                  <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+                  <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
+<div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-boolean-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+                  <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+                  <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+                  boolean&nbsp;thickCorridors)</code>
+<div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.IRNG-int-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
+                  <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
+                  <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+                  int&nbsp;fraction)</code>
+<div class="block">Calculates and stores the specified fraction of walkable points from map as waypoints.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -461,15 +491,28 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MultiSpill.html#MultiSpill-squidpony.squidmath.IRNG-">MultiSpill</a></span>(<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>
+<div class="block">Construct a Spill without a level to actually scan.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MultiSpill.html#MultiSpill-short:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IRNG-">MultiSpill</a></span>(short[][]&nbsp;level,
           <a href="../../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
           <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>
 <div class="block">Used to construct a Spill from the output of another, specifying a distance calculation and RNG.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/SoundMap.html#SoundMap-squidpony.squidmath.IRNG-">SoundMap</a></span>(<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>
 <div class="block">Construct a SoundMap without a level to actually scan.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IRNG-">Spill</a></span>(char[][]&nbsp;level,
+     <a href="../../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
+     <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>
+<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
+ char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -685,6 +728,19 @@
                 <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/PoliticalMapper.html#PoliticalMapper-squidpony.squidmath.IRNG-">PoliticalMapper</a></span>(<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>
+<div class="block">Constructs a SpillWorldMap using the given world name, and uses the world name as the
+ basis for all future random generation in this object.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#SectionDungeonGenerator-int-int-squidpony.squidmath.IRNG-">SectionDungeonGenerator</a></span>(int&nbsp;width,
+                       int&nbsp;height,
+                       <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
+<div class="block">Make a SectionDungeonGenerator with the given height, width, and RNG.</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SerpentDeepMapGenerator.html#SerpentDeepMapGenerator-int-int-int-squidpony.squidmath.IRNG-">SerpentDeepMapGenerator</a></span>(int&nbsp;width,
                        int&nbsp;height,
                        int&nbsp;depth,
@@ -775,6 +831,23 @@
 <div class="block">This prepares a map generator that will generate a map with the given width and height, using the given RNG.</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#ThinDungeonGenerator-int-int-squidpony.squidmath.IRNG-">ThinDungeonGenerator</a></span>(int&nbsp;width,
+                    int&nbsp;height,
+                    <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
+<div class="block">Make a DungeonGenerator with the given height, width, and RNG.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#ThinDungeonGenerator-int-int-squidpony.squidmath.IRNG-int-int-int-">ThinDungeonGenerator</a></span>(int&nbsp;width,
+                    int&nbsp;height,
+                    <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng,
+                    int&nbsp;roomShape,
+                    int&nbsp;corridorShape,
+                    int&nbsp;caveShape)</code>
+<div class="block">Make a DungeonGenerator with the given height, width, and RNG for generating random features.</div>
+</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -812,6 +885,21 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/styled/package-summary.html">squidpony.squidgrid.mapping.styled</a> with parameters of type <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">DungeonBoneGen.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#setRng-squidpony.squidmath.IRNG-">setRng</a></span>(<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
+<div class="block">Sets the current RNG.</div>
+</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructors in <a href="../../../squidpony/squidgrid/mapping/styled/package-summary.html">squidpony.squidgrid.mapping.styled</a> with parameters of type <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -820,7 +908,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#DungeonBoneGen-squidpony.squidmath.IRNG-">DungeonBoneGen</a></span>(<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>
-<div class="block">Constructs a DungeonBoneGen that uses the given squidpony.squidmath.RNG.</div>
+<div class="block">Constructs a DungeonBoneGen that uses the given IRNG.</div>
 </td>
 </tr>
 </tbody>

@@ -2,10 +2,11 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.Maker;
 import squidpony.squidgrid.Direction;
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
-import squidpony.squidmath.RNG;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 /**
  * Recursively divided maze. Creates only walls and passages.
@@ -42,7 +43,7 @@ public class DividedMazeGenerator {
     public DividedMazeGenerator(int width, int height) {
         this.width = width;
         this.height = height;
-        rng = new RNG();
+        rng = new GWTRNG();
     }
 
     /**

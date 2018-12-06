@@ -165,8 +165,8 @@
 <span class="sourceLineNo">157</span>    }<a name="line.157"></a>
 <span class="sourceLineNo">158</span><a name="line.158"></a>
 <span class="sourceLineNo">159</span>    /**<a name="line.159"></a>
-<span class="sourceLineNo">160</span>     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and<a name="line.160"></a>
-<span class="sourceLineNo">161</span>     * adding features will be a LightRNG using a random seed. If width or height is greater than 256, then this will<a name="line.161"></a>
+<span class="sourceLineNo">160</span>     * Make a DungeonGenerator with the given height and width; a GWTRNG will be used for generating a dungeon and<a name="line.160"></a>
+<span class="sourceLineNo">161</span>     * adding features using a random seed. If width or height is greater than 256, then this will<a name="line.161"></a>
 <span class="sourceLineNo">162</span>     * expand the Coord pool from its 256x256 default so it stores a reference to each Coord that might be used in the<a name="line.162"></a>
 <span class="sourceLineNo">163</span>     * creation of the dungeon (if width and height are 300 and 300, the Coord pool will be 300x300; if width and height<a name="line.163"></a>
 <span class="sourceLineNo">164</span>     * are 500 and 100, the Coord pool will be 500x256 because it won't shrink below the default size of 256x256).<a name="line.164"></a>
@@ -175,7 +175,7 @@
 <span class="sourceLineNo">167</span>     */<a name="line.167"></a>
 <span class="sourceLineNo">168</span>    public DungeonGenerator(int width, int height)<a name="line.168"></a>
 <span class="sourceLineNo">169</span>    {<a name="line.169"></a>
-<span class="sourceLineNo">170</span>        this(width, height, new RNG());<a name="line.170"></a>
+<span class="sourceLineNo">170</span>        this(width, height, new GWTRNG());<a name="line.170"></a>
 <span class="sourceLineNo">171</span>    }<a name="line.171"></a>
 <span class="sourceLineNo">172</span><a name="line.172"></a>
 <span class="sourceLineNo">173</span>    /**<a name="line.173"></a>

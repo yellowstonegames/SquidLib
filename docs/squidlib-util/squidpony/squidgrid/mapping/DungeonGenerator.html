@@ -264,8 +264,8 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/DungeonGenerator.html#DungeonGenerator-int-int-">DungeonGenerator</a></span>(int&nbsp;width,
                 int&nbsp;height)</code>
-<div class="block">Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
- adding features will be a LightRNG using a random seed.</div>
+<div class="block">Make a DungeonGenerator with the given height and width; a GWTRNG will be used for generating a dungeon and
+ adding features using a random seed.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -571,8 +571,8 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <h4>DungeonGenerator</h4>
 <pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/DungeonGenerator.html#line.168">DungeonGenerator</a>(int&nbsp;width,
                         int&nbsp;height)</pre>
-<div class="block">Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
- adding features will be a LightRNG using a random seed. If width or height is greater than 256, then this will
+<div class="block">Make a DungeonGenerator with the given height and width; a GWTRNG will be used for generating a dungeon and
+ adding features using a random seed. If width or height is greater than 256, then this will
  expand the Coord pool from its 256x256 default so it stores a reference to each Coord that might be used in the
  creation of the dungeon (if width and height are 300 and 300, the Coord pool will be 300x300; if width and height
  are 500 and 100, the Coord pool will be 500x256 because it won't shrink below the default size of 256x256).</div>

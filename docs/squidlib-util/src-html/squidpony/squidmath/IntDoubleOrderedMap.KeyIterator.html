@@ -2011,406 +2011,405 @@
 <span class="sourceLineNo">2003</span>            while (key[i] == 0)<a name="line.2003"></a>
 <span class="sourceLineNo">2004</span>                i++;<a name="line.2004"></a>
 <span class="sourceLineNo">2005</span>            t = key[i];<a name="line.2005"></a>
-<span class="sourceLineNo">2006</span>            t ^= NumberTools.doubleToMixedIntBits(value[i]);<a name="line.2006"></a>
-<span class="sourceLineNo">2007</span>            h += t;<a name="line.2007"></a>
-<span class="sourceLineNo">2008</span>            i++;<a name="line.2008"></a>
-<span class="sourceLineNo">2009</span>        }<a name="line.2009"></a>
-<span class="sourceLineNo">2010</span>        // Zero / null keys have hash zero.<a name="line.2010"></a>
-<span class="sourceLineNo">2011</span>        if (containsNullKey) h += NumberTools.doubleToMixedIntBits(value[n]);<a name="line.2011"></a>
-<span class="sourceLineNo">2012</span>        return h;<a name="line.2012"></a>
-<span class="sourceLineNo">2013</span>    }<a name="line.2013"></a>
-<span class="sourceLineNo">2014</span>    public long hash64()<a name="line.2014"></a>
-<span class="sourceLineNo">2015</span>    {<a name="line.2015"></a>
-<span class="sourceLineNo">2016</span>        return 31L * CrossHash.hash64(key) + CrossHash.hash64(value);<a name="line.2016"></a>
-<span class="sourceLineNo">2017</span>    }<a name="line.2017"></a>
-<span class="sourceLineNo">2018</span><a name="line.2018"></a>
-<span class="sourceLineNo">2019</span>    @Override<a name="line.2019"></a>
-<span class="sourceLineNo">2020</span>    public boolean equals(Object o) {<a name="line.2020"></a>
-<span class="sourceLineNo">2021</span>        if (o == this)<a name="line.2021"></a>
-<span class="sourceLineNo">2022</span>            return true;<a name="line.2022"></a>
-<span class="sourceLineNo">2023</span>        if (!(o instanceof Map))<a name="line.2023"></a>
-<span class="sourceLineNo">2024</span>            return false;<a name="line.2024"></a>
-<span class="sourceLineNo">2025</span>        Map&lt;?, ?&gt; m = (Map&lt;?, ?&gt;) o;<a name="line.2025"></a>
-<span class="sourceLineNo">2026</span>        return m.size() == size() &amp;&amp; mapEntrySet().containsAll(m.entrySet());<a name="line.2026"></a>
-<span class="sourceLineNo">2027</span>    }<a name="line.2027"></a>
+<span class="sourceLineNo">2006</span>            h = h + (t ^ NumberTools.doubleToMixedIntBits(value[i])) | 0;<a name="line.2006"></a>
+<span class="sourceLineNo">2007</span>            i++;<a name="line.2007"></a>
+<span class="sourceLineNo">2008</span>        }<a name="line.2008"></a>
+<span class="sourceLineNo">2009</span>        // Zero / null keys have hash zero.<a name="line.2009"></a>
+<span class="sourceLineNo">2010</span>        if (containsNullKey) h = h + NumberTools.doubleToMixedIntBits(value[n]) | 0;<a name="line.2010"></a>
+<span class="sourceLineNo">2011</span>        return h;<a name="line.2011"></a>
+<span class="sourceLineNo">2012</span>    }<a name="line.2012"></a>
+<span class="sourceLineNo">2013</span>    public long hash64()<a name="line.2013"></a>
+<span class="sourceLineNo">2014</span>    {<a name="line.2014"></a>
+<span class="sourceLineNo">2015</span>        return 31L * CrossHash.hash64(key) + CrossHash.hash64(value);<a name="line.2015"></a>
+<span class="sourceLineNo">2016</span>    }<a name="line.2016"></a>
+<span class="sourceLineNo">2017</span><a name="line.2017"></a>
+<span class="sourceLineNo">2018</span>    @Override<a name="line.2018"></a>
+<span class="sourceLineNo">2019</span>    public boolean equals(Object o) {<a name="line.2019"></a>
+<span class="sourceLineNo">2020</span>        if (o == this)<a name="line.2020"></a>
+<span class="sourceLineNo">2021</span>            return true;<a name="line.2021"></a>
+<span class="sourceLineNo">2022</span>        if (!(o instanceof Map))<a name="line.2022"></a>
+<span class="sourceLineNo">2023</span>            return false;<a name="line.2023"></a>
+<span class="sourceLineNo">2024</span>        Map&lt;?, ?&gt; m = (Map&lt;?, ?&gt;) o;<a name="line.2024"></a>
+<span class="sourceLineNo">2025</span>        return m.size() == size() &amp;&amp; mapEntrySet().containsAll(m.entrySet());<a name="line.2025"></a>
+<span class="sourceLineNo">2026</span>    }<a name="line.2026"></a>
+<span class="sourceLineNo">2027</span><a name="line.2027"></a>
 <span class="sourceLineNo">2028</span><a name="line.2028"></a>
-<span class="sourceLineNo">2029</span><a name="line.2029"></a>
-<span class="sourceLineNo">2030</span>    /**<a name="line.2030"></a>
-<span class="sourceLineNo">2031</span>     * Delegates to the corresponding type-specific method.<a name="line.2031"></a>
-<span class="sourceLineNo">2032</span>     *<a name="line.2032"></a>
-<span class="sourceLineNo">2033</span>     * @deprecated Please use the corresponding type-specific method instead.<a name="line.2033"></a>
-<span class="sourceLineNo">2034</span>     */<a name="line.2034"></a>
-<span class="sourceLineNo">2035</span>    @Deprecated<a name="line.2035"></a>
-<span class="sourceLineNo">2036</span>    public Integer firstKey() {<a name="line.2036"></a>
-<span class="sourceLineNo">2037</span>        return firstIntKey();<a name="line.2037"></a>
-<span class="sourceLineNo">2038</span>    }<a name="line.2038"></a>
-<span class="sourceLineNo">2039</span><a name="line.2039"></a>
-<span class="sourceLineNo">2040</span>    /**<a name="line.2040"></a>
-<span class="sourceLineNo">2041</span>     * Delegates to the corresponding type-specific method.<a name="line.2041"></a>
-<span class="sourceLineNo">2042</span>     *<a name="line.2042"></a>
-<span class="sourceLineNo">2043</span>     * @deprecated Please use the corresponding type-specific method instead.<a name="line.2043"></a>
-<span class="sourceLineNo">2044</span>     */<a name="line.2044"></a>
-<span class="sourceLineNo">2045</span>    @Deprecated<a name="line.2045"></a>
-<span class="sourceLineNo">2046</span>    public Integer lastKey() {<a name="line.2046"></a>
-<span class="sourceLineNo">2047</span>        return lastIntKey();<a name="line.2047"></a>
-<span class="sourceLineNo">2048</span>    }<a name="line.2048"></a>
+<span class="sourceLineNo">2029</span>    /**<a name="line.2029"></a>
+<span class="sourceLineNo">2030</span>     * Delegates to the corresponding type-specific method.<a name="line.2030"></a>
+<span class="sourceLineNo">2031</span>     *<a name="line.2031"></a>
+<span class="sourceLineNo">2032</span>     * @deprecated Please use the corresponding type-specific method instead.<a name="line.2032"></a>
+<span class="sourceLineNo">2033</span>     */<a name="line.2033"></a>
+<span class="sourceLineNo">2034</span>    @Deprecated<a name="line.2034"></a>
+<span class="sourceLineNo">2035</span>    public Integer firstKey() {<a name="line.2035"></a>
+<span class="sourceLineNo">2036</span>        return firstIntKey();<a name="line.2036"></a>
+<span class="sourceLineNo">2037</span>    }<a name="line.2037"></a>
+<span class="sourceLineNo">2038</span><a name="line.2038"></a>
+<span class="sourceLineNo">2039</span>    /**<a name="line.2039"></a>
+<span class="sourceLineNo">2040</span>     * Delegates to the corresponding type-specific method.<a name="line.2040"></a>
+<span class="sourceLineNo">2041</span>     *<a name="line.2041"></a>
+<span class="sourceLineNo">2042</span>     * @deprecated Please use the corresponding type-specific method instead.<a name="line.2042"></a>
+<span class="sourceLineNo">2043</span>     */<a name="line.2043"></a>
+<span class="sourceLineNo">2044</span>    @Deprecated<a name="line.2044"></a>
+<span class="sourceLineNo">2045</span>    public Integer lastKey() {<a name="line.2045"></a>
+<span class="sourceLineNo">2046</span>        return lastIntKey();<a name="line.2046"></a>
+<span class="sourceLineNo">2047</span>    }<a name="line.2047"></a>
+<span class="sourceLineNo">2048</span><a name="line.2048"></a>
 <span class="sourceLineNo">2049</span><a name="line.2049"></a>
-<span class="sourceLineNo">2050</span><a name="line.2050"></a>
-<span class="sourceLineNo">2051</span>    /**<a name="line.2051"></a>
-<span class="sourceLineNo">2052</span>     * Returns the maximum number of entries that can be filled before rehashing.<a name="line.2052"></a>
-<span class="sourceLineNo">2053</span>     *<a name="line.2053"></a>
-<span class="sourceLineNo">2054</span>     * @param n the size of the backing array.<a name="line.2054"></a>
-<span class="sourceLineNo">2055</span>     * @param f the load factor.<a name="line.2055"></a>
-<span class="sourceLineNo">2056</span>     * @return the maximum number of entries before rehashing.<a name="line.2056"></a>
-<span class="sourceLineNo">2057</span>     */<a name="line.2057"></a>
-<span class="sourceLineNo">2058</span>    public static int maxFill(final int n, final float f) {<a name="line.2058"></a>
-<span class="sourceLineNo">2059</span>        /* We must guarantee that there is always at least<a name="line.2059"></a>
-<span class="sourceLineNo">2060</span>                 * one free entry (even with pathological load factors). */<a name="line.2060"></a>
-<span class="sourceLineNo">2061</span>        return Math.min((int) Math.ceil(n * f), n - 1);<a name="line.2061"></a>
-<span class="sourceLineNo">2062</span>    }<a name="line.2062"></a>
-<span class="sourceLineNo">2063</span><a name="line.2063"></a>
-<span class="sourceLineNo">2064</span>    /**<a name="line.2064"></a>
-<span class="sourceLineNo">2065</span>     * Returns the maximum number of entries that can be filled before rehashing.<a name="line.2065"></a>
-<span class="sourceLineNo">2066</span>     *<a name="line.2066"></a>
-<span class="sourceLineNo">2067</span>     * @param n the size of the backing array.<a name="line.2067"></a>
-<span class="sourceLineNo">2068</span>     * @param f the load factor.<a name="line.2068"></a>
-<span class="sourceLineNo">2069</span>     * @return the maximum number of entries before rehashing.<a name="line.2069"></a>
-<span class="sourceLineNo">2070</span>     */<a name="line.2070"></a>
-<span class="sourceLineNo">2071</span>    public static long maxFill(final long n, final float f) {<a name="line.2071"></a>
-<span class="sourceLineNo">2072</span>                /* We must guarantee that there is always at least<a name="line.2072"></a>
-<span class="sourceLineNo">2073</span>                 * one free entry (even with pathological load factors). */<a name="line.2073"></a>
-<span class="sourceLineNo">2074</span>        return Math.min((long) Math.ceil(n * f), n - 1);<a name="line.2074"></a>
-<span class="sourceLineNo">2075</span>    }<a name="line.2075"></a>
-<span class="sourceLineNo">2076</span><a name="line.2076"></a>
-<span class="sourceLineNo">2077</span>    /**<a name="line.2077"></a>
-<span class="sourceLineNo">2078</span>     * Returns the least power of two smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt; and larger than or equal to &lt;code&gt;Math.ceil( expected / f )&lt;/code&gt;.<a name="line.2078"></a>
-<span class="sourceLineNo">2079</span>     *<a name="line.2079"></a>
-<span class="sourceLineNo">2080</span>     * @param expected the expected number of elements in a hash table.<a name="line.2080"></a>
-<span class="sourceLineNo">2081</span>     * @param f        the load factor.<a name="line.2081"></a>
-<span class="sourceLineNo">2082</span>     * @return the minimum possible size for a backing array.<a name="line.2082"></a>
-<span class="sourceLineNo">2083</span>     * @throws IllegalArgumentException if the necessary size is larger than 2&lt;sup&gt;30&lt;/sup&gt;.<a name="line.2083"></a>
-<span class="sourceLineNo">2084</span>     */<a name="line.2084"></a>
-<span class="sourceLineNo">2085</span>    public static int arraySize(final int expected, final float f) {<a name="line.2085"></a>
-<span class="sourceLineNo">2086</span>        final long s = Math.max(2, HashCommon.nextPowerOfTwo((long) Math.ceil(expected / f)));<a name="line.2086"></a>
-<span class="sourceLineNo">2087</span>        if (s &gt; (1 &lt;&lt; 30))<a name="line.2087"></a>
-<span class="sourceLineNo">2088</span>            throw new IllegalArgumentException("Too large (" + expected + " expected elements with load factor " + f + ")");<a name="line.2088"></a>
-<span class="sourceLineNo">2089</span>        return (int) s;<a name="line.2089"></a>
-<span class="sourceLineNo">2090</span>    }<a name="line.2090"></a>
-<span class="sourceLineNo">2091</span><a name="line.2091"></a>
-<span class="sourceLineNo">2092</span>    public class DoubleCollection implements Collection&lt;Double&gt; {<a name="line.2092"></a>
-<span class="sourceLineNo">2093</span><a name="line.2093"></a>
-<span class="sourceLineNo">2094</span>        public double[] toArray(double a[]) {<a name="line.2094"></a>
-<span class="sourceLineNo">2095</span>            return toDoubleArray(a);<a name="line.2095"></a>
-<span class="sourceLineNo">2096</span>        }<a name="line.2096"></a>
-<span class="sourceLineNo">2097</span><a name="line.2097"></a>
-<span class="sourceLineNo">2098</span>        public double[] toDoubleArray() {<a name="line.2098"></a>
-<span class="sourceLineNo">2099</span>            return toDoubleArray(null);<a name="line.2099"></a>
-<span class="sourceLineNo">2100</span>        }<a name="line.2100"></a>
-<span class="sourceLineNo">2101</span><a name="line.2101"></a>
-<span class="sourceLineNo">2102</span>        public double[] toDoubleArray(double a[]) {<a name="line.2102"></a>
-<span class="sourceLineNo">2103</span>            if (a == null || a.length &lt; size()) a = new double[size()];<a name="line.2103"></a>
-<span class="sourceLineNo">2104</span>            unwrap(iterator(), a);<a name="line.2104"></a>
-<span class="sourceLineNo">2105</span>            return a;<a name="line.2105"></a>
-<span class="sourceLineNo">2106</span>        }<a name="line.2106"></a>
-<span class="sourceLineNo">2107</span><a name="line.2107"></a>
-<span class="sourceLineNo">2108</span>        /**<a name="line.2108"></a>
-<span class="sourceLineNo">2109</span>         * Adds all elements of the given type-specific collection to this collection.<a name="line.2109"></a>
-<span class="sourceLineNo">2110</span>         *<a name="line.2110"></a>
-<span class="sourceLineNo">2111</span>         * @param c a type-specific collection.<a name="line.2111"></a>
-<span class="sourceLineNo">2112</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2112"></a>
-<span class="sourceLineNo">2113</span>         */<a name="line.2113"></a>
-<span class="sourceLineNo">2114</span>        public boolean addAll(DoubleCollection c) {<a name="line.2114"></a>
-<span class="sourceLineNo">2115</span>            boolean retVal = false;<a name="line.2115"></a>
-<span class="sourceLineNo">2116</span>            final DoubleIterator i = c.iterator();<a name="line.2116"></a>
-<span class="sourceLineNo">2117</span>            int n = c.size();<a name="line.2117"></a>
-<span class="sourceLineNo">2118</span>            while (n-- != 0)<a name="line.2118"></a>
-<span class="sourceLineNo">2119</span>                if (add(i.nextDouble())) retVal = true;<a name="line.2119"></a>
-<span class="sourceLineNo">2120</span>            return retVal;<a name="line.2120"></a>
-<span class="sourceLineNo">2121</span>        }<a name="line.2121"></a>
-<span class="sourceLineNo">2122</span><a name="line.2122"></a>
-<span class="sourceLineNo">2123</span>        /**<a name="line.2123"></a>
-<span class="sourceLineNo">2124</span>         * Checks whether this collection contains all elements from the given type-specific collection.<a name="line.2124"></a>
-<span class="sourceLineNo">2125</span>         *<a name="line.2125"></a>
-<span class="sourceLineNo">2126</span>         * @param c a type-specific collection.<a name="line.2126"></a>
-<span class="sourceLineNo">2127</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection contains all elements of the argument.<a name="line.2127"></a>
-<span class="sourceLineNo">2128</span>         */<a name="line.2128"></a>
-<span class="sourceLineNo">2129</span>        public boolean containsAll(DoubleCollection c) {<a name="line.2129"></a>
-<span class="sourceLineNo">2130</span>            final DoubleIterator i = c.iterator();<a name="line.2130"></a>
-<span class="sourceLineNo">2131</span>            int n = c.size();<a name="line.2131"></a>
-<span class="sourceLineNo">2132</span>            while (n-- != 0)<a name="line.2132"></a>
-<span class="sourceLineNo">2133</span>                if (!contains(i.nextDouble())) return false;<a name="line.2133"></a>
-<span class="sourceLineNo">2134</span>            return true;<a name="line.2134"></a>
-<span class="sourceLineNo">2135</span>        }<a name="line.2135"></a>
-<span class="sourceLineNo">2136</span><a name="line.2136"></a>
-<span class="sourceLineNo">2137</span>        /**<a name="line.2137"></a>
-<span class="sourceLineNo">2138</span>         * Retains in this collection only elements from the given type-specific collection.<a name="line.2138"></a>
-<span class="sourceLineNo">2139</span>         *<a name="line.2139"></a>
-<span class="sourceLineNo">2140</span>         * @param c a type-specific collection.<a name="line.2140"></a>
-<span class="sourceLineNo">2141</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2141"></a>
-<span class="sourceLineNo">2142</span>         */<a name="line.2142"></a>
-<span class="sourceLineNo">2143</span>        public boolean retainAll(DoubleCollection c) {<a name="line.2143"></a>
-<span class="sourceLineNo">2144</span>            boolean retVal = false;<a name="line.2144"></a>
-<span class="sourceLineNo">2145</span>            int n = size();<a name="line.2145"></a>
-<span class="sourceLineNo">2146</span>            final DoubleIterator i = iterator();<a name="line.2146"></a>
-<span class="sourceLineNo">2147</span>            while (n-- != 0) {<a name="line.2147"></a>
-<span class="sourceLineNo">2148</span>                if (!c.contains(i.nextDouble())) {<a name="line.2148"></a>
-<span class="sourceLineNo">2149</span>                    i.remove();<a name="line.2149"></a>
-<span class="sourceLineNo">2150</span>                    retVal = true;<a name="line.2150"></a>
-<span class="sourceLineNo">2151</span>                }<a name="line.2151"></a>
-<span class="sourceLineNo">2152</span>            }<a name="line.2152"></a>
-<span class="sourceLineNo">2153</span>            return retVal;<a name="line.2153"></a>
-<span class="sourceLineNo">2154</span>        }<a name="line.2154"></a>
-<span class="sourceLineNo">2155</span><a name="line.2155"></a>
-<span class="sourceLineNo">2156</span>        /**<a name="line.2156"></a>
-<span class="sourceLineNo">2157</span>         * Remove from this collection all elements in the given type-specific collection.<a name="line.2157"></a>
-<span class="sourceLineNo">2158</span>         *<a name="line.2158"></a>
-<span class="sourceLineNo">2159</span>         * @param c a type-specific collection.<a name="line.2159"></a>
-<span class="sourceLineNo">2160</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2160"></a>
-<span class="sourceLineNo">2161</span>         */<a name="line.2161"></a>
-<span class="sourceLineNo">2162</span>        public boolean removeAll(DoubleCollection c) {<a name="line.2162"></a>
-<span class="sourceLineNo">2163</span>            boolean retVal = false;<a name="line.2163"></a>
-<span class="sourceLineNo">2164</span>            int n = c.size();<a name="line.2164"></a>
-<span class="sourceLineNo">2165</span>            final DoubleIterator i = c.iterator();<a name="line.2165"></a>
-<span class="sourceLineNo">2166</span>            while (n-- != 0)<a name="line.2166"></a>
-<span class="sourceLineNo">2167</span>                if (rem(i.nextDouble())) retVal = true;<a name="line.2167"></a>
-<span class="sourceLineNo">2168</span>            return retVal;<a name="line.2168"></a>
-<span class="sourceLineNo">2169</span>        }<a name="line.2169"></a>
-<span class="sourceLineNo">2170</span><a name="line.2170"></a>
-<span class="sourceLineNo">2171</span>        public Object[] toArray() {<a name="line.2171"></a>
-<span class="sourceLineNo">2172</span>            final Object[] a = new Object[size()];<a name="line.2172"></a>
-<span class="sourceLineNo">2173</span>            objectUnwrap(iterator(), a);<a name="line.2173"></a>
-<span class="sourceLineNo">2174</span>            return a;<a name="line.2174"></a>
-<span class="sourceLineNo">2175</span>        }<a name="line.2175"></a>
-<span class="sourceLineNo">2176</span><a name="line.2176"></a>
-<span class="sourceLineNo">2177</span>        @SuppressWarnings("unchecked")<a name="line.2177"></a>
-<span class="sourceLineNo">2178</span>        public &lt;T&gt; T[] toArray(T[] a) {<a name="line.2178"></a>
-<span class="sourceLineNo">2179</span>            objectUnwrap(iterator(), a);<a name="line.2179"></a>
-<span class="sourceLineNo">2180</span>            return a;<a name="line.2180"></a>
-<span class="sourceLineNo">2181</span>        }<a name="line.2181"></a>
-<span class="sourceLineNo">2182</span><a name="line.2182"></a>
-<span class="sourceLineNo">2183</span>        /**<a name="line.2183"></a>
-<span class="sourceLineNo">2184</span>         * Adds all elements of the given collection to this collection.<a name="line.2184"></a>
-<span class="sourceLineNo">2185</span>         *<a name="line.2185"></a>
-<span class="sourceLineNo">2186</span>         * @param c a collection.<a name="line.2186"></a>
-<span class="sourceLineNo">2187</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2187"></a>
-<span class="sourceLineNo">2188</span>         */<a name="line.2188"></a>
-<span class="sourceLineNo">2189</span>        public boolean addAll(Collection&lt;? extends Double&gt; c) {<a name="line.2189"></a>
-<span class="sourceLineNo">2190</span>            boolean retVal = false;<a name="line.2190"></a>
-<span class="sourceLineNo">2191</span>            final Iterator&lt;? extends Double&gt; i = c.iterator();<a name="line.2191"></a>
-<span class="sourceLineNo">2192</span>            int n = c.size();<a name="line.2192"></a>
-<span class="sourceLineNo">2193</span>            while (n-- != 0)<a name="line.2193"></a>
-<span class="sourceLineNo">2194</span>                if (add(i.next())) retVal = true;<a name="line.2194"></a>
-<span class="sourceLineNo">2195</span>            return retVal;<a name="line.2195"></a>
-<span class="sourceLineNo">2196</span>        }<a name="line.2196"></a>
-<span class="sourceLineNo">2197</span><a name="line.2197"></a>
-<span class="sourceLineNo">2198</span>        public boolean add(double k) {<a name="line.2198"></a>
-<span class="sourceLineNo">2199</span>            throw new UnsupportedOperationException();<a name="line.2199"></a>
-<span class="sourceLineNo">2200</span>        }<a name="line.2200"></a>
-<span class="sourceLineNo">2201</span><a name="line.2201"></a>
-<span class="sourceLineNo">2202</span>        /**<a name="line.2202"></a>
-<span class="sourceLineNo">2203</span>         * Delegates to the type-specific &lt;code&gt;rem()&lt;/code&gt; method.<a name="line.2203"></a>
-<span class="sourceLineNo">2204</span>         */<a name="line.2204"></a>
-<span class="sourceLineNo">2205</span>        public boolean remove(Object ok) {<a name="line.2205"></a>
-<span class="sourceLineNo">2206</span>            return rem(((Double) ok).doubleValue());<a name="line.2206"></a>
-<span class="sourceLineNo">2207</span>        }<a name="line.2207"></a>
-<span class="sourceLineNo">2208</span><a name="line.2208"></a>
-<span class="sourceLineNo">2209</span>        /**<a name="line.2209"></a>
-<span class="sourceLineNo">2210</span>         * Delegates to the corresponding type-specific method.<a name="line.2210"></a>
-<span class="sourceLineNo">2211</span>         */<a name="line.2211"></a>
-<span class="sourceLineNo">2212</span>        public boolean add(final Double o) {<a name="line.2212"></a>
-<span class="sourceLineNo">2213</span>            return add(o.doubleValue());<a name="line.2213"></a>
-<span class="sourceLineNo">2214</span>        }<a name="line.2214"></a>
-<span class="sourceLineNo">2215</span><a name="line.2215"></a>
-<span class="sourceLineNo">2216</span>        /**<a name="line.2216"></a>
-<span class="sourceLineNo">2217</span>         * Delegates to the corresponding type-specific method.<a name="line.2217"></a>
-<span class="sourceLineNo">2218</span>         */<a name="line.2218"></a>
-<span class="sourceLineNo">2219</span>        public boolean rem(final Object o) {<a name="line.2219"></a>
-<span class="sourceLineNo">2220</span>            return rem(((Double) o).doubleValue());<a name="line.2220"></a>
-<span class="sourceLineNo">2221</span>        }<a name="line.2221"></a>
-<span class="sourceLineNo">2222</span><a name="line.2222"></a>
-<span class="sourceLineNo">2223</span>        /**<a name="line.2223"></a>
-<span class="sourceLineNo">2224</span>         * Delegates to the corresponding type-specific method.<a name="line.2224"></a>
-<span class="sourceLineNo">2225</span>         */<a name="line.2225"></a>
-<span class="sourceLineNo">2226</span>        public boolean contains(final Object o) {<a name="line.2226"></a>
-<span class="sourceLineNo">2227</span>            return contains(((Double) o).doubleValue());<a name="line.2227"></a>
-<span class="sourceLineNo">2228</span>        }<a name="line.2228"></a>
-<span class="sourceLineNo">2229</span><a name="line.2229"></a>
-<span class="sourceLineNo">2230</span>        public boolean rem(final double k) {<a name="line.2230"></a>
-<span class="sourceLineNo">2231</span>            final DoubleIterator iterator = iterator();<a name="line.2231"></a>
-<span class="sourceLineNo">2232</span>            while (iterator.hasNext())<a name="line.2232"></a>
-<span class="sourceLineNo">2233</span>                if (k == iterator.nextDouble()) {<a name="line.2233"></a>
-<span class="sourceLineNo">2234</span>                    iterator.remove();<a name="line.2234"></a>
-<span class="sourceLineNo">2235</span>                    return true;<a name="line.2235"></a>
-<span class="sourceLineNo">2236</span>                }<a name="line.2236"></a>
-<span class="sourceLineNo">2237</span>            return false;<a name="line.2237"></a>
-<span class="sourceLineNo">2238</span>        }<a name="line.2238"></a>
-<span class="sourceLineNo">2239</span><a name="line.2239"></a>
-<span class="sourceLineNo">2240</span>        /**<a name="line.2240"></a>
-<span class="sourceLineNo">2241</span>         * Checks whether this collection contains all elements from the given collection.<a name="line.2241"></a>
-<span class="sourceLineNo">2242</span>         *<a name="line.2242"></a>
-<span class="sourceLineNo">2243</span>         * @param c a collection.<a name="line.2243"></a>
-<span class="sourceLineNo">2244</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection contains all elements of the argument.<a name="line.2244"></a>
-<span class="sourceLineNo">2245</span>         */<a name="line.2245"></a>
-<span class="sourceLineNo">2246</span>        public boolean containsAll(Collection&lt;?&gt; c) {<a name="line.2246"></a>
-<span class="sourceLineNo">2247</span>            int n = c.size();<a name="line.2247"></a>
-<span class="sourceLineNo">2248</span>            final Iterator&lt;?&gt; i = c.iterator();<a name="line.2248"></a>
-<span class="sourceLineNo">2249</span>            while (n-- != 0)<a name="line.2249"></a>
-<span class="sourceLineNo">2250</span>                if (!contains(i.next())) return false;<a name="line.2250"></a>
-<span class="sourceLineNo">2251</span>            return true;<a name="line.2251"></a>
-<span class="sourceLineNo">2252</span>        }<a name="line.2252"></a>
-<span class="sourceLineNo">2253</span><a name="line.2253"></a>
-<span class="sourceLineNo">2254</span>        /**<a name="line.2254"></a>
-<span class="sourceLineNo">2255</span>         * Retains in this collection only elements from the given collection.<a name="line.2255"></a>
-<span class="sourceLineNo">2256</span>         *<a name="line.2256"></a>
-<span class="sourceLineNo">2257</span>         * @param c a collection.<a name="line.2257"></a>
-<span class="sourceLineNo">2258</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2258"></a>
-<span class="sourceLineNo">2259</span>         */<a name="line.2259"></a>
-<span class="sourceLineNo">2260</span>        public boolean retainAll(Collection&lt;?&gt; c) {<a name="line.2260"></a>
-<span class="sourceLineNo">2261</span>            boolean retVal = false;<a name="line.2261"></a>
-<span class="sourceLineNo">2262</span>            int n = size();<a name="line.2262"></a>
-<span class="sourceLineNo">2263</span>            final Iterator&lt;?&gt; i = iterator();<a name="line.2263"></a>
-<span class="sourceLineNo">2264</span>            while (n-- != 0) {<a name="line.2264"></a>
-<span class="sourceLineNo">2265</span>                if (!c.contains(i.next())) {<a name="line.2265"></a>
-<span class="sourceLineNo">2266</span>                    i.remove();<a name="line.2266"></a>
-<span class="sourceLineNo">2267</span>                    retVal = true;<a name="line.2267"></a>
-<span class="sourceLineNo">2268</span>                }<a name="line.2268"></a>
-<span class="sourceLineNo">2269</span>            }<a name="line.2269"></a>
-<span class="sourceLineNo">2270</span>            return retVal;<a name="line.2270"></a>
-<span class="sourceLineNo">2271</span>        }<a name="line.2271"></a>
-<span class="sourceLineNo">2272</span><a name="line.2272"></a>
-<span class="sourceLineNo">2273</span>        /**<a name="line.2273"></a>
-<span class="sourceLineNo">2274</span>         * Remove from this collection all elements in the given collection. If the collection is an instance of this class, it uses faster iterators.<a name="line.2274"></a>
-<span class="sourceLineNo">2275</span>         *<a name="line.2275"></a>
-<span class="sourceLineNo">2276</span>         * @param c a collection.<a name="line.2276"></a>
-<span class="sourceLineNo">2277</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2277"></a>
-<span class="sourceLineNo">2278</span>         */<a name="line.2278"></a>
-<span class="sourceLineNo">2279</span>        public boolean removeAll(Collection&lt;?&gt; c) {<a name="line.2279"></a>
-<span class="sourceLineNo">2280</span>            boolean retVal = false;<a name="line.2280"></a>
-<span class="sourceLineNo">2281</span>            int n = c.size();<a name="line.2281"></a>
-<span class="sourceLineNo">2282</span>            final Iterator&lt;?&gt; i = c.iterator();<a name="line.2282"></a>
-<span class="sourceLineNo">2283</span>            while (n-- != 0)<a name="line.2283"></a>
-<span class="sourceLineNo">2284</span>                if (remove(i.next())) retVal = true;<a name="line.2284"></a>
-<span class="sourceLineNo">2285</span>            return retVal;<a name="line.2285"></a>
-<span class="sourceLineNo">2286</span>        }<a name="line.2286"></a>
-<span class="sourceLineNo">2287</span><a name="line.2287"></a>
-<span class="sourceLineNo">2288</span>        public boolean isEmpty() {<a name="line.2288"></a>
-<span class="sourceLineNo">2289</span>            return size() == 0;<a name="line.2289"></a>
-<span class="sourceLineNo">2290</span>        }<a name="line.2290"></a>
-<span class="sourceLineNo">2291</span><a name="line.2291"></a>
-<span class="sourceLineNo">2292</span>        public String toString() {<a name="line.2292"></a>
-<span class="sourceLineNo">2293</span>            final StringBuilder s = new StringBuilder();<a name="line.2293"></a>
-<span class="sourceLineNo">2294</span>            final DoubleIterator i = iterator();<a name="line.2294"></a>
-<span class="sourceLineNo">2295</span>            int n = size();<a name="line.2295"></a>
-<span class="sourceLineNo">2296</span>            boolean first = true;<a name="line.2296"></a>
-<span class="sourceLineNo">2297</span>            s.append("{");<a name="line.2297"></a>
-<span class="sourceLineNo">2298</span>            while (n-- != 0) {<a name="line.2298"></a>
-<span class="sourceLineNo">2299</span>                if (first) first = false;<a name="line.2299"></a>
-<span class="sourceLineNo">2300</span>                else s.append(", ");<a name="line.2300"></a>
-<span class="sourceLineNo">2301</span>                s.append(i.nextDouble());<a name="line.2301"></a>
-<span class="sourceLineNo">2302</span>            }<a name="line.2302"></a>
-<span class="sourceLineNo">2303</span>            s.append("}");<a name="line.2303"></a>
-<span class="sourceLineNo">2304</span>            return s.toString();<a name="line.2304"></a>
-<span class="sourceLineNo">2305</span>        }<a name="line.2305"></a>
-<span class="sourceLineNo">2306</span><a name="line.2306"></a>
-<span class="sourceLineNo">2307</span>        public DoubleIterator iterator() {<a name="line.2307"></a>
-<span class="sourceLineNo">2308</span>            return new DoubleIterator();<a name="line.2308"></a>
-<span class="sourceLineNo">2309</span>        }<a name="line.2309"></a>
-<span class="sourceLineNo">2310</span><a name="line.2310"></a>
-<span class="sourceLineNo">2311</span>        public int size() {<a name="line.2311"></a>
-<span class="sourceLineNo">2312</span>            return size;<a name="line.2312"></a>
-<span class="sourceLineNo">2313</span>        }<a name="line.2313"></a>
-<span class="sourceLineNo">2314</span><a name="line.2314"></a>
-<span class="sourceLineNo">2315</span>        public boolean contains(double v) {<a name="line.2315"></a>
-<span class="sourceLineNo">2316</span>            return containsValue(v);<a name="line.2316"></a>
-<span class="sourceLineNo">2317</span>        }<a name="line.2317"></a>
-<span class="sourceLineNo">2318</span><a name="line.2318"></a>
-<span class="sourceLineNo">2319</span>        public void clear() {<a name="line.2319"></a>
-<span class="sourceLineNo">2320</span>            IntDoubleOrderedMap.this.clear();<a name="line.2320"></a>
-<span class="sourceLineNo">2321</span>        }<a name="line.2321"></a>
-<span class="sourceLineNo">2322</span><a name="line.2322"></a>
-<span class="sourceLineNo">2323</span>        public double sum()<a name="line.2323"></a>
-<span class="sourceLineNo">2324</span>        {<a name="line.2324"></a>
-<span class="sourceLineNo">2325</span>            DoubleIterator i = iterator();<a name="line.2325"></a>
-<span class="sourceLineNo">2326</span>            int j = 0;<a name="line.2326"></a>
-<span class="sourceLineNo">2327</span>            while (i.hasNext())<a name="line.2327"></a>
-<span class="sourceLineNo">2328</span>                j += i.nextDouble();<a name="line.2328"></a>
-<span class="sourceLineNo">2329</span>            return j;<a name="line.2329"></a>
-<span class="sourceLineNo">2330</span>        }<a name="line.2330"></a>
-<span class="sourceLineNo">2331</span>    }<a name="line.2331"></a>
-<span class="sourceLineNo">2332</span><a name="line.2332"></a>
-<span class="sourceLineNo">2333</span>    public boolean containsValue(Object ov) {<a name="line.2333"></a>
-<span class="sourceLineNo">2334</span>        return containsValue(((Double) ov).doubleValue());<a name="line.2334"></a>
-<span class="sourceLineNo">2335</span>    }<a name="line.2335"></a>
-<span class="sourceLineNo">2336</span><a name="line.2336"></a>
-<span class="sourceLineNo">2337</span>    /**<a name="line.2337"></a>
-<span class="sourceLineNo">2338</span>     * Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2338"></a>
-<span class="sourceLineNo">2339</span>     * &lt;p&gt;<a name="line.2339"></a>
-<span class="sourceLineNo">2340</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2340"></a>
-<span class="sourceLineNo">2341</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2341"></a>
-<span class="sourceLineNo">2342</span>     *<a name="line.2342"></a>
-<span class="sourceLineNo">2343</span>     * @param i      a type-specific iterator.<a name="line.2343"></a>
-<span class="sourceLineNo">2344</span>     * @param array  an array to contain the output of the iterator.<a name="line.2344"></a>
-<span class="sourceLineNo">2345</span>     * @param offset the first element of the array to be returned.<a name="line.2345"></a>
-<span class="sourceLineNo">2346</span>     * @param max    the maximum number of elements to unwrap.<a name="line.2346"></a>
-<span class="sourceLineNo">2347</span>     * @return the number of elements unwrapped.<a name="line.2347"></a>
-<span class="sourceLineNo">2348</span>     */<a name="line.2348"></a>
-<span class="sourceLineNo">2349</span>    private static int unwrap(final DoubleIterator i, final double array[], int offset, final int max) {<a name="line.2349"></a>
-<span class="sourceLineNo">2350</span>        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");<a name="line.2350"></a>
-<span class="sourceLineNo">2351</span>        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();<a name="line.2351"></a>
-<span class="sourceLineNo">2352</span>        int j = max;<a name="line.2352"></a>
-<span class="sourceLineNo">2353</span>        while (j-- != 0 &amp;&amp; i.hasNext())<a name="line.2353"></a>
-<span class="sourceLineNo">2354</span>            array[offset++] = i.nextDouble();<a name="line.2354"></a>
-<span class="sourceLineNo">2355</span>        return max - j - 1;<a name="line.2355"></a>
-<span class="sourceLineNo">2356</span>    }<a name="line.2356"></a>
-<span class="sourceLineNo">2357</span><a name="line.2357"></a>
-<span class="sourceLineNo">2358</span>    /**<a name="line.2358"></a>
-<span class="sourceLineNo">2359</span>     * Unwraps an iterator into an array.<a name="line.2359"></a>
-<span class="sourceLineNo">2360</span>     * &lt;p&gt;<a name="line.2360"></a>
-<span class="sourceLineNo">2361</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2361"></a>
-<span class="sourceLineNo">2362</span>     * of the array has been reached.<a name="line.2362"></a>
-<span class="sourceLineNo">2363</span>     *<a name="line.2363"></a>
-<span class="sourceLineNo">2364</span>     * @param i     a type-specific iterator.<a name="line.2364"></a>
-<span class="sourceLineNo">2365</span>     * @param array an array to contain the output of the iterator.<a name="line.2365"></a>
-<span class="sourceLineNo">2366</span>     * @return the number of elements unwrapped.<a name="line.2366"></a>
-<span class="sourceLineNo">2367</span>     */<a name="line.2367"></a>
-<span class="sourceLineNo">2368</span>    private static int unwrap(final DoubleIterator i, final double array[]) {<a name="line.2368"></a>
-<span class="sourceLineNo">2369</span>        return unwrap(i, array, 0, array.length);<a name="line.2369"></a>
-<span class="sourceLineNo">2370</span>    }<a name="line.2370"></a>
+<span class="sourceLineNo">2050</span>    /**<a name="line.2050"></a>
+<span class="sourceLineNo">2051</span>     * Returns the maximum number of entries that can be filled before rehashing.<a name="line.2051"></a>
+<span class="sourceLineNo">2052</span>     *<a name="line.2052"></a>
+<span class="sourceLineNo">2053</span>     * @param n the size of the backing array.<a name="line.2053"></a>
+<span class="sourceLineNo">2054</span>     * @param f the load factor.<a name="line.2054"></a>
+<span class="sourceLineNo">2055</span>     * @return the maximum number of entries before rehashing.<a name="line.2055"></a>
+<span class="sourceLineNo">2056</span>     */<a name="line.2056"></a>
+<span class="sourceLineNo">2057</span>    public static int maxFill(final int n, final float f) {<a name="line.2057"></a>
+<span class="sourceLineNo">2058</span>        /* We must guarantee that there is always at least<a name="line.2058"></a>
+<span class="sourceLineNo">2059</span>                 * one free entry (even with pathological load factors). */<a name="line.2059"></a>
+<span class="sourceLineNo">2060</span>        return Math.min((int) Math.ceil(n * f), n - 1);<a name="line.2060"></a>
+<span class="sourceLineNo">2061</span>    }<a name="line.2061"></a>
+<span class="sourceLineNo">2062</span><a name="line.2062"></a>
+<span class="sourceLineNo">2063</span>    /**<a name="line.2063"></a>
+<span class="sourceLineNo">2064</span>     * Returns the maximum number of entries that can be filled before rehashing.<a name="line.2064"></a>
+<span class="sourceLineNo">2065</span>     *<a name="line.2065"></a>
+<span class="sourceLineNo">2066</span>     * @param n the size of the backing array.<a name="line.2066"></a>
+<span class="sourceLineNo">2067</span>     * @param f the load factor.<a name="line.2067"></a>
+<span class="sourceLineNo">2068</span>     * @return the maximum number of entries before rehashing.<a name="line.2068"></a>
+<span class="sourceLineNo">2069</span>     */<a name="line.2069"></a>
+<span class="sourceLineNo">2070</span>    public static long maxFill(final long n, final float f) {<a name="line.2070"></a>
+<span class="sourceLineNo">2071</span>                /* We must guarantee that there is always at least<a name="line.2071"></a>
+<span class="sourceLineNo">2072</span>                 * one free entry (even with pathological load factors). */<a name="line.2072"></a>
+<span class="sourceLineNo">2073</span>        return Math.min((long) Math.ceil(n * f), n - 1);<a name="line.2073"></a>
+<span class="sourceLineNo">2074</span>    }<a name="line.2074"></a>
+<span class="sourceLineNo">2075</span><a name="line.2075"></a>
+<span class="sourceLineNo">2076</span>    /**<a name="line.2076"></a>
+<span class="sourceLineNo">2077</span>     * Returns the least power of two smaller than or equal to 2&lt;sup&gt;30&lt;/sup&gt; and larger than or equal to &lt;code&gt;Math.ceil( expected / f )&lt;/code&gt;.<a name="line.2077"></a>
+<span class="sourceLineNo">2078</span>     *<a name="line.2078"></a>
+<span class="sourceLineNo">2079</span>     * @param expected the expected number of elements in a hash table.<a name="line.2079"></a>
+<span class="sourceLineNo">2080</span>     * @param f        the load factor.<a name="line.2080"></a>
+<span class="sourceLineNo">2081</span>     * @return the minimum possible size for a backing array.<a name="line.2081"></a>
+<span class="sourceLineNo">2082</span>     * @throws IllegalArgumentException if the necessary size is larger than 2&lt;sup&gt;30&lt;/sup&gt;.<a name="line.2082"></a>
+<span class="sourceLineNo">2083</span>     */<a name="line.2083"></a>
+<span class="sourceLineNo">2084</span>    public static int arraySize(final int expected, final float f) {<a name="line.2084"></a>
+<span class="sourceLineNo">2085</span>        final long s = Math.max(2, HashCommon.nextPowerOfTwo((long) Math.ceil(expected / f)));<a name="line.2085"></a>
+<span class="sourceLineNo">2086</span>        if (s &gt; (1 &lt;&lt; 30))<a name="line.2086"></a>
+<span class="sourceLineNo">2087</span>            throw new IllegalArgumentException("Too large (" + expected + " expected elements with load factor " + f + ")");<a name="line.2087"></a>
+<span class="sourceLineNo">2088</span>        return (int) s;<a name="line.2088"></a>
+<span class="sourceLineNo">2089</span>    }<a name="line.2089"></a>
+<span class="sourceLineNo">2090</span><a name="line.2090"></a>
+<span class="sourceLineNo">2091</span>    public class DoubleCollection implements Collection&lt;Double&gt; {<a name="line.2091"></a>
+<span class="sourceLineNo">2092</span><a name="line.2092"></a>
+<span class="sourceLineNo">2093</span>        public double[] toArray(double a[]) {<a name="line.2093"></a>
+<span class="sourceLineNo">2094</span>            return toDoubleArray(a);<a name="line.2094"></a>
+<span class="sourceLineNo">2095</span>        }<a name="line.2095"></a>
+<span class="sourceLineNo">2096</span><a name="line.2096"></a>
+<span class="sourceLineNo">2097</span>        public double[] toDoubleArray() {<a name="line.2097"></a>
+<span class="sourceLineNo">2098</span>            return toDoubleArray(null);<a name="line.2098"></a>
+<span class="sourceLineNo">2099</span>        }<a name="line.2099"></a>
+<span class="sourceLineNo">2100</span><a name="line.2100"></a>
+<span class="sourceLineNo">2101</span>        public double[] toDoubleArray(double a[]) {<a name="line.2101"></a>
+<span class="sourceLineNo">2102</span>            if (a == null || a.length &lt; size()) a = new double[size()];<a name="line.2102"></a>
+<span class="sourceLineNo">2103</span>            unwrap(iterator(), a);<a name="line.2103"></a>
+<span class="sourceLineNo">2104</span>            return a;<a name="line.2104"></a>
+<span class="sourceLineNo">2105</span>        }<a name="line.2105"></a>
+<span class="sourceLineNo">2106</span><a name="line.2106"></a>
+<span class="sourceLineNo">2107</span>        /**<a name="line.2107"></a>
+<span class="sourceLineNo">2108</span>         * Adds all elements of the given type-specific collection to this collection.<a name="line.2108"></a>
+<span class="sourceLineNo">2109</span>         *<a name="line.2109"></a>
+<span class="sourceLineNo">2110</span>         * @param c a type-specific collection.<a name="line.2110"></a>
+<span class="sourceLineNo">2111</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2111"></a>
+<span class="sourceLineNo">2112</span>         */<a name="line.2112"></a>
+<span class="sourceLineNo">2113</span>        public boolean addAll(DoubleCollection c) {<a name="line.2113"></a>
+<span class="sourceLineNo">2114</span>            boolean retVal = false;<a name="line.2114"></a>
+<span class="sourceLineNo">2115</span>            final DoubleIterator i = c.iterator();<a name="line.2115"></a>
+<span class="sourceLineNo">2116</span>            int n = c.size();<a name="line.2116"></a>
+<span class="sourceLineNo">2117</span>            while (n-- != 0)<a name="line.2117"></a>
+<span class="sourceLineNo">2118</span>                if (add(i.nextDouble())) retVal = true;<a name="line.2118"></a>
+<span class="sourceLineNo">2119</span>            return retVal;<a name="line.2119"></a>
+<span class="sourceLineNo">2120</span>        }<a name="line.2120"></a>
+<span class="sourceLineNo">2121</span><a name="line.2121"></a>
+<span class="sourceLineNo">2122</span>        /**<a name="line.2122"></a>
+<span class="sourceLineNo">2123</span>         * Checks whether this collection contains all elements from the given type-specific collection.<a name="line.2123"></a>
+<span class="sourceLineNo">2124</span>         *<a name="line.2124"></a>
+<span class="sourceLineNo">2125</span>         * @param c a type-specific collection.<a name="line.2125"></a>
+<span class="sourceLineNo">2126</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection contains all elements of the argument.<a name="line.2126"></a>
+<span class="sourceLineNo">2127</span>         */<a name="line.2127"></a>
+<span class="sourceLineNo">2128</span>        public boolean containsAll(DoubleCollection c) {<a name="line.2128"></a>
+<span class="sourceLineNo">2129</span>            final DoubleIterator i = c.iterator();<a name="line.2129"></a>
+<span class="sourceLineNo">2130</span>            int n = c.size();<a name="line.2130"></a>
+<span class="sourceLineNo">2131</span>            while (n-- != 0)<a name="line.2131"></a>
+<span class="sourceLineNo">2132</span>                if (!contains(i.nextDouble())) return false;<a name="line.2132"></a>
+<span class="sourceLineNo">2133</span>            return true;<a name="line.2133"></a>
+<span class="sourceLineNo">2134</span>        }<a name="line.2134"></a>
+<span class="sourceLineNo">2135</span><a name="line.2135"></a>
+<span class="sourceLineNo">2136</span>        /**<a name="line.2136"></a>
+<span class="sourceLineNo">2137</span>         * Retains in this collection only elements from the given type-specific collection.<a name="line.2137"></a>
+<span class="sourceLineNo">2138</span>         *<a name="line.2138"></a>
+<span class="sourceLineNo">2139</span>         * @param c a type-specific collection.<a name="line.2139"></a>
+<span class="sourceLineNo">2140</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2140"></a>
+<span class="sourceLineNo">2141</span>         */<a name="line.2141"></a>
+<span class="sourceLineNo">2142</span>        public boolean retainAll(DoubleCollection c) {<a name="line.2142"></a>
+<span class="sourceLineNo">2143</span>            boolean retVal = false;<a name="line.2143"></a>
+<span class="sourceLineNo">2144</span>            int n = size();<a name="line.2144"></a>
+<span class="sourceLineNo">2145</span>            final DoubleIterator i = iterator();<a name="line.2145"></a>
+<span class="sourceLineNo">2146</span>            while (n-- != 0) {<a name="line.2146"></a>
+<span class="sourceLineNo">2147</span>                if (!c.contains(i.nextDouble())) {<a name="line.2147"></a>
+<span class="sourceLineNo">2148</span>                    i.remove();<a name="line.2148"></a>
+<span class="sourceLineNo">2149</span>                    retVal = true;<a name="line.2149"></a>
+<span class="sourceLineNo">2150</span>                }<a name="line.2150"></a>
+<span class="sourceLineNo">2151</span>            }<a name="line.2151"></a>
+<span class="sourceLineNo">2152</span>            return retVal;<a name="line.2152"></a>
+<span class="sourceLineNo">2153</span>        }<a name="line.2153"></a>
+<span class="sourceLineNo">2154</span><a name="line.2154"></a>
+<span class="sourceLineNo">2155</span>        /**<a name="line.2155"></a>
+<span class="sourceLineNo">2156</span>         * Remove from this collection all elements in the given type-specific collection.<a name="line.2156"></a>
+<span class="sourceLineNo">2157</span>         *<a name="line.2157"></a>
+<span class="sourceLineNo">2158</span>         * @param c a type-specific collection.<a name="line.2158"></a>
+<span class="sourceLineNo">2159</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2159"></a>
+<span class="sourceLineNo">2160</span>         */<a name="line.2160"></a>
+<span class="sourceLineNo">2161</span>        public boolean removeAll(DoubleCollection c) {<a name="line.2161"></a>
+<span class="sourceLineNo">2162</span>            boolean retVal = false;<a name="line.2162"></a>
+<span class="sourceLineNo">2163</span>            int n = c.size();<a name="line.2163"></a>
+<span class="sourceLineNo">2164</span>            final DoubleIterator i = c.iterator();<a name="line.2164"></a>
+<span class="sourceLineNo">2165</span>            while (n-- != 0)<a name="line.2165"></a>
+<span class="sourceLineNo">2166</span>                if (rem(i.nextDouble())) retVal = true;<a name="line.2166"></a>
+<span class="sourceLineNo">2167</span>            return retVal;<a name="line.2167"></a>
+<span class="sourceLineNo">2168</span>        }<a name="line.2168"></a>
+<span class="sourceLineNo">2169</span><a name="line.2169"></a>
+<span class="sourceLineNo">2170</span>        public Object[] toArray() {<a name="line.2170"></a>
+<span class="sourceLineNo">2171</span>            final Object[] a = new Object[size()];<a name="line.2171"></a>
+<span class="sourceLineNo">2172</span>            objectUnwrap(iterator(), a);<a name="line.2172"></a>
+<span class="sourceLineNo">2173</span>            return a;<a name="line.2173"></a>
+<span class="sourceLineNo">2174</span>        }<a name="line.2174"></a>
+<span class="sourceLineNo">2175</span><a name="line.2175"></a>
+<span class="sourceLineNo">2176</span>        @SuppressWarnings("unchecked")<a name="line.2176"></a>
+<span class="sourceLineNo">2177</span>        public &lt;T&gt; T[] toArray(T[] a) {<a name="line.2177"></a>
+<span class="sourceLineNo">2178</span>            objectUnwrap(iterator(), a);<a name="line.2178"></a>
+<span class="sourceLineNo">2179</span>            return a;<a name="line.2179"></a>
+<span class="sourceLineNo">2180</span>        }<a name="line.2180"></a>
+<span class="sourceLineNo">2181</span><a name="line.2181"></a>
+<span class="sourceLineNo">2182</span>        /**<a name="line.2182"></a>
+<span class="sourceLineNo">2183</span>         * Adds all elements of the given collection to this collection.<a name="line.2183"></a>
+<span class="sourceLineNo">2184</span>         *<a name="line.2184"></a>
+<span class="sourceLineNo">2185</span>         * @param c a collection.<a name="line.2185"></a>
+<span class="sourceLineNo">2186</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2186"></a>
+<span class="sourceLineNo">2187</span>         */<a name="line.2187"></a>
+<span class="sourceLineNo">2188</span>        public boolean addAll(Collection&lt;? extends Double&gt; c) {<a name="line.2188"></a>
+<span class="sourceLineNo">2189</span>            boolean retVal = false;<a name="line.2189"></a>
+<span class="sourceLineNo">2190</span>            final Iterator&lt;? extends Double&gt; i = c.iterator();<a name="line.2190"></a>
+<span class="sourceLineNo">2191</span>            int n = c.size();<a name="line.2191"></a>
+<span class="sourceLineNo">2192</span>            while (n-- != 0)<a name="line.2192"></a>
+<span class="sourceLineNo">2193</span>                if (add(i.next())) retVal = true;<a name="line.2193"></a>
+<span class="sourceLineNo">2194</span>            return retVal;<a name="line.2194"></a>
+<span class="sourceLineNo">2195</span>        }<a name="line.2195"></a>
+<span class="sourceLineNo">2196</span><a name="line.2196"></a>
+<span class="sourceLineNo">2197</span>        public boolean add(double k) {<a name="line.2197"></a>
+<span class="sourceLineNo">2198</span>            throw new UnsupportedOperationException();<a name="line.2198"></a>
+<span class="sourceLineNo">2199</span>        }<a name="line.2199"></a>
+<span class="sourceLineNo">2200</span><a name="line.2200"></a>
+<span class="sourceLineNo">2201</span>        /**<a name="line.2201"></a>
+<span class="sourceLineNo">2202</span>         * Delegates to the type-specific &lt;code&gt;rem()&lt;/code&gt; method.<a name="line.2202"></a>
+<span class="sourceLineNo">2203</span>         */<a name="line.2203"></a>
+<span class="sourceLineNo">2204</span>        public boolean remove(Object ok) {<a name="line.2204"></a>
+<span class="sourceLineNo">2205</span>            return rem(((Double) ok).doubleValue());<a name="line.2205"></a>
+<span class="sourceLineNo">2206</span>        }<a name="line.2206"></a>
+<span class="sourceLineNo">2207</span><a name="line.2207"></a>
+<span class="sourceLineNo">2208</span>        /**<a name="line.2208"></a>
+<span class="sourceLineNo">2209</span>         * Delegates to the corresponding type-specific method.<a name="line.2209"></a>
+<span class="sourceLineNo">2210</span>         */<a name="line.2210"></a>
+<span class="sourceLineNo">2211</span>        public boolean add(final Double o) {<a name="line.2211"></a>
+<span class="sourceLineNo">2212</span>            return add(o.doubleValue());<a name="line.2212"></a>
+<span class="sourceLineNo">2213</span>        }<a name="line.2213"></a>
+<span class="sourceLineNo">2214</span><a name="line.2214"></a>
+<span class="sourceLineNo">2215</span>        /**<a name="line.2215"></a>
+<span class="sourceLineNo">2216</span>         * Delegates to the corresponding type-specific method.<a name="line.2216"></a>
+<span class="sourceLineNo">2217</span>         */<a name="line.2217"></a>
+<span class="sourceLineNo">2218</span>        public boolean rem(final Object o) {<a name="line.2218"></a>
+<span class="sourceLineNo">2219</span>            return rem(((Double) o).doubleValue());<a name="line.2219"></a>
+<span class="sourceLineNo">2220</span>        }<a name="line.2220"></a>
+<span class="sourceLineNo">2221</span><a name="line.2221"></a>
+<span class="sourceLineNo">2222</span>        /**<a name="line.2222"></a>
+<span class="sourceLineNo">2223</span>         * Delegates to the corresponding type-specific method.<a name="line.2223"></a>
+<span class="sourceLineNo">2224</span>         */<a name="line.2224"></a>
+<span class="sourceLineNo">2225</span>        public boolean contains(final Object o) {<a name="line.2225"></a>
+<span class="sourceLineNo">2226</span>            return contains(((Double) o).doubleValue());<a name="line.2226"></a>
+<span class="sourceLineNo">2227</span>        }<a name="line.2227"></a>
+<span class="sourceLineNo">2228</span><a name="line.2228"></a>
+<span class="sourceLineNo">2229</span>        public boolean rem(final double k) {<a name="line.2229"></a>
+<span class="sourceLineNo">2230</span>            final DoubleIterator iterator = iterator();<a name="line.2230"></a>
+<span class="sourceLineNo">2231</span>            while (iterator.hasNext())<a name="line.2231"></a>
+<span class="sourceLineNo">2232</span>                if (k == iterator.nextDouble()) {<a name="line.2232"></a>
+<span class="sourceLineNo">2233</span>                    iterator.remove();<a name="line.2233"></a>
+<span class="sourceLineNo">2234</span>                    return true;<a name="line.2234"></a>
+<span class="sourceLineNo">2235</span>                }<a name="line.2235"></a>
+<span class="sourceLineNo">2236</span>            return false;<a name="line.2236"></a>
+<span class="sourceLineNo">2237</span>        }<a name="line.2237"></a>
+<span class="sourceLineNo">2238</span><a name="line.2238"></a>
+<span class="sourceLineNo">2239</span>        /**<a name="line.2239"></a>
+<span class="sourceLineNo">2240</span>         * Checks whether this collection contains all elements from the given collection.<a name="line.2240"></a>
+<span class="sourceLineNo">2241</span>         *<a name="line.2241"></a>
+<span class="sourceLineNo">2242</span>         * @param c a collection.<a name="line.2242"></a>
+<span class="sourceLineNo">2243</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection contains all elements of the argument.<a name="line.2243"></a>
+<span class="sourceLineNo">2244</span>         */<a name="line.2244"></a>
+<span class="sourceLineNo">2245</span>        public boolean containsAll(Collection&lt;?&gt; c) {<a name="line.2245"></a>
+<span class="sourceLineNo">2246</span>            int n = c.size();<a name="line.2246"></a>
+<span class="sourceLineNo">2247</span>            final Iterator&lt;?&gt; i = c.iterator();<a name="line.2247"></a>
+<span class="sourceLineNo">2248</span>            while (n-- != 0)<a name="line.2248"></a>
+<span class="sourceLineNo">2249</span>                if (!contains(i.next())) return false;<a name="line.2249"></a>
+<span class="sourceLineNo">2250</span>            return true;<a name="line.2250"></a>
+<span class="sourceLineNo">2251</span>        }<a name="line.2251"></a>
+<span class="sourceLineNo">2252</span><a name="line.2252"></a>
+<span class="sourceLineNo">2253</span>        /**<a name="line.2253"></a>
+<span class="sourceLineNo">2254</span>         * Retains in this collection only elements from the given collection.<a name="line.2254"></a>
+<span class="sourceLineNo">2255</span>         *<a name="line.2255"></a>
+<span class="sourceLineNo">2256</span>         * @param c a collection.<a name="line.2256"></a>
+<span class="sourceLineNo">2257</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2257"></a>
+<span class="sourceLineNo">2258</span>         */<a name="line.2258"></a>
+<span class="sourceLineNo">2259</span>        public boolean retainAll(Collection&lt;?&gt; c) {<a name="line.2259"></a>
+<span class="sourceLineNo">2260</span>            boolean retVal = false;<a name="line.2260"></a>
+<span class="sourceLineNo">2261</span>            int n = size();<a name="line.2261"></a>
+<span class="sourceLineNo">2262</span>            final Iterator&lt;?&gt; i = iterator();<a name="line.2262"></a>
+<span class="sourceLineNo">2263</span>            while (n-- != 0) {<a name="line.2263"></a>
+<span class="sourceLineNo">2264</span>                if (!c.contains(i.next())) {<a name="line.2264"></a>
+<span class="sourceLineNo">2265</span>                    i.remove();<a name="line.2265"></a>
+<span class="sourceLineNo">2266</span>                    retVal = true;<a name="line.2266"></a>
+<span class="sourceLineNo">2267</span>                }<a name="line.2267"></a>
+<span class="sourceLineNo">2268</span>            }<a name="line.2268"></a>
+<span class="sourceLineNo">2269</span>            return retVal;<a name="line.2269"></a>
+<span class="sourceLineNo">2270</span>        }<a name="line.2270"></a>
+<span class="sourceLineNo">2271</span><a name="line.2271"></a>
+<span class="sourceLineNo">2272</span>        /**<a name="line.2272"></a>
+<span class="sourceLineNo">2273</span>         * Remove from this collection all elements in the given collection. If the collection is an instance of this class, it uses faster iterators.<a name="line.2273"></a>
+<span class="sourceLineNo">2274</span>         *<a name="line.2274"></a>
+<span class="sourceLineNo">2275</span>         * @param c a collection.<a name="line.2275"></a>
+<span class="sourceLineNo">2276</span>         * @return &lt;code&gt;true&lt;/code&gt; if this collection changed as a result of the call.<a name="line.2276"></a>
+<span class="sourceLineNo">2277</span>         */<a name="line.2277"></a>
+<span class="sourceLineNo">2278</span>        public boolean removeAll(Collection&lt;?&gt; c) {<a name="line.2278"></a>
+<span class="sourceLineNo">2279</span>            boolean retVal = false;<a name="line.2279"></a>
+<span class="sourceLineNo">2280</span>            int n = c.size();<a name="line.2280"></a>
+<span class="sourceLineNo">2281</span>            final Iterator&lt;?&gt; i = c.iterator();<a name="line.2281"></a>
+<span class="sourceLineNo">2282</span>            while (n-- != 0)<a name="line.2282"></a>
+<span class="sourceLineNo">2283</span>                if (remove(i.next())) retVal = true;<a name="line.2283"></a>
+<span class="sourceLineNo">2284</span>            return retVal;<a name="line.2284"></a>
+<span class="sourceLineNo">2285</span>        }<a name="line.2285"></a>
+<span class="sourceLineNo">2286</span><a name="line.2286"></a>
+<span class="sourceLineNo">2287</span>        public boolean isEmpty() {<a name="line.2287"></a>
+<span class="sourceLineNo">2288</span>            return size() == 0;<a name="line.2288"></a>
+<span class="sourceLineNo">2289</span>        }<a name="line.2289"></a>
+<span class="sourceLineNo">2290</span><a name="line.2290"></a>
+<span class="sourceLineNo">2291</span>        public String toString() {<a name="line.2291"></a>
+<span class="sourceLineNo">2292</span>            final StringBuilder s = new StringBuilder();<a name="line.2292"></a>
+<span class="sourceLineNo">2293</span>            final DoubleIterator i = iterator();<a name="line.2293"></a>
+<span class="sourceLineNo">2294</span>            int n = size();<a name="line.2294"></a>
+<span class="sourceLineNo">2295</span>            boolean first = true;<a name="line.2295"></a>
+<span class="sourceLineNo">2296</span>            s.append("{");<a name="line.2296"></a>
+<span class="sourceLineNo">2297</span>            while (n-- != 0) {<a name="line.2297"></a>
+<span class="sourceLineNo">2298</span>                if (first) first = false;<a name="line.2298"></a>
+<span class="sourceLineNo">2299</span>                else s.append(", ");<a name="line.2299"></a>
+<span class="sourceLineNo">2300</span>                s.append(i.nextDouble());<a name="line.2300"></a>
+<span class="sourceLineNo">2301</span>            }<a name="line.2301"></a>
+<span class="sourceLineNo">2302</span>            s.append("}");<a name="line.2302"></a>
+<span class="sourceLineNo">2303</span>            return s.toString();<a name="line.2303"></a>
+<span class="sourceLineNo">2304</span>        }<a name="line.2304"></a>
+<span class="sourceLineNo">2305</span><a name="line.2305"></a>
+<span class="sourceLineNo">2306</span>        public DoubleIterator iterator() {<a name="line.2306"></a>
+<span class="sourceLineNo">2307</span>            return new DoubleIterator();<a name="line.2307"></a>
+<span class="sourceLineNo">2308</span>        }<a name="line.2308"></a>
+<span class="sourceLineNo">2309</span><a name="line.2309"></a>
+<span class="sourceLineNo">2310</span>        public int size() {<a name="line.2310"></a>
+<span class="sourceLineNo">2311</span>            return size;<a name="line.2311"></a>
+<span class="sourceLineNo">2312</span>        }<a name="line.2312"></a>
+<span class="sourceLineNo">2313</span><a name="line.2313"></a>
+<span class="sourceLineNo">2314</span>        public boolean contains(double v) {<a name="line.2314"></a>
+<span class="sourceLineNo">2315</span>            return containsValue(v);<a name="line.2315"></a>
+<span class="sourceLineNo">2316</span>        }<a name="line.2316"></a>
+<span class="sourceLineNo">2317</span><a name="line.2317"></a>
+<span class="sourceLineNo">2318</span>        public void clear() {<a name="line.2318"></a>
+<span class="sourceLineNo">2319</span>            IntDoubleOrderedMap.this.clear();<a name="line.2319"></a>
+<span class="sourceLineNo">2320</span>        }<a name="line.2320"></a>
+<span class="sourceLineNo">2321</span><a name="line.2321"></a>
+<span class="sourceLineNo">2322</span>        public double sum()<a name="line.2322"></a>
+<span class="sourceLineNo">2323</span>        {<a name="line.2323"></a>
+<span class="sourceLineNo">2324</span>            DoubleIterator i = iterator();<a name="line.2324"></a>
+<span class="sourceLineNo">2325</span>            int j = 0;<a name="line.2325"></a>
+<span class="sourceLineNo">2326</span>            while (i.hasNext())<a name="line.2326"></a>
+<span class="sourceLineNo">2327</span>                j += i.nextDouble();<a name="line.2327"></a>
+<span class="sourceLineNo">2328</span>            return j;<a name="line.2328"></a>
+<span class="sourceLineNo">2329</span>        }<a name="line.2329"></a>
+<span class="sourceLineNo">2330</span>    }<a name="line.2330"></a>
+<span class="sourceLineNo">2331</span><a name="line.2331"></a>
+<span class="sourceLineNo">2332</span>    public boolean containsValue(Object ov) {<a name="line.2332"></a>
+<span class="sourceLineNo">2333</span>        return containsValue(((Double) ov).doubleValue());<a name="line.2333"></a>
+<span class="sourceLineNo">2334</span>    }<a name="line.2334"></a>
+<span class="sourceLineNo">2335</span><a name="line.2335"></a>
+<span class="sourceLineNo">2336</span>    /**<a name="line.2336"></a>
+<span class="sourceLineNo">2337</span>     * Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2337"></a>
+<span class="sourceLineNo">2338</span>     * &lt;p&gt;<a name="line.2338"></a>
+<span class="sourceLineNo">2339</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2339"></a>
+<span class="sourceLineNo">2340</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2340"></a>
+<span class="sourceLineNo">2341</span>     *<a name="line.2341"></a>
+<span class="sourceLineNo">2342</span>     * @param i      a type-specific iterator.<a name="line.2342"></a>
+<span class="sourceLineNo">2343</span>     * @param array  an array to contain the output of the iterator.<a name="line.2343"></a>
+<span class="sourceLineNo">2344</span>     * @param offset the first element of the array to be returned.<a name="line.2344"></a>
+<span class="sourceLineNo">2345</span>     * @param max    the maximum number of elements to unwrap.<a name="line.2345"></a>
+<span class="sourceLineNo">2346</span>     * @return the number of elements unwrapped.<a name="line.2346"></a>
+<span class="sourceLineNo">2347</span>     */<a name="line.2347"></a>
+<span class="sourceLineNo">2348</span>    private static int unwrap(final DoubleIterator i, final double array[], int offset, final int max) {<a name="line.2348"></a>
+<span class="sourceLineNo">2349</span>        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");<a name="line.2349"></a>
+<span class="sourceLineNo">2350</span>        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();<a name="line.2350"></a>
+<span class="sourceLineNo">2351</span>        int j = max;<a name="line.2351"></a>
+<span class="sourceLineNo">2352</span>        while (j-- != 0 &amp;&amp; i.hasNext())<a name="line.2352"></a>
+<span class="sourceLineNo">2353</span>            array[offset++] = i.nextDouble();<a name="line.2353"></a>
+<span class="sourceLineNo">2354</span>        return max - j - 1;<a name="line.2354"></a>
+<span class="sourceLineNo">2355</span>    }<a name="line.2355"></a>
+<span class="sourceLineNo">2356</span><a name="line.2356"></a>
+<span class="sourceLineNo">2357</span>    /**<a name="line.2357"></a>
+<span class="sourceLineNo">2358</span>     * Unwraps an iterator into an array.<a name="line.2358"></a>
+<span class="sourceLineNo">2359</span>     * &lt;p&gt;<a name="line.2359"></a>
+<span class="sourceLineNo">2360</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2360"></a>
+<span class="sourceLineNo">2361</span>     * of the array has been reached.<a name="line.2361"></a>
+<span class="sourceLineNo">2362</span>     *<a name="line.2362"></a>
+<span class="sourceLineNo">2363</span>     * @param i     a type-specific iterator.<a name="line.2363"></a>
+<span class="sourceLineNo">2364</span>     * @param array an array to contain the output of the iterator.<a name="line.2364"></a>
+<span class="sourceLineNo">2365</span>     * @return the number of elements unwrapped.<a name="line.2365"></a>
+<span class="sourceLineNo">2366</span>     */<a name="line.2366"></a>
+<span class="sourceLineNo">2367</span>    private static int unwrap(final DoubleIterator i, final double array[]) {<a name="line.2367"></a>
+<span class="sourceLineNo">2368</span>        return unwrap(i, array, 0, array.length);<a name="line.2368"></a>
+<span class="sourceLineNo">2369</span>    }<a name="line.2369"></a>
+<span class="sourceLineNo">2370</span><a name="line.2370"></a>
 <span class="sourceLineNo">2371</span><a name="line.2371"></a>
-<span class="sourceLineNo">2372</span><a name="line.2372"></a>
-<span class="sourceLineNo">2373</span>    /** Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2373"></a>
-<span class="sourceLineNo">2374</span>     *<a name="line.2374"></a>
-<span class="sourceLineNo">2375</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2375"></a>
-<span class="sourceLineNo">2376</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2376"></a>
-<span class="sourceLineNo">2377</span>     *<a name="line.2377"></a>
-<span class="sourceLineNo">2378</span>     * @param i a type-specific iterator.<a name="line.2378"></a>
-<span class="sourceLineNo">2379</span>     * @param array an array to contain the output of the iterator.<a name="line.2379"></a>
-<span class="sourceLineNo">2380</span>     * @param offset the first element of the array to be returned.<a name="line.2380"></a>
-<span class="sourceLineNo">2381</span>     * @param max the maximum number of elements to unwrap.<a name="line.2381"></a>
-<span class="sourceLineNo">2382</span>     * @return the number of elements unwrapped. */<a name="line.2382"></a>
-<span class="sourceLineNo">2383</span>    public static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max ) {<a name="line.2383"></a>
-<span class="sourceLineNo">2384</span>        if ( max &lt; 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );<a name="line.2384"></a>
-<span class="sourceLineNo">2385</span>        if ( offset &lt; 0 || offset + max &gt; array.length ) throw new IllegalArgumentException();<a name="line.2385"></a>
-<span class="sourceLineNo">2386</span>        int j = max;<a name="line.2386"></a>
-<span class="sourceLineNo">2387</span>        while ( j-- != 0 &amp;&amp; i.hasNext() )<a name="line.2387"></a>
-<span class="sourceLineNo">2388</span>            array[ offset++ ] = i.next();<a name="line.2388"></a>
-<span class="sourceLineNo">2389</span>        return max - j - 1;<a name="line.2389"></a>
-<span class="sourceLineNo">2390</span>    }<a name="line.2390"></a>
-<span class="sourceLineNo">2391</span><a name="line.2391"></a>
-<span class="sourceLineNo">2392</span>    /** Unwraps an iterator into an array.<a name="line.2392"></a>
-<span class="sourceLineNo">2393</span>     *<a name="line.2393"></a>
-<span class="sourceLineNo">2394</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2394"></a>
-<span class="sourceLineNo">2395</span>     * of the array has been reached.<a name="line.2395"></a>
-<span class="sourceLineNo">2396</span>     *<a name="line.2396"></a>
-<span class="sourceLineNo">2397</span>     * @param i a type-specific iterator.<a name="line.2397"></a>
-<span class="sourceLineNo">2398</span>     * @param array an array to contain the output of the iterator.<a name="line.2398"></a>
-<span class="sourceLineNo">2399</span>     * @return the number of elements unwrapped. */<a name="line.2399"></a>
-<span class="sourceLineNo">2400</span>    public static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[] ) {<a name="line.2400"></a>
-<span class="sourceLineNo">2401</span>        return objectUnwrap(i, array, 0, array.length );<a name="line.2401"></a>
-<span class="sourceLineNo">2402</span>    }<a name="line.2402"></a>
+<span class="sourceLineNo">2372</span>    /** Unwraps an iterator into an array starting at a given offset for a given number of elements.<a name="line.2372"></a>
+<span class="sourceLineNo">2373</span>     *<a name="line.2373"></a>
+<span class="sourceLineNo">2374</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned, up to a maximum of &lt;code&gt;length&lt;/code&gt;, in the given array starting at &lt;code&gt;offset&lt;/code&gt;. The<a name="line.2374"></a>
+<span class="sourceLineNo">2375</span>     * number of actually unwrapped elements is returned (it may be less than &lt;code&gt;max&lt;/code&gt; if the iterator emits less than &lt;code&gt;max&lt;/code&gt; elements).<a name="line.2375"></a>
+<span class="sourceLineNo">2376</span>     *<a name="line.2376"></a>
+<span class="sourceLineNo">2377</span>     * @param i a type-specific iterator.<a name="line.2377"></a>
+<span class="sourceLineNo">2378</span>     * @param array an array to contain the output of the iterator.<a name="line.2378"></a>
+<span class="sourceLineNo">2379</span>     * @param offset the first element of the array to be returned.<a name="line.2379"></a>
+<span class="sourceLineNo">2380</span>     * @param max the maximum number of elements to unwrap.<a name="line.2380"></a>
+<span class="sourceLineNo">2381</span>     * @return the number of elements unwrapped. */<a name="line.2381"></a>
+<span class="sourceLineNo">2382</span>    public static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max ) {<a name="line.2382"></a>
+<span class="sourceLineNo">2383</span>        if ( max &lt; 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );<a name="line.2383"></a>
+<span class="sourceLineNo">2384</span>        if ( offset &lt; 0 || offset + max &gt; array.length ) throw new IllegalArgumentException();<a name="line.2384"></a>
+<span class="sourceLineNo">2385</span>        int j = max;<a name="line.2385"></a>
+<span class="sourceLineNo">2386</span>        while ( j-- != 0 &amp;&amp; i.hasNext() )<a name="line.2386"></a>
+<span class="sourceLineNo">2387</span>            array[ offset++ ] = i.next();<a name="line.2387"></a>
+<span class="sourceLineNo">2388</span>        return max - j - 1;<a name="line.2388"></a>
+<span class="sourceLineNo">2389</span>    }<a name="line.2389"></a>
+<span class="sourceLineNo">2390</span><a name="line.2390"></a>
+<span class="sourceLineNo">2391</span>    /** Unwraps an iterator into an array.<a name="line.2391"></a>
+<span class="sourceLineNo">2392</span>     *<a name="line.2392"></a>
+<span class="sourceLineNo">2393</span>     * &lt;P&gt;This method iterates over the given type-specific iterator and stores the elements returned in the given array. The iteration will stop when the iterator has no more elements or when the end<a name="line.2393"></a>
+<span class="sourceLineNo">2394</span>     * of the array has been reached.<a name="line.2394"></a>
+<span class="sourceLineNo">2395</span>     *<a name="line.2395"></a>
+<span class="sourceLineNo">2396</span>     * @param i a type-specific iterator.<a name="line.2396"></a>
+<span class="sourceLineNo">2397</span>     * @param array an array to contain the output of the iterator.<a name="line.2397"></a>
+<span class="sourceLineNo">2398</span>     * @return the number of elements unwrapped. */<a name="line.2398"></a>
+<span class="sourceLineNo">2399</span>    public static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[] ) {<a name="line.2399"></a>
+<span class="sourceLineNo">2400</span>        return objectUnwrap(i, array, 0, array.length );<a name="line.2400"></a>
+<span class="sourceLineNo">2401</span>    }<a name="line.2401"></a>
+<span class="sourceLineNo">2402</span><a name="line.2402"></a>
 <span class="sourceLineNo">2403</span><a name="line.2403"></a>
-<span class="sourceLineNo">2404</span><a name="line.2404"></a>
-<span class="sourceLineNo">2405</span>}<a name="line.2405"></a>
+<span class="sourceLineNo">2404</span>}<a name="line.2404"></a>
 
 
 

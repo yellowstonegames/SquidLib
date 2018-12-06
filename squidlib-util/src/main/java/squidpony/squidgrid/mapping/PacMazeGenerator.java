@@ -1,8 +1,8 @@
 package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
+import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
-import squidpony.squidmath.RNG;
 
 /**
  * Meant to produce the sort of narrow, looping, not-quite-maze-like passages found in a certain famous early arcade game.
@@ -22,7 +22,7 @@ public class PacMazeGenerator {
     public PacMazeGenerator(int width, int height) {
         this.height = height;
         this.width = width;
-        rng = new RNG();
+        rng = new GWTRNG();
     }
 
     public PacMazeGenerator(int width, int height, IRNG rng) {

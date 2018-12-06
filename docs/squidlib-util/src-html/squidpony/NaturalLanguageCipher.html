@@ -414,13 +414,13 @@
 <span class="sourceLineNo">406</span>        nounicSuffix = addPart("-ic", 0);<a name="line.406"></a>
 <span class="sourceLineNo">407</span>        nouniveSuffix = addPart("-ive", 0);<a name="line.407"></a>
 <span class="sourceLineNo">408</span>        nounistSuffix = addPart("-ist", 0);<a name="line.408"></a>
-<span class="sourceLineNo">409</span>        nounismSuffix = addPart("-ism", 1 + (rng.nextIntHasty(3) &gt;&gt; 1));<a name="line.409"></a>
+<span class="sourceLineNo">409</span>        nounismSuffix = addPart("-ism", 1 + (rng.nextSignedInt(3) &gt;&gt; 1));<a name="line.409"></a>
 <span class="sourceLineNo">410</span>        nounenSuffix = addPart("-en", 0);<a name="line.410"></a>
 <span class="sourceLineNo">411</span>        verbedSuffix = addPart("-ed", 0);<a name="line.411"></a>
 <span class="sourceLineNo">412</span>        verberSuffix = addPart("-er", 0);<a name="line.412"></a>
 <span class="sourceLineNo">413</span>        verbingSuffix = addPart("-ing", 1);<a name="line.413"></a>
 <span class="sourceLineNo">414</span>        verbmentSuffix = addPart("-ment", 0);<a name="line.414"></a>
-<span class="sourceLineNo">415</span>        verbationSuffix = addPart("-ation", rng.nextIntHasty(2) + 1);<a name="line.415"></a>
+<span class="sourceLineNo">415</span>        verbationSuffix = addPart("-ation", rng.nextSignedInt(2) + 1);<a name="line.415"></a>
 <span class="sourceLineNo">416</span>        adjectivelySuffix = addPart("-ly", 0);<a name="line.416"></a>
 <span class="sourceLineNo">417</span>        adjectivestSuffix = addPart("-est", 0);<a name="line.417"></a>
 <span class="sourceLineNo">418</span>        reverbPrefix = addPart("re-", 0);<a name="line.418"></a>
@@ -428,7 +428,7 @@
 <span class="sourceLineNo">420</span>        preverbPrefix = addPart("pre-", 0);<a name="line.420"></a>
 <span class="sourceLineNo">421</span>        proverbPrefix = addPart("pro-", 0);<a name="line.421"></a>
 <span class="sourceLineNo">422</span>        postverbPrefix = addPart("post-", 0);<a name="line.422"></a>
-<span class="sourceLineNo">423</span>        antiverbPrefix = addPart("anti-", 2 - (rng.nextIntHasty(3) &gt;&gt; 1));<a name="line.423"></a>
+<span class="sourceLineNo">423</span>        antiverbPrefix = addPart("anti-", 2 - (rng.nextSignedInt(3) &gt;&gt; 1));<a name="line.423"></a>
 <span class="sourceLineNo">424</span>        disnounPrefix = addPart("dis-", 0);<a name="line.424"></a>
 <span class="sourceLineNo">425</span>        table.clear();<a name="line.425"></a>
 <span class="sourceLineNo">426</span>        reverse.clear();<a name="line.426"></a>

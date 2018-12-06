@@ -244,17 +244,17 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/MultiSpill.html#MultiSpill-squidpony.squidmath.IStatefulRNG-">MultiSpill</a></span>(<a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/MultiSpill.html#MultiSpill-squidpony.squidmath.IRNG-">MultiSpill</a></span>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</code>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/MultiSpill.html#MultiSpill-long-">MultiSpill</a></span>(long&nbsp;state)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/MultiSpill.html#MultiSpill-squidpony.squidmath.IStatefulRNG-">MultiSpill</a></span>(<a href="../../squidpony/squidmath/IStatefulRNG.html" title="interface in squidpony.squidmath">IStatefulRNG</a>&nbsp;random)</code>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/MultiSpill.html#MultiSpill-squidpony.squidmath.RNG-">MultiSpill</a></span>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidgrid/MultiSpill.html#MultiSpill-long-">MultiSpill</a></span>(long&nbsp;state)</code>
 <div class="block">Construct a Spill without a level to actually scan.</div>
 </td>
 </tr>
@@ -520,13 +520,13 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  initialize() method before using this class.</div>
 </li>
 </ul>
-<a name="MultiSpill-squidpony.squidmath.RNG-">
+<a name="MultiSpill-squidpony.squidmath.IRNG-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>MultiSpill</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/MultiSpill.html#line.92">MultiSpill</a>(<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidgrid/MultiSpill.html#line.92">MultiSpill</a>(<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;random)</pre>
 <div class="block">Construct a Spill without a level to actually scan. This constructor allows you to specify an RNG, but the actual
  RandomnessSource the RNG that this object uses will not be identical to the one passed as random (64 bits will
  be requested from the passed RNG, and that will be used to seed this class' RNG).

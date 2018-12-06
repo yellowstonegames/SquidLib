@@ -348,7 +348,7 @@
 <div class="block">Make a SectionDungeonGenerator with the given height and width; the RNG used for generating a dungeon and
  adding features will be a LightRNG using a random seed.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#SectionDungeonGenerator-int-int-squidpony.squidmath.RNG-">SectionDungeonGenerator(int, int, RNG)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#SectionDungeonGenerator-int-int-squidpony.squidmath.IRNG-">SectionDungeonGenerator(int, int, IRNG)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping">SectionDungeonGenerator</a></dt>
 <dd>
 <div class="block">Make a SectionDungeonGenerator with the given height, width, and RNG.</div>
 </dd>
@@ -1141,7 +1141,7 @@
 <div class="block">Sets the resolution, which is an exponent that determines the width/height of each zone that shares the same four
  corners (where only the corners have their own hashed values).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#setRng-squidpony.squidmath.RNG-">setRng(RNG)</a></span> - Method in class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#setRng-squidpony.squidmath.IRNG-">setRng(IRNG)</a></span> - Method in class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html" title="class in squidpony.squidgrid.mapping.styled">DungeonBoneGen</a></dt>
 <dd>
 <div class="block">Sets the current RNG.</div>
 </dd>
@@ -2374,7 +2374,7 @@
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill(char[][], Spill.Measurement, RNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.IRNG-">Spill(char[][], Spill.Measurement, IRNG)</a></span> - Constructor for class squidpony.squidgrid.<a href="../squidpony/squidgrid/Spill.html" title="class in squidpony.squidgrid">Spill</a></dt>
 <dd>
 <div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
  char[][] where '#' means a wall and anything else is a walkable tile.</div>
@@ -2717,10 +2717,14 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlapRNG.html#state1">state1</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#stateA">stateA</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrbitRNG.html#stateA">stateA</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/OrbitRNG.html" title="class in squidpony.squidmath">OrbitRNG</a></dt>
 <dd>
 <div class="block">Can be any long value.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#stateB">stateB</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/OrbitRNG.html#stateB">stateB</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/OrbitRNG.html" title="class in squidpony.squidmath">OrbitRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><span class="typeNameLink">StatefulRandomness</span></a> - Interface in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>

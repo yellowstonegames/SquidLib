@@ -149,7 +149,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MaskedShapeGenerator.html#potentialSolid">potentialSolid</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath">LinnormRNG</a></code></td>
+<td class="colFirst"><code><a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MaskedShapeGenerator.html#randomness">randomness</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -157,10 +157,6 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MaskedShapeGenerator.html#randomRegion">randomRegion</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MaskedShapeGenerator.html#rng">rng</a></span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/MaskedShapeGenerator.html#spaceship">spaceship</a></span></code>&nbsp;</td>
 </tr>
@@ -301,16 +297,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>randomness</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath">LinnormRNG</a> <a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.24">randomness</a></pre>
-</li>
-</ul>
-<a name="rng">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>rng</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> <a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.25">rng</a></pre>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a> <a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.24">randomness</a></pre>
 </li>
 </ul>
 <a name="randomRegion">
@@ -319,7 +306,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>randomRegion</h4>
-<pre>public final&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.26">randomRegion</a></pre>
+<pre>public final&nbsp;<a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.25">randomRegion</a></pre>
 </li>
 </ul>
 </li>
@@ -336,7 +323,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MaskedShapeGenerator</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.32">MaskedShapeGenerator</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.31">MaskedShapeGenerator</a>()</pre>
 </li>
 </ul>
 </li>
@@ -353,7 +340,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateInto</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.46">generateInto</a>(int[][]&nbsp;changing,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.45">generateInto</a>(int[][]&nbsp;changing,
                             int&nbsp;xPos,
                             int&nbsp;yPos)</pre>
 <div class="block">Returns a modified version of changing where 0 represents empty space, 1 represents border, and 2 represents
@@ -376,7 +363,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.72">generate</a>()</pre>
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.71">generate</a>()</pre>
 <div class="block">Returns an int array (12x12) where 0 represents empty space, 1 represents border, and 2 represents "body."
  The seed will change each time this runs, producing different shapes each time.
  The technique used here is derived from https://github.com/zfedoran/pixel-sprite-generator .</div>
@@ -392,7 +379,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.83">generate</a>(long&nbsp;seed)</pre>
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.82">generate</a>(long&nbsp;seed)</pre>
 <div class="block">Returns an int array (12x12) where 0 represents empty space, 1 represents border, and 2 represents "body."
  Will use the specified seed for this generation.
  The technique used here is derived from https://github.com/zfedoran/pixel-sprite-generator .</div>
@@ -410,7 +397,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateIntoShaded</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.100">generateIntoShaded</a>(int[][]&nbsp;changing,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.99">generateIntoShaded</a>(int[][]&nbsp;changing,
                                   int&nbsp;xPos,
                                   int&nbsp;yPos)</pre>
 <div class="block">Returns a modified version of changing where 0 represents empty space, 1 represents border, 2 represents shaded
@@ -434,7 +421,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>generateIntoShaded8way</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.137">generateIntoShaded8way</a>(int[][]&nbsp;changing,
+<pre>public&nbsp;int[][]&nbsp;<a href="../../src-html/squidpony/squidmath/MaskedShapeGenerator.html#line.136">generateIntoShaded8way</a>(int[][]&nbsp;changing,
                                       int&nbsp;xPos,
                                       int&nbsp;yPos)</pre>
 <div class="block">Returns a modified version of changing where 0 represents empty space, 1 represents border, 2 represents shaded

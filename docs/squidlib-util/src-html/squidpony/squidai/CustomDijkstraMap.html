@@ -124,7 +124,7 @@
 <span class="sourceLineNo">116</span>     * initialize() method before using this class.<a name="line.116"></a>
 <span class="sourceLineNo">117</span>     */<a name="line.117"></a>
 <span class="sourceLineNo">118</span>    public CustomDijkstraMap() {<a name="line.118"></a>
-<span class="sourceLineNo">119</span>        rng = new RNG();<a name="line.119"></a>
+<span class="sourceLineNo">119</span>        rng = new GWTRNG();<a name="line.119"></a>
 <span class="sourceLineNo">120</span>        path = new IntVLA();<a name="line.120"></a>
 <span class="sourceLineNo">121</span>    }<a name="line.121"></a>
 <span class="sourceLineNo">122</span><a name="line.122"></a>
@@ -154,7 +154,7 @@
 <span class="sourceLineNo">146</span>     * @param adjacency<a name="line.146"></a>
 <span class="sourceLineNo">147</span>     */<a name="line.147"></a>
 <span class="sourceLineNo">148</span>    public CustomDijkstraMap(final double[] level, Adjacency adjacency) {<a name="line.148"></a>
-<span class="sourceLineNo">149</span>        rng = new RNG();<a name="line.149"></a>
+<span class="sourceLineNo">149</span>        rng = new GWTRNG();<a name="line.149"></a>
 <span class="sourceLineNo">150</span>        this.adjacency = adjacency;<a name="line.150"></a>
 <span class="sourceLineNo">151</span>        path = new IntVLA();<a name="line.151"></a>
 <span class="sourceLineNo">152</span><a name="line.152"></a>
@@ -170,7 +170,7 @@
 <span class="sourceLineNo">162</span>     * @param level<a name="line.162"></a>
 <span class="sourceLineNo">163</span>     */<a name="line.163"></a>
 <span class="sourceLineNo">164</span>    public CustomDijkstraMap(final char[][] level) {<a name="line.164"></a>
-<span class="sourceLineNo">165</span>        this(level, new BasicAdjacency(level.length, level[0].length, Measurement.MANHATTAN), new RNG());<a name="line.165"></a>
+<span class="sourceLineNo">165</span>        this(level, new BasicAdjacency(level.length, level[0].length, Measurement.MANHATTAN), new GWTRNG());<a name="line.165"></a>
 <span class="sourceLineNo">166</span>    }<a name="line.166"></a>
 <span class="sourceLineNo">167</span><a name="line.167"></a>
 <span class="sourceLineNo">168</span>    /**<a name="line.168"></a>
@@ -196,7 +196,7 @@
 <span class="sourceLineNo">188</span>     * @param level<a name="line.188"></a>
 <span class="sourceLineNo">189</span>     */<a name="line.189"></a>
 <span class="sourceLineNo">190</span>    public CustomDijkstraMap(final char[][] level, char alternateWall) {<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        rng = new RNG();<a name="line.191"></a>
+<span class="sourceLineNo">191</span>        rng = new GWTRNG();<a name="line.191"></a>
 <span class="sourceLineNo">192</span>        path = new IntVLA();<a name="line.192"></a>
 <span class="sourceLineNo">193</span>        adjacency = new BasicAdjacency(level.length, level[0].length, Measurement.MANHATTAN);<a name="line.193"></a>
 <span class="sourceLineNo">194</span><a name="line.194"></a>
@@ -213,7 +213,7 @@
 <span class="sourceLineNo">205</span>     * @param adjacency<a name="line.205"></a>
 <span class="sourceLineNo">206</span>     */<a name="line.206"></a>
 <span class="sourceLineNo">207</span>    public CustomDijkstraMap(final char[][] level, Adjacency adjacency) {<a name="line.207"></a>
-<span class="sourceLineNo">208</span>        this(level, adjacency, new RNG());<a name="line.208"></a>
+<span class="sourceLineNo">208</span>        this(level, adjacency, new GWTRNG());<a name="line.208"></a>
 <span class="sourceLineNo">209</span>    }<a name="line.209"></a>
 <span class="sourceLineNo">210</span><a name="line.210"></a>
 <span class="sourceLineNo">211</span>    /**<a name="line.211"></a>

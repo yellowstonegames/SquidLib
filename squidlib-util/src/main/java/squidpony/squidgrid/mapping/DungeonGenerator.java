@@ -157,8 +157,8 @@ public class DungeonGenerator implements IDungeonGenerator {
     }
 
     /**
-     * Make a DungeonGenerator with the given height and width; the RNG used for generating a dungeon and
-     * adding features will be a LightRNG using a random seed. If width or height is greater than 256, then this will
+     * Make a DungeonGenerator with the given height and width; a GWTRNG will be used for generating a dungeon and
+     * adding features using a random seed. If width or height is greater than 256, then this will
      * expand the Coord pool from its 256x256 default so it stores a reference to each Coord that might be used in the
      * creation of the dungeon (if width and height are 300 and 300, the Coord pool will be 300x300; if width and height
      * are 500 and 100, the Coord pool will be 500x256 because it won't shrink below the default size of 256x256).
@@ -167,7 +167,7 @@ public class DungeonGenerator implements IDungeonGenerator {
      */
     public DungeonGenerator(int width, int height)
     {
-    	this(width, height, new RNG());
+    	this(width, height, new GWTRNG());
     }
 
     /**

@@ -89,30 +89,6 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#squidpony.squidai">squidpony.squidai</a></td>
-<td class="colLast">
-<div class="block">Tools for finding paths, optimizing targets for area-of-effect (AOE) abilities, and evaluating influence on a grid.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#squidpony.squidgrid">squidpony.squidgrid</a></td>
-<td class="colLast">
-<div class="block">Tools for working with data on a grid, including LOS and FOV; overlaps with geometry code in squidpony.squidmath .</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#squidpony.squidgrid.mapping">squidpony.squidgrid.mapping</a></td>
-<td class="colLast">
-<div class="block">Tools specifically for generating maps and placing content in them, usually working with 2D char arrays.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#squidpony.squidgrid.mapping.styled">squidpony.squidgrid.mapping.styled</a></td>
-<td class="colLast">
-<div class="block">Support code for working with tiled dungeon generation; normally only TilesetType is used outside SquidLib.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#squidpony.squidmath">squidpony.squidmath</a></td>
 <td class="colLast">
 <div class="block">A very broad package containing random number generators, geometry tools, and some classes for combinatorics.</div>
@@ -179,138 +155,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="squidpony.squidai">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> in <a href="../../../squidpony/squidai/package-summary.html">squidpony.squidai</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../squidpony/squidai/package-summary.html">squidpony.squidai</a> with parameters of type <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidai.DijkstraMap-squidpony.squidmath.RNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
-                  <a href="../../../squidpony/squidai/DijkstraMap.html" title="class in squidpony.squidai">DijkstraMap</a>&nbsp;dijkstra,
-                  <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
-                  <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                  <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-boolean-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
-                  <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                  <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
-                  boolean&nbsp;thickCorridors)</code>
-<div class="block">Calculates and stores the doors and doors-like connections ("chokepoints") on the given map as waypoints.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidai/WaypointPathfinder.html#WaypointPathfinder-char:A:A-squidpony.squidgrid.Radius-squidpony.squidmath.RNG-int-">WaypointPathfinder</a></span>(char[][]&nbsp;map,
-                  <a href="../../../squidpony/squidgrid/Radius.html" title="enum in squidpony.squidgrid">Radius</a>&nbsp;measurement,
-                  <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
-                  int&nbsp;fraction)</code>
-<div class="block">Calculates and stores the specified fraction of walkable points from map as waypoints.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="squidpony.squidgrid">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> in <a href="../../../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a> with parameters of type <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/MultiSpill.html#MultiSpill-squidpony.squidmath.RNG-">MultiSpill</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
-<div class="block">Construct a Spill without a level to actually scan.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/Spill.html#Spill-char:A:A-squidpony.squidgrid.Spill.Measurement-squidpony.squidmath.RNG-">Spill</a></span>(char[][]&nbsp;level,
-     <a href="../../../squidpony/squidgrid/Spill.Measurement.html" title="enum in squidpony.squidgrid">Spill.Measurement</a>&nbsp;measurement,
-     <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
-<div class="block">Constructor meant to take a char[][] returned by DungeonBoneGen.generate(), or any other
- char[][] where '#' means a wall and anything else is a walkable tile.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="squidpony.squidgrid.mapping">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a> with parameters of type <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/PoliticalMapper.html#PoliticalMapper-squidpony.squidmath.RNG-">PoliticalMapper</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;random)</code>
-<div class="block">Constructs a SpillWorldMap using the given world name, and uses the world name as the
- basis for all future random generation in this object.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/SectionDungeonGenerator.html#SectionDungeonGenerator-int-int-squidpony.squidmath.RNG-">SectionDungeonGenerator</a></span>(int&nbsp;width,
-                       int&nbsp;height,
-                       <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Make a SectionDungeonGenerator with the given height, width, and RNG.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#ThinDungeonGenerator-int-int-squidpony.squidmath.RNG-">ThinDungeonGenerator</a></span>(int&nbsp;width,
-                    int&nbsp;height,
-                    <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Make a DungeonGenerator with the given height, width, and RNG.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/ThinDungeonGenerator.html#ThinDungeonGenerator-int-int-squidpony.squidmath.RNG-int-int-int-">ThinDungeonGenerator</a></span>(int&nbsp;width,
-                    int&nbsp;height,
-                    <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng,
-                    int&nbsp;roomShape,
-                    int&nbsp;corridorShape,
-                    int&nbsp;caveShape)</code>
-<div class="block">Make a DungeonGenerator with the given height, width, and RNG for generating random features.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="squidpony.squidgrid.mapping.styled">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a> in <a href="../../../squidpony/squidgrid/mapping/styled/package-summary.html">squidpony.squidgrid.mapping.styled</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../squidpony/squidgrid/mapping/styled/package-summary.html">squidpony.squidgrid.mapping.styled</a> with parameters of type <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">DungeonBoneGen.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/styled/DungeonBoneGen.html#setRng-squidpony.squidmath.RNG-">setRng</a></span>(<a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a>&nbsp;rng)</code>
-<div class="block">Sets the current RNG.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="squidpony.squidmath">
 <!--   -->
 </a>
@@ -352,19 +196,6 @@
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
 </td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
-<caption><span>Fields in <a href="../../../squidpony/squidmath/package-summary.html">squidpony.squidmath</a> declared as <a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MaskedShapeGenerator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MaskedShapeGenerator.html#rng">rng</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

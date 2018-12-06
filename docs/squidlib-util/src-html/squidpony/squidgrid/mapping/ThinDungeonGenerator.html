@@ -9,8 +9,8 @@
 <pre><span class="sourceLineNo">001</span>package squidpony.squidgrid.mapping;<a name="line.1"></a>
 <span class="sourceLineNo">002</span><a name="line.2"></a>
 <span class="sourceLineNo">003</span>import squidpony.ArrayTools;<a name="line.3"></a>
-<span class="sourceLineNo">004</span>import squidpony.squidmath.PerlinNoise;<a name="line.4"></a>
-<span class="sourceLineNo">005</span>import squidpony.squidmath.RNG;<a name="line.5"></a>
+<span class="sourceLineNo">004</span>import squidpony.squidmath.IRNG;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidmath.PerlinNoise;<a name="line.5"></a>
 <span class="sourceLineNo">006</span><a name="line.6"></a>
 <span class="sourceLineNo">007</span>/**<a name="line.7"></a>
 <span class="sourceLineNo">008</span> * Created by Tommy Ettinger on 8/7/2016.<a name="line.8"></a>
@@ -46,7 +46,7 @@
 <span class="sourceLineNo">038</span>     * @param height The height of the dungeon in cells<a name="line.38"></a>
 <span class="sourceLineNo">039</span>     * @param rng    The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.39"></a>
 <span class="sourceLineNo">040</span>     */<a name="line.40"></a>
-<span class="sourceLineNo">041</span>    public ThinDungeonGenerator(int width, int height, RNG rng) {<a name="line.41"></a>
+<span class="sourceLineNo">041</span>    public ThinDungeonGenerator(int width, int height, IRNG rng) {<a name="line.41"></a>
 <span class="sourceLineNo">042</span>        super(width, height, rng);<a name="line.42"></a>
 <span class="sourceLineNo">043</span>    }<a name="line.43"></a>
 <span class="sourceLineNo">044</span><a name="line.44"></a>
@@ -98,7 +98,7 @@
 <span class="sourceLineNo">090</span>     * @param caveShape     expected to be an int constant: CAVE_WALL_EXPAND, CAVE_WALL_RETRACT, or CAVE_WALL_CHAOTIC<a name="line.90"></a>
 <span class="sourceLineNo">091</span>     * @param rng           The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.91"></a>
 <span class="sourceLineNo">092</span>     */<a name="line.92"></a>
-<span class="sourceLineNo">093</span>    public ThinDungeonGenerator(int width, int height, RNG rng, int roomShape, int corridorShape, int caveShape) {<a name="line.93"></a>
+<span class="sourceLineNo">093</span>    public ThinDungeonGenerator(int width, int height, IRNG rng, int roomShape, int corridorShape, int caveShape) {<a name="line.93"></a>
 <span class="sourceLineNo">094</span>        super(width, height, rng);<a name="line.94"></a>
 <span class="sourceLineNo">095</span>        wallShapes = roomShape | corridorShape | caveShape;<a name="line.95"></a>
 <span class="sourceLineNo">096</span>        if ((wallShapes &amp; 0xF) == 0 || (wallShapes &amp; 0xF0) == 0 || (wallShapes &amp; 0xF00) == 0<a name="line.96"></a>

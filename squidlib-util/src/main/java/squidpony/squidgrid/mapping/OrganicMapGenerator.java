@@ -17,11 +17,11 @@ public class OrganicMapGenerator implements IDungeonGenerator {
     public double noiseMin, noiseMax;
     public OrganicMapGenerator()
     {
-        this(0.55, 0.65, 80, 30, new RNG());
+        this(0.55, 0.65, 80, 30, new GWTRNG());
     }
     public OrganicMapGenerator(int width, int height)
     {
-        this(0.55, 0.65, width, height, new RNG());
+        this(0.55, 0.65, width, height, new GWTRNG());
     }
     public OrganicMapGenerator(int width, int height, IRNG rng)
     {

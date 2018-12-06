@@ -248,7 +248,7 @@
 <span class="sourceLineNo">240</span>     * @param rng The RNG to use for all purposes in this class; if it is a StatefulRNG, then it will be used as-is,<a name="line.240"></a>
 <span class="sourceLineNo">241</span>     *            but if it is not a StatefulRNG, a new StatefulRNG will be used, randomly seeded by this parameter<a name="line.241"></a>
 <span class="sourceLineNo">242</span>     */<a name="line.242"></a>
-<span class="sourceLineNo">243</span>    public SectionDungeonGenerator(int width, int height, RNG rng)<a name="line.243"></a>
+<span class="sourceLineNo">243</span>    public SectionDungeonGenerator(int width, int height, IRNG rng)<a name="line.243"></a>
 <span class="sourceLineNo">244</span>    {<a name="line.244"></a>
 <span class="sourceLineNo">245</span>        Coord.expandPoolTo(width, height);<a name="line.245"></a>
 <span class="sourceLineNo">246</span>        this.rng = (rng instanceof StatefulRNG) ? (StatefulRNG) rng : new StatefulRNG(rng.nextLong());<a name="line.246"></a>

@@ -67,7 +67,7 @@ public class PoliticalMapper {
      *
      * @param random an RNG to generate the name for the world in a random language, which will also serve as a seed
      */
-    public PoliticalMapper(RNG random) {
+    public PoliticalMapper(IRNG random) {
         this(FakeLanguageGen.SIMPLISH.word(random, true));
     }
     /**

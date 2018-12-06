@@ -32,7 +32,7 @@ public class WobblyLine {
      * @return List of Coord, including (startX, startY) and (endX, endY) and all points walked between
      */
     public static List<Coord> line(int startX, int startY, int endX, int endY, int width, int height) {
-        return line(startX, startY, endX, endY, width, height, 0.75, new RNG());
+        return line(startX, startY, endX, endY, width, height, 0.75, new GWTRNG());
     }
     /**
      * Draws a line from (startX, startY) to (endX, endY) using the Drunkard's Walk algorithm. Returns a List of Coord

@@ -2,10 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.CellularAutomaton;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.IRNG;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 
@@ -118,7 +115,7 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         this.width = Math.max(3, width);
         this.height = Math.max(3, height);
         type = TilesetType.DEFAULT_DUNGEON;
-        rng = new RNG();
+        rng = new GWTRNG();
         gen = new DungeonBoneGen(rng);
         ca = new CellularAutomaton(this.width, this.height);
         environment = new int[this.width][this.height];
@@ -135,7 +132,7 @@ public class FlowingCaveGenerator implements IDungeonGenerator {
         this.width = Math.max(3, width);
         this.height = Math.max(3, height);
         this.type = type == null ? TilesetType.DEFAULT_DUNGEON : type;
-        this.rng = rng == null ? new RNG() : rng;
+        this.rng = rng == null ? new GWTRNG() : rng;
         gen = new DungeonBoneGen(this.rng);
         ca = new CellularAutomaton(this.width, this.height);
         environment = new int[this.width][this.height];

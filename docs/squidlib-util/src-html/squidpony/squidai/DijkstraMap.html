@@ -234,7 +234,7 @@
 <span class="sourceLineNo">226</span>     * initialize() method before using this class.<a name="line.226"></a>
 <span class="sourceLineNo">227</span>     */<a name="line.227"></a>
 <span class="sourceLineNo">228</span>    public DijkstraMap() {<a name="line.228"></a>
-<span class="sourceLineNo">229</span>        rng = new RNG();<a name="line.229"></a>
+<span class="sourceLineNo">229</span>        rng = new GWTRNG();<a name="line.229"></a>
 <span class="sourceLineNo">230</span>        path = new ArrayList&lt;&gt;();<a name="line.230"></a>
 <span class="sourceLineNo">231</span>    }<a name="line.231"></a>
 <span class="sourceLineNo">232</span><a name="line.232"></a>
@@ -264,7 +264,7 @@
 <span class="sourceLineNo">256</span>     * @param measurement<a name="line.256"></a>
 <span class="sourceLineNo">257</span>     */<a name="line.257"></a>
 <span class="sourceLineNo">258</span>    public DijkstraMap(final double[][] level, Measurement measurement) {<a name="line.258"></a>
-<span class="sourceLineNo">259</span>        rng = new RNG();<a name="line.259"></a>
+<span class="sourceLineNo">259</span>        rng = new GWTRNG();<a name="line.259"></a>
 <span class="sourceLineNo">260</span>        this.measurement = measurement;<a name="line.260"></a>
 <span class="sourceLineNo">261</span>        path = new ArrayList&lt;&gt;();<a name="line.261"></a>
 <span class="sourceLineNo">262</span>        initialize(level);<a name="line.262"></a>
@@ -279,7 +279,7 @@
 <span class="sourceLineNo">271</span>     * @param level<a name="line.271"></a>
 <span class="sourceLineNo">272</span>     */<a name="line.272"></a>
 <span class="sourceLineNo">273</span>    public DijkstraMap(final char[][] level) {<a name="line.273"></a>
-<span class="sourceLineNo">274</span>        this(level, Measurement.MANHATTAN, new RNG());<a name="line.274"></a>
+<span class="sourceLineNo">274</span>        this(level, Measurement.MANHATTAN, new GWTRNG());<a name="line.274"></a>
 <span class="sourceLineNo">275</span>    }<a name="line.275"></a>
 <span class="sourceLineNo">276</span><a name="line.276"></a>
 <span class="sourceLineNo">277</span>    /**<a name="line.277"></a>
@@ -305,7 +305,7 @@
 <span class="sourceLineNo">297</span>     * @param level<a name="line.297"></a>
 <span class="sourceLineNo">298</span>     */<a name="line.298"></a>
 <span class="sourceLineNo">299</span>    public DijkstraMap(final char[][] level, char alternateWall) {<a name="line.299"></a>
-<span class="sourceLineNo">300</span>        rng = new RNG();<a name="line.300"></a>
+<span class="sourceLineNo">300</span>        rng = new GWTRNG();<a name="line.300"></a>
 <span class="sourceLineNo">301</span>        path = new ArrayList&lt;&gt;();<a name="line.301"></a>
 <span class="sourceLineNo">302</span><a name="line.302"></a>
 <span class="sourceLineNo">303</span>        initialize(level, alternateWall);<a name="line.303"></a>
@@ -321,7 +321,7 @@
 <span class="sourceLineNo">313</span>     * @param measurement<a name="line.313"></a>
 <span class="sourceLineNo">314</span>     */<a name="line.314"></a>
 <span class="sourceLineNo">315</span>    public DijkstraMap(final char[][] level, Measurement measurement) {<a name="line.315"></a>
-<span class="sourceLineNo">316</span>        this(level, measurement, new RNG());<a name="line.316"></a>
+<span class="sourceLineNo">316</span>        this(level, measurement, new GWTRNG());<a name="line.316"></a>
 <span class="sourceLineNo">317</span>    }<a name="line.317"></a>
 <span class="sourceLineNo">318</span><a name="line.318"></a>
 <span class="sourceLineNo">319</span>    /**<a name="line.319"></a>

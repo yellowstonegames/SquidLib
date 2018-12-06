@@ -12,8 +12,8 @@
 <span class="sourceLineNo">004</span>import squidpony.annotation.Beta;<a name="line.4"></a>
 <span class="sourceLineNo">005</span>import squidpony.squidgrid.Direction;<a name="line.5"></a>
 <span class="sourceLineNo">006</span>import squidpony.squidmath.Coord;<a name="line.6"></a>
-<span class="sourceLineNo">007</span>import squidpony.squidmath.IRNG;<a name="line.7"></a>
-<span class="sourceLineNo">008</span>import squidpony.squidmath.RNG;<a name="line.8"></a>
+<span class="sourceLineNo">007</span>import squidpony.squidmath.GWTRNG;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import squidpony.squidmath.IRNG;<a name="line.8"></a>
 <span class="sourceLineNo">009</span><a name="line.9"></a>
 <span class="sourceLineNo">010</span>import java.util.ArrayList;<a name="line.10"></a>
 <span class="sourceLineNo">011</span><a name="line.11"></a>
@@ -33,7 +33,7 @@
 <span class="sourceLineNo">025</span>    public GrowingTreeMazeGenerator(int width, int height) {<a name="line.25"></a>
 <span class="sourceLineNo">026</span>        this.width = width;<a name="line.26"></a>
 <span class="sourceLineNo">027</span>        this.height = height;<a name="line.27"></a>
-<span class="sourceLineNo">028</span>        rng = new RNG();<a name="line.28"></a>
+<span class="sourceLineNo">028</span>        rng = new GWTRNG();<a name="line.28"></a>
 <span class="sourceLineNo">029</span>    }<a name="line.29"></a>
 <span class="sourceLineNo">030</span>    public GrowingTreeMazeGenerator(int width, int height, IRNG rng) {<a name="line.30"></a>
 <span class="sourceLineNo">031</span>        this.width = width;<a name="line.31"></a>
