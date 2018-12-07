@@ -11,14 +11,20 @@ import java.util.Arrays;
 
 /**
  * Can be used to generate world maps with a wide variety of data, starting with height, temperature and moisture.
- * From there, you can determine biome information in as much detail as your game needs, with a default implementation
- * available that assigns a single biome to each cell based on heat/moisture. The maps this produces are valid
- * for spherical or toroidal world projections, and will wrap from edge to opposite edge seamlessly thanks to a
- * technique from the Accidental Noise Library ( https://www.gamedev.net/blog/33/entry-2138456-seamless-noise/ ) that
- * involves getting a 2D slice of 4D Simplex noise. Because of how Simplex noise works, this also allows extremely high
- * zoom levels as long as certain parameters are within reason. You can access the height map with the
- * {@link #heightData} field, the heat map with the {@link #heatData} field, the moisture map with the
- * {@link #moistureData} field, and a special map that stores ints representing the codes for various ranges of
+ * From there, you can determine biome information in as much detail as your game needs, with default implementations
+ * available; one assigns a single biome to each cell based on heat/moisture, and the other gives a gradient between two
+ * biome types for every cell. The maps this produces with {@link SphereMap} are valid for spherical world projections,
+ * while the maps from {@link TilingMap} are for toroidal world projections and will wrap from edge to opposite edge
+ * seamlessly thanks to <a href="https://www.gamedev.net/blog/33/entry-2138456-seamless-noise/">a technique from the
+ * Accidental Noise Library</a> that involves getting a 2D slice of 4D Simplex noise. Because of how Simplex noise
+ * works, this also allows extremely high zoom levels for all types of map as long as certain parameters are within
+ * reason. Other world maps produce more conventional shapes, like {@link SpaceViewMap} and {@link RotatingSpaceMap}
+ * make a view of a marble-like world from space, and others make more unconventional shapes, like {@link EllipticalMap}
+ * or {@link EllipticalHammerMap}, which form a 2:1 ellipse shape that accurately keeps sizes but not relative shapes,
+ * {@link RoundSideMap}, which forms a pill-shape, and {@link HyperellipticalMap}, which takes parameters so it can fit
+ * any shape between a circle or ellipse and a rectangle (the default is a slightly squared-off ellipse). You can access
+ * the height map with the {@link #heightData} field, the heat map with the {@link #heatData} field, the moisture map
+ * with the {@link #moistureData} field, and a special map that stores ints representing the codes for various ranges of
  * elevation (0 to 8 inclusive, with 0 the deepest ocean and 8 the highest mountains) with {@link #heightCodeData}. The
  * last map should be noted as being the simplest way to find what is land and what is water; any height code 4 or
  * greater is land, and any height code 3 or less is water.
@@ -31,8 +37,8 @@ import java.util.Arrays;
 @Beta
 public abstract class WorldMapGenerator implements Serializable {
     public final int width, height;
-    public long seed, cachedState;
-    public IStatefulRNG rng;
+    public int seedA, seedB, cacheA, cacheB;
+    public GWTRNG rng;
     public final double[][] heightData, heatData, moistureData;
     public final GreasedRegion landData
             ;//, riverData, lakeData,
@@ -104,7 +110,7 @@ public abstract class WorldMapGenerator implements Serializable {
     }
     /**
      * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
-     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
+     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, int, int)}).
      * Always makes a 256x256 map. If you were using {@link WorldMapGenerator#WorldMapGenerator(long, int, int)}, then
      * this would be the same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 256}.
      */
@@ -114,7 +120,7 @@ public abstract class WorldMapGenerator implements Serializable {
     }
     /**
      * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
-     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
+     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, int, int)}).
      * Takes only the width/height of the map. The initial seed is set to the same large long
      * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
      * height of the map cannot be changed after the fact, but you can zoom in.
@@ -128,12 +134,12 @@ public abstract class WorldMapGenerator implements Serializable {
     }
     /**
      * Constructs a WorldMapGenerator (this class is abstract, so you should typically call this from a subclass or as
-     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, long)}).
+     * part of an anonymous class that implements {@link #regenerate(int, int, int, int, double, double, int, int)}).
      * Takes an initial seed and the width/height of the map. The {@code initialSeed}
      * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
      * The width and height of the map cannot be changed after the fact, but you can zoom in.
      *
-     * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+     * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
      * @param mapWidth the width of the map(s) to generate; cannot be changed later
      * @param mapHeight the height of the map(s) to generate; cannot be changed later
      */
@@ -143,9 +149,11 @@ public abstract class WorldMapGenerator implements Serializable {
         height = mapHeight;
         usedWidth = width;
         usedHeight = height;
-        seed = initialSeed;
-        cachedState = ~initialSeed;
-        rng = new StatefulRNG(initialSeed);
+        seedA = (int) (initialSeed & 0xFFFFFFFFL);
+        seedB = (int) (initialSeed >>> 32);
+        cacheA = ~seedA;
+        cacheB = ~seedB;
+        rng = new GWTRNG(seedA, seedB);
         heightData = new double[width][height];
         heatData = new double[width][height];
         moistureData = new double[width][height];
@@ -193,9 +201,11 @@ public abstract class WorldMapGenerator implements Serializable {
      */
     public void generate(double landMod, double coolMod, long state)
     {
-        if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+        if(cacheA != (int) (state & 0xFFFFFFFFL) || cacheB != (int) (state >>> 32) ||
+                landMod != landModifier || coolMod != coolingModifier)
         {
-            seed = state;
+            seedA = (int) (state & 0xFFFFFFFFL);
+            seedB = (int) (state >>> 32);
             zoom = 0;
             startCacheX.clear();
             startCacheY.clear();
@@ -209,7 +219,7 @@ public abstract class WorldMapGenerator implements Serializable {
 
         regenerate(startX = (zoomStartX >> zoom) - (width >> 1 + zoom), startY = (zoomStartY >> zoom) - (height >> 1 + zoom),
                 //startCacheX.peek(), startCacheY.peek(),
-                usedWidth = (width >> zoom), usedHeight = (height >> zoom), landMod, coolMod, state);
+                usedWidth = (width >> zoom), usedHeight = (height >> zoom), landMod, coolMod, seedA, seedB);
     }
 
     /**
@@ -242,7 +252,7 @@ public abstract class WorldMapGenerator implements Serializable {
         }
         if(zoom > 0)
         {
-            if(seed != cachedState)
+            if(cacheA != seedA || cacheB != seedB)
             {
                 generate(rng.nextLong());
             }
@@ -267,8 +277,8 @@ public abstract class WorldMapGenerator implements Serializable {
             regenerate(startX = (zoomStartX >> zoom) - (width >> zoom + 1), startY = (zoomStartY >> zoom) - (height >> zoom + 1),
                     //startCacheX.peek(), startCacheY.peek(),
                     usedWidth = width >> zoom,  usedHeight = height >> zoom,
-                    landModifier, coolingModifier, cachedState);
-            rng.setState(cachedState);
+                    landModifier, coolingModifier, cacheA, cacheB);
+            rng.setState(cacheA, cacheB);
         }
 
     }
@@ -304,7 +314,7 @@ public abstract class WorldMapGenerator implements Serializable {
             zoomOut(-zoomAmount, zoomCenterX, zoomCenterY);
             return;
         }
-        if(seed != cachedState)
+        if(seedA != cacheA || seedB != cacheB)
         {
             generate(rng.nextLong());
         }
@@ -332,12 +342,12 @@ public abstract class WorldMapGenerator implements Serializable {
         regenerate(startX = (zoomStartX >> zoom) - (width >> 1 + zoom), startY = (zoomStartY >> zoom) - (height >> 1 + zoom),
                 //startCacheX.peek(), startCacheY.peek(),
                 usedWidth = width >> zoom, usedHeight = height >> zoom,
-                landModifier, coolingModifier, cachedState);
-        rng.setState(cachedState);
+                landModifier, coolingModifier, cacheA, cacheB);
+        rng.setState(cacheA, cacheB);
     }
 
     protected abstract void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                       double landMod, double coolMod, long state);
+                                       double landMod, double coolMod, int stateA, int stateB);
     /**
      * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
      * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
@@ -1280,10 +1290,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -1297,10 +1307,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -1638,10 +1649,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -1655,10 +1666,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -1987,15 +1999,13 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
-                minHeightActual = Double.POSITIVE_INFINITY;
-                maxHeightActual = Double.NEGATIVE_INFINITY;
                 minHeat0 = Double.POSITIVE_INFINITY;
                 maxHeat0 = Double.NEGATIVE_INFINITY;
                 minHeat1 = Double.POSITIVE_INFINITY;
@@ -2006,10 +2016,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -2316,10 +2327,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -2333,10 +2344,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -2681,10 +2693,10 @@ public abstract class WorldMapGenerator implements Serializable {
         //private static final double root2 = Math.sqrt(2.0), inverseRoot2 = 1.0 / root2, halfInverseRoot2 = 0.5 / root2;
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -2700,10 +2712,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -3019,10 +3032,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -3038,10 +3051,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -3414,10 +3428,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -3433,10 +3447,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -3767,10 +3782,10 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
             boolean fresh = false;
-            if(cachedState != state || landMod != landModifier || coolMod != coolingModifier)
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
             {
                 minHeight = Double.POSITIVE_INFINITY;
                 maxHeight = Double.NEGATIVE_INFINITY;
@@ -3786,10 +3801,11 @@ public abstract class WorldMapGenerator implements Serializable {
                 maxWet0 = Double.NEGATIVE_INFINITY;
                 minWet = Double.POSITIVE_INFINITY;
                 maxWet = Double.NEGATIVE_INFINITY;
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
                 fresh = true;
             }
-            rng.setState(state);
+            rng.setState(stateA, stateB);
             long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
             int t;
 
@@ -4175,11 +4191,11 @@ public abstract class WorldMapGenerator implements Serializable {
         }
 
         protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
-                                  double landMod, double coolMod, long state)
+                                  double landMod, double coolMod, int stateA, int stateB)
         {
-            if(cachedState != state)// || landMod != storedMap.landModifier || coolMod != storedMap.coolingModifier)
+            if(cacheA != stateA || cacheB != stateB)// || landMod != storedMap.landModifier || coolMod != storedMap.coolingModifier)
             {
-                storedMap.regenerate(0, 0, width << 1, height, landMod, coolMod, state);
+                storedMap.regenerate(0, 0, width << 1, height, landMod, coolMod, stateA, stateB);
                 minHeightActual = Double.POSITIVE_INFINITY;
                 maxHeightActual = Double.NEGATIVE_INFINITY;
 
@@ -4201,7 +4217,8 @@ public abstract class WorldMapGenerator implements Serializable {
                 minWet = storedMap.minWet;
                 maxWet = storedMap.maxWet;
 
-                cachedState = state;
+                cacheA = stateA;
+                cacheB = stateB;
             }
             setCenterLongitude(centerLongitude);
             landData.refill(heightCodeData, 4, 999);
