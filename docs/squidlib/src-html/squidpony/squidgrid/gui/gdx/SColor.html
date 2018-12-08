@@ -13026,7 +13026,7 @@
 <span class="sourceLineNo">13018</span>     * as "FFFFFFFE", and pure red with 50% alpha will be shown as "FF00007E".<a name="line.13018"></a>
 <span class="sourceLineNo">13019</span>     * &lt;br&gt;<a name="line.13019"></a>
 <span class="sourceLineNo">13020</span>     * The value of {@code color} should be the same type used internally in libGDX and SquidLib, that is, an ABGR<a name="line.13020"></a>
-<span class="sourceLineNo">13021</span>     * packed float that could be passed directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}.<a name="line.13021"></a>
+<span class="sourceLineNo">13021</span>     * packed float that could be passed directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}.<a name="line.13021"></a>
 <span class="sourceLineNo">13022</span>     *<a name="line.13022"></a>
 <span class="sourceLineNo">13023</span>     * @param changing a char array that will be changed in place; must not be null and must have length of at least 8<a name="line.13023"></a>
 <span class="sourceLineNo">13024</span>     * @param color    a color<a name="line.13024"></a>
@@ -13050,8 +13050,8 @@
 <span class="sourceLineNo">13042</span>     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in<a name="line.13042"></a>
 <span class="sourceLineNo">13043</span>     * RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and<a name="line.13043"></a>
 <span class="sourceLineNo">13044</span>     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13044"></a>
-<span class="sourceLineNo">13045</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which was the fastest and least wasteful way<a name="line.13045"></a>
-<span class="sourceLineNo">13046</span>     * to set the current color used by a Batch for tinting (it still is for {@link FilterBatch}).<a name="line.13046"></a>
+<span class="sourceLineNo">13045</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.13045"></a>
+<span class="sourceLineNo">13046</span>     * the current color used by a Batch for tinting.<a name="line.13046"></a>
 <span class="sourceLineNo">13047</span>     *<a name="line.13047"></a>
 <span class="sourceLineNo">13048</span>     * @param data   a char array that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer<a name="line.13048"></a>
 <span class="sourceLineNo">13049</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.13049"></a>
@@ -13065,88 +13065,88 @@
 <span class="sourceLineNo">13057</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as<a name="line.13057"></a>
 <span class="sourceLineNo">13058</span>     * as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in RGBA8888 format. Some parts of<a name="line.13058"></a>
 <span class="sourceLineNo">13059</span>     * libGDX use and expect RGBA8888 order, such as most constructors for Color and {@link Color#set(int)}, while<a name="line.13059"></a>
-<span class="sourceLineNo">13060</span>     * others use ABGR8888 (often with packed floats), like <a name="line.13060"></a>
-<span class="sourceLineNo">13061</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which was the fastest and least wasteful way<a name="line.13061"></a>
-<span class="sourceLineNo">13062</span>     * to set the current color used by a Batch for tinting (it still is for {@link FilterBatch}).<a name="line.13062"></a>
-<span class="sourceLineNo">13063</span>     *<a name="line.13063"></a>
-<span class="sourceLineNo">13064</span>     * @param data   a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer<a name="line.13064"></a>
-<span class="sourceLineNo">13065</span>     * @return an int in RGBA8888 format<a name="line.13065"></a>
-<span class="sourceLineNo">13066</span>     */<a name="line.13066"></a>
-<span class="sourceLineNo">13067</span>    public static int charsToRGBA(final char[] data) {<a name="line.13067"></a>
-<span class="sourceLineNo">13068</span>        return StringKit.intFromHex(data, 0, Math.min(data.length, 8));<a name="line.13068"></a>
-<span class="sourceLineNo">13069</span>    }<a name="line.13069"></a>
-<span class="sourceLineNo">13070</span><a name="line.13070"></a>
-<span class="sourceLineNo">13071</span>    /**<a name="line.13071"></a>
-<span class="sourceLineNo">13072</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} starting at<a name="line.13072"></a>
-<span class="sourceLineNo">13073</span>     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to<a name="line.13073"></a>
-<span class="sourceLineNo">13074</span>     * construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.13074"></a>
-<span class="sourceLineNo">13075</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13075"></a>
-<span class="sourceLineNo">13076</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which was the fastest and least wasteful way<a name="line.13076"></a>
-<span class="sourceLineNo">13077</span>     * to set the current color used by a Batch for tinting (it still is for {@link FilterBatch}).<a name="line.13077"></a>
-<span class="sourceLineNo">13078</span>     *<a name="line.13078"></a>
-<span class="sourceLineNo">13079</span>     * @param data   a char array that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer<a name="line.13079"></a>
-<span class="sourceLineNo">13080</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.13080"></a>
-<span class="sourceLineNo">13081</span>     * @return an int in ABGR8888 format<a name="line.13081"></a>
-<span class="sourceLineNo">13082</span>     */<a name="line.13082"></a>
-<span class="sourceLineNo">13083</span>    public static int charsToABGR(final char[] data, final int offset) {<a name="line.13083"></a>
-<span class="sourceLineNo">13084</span>        return Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset + 8)));<a name="line.13084"></a>
-<span class="sourceLineNo">13085</span>    }<a name="line.13085"></a>
-<span class="sourceLineNo">13086</span><a name="line.13086"></a>
-<span class="sourceLineNo">13087</span>    /**<a name="line.13087"></a>
-<span class="sourceLineNo">13088</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as<a name="line.13088"></a>
-<span class="sourceLineNo">13089</span>     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct an int in ABGR8888 format.<a name="line.13089"></a>
-<span class="sourceLineNo">13090</span>     * Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and<a name="line.13090"></a>
-<span class="sourceLineNo">13091</span>     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13091"></a>
-<span class="sourceLineNo">13092</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set<a name="line.13092"></a>
-<span class="sourceLineNo">13093</span>     * the current color used by a Batch for tinting.<a name="line.13093"></a>
-<span class="sourceLineNo">13094</span>     *<a name="line.13094"></a>
-<span class="sourceLineNo">13095</span>     * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer<a name="line.13095"></a>
-<span class="sourceLineNo">13096</span>     * @return an int in ABGR8888 format<a name="line.13096"></a>
-<span class="sourceLineNo">13097</span>     */<a name="line.13097"></a>
-<span class="sourceLineNo">13098</span>    public static int charsToABGR(final char[] data) {<a name="line.13098"></a>
-<span class="sourceLineNo">13099</span>        return Integer.reverseBytes(StringKit.intFromHex(data, 0, 8));<a name="line.13099"></a>
-<span class="sourceLineNo">13100</span>    }<a name="line.13100"></a>
-<span class="sourceLineNo">13101</span><a name="line.13101"></a>
-<span class="sourceLineNo">13102</span>    /**<a name="line.13102"></a>
-<span class="sourceLineNo">13103</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as<a name="line.13103"></a>
-<span class="sourceLineNo">13104</span>     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888<a name="line.13104"></a>
-<span class="sourceLineNo">13105</span>     * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and<a name="line.13105"></a>
-<span class="sourceLineNo">13106</span>     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13106"></a>
-<span class="sourceLineNo">13107</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set<a name="line.13107"></a>
-<span class="sourceLineNo">13108</span>     * the current color used by a Batch for tinting.<a name="line.13108"></a>
-<span class="sourceLineNo">13109</span>     *<a name="line.13109"></a>
-<span class="sourceLineNo">13110</span>     * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer<a name="line.13110"></a>
-<span class="sourceLineNo">13111</span>     * @return a float in packed ABGR8888 format<a name="line.13111"></a>
-<span class="sourceLineNo">13112</span>     */<a name="line.13112"></a>
-<span class="sourceLineNo">13113</span>    public static float charsToFloat(final char[] data) {<a name="line.13113"></a>
-<span class="sourceLineNo">13114</span>        return NumberTools.intBitsToFloat(0xFEFFFFFF &amp;<a name="line.13114"></a>
-<span class="sourceLineNo">13115</span>                Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));<a name="line.13115"></a>
-<span class="sourceLineNo">13116</span>    }<a name="line.13116"></a>
-<span class="sourceLineNo">13117</span><a name="line.13117"></a>
-<span class="sourceLineNo">13118</span>    /**<a name="line.13118"></a>
-<span class="sourceLineNo">13119</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} starting at<a name="line.13119"></a>
-<span class="sourceLineNo">13120</span>     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to<a name="line.13120"></a>
-<span class="sourceLineNo">13121</span>     * construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.13121"></a>
-<span class="sourceLineNo">13122</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13122"></a>
-<span class="sourceLineNo">13123</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which is the fastest and least wasteful way to set<a name="line.13123"></a>
-<span class="sourceLineNo">13124</span>     * the current color used by a Batch for tinting.<a name="line.13124"></a>
-<span class="sourceLineNo">13125</span>     *<a name="line.13125"></a>
-<span class="sourceLineNo">13126</span>     * @param data a char array that must not be null + offset; the first 8 chars after offset should be an RGBA8888 hex integer<a name="line.13126"></a>
-<span class="sourceLineNo">13127</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.13127"></a>
-<span class="sourceLineNo">13128</span>     * @return a float in packed ABGR8888 format<a name="line.13128"></a>
-<span class="sourceLineNo">13129</span>     */<a name="line.13129"></a>
-<span class="sourceLineNo">13130</span>    public static float charsToFloat(final char[] data, final int offset) {<a name="line.13130"></a>
-<span class="sourceLineNo">13131</span>        return NumberTools.intBitsToFloat(0xFEFFFFFF &amp;<a name="line.13131"></a>
-<span class="sourceLineNo">13132</span>                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset + 8))));<a name="line.13132"></a>
-<span class="sourceLineNo">13133</span>    }<a name="line.13133"></a>
-<span class="sourceLineNo">13134</span><a name="line.13134"></a>
-<span class="sourceLineNo">13135</span>    /**<a name="line.13135"></a>
-<span class="sourceLineNo">13136</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as<a name="line.13136"></a>
-<span class="sourceLineNo">13137</span>     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888<a name="line.13137"></a>
-<span class="sourceLineNo">13138</span>     * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and<a name="line.13138"></a>
-<span class="sourceLineNo">13139</span>     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13139"></a>
-<span class="sourceLineNo">13140</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, which was the fastest and least wasteful way<a name="line.13140"></a>
-<span class="sourceLineNo">13141</span>     * to set the current color used by a Batch for tinting (it still is for {@link FilterBatch}).<a name="line.13141"></a>
+<span class="sourceLineNo">13060</span>     * others use ABGR8888 (often with packed floats), like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)},<a name="line.13060"></a>
+<span class="sourceLineNo">13061</span>     * which is the fastest and least wasteful way to set the current color used by a Batch for tinting.<a name="line.13061"></a>
+<span class="sourceLineNo">13062</span>     *<a name="line.13062"></a>
+<span class="sourceLineNo">13063</span>     * @param data   a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer<a name="line.13063"></a>
+<span class="sourceLineNo">13064</span>     * @return an int in RGBA8888 format<a name="line.13064"></a>
+<span class="sourceLineNo">13065</span>     */<a name="line.13065"></a>
+<span class="sourceLineNo">13066</span>    public static int charsToRGBA(final char[] data) {<a name="line.13066"></a>
+<span class="sourceLineNo">13067</span>        return StringKit.intFromHex(data, 0, Math.min(data.length, 8));<a name="line.13067"></a>
+<span class="sourceLineNo">13068</span>    }<a name="line.13068"></a>
+<span class="sourceLineNo">13069</span><a name="line.13069"></a>
+<span class="sourceLineNo">13070</span>    /**<a name="line.13070"></a>
+<span class="sourceLineNo">13071</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} starting at<a name="line.13071"></a>
+<span class="sourceLineNo">13072</span>     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to<a name="line.13072"></a>
+<span class="sourceLineNo">13073</span>     * construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.13073"></a>
+<span class="sourceLineNo">13074</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13074"></a>
+<span class="sourceLineNo">13075</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.13075"></a>
+<span class="sourceLineNo">13076</span>     * the current color used by a Batch for tinting.<a name="line.13076"></a>
+<span class="sourceLineNo">13077</span>     *<a name="line.13077"></a>
+<span class="sourceLineNo">13078</span>     * @param data   a char array that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer<a name="line.13078"></a>
+<span class="sourceLineNo">13079</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.13079"></a>
+<span class="sourceLineNo">13080</span>     * @return an int in ABGR8888 format<a name="line.13080"></a>
+<span class="sourceLineNo">13081</span>     */<a name="line.13081"></a>
+<span class="sourceLineNo">13082</span>    public static int charsToABGR(final char[] data, final int offset) {<a name="line.13082"></a>
+<span class="sourceLineNo">13083</span>        return Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset + 8)));<a name="line.13083"></a>
+<span class="sourceLineNo">13084</span>    }<a name="line.13084"></a>
+<span class="sourceLineNo">13085</span><a name="line.13085"></a>
+<span class="sourceLineNo">13086</span>    /**<a name="line.13086"></a>
+<span class="sourceLineNo">13087</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as<a name="line.13087"></a>
+<span class="sourceLineNo">13088</span>     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct an int in ABGR8888 format.<a name="line.13088"></a>
+<span class="sourceLineNo">13089</span>     * Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and<a name="line.13089"></a>
+<span class="sourceLineNo">13090</span>     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13090"></a>
+<span class="sourceLineNo">13091</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.13091"></a>
+<span class="sourceLineNo">13092</span>     * the current color used by a Batch for tinting.<a name="line.13092"></a>
+<span class="sourceLineNo">13093</span>     *<a name="line.13093"></a>
+<span class="sourceLineNo">13094</span>     * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer<a name="line.13094"></a>
+<span class="sourceLineNo">13095</span>     * @return an int in ABGR8888 format<a name="line.13095"></a>
+<span class="sourceLineNo">13096</span>     */<a name="line.13096"></a>
+<span class="sourceLineNo">13097</span>    public static int charsToABGR(final char[] data) {<a name="line.13097"></a>
+<span class="sourceLineNo">13098</span>        return Integer.reverseBytes(StringKit.intFromHex(data, 0, 8));<a name="line.13098"></a>
+<span class="sourceLineNo">13099</span>    }<a name="line.13099"></a>
+<span class="sourceLineNo">13100</span><a name="line.13100"></a>
+<span class="sourceLineNo">13101</span>    /**<a name="line.13101"></a>
+<span class="sourceLineNo">13102</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as<a name="line.13102"></a>
+<span class="sourceLineNo">13103</span>     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888<a name="line.13103"></a>
+<span class="sourceLineNo">13104</span>     * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and<a name="line.13104"></a>
+<span class="sourceLineNo">13105</span>     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13105"></a>
+<span class="sourceLineNo">13106</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.13106"></a>
+<span class="sourceLineNo">13107</span>     * the current color used by a Batch for tinting.<a name="line.13107"></a>
+<span class="sourceLineNo">13108</span>     *<a name="line.13108"></a>
+<span class="sourceLineNo">13109</span>     * @param data a char array that must not be null; the first 8 chars should be an RGBA8888 hex integer<a name="line.13109"></a>
+<span class="sourceLineNo">13110</span>     * @return a float in packed ABGR8888 format<a name="line.13110"></a>
+<span class="sourceLineNo">13111</span>     */<a name="line.13111"></a>
+<span class="sourceLineNo">13112</span>    public static float charsToFloat(final char[] data) {<a name="line.13112"></a>
+<span class="sourceLineNo">13113</span>        return NumberTools.intBitsToFloat(0xFEFFFFFF &amp;<a name="line.13113"></a>
+<span class="sourceLineNo">13114</span>                Integer.reverseBytes(StringKit.intFromHex(data, 0, 8)));<a name="line.13114"></a>
+<span class="sourceLineNo">13115</span>    }<a name="line.13115"></a>
+<span class="sourceLineNo">13116</span><a name="line.13116"></a>
+<span class="sourceLineNo">13117</span>    /**<a name="line.13117"></a>
+<span class="sourceLineNo">13118</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data} starting at<a name="line.13118"></a>
+<span class="sourceLineNo">13119</span>     * {@code offset}, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to<a name="line.13119"></a>
+<span class="sourceLineNo">13120</span>     * construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most<a name="line.13120"></a>
+<span class="sourceLineNo">13121</span>     * constructors for Color and {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13121"></a>
+<span class="sourceLineNo">13122</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.13122"></a>
+<span class="sourceLineNo">13123</span>     * the current color used by a Batch for tinting.<a name="line.13123"></a>
+<span class="sourceLineNo">13124</span>     *<a name="line.13124"></a>
+<span class="sourceLineNo">13125</span>     * @param data a char array that must not be null + offset; the first 8 chars after offset should be an RGBA8888 hex integer<a name="line.13125"></a>
+<span class="sourceLineNo">13126</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length<a name="line.13126"></a>
+<span class="sourceLineNo">13127</span>     * @return a float in packed ABGR8888 format<a name="line.13127"></a>
+<span class="sourceLineNo">13128</span>     */<a name="line.13128"></a>
+<span class="sourceLineNo">13129</span>    public static float charsToFloat(final char[] data, final int offset) {<a name="line.13129"></a>
+<span class="sourceLineNo">13130</span>        return NumberTools.intBitsToFloat(0xFEFFFFFF &amp;<a name="line.13130"></a>
+<span class="sourceLineNo">13131</span>                Integer.reverseBytes(StringKit.intFromHex(data, offset, Math.min(data.length, offset + 8))));<a name="line.13131"></a>
+<span class="sourceLineNo">13132</span>    }<a name="line.13132"></a>
+<span class="sourceLineNo">13133</span><a name="line.13133"></a>
+<span class="sourceLineNo">13134</span>    /**<a name="line.13134"></a>
+<span class="sourceLineNo">13135</span>     * Meant for usage with {@link #floatToChars(char[], float)}, this will take 8 chars from {@code data}, read them as<a name="line.13135"></a>
+<span class="sourceLineNo">13136</span>     * as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888<a name="line.13136"></a>
+<span class="sourceLineNo">13137</span>     * format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and<a name="line.13137"></a>
+<span class="sourceLineNo">13138</span>     * {@link Color#set(int)}, while others use ABGR8888 (often with packed floats), like<a name="line.13138"></a>
+<span class="sourceLineNo">13139</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, which is the fastest and least wasteful way to set<a name="line.13139"></a>
+<span class="sourceLineNo">13140</span>     * the current color used by a Batch for tinting.<a name="line.13140"></a>
+<span class="sourceLineNo">13141</span>     *<a name="line.13141"></a>
 <span class="sourceLineNo">13142</span>     * @param data a CharSequence that must not be null; the first 8 chars after offset should be an RGBA8888 hex integer<a name="line.13142"></a>
 <span class="sourceLineNo">13143</span>     * @param offset where to start reading from in data; there must be at least 8 items between offset and data.length()<a name="line.13143"></a>
 <span class="sourceLineNo">13144</span>     * @return a float in packed ABGR8888 format<a name="line.13144"></a>
@@ -13161,7 +13161,7 @@
 <span class="sourceLineNo">13153</span>     * Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format<a name="line.13153"></a>
 <span class="sourceLineNo">13154</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.13154"></a>
 <span class="sourceLineNo">13155</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.13155"></a>
-<span class="sourceLineNo">13156</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.<a name="line.13156"></a>
+<span class="sourceLineNo">13156</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.13156"></a>
 <span class="sourceLineNo">13157</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.13157"></a>
 <span class="sourceLineNo">13158</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.13158"></a>
 <span class="sourceLineNo">13159</span>     *<a name="line.13159"></a>
@@ -13180,7 +13180,7 @@
 <span class="sourceLineNo">13172</span>     * Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format<a name="line.13172"></a>
 <span class="sourceLineNo">13173</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.13173"></a>
 <span class="sourceLineNo">13174</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.13174"></a>
-<span class="sourceLineNo">13175</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.<a name="line.13175"></a>
+<span class="sourceLineNo">13175</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.13175"></a>
 <span class="sourceLineNo">13176</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.13176"></a>
 <span class="sourceLineNo">13177</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.13177"></a>
 <span class="sourceLineNo">13178</span>     * &lt;br&gt;<a name="line.13178"></a>
@@ -13201,7 +13201,7 @@
 <span class="sourceLineNo">13193</span>     * Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format<a name="line.13193"></a>
 <span class="sourceLineNo">13194</span>     * in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,<a name="line.13194"></a>
 <span class="sourceLineNo">13195</span>     * packed floats like what this returns are ABGR format, the kind that can be passed directly to<a name="line.13195"></a>
-<span class="sourceLineNo">13196</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate objects.<a name="line.13196"></a>
+<span class="sourceLineNo">13196</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate objects.<a name="line.13196"></a>
 <span class="sourceLineNo">13197</span>     * SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.13197"></a>
 <span class="sourceLineNo">13198</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.13198"></a>
 <span class="sourceLineNo">13199</span>     * &lt;br&gt;<a name="line.13199"></a>
@@ -13221,7 +13221,7 @@
 <span class="sourceLineNo">13213</span>     * Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX<a name="line.13213"></a>
 <span class="sourceLineNo">13214</span>     * expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,<a name="line.13214"></a>
 <span class="sourceLineNo">13215</span>     * or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed<a name="line.13215"></a>
-<span class="sourceLineNo">13216</span>     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)} without constructing intermediate<a name="line.13216"></a>
+<span class="sourceLineNo">13216</span>     * directly to {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)} without constructing intermediate<a name="line.13216"></a>
 <span class="sourceLineNo">13217</span>     * objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that<a name="line.13217"></a>
 <span class="sourceLineNo">13218</span>     * associates colors to cells; this has changed from earlier releases and should be much more efficient.<a name="line.13218"></a>
 <span class="sourceLineNo">13219</span>     *<a name="line.13219"></a>
@@ -13522,9 +13522,9 @@
 <span class="sourceLineNo">13514</span>     * to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an IRNG), as well as<a name="line.13514"></a>
 <span class="sourceLineNo">13515</span>     * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that<a name="line.13515"></a>
 <span class="sourceLineNo">13516</span>     * can be used as a packed or encoded color with methods like<a name="line.13516"></a>
-<span class="sourceLineNo">13517</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like<a name="line.13517"></a>
-<span class="sourceLineNo">13518</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13518"></a>
-<span class="sourceLineNo">13519</span>     * hue, saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13519"></a>
+<span class="sourceLineNo">13517</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or<a name="line.13517"></a>
+<span class="sourceLineNo">13518</span>     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,<a name="line.13518"></a>
+<span class="sourceLineNo">13519</span>     * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13519"></a>
 <span class="sourceLineNo">13520</span>     * &lt;br&gt;<a name="line.13520"></a>
 <span class="sourceLineNo">13521</span>     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway<a name="line.13521"></a>
 <span class="sourceLineNo">13522</span>     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or<a name="line.13522"></a>
@@ -13552,9 +13552,9 @@
 <span class="sourceLineNo">13544</span>     * consider setting the state of that IRNG with {@link squidpony.squidmath.StatefulRNG#setState(long)}), as well as<a name="line.13544"></a>
 <span class="sourceLineNo">13545</span>     * floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that<a name="line.13545"></a>
 <span class="sourceLineNo">13546</span>     * can be used as a packed or encoded color with methods like<a name="line.13546"></a>
-<span class="sourceLineNo">13547</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like<a name="line.13547"></a>
-<span class="sourceLineNo">13548</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13548"></a>
-<span class="sourceLineNo">13549</span>     * hue, saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13549"></a>
+<span class="sourceLineNo">13547</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or<a name="line.13547"></a>
+<span class="sourceLineNo">13548</span>     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,<a name="line.13548"></a>
+<span class="sourceLineNo">13549</span>     * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13549"></a>
 <span class="sourceLineNo">13550</span>     * &lt;br&gt;<a name="line.13550"></a>
 <span class="sourceLineNo">13551</span>     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway<a name="line.13551"></a>
 <span class="sourceLineNo">13552</span>     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or<a name="line.13552"></a>
@@ -13581,534 +13581,532 @@
 <span class="sourceLineNo">13573</span>     * need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an IRNG), as well<a name="line.13573"></a>
 <span class="sourceLineNo">13574</span>     * as floats representing the amounts of change that can be applied to hue, saturation, value, and opacity. Returns<a name="line.13574"></a>
 <span class="sourceLineNo">13575</span>     * a float that can be used as a packed or encoded color with methods like<a name="line.13575"></a>
-<span class="sourceLineNo">13576</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like<a name="line.13576"></a>
-<span class="sourceLineNo">13577</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13577"></a>
-<span class="sourceLineNo">13578</span>     * hue, saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any<a name="line.13578"></a>
-<span class="sourceLineNo">13579</span>     * objects.<a name="line.13579"></a>
-<span class="sourceLineNo">13580</span>     * &lt;br&gt;<a name="line.13580"></a>
-<span class="sourceLineNo">13581</span>     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway<a name="line.13581"></a>
-<span class="sourceLineNo">13582</span>     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or<a name="line.13582"></a>
-<span class="sourceLineNo">13583</span>     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.<a name="line.13583"></a>
-<span class="sourceLineNo">13584</span>     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible<a name="line.13584"></a>
-<span class="sourceLineNo">13585</span>     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave<a name="line.13585"></a>
-<span class="sourceLineNo">13586</span>     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the<a name="line.13586"></a>
-<span class="sourceLineNo">13587</span>     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely<a name="line.13587"></a>
-<span class="sourceLineNo">13588</span>     * to be at the truncated max or min amount.<a name="line.13588"></a>
-<span class="sourceLineNo">13589</span>     *<a name="line.13589"></a>
-<span class="sourceLineNo">13590</span>     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}<a name="line.13590"></a>
-<span class="sourceLineNo">13591</span>     * @param hue        0f to 2f, the span of hue change that can be applied to the new float color<a name="line.13591"></a>
-<span class="sourceLineNo">13592</span>     * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color<a name="line.13592"></a>
-<span class="sourceLineNo">13593</span>     * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color<a name="line.13593"></a>
-<span class="sourceLineNo">13594</span>     * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color<a name="line.13594"></a>
-<span class="sourceLineNo">13595</span>     * @return a float encoding a variation of this SColor with changes up to the given properties<a name="line.13595"></a>
-<span class="sourceLineNo">13596</span>     */<a name="line.13596"></a>
-<span class="sourceLineNo">13597</span>    public float toRandomizedFloat(IRNG random, float hue, float saturation, float value, float opacity) {<a name="line.13597"></a>
-<span class="sourceLineNo">13598</span>        return toRandomizedFloat(this, random, hue, saturation, value, opacity);<a name="line.13598"></a>
-<span class="sourceLineNo">13599</span>    }<a name="line.13599"></a>
-<span class="sourceLineNo">13600</span>    /**<a name="line.13600"></a>
-<span class="sourceLineNo">13601</span>     * Gets a variation on the Color basis as a packed float that can have its hue, saturation, value, and opacity<a name="line.13601"></a>
-<span class="sourceLineNo">13602</span>     * changed to specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a<a name="line.13602"></a>
-<span class="sourceLineNo">13603</span>     * specific need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an<a name="line.13603"></a>
-<span class="sourceLineNo">13604</span>     * IRNG), as well as floats representing the amounts of change that can be applied to hue, saturation, value, and<a name="line.13604"></a>
-<span class="sourceLineNo">13605</span>     * opacity. Returns a float that can be used as a packed or encoded color with methods like<a name="line.13605"></a>
-<span class="sourceLineNo">13606</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like<a name="line.13606"></a>
-<span class="sourceLineNo">13607</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13607"></a>
-<span class="sourceLineNo">13608</span>     * hue, saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any<a name="line.13608"></a>
-<span class="sourceLineNo">13609</span>     * objects.<a name="line.13609"></a>
-<span class="sourceLineNo">13610</span>     * &lt;br&gt;<a name="line.13610"></a>
-<span class="sourceLineNo">13611</span>     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway<a name="line.13611"></a>
-<span class="sourceLineNo">13612</span>     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or<a name="line.13612"></a>
-<span class="sourceLineNo">13613</span>     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.<a name="line.13613"></a>
-<span class="sourceLineNo">13614</span>     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible<a name="line.13614"></a>
-<span class="sourceLineNo">13615</span>     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave<a name="line.13615"></a>
-<span class="sourceLineNo">13616</span>     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the<a name="line.13616"></a>
-<span class="sourceLineNo">13617</span>     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely<a name="line.13617"></a>
-<span class="sourceLineNo">13618</span>     * to be at the truncated max or min amount.<a name="line.13618"></a>
-<span class="sourceLineNo">13619</span>     *<a name="line.13619"></a>
-<span class="sourceLineNo">13620</span>     * @param basis      a Color or SColor to use as the starting point; will not be modified itself<a name="line.13620"></a>
-<span class="sourceLineNo">13621</span>     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}<a name="line.13621"></a>
-<span class="sourceLineNo">13622</span>     * @param hue        0f to 2f, the span of hue change that can be applied to the new float color<a name="line.13622"></a>
-<span class="sourceLineNo">13623</span>     * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color<a name="line.13623"></a>
-<span class="sourceLineNo">13624</span>     * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color<a name="line.13624"></a>
-<span class="sourceLineNo">13625</span>     * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color<a name="line.13625"></a>
-<span class="sourceLineNo">13626</span>     * @return a float encoding a variation of this SColor with changes up to the given properties<a name="line.13626"></a>
-<span class="sourceLineNo">13627</span>     */<a name="line.13627"></a>
-<span class="sourceLineNo">13628</span>    public static float toRandomizedFloat(Color basis, IRNG random, float hue, float saturation, float value, float opacity) {<a name="line.13628"></a>
-<span class="sourceLineNo">13629</span>        final float h, s, r = basis.r, g = basis.g, b = basis.b;<a name="line.13629"></a>
-<span class="sourceLineNo">13630</span>        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB<a name="line.13630"></a>
-<span class="sourceLineNo">13631</span>        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value<a name="line.13631"></a>
-<span class="sourceLineNo">13632</span>        final float delta = max - min;                   //Delta RGB value<a name="line.13632"></a>
-<span class="sourceLineNo">13633</span>        if ( delta &lt; 0.0039f )                           //This is a gray, no chroma...<a name="line.13633"></a>
-<span class="sourceLineNo">13634</span>        {<a name="line.13634"></a>
-<span class="sourceLineNo">13635</span>            s = 0f;<a name="line.13635"></a>
-<span class="sourceLineNo">13636</span>            h = 0f;<a name="line.13636"></a>
-<span class="sourceLineNo">13637</span>            hue = 1f;<a name="line.13637"></a>
-<span class="sourceLineNo">13638</span>        }<a name="line.13638"></a>
-<span class="sourceLineNo">13639</span>        else                                             //Chromatic data...<a name="line.13639"></a>
-<span class="sourceLineNo">13640</span>        {<a name="line.13640"></a>
-<span class="sourceLineNo">13641</span>            s = delta / max;<a name="line.13641"></a>
-<span class="sourceLineNo">13642</span>            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;<a name="line.13642"></a>
-<span class="sourceLineNo">13643</span>            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;<a name="line.13643"></a>
-<span class="sourceLineNo">13644</span>            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;<a name="line.13644"></a>
-<span class="sourceLineNo">13645</span><a name="line.13645"></a>
-<span class="sourceLineNo">13646</span>            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;<a name="line.13646"></a>
-<span class="sourceLineNo">13647</span>            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;<a name="line.13647"></a>
-<span class="sourceLineNo">13648</span>            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;<a name="line.13648"></a>
-<span class="sourceLineNo">13649</span>        }<a name="line.13649"></a>
-<span class="sourceLineNo">13650</span>        saturation = MathUtils.clamp(s + (random.nextFloat() - 0.5f) * saturation, 0f, 1f);<a name="line.13650"></a>
-<span class="sourceLineNo">13651</span>        value = MathUtils.clamp(max + (random.nextFloat() - 0.5f) * value, 0f, 1f);<a name="line.13651"></a>
-<span class="sourceLineNo">13652</span>        opacity = MathUtils.clamp(basis.a + (random.nextFloat() - 0.5f) * opacity, 0f, 1f);<a name="line.13652"></a>
-<span class="sourceLineNo">13653</span><a name="line.13653"></a>
-<span class="sourceLineNo">13654</span>        if (saturation &lt;= 0.0039f) {<a name="line.13654"></a>
-<span class="sourceLineNo">13655</span>            return floatGet(value, value, value, opacity);<a name="line.13655"></a>
-<span class="sourceLineNo">13656</span>        } else if (value &lt;= 0.0039f) {<a name="line.13656"></a>
-<span class="sourceLineNo">13657</span>            return NumberTools.intBitsToFloat((int) (opacity * 254f) &lt;&lt; 24 &amp; 0xFE000000);<a name="line.13657"></a>
-<span class="sourceLineNo">13658</span>        } else {<a name="line.13658"></a>
-<span class="sourceLineNo">13659</span>            final float hu = ((h + (random.nextFloat() - 0.5f) * hue + 6f) % 1f) * 6f;<a name="line.13659"></a>
-<span class="sourceLineNo">13660</span>            final int i = (int) hu;<a name="line.13660"></a>
-<span class="sourceLineNo">13661</span>            final float x = value * (1 - saturation);<a name="line.13661"></a>
-<span class="sourceLineNo">13662</span>            final float y = value * (1 - saturation * (hu - i));<a name="line.13662"></a>
-<span class="sourceLineNo">13663</span>            final float z = value * (1 - saturation * (1 - (hu - i)));<a name="line.13663"></a>
-<span class="sourceLineNo">13664</span><a name="line.13664"></a>
-<span class="sourceLineNo">13665</span>            switch (i) {<a name="line.13665"></a>
-<span class="sourceLineNo">13666</span>                case 0:<a name="line.13666"></a>
-<span class="sourceLineNo">13667</span>                    return floatGet(value, z, x, opacity);<a name="line.13667"></a>
-<span class="sourceLineNo">13668</span>                case 1:<a name="line.13668"></a>
-<span class="sourceLineNo">13669</span>                    return floatGet(y, value, x, opacity);<a name="line.13669"></a>
-<span class="sourceLineNo">13670</span>                case 2:<a name="line.13670"></a>
-<span class="sourceLineNo">13671</span>                    return floatGet(x, value, z, opacity);<a name="line.13671"></a>
-<span class="sourceLineNo">13672</span>                case 3:<a name="line.13672"></a>
-<span class="sourceLineNo">13673</span>                    return floatGet(x, y, value, opacity);<a name="line.13673"></a>
-<span class="sourceLineNo">13674</span>                case 4:<a name="line.13674"></a>
-<span class="sourceLineNo">13675</span>                    return floatGet(z, x, value, opacity);<a name="line.13675"></a>
-<span class="sourceLineNo">13676</span>                default:<a name="line.13676"></a>
-<span class="sourceLineNo">13677</span>                    return floatGet(value, x, y, opacity);<a name="line.13677"></a>
-<span class="sourceLineNo">13678</span>            }<a name="line.13678"></a>
-<span class="sourceLineNo">13679</span>        }<a name="line.13679"></a>
-<span class="sourceLineNo">13680</span>    }<a name="line.13680"></a>
-<span class="sourceLineNo">13681</span>    /**<a name="line.13681"></a>
-<span class="sourceLineNo">13682</span>     * Gets a variation on this SColor as a packed float that has its hue, saturation, and value adjusted by the<a name="line.13682"></a>
-<span class="sourceLineNo">13683</span>     * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these<a name="line.13683"></a>
-<span class="sourceLineNo">13684</span>     * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like<a name="line.13684"></a>
-<span class="sourceLineNo">13685</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like<a name="line.13685"></a>
-<span class="sourceLineNo">13686</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13686"></a>
-<span class="sourceLineNo">13687</span>     * hue, saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13687"></a>
-<span class="sourceLineNo">13688</span>     * &lt;br&gt;<a name="line.13688"></a>
-<span class="sourceLineNo">13689</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13689"></a>
-<span class="sourceLineNo">13690</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13690"></a>
-<span class="sourceLineNo">13691</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13691"></a>
-<span class="sourceLineNo">13692</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13692"></a>
-<span class="sourceLineNo">13693</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13693"></a>
-<span class="sourceLineNo">13694</span>     *<a name="line.13694"></a>
-<span class="sourceLineNo">13695</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13695"></a>
-<span class="sourceLineNo">13696</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13696"></a>
-<span class="sourceLineNo">13697</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13697"></a>
-<span class="sourceLineNo">13698</span>     * @return a float encoding a color with the given properties<a name="line.13698"></a>
-<span class="sourceLineNo">13699</span>     */<a name="line.13699"></a>
-<span class="sourceLineNo">13700</span>    public float toEditedFloat(float hue, float saturation, float value) {<a name="line.13700"></a>
-<span class="sourceLineNo">13701</span>        return toEditedFloat(this, hue, saturation, value, 0f);<a name="line.13701"></a>
-<span class="sourceLineNo">13702</span>    }<a name="line.13702"></a>
-<span class="sourceLineNo">13703</span><a name="line.13703"></a>
-<span class="sourceLineNo">13704</span>    /**<a name="line.13704"></a>
-<span class="sourceLineNo">13705</span>     * Gets a variation on the Color basis as a packed float that has its hue, saturation, and value adjusted by the<a name="line.13705"></a>
-<span class="sourceLineNo">13706</span>     * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these<a name="line.13706"></a>
-<span class="sourceLineNo">13707</span>     * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like<a name="line.13707"></a>
-<span class="sourceLineNo">13708</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes like<a name="line.13708"></a>
-<span class="sourceLineNo">13709</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13709"></a>
-<span class="sourceLineNo">13710</span>     * hue, saturation, and value are all 0. This won't modify the given SColor, nor will it allocate any objects.<a name="line.13710"></a>
-<span class="sourceLineNo">13711</span>     * &lt;br&gt;<a name="line.13711"></a>
-<span class="sourceLineNo">13712</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13712"></a>
-<span class="sourceLineNo">13713</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13713"></a>
-<span class="sourceLineNo">13714</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13714"></a>
-<span class="sourceLineNo">13715</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13715"></a>
-<span class="sourceLineNo">13716</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13716"></a>
-<span class="sourceLineNo">13717</span>     *<a name="line.13717"></a>
-<span class="sourceLineNo">13718</span>     * @param basis      a Color or SColor to use as the starting point; will not be modified itself<a name="line.13718"></a>
-<span class="sourceLineNo">13719</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13719"></a>
-<span class="sourceLineNo">13720</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13720"></a>
-<span class="sourceLineNo">13721</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13721"></a>
-<span class="sourceLineNo">13722</span>     * @return a float encoding a variation of basis with the given changes<a name="line.13722"></a>
-<span class="sourceLineNo">13723</span>     */<a name="line.13723"></a>
-<span class="sourceLineNo">13724</span>    public static float toEditedFloat(Color basis, float hue, float saturation, float value) {<a name="line.13724"></a>
-<span class="sourceLineNo">13725</span>        return toEditedFloat(basis, hue, saturation, value, 0f);<a name="line.13725"></a>
-<span class="sourceLineNo">13726</span>    }<a name="line.13726"></a>
-<span class="sourceLineNo">13727</span>    /**<a name="line.13727"></a>
-<span class="sourceLineNo">13728</span>     * Gets a variation on this SColor as a packed float that has its hue, saturation, value, and opacity adjusted by<a name="line.13728"></a>
-<span class="sourceLineNo">13729</span>     * the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and<a name="line.13729"></a>
-<span class="sourceLineNo">13730</span>     * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with<a name="line.13730"></a>
-<span class="sourceLineNo">13731</span>     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes<a name="line.13731"></a>
-<span class="sourceLineNo">13732</span>     * like SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()}<a name="line.13732"></a>
-<span class="sourceLineNo">13733</span>     * unless hue saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate<a name="line.13733"></a>
-<span class="sourceLineNo">13734</span>     * any objects.<a name="line.13734"></a>
-<span class="sourceLineNo">13735</span>     * &lt;br&gt;<a name="line.13735"></a>
-<span class="sourceLineNo">13736</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13736"></a>
-<span class="sourceLineNo">13737</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13737"></a>
-<span class="sourceLineNo">13738</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13738"></a>
-<span class="sourceLineNo">13739</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13739"></a>
-<span class="sourceLineNo">13740</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13740"></a>
-<span class="sourceLineNo">13741</span>     *<a name="line.13741"></a>
-<span class="sourceLineNo">13742</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13742"></a>
-<span class="sourceLineNo">13743</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13743"></a>
-<span class="sourceLineNo">13744</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13744"></a>
-<span class="sourceLineNo">13745</span>     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color<a name="line.13745"></a>
-<span class="sourceLineNo">13746</span>     * @return a float encoding a color with the given properties<a name="line.13746"></a>
-<span class="sourceLineNo">13747</span>     */<a name="line.13747"></a>
-<span class="sourceLineNo">13748</span>    public float toEditedFloat(float hue, float saturation, float value, float opacity) {<a name="line.13748"></a>
-<span class="sourceLineNo">13749</span>        return toEditedFloat(this, hue, saturation, value, opacity);<a name="line.13749"></a>
-<span class="sourceLineNo">13750</span>    }<a name="line.13750"></a>
-<span class="sourceLineNo">13751</span>    /**<a name="line.13751"></a>
-<span class="sourceLineNo">13752</span>     * Gets a variation on the Color basis as a packed float that has its hue, saturation, value, and opacity adjusted<a name="line.13752"></a>
-<span class="sourceLineNo">13753</span>     * by the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and<a name="line.13753"></a>
-<span class="sourceLineNo">13754</span>     * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with<a name="line.13754"></a>
-<span class="sourceLineNo">13755</span>     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various SquidLib classes<a name="line.13755"></a>
-<span class="sourceLineNo">13756</span>     * like SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()}<a name="line.13756"></a>
-<span class="sourceLineNo">13757</span>     * unless hue saturation, value, and opacity are all 0. This won't modify the given SColor, nor will it allocate any<a name="line.13757"></a>
-<span class="sourceLineNo">13758</span>     * objects.<a name="line.13758"></a>
-<span class="sourceLineNo">13759</span>     * &lt;br&gt;<a name="line.13759"></a>
-<span class="sourceLineNo">13760</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13760"></a>
-<span class="sourceLineNo">13761</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13761"></a>
-<span class="sourceLineNo">13762</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13762"></a>
-<span class="sourceLineNo">13763</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13763"></a>
-<span class="sourceLineNo">13764</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13764"></a>
-<span class="sourceLineNo">13765</span>     *<a name="line.13765"></a>
-<span class="sourceLineNo">13766</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13766"></a>
-<span class="sourceLineNo">13767</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13767"></a>
-<span class="sourceLineNo">13768</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13768"></a>
-<span class="sourceLineNo">13769</span>     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color<a name="line.13769"></a>
-<span class="sourceLineNo">13770</span>     * @return a float encoding a variation of basis with the given changes<a name="line.13770"></a>
-<span class="sourceLineNo">13771</span>     */<a name="line.13771"></a>
-<span class="sourceLineNo">13772</span>    public static float toEditedFloat(Color basis, float hue, float saturation, float value, float opacity) {<a name="line.13772"></a>
-<span class="sourceLineNo">13773</span>        final float h, s, r = basis.r, g = basis.g, b = basis.b;<a name="line.13773"></a>
-<span class="sourceLineNo">13774</span>        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB<a name="line.13774"></a>
-<span class="sourceLineNo">13775</span>        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value<a name="line.13775"></a>
-<span class="sourceLineNo">13776</span>        final float delta = max - min;                   //Delta RGB value<a name="line.13776"></a>
-<span class="sourceLineNo">13777</span>        if ( delta &lt; 0.0039f )                           //This is a gray, no chroma...<a name="line.13777"></a>
-<span class="sourceLineNo">13778</span>        {<a name="line.13778"></a>
-<span class="sourceLineNo">13779</span>            s = 0f;<a name="line.13779"></a>
-<span class="sourceLineNo">13780</span>            h = 0f;<a name="line.13780"></a>
-<span class="sourceLineNo">13781</span>            hue = 1f;<a name="line.13781"></a>
-<span class="sourceLineNo">13782</span>        }<a name="line.13782"></a>
-<span class="sourceLineNo">13783</span>        else                                             //Chromatic data...<a name="line.13783"></a>
-<span class="sourceLineNo">13784</span>        {<a name="line.13784"></a>
-<span class="sourceLineNo">13785</span>            s = delta / max;<a name="line.13785"></a>
-<span class="sourceLineNo">13786</span>            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;<a name="line.13786"></a>
-<span class="sourceLineNo">13787</span>            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;<a name="line.13787"></a>
-<span class="sourceLineNo">13788</span>            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;<a name="line.13788"></a>
-<span class="sourceLineNo">13789</span><a name="line.13789"></a>
-<span class="sourceLineNo">13790</span>            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;<a name="line.13790"></a>
-<span class="sourceLineNo">13791</span>            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;<a name="line.13791"></a>
-<span class="sourceLineNo">13792</span>            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;<a name="line.13792"></a>
-<span class="sourceLineNo">13793</span>        }<a name="line.13793"></a>
-<span class="sourceLineNo">13794</span>        saturation = MathUtils.clamp(s + saturation, 0f, 1f);<a name="line.13794"></a>
-<span class="sourceLineNo">13795</span>        value = MathUtils.clamp(max + value, 0f, 1f);<a name="line.13795"></a>
-<span class="sourceLineNo">13796</span>        opacity = MathUtils.clamp(basis.a + opacity, 0f, 1f);<a name="line.13796"></a>
-<span class="sourceLineNo">13797</span><a name="line.13797"></a>
-<span class="sourceLineNo">13798</span>        if (saturation &lt;= 0.0039f) {<a name="line.13798"></a>
-<span class="sourceLineNo">13799</span>            return floatGet(value, value, value, opacity);<a name="line.13799"></a>
-<span class="sourceLineNo">13800</span>        } else if (value &lt;= 0.0039f) {<a name="line.13800"></a>
-<span class="sourceLineNo">13801</span>            return NumberTools.intBitsToFloat((int) (opacity * 254f) &lt;&lt; 24 &amp; 0xFE000000);<a name="line.13801"></a>
-<span class="sourceLineNo">13802</span>        } else {<a name="line.13802"></a>
-<span class="sourceLineNo">13803</span>            final float hu = ((h + hue + 6f) % 1f) * 6f;<a name="line.13803"></a>
-<span class="sourceLineNo">13804</span>            final int i = (int) hu;<a name="line.13804"></a>
-<span class="sourceLineNo">13805</span>            final float x = value * (1 - saturation);<a name="line.13805"></a>
-<span class="sourceLineNo">13806</span>            final float y = value * (1 - saturation * (hu - i));<a name="line.13806"></a>
-<span class="sourceLineNo">13807</span>            final float z = value * (1 - saturation * (1 - (hu - i)));<a name="line.13807"></a>
-<span class="sourceLineNo">13808</span><a name="line.13808"></a>
-<span class="sourceLineNo">13809</span>            switch (i) {<a name="line.13809"></a>
-<span class="sourceLineNo">13810</span>                case 0:<a name="line.13810"></a>
-<span class="sourceLineNo">13811</span>                    return floatGet(value, z, x, opacity);<a name="line.13811"></a>
-<span class="sourceLineNo">13812</span>                case 1:<a name="line.13812"></a>
-<span class="sourceLineNo">13813</span>                    return floatGet(y, value, x, opacity);<a name="line.13813"></a>
-<span class="sourceLineNo">13814</span>                case 2:<a name="line.13814"></a>
-<span class="sourceLineNo">13815</span>                    return floatGet(x, value, z, opacity);<a name="line.13815"></a>
-<span class="sourceLineNo">13816</span>                case 3:<a name="line.13816"></a>
-<span class="sourceLineNo">13817</span>                    return floatGet(x, y, value, opacity);<a name="line.13817"></a>
-<span class="sourceLineNo">13818</span>                case 4:<a name="line.13818"></a>
-<span class="sourceLineNo">13819</span>                    return floatGet(z, x, value, opacity);<a name="line.13819"></a>
-<span class="sourceLineNo">13820</span>                default:<a name="line.13820"></a>
-<span class="sourceLineNo">13821</span>                    return floatGet(value, x, y, opacity);<a name="line.13821"></a>
-<span class="sourceLineNo">13822</span>            }<a name="line.13822"></a>
-<span class="sourceLineNo">13823</span>        }<a name="line.13823"></a>
-<span class="sourceLineNo">13824</span>    }<a name="line.13824"></a>
-<span class="sourceLineNo">13825</span>    /**<a name="line.13825"></a>
-<span class="sourceLineNo">13826</span>     * Gets a variation on the packed float color basis as another packed float that has its hue, saturation, value, and<a name="line.13826"></a>
-<span class="sourceLineNo">13827</span>     * opacity adjusted by the specified amounts. Takes floats representing the amounts of change to apply to hue,<a name="line.13827"></a>
-<span class="sourceLineNo">13828</span>     * saturation, value, and opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or<a name="line.13828"></a>
-<span class="sourceLineNo">13829</span>     * encoded color with methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setPackedColor(float)}, or in various<a name="line.13829"></a>
-<span class="sourceLineNo">13830</span>     * SquidLib classes like SparseLayers or SquidLayers. The float is likely to be different than the result of<a name="line.13830"></a>
-<span class="sourceLineNo">13831</span>     * {@link #toFloatBits()} unless hue saturation, value, and opacity are all 0. This won't allocate any objects.<a name="line.13831"></a>
-<span class="sourceLineNo">13832</span>     * &lt;br&gt;<a name="line.13832"></a>
-<span class="sourceLineNo">13833</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13833"></a>
-<span class="sourceLineNo">13834</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13834"></a>
-<span class="sourceLineNo">13835</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13835"></a>
-<span class="sourceLineNo">13836</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color again<a name="line.13836"></a>
-<span class="sourceLineNo">13837</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13837"></a>
-<span class="sourceLineNo">13838</span>     *<a name="line.13838"></a>
-<span class="sourceLineNo">13839</span>     * @param basis      a packed float color that will be used as the starting point to make the next color<a name="line.13839"></a>
-<span class="sourceLineNo">13840</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color (not clamped, wraps)<a name="line.13840"></a>
-<span class="sourceLineNo">13841</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13841"></a>
-<span class="sourceLineNo">13842</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13842"></a>
-<span class="sourceLineNo">13843</span>     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color<a name="line.13843"></a>
-<span class="sourceLineNo">13844</span>     * @return a float encoding a variation of basis with the given changes<a name="line.13844"></a>
-<span class="sourceLineNo">13845</span>     */<a name="line.13845"></a>
-<span class="sourceLineNo">13846</span>    public static float toEditedFloat(float basis, float hue, float saturation, float value, float opacity) {<a name="line.13846"></a>
-<span class="sourceLineNo">13847</span>        final int bits = NumberTools.floatToIntBits(basis);<a name="line.13847"></a>
-<span class="sourceLineNo">13848</span>        final float h, s,<a name="line.13848"></a>
-<span class="sourceLineNo">13849</span>                r = (bits &amp; 0x000000ff) * 0x1.010102p-8f,<a name="line.13849"></a>
-<span class="sourceLineNo">13850</span>                g = (bits &amp; 0x0000ff00) * 0x1.010102p-16f,<a name="line.13850"></a>
-<span class="sourceLineNo">13851</span>                b = (bits &amp; 0x00ff0000) * 0x1.010102p-24f;<a name="line.13851"></a>
-<span class="sourceLineNo">13852</span>        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB<a name="line.13852"></a>
-<span class="sourceLineNo">13853</span>        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value<a name="line.13853"></a>
-<span class="sourceLineNo">13854</span>        final float delta = max - min;                   //Delta RGB value<a name="line.13854"></a>
-<span class="sourceLineNo">13855</span>        if ( delta &lt; 0.0039f )                           //This is a gray, no chroma...<a name="line.13855"></a>
-<span class="sourceLineNo">13856</span>        {<a name="line.13856"></a>
-<span class="sourceLineNo">13857</span>            s = 0f;<a name="line.13857"></a>
-<span class="sourceLineNo">13858</span>            h = 0f;<a name="line.13858"></a>
-<span class="sourceLineNo">13859</span>            hue = 1f;<a name="line.13859"></a>
-<span class="sourceLineNo">13860</span>        }<a name="line.13860"></a>
-<span class="sourceLineNo">13861</span>        else                                             //Chromatic data...<a name="line.13861"></a>
-<span class="sourceLineNo">13862</span>        {<a name="line.13862"></a>
-<span class="sourceLineNo">13863</span>            s = delta / max;<a name="line.13863"></a>
-<span class="sourceLineNo">13864</span>            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;<a name="line.13864"></a>
-<span class="sourceLineNo">13865</span>            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;<a name="line.13865"></a>
-<span class="sourceLineNo">13866</span>            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;<a name="line.13866"></a>
-<span class="sourceLineNo">13867</span><a name="line.13867"></a>
-<span class="sourceLineNo">13868</span>            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;<a name="line.13868"></a>
-<span class="sourceLineNo">13869</span>            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;<a name="line.13869"></a>
-<span class="sourceLineNo">13870</span>            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;<a name="line.13870"></a>
-<span class="sourceLineNo">13871</span>        }<a name="line.13871"></a>
-<span class="sourceLineNo">13872</span>        saturation = MathUtils.clamp(s + saturation, 0f, 1f);<a name="line.13872"></a>
-<span class="sourceLineNo">13873</span>        value = MathUtils.clamp(max + value, 0f, 1f);<a name="line.13873"></a>
-<span class="sourceLineNo">13874</span>        opacity = MathUtils.clamp(((bits &amp; 0xfe000000) &gt;&gt;&gt; 24) * 0x1.020408p-8f + opacity, 0f, 1f);<a name="line.13874"></a>
-<span class="sourceLineNo">13875</span><a name="line.13875"></a>
-<span class="sourceLineNo">13876</span>        if (saturation &lt;= 0.0039f) {<a name="line.13876"></a>
-<span class="sourceLineNo">13877</span>            return floatGet(value, value, value, opacity);<a name="line.13877"></a>
-<span class="sourceLineNo">13878</span>        } else if (value &lt;= 0.0039f) {<a name="line.13878"></a>
-<span class="sourceLineNo">13879</span>            return NumberTools.intBitsToFloat((int) (opacity * 254f) &lt;&lt; 24 &amp; 0xFE000000);<a name="line.13879"></a>
-<span class="sourceLineNo">13880</span>        } else {<a name="line.13880"></a>
-<span class="sourceLineNo">13881</span>            final float hu = ((h + hue + 6f) % 1f) * 6f;<a name="line.13881"></a>
-<span class="sourceLineNo">13882</span>            final int i = (int) hu;<a name="line.13882"></a>
-<span class="sourceLineNo">13883</span>            final float x = value * (1 - saturation);<a name="line.13883"></a>
-<span class="sourceLineNo">13884</span>            final float y = value * (1 - saturation * (hu - i));<a name="line.13884"></a>
-<span class="sourceLineNo">13885</span>            final float z = value * (1 - saturation * (1 - (hu - i)));<a name="line.13885"></a>
-<span class="sourceLineNo">13886</span><a name="line.13886"></a>
-<span class="sourceLineNo">13887</span>            switch (i) {<a name="line.13887"></a>
-<span class="sourceLineNo">13888</span>                case 0:<a name="line.13888"></a>
-<span class="sourceLineNo">13889</span>                    return floatGet(value, z, x, opacity);<a name="line.13889"></a>
-<span class="sourceLineNo">13890</span>                case 1:<a name="line.13890"></a>
-<span class="sourceLineNo">13891</span>                    return floatGet(y, value, x, opacity);<a name="line.13891"></a>
-<span class="sourceLineNo">13892</span>                case 2:<a name="line.13892"></a>
-<span class="sourceLineNo">13893</span>                    return floatGet(x, value, z, opacity);<a name="line.13893"></a>
-<span class="sourceLineNo">13894</span>                case 3:<a name="line.13894"></a>
-<span class="sourceLineNo">13895</span>                    return floatGet(x, y, value, opacity);<a name="line.13895"></a>
-<span class="sourceLineNo">13896</span>                case 4:<a name="line.13896"></a>
-<span class="sourceLineNo">13897</span>                    return floatGet(z, x, value, opacity);<a name="line.13897"></a>
-<span class="sourceLineNo">13898</span>                default:<a name="line.13898"></a>
-<span class="sourceLineNo">13899</span>                    return floatGet(value, x, y, opacity);<a name="line.13899"></a>
-<span class="sourceLineNo">13900</span>            }<a name="line.13900"></a>
-<span class="sourceLineNo">13901</span>        }<a name="line.13901"></a>
-<span class="sourceLineNo">13902</span>    }<a name="line.13902"></a>
-<span class="sourceLineNo">13903</span><a name="line.13903"></a>
-<span class="sourceLineNo">13904</span>    /**<a name="line.13904"></a>
-<span class="sourceLineNo">13905</span>     * Interpolates from the packed float color start towards end by change. Both start and end should be packed colors,<a name="line.13905"></a>
-<span class="sourceLineNo">13906</span>     * as from {@link #toFloatBits()} or {@link #floatGet(float, float, float, float)}, and change can be between 0f<a name="line.13906"></a>
-<span class="sourceLineNo">13907</span>     * (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.<a name="line.13907"></a>
-<span class="sourceLineNo">13908</span>     * @param start the starting color as a packed float<a name="line.13908"></a>
-<span class="sourceLineNo">13909</span>     * @param end the target color as a packed float<a name="line.13909"></a>
-<span class="sourceLineNo">13910</span>     * @param change how much to go from start toward end, as a float between 0 and 1; higher means closer to end<a name="line.13910"></a>
-<span class="sourceLineNo">13911</span>     * @return a packed float that represents a color between start and end<a name="line.13911"></a>
-<span class="sourceLineNo">13912</span>     */<a name="line.13912"></a>
-<span class="sourceLineNo">13913</span>    public static float lerpFloatColors(final float start, final float end, final float change) {<a name="line.13913"></a>
-<span class="sourceLineNo">13914</span>        final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),<a name="line.13914"></a>
-<span class="sourceLineNo">13915</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = (s &gt;&gt;&gt; 24) &amp; 254,<a name="line.13915"></a>
-<span class="sourceLineNo">13916</span>                re = (e &amp; 0xFF), ge = (e &gt;&gt;&gt; 8) &amp; 0xFF, be = (e &gt;&gt;&gt; 16) &amp; 0xFF, ae = (e &gt;&gt;&gt; 24) &amp; 254;<a name="line.13916"></a>
-<span class="sourceLineNo">13917</span>        return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) &amp; 0xFF)<a name="line.13917"></a>
-<span class="sourceLineNo">13918</span>                | (((int) (gs + change * (ge - gs)) &amp; 0xFF) &lt;&lt; 8)<a name="line.13918"></a>
-<span class="sourceLineNo">13919</span>                | (((int) (bs + change * (be - bs)) &amp; 0xFF) &lt;&lt; 16)<a name="line.13919"></a>
-<span class="sourceLineNo">13920</span>                | (((int) (as + change * (ae - as)) &amp; 0xFE) &lt;&lt; 24));<a name="line.13920"></a>
-<span class="sourceLineNo">13921</span>    }<a name="line.13921"></a>
-<span class="sourceLineNo">13922</span><a name="line.13922"></a>
-<span class="sourceLineNo">13923</span>    /**<a name="line.13923"></a>
-<span class="sourceLineNo">13924</span>     * Interpolates from the packed float color start towards end by change, but keeps the alpha of start and uses the<a name="line.13924"></a>
-<span class="sourceLineNo">13925</span>     * alpha of end as an extra factor that can affect how much to change. Both start and end should be packed colors,<a name="line.13925"></a>
-<span class="sourceLineNo">13926</span>     * as from {@link #toFloatBits()} or {@link #floatGet(float, float, float, float)}, and change can be between 0f<a name="line.13926"></a>
-<span class="sourceLineNo">13927</span>     * (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.<a name="line.13927"></a>
-<span class="sourceLineNo">13928</span>     * @param start the starting color as a packed float; alpha will be preserved<a name="line.13928"></a>
-<span class="sourceLineNo">13929</span>     * @param end the target color as a packed float; alpha will not be used directly, and will instead be multiplied with change<a name="line.13929"></a>
-<span class="sourceLineNo">13930</span>     * @param change how much to go from start toward end, as a float between 0 and 1; higher means closer to end<a name="line.13930"></a>
-<span class="sourceLineNo">13931</span>     * @return a packed float that represents a color between start and end<a name="line.13931"></a>
-<span class="sourceLineNo">13932</span>     */<a name="line.13932"></a>
-<span class="sourceLineNo">13933</span>    public static float lerpFloatColorsBlended(final float start, final float end, float change) {<a name="line.13933"></a>
-<span class="sourceLineNo">13934</span>        final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),<a name="line.13934"></a>
-<span class="sourceLineNo">13935</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = s &amp; 0xFE000000,<a name="line.13935"></a>
-<span class="sourceLineNo">13936</span>                re = (e &amp; 0xFF), ge = (e &gt;&gt;&gt; 8) &amp; 0xFF, be = (e &gt;&gt;&gt; 16) &amp; 0xFF, ae = (e &gt;&gt;&gt; 25);<a name="line.13936"></a>
-<span class="sourceLineNo">13937</span>        change *= ae * 0.007874016f;<a name="line.13937"></a>
-<span class="sourceLineNo">13938</span>        return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) &amp; 0xFF)<a name="line.13938"></a>
-<span class="sourceLineNo">13939</span>                | (((int) (gs + change * (ge - gs)) &amp; 0xFF) &lt;&lt; 8)<a name="line.13939"></a>
-<span class="sourceLineNo">13940</span>                | (((int) (bs + change * (be - bs)) &amp; 0xFF) &lt;&lt; 16)<a name="line.13940"></a>
-<span class="sourceLineNo">13941</span>                | as);<a name="line.13941"></a>
-<span class="sourceLineNo">13942</span>    }<a name="line.13942"></a>
-<span class="sourceLineNo">13943</span><a name="line.13943"></a>
-<span class="sourceLineNo">13944</span>    /**<a name="line.13944"></a>
-<span class="sourceLineNo">13945</span>     * Interpolates from the packed float color start towards white by change. While change should be between 0f (return<a name="line.13945"></a>
-<span class="sourceLineNo">13946</span>     * start as-is) and 1f (return white), start should be a packed color, as from {@link #toFloatBits()} or<a name="line.13946"></a>
-<span class="sourceLineNo">13947</span>     * {@link #floatGet(float, float, float, float)}. This is a good way to reduce allocations of temporary Colors, and<a name="line.13947"></a>
-<span class="sourceLineNo">13948</span>     * is a little more efficient and clear than using {@link #lerpFloatColors(float, float, float)} to lerp towards<a name="line.13948"></a>
-<span class="sourceLineNo">13949</span>     * white. Unlike {@link #lerpFloatColors(float, float, float)}, this keeps the alpha of start as-is.<a name="line.13949"></a>
-<span class="sourceLineNo">13950</span>     * @param start the starting color as a packed float<a name="line.13950"></a>
-<span class="sourceLineNo">13951</span>     * @param change how much to go from start toward white, as a float between 0 and 1; higher means closer to end<a name="line.13951"></a>
-<span class="sourceLineNo">13952</span>     * @return a packed float that represents a color between start and white<a name="line.13952"></a>
-<span class="sourceLineNo">13953</span>     */<a name="line.13953"></a>
-<span class="sourceLineNo">13954</span>    public static float lightenFloat(final float start, final float change) {<a name="line.13954"></a>
-<span class="sourceLineNo">13955</span>        final int s = NumberTools.floatToIntBits(start),<a name="line.13955"></a>
-<span class="sourceLineNo">13956</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = s &amp; 0xFE000000;<a name="line.13956"></a>
-<span class="sourceLineNo">13957</span>        return NumberTools.intBitsToFloat(((int) (rs + change * (0xFF - rs)) &amp; 0xFF)<a name="line.13957"></a>
-<span class="sourceLineNo">13958</span>                | (((int) (gs + change * (0xFF - gs)) &amp; 0xFF) &lt;&lt; 8)<a name="line.13958"></a>
-<span class="sourceLineNo">13959</span>                | (((int) (bs + change * (0xFF - bs)) &amp; 0xFF) &lt;&lt; 16)<a name="line.13959"></a>
-<span class="sourceLineNo">13960</span>                | as);<a name="line.13960"></a>
-<span class="sourceLineNo">13961</span>    }<a name="line.13961"></a>
-<span class="sourceLineNo">13962</span><a name="line.13962"></a>
-<span class="sourceLineNo">13963</span>    /**<a name="line.13963"></a>
-<span class="sourceLineNo">13964</span>     * Interpolates from the packed float color start towards black by change. While change should be between 0f (return<a name="line.13964"></a>
-<span class="sourceLineNo">13965</span>     * start as-is) and 1f (return black), start should be a packed color, as from {@link #toFloatBits()} or<a name="line.13965"></a>
-<span class="sourceLineNo">13966</span>     * {@link #floatGet(float, float, float, float)}. This is a good way to reduce allocations of temporary Colors, and<a name="line.13966"></a>
-<span class="sourceLineNo">13967</span>     * is a little more efficient and clear than using {@link #lerpFloatColors(float, float, float)} to lerp towards<a name="line.13967"></a>
-<span class="sourceLineNo">13968</span>     * black. Unlike {@link #lerpFloatColors(float, float, float)}, this keeps the alpha of start as-is.<a name="line.13968"></a>
-<span class="sourceLineNo">13969</span>     * @param start the starting color as a packed float<a name="line.13969"></a>
-<span class="sourceLineNo">13970</span>     * @param change how much to go from start toward black, as a float between 0 and 1; higher means closer to end<a name="line.13970"></a>
-<span class="sourceLineNo">13971</span>     * @return a packed float that represents a color between start and black<a name="line.13971"></a>
-<span class="sourceLineNo">13972</span>     */<a name="line.13972"></a>
-<span class="sourceLineNo">13973</span>    public static float darkenFloat(final float start, float change) {<a name="line.13973"></a>
-<span class="sourceLineNo">13974</span>        final int s = NumberTools.floatToIntBits(start),<a name="line.13974"></a>
-<span class="sourceLineNo">13975</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = s &amp; 0xFE000000;<a name="line.13975"></a>
-<span class="sourceLineNo">13976</span>        change = 1f - change;<a name="line.13976"></a>
-<span class="sourceLineNo">13977</span>        return NumberTools.intBitsToFloat(((int) (rs * change) &amp; 0xFF)<a name="line.13977"></a>
-<span class="sourceLineNo">13978</span>                | (((int) (gs * change) &amp; 0xFF) &lt;&lt; 8)<a name="line.13978"></a>
-<span class="sourceLineNo">13979</span>                | (((int) (bs * change) &amp; 0xFF) &lt;&lt; 16)<a name="line.13979"></a>
-<span class="sourceLineNo">13980</span>                | as);<a name="line.13980"></a>
-<span class="sourceLineNo">13981</span>    }<a name="line.13981"></a>
-<span class="sourceLineNo">13982</span><a name="line.13982"></a>
-<span class="sourceLineNo">13983</span><a name="line.13983"></a>
-<span class="sourceLineNo">13984</span>    /**<a name="line.13984"></a>
-<span class="sourceLineNo">13985</span>     * Similar to {@link #colorLighting(double[][], float)}, but meant for an initial state before you have FOV or color<a name="line.13985"></a>
-<span class="sourceLineNo">13986</span>     * data to fill the lighting with, and you just need a map of a specific size that starts with no lighting. This<a name="line.13986"></a>
-<span class="sourceLineNo">13987</span>     * will produce a map that has white as the lighting color for all cells, but no cells will be lit. It is likely you<a name="line.13987"></a>
-<span class="sourceLineNo">13988</span>     * will want to pass this as basis to {@link #mixColoredLighting(float[][][], float[][][])}.<a name="line.13988"></a>
-<span class="sourceLineNo">13989</span>     *<a name="line.13989"></a>
-<span class="sourceLineNo">13990</span>     * @param width  the width of the colored lighting area to generate<a name="line.13990"></a>
-<span class="sourceLineNo">13991</span>     * @param height the height of the colored lighting area to generate<a name="line.13991"></a>
-<span class="sourceLineNo">13992</span>     * @return the colored lighting 3D float array, with no cells lit and all colors set to white<a name="line.13992"></a>
-<span class="sourceLineNo">13993</span>     */<a name="line.13993"></a>
-<span class="sourceLineNo">13994</span>    public static float[][][] blankColoredLighting(int width, int height) {<a name="line.13994"></a>
-<span class="sourceLineNo">13995</span>        return new float[][][]<a name="line.13995"></a>
-<span class="sourceLineNo">13996</span>                {<a name="line.13996"></a>
-<span class="sourceLineNo">13997</span>                        new float[width][height],<a name="line.13997"></a>
-<span class="sourceLineNo">13998</span>                        ArrayTools.fill(FLOAT_WHITE, width, height)<a name="line.13998"></a>
-<span class="sourceLineNo">13999</span>                };<a name="line.13999"></a>
-<span class="sourceLineNo">14000</span>    }<a name="line.14000"></a>
-<span class="sourceLineNo">14001</span><a name="line.14001"></a>
-<span class="sourceLineNo">14002</span>    /**<a name="line.14002"></a>
-<span class="sourceLineNo">14003</span>     * Removes any information from the given 3D float array for colored lighting, making it as if it had just been<a name="line.14003"></a>
-<span class="sourceLineNo">14004</span>     * built by {@link #blankColoredLighting(int, int)}, but without any allocations. This blank state is different from<a name="line.14004"></a>
-<span class="sourceLineNo">14005</span>     * being simply filled with all 0 or all default values; the two sub-arrays receive different contents (the one that<a name="line.14005"></a>
-<span class="sourceLineNo">14006</span>     * stores brightness is all 0, the one that stores colors will be filled with the float that encodes white).<a name="line.14006"></a>
-<span class="sourceLineNo">14007</span>     *<a name="line.14007"></a>
-<span class="sourceLineNo">14008</span>     * @param original a 3d float array used for colored lighting; will be modified to be completely blank<a name="line.14008"></a>
-<span class="sourceLineNo">14009</span>     * @return original, after modification<a name="line.14009"></a>
-<span class="sourceLineNo">14010</span>     */<a name="line.14010"></a>
-<span class="sourceLineNo">14011</span>    public static float[][][] eraseColoredLighting(float[][][] original) {<a name="line.14011"></a>
-<span class="sourceLineNo">14012</span>        ArrayTools.fill(original[0], 0f);<a name="line.14012"></a>
-<span class="sourceLineNo">14013</span>        ArrayTools.fill(original[1], FLOAT_WHITE);<a name="line.14013"></a>
-<span class="sourceLineNo">14014</span>        return original;<a name="line.14014"></a>
-<span class="sourceLineNo">14015</span>    }<a name="line.14015"></a>
-<span class="sourceLineNo">14016</span><a name="line.14016"></a>
-<span class="sourceLineNo">14017</span>    /**<a name="line.14017"></a>
-<span class="sourceLineNo">14018</span>     * Given a 2D double array that was probably produced by FOV and a packed color as a float, this gets a 3D float<a name="line.14018"></a>
-<span class="sourceLineNo">14019</span>     * array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in the first<a name="line.14019"></a>
-<span class="sourceLineNo">14020</span>     * 2D array element and the colors in the second 2D array element (using the given color if a cell has a value in<a name="line.14020"></a>
-<span class="sourceLineNo">14021</span>     * lights that is greater than 0, or defaulting to white if the cell is unlit). This has little use on its own, and<a name="line.14021"></a>
-<span class="sourceLineNo">14022</span>     * is meant to be given to {@link #mixColoredLighting(float[][][], float[][][])} so that multiple colors of lights<a name="line.14022"></a>
-<span class="sourceLineNo">14023</span>     * can be mixed.<a name="line.14023"></a>
-<span class="sourceLineNo">14024</span>     *<a name="line.14024"></a>
-<span class="sourceLineNo">14025</span>     * @param lights a 2D double array that should probably come from FOV<a name="line.14025"></a>
-<span class="sourceLineNo">14026</span>     * @param color  a packed float as produced by {@link #floatGet(float, float, float, float)}<a name="line.14026"></a>
-<span class="sourceLineNo">14027</span>     * @return a 3D float array containing two 2D sub-arrays, the first holding brightness and the second holding color<a name="line.14027"></a>
-<span class="sourceLineNo">14028</span>     */<a name="line.14028"></a>
-<span class="sourceLineNo">14029</span>    public static float[][][] colorLighting(double[][] lights, float color) {<a name="line.14029"></a>
-<span class="sourceLineNo">14030</span>        return colorLightingInto(new float[2][lights.length][lights[0].length], lights, color);<a name="line.14030"></a>
-<span class="sourceLineNo">14031</span>    }<a name="line.14031"></a>
-<span class="sourceLineNo">14032</span><a name="line.14032"></a>
-<span class="sourceLineNo">14033</span>    /**<a name="line.14033"></a>
-<span class="sourceLineNo">14034</span>     * Given a 2D double array that was probably produced by FOV and a packed color as a float, this assigns into reuse<a name="line.14034"></a>
-<span class="sourceLineNo">14035</span>     * a 3D float array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in<a name="line.14035"></a>
-<span class="sourceLineNo">14036</span>     * the first 2D array element and the colors in the second 2D array element (using the given color if a cell has a<a name="line.14036"></a>
-<span class="sourceLineNo">14037</span>     * value in lights that is greater than 0, or defaulting to white if the cell is unlit). This method requires that<a name="line.14037"></a>
-<span class="sourceLineNo">14038</span>     * reuse has length of at least 2, where elements 0 and 1 must be 2D arrays of identical dimensions; this is the<a name="line.14038"></a>
-<span class="sourceLineNo">14039</span>     * format that {@link #colorLighting(double[][], float)} produces. This has little use on its own, and  is meant to<a name="line.14039"></a>
-<span class="sourceLineNo">14040</span>     * be given to {@link #mixColoredLighting(float[][][], float[][][])} so that multiple colors of lights can be mixed.<a name="line.14040"></a>
-<span class="sourceLineNo">14041</span>     *<a name="line.14041"></a>
-<span class="sourceLineNo">14042</span>     * @param reuse  a 3D float array of the exact format produced by {@link #colorLighting(double[][], float)} or<a name="line.14042"></a>
-<span class="sourceLineNo">14043</span>     *               {@link #mixColoredLighting(float[][][], float[][][])}, and must have length 2; will be modified!<a name="line.14043"></a>
-<span class="sourceLineNo">14044</span>     * @param lights a 2D double array that should probably come from FOV<a name="line.14044"></a>
-<span class="sourceLineNo">14045</span>     * @param color  a packed float as produced by {@link #floatGet(float, float, float, float)}<a name="line.14045"></a>
-<span class="sourceLineNo">14046</span>     * @return reuse after modification<a name="line.14046"></a>
-<span class="sourceLineNo">14047</span>     */<a name="line.14047"></a>
-<span class="sourceLineNo">14048</span>    public static float[][][] colorLightingInto(float[][][] reuse, double[][] lights, float color) {<a name="line.14048"></a>
-<span class="sourceLineNo">14049</span>        for (int x = 0; x &lt; lights.length; x++) {<a name="line.14049"></a>
-<span class="sourceLineNo">14050</span>            for (int y = 0; y &lt; lights[0].length; y++) {<a name="line.14050"></a>
-<span class="sourceLineNo">14051</span>                reuse[1][x][y] = ((reuse[0][x][y] = (float) lights[x][y]) &gt; 0f)<a name="line.14051"></a>
-<span class="sourceLineNo">14052</span>                        ? color<a name="line.14052"></a>
-<span class="sourceLineNo">14053</span>                        : FLOAT_WHITE;<a name="line.14053"></a>
-<span class="sourceLineNo">14054</span>            }<a name="line.14054"></a>
-<span class="sourceLineNo">14055</span>        }<a name="line.14055"></a>
-<span class="sourceLineNo">14056</span>        return reuse;<a name="line.14056"></a>
-<span class="sourceLineNo">14057</span>    }<a name="line.14057"></a>
-<span class="sourceLineNo">14058</span><a name="line.14058"></a>
-<span class="sourceLineNo">14059</span>    /**<a name="line.14059"></a>
-<span class="sourceLineNo">14060</span>     * Adds two 3D arrays produced by {@link #colorLighting(double[][], float)} or this method and modifies the basis<a name="line.14060"></a>
-<span class="sourceLineNo">14061</span>     * parameter so it contains the combined brightnesses and colors of basis and other, in a pair of 2D arrays.<a name="line.14061"></a>
-<span class="sourceLineNo">14062</span>     *<a name="line.14062"></a>
-<span class="sourceLineNo">14063</span>     * @param basis a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)};<a name="line.14063"></a>
-<span class="sourceLineNo">14064</span>     *              will be modified to contain its existing contents mixed with other's contents <a name="line.14064"></a>
-<span class="sourceLineNo">14065</span>     * @param other a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)};<a name="line.14065"></a>
-<span class="sourceLineNo">14066</span>     *              will not be modified<a name="line.14066"></a>
-<span class="sourceLineNo">14067</span>     * @return basis, after modification; it can be passed to this method as basis again<a name="line.14067"></a>
-<span class="sourceLineNo">14068</span>     */<a name="line.14068"></a>
-<span class="sourceLineNo">14069</span>    public static float[][][] mixColoredLighting(float[][][] basis, float[][][] other) {<a name="line.14069"></a>
-<span class="sourceLineNo">14070</span>        int w = basis[0].length, h = basis[0][0].length, w2 = other[0].length, h2 = other[0][0].length;<a name="line.14070"></a>
-<span class="sourceLineNo">14071</span>        for (int x = 0; x &lt; w &amp;&amp; x &lt; w2; x++) {<a name="line.14071"></a>
-<span class="sourceLineNo">14072</span>            for (int y = 0; y &lt; h &amp;&amp; y &lt; h2; y++) {<a name="line.14072"></a>
-<span class="sourceLineNo">14073</span>                basis[1][x][y] = (basis[1][x][y] == FLOAT_WHITE)<a name="line.14073"></a>
-<span class="sourceLineNo">14074</span>                        ? other[1][x][y]<a name="line.14074"></a>
-<span class="sourceLineNo">14075</span>                        : (other[1][x][y] == FLOAT_WHITE)<a name="line.14075"></a>
-<span class="sourceLineNo">14076</span>                        ? basis[1][x][y]<a name="line.14076"></a>
-<span class="sourceLineNo">14077</span>                        : lerpFloatColors(basis[1][x][y], other[1][x][y], (other[0][x][y] - basis[0][x][y]) * 0.5f + 0.5f);<a name="line.14077"></a>
-<span class="sourceLineNo">14078</span>                basis[0][x][y] = Math.min(1.0f, basis[0][x][y] + other[0][x][y]);<a name="line.14078"></a>
-<span class="sourceLineNo">14079</span>            }<a name="line.14079"></a>
-<span class="sourceLineNo">14080</span>        }<a name="line.14080"></a>
-<span class="sourceLineNo">14081</span>        return basis;<a name="line.14081"></a>
-<span class="sourceLineNo">14082</span>    }<a name="line.14082"></a>
-<span class="sourceLineNo">14083</span><a name="line.14083"></a>
-<span class="sourceLineNo">14084</span><a name="line.14084"></a>
-<span class="sourceLineNo">14085</span>    @Override<a name="line.14085"></a>
-<span class="sourceLineNo">14086</span>    public String toString() {<a name="line.14086"></a>
-<span class="sourceLineNo">14087</span>        return name + " " + super.toString();<a name="line.14087"></a>
-<span class="sourceLineNo">14088</span>    }<a name="line.14088"></a>
-<span class="sourceLineNo">14089</span><a name="line.14089"></a>
-<span class="sourceLineNo">14090</span>    public String getName() {<a name="line.14090"></a>
-<span class="sourceLineNo">14091</span>        return name;<a name="line.14091"></a>
-<span class="sourceLineNo">14092</span>    }<a name="line.14092"></a>
-<span class="sourceLineNo">14093</span><a name="line.14093"></a>
-<span class="sourceLineNo">14094</span>    @Override<a name="line.14094"></a>
-<span class="sourceLineNo">14095</span>    public boolean equals(Object other) {<a name="line.14095"></a>
-<span class="sourceLineNo">14096</span>        return (other instanceof SColor || other instanceof Color) &amp;&amp; toIntBits() == ((Color) other).toIntBits();<a name="line.14096"></a>
-<span class="sourceLineNo">14097</span>    }<a name="line.14097"></a>
-<span class="sourceLineNo">14098</span><a name="line.14098"></a>
-<span class="sourceLineNo">14099</span>    @Override<a name="line.14099"></a>
-<span class="sourceLineNo">14100</span>    public int hashCode() {<a name="line.14100"></a>
-<span class="sourceLineNo">14101</span>        return (155 + CrossHash.hash(name)) * 31 ^ toIntBits();<a name="line.14101"></a>
-<span class="sourceLineNo">14102</span>    }<a name="line.14102"></a>
-<span class="sourceLineNo">14103</span>}<a name="line.14103"></a>
+<span class="sourceLineNo">13576</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or<a name="line.13576"></a>
+<span class="sourceLineNo">13577</span>     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,<a name="line.13577"></a>
+<span class="sourceLineNo">13578</span>     * saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13578"></a>
+<span class="sourceLineNo">13579</span>     * &lt;br&gt;<a name="line.13579"></a>
+<span class="sourceLineNo">13580</span>     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway<a name="line.13580"></a>
+<span class="sourceLineNo">13581</span>     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or<a name="line.13581"></a>
+<span class="sourceLineNo">13582</span>     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.<a name="line.13582"></a>
+<span class="sourceLineNo">13583</span>     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible<a name="line.13583"></a>
+<span class="sourceLineNo">13584</span>     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave<a name="line.13584"></a>
+<span class="sourceLineNo">13585</span>     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the<a name="line.13585"></a>
+<span class="sourceLineNo">13586</span>     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely<a name="line.13586"></a>
+<span class="sourceLineNo">13587</span>     * to be at the truncated max or min amount.<a name="line.13587"></a>
+<span class="sourceLineNo">13588</span>     *<a name="line.13588"></a>
+<span class="sourceLineNo">13589</span>     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}<a name="line.13589"></a>
+<span class="sourceLineNo">13590</span>     * @param hue        0f to 2f, the span of hue change that can be applied to the new float color<a name="line.13590"></a>
+<span class="sourceLineNo">13591</span>     * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color<a name="line.13591"></a>
+<span class="sourceLineNo">13592</span>     * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color<a name="line.13592"></a>
+<span class="sourceLineNo">13593</span>     * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color<a name="line.13593"></a>
+<span class="sourceLineNo">13594</span>     * @return a float encoding a variation of this SColor with changes up to the given properties<a name="line.13594"></a>
+<span class="sourceLineNo">13595</span>     */<a name="line.13595"></a>
+<span class="sourceLineNo">13596</span>    public float toRandomizedFloat(IRNG random, float hue, float saturation, float value, float opacity) {<a name="line.13596"></a>
+<span class="sourceLineNo">13597</span>        return toRandomizedFloat(this, random, hue, saturation, value, opacity);<a name="line.13597"></a>
+<span class="sourceLineNo">13598</span>    }<a name="line.13598"></a>
+<span class="sourceLineNo">13599</span>    /**<a name="line.13599"></a>
+<span class="sourceLineNo">13600</span>     * Gets a variation on the Color basis as a packed float that can have its hue, saturation, value, and opacity<a name="line.13600"></a>
+<span class="sourceLineNo">13601</span>     * changed to specified degrees using a random number generator. Takes an IRNG object (if the colors don't have a<a name="line.13601"></a>
+<span class="sourceLineNo">13602</span>     * specific need to be exactly the same each run, consider using {@link DefaultResources#getGuiRandom()} for an<a name="line.13602"></a>
+<span class="sourceLineNo">13603</span>     * IRNG), as well as floats representing the amounts of change that can be applied to hue, saturation, value, and<a name="line.13603"></a>
+<span class="sourceLineNo">13604</span>     * opacity. Returns a float that can be used as a packed or encoded color with methods like<a name="line.13604"></a>
+<span class="sourceLineNo">13605</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or<a name="line.13605"></a>
+<span class="sourceLineNo">13606</span>     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,<a name="line.13606"></a>
+<span class="sourceLineNo">13607</span>     * saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13607"></a>
+<span class="sourceLineNo">13608</span>     * &lt;br&gt;<a name="line.13608"></a>
+<span class="sourceLineNo">13609</span>     * The parameters this takes (other than random) all specify spans that the value can change by, spread halfway<a name="line.13609"></a>
+<span class="sourceLineNo">13610</span>     * toward higher values and halfway towards lower values. This is truncated if it would make a value lower than 0 or<a name="line.13610"></a>
+<span class="sourceLineNo">13611</span>     * higher than 1, with an exception for hue, which can rotate around somewhat if lower or higher hues would be used.<a name="line.13611"></a>
+<span class="sourceLineNo">13612</span>     * As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the possible<a name="line.13612"></a>
+<span class="sourceLineNo">13613</span>     * saturations that could be used would have the specified 0.4f range centered on 0.7f, or 0.5f to 0.9f. If you gave<a name="line.13613"></a>
+<span class="sourceLineNo">13614</span>     * this 1f for saturation and the current color still has saturation 0.7f, then the range would be truncated at the<a name="line.13614"></a>
+<span class="sourceLineNo">13615</span>     * upper end, for a possible range of 0.2f to 1.0f. If truncation of the range occurs, then values are more likely<a name="line.13615"></a>
+<span class="sourceLineNo">13616</span>     * to be at the truncated max or min amount.<a name="line.13616"></a>
+<span class="sourceLineNo">13617</span>     *<a name="line.13617"></a>
+<span class="sourceLineNo">13618</span>     * @param basis      a Color or SColor to use as the starting point; will not be modified itself<a name="line.13618"></a>
+<span class="sourceLineNo">13619</span>     * @param random     an IRNG to get random amounts, such as {@link DefaultResources#getGuiRandom()}<a name="line.13619"></a>
+<span class="sourceLineNo">13620</span>     * @param hue        0f to 2f, the span of hue change that can be applied to the new float color<a name="line.13620"></a>
+<span class="sourceLineNo">13621</span>     * @param saturation 0f to 2f, the span of saturation change that can be applied to the new float color<a name="line.13621"></a>
+<span class="sourceLineNo">13622</span>     * @param value      0f to 2f, the span of value/brightness change that can be applied to the new float color<a name="line.13622"></a>
+<span class="sourceLineNo">13623</span>     * @param opacity    0f to 2f, the span of opacity/alpha change that can be applied to the new float color<a name="line.13623"></a>
+<span class="sourceLineNo">13624</span>     * @return a float encoding a variation of this SColor with changes up to the given properties<a name="line.13624"></a>
+<span class="sourceLineNo">13625</span>     */<a name="line.13625"></a>
+<span class="sourceLineNo">13626</span>    public static float toRandomizedFloat(Color basis, IRNG random, float hue, float saturation, float value, float opacity) {<a name="line.13626"></a>
+<span class="sourceLineNo">13627</span>        final float h, s, r = basis.r, g = basis.g, b = basis.b;<a name="line.13627"></a>
+<span class="sourceLineNo">13628</span>        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB<a name="line.13628"></a>
+<span class="sourceLineNo">13629</span>        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value<a name="line.13629"></a>
+<span class="sourceLineNo">13630</span>        final float delta = max - min;                   //Delta RGB value<a name="line.13630"></a>
+<span class="sourceLineNo">13631</span>        if ( delta &lt; 0.0039f )                           //This is a gray, no chroma...<a name="line.13631"></a>
+<span class="sourceLineNo">13632</span>        {<a name="line.13632"></a>
+<span class="sourceLineNo">13633</span>            s = 0f;<a name="line.13633"></a>
+<span class="sourceLineNo">13634</span>            h = 0f;<a name="line.13634"></a>
+<span class="sourceLineNo">13635</span>            hue = 1f;<a name="line.13635"></a>
+<span class="sourceLineNo">13636</span>        }<a name="line.13636"></a>
+<span class="sourceLineNo">13637</span>        else                                             //Chromatic data...<a name="line.13637"></a>
+<span class="sourceLineNo">13638</span>        {<a name="line.13638"></a>
+<span class="sourceLineNo">13639</span>            s = delta / max;<a name="line.13639"></a>
+<span class="sourceLineNo">13640</span>            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;<a name="line.13640"></a>
+<span class="sourceLineNo">13641</span>            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;<a name="line.13641"></a>
+<span class="sourceLineNo">13642</span>            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;<a name="line.13642"></a>
+<span class="sourceLineNo">13643</span><a name="line.13643"></a>
+<span class="sourceLineNo">13644</span>            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;<a name="line.13644"></a>
+<span class="sourceLineNo">13645</span>            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;<a name="line.13645"></a>
+<span class="sourceLineNo">13646</span>            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;<a name="line.13646"></a>
+<span class="sourceLineNo">13647</span>        }<a name="line.13647"></a>
+<span class="sourceLineNo">13648</span>        saturation = MathUtils.clamp(s + (random.nextFloat() - 0.5f) * saturation, 0f, 1f);<a name="line.13648"></a>
+<span class="sourceLineNo">13649</span>        value = MathUtils.clamp(max + (random.nextFloat() - 0.5f) * value, 0f, 1f);<a name="line.13649"></a>
+<span class="sourceLineNo">13650</span>        opacity = MathUtils.clamp(basis.a + (random.nextFloat() - 0.5f) * opacity, 0f, 1f);<a name="line.13650"></a>
+<span class="sourceLineNo">13651</span><a name="line.13651"></a>
+<span class="sourceLineNo">13652</span>        if (saturation &lt;= 0.0039f) {<a name="line.13652"></a>
+<span class="sourceLineNo">13653</span>            return floatGet(value, value, value, opacity);<a name="line.13653"></a>
+<span class="sourceLineNo">13654</span>        } else if (value &lt;= 0.0039f) {<a name="line.13654"></a>
+<span class="sourceLineNo">13655</span>            return NumberTools.intBitsToFloat((int) (opacity * 254f) &lt;&lt; 24 &amp; 0xFE000000);<a name="line.13655"></a>
+<span class="sourceLineNo">13656</span>        } else {<a name="line.13656"></a>
+<span class="sourceLineNo">13657</span>            final float hu = ((h + (random.nextFloat() - 0.5f) * hue + 6f) % 1f) * 6f;<a name="line.13657"></a>
+<span class="sourceLineNo">13658</span>            final int i = (int) hu;<a name="line.13658"></a>
+<span class="sourceLineNo">13659</span>            final float x = value * (1 - saturation);<a name="line.13659"></a>
+<span class="sourceLineNo">13660</span>            final float y = value * (1 - saturation * (hu - i));<a name="line.13660"></a>
+<span class="sourceLineNo">13661</span>            final float z = value * (1 - saturation * (1 - (hu - i)));<a name="line.13661"></a>
+<span class="sourceLineNo">13662</span><a name="line.13662"></a>
+<span class="sourceLineNo">13663</span>            switch (i) {<a name="line.13663"></a>
+<span class="sourceLineNo">13664</span>                case 0:<a name="line.13664"></a>
+<span class="sourceLineNo">13665</span>                    return floatGet(value, z, x, opacity);<a name="line.13665"></a>
+<span class="sourceLineNo">13666</span>                case 1:<a name="line.13666"></a>
+<span class="sourceLineNo">13667</span>                    return floatGet(y, value, x, opacity);<a name="line.13667"></a>
+<span class="sourceLineNo">13668</span>                case 2:<a name="line.13668"></a>
+<span class="sourceLineNo">13669</span>                    return floatGet(x, value, z, opacity);<a name="line.13669"></a>
+<span class="sourceLineNo">13670</span>                case 3:<a name="line.13670"></a>
+<span class="sourceLineNo">13671</span>                    return floatGet(x, y, value, opacity);<a name="line.13671"></a>
+<span class="sourceLineNo">13672</span>                case 4:<a name="line.13672"></a>
+<span class="sourceLineNo">13673</span>                    return floatGet(z, x, value, opacity);<a name="line.13673"></a>
+<span class="sourceLineNo">13674</span>                default:<a name="line.13674"></a>
+<span class="sourceLineNo">13675</span>                    return floatGet(value, x, y, opacity);<a name="line.13675"></a>
+<span class="sourceLineNo">13676</span>            }<a name="line.13676"></a>
+<span class="sourceLineNo">13677</span>        }<a name="line.13677"></a>
+<span class="sourceLineNo">13678</span>    }<a name="line.13678"></a>
+<span class="sourceLineNo">13679</span>    /**<a name="line.13679"></a>
+<span class="sourceLineNo">13680</span>     * Gets a variation on this SColor as a packed float that has its hue, saturation, and value adjusted by the<a name="line.13680"></a>
+<span class="sourceLineNo">13681</span>     * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these<a name="line.13681"></a>
+<span class="sourceLineNo">13682</span>     * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like<a name="line.13682"></a>
+<span class="sourceLineNo">13683</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or<a name="line.13683"></a>
+<span class="sourceLineNo">13684</span>     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,<a name="line.13684"></a>
+<span class="sourceLineNo">13685</span>     * saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.<a name="line.13685"></a>
+<span class="sourceLineNo">13686</span>     * &lt;br&gt;<a name="line.13686"></a>
+<span class="sourceLineNo">13687</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13687"></a>
+<span class="sourceLineNo">13688</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13688"></a>
+<span class="sourceLineNo">13689</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13689"></a>
+<span class="sourceLineNo">13690</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13690"></a>
+<span class="sourceLineNo">13691</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13691"></a>
+<span class="sourceLineNo">13692</span>     *<a name="line.13692"></a>
+<span class="sourceLineNo">13693</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13693"></a>
+<span class="sourceLineNo">13694</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13694"></a>
+<span class="sourceLineNo">13695</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13695"></a>
+<span class="sourceLineNo">13696</span>     * @return a float encoding a color with the given properties<a name="line.13696"></a>
+<span class="sourceLineNo">13697</span>     */<a name="line.13697"></a>
+<span class="sourceLineNo">13698</span>    public float toEditedFloat(float hue, float saturation, float value) {<a name="line.13698"></a>
+<span class="sourceLineNo">13699</span>        return toEditedFloat(this, hue, saturation, value, 0f);<a name="line.13699"></a>
+<span class="sourceLineNo">13700</span>    }<a name="line.13700"></a>
+<span class="sourceLineNo">13701</span><a name="line.13701"></a>
+<span class="sourceLineNo">13702</span>    /**<a name="line.13702"></a>
+<span class="sourceLineNo">13703</span>     * Gets a variation on the Color basis as a packed float that has its hue, saturation, and value adjusted by the<a name="line.13703"></a>
+<span class="sourceLineNo">13704</span>     * specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these<a name="line.13704"></a>
+<span class="sourceLineNo">13705</span>     * can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like<a name="line.13705"></a>
+<span class="sourceLineNo">13706</span>     * {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like SparseLayers or<a name="line.13706"></a>
+<span class="sourceLineNo">13707</span>     * SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless hue,<a name="line.13707"></a>
+<span class="sourceLineNo">13708</span>     * saturation, and value are all 0. This won't modify the given SColor, nor will it allocate any objects.<a name="line.13708"></a>
+<span class="sourceLineNo">13709</span>     * &lt;br&gt;<a name="line.13709"></a>
+<span class="sourceLineNo">13710</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13710"></a>
+<span class="sourceLineNo">13711</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13711"></a>
+<span class="sourceLineNo">13712</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13712"></a>
+<span class="sourceLineNo">13713</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13713"></a>
+<span class="sourceLineNo">13714</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13714"></a>
+<span class="sourceLineNo">13715</span>     *<a name="line.13715"></a>
+<span class="sourceLineNo">13716</span>     * @param basis      a Color or SColor to use as the starting point; will not be modified itself<a name="line.13716"></a>
+<span class="sourceLineNo">13717</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13717"></a>
+<span class="sourceLineNo">13718</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13718"></a>
+<span class="sourceLineNo">13719</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13719"></a>
+<span class="sourceLineNo">13720</span>     * @return a float encoding a variation of basis with the given changes<a name="line.13720"></a>
+<span class="sourceLineNo">13721</span>     */<a name="line.13721"></a>
+<span class="sourceLineNo">13722</span>    public static float toEditedFloat(Color basis, float hue, float saturation, float value) {<a name="line.13722"></a>
+<span class="sourceLineNo">13723</span>        return toEditedFloat(basis, hue, saturation, value, 0f);<a name="line.13723"></a>
+<span class="sourceLineNo">13724</span>    }<a name="line.13724"></a>
+<span class="sourceLineNo">13725</span>    /**<a name="line.13725"></a>
+<span class="sourceLineNo">13726</span>     * Gets a variation on this SColor as a packed float that has its hue, saturation, value, and opacity adjusted by<a name="line.13726"></a>
+<span class="sourceLineNo">13727</span>     * the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and<a name="line.13727"></a>
+<span class="sourceLineNo">13728</span>     * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with<a name="line.13728"></a>
+<span class="sourceLineNo">13729</span>     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like<a name="line.13729"></a>
+<span class="sourceLineNo">13730</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13730"></a>
+<span class="sourceLineNo">13731</span>     * hue saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any<a name="line.13731"></a>
+<span class="sourceLineNo">13732</span>     * objects.<a name="line.13732"></a>
+<span class="sourceLineNo">13733</span>     * &lt;br&gt;<a name="line.13733"></a>
+<span class="sourceLineNo">13734</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13734"></a>
+<span class="sourceLineNo">13735</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13735"></a>
+<span class="sourceLineNo">13736</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13736"></a>
+<span class="sourceLineNo">13737</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13737"></a>
+<span class="sourceLineNo">13738</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13738"></a>
+<span class="sourceLineNo">13739</span>     *<a name="line.13739"></a>
+<span class="sourceLineNo">13740</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13740"></a>
+<span class="sourceLineNo">13741</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13741"></a>
+<span class="sourceLineNo">13742</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13742"></a>
+<span class="sourceLineNo">13743</span>     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color<a name="line.13743"></a>
+<span class="sourceLineNo">13744</span>     * @return a float encoding a color with the given properties<a name="line.13744"></a>
+<span class="sourceLineNo">13745</span>     */<a name="line.13745"></a>
+<span class="sourceLineNo">13746</span>    public float toEditedFloat(float hue, float saturation, float value, float opacity) {<a name="line.13746"></a>
+<span class="sourceLineNo">13747</span>        return toEditedFloat(this, hue, saturation, value, opacity);<a name="line.13747"></a>
+<span class="sourceLineNo">13748</span>    }<a name="line.13748"></a>
+<span class="sourceLineNo">13749</span>    /**<a name="line.13749"></a>
+<span class="sourceLineNo">13750</span>     * Gets a variation on the Color basis as a packed float that has its hue, saturation, value, and opacity adjusted<a name="line.13750"></a>
+<span class="sourceLineNo">13751</span>     * by the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and<a name="line.13751"></a>
+<span class="sourceLineNo">13752</span>     * opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with<a name="line.13752"></a>
+<span class="sourceLineNo">13753</span>     * methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various SquidLib classes like<a name="line.13753"></a>
+<span class="sourceLineNo">13754</span>     * SparseLayers or SquidLayers. The float is likely to be different than the result of {@link #toFloatBits()} unless<a name="line.13754"></a>
+<span class="sourceLineNo">13755</span>     * hue saturation, value, and opacity are all 0. This won't modify the given SColor, nor will it allocate any<a name="line.13755"></a>
+<span class="sourceLineNo">13756</span>     * objects.<a name="line.13756"></a>
+<span class="sourceLineNo">13757</span>     * &lt;br&gt;<a name="line.13757"></a>
+<span class="sourceLineNo">13758</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13758"></a>
+<span class="sourceLineNo">13759</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13759"></a>
+<span class="sourceLineNo">13760</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13760"></a>
+<span class="sourceLineNo">13761</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color still<a name="line.13761"></a>
+<span class="sourceLineNo">13762</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13762"></a>
+<span class="sourceLineNo">13763</span>     *<a name="line.13763"></a>
+<span class="sourceLineNo">13764</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color<a name="line.13764"></a>
+<span class="sourceLineNo">13765</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13765"></a>
+<span class="sourceLineNo">13766</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13766"></a>
+<span class="sourceLineNo">13767</span>     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color<a name="line.13767"></a>
+<span class="sourceLineNo">13768</span>     * @return a float encoding a variation of basis with the given changes<a name="line.13768"></a>
+<span class="sourceLineNo">13769</span>     */<a name="line.13769"></a>
+<span class="sourceLineNo">13770</span>    public static float toEditedFloat(Color basis, float hue, float saturation, float value, float opacity) {<a name="line.13770"></a>
+<span class="sourceLineNo">13771</span>        final float h, s, r = basis.r, g = basis.g, b = basis.b;<a name="line.13771"></a>
+<span class="sourceLineNo">13772</span>        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB<a name="line.13772"></a>
+<span class="sourceLineNo">13773</span>        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value<a name="line.13773"></a>
+<span class="sourceLineNo">13774</span>        final float delta = max - min;                   //Delta RGB value<a name="line.13774"></a>
+<span class="sourceLineNo">13775</span>        if ( delta &lt; 0.0039f )                           //This is a gray, no chroma...<a name="line.13775"></a>
+<span class="sourceLineNo">13776</span>        {<a name="line.13776"></a>
+<span class="sourceLineNo">13777</span>            s = 0f;<a name="line.13777"></a>
+<span class="sourceLineNo">13778</span>            h = 0f;<a name="line.13778"></a>
+<span class="sourceLineNo">13779</span>            hue = 1f;<a name="line.13779"></a>
+<span class="sourceLineNo">13780</span>        }<a name="line.13780"></a>
+<span class="sourceLineNo">13781</span>        else                                             //Chromatic data...<a name="line.13781"></a>
+<span class="sourceLineNo">13782</span>        {<a name="line.13782"></a>
+<span class="sourceLineNo">13783</span>            s = delta / max;<a name="line.13783"></a>
+<span class="sourceLineNo">13784</span>            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;<a name="line.13784"></a>
+<span class="sourceLineNo">13785</span>            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;<a name="line.13785"></a>
+<span class="sourceLineNo">13786</span>            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;<a name="line.13786"></a>
+<span class="sourceLineNo">13787</span><a name="line.13787"></a>
+<span class="sourceLineNo">13788</span>            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;<a name="line.13788"></a>
+<span class="sourceLineNo">13789</span>            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;<a name="line.13789"></a>
+<span class="sourceLineNo">13790</span>            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;<a name="line.13790"></a>
+<span class="sourceLineNo">13791</span>        }<a name="line.13791"></a>
+<span class="sourceLineNo">13792</span>        saturation = MathUtils.clamp(s + saturation, 0f, 1f);<a name="line.13792"></a>
+<span class="sourceLineNo">13793</span>        value = MathUtils.clamp(max + value, 0f, 1f);<a name="line.13793"></a>
+<span class="sourceLineNo">13794</span>        opacity = MathUtils.clamp(basis.a + opacity, 0f, 1f);<a name="line.13794"></a>
+<span class="sourceLineNo">13795</span><a name="line.13795"></a>
+<span class="sourceLineNo">13796</span>        if (saturation &lt;= 0.0039f) {<a name="line.13796"></a>
+<span class="sourceLineNo">13797</span>            return floatGet(value, value, value, opacity);<a name="line.13797"></a>
+<span class="sourceLineNo">13798</span>        } else if (value &lt;= 0.0039f) {<a name="line.13798"></a>
+<span class="sourceLineNo">13799</span>            return NumberTools.intBitsToFloat((int) (opacity * 254f) &lt;&lt; 24 &amp; 0xFE000000);<a name="line.13799"></a>
+<span class="sourceLineNo">13800</span>        } else {<a name="line.13800"></a>
+<span class="sourceLineNo">13801</span>            final float hu = ((h + hue + 6f) % 1f) * 6f;<a name="line.13801"></a>
+<span class="sourceLineNo">13802</span>            final int i = (int) hu;<a name="line.13802"></a>
+<span class="sourceLineNo">13803</span>            final float x = value * (1 - saturation);<a name="line.13803"></a>
+<span class="sourceLineNo">13804</span>            final float y = value * (1 - saturation * (hu - i));<a name="line.13804"></a>
+<span class="sourceLineNo">13805</span>            final float z = value * (1 - saturation * (1 - (hu - i)));<a name="line.13805"></a>
+<span class="sourceLineNo">13806</span><a name="line.13806"></a>
+<span class="sourceLineNo">13807</span>            switch (i) {<a name="line.13807"></a>
+<span class="sourceLineNo">13808</span>                case 0:<a name="line.13808"></a>
+<span class="sourceLineNo">13809</span>                    return floatGet(value, z, x, opacity);<a name="line.13809"></a>
+<span class="sourceLineNo">13810</span>                case 1:<a name="line.13810"></a>
+<span class="sourceLineNo">13811</span>                    return floatGet(y, value, x, opacity);<a name="line.13811"></a>
+<span class="sourceLineNo">13812</span>                case 2:<a name="line.13812"></a>
+<span class="sourceLineNo">13813</span>                    return floatGet(x, value, z, opacity);<a name="line.13813"></a>
+<span class="sourceLineNo">13814</span>                case 3:<a name="line.13814"></a>
+<span class="sourceLineNo">13815</span>                    return floatGet(x, y, value, opacity);<a name="line.13815"></a>
+<span class="sourceLineNo">13816</span>                case 4:<a name="line.13816"></a>
+<span class="sourceLineNo">13817</span>                    return floatGet(z, x, value, opacity);<a name="line.13817"></a>
+<span class="sourceLineNo">13818</span>                default:<a name="line.13818"></a>
+<span class="sourceLineNo">13819</span>                    return floatGet(value, x, y, opacity);<a name="line.13819"></a>
+<span class="sourceLineNo">13820</span>            }<a name="line.13820"></a>
+<span class="sourceLineNo">13821</span>        }<a name="line.13821"></a>
+<span class="sourceLineNo">13822</span>    }<a name="line.13822"></a>
+<span class="sourceLineNo">13823</span>    /**<a name="line.13823"></a>
+<span class="sourceLineNo">13824</span>     * Gets a variation on the packed float color basis as another packed float that has its hue, saturation, value, and<a name="line.13824"></a>
+<span class="sourceLineNo">13825</span>     * opacity adjusted by the specified amounts. Takes floats representing the amounts of change to apply to hue,<a name="line.13825"></a>
+<span class="sourceLineNo">13826</span>     * saturation, value, and opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or<a name="line.13826"></a>
+<span class="sourceLineNo">13827</span>     * encoded color with methods like {@link com.badlogic.gdx.graphics.g2d.Batch#setColor(float)}, or in various<a name="line.13827"></a>
+<span class="sourceLineNo">13828</span>     * SquidLib classes like SparseLayers or SquidLayers. The float is likely to be different than the result of<a name="line.13828"></a>
+<span class="sourceLineNo">13829</span>     * {@link #toFloatBits()} unless hue saturation, value, and opacity are all 0. This won't allocate any objects.<a name="line.13829"></a>
+<span class="sourceLineNo">13830</span>     * &lt;br&gt;<a name="line.13830"></a>
+<span class="sourceLineNo">13831</span>     * The parameters this takes all specify additive changes for a color component, clamping the final values so they<a name="line.13831"></a>
+<span class="sourceLineNo">13832</span>     * can't go above 1 or below 0, with an exception for hue, which can rotate around if lower or higher hues would be<a name="line.13832"></a>
+<span class="sourceLineNo">13833</span>     * used. As an example, if you give this 0.4f for saturation, and the current color has saturation 0.7f, then the<a name="line.13833"></a>
+<span class="sourceLineNo">13834</span>     * resulting color will have 1f for saturation. If you gave this -0.1f for saturation and the current color again<a name="line.13834"></a>
+<span class="sourceLineNo">13835</span>     * has saturation 0.7f, then resulting color will have 0.6f for saturation.<a name="line.13835"></a>
+<span class="sourceLineNo">13836</span>     *<a name="line.13836"></a>
+<span class="sourceLineNo">13837</span>     * @param basis      a packed float color that will be used as the starting point to make the next color<a name="line.13837"></a>
+<span class="sourceLineNo">13838</span>     * @param hue        -1f to 1f, the hue change that can be applied to the new float color (not clamped, wraps)<a name="line.13838"></a>
+<span class="sourceLineNo">13839</span>     * @param saturation -1f to 1f, the saturation change that can be applied to the new float color<a name="line.13839"></a>
+<span class="sourceLineNo">13840</span>     * @param value      -1f to 1f, the value/brightness change that can be applied to the new float color<a name="line.13840"></a>
+<span class="sourceLineNo">13841</span>     * @param opacity    -1f to 1f, the opacity/alpha change that can be applied to the new float color<a name="line.13841"></a>
+<span class="sourceLineNo">13842</span>     * @return a float encoding a variation of basis with the given changes<a name="line.13842"></a>
+<span class="sourceLineNo">13843</span>     */<a name="line.13843"></a>
+<span class="sourceLineNo">13844</span>    public static float toEditedFloat(float basis, float hue, float saturation, float value, float opacity) {<a name="line.13844"></a>
+<span class="sourceLineNo">13845</span>        final int bits = NumberTools.floatToIntBits(basis);<a name="line.13845"></a>
+<span class="sourceLineNo">13846</span>        final float h, s,<a name="line.13846"></a>
+<span class="sourceLineNo">13847</span>                r = (bits &amp; 0x000000ff) * 0x1.010102p-8f,<a name="line.13847"></a>
+<span class="sourceLineNo">13848</span>                g = (bits &amp; 0x0000ff00) * 0x1.010102p-16f,<a name="line.13848"></a>
+<span class="sourceLineNo">13849</span>                b = (bits &amp; 0x00ff0000) * 0x1.010102p-24f;<a name="line.13849"></a>
+<span class="sourceLineNo">13850</span>        final float min = Math.min(Math.min(r, g), b);   //Min. value of RGB<a name="line.13850"></a>
+<span class="sourceLineNo">13851</span>        final float max = Math.max(Math.max(r, g), b);   //Max value of RGB, equivalent to value<a name="line.13851"></a>
+<span class="sourceLineNo">13852</span>        final float delta = max - min;                   //Delta RGB value<a name="line.13852"></a>
+<span class="sourceLineNo">13853</span>        if ( delta &lt; 0.0039f )                           //This is a gray, no chroma...<a name="line.13853"></a>
+<span class="sourceLineNo">13854</span>        {<a name="line.13854"></a>
+<span class="sourceLineNo">13855</span>            s = 0f;<a name="line.13855"></a>
+<span class="sourceLineNo">13856</span>            h = 0f;<a name="line.13856"></a>
+<span class="sourceLineNo">13857</span>            hue = 1f;<a name="line.13857"></a>
+<span class="sourceLineNo">13858</span>        }<a name="line.13858"></a>
+<span class="sourceLineNo">13859</span>        else                                             //Chromatic data...<a name="line.13859"></a>
+<span class="sourceLineNo">13860</span>        {<a name="line.13860"></a>
+<span class="sourceLineNo">13861</span>            s = delta / max;<a name="line.13861"></a>
+<span class="sourceLineNo">13862</span>            final float rDelta = (((max - r) / 6f) + (delta / 2f)) / delta;<a name="line.13862"></a>
+<span class="sourceLineNo">13863</span>            final float gDelta = (((max - g) / 6f) + (delta / 2f)) / delta;<a name="line.13863"></a>
+<span class="sourceLineNo">13864</span>            final float bDelta = (((max - b) / 6f) + (delta / 2f)) / delta;<a name="line.13864"></a>
+<span class="sourceLineNo">13865</span><a name="line.13865"></a>
+<span class="sourceLineNo">13866</span>            if      (r == max) h = (bDelta - gDelta + 1f) % 1f;<a name="line.13866"></a>
+<span class="sourceLineNo">13867</span>            else if (g == max) h = ((1f / 3f) + rDelta - bDelta + 1f) % 1f;<a name="line.13867"></a>
+<span class="sourceLineNo">13868</span>            else               h = ((2f / 3f) + gDelta - rDelta + 1f) % 1f;<a name="line.13868"></a>
+<span class="sourceLineNo">13869</span>        }<a name="line.13869"></a>
+<span class="sourceLineNo">13870</span>        saturation = MathUtils.clamp(s + saturation, 0f, 1f);<a name="line.13870"></a>
+<span class="sourceLineNo">13871</span>        value = MathUtils.clamp(max + value, 0f, 1f);<a name="line.13871"></a>
+<span class="sourceLineNo">13872</span>        opacity = MathUtils.clamp(((bits &amp; 0xfe000000) &gt;&gt;&gt; 24) * 0x1.020408p-8f + opacity, 0f, 1f);<a name="line.13872"></a>
+<span class="sourceLineNo">13873</span><a name="line.13873"></a>
+<span class="sourceLineNo">13874</span>        if (saturation &lt;= 0.0039f) {<a name="line.13874"></a>
+<span class="sourceLineNo">13875</span>            return floatGet(value, value, value, opacity);<a name="line.13875"></a>
+<span class="sourceLineNo">13876</span>        } else if (value &lt;= 0.0039f) {<a name="line.13876"></a>
+<span class="sourceLineNo">13877</span>            return NumberTools.intBitsToFloat((int) (opacity * 254f) &lt;&lt; 24 &amp; 0xFE000000);<a name="line.13877"></a>
+<span class="sourceLineNo">13878</span>        } else {<a name="line.13878"></a>
+<span class="sourceLineNo">13879</span>            final float hu = ((h + hue + 6f) % 1f) * 6f;<a name="line.13879"></a>
+<span class="sourceLineNo">13880</span>            final int i = (int) hu;<a name="line.13880"></a>
+<span class="sourceLineNo">13881</span>            final float x = value * (1 - saturation);<a name="line.13881"></a>
+<span class="sourceLineNo">13882</span>            final float y = value * (1 - saturation * (hu - i));<a name="line.13882"></a>
+<span class="sourceLineNo">13883</span>            final float z = value * (1 - saturation * (1 - (hu - i)));<a name="line.13883"></a>
+<span class="sourceLineNo">13884</span><a name="line.13884"></a>
+<span class="sourceLineNo">13885</span>            switch (i) {<a name="line.13885"></a>
+<span class="sourceLineNo">13886</span>                case 0:<a name="line.13886"></a>
+<span class="sourceLineNo">13887</span>                    return floatGet(value, z, x, opacity);<a name="line.13887"></a>
+<span class="sourceLineNo">13888</span>                case 1:<a name="line.13888"></a>
+<span class="sourceLineNo">13889</span>                    return floatGet(y, value, x, opacity);<a name="line.13889"></a>
+<span class="sourceLineNo">13890</span>                case 2:<a name="line.13890"></a>
+<span class="sourceLineNo">13891</span>                    return floatGet(x, value, z, opacity);<a name="line.13891"></a>
+<span class="sourceLineNo">13892</span>                case 3:<a name="line.13892"></a>
+<span class="sourceLineNo">13893</span>                    return floatGet(x, y, value, opacity);<a name="line.13893"></a>
+<span class="sourceLineNo">13894</span>                case 4:<a name="line.13894"></a>
+<span class="sourceLineNo">13895</span>                    return floatGet(z, x, value, opacity);<a name="line.13895"></a>
+<span class="sourceLineNo">13896</span>                default:<a name="line.13896"></a>
+<span class="sourceLineNo">13897</span>                    return floatGet(value, x, y, opacity);<a name="line.13897"></a>
+<span class="sourceLineNo">13898</span>            }<a name="line.13898"></a>
+<span class="sourceLineNo">13899</span>        }<a name="line.13899"></a>
+<span class="sourceLineNo">13900</span>    }<a name="line.13900"></a>
+<span class="sourceLineNo">13901</span><a name="line.13901"></a>
+<span class="sourceLineNo">13902</span>    /**<a name="line.13902"></a>
+<span class="sourceLineNo">13903</span>     * Interpolates from the packed float color start towards end by change. Both start and end should be packed colors,<a name="line.13903"></a>
+<span class="sourceLineNo">13904</span>     * as from {@link #toFloatBits()} or {@link #floatGet(float, float, float, float)}, and change can be between 0f<a name="line.13904"></a>
+<span class="sourceLineNo">13905</span>     * (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.<a name="line.13905"></a>
+<span class="sourceLineNo">13906</span>     * @param start the starting color as a packed float<a name="line.13906"></a>
+<span class="sourceLineNo">13907</span>     * @param end the target color as a packed float<a name="line.13907"></a>
+<span class="sourceLineNo">13908</span>     * @param change how much to go from start toward end, as a float between 0 and 1; higher means closer to end<a name="line.13908"></a>
+<span class="sourceLineNo">13909</span>     * @return a packed float that represents a color between start and end<a name="line.13909"></a>
+<span class="sourceLineNo">13910</span>     */<a name="line.13910"></a>
+<span class="sourceLineNo">13911</span>    public static float lerpFloatColors(final float start, final float end, final float change) {<a name="line.13911"></a>
+<span class="sourceLineNo">13912</span>        final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),<a name="line.13912"></a>
+<span class="sourceLineNo">13913</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = (s &gt;&gt;&gt; 24) &amp; 254,<a name="line.13913"></a>
+<span class="sourceLineNo">13914</span>                re = (e &amp; 0xFF), ge = (e &gt;&gt;&gt; 8) &amp; 0xFF, be = (e &gt;&gt;&gt; 16) &amp; 0xFF, ae = (e &gt;&gt;&gt; 24) &amp; 254;<a name="line.13914"></a>
+<span class="sourceLineNo">13915</span>        return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) &amp; 0xFF)<a name="line.13915"></a>
+<span class="sourceLineNo">13916</span>                | (((int) (gs + change * (ge - gs)) &amp; 0xFF) &lt;&lt; 8)<a name="line.13916"></a>
+<span class="sourceLineNo">13917</span>                | (((int) (bs + change * (be - bs)) &amp; 0xFF) &lt;&lt; 16)<a name="line.13917"></a>
+<span class="sourceLineNo">13918</span>                | (((int) (as + change * (ae - as)) &amp; 0xFE) &lt;&lt; 24));<a name="line.13918"></a>
+<span class="sourceLineNo">13919</span>    }<a name="line.13919"></a>
+<span class="sourceLineNo">13920</span><a name="line.13920"></a>
+<span class="sourceLineNo">13921</span>    /**<a name="line.13921"></a>
+<span class="sourceLineNo">13922</span>     * Interpolates from the packed float color start towards end by change, but keeps the alpha of start and uses the<a name="line.13922"></a>
+<span class="sourceLineNo">13923</span>     * alpha of end as an extra factor that can affect how much to change. Both start and end should be packed colors,<a name="line.13923"></a>
+<span class="sourceLineNo">13924</span>     * as from {@link #toFloatBits()} or {@link #floatGet(float, float, float, float)}, and change can be between 0f<a name="line.13924"></a>
+<span class="sourceLineNo">13925</span>     * (keep start) and 1f (only use end). This is a good way to reduce allocations of temporary Colors.<a name="line.13925"></a>
+<span class="sourceLineNo">13926</span>     * @param start the starting color as a packed float; alpha will be preserved<a name="line.13926"></a>
+<span class="sourceLineNo">13927</span>     * @param end the target color as a packed float; alpha will not be used directly, and will instead be multiplied with change<a name="line.13927"></a>
+<span class="sourceLineNo">13928</span>     * @param change how much to go from start toward end, as a float between 0 and 1; higher means closer to end<a name="line.13928"></a>
+<span class="sourceLineNo">13929</span>     * @return a packed float that represents a color between start and end<a name="line.13929"></a>
+<span class="sourceLineNo">13930</span>     */<a name="line.13930"></a>
+<span class="sourceLineNo">13931</span>    public static float lerpFloatColorsBlended(final float start, final float end, float change) {<a name="line.13931"></a>
+<span class="sourceLineNo">13932</span>        final int s = NumberTools.floatToIntBits(start), e = NumberTools.floatToIntBits(end),<a name="line.13932"></a>
+<span class="sourceLineNo">13933</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = s &amp; 0xFE000000,<a name="line.13933"></a>
+<span class="sourceLineNo">13934</span>                re = (e &amp; 0xFF), ge = (e &gt;&gt;&gt; 8) &amp; 0xFF, be = (e &gt;&gt;&gt; 16) &amp; 0xFF, ae = (e &gt;&gt;&gt; 25);<a name="line.13934"></a>
+<span class="sourceLineNo">13935</span>        change *= ae * 0.007874016f;<a name="line.13935"></a>
+<span class="sourceLineNo">13936</span>        return NumberTools.intBitsToFloat(((int) (rs + change * (re - rs)) &amp; 0xFF)<a name="line.13936"></a>
+<span class="sourceLineNo">13937</span>                | (((int) (gs + change * (ge - gs)) &amp; 0xFF) &lt;&lt; 8)<a name="line.13937"></a>
+<span class="sourceLineNo">13938</span>                | (((int) (bs + change * (be - bs)) &amp; 0xFF) &lt;&lt; 16)<a name="line.13938"></a>
+<span class="sourceLineNo">13939</span>                | as);<a name="line.13939"></a>
+<span class="sourceLineNo">13940</span>    }<a name="line.13940"></a>
+<span class="sourceLineNo">13941</span><a name="line.13941"></a>
+<span class="sourceLineNo">13942</span>    /**<a name="line.13942"></a>
+<span class="sourceLineNo">13943</span>     * Interpolates from the packed float color start towards white by change. While change should be between 0f (return<a name="line.13943"></a>
+<span class="sourceLineNo">13944</span>     * start as-is) and 1f (return white), start should be a packed color, as from {@link #toFloatBits()} or<a name="line.13944"></a>
+<span class="sourceLineNo">13945</span>     * {@link #floatGet(float, float, float, float)}. This is a good way to reduce allocations of temporary Colors, and<a name="line.13945"></a>
+<span class="sourceLineNo">13946</span>     * is a little more efficient and clear than using {@link #lerpFloatColors(float, float, float)} to lerp towards<a name="line.13946"></a>
+<span class="sourceLineNo">13947</span>     * white. Unlike {@link #lerpFloatColors(float, float, float)}, this keeps the alpha of start as-is.<a name="line.13947"></a>
+<span class="sourceLineNo">13948</span>     * @param start the starting color as a packed float<a name="line.13948"></a>
+<span class="sourceLineNo">13949</span>     * @param change how much to go from start toward white, as a float between 0 and 1; higher means closer to end<a name="line.13949"></a>
+<span class="sourceLineNo">13950</span>     * @return a packed float that represents a color between start and white<a name="line.13950"></a>
+<span class="sourceLineNo">13951</span>     */<a name="line.13951"></a>
+<span class="sourceLineNo">13952</span>    public static float lightenFloat(final float start, final float change) {<a name="line.13952"></a>
+<span class="sourceLineNo">13953</span>        final int s = NumberTools.floatToIntBits(start),<a name="line.13953"></a>
+<span class="sourceLineNo">13954</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = s &amp; 0xFE000000;<a name="line.13954"></a>
+<span class="sourceLineNo">13955</span>        return NumberTools.intBitsToFloat(((int) (rs + change * (0xFF - rs)) &amp; 0xFF)<a name="line.13955"></a>
+<span class="sourceLineNo">13956</span>                | (((int) (gs + change * (0xFF - gs)) &amp; 0xFF) &lt;&lt; 8)<a name="line.13956"></a>
+<span class="sourceLineNo">13957</span>                | (((int) (bs + change * (0xFF - bs)) &amp; 0xFF) &lt;&lt; 16)<a name="line.13957"></a>
+<span class="sourceLineNo">13958</span>                | as);<a name="line.13958"></a>
+<span class="sourceLineNo">13959</span>    }<a name="line.13959"></a>
+<span class="sourceLineNo">13960</span><a name="line.13960"></a>
+<span class="sourceLineNo">13961</span>    /**<a name="line.13961"></a>
+<span class="sourceLineNo">13962</span>     * Interpolates from the packed float color start towards black by change. While change should be between 0f (return<a name="line.13962"></a>
+<span class="sourceLineNo">13963</span>     * start as-is) and 1f (return black), start should be a packed color, as from {@link #toFloatBits()} or<a name="line.13963"></a>
+<span class="sourceLineNo">13964</span>     * {@link #floatGet(float, float, float, float)}. This is a good way to reduce allocations of temporary Colors, and<a name="line.13964"></a>
+<span class="sourceLineNo">13965</span>     * is a little more efficient and clear than using {@link #lerpFloatColors(float, float, float)} to lerp towards<a name="line.13965"></a>
+<span class="sourceLineNo">13966</span>     * black. Unlike {@link #lerpFloatColors(float, float, float)}, this keeps the alpha of start as-is.<a name="line.13966"></a>
+<span class="sourceLineNo">13967</span>     * @param start the starting color as a packed float<a name="line.13967"></a>
+<span class="sourceLineNo">13968</span>     * @param change how much to go from start toward black, as a float between 0 and 1; higher means closer to end<a name="line.13968"></a>
+<span class="sourceLineNo">13969</span>     * @return a packed float that represents a color between start and black<a name="line.13969"></a>
+<span class="sourceLineNo">13970</span>     */<a name="line.13970"></a>
+<span class="sourceLineNo">13971</span>    public static float darkenFloat(final float start, float change) {<a name="line.13971"></a>
+<span class="sourceLineNo">13972</span>        final int s = NumberTools.floatToIntBits(start),<a name="line.13972"></a>
+<span class="sourceLineNo">13973</span>                rs = (s &amp; 0xFF), gs = (s &gt;&gt;&gt; 8) &amp; 0xFF, bs = (s &gt;&gt;&gt; 16) &amp; 0xFF, as = s &amp; 0xFE000000;<a name="line.13973"></a>
+<span class="sourceLineNo">13974</span>        change = 1f - change;<a name="line.13974"></a>
+<span class="sourceLineNo">13975</span>        return NumberTools.intBitsToFloat(((int) (rs * change) &amp; 0xFF)<a name="line.13975"></a>
+<span class="sourceLineNo">13976</span>                | (((int) (gs * change) &amp; 0xFF) &lt;&lt; 8)<a name="line.13976"></a>
+<span class="sourceLineNo">13977</span>                | (((int) (bs * change) &amp; 0xFF) &lt;&lt; 16)<a name="line.13977"></a>
+<span class="sourceLineNo">13978</span>                | as);<a name="line.13978"></a>
+<span class="sourceLineNo">13979</span>    }<a name="line.13979"></a>
+<span class="sourceLineNo">13980</span><a name="line.13980"></a>
+<span class="sourceLineNo">13981</span><a name="line.13981"></a>
+<span class="sourceLineNo">13982</span>    /**<a name="line.13982"></a>
+<span class="sourceLineNo">13983</span>     * Similar to {@link #colorLighting(double[][], float)}, but meant for an initial state before you have FOV or color<a name="line.13983"></a>
+<span class="sourceLineNo">13984</span>     * data to fill the lighting with, and you just need a map of a specific size that starts with no lighting. This<a name="line.13984"></a>
+<span class="sourceLineNo">13985</span>     * will produce a map that has white as the lighting color for all cells, but no cells will be lit. It is likely you<a name="line.13985"></a>
+<span class="sourceLineNo">13986</span>     * will want to pass this as basis to {@link #mixColoredLighting(float[][][], float[][][])}.<a name="line.13986"></a>
+<span class="sourceLineNo">13987</span>     *<a name="line.13987"></a>
+<span class="sourceLineNo">13988</span>     * @param width  the width of the colored lighting area to generate<a name="line.13988"></a>
+<span class="sourceLineNo">13989</span>     * @param height the height of the colored lighting area to generate<a name="line.13989"></a>
+<span class="sourceLineNo">13990</span>     * @return the colored lighting 3D float array, with no cells lit and all colors set to white<a name="line.13990"></a>
+<span class="sourceLineNo">13991</span>     */<a name="line.13991"></a>
+<span class="sourceLineNo">13992</span>    public static float[][][] blankColoredLighting(int width, int height) {<a name="line.13992"></a>
+<span class="sourceLineNo">13993</span>        return new float[][][]<a name="line.13993"></a>
+<span class="sourceLineNo">13994</span>                {<a name="line.13994"></a>
+<span class="sourceLineNo">13995</span>                        new float[width][height],<a name="line.13995"></a>
+<span class="sourceLineNo">13996</span>                        ArrayTools.fill(FLOAT_WHITE, width, height)<a name="line.13996"></a>
+<span class="sourceLineNo">13997</span>                };<a name="line.13997"></a>
+<span class="sourceLineNo">13998</span>    }<a name="line.13998"></a>
+<span class="sourceLineNo">13999</span><a name="line.13999"></a>
+<span class="sourceLineNo">14000</span>    /**<a name="line.14000"></a>
+<span class="sourceLineNo">14001</span>     * Removes any information from the given 3D float array for colored lighting, making it as if it had just been<a name="line.14001"></a>
+<span class="sourceLineNo">14002</span>     * built by {@link #blankColoredLighting(int, int)}, but without any allocations. This blank state is different from<a name="line.14002"></a>
+<span class="sourceLineNo">14003</span>     * being simply filled with all 0 or all default values; the two sub-arrays receive different contents (the one that<a name="line.14003"></a>
+<span class="sourceLineNo">14004</span>     * stores brightness is all 0, the one that stores colors will be filled with the float that encodes white).<a name="line.14004"></a>
+<span class="sourceLineNo">14005</span>     *<a name="line.14005"></a>
+<span class="sourceLineNo">14006</span>     * @param original a 3d float array used for colored lighting; will be modified to be completely blank<a name="line.14006"></a>
+<span class="sourceLineNo">14007</span>     * @return original, after modification<a name="line.14007"></a>
+<span class="sourceLineNo">14008</span>     */<a name="line.14008"></a>
+<span class="sourceLineNo">14009</span>    public static float[][][] eraseColoredLighting(float[][][] original) {<a name="line.14009"></a>
+<span class="sourceLineNo">14010</span>        ArrayTools.fill(original[0], 0f);<a name="line.14010"></a>
+<span class="sourceLineNo">14011</span>        ArrayTools.fill(original[1], FLOAT_WHITE);<a name="line.14011"></a>
+<span class="sourceLineNo">14012</span>        return original;<a name="line.14012"></a>
+<span class="sourceLineNo">14013</span>    }<a name="line.14013"></a>
+<span class="sourceLineNo">14014</span><a name="line.14014"></a>
+<span class="sourceLineNo">14015</span>    /**<a name="line.14015"></a>
+<span class="sourceLineNo">14016</span>     * Given a 2D double array that was probably produced by FOV and a packed color as a float, this gets a 3D float<a name="line.14016"></a>
+<span class="sourceLineNo">14017</span>     * array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in the first<a name="line.14017"></a>
+<span class="sourceLineNo">14018</span>     * 2D array element and the colors in the second 2D array element (using the given color if a cell has a value in<a name="line.14018"></a>
+<span class="sourceLineNo">14019</span>     * lights that is greater than 0, or defaulting to white if the cell is unlit). This has little use on its own, and<a name="line.14019"></a>
+<span class="sourceLineNo">14020</span>     * is meant to be given to {@link #mixColoredLighting(float[][][], float[][][])} so that multiple colors of lights<a name="line.14020"></a>
+<span class="sourceLineNo">14021</span>     * can be mixed.<a name="line.14021"></a>
+<span class="sourceLineNo">14022</span>     *<a name="line.14022"></a>
+<span class="sourceLineNo">14023</span>     * @param lights a 2D double array that should probably come from FOV<a name="line.14023"></a>
+<span class="sourceLineNo">14024</span>     * @param color  a packed float as produced by {@link #floatGet(float, float, float, float)}<a name="line.14024"></a>
+<span class="sourceLineNo">14025</span>     * @return a 3D float array containing two 2D sub-arrays, the first holding brightness and the second holding color<a name="line.14025"></a>
+<span class="sourceLineNo">14026</span>     */<a name="line.14026"></a>
+<span class="sourceLineNo">14027</span>    public static float[][][] colorLighting(double[][] lights, float color) {<a name="line.14027"></a>
+<span class="sourceLineNo">14028</span>        return colorLightingInto(new float[2][lights.length][lights[0].length], lights, color);<a name="line.14028"></a>
+<span class="sourceLineNo">14029</span>    }<a name="line.14029"></a>
+<span class="sourceLineNo">14030</span><a name="line.14030"></a>
+<span class="sourceLineNo">14031</span>    /**<a name="line.14031"></a>
+<span class="sourceLineNo">14032</span>     * Given a 2D double array that was probably produced by FOV and a packed color as a float, this assigns into reuse<a name="line.14032"></a>
+<span class="sourceLineNo">14033</span>     * a 3D float array (really just two same-size 2D float arrays in one parent array) that stores the brightnesses in<a name="line.14033"></a>
+<span class="sourceLineNo">14034</span>     * the first 2D array element and the colors in the second 2D array element (using the given color if a cell has a<a name="line.14034"></a>
+<span class="sourceLineNo">14035</span>     * value in lights that is greater than 0, or defaulting to white if the cell is unlit). This method requires that<a name="line.14035"></a>
+<span class="sourceLineNo">14036</span>     * reuse has length of at least 2, where elements 0 and 1 must be 2D arrays of identical dimensions; this is the<a name="line.14036"></a>
+<span class="sourceLineNo">14037</span>     * format that {@link #colorLighting(double[][], float)} produces. This has little use on its own, and  is meant to<a name="line.14037"></a>
+<span class="sourceLineNo">14038</span>     * be given to {@link #mixColoredLighting(float[][][], float[][][])} so that multiple colors of lights can be mixed.<a name="line.14038"></a>
+<span class="sourceLineNo">14039</span>     *<a name="line.14039"></a>
+<span class="sourceLineNo">14040</span>     * @param reuse  a 3D float array of the exact format produced by {@link #colorLighting(double[][], float)} or<a name="line.14040"></a>
+<span class="sourceLineNo">14041</span>     *               {@link #mixColoredLighting(float[][][], float[][][])}, and must have length 2; will be modified!<a name="line.14041"></a>
+<span class="sourceLineNo">14042</span>     * @param lights a 2D double array that should probably come from FOV<a name="line.14042"></a>
+<span class="sourceLineNo">14043</span>     * @param color  a packed float as produced by {@link #floatGet(float, float, float, float)}<a name="line.14043"></a>
+<span class="sourceLineNo">14044</span>     * @return reuse after modification<a name="line.14044"></a>
+<span class="sourceLineNo">14045</span>     */<a name="line.14045"></a>
+<span class="sourceLineNo">14046</span>    public static float[][][] colorLightingInto(float[][][] reuse, double[][] lights, float color) {<a name="line.14046"></a>
+<span class="sourceLineNo">14047</span>        for (int x = 0; x &lt; lights.length; x++) {<a name="line.14047"></a>
+<span class="sourceLineNo">14048</span>            for (int y = 0; y &lt; lights[0].length; y++) {<a name="line.14048"></a>
+<span class="sourceLineNo">14049</span>                reuse[1][x][y] = ((reuse[0][x][y] = (float) lights[x][y]) &gt; 0f)<a name="line.14049"></a>
+<span class="sourceLineNo">14050</span>                        ? color<a name="line.14050"></a>
+<span class="sourceLineNo">14051</span>                        : FLOAT_WHITE;<a name="line.14051"></a>
+<span class="sourceLineNo">14052</span>            }<a name="line.14052"></a>
+<span class="sourceLineNo">14053</span>        }<a name="line.14053"></a>
+<span class="sourceLineNo">14054</span>        return reuse;<a name="line.14054"></a>
+<span class="sourceLineNo">14055</span>    }<a name="line.14055"></a>
+<span class="sourceLineNo">14056</span><a name="line.14056"></a>
+<span class="sourceLineNo">14057</span>    /**<a name="line.14057"></a>
+<span class="sourceLineNo">14058</span>     * Adds two 3D arrays produced by {@link #colorLighting(double[][], float)} or this method and modifies the basis<a name="line.14058"></a>
+<span class="sourceLineNo">14059</span>     * parameter so it contains the combined brightnesses and colors of basis and other, in a pair of 2D arrays.<a name="line.14059"></a>
+<span class="sourceLineNo">14060</span>     *<a name="line.14060"></a>
+<span class="sourceLineNo">14061</span>     * @param basis a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)};<a name="line.14061"></a>
+<span class="sourceLineNo">14062</span>     *              will be modified to contain its existing contents mixed with other's contents <a name="line.14062"></a>
+<span class="sourceLineNo">14063</span>     * @param other a 3D float array holding two 2D sub-arrays, as produced by {@link #colorLighting(double[][], float)};<a name="line.14063"></a>
+<span class="sourceLineNo">14064</span>     *              will not be modified<a name="line.14064"></a>
+<span class="sourceLineNo">14065</span>     * @return basis, after modification; it can be passed to this method as basis again<a name="line.14065"></a>
+<span class="sourceLineNo">14066</span>     */<a name="line.14066"></a>
+<span class="sourceLineNo">14067</span>    public static float[][][] mixColoredLighting(float[][][] basis, float[][][] other) {<a name="line.14067"></a>
+<span class="sourceLineNo">14068</span>        int w = basis[0].length, h = basis[0][0].length, w2 = other[0].length, h2 = other[0][0].length;<a name="line.14068"></a>
+<span class="sourceLineNo">14069</span>        for (int x = 0; x &lt; w &amp;&amp; x &lt; w2; x++) {<a name="line.14069"></a>
+<span class="sourceLineNo">14070</span>            for (int y = 0; y &lt; h &amp;&amp; y &lt; h2; y++) {<a name="line.14070"></a>
+<span class="sourceLineNo">14071</span>                basis[1][x][y] = (basis[1][x][y] == FLOAT_WHITE)<a name="line.14071"></a>
+<span class="sourceLineNo">14072</span>                        ? other[1][x][y]<a name="line.14072"></a>
+<span class="sourceLineNo">14073</span>                        : (other[1][x][y] == FLOAT_WHITE)<a name="line.14073"></a>
+<span class="sourceLineNo">14074</span>                        ? basis[1][x][y]<a name="line.14074"></a>
+<span class="sourceLineNo">14075</span>                        : lerpFloatColors(basis[1][x][y], other[1][x][y], (other[0][x][y] - basis[0][x][y]) * 0.5f + 0.5f);<a name="line.14075"></a>
+<span class="sourceLineNo">14076</span>                basis[0][x][y] = Math.min(1.0f, basis[0][x][y] + other[0][x][y]);<a name="line.14076"></a>
+<span class="sourceLineNo">14077</span>            }<a name="line.14077"></a>
+<span class="sourceLineNo">14078</span>        }<a name="line.14078"></a>
+<span class="sourceLineNo">14079</span>        return basis;<a name="line.14079"></a>
+<span class="sourceLineNo">14080</span>    }<a name="line.14080"></a>
+<span class="sourceLineNo">14081</span><a name="line.14081"></a>
+<span class="sourceLineNo">14082</span><a name="line.14082"></a>
+<span class="sourceLineNo">14083</span>    @Override<a name="line.14083"></a>
+<span class="sourceLineNo">14084</span>    public String toString() {<a name="line.14084"></a>
+<span class="sourceLineNo">14085</span>        return name + " " + super.toString();<a name="line.14085"></a>
+<span class="sourceLineNo">14086</span>    }<a name="line.14086"></a>
+<span class="sourceLineNo">14087</span><a name="line.14087"></a>
+<span class="sourceLineNo">14088</span>    public String getName() {<a name="line.14088"></a>
+<span class="sourceLineNo">14089</span>        return name;<a name="line.14089"></a>
+<span class="sourceLineNo">14090</span>    }<a name="line.14090"></a>
+<span class="sourceLineNo">14091</span><a name="line.14091"></a>
+<span class="sourceLineNo">14092</span>    @Override<a name="line.14092"></a>
+<span class="sourceLineNo">14093</span>    public boolean equals(Object other) {<a name="line.14093"></a>
+<span class="sourceLineNo">14094</span>        return (other instanceof SColor || other instanceof Color) &amp;&amp; toIntBits() == ((Color) other).toIntBits();<a name="line.14094"></a>
+<span class="sourceLineNo">14095</span>    }<a name="line.14095"></a>
+<span class="sourceLineNo">14096</span><a name="line.14096"></a>
+<span class="sourceLineNo">14097</span>    @Override<a name="line.14097"></a>
+<span class="sourceLineNo">14098</span>    public int hashCode() {<a name="line.14098"></a>
+<span class="sourceLineNo">14099</span>        return (155 + CrossHash.hash(name)) * 31 ^ toIntBits();<a name="line.14099"></a>
+<span class="sourceLineNo">14100</span>    }<a name="line.14100"></a>
+<span class="sourceLineNo">14101</span>}<a name="line.14101"></a>
 
 
 

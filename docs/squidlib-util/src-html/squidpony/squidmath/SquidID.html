@@ -21,230 +21,151 @@
 <span class="sourceLineNo">013</span> * Changed on April 27, 2018 so it isn't possible to generate two identical SquidIDs until 2 to the 128 minus 1<a name="line.13"></a>
 <span class="sourceLineNo">014</span> * SquidIDs have been generated, which will take a while. Before, there was a small possibility that even two sequential<a name="line.14"></a>
 <span class="sourceLineNo">015</span> * SquidIDs could be the same, and the new way gives a better guarantee of how many can be produced without duplicates.<a name="line.15"></a>
-<span class="sourceLineNo">016</span> * Changed again on December 7, 2018 so the class can be automatically serialized by libGDX's Json class and other ways<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * of reflection on GWT. Now this uses 4 ints instead of 2 longs, since libGDX reflection couldn't be used to serialize<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * the long fields this used before. The random number generator has the same guarantee of 2 to the 128 minus 1 IDs, but<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * uses a different algorithm, and it can be restarted now using {@link #store()} and {@link #load(CharSequence)}.<a name="line.19"></a>
-<span class="sourceLineNo">020</span> * &lt;br&gt;<a name="line.20"></a>
-<span class="sourceLineNo">021</span> * Created by Tommy Ettinger on 4/30/2016.<a name="line.21"></a>
-<span class="sourceLineNo">022</span> */<a name="line.22"></a>
-<span class="sourceLineNo">023</span>public class SquidID implements Serializable, Comparable&lt;SquidID&gt; {<a name="line.23"></a>
-<span class="sourceLineNo">024</span>    private static final long serialVersionUID = 8946534790126874460L;<a name="line.24"></a>
-<span class="sourceLineNo">025</span>    private static XoshiroStarPhi32RNG rng = new XoshiroStarPhi32RNG();<a name="line.25"></a>
-<span class="sourceLineNo">026</span>    public final int a, b, c, d;<a name="line.26"></a>
-<span class="sourceLineNo">027</span><a name="line.27"></a>
-<span class="sourceLineNo">028</span>    /**<a name="line.28"></a>
-<span class="sourceLineNo">029</span>     * Constructs a new random SquidID. If you want different random IDs with every run, the defaults should be fine.<a name="line.29"></a>
-<span class="sourceLineNo">030</span>     * If you want stable IDs to be generated, use SquidID.stabilize(), but be careful about collisions!<a name="line.30"></a>
-<span class="sourceLineNo">031</span>     */<a name="line.31"></a>
-<span class="sourceLineNo">032</span>    public SquidID() {<a name="line.32"></a>
-<span class="sourceLineNo">033</span>        a = rng.getStateA();<a name="line.33"></a>
-<span class="sourceLineNo">034</span>        b = rng.getStateB();<a name="line.34"></a>
-<span class="sourceLineNo">035</span>        c = rng.getStateC();<a name="line.35"></a>
-<span class="sourceLineNo">036</span>        d = rng.getStateD();<a name="line.36"></a>
-<span class="sourceLineNo">037</span>        rng.nextInt();<a name="line.37"></a>
-<span class="sourceLineNo">038</span><a name="line.38"></a>
-<span class="sourceLineNo">039</span>    }<a name="line.39"></a>
-<span class="sourceLineNo">040</span><a name="line.40"></a>
-<span class="sourceLineNo">041</span>    /**<a name="line.41"></a>
-<span class="sourceLineNo">042</span>     * Constructs a fixed SquidID with the given four 32-bit ints, which will be used exactly.<a name="line.42"></a>
-<span class="sourceLineNo">043</span>     * @param a the least-significant bits of the ID<a name="line.43"></a>
-<span class="sourceLineNo">044</span>     * @param b the second-to-least-significant bits of the ID<a name="line.44"></a>
-<span class="sourceLineNo">045</span>     * @param c the second-to-most-significant bits of the ID<a name="line.45"></a>
-<span class="sourceLineNo">046</span>     * @param d the most-significant bits of the ID<a name="line.46"></a>
-<span class="sourceLineNo">047</span>     */<a name="line.47"></a>
-<span class="sourceLineNo">048</span>    public SquidID(int a, int b, int c, int d) {<a name="line.48"></a>
-<span class="sourceLineNo">049</span>        this.a = a;<a name="line.49"></a>
-<span class="sourceLineNo">050</span>        this.b = b;<a name="line.50"></a>
-<span class="sourceLineNo">051</span>        this.c = c;<a name="line.51"></a>
-<span class="sourceLineNo">052</span>        this.d = d;<a name="line.52"></a>
-<span class="sourceLineNo">053</span>    }<a name="line.53"></a>
-<span class="sourceLineNo">054</span><a name="line.54"></a>
-<span class="sourceLineNo">055</span>    /**<a name="line.55"></a>
-<span class="sourceLineNo">056</span>     * Constructs a fixed SquidID with the given low and high 64-bit longs.<a name="line.56"></a>
-<span class="sourceLineNo">057</span>     * @param low the least-significant bits of the ID<a name="line.57"></a>
-<span class="sourceLineNo">058</span>     * @param high the most-significant bits of the ID<a name="line.58"></a>
-<span class="sourceLineNo">059</span>     */<a name="line.59"></a>
-<span class="sourceLineNo">060</span>    public SquidID(long low, long high) {<a name="line.60"></a>
-<span class="sourceLineNo">061</span>        a = (int)(low &amp; 0xFFFFFFFFL);<a name="line.61"></a>
-<span class="sourceLineNo">062</span>        b = (int)(low &gt;&gt;&gt; 32);<a name="line.62"></a>
-<span class="sourceLineNo">063</span>        c = (int)(high &amp; 0xFFFFFFFFL);<a name="line.63"></a>
-<span class="sourceLineNo">064</span>        d = (int)(high &gt;&gt;&gt; 32);<a name="line.64"></a>
-<span class="sourceLineNo">065</span>    }<a name="line.65"></a>
-<span class="sourceLineNo">066</span><a name="line.66"></a>
-<span class="sourceLineNo">067</span>    /**<a name="line.67"></a>
-<span class="sourceLineNo">068</span>     * Gets a new random SquidID, the same as calling the no-argument constructor.<a name="line.68"></a>
-<span class="sourceLineNo">069</span>     * The name is for compatibility with Java's standard UUID class.<a name="line.69"></a>
-<span class="sourceLineNo">070</span>     * @return a newly-constructed random SquidID.<a name="line.70"></a>
-<span class="sourceLineNo">071</span>     */<a name="line.71"></a>
-<span class="sourceLineNo">072</span>    public static SquidID randomUUID()<a name="line.72"></a>
-<span class="sourceLineNo">073</span>    {<a name="line.73"></a>
-<span class="sourceLineNo">074</span>        return new SquidID();<a name="line.74"></a>
-<span class="sourceLineNo">075</span>    }<a name="line.75"></a>
-<span class="sourceLineNo">076</span><a name="line.76"></a>
-<span class="sourceLineNo">077</span>    /**<a name="line.77"></a>
-<span class="sourceLineNo">078</span>     * Makes the IDs generated after calling this repeatable, with the same IDs generated in order after this is called.<a name="line.78"></a>
-<span class="sourceLineNo">079</span>     * This class uses a random number generator with a random seed by default to produce IDs, and properties of the<a name="line.79"></a>
-<span class="sourceLineNo">080</span>     * {@link XoshiroStarPhi32RNG} this uses make it incredibly unlikely that IDs will repeat even if the game was run<a name="line.80"></a>
-<span class="sourceLineNo">081</span>     * for years without stopping. For the purposes of tests, you may want stable SquidID values to be generated, the<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * same for every startup of the program, generating the same IDs in order. This will change the seed used<a name="line.82"></a>
-<span class="sourceLineNo">083</span>     * internally to a constant (large) seed the first time it is called, and it should only be called at or near the<a name="line.83"></a>
-<span class="sourceLineNo">084</span>     * start of your program, no more than once. If an ID is requested immediately after calling this method, and then<a name="line.84"></a>
-<span class="sourceLineNo">085</span>     * this method is called again, the next ID to be generated will be identical to the previous one generated (a<a name="line.85"></a>
-<span class="sourceLineNo">086</span>     * collision). There may be reasons you want this during testing, so there isn't any check for multiple calls to<a name="line.86"></a>
-<span class="sourceLineNo">087</span>     * this method. If IDs can persist between runs of the game (i.e. saved in a file), using this is generally a bad<a name="line.87"></a>
-<span class="sourceLineNo">088</span>     * idea, and you should instead use either random IDs or save the state with.<a name="line.88"></a>
-<span class="sourceLineNo">089</span>     * &lt;br&gt;<a name="line.89"></a>
-<span class="sourceLineNo">090</span>     * You can "undo" the effects of this method with randomize(), changing the seed to a new random value.<a name="line.90"></a>
-<span class="sourceLineNo">091</span>     * &lt;br&gt;<a name="line.91"></a>
-<span class="sourceLineNo">092</span>     * Because IDs aren't likely to have gameplay significance, this uses one seed, and is equivalent to calling<a name="line.92"></a>
-<span class="sourceLineNo">093</span>     * {@code SquidID.load("C13FA9A902A6328F91E10DA5C79E7B1D")}, which are values based on the Plastic Constant (2 to<a name="line.93"></a>
-<span class="sourceLineNo">094</span>     * the 64 divided by the plastic constant, upper 32 bits and then lower 32 bits, then the upper and lower bits of<a name="line.94"></a>
-<span class="sourceLineNo">095</span>     * that number divided again by the plastic constant). Irrational numbers like the plastic constant generally have a<a name="line.95"></a>
-<span class="sourceLineNo">096</span>     * good distribution of bits, which should help delay the point when the generator hits "zeroland" and produces<a name="line.96"></a>
-<span class="sourceLineNo">097</span>     * multiple small numbers for a short while.<a name="line.97"></a>
-<span class="sourceLineNo">098</span>     */<a name="line.98"></a>
-<span class="sourceLineNo">099</span>    public static void stabilize()<a name="line.99"></a>
-<span class="sourceLineNo">100</span>    {<a name="line.100"></a>
-<span class="sourceLineNo">101</span>        rng.setState(0xC13FA9A9, 0x02A6328F, 0x91E10DA5, 0xC79E7B1D);<a name="line.101"></a>
-<span class="sourceLineNo">102</span>    }<a name="line.102"></a>
-<span class="sourceLineNo">103</span><a name="line.103"></a>
-<span class="sourceLineNo">104</span>    public static StringBuilder store()<a name="line.104"></a>
-<span class="sourceLineNo">105</span>    {<a name="line.105"></a>
-<span class="sourceLineNo">106</span>        final StringBuilder sb = new StringBuilder(32);<a name="line.106"></a>
-<span class="sourceLineNo">107</span>        StringKit.appendHex(sb, rng.getStateA());<a name="line.107"></a>
-<span class="sourceLineNo">108</span>        StringKit.appendHex(sb, rng.getStateB());<a name="line.108"></a>
-<span class="sourceLineNo">109</span>        StringKit.appendHex(sb, rng.getStateC());<a name="line.109"></a>
-<span class="sourceLineNo">110</span>        return StringKit.appendHex(sb, rng.getStateD());<a name="line.110"></a>
-<span class="sourceLineNo">111</span>    }<a name="line.111"></a>
-<span class="sourceLineNo">112</span>    /**<a name="line.112"></a>
-<span class="sourceLineNo">113</span>     * Makes the IDs generated after calling this repeatable, with the same IDs generated in order after this is called.<a name="line.113"></a>
-<span class="sourceLineNo">114</span>     * This class uses a random number generator with a random seed by default to produce IDs, and properties of the<a name="line.114"></a>
-<span class="sourceLineNo">115</span>     * {@link XoshiroStarPhi32RNG} this uses make it incredibly unlikely that IDs will repeat even if the game was run<a name="line.115"></a>
-<span class="sourceLineNo">116</span>     * for years without stopping. For the purposes of tests, you may want stable SquidID values to be generated, the<a name="line.116"></a>
-<span class="sourceLineNo">117</span>     * same for every startup of the program, generating the same IDs in order; you may also want this when loading a<a name="line.117"></a>
-<span class="sourceLineNo">118</span>     * saved game. This will change the seed used internally to match a value that should have been produced by<a name="line.118"></a>
-<span class="sourceLineNo">119</span>     * {@link #store()} but can be any 32 hex digits, and it should only be called at or near the start of your program,<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     * no more than once per load of a save. If an ID is requested immediately after calling this method, and then this<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     * method is called again with the same data parameter, the next ID to be generated will be identical to the<a name="line.121"></a>
-<span class="sourceLineNo">122</span>     * previous one generated (a collision). There may be reasons you want this during testing, so there isn't any check<a name="line.122"></a>
-<span class="sourceLineNo">123</span>     * for multiple calls to this method. If IDs can persist between runs of the game (i.e. saved in a file), you can be<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     * fine with random IDs in almost all cases, or you can have more certainty by saving the last state of the<a name="line.124"></a>
-<span class="sourceLineNo">125</span>     * generator using {@link #store()} when saving and loading that state with this method later.<a name="line.125"></a>
-<span class="sourceLineNo">126</span>     * &lt;br&gt;<a name="line.126"></a>
-<span class="sourceLineNo">127</span>     * You can "undo" the effects of this method with randomize(), changing the seed to a new random value.<a name="line.127"></a>
-<span class="sourceLineNo">128</span>     */<a name="line.128"></a>
-<span class="sourceLineNo">129</span>    public static void load(CharSequence data)<a name="line.129"></a>
-<span class="sourceLineNo">130</span>    {<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        rng.setState(StringKit.intFromHex(data, 0, 8), StringKit.intFromHex(data, 8, 16),<a name="line.131"></a>
-<span class="sourceLineNo">132</span>                StringKit.intFromHex(data, 16, 24), StringKit.intFromHex(data, 24, 32));<a name="line.132"></a>
-<span class="sourceLineNo">133</span>    }<a name="line.133"></a>
+<span class="sourceLineNo">016</span> * &lt;br&gt;<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * Created by Tommy Ettinger on 4/30/2016.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> */<a name="line.18"></a>
+<span class="sourceLineNo">019</span>public class SquidID implements Serializable, Comparable&lt;SquidID&gt; {<a name="line.19"></a>
+<span class="sourceLineNo">020</span>    private static final long serialVersionUID = 8946534790126874460L;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>    private static XoRoRNG rng = new XoRoRNG();<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    public final long low, high;<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>    /**<a name="line.24"></a>
+<span class="sourceLineNo">025</span>     * Constructs a new random SquidID. If you want different random IDs with every run, the defaults should be fine.<a name="line.25"></a>
+<span class="sourceLineNo">026</span>     * If you want stable IDs to be generated, use SquidID.stabilize(), but be careful about collisions!<a name="line.26"></a>
+<span class="sourceLineNo">027</span>     */<a name="line.27"></a>
+<span class="sourceLineNo">028</span>    public SquidID() {<a name="line.28"></a>
+<span class="sourceLineNo">029</span>        rng.nextLong();<a name="line.29"></a>
+<span class="sourceLineNo">030</span>        low = rng.getStateA();<a name="line.30"></a>
+<span class="sourceLineNo">031</span>        high = rng.getStateB();<a name="line.31"></a>
+<span class="sourceLineNo">032</span>    }<a name="line.32"></a>
+<span class="sourceLineNo">033</span><a name="line.33"></a>
+<span class="sourceLineNo">034</span>    /**<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * Constructs a fixed SquidID with the given low and high 64-bit longs.<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     * @param low the least-significant bits of the ID<a name="line.36"></a>
+<span class="sourceLineNo">037</span>     * @param high the most-significant bits of the ID<a name="line.37"></a>
+<span class="sourceLineNo">038</span>     */<a name="line.38"></a>
+<span class="sourceLineNo">039</span>    public SquidID(long low, long high) {<a name="line.39"></a>
+<span class="sourceLineNo">040</span>        this.low = low;<a name="line.40"></a>
+<span class="sourceLineNo">041</span>        this.high = high;<a name="line.41"></a>
+<span class="sourceLineNo">042</span>    }<a name="line.42"></a>
+<span class="sourceLineNo">043</span><a name="line.43"></a>
+<span class="sourceLineNo">044</span>    /**<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     * Gets a new random SquidID, the same as calling the no-argument constructor.<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * The name is for compatibility with Java's standard UUID class.<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     * @return a newly-constructed random SquidID.<a name="line.47"></a>
+<span class="sourceLineNo">048</span>     */<a name="line.48"></a>
+<span class="sourceLineNo">049</span>    public static SquidID randomUUID()<a name="line.49"></a>
+<span class="sourceLineNo">050</span>    {<a name="line.50"></a>
+<span class="sourceLineNo">051</span>        return new SquidID();<a name="line.51"></a>
+<span class="sourceLineNo">052</span>    }<a name="line.52"></a>
+<span class="sourceLineNo">053</span><a name="line.53"></a>
+<span class="sourceLineNo">054</span>    /**<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * Makes the IDs generated after calling this repeatable, with the same IDs generated in order after this is called.<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * This class uses a random number generator with a random seed by default to produce IDs, and properties of the<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * {@link XoRoRNG} this uses make it incredibly unlikely that IDs will repeat even if the game was run for years<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * without stopping. For the purposes of tests, you may want stable SquidID values to be generated, the same for<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * every startup of the program, generating the same IDs in order. This will change the seed used internally to a<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     * constant (large) seed the first time it is called, and it should only be called at or near the start of your<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * program, no more than once. If an ID is requested immediately after calling this method, and then this method is<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * called again, the next ID to be generated will be identical to the previous one generated (a collision). There<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     * may be reasons you want this during testing, so there isn't any check for multiple calls to this method. If IDs<a name="line.63"></a>
+<span class="sourceLineNo">064</span>     * can persist between runs of the game (i.e. saved in a file), using this is generally a bad idea, and the default<a name="line.64"></a>
+<span class="sourceLineNo">065</span>     * random IDs should more than suffice.<a name="line.65"></a>
+<span class="sourceLineNo">066</span>     * &lt;br&gt;<a name="line.66"></a>
+<span class="sourceLineNo">067</span>     * You can "undo" the effects of this method with randomize(), changing the seed to a new random value.<a name="line.67"></a>
+<span class="sourceLineNo">068</span>     * &lt;br&gt;<a name="line.68"></a>
+<span class="sourceLineNo">069</span>     * Because IDs aren't likely to have gameplay significance, this uses one seed, the opening paragraph of The<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * Wonderful Wizard of Oz, by Frank L. Baum, which is in the public domain. Changing the seed is unlikely to change<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * the likelihood of collisions, which should be less likely than a tornado transporting you to Oz, as long as this<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * method is called at most once per program run.<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    public static void stabilize()<a name="line.74"></a>
+<span class="sourceLineNo">075</span>    {<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        rng.setSeed(<a name="line.76"></a>
+<span class="sourceLineNo">077</span>                CrossHash.hash64("Dorothy lived in the midst of the great Kansas prairies, with Uncle Henry, who was a "+<a name="line.77"></a>
+<span class="sourceLineNo">078</span>                        "farmer, and Aunt Em, who was the farmer's wife. Their house was small, for the "+<a name="line.78"></a>
+<span class="sourceLineNo">079</span>                        "lumber to build it had to be carried by wagon many miles. There were four walls, "+<a name="line.79"></a>
+<span class="sourceLineNo">080</span>                        "a floor and a roof, which made one room; and this room contained a rusty looking "+<a name="line.80"></a>
+<span class="sourceLineNo">081</span>                        "cookstove, a cupboard for the dishes, a table, three or four chairs, and the beds."),<a name="line.81"></a>
+<span class="sourceLineNo">082</span>                CrossHash.hash64(" Uncle Henry and Aunt Em had a big bed in one corner, and Dorothy a little bed in "+<a name="line.82"></a>
+<span class="sourceLineNo">083</span>                        "another corner. There was no garret at all, and no cellar—except a small hole dug "+<a name="line.83"></a>
+<span class="sourceLineNo">084</span>                        "in the ground, called a cyclone cellar, where the family could go in case one of "+<a name="line.84"></a>
+<span class="sourceLineNo">085</span>                        "those great whirlwinds arose, mighty enough to crush any building in its path. It "+<a name="line.85"></a>
+<span class="sourceLineNo">086</span>                        "was reached by a trap door in the middle of the floor, from which a ladder led "+<a name="line.86"></a>
+<span class="sourceLineNo">087</span>                        "down into the small, dark hole."));<a name="line.87"></a>
+<span class="sourceLineNo">088</span>    }<a name="line.88"></a>
+<span class="sourceLineNo">089</span><a name="line.89"></a>
+<span class="sourceLineNo">090</span>    /**<a name="line.90"></a>
+<span class="sourceLineNo">091</span>     * Makes the IDs generated after calling this non-repeatable, with a random 128-bit seed.<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * This class uses a random number generator with a random seed by default to produce IDs, and properties of the<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * {@link XoRoRNG} this uses make it incredibly unlikely that IDs will repeat even if the game was run for years<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * without stopping. However, if you call stabilize(), generate some IDs, call stabilize() again, and generate some<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * more IDs, the first, second, third, etc. IDs generated after each call will be identical -- hardly the unique ID<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * you usually want. You can "undo" the effects of stabilize by calling this method, making the seed a new random<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * value. This does not affect the constructor that takes two longs to produce an exact ID, nor will it change any<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * existing IDs.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>    public static void randomize()<a name="line.100"></a>
+<span class="sourceLineNo">101</span>    {<a name="line.101"></a>
+<span class="sourceLineNo">102</span>        rng.setSeed((long) ((Math.random() - 0.5) * 0x10000000000000L)<a name="line.102"></a>
+<span class="sourceLineNo">103</span>                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L),<a name="line.103"></a>
+<span class="sourceLineNo">104</span>                (long) ((Math.random() - 0.5) * 0x10000000000000L)<a name="line.104"></a>
+<span class="sourceLineNo">105</span>                        ^ (long) (((Math.random() - 0.5) * 2.0) * 0x8000000000000000L));<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    }<a name="line.106"></a>
+<span class="sourceLineNo">107</span><a name="line.107"></a>
+<span class="sourceLineNo">108</span>    /**<a name="line.108"></a>
+<span class="sourceLineNo">109</span>     * Gets the least-significant bits, also accessible by the field low.<a name="line.109"></a>
+<span class="sourceLineNo">110</span>     * The name is for compatibility with Java's standard UUID class.<a name="line.110"></a>
+<span class="sourceLineNo">111</span>     * @return the least-significant bits as a long<a name="line.111"></a>
+<span class="sourceLineNo">112</span>     */<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    public long getLeastSignificantBits()<a name="line.113"></a>
+<span class="sourceLineNo">114</span>    {<a name="line.114"></a>
+<span class="sourceLineNo">115</span>        return low;<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    }<a name="line.116"></a>
+<span class="sourceLineNo">117</span><a name="line.117"></a>
+<span class="sourceLineNo">118</span>    /**<a name="line.118"></a>
+<span class="sourceLineNo">119</span>     * Gets the most-significant bits, also accessible by the field high.<a name="line.119"></a>
+<span class="sourceLineNo">120</span>     * The name is for compatibility with Java's standard UUID class.<a name="line.120"></a>
+<span class="sourceLineNo">121</span>     * @return the most-significant bits as a long<a name="line.121"></a>
+<span class="sourceLineNo">122</span>     */<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    public long getMostSignificantBits()<a name="line.123"></a>
+<span class="sourceLineNo">124</span>    {<a name="line.124"></a>
+<span class="sourceLineNo">125</span>        return high;<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    }<a name="line.126"></a>
+<span class="sourceLineNo">127</span><a name="line.127"></a>
+<span class="sourceLineNo">128</span>    @Override<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    public boolean equals(Object o) {<a name="line.129"></a>
+<span class="sourceLineNo">130</span>        if (this == o) return true;<a name="line.130"></a>
+<span class="sourceLineNo">131</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.131"></a>
+<span class="sourceLineNo">132</span><a name="line.132"></a>
+<span class="sourceLineNo">133</span>        SquidID squidID = (SquidID) o;<a name="line.133"></a>
 <span class="sourceLineNo">134</span><a name="line.134"></a>
-<span class="sourceLineNo">135</span>    /**<a name="line.135"></a>
-<span class="sourceLineNo">136</span>     * Makes the IDs generated after calling this non-repeatable, with a random 128-bit seed.<a name="line.136"></a>
-<span class="sourceLineNo">137</span>     * This class uses a random number generator with a random seed by default to produce IDs, and properties of the<a name="line.137"></a>
-<span class="sourceLineNo">138</span>     * {@link XoshiroStarPhi32RNG} this uses make it incredibly unlikely that IDs will repeat even if the game was run<a name="line.138"></a>
-<span class="sourceLineNo">139</span>     * for years without stopping. However, if you call stabilize(), generate some IDs, call stabilize() again, and<a name="line.139"></a>
-<span class="sourceLineNo">140</span>     * generate some  more IDs, the first, second, third, etc. IDs generated after each call will be identical -- hardly<a name="line.140"></a>
-<span class="sourceLineNo">141</span>     * the unique ID you usually want. You can "undo" the effects of stabilize by calling this method, making the seed a<a name="line.141"></a>
-<span class="sourceLineNo">142</span>     * new random value. This does not affect the constructor that takes two longs to produce an exact ID, nor will it<a name="line.142"></a>
-<span class="sourceLineNo">143</span>     * change any existing IDs.<a name="line.143"></a>
-<span class="sourceLineNo">144</span>     */<a name="line.144"></a>
-<span class="sourceLineNo">145</span>    public static void randomize()<a name="line.145"></a>
-<span class="sourceLineNo">146</span>    {<a name="line.146"></a>
-<span class="sourceLineNo">147</span>        rng.setState((int)((Math.random() * 2.0 - 1.0) * 0x80000000), (int)((Math.random() * 2.0 - 1.0) * 0x80000000),<a name="line.147"></a>
-<span class="sourceLineNo">148</span>                (int)((Math.random() * 2.0 - 1.0) * 0x80000000), (int)((Math.random() * 2.0 - 1.0) * 0x80000000));<a name="line.148"></a>
+<span class="sourceLineNo">135</span>        if (low != squidID.low) return false;<a name="line.135"></a>
+<span class="sourceLineNo">136</span>        return high == squidID.high;<a name="line.136"></a>
+<span class="sourceLineNo">137</span><a name="line.137"></a>
+<span class="sourceLineNo">138</span>    }<a name="line.138"></a>
+<span class="sourceLineNo">139</span><a name="line.139"></a>
+<span class="sourceLineNo">140</span>    @Override<a name="line.140"></a>
+<span class="sourceLineNo">141</span>    public int hashCode() {<a name="line.141"></a>
+<span class="sourceLineNo">142</span>        return (int) (31 * (low ^ (low &gt;&gt;&gt; 32)) + (high ^ (high &gt;&gt;&gt; 32)));<a name="line.142"></a>
+<span class="sourceLineNo">143</span>    }<a name="line.143"></a>
+<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">145</span>    @Override<a name="line.145"></a>
+<span class="sourceLineNo">146</span>    public String toString()<a name="line.146"></a>
+<span class="sourceLineNo">147</span>    {<a name="line.147"></a>
+<span class="sourceLineNo">148</span>        return StringKit.hex(high) + '-' + StringKit.hex(low);<a name="line.148"></a>
 <span class="sourceLineNo">149</span>    }<a name="line.149"></a>
 <span class="sourceLineNo">150</span><a name="line.150"></a>
-<span class="sourceLineNo">151</span>    /**<a name="line.151"></a>
-<span class="sourceLineNo">152</span>     * Gets the least-significant bits, also accessible by the field low.<a name="line.152"></a>
-<span class="sourceLineNo">153</span>     * The name is for compatibility with Java's standard UUID class.<a name="line.153"></a>
-<span class="sourceLineNo">154</span>     * @return the least-significant bits as a long<a name="line.154"></a>
-<span class="sourceLineNo">155</span>     */<a name="line.155"></a>
-<span class="sourceLineNo">156</span>    public long getLeastSignificantBits()<a name="line.156"></a>
-<span class="sourceLineNo">157</span>    {<a name="line.157"></a>
-<span class="sourceLineNo">158</span>        return (long)b &lt;&lt; 32 | (a &amp; 0xFFFFFFFFL);<a name="line.158"></a>
+<span class="sourceLineNo">151</span>    @Override<a name="line.151"></a>
+<span class="sourceLineNo">152</span>    public int compareTo(SquidID o) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>        if(o == null)<a name="line.153"></a>
+<span class="sourceLineNo">154</span>            return 1;<a name="line.154"></a>
+<span class="sourceLineNo">155</span>        long diff = high - o.high;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>        if(diff == 0)<a name="line.156"></a>
+<span class="sourceLineNo">157</span>            diff = low - o.low;<a name="line.157"></a>
+<span class="sourceLineNo">158</span>        return diff &gt; 0 ? 1 : diff &lt; 0 ? -1 : 0;<a name="line.158"></a>
 <span class="sourceLineNo">159</span>    }<a name="line.159"></a>
-<span class="sourceLineNo">160</span><a name="line.160"></a>
-<span class="sourceLineNo">161</span>    /**<a name="line.161"></a>
-<span class="sourceLineNo">162</span>     * Gets the most-significant bits, also accessible by the field high.<a name="line.162"></a>
-<span class="sourceLineNo">163</span>     * The name is for compatibility with Java's standard UUID class.<a name="line.163"></a>
-<span class="sourceLineNo">164</span>     * @return the most-significant bits as a long<a name="line.164"></a>
-<span class="sourceLineNo">165</span>     */<a name="line.165"></a>
-<span class="sourceLineNo">166</span>    public long getMostSignificantBits()<a name="line.166"></a>
-<span class="sourceLineNo">167</span>    {<a name="line.167"></a>
-<span class="sourceLineNo">168</span>        return (long)d &lt;&lt; 32 | (c &amp; 0xFFFFFFFFL);<a name="line.168"></a>
-<span class="sourceLineNo">169</span>    }<a name="line.169"></a>
-<span class="sourceLineNo">170</span><a name="line.170"></a>
-<span class="sourceLineNo">171</span>    /**<a name="line.171"></a>
-<span class="sourceLineNo">172</span>     * Gets the 32 least-significant bits as an int.<a name="line.172"></a>
-<span class="sourceLineNo">173</span>     * @return an int with the 32 least-significant bits of this ID<a name="line.173"></a>
-<span class="sourceLineNo">174</span>     */<a name="line.174"></a>
-<span class="sourceLineNo">175</span>    public int getA() {<a name="line.175"></a>
-<span class="sourceLineNo">176</span>        return a;<a name="line.176"></a>
-<span class="sourceLineNo">177</span>    }<a name="line.177"></a>
-<span class="sourceLineNo">178</span><a name="line.178"></a>
-<span class="sourceLineNo">179</span>    /**<a name="line.179"></a>
-<span class="sourceLineNo">180</span>     * Gets the 32 second-to-least-significant bits as an int.<a name="line.180"></a>
-<span class="sourceLineNo">181</span>     * @return an int with the 32 second-to-least-significant bits of this ID<a name="line.181"></a>
-<span class="sourceLineNo">182</span>     */<a name="line.182"></a>
-<span class="sourceLineNo">183</span>    public int getB() {<a name="line.183"></a>
-<span class="sourceLineNo">184</span>        return b;<a name="line.184"></a>
-<span class="sourceLineNo">185</span>    }<a name="line.185"></a>
-<span class="sourceLineNo">186</span>    /**<a name="line.186"></a>
-<span class="sourceLineNo">187</span>     * Gets the 32 second-to-most-significant bits as an int.<a name="line.187"></a>
-<span class="sourceLineNo">188</span>     * @return an int with the 32 second-to-most-significant bits of this ID<a name="line.188"></a>
-<span class="sourceLineNo">189</span>     */<a name="line.189"></a>
-<span class="sourceLineNo">190</span>    public int getC() {<a name="line.190"></a>
-<span class="sourceLineNo">191</span>        return c;<a name="line.191"></a>
-<span class="sourceLineNo">192</span>    }<a name="line.192"></a>
-<span class="sourceLineNo">193</span>    /**<a name="line.193"></a>
-<span class="sourceLineNo">194</span>     * Gets the 32 most-significant bits as an int.<a name="line.194"></a>
-<span class="sourceLineNo">195</span>     * @return an int with the 32 most-significant bits of this ID<a name="line.195"></a>
-<span class="sourceLineNo">196</span>     */<a name="line.196"></a>
-<span class="sourceLineNo">197</span>    public int getD() {<a name="line.197"></a>
-<span class="sourceLineNo">198</span>        return d;<a name="line.198"></a>
-<span class="sourceLineNo">199</span>    }<a name="line.199"></a>
-<span class="sourceLineNo">200</span><a name="line.200"></a>
-<span class="sourceLineNo">201</span>    @Override<a name="line.201"></a>
-<span class="sourceLineNo">202</span>    public boolean equals(Object o) {<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        if (this == o) return true;<a name="line.203"></a>
-<span class="sourceLineNo">204</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.204"></a>
-<span class="sourceLineNo">205</span><a name="line.205"></a>
-<span class="sourceLineNo">206</span>        SquidID squidID = (SquidID) o;<a name="line.206"></a>
-<span class="sourceLineNo">207</span><a name="line.207"></a>
-<span class="sourceLineNo">208</span>        return a == squidID.a &amp;&amp; b == squidID.b &amp;&amp; c == squidID.c &amp;&amp; d == squidID.d;<a name="line.208"></a>
-<span class="sourceLineNo">209</span><a name="line.209"></a>
-<span class="sourceLineNo">210</span>    }<a name="line.210"></a>
-<span class="sourceLineNo">211</span><a name="line.211"></a>
-<span class="sourceLineNo">212</span>    @Override<a name="line.212"></a>
-<span class="sourceLineNo">213</span>    public int hashCode() {<a name="line.213"></a>
-<span class="sourceLineNo">214</span>        return 31 * 31 * 31 * a +<a name="line.214"></a>
-<span class="sourceLineNo">215</span>                31 * 31 * b +<a name="line.215"></a>
-<span class="sourceLineNo">216</span>                31 * c +<a name="line.216"></a>
-<span class="sourceLineNo">217</span>                d;<a name="line.217"></a>
-<span class="sourceLineNo">218</span>    }<a name="line.218"></a>
-<span class="sourceLineNo">219</span><a name="line.219"></a>
-<span class="sourceLineNo">220</span>    @Override<a name="line.220"></a>
-<span class="sourceLineNo">221</span>    public String toString()<a name="line.221"></a>
-<span class="sourceLineNo">222</span>    {<a name="line.222"></a>
-<span class="sourceLineNo">223</span>        return StringKit.hex(d) + StringKit.hex(c) + '-' + StringKit.hex(b) + StringKit.hex(a);<a name="line.223"></a>
-<span class="sourceLineNo">224</span>    }<a name="line.224"></a>
-<span class="sourceLineNo">225</span><a name="line.225"></a>
-<span class="sourceLineNo">226</span>    @Override<a name="line.226"></a>
-<span class="sourceLineNo">227</span>    public int compareTo(SquidID o) {<a name="line.227"></a>
-<span class="sourceLineNo">228</span>        if(o == null)<a name="line.228"></a>
-<span class="sourceLineNo">229</span>            return 1;<a name="line.229"></a>
-<span class="sourceLineNo">230</span>        int diff = d - o.d;<a name="line.230"></a>
-<span class="sourceLineNo">231</span>        if(diff == 0)<a name="line.231"></a>
-<span class="sourceLineNo">232</span>            diff = c - o.c;<a name="line.232"></a>
-<span class="sourceLineNo">233</span>        if(diff == 0)<a name="line.233"></a>
-<span class="sourceLineNo">234</span>            diff = b - o.b;<a name="line.234"></a>
-<span class="sourceLineNo">235</span>        if(diff == 0)<a name="line.235"></a>
-<span class="sourceLineNo">236</span>            diff = a - o.a;<a name="line.236"></a>
-<span class="sourceLineNo">237</span>        return diff &gt; 0 ? 1 : diff &lt; 0 ? -1 : 0;<a name="line.237"></a>
-<span class="sourceLineNo">238</span>    }<a name="line.238"></a>
-<span class="sourceLineNo">239</span>}<a name="line.239"></a>
+<span class="sourceLineNo">160</span>}<a name="line.160"></a>
 
 
 
