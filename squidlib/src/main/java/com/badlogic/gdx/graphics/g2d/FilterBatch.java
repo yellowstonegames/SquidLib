@@ -1,7 +1,10 @@
-package squidpony.squidgrid.gui.gdx;
+package com.badlogic.gdx.graphics.g2d;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import squidpony.squidgrid.gui.gdx.FloatFilter;
+import squidpony.squidgrid.gui.gdx.FloatFilters;
+import squidpony.squidmath.NumberTools;
 
 /**
  * A drop-in substitute for {@link SpriteBatch} that filters any colors used to tint text or images using a
@@ -9,12 +12,23 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
  * {@link FloatFilters.YCbCrFilter} seem to perform perfectly well, spiking at above 1000 FPS on SparseDemo with a
  * filter that changes parameters.
  * <br>
- * Delegates pretty much everything to a different FilterBatch class in a libGDX package, needed for package-private
- * access to an important field.
+ * This unfortunately has to be in a libGDX package because a field of SpriteBatch that is vital for the operation of
+ * this class was changed from having a trivial setter to a significantly more expensive one, and accessing the
+ * package-private field without using the pricey setter needs the accessing code to be in the same package.
  * <br>
- * Created by Tommy Ettinger on 8/2/2018.
+ * Created by Tommy Ettinger on 12/8/2018.
  */
-public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
+public class FilterBatch extends SpriteBatch {
+    public FloatFilter filter;
+
+    public FloatFilter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(FloatFilter filter) {
+        this.filter = filter;
+    }
+
     /**
      * Constructs a new SpriteBatch with a size of 1000, one buffer, and the default shader.
      *
@@ -90,5 +104,37 @@ public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
     public FilterBatch(int size, ShaderProgram defaultShader, FloatFilter filter) {
         super(size, defaultShader);
         this.filter = filter;
+    }
+
+    @Override
+    public void setColor(Color tint) {
+        colorPacked = filter.alter(tint);
+        Color.abgr8888ToColor(super.getColor(), colorPacked);
+    }
+
+    @Override
+    public void setColor(float r, float g, float b, float a) {
+        int intBits = ((int)(255 * a) & 0xFE) << 24 | (int)(255 * b) << 16 | (int)(255 * g) << 8 | (int)(255 * r);
+        colorPacked = (filter.alter(NumberTools.intBitsToFloat(intBits)));
+    }
+
+    public void setColor(float color) {
+        colorPacked = (filter.alter(color));
+    }
+
+    @Override
+    public Color getColor() {
+        Color.abgr8888ToColor(super.getColor(), getPackedColor());
+        return super.getColor();
+    }
+
+    @Override
+    public void setPackedColor(float packedColor) {
+        colorPacked = filter.alter(packedColor);
+    }
+
+    @Override
+    public float getPackedColor() {
+        return colorPacked;
     }
 }
