@@ -2,14 +2,12 @@ package com.badlogic.gdx.graphics.g2d;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import squidpony.squidgrid.gui.gdx.FloatFilter;
-import squidpony.squidgrid.gui.gdx.FloatFilters;
 import squidpony.squidmath.NumberTools;
 
 /**
  * A drop-in substitute for {@link SpriteBatch} that filters any colors used to tint text or images using a
  * {@link FloatFilter}. The filter may have an effect on speed in some cases, but even moderately complex filters like
- * {@link FloatFilters.YCbCrFilter} seem to perform perfectly well, spiking at above 1000 FPS on SparseDemo with a
+ * FloatFilters' YCbCrFilter seem to perform perfectly well, spiking at above 1000 FPS on SparseDemo with a
  * filter that changes parameters.
  * <br>
  * This unfortunately has to be in a libGDX package because a field of SpriteBatch that is vital for the operation of
@@ -36,7 +34,7 @@ public class FilterBatch extends SpriteBatch {
      */
     public FilterBatch() {
         super();
-        filter = new FloatFilters.IdentityFilter();
+        filter = new FloatFilter.IdentityFilter();
     }
 
     /**
@@ -47,7 +45,7 @@ public class FilterBatch extends SpriteBatch {
      */
     public FilterBatch(int size) {
         super(size);
-        filter = new FloatFilters.IdentityFilter();
+        filter = new FloatFilter.IdentityFilter();
     }
 
     /**
@@ -63,12 +61,12 @@ public class FilterBatch extends SpriteBatch {
      */
     public FilterBatch(int size, ShaderProgram defaultShader) {
         super(size, defaultShader);
-        filter = new FloatFilters.IdentityFilter();
+        filter = new FloatFilter.IdentityFilter();
     }
 
     /**
      * Constructs a new SpriteBatch with a size of 1000, one buffer, the default shader, and the given FloatFilter.
-     * @param filter        a {@link FloatFilter}, such as one from {@link FloatFilters}
+     * @param filter        a {@link FloatFilter}, such as one from FloatFilters
      * @see SpriteBatch#SpriteBatch(int, ShaderProgram)
      */
     public FilterBatch(FloatFilter filter) {
@@ -80,7 +78,7 @@ public class FilterBatch extends SpriteBatch {
      * Constructs a SpriteBatch with one buffer of the given size, the default shader, and the given FloatFilter.
      *
      * @param size          The max number of sprites in a single batch. Max of 8191.
-     * @param filter        a {@link FloatFilter}, such as one from {@link FloatFilters}
+     * @param filter        a {@link FloatFilter}, such as one from FloatFilters
      * @see SpriteBatch#SpriteBatch(int, ShaderProgram)
      */
     public FilterBatch(int size, FloatFilter filter) {
@@ -99,7 +97,7 @@ public class FilterBatch extends SpriteBatch {
      *
      * @param size          The max number of sprites in a single batch. Max of 8191.
      * @param defaultShader The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
-     * @param filter        a {@link FloatFilter}, such as one from {@link FloatFilters}
+     * @param filter        a {@link FloatFilter}, such as one from FloatFilters
      */
     public FilterBatch(int size, ShaderProgram defaultShader, FloatFilter filter) {
         super(size, defaultShader);

@@ -1,5 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
+import com.badlogic.gdx.graphics.g2d.FloatFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 
@@ -22,7 +23,6 @@ public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
      */
     public FilterBatch() {
         super();
-        filter = new FloatFilters.IdentityFilter();
     }
 
     /**
@@ -33,7 +33,6 @@ public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
      */
     public FilterBatch(int size) {
         super(size);
-        filter = new FloatFilters.IdentityFilter();
     }
 
     /**
@@ -49,7 +48,6 @@ public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
      */
     public FilterBatch(int size, ShaderProgram defaultShader) {
         super(size, defaultShader);
-        filter = new FloatFilters.IdentityFilter();
     }
 
     /**
@@ -58,8 +56,7 @@ public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
      * @see SpriteBatch#SpriteBatch(int, ShaderProgram)
      */
     public FilterBatch(FloatFilter filter) {
-        super();
-        this.filter = filter;
+        super(filter);
     }
 
     /**
@@ -70,8 +67,7 @@ public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
      * @see SpriteBatch#SpriteBatch(int, ShaderProgram)
      */
     public FilterBatch(int size, FloatFilter filter) {
-        super(size);
-        this.filter = filter;
+        super(size, filter);
     }
 
     /**
@@ -88,7 +84,6 @@ public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
      * @param filter        a {@link FloatFilter}, such as one from {@link FloatFilters}
      */
     public FilterBatch(int size, ShaderProgram defaultShader, FloatFilter filter) {
-        super(size, defaultShader);
-        this.filter = filter;
+        super(size, defaultShader, filter);
     }
 }
