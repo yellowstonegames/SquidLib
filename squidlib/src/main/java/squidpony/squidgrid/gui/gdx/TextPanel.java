@@ -276,7 +276,7 @@ public class TextPanel<T extends Color> {
 	public void setFont(BitmapFont font) {
 		this.font = font;
         tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))
-                .width(MathUtils.round(font.getSpaceXadvance()));
+                .width(MathUtils.round(font.getSpaceWidth()));
 		if (markup != null)
 			font.getData().markupEnabled = true;
 	}
