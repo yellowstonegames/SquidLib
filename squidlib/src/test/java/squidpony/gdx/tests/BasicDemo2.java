@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
@@ -22,7 +21,6 @@ import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 /**
  * The main class of the game, constructed once in each of the platform-specific Launcher classes. Doesn't use any
@@ -41,13 +39,13 @@ import java.util.List;
 // or something related, like Game. Game adds features that SquidLib doesn't currently use, so ApplicationAdapter is
 // perfectly fine for these uses.
 public class BasicDemo2 extends ApplicationAdapter {
-    SpriteBatch batch;
+    private FilterBatch batch;
 
     private RNG rng;
     private SquidLayers display;
     private DungeonGenerator dungeonGen;
     private char[][] decoDungeon, bareDungeon, lineDungeon;
-    private Color[][] colors, bgColors;
+    private float[][] colors, bgColors;
 
     //Here, gridHeight refers to the total number of rows to be displayed on the screen.
     //We're displaying 30 rows of dungeon, then 7 more rows of text generation to show some tricks with language.
@@ -72,9 +70,9 @@ public class BasicDemo2 extends ApplicationAdapter {
     /** In number of cells */
     public static final int bonusHeight = 7;
     /** The initial pixel width of a cell */
-    public static final int cellWidth = 4;//10;
+    public static final int cellWidth = 9;
     /** The initial pixel height of a cell */
-    public static final int cellHeight = 10;//17;
+    public static final int cellHeight = 17;
 
     private SquidInput input;
     private Color bgColor;
@@ -105,14 +103,14 @@ public class BasicDemo2 extends ApplicationAdapter {
         rng = new RNG("SquidLib!");
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight), batch);
         // the font will try to load Iosevka Slab as an embedded bitmap font with a distance field effect.
         // the distance field effect allows the font to be stretched without getting blurry or grainy too easily.
         // this font is covered under the SIL Open Font License (fully free), so there's no reason it can't be used.
         display = new SquidLayers(gridWidth, gridHeight + bonusHeight, cellWidth, cellHeight,
-                new TextCellFactory().font(DefaultResources.getTinyFont())
+                DefaultResources.getCrispSlabFont()
                 //DefaultResources.getCrispDejaVuFont()
         );//.setSmoothingMultiplier(1.625f));
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
@@ -220,14 +218,16 @@ public class BasicDemo2 extends ApplicationAdapter {
         // up as the colors for the cell with the same x and y.
         bgColor = SColor.DARK_SLATE_GRAY;
         SColor.LIMITED_PALETTE[3] = SColor.DB_GRAPHITE;
-        colors = MapUtility.generateDefaultColors(decoDungeon);
-        bgColors = MapUtility.generateDefaultBGColors(decoDungeon);
+        colors = MapUtility.generateDefaultColorsFloat(decoDungeon);
+        bgColors = MapUtility.generateDefaultBGColorsFloat(decoDungeon);
         lang = new ArrayList<>(16);
         StringKit.wrap(lang, artOfWar, gridWidth - 2);
         translator = new NaturalLanguageCipher(rng.getRandomElement(FakeLanguageGen.registered));
         StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
         translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
-
+        for (int i = 0; i < lang.size(); i++) {
+            lang.set(i, StringKit.padRight(" " + lang.get(i), gridWidth));
+        }
         // this is a big one.
         // SquidInput can be constructed with a KeyHandler (which just processes specific keypresses), a SquidMouse
         // (which is given an InputProcessor implementation and can handle multiple kinds of mouse move), or both.
@@ -415,9 +415,13 @@ public class BasicDemo2 extends ApplicationAdapter {
         lang.remove(0);
         // if the last line reduced the number of lines we can show to less than what we try to show, we fill in more
         // lines using a randomly selected fake language to translate the same Art of War text.
-        while (lang.size() < bonusHeight - 1)
+        int len;
+        while ((len = lang.size()) < bonusHeight - 1)
         {
             StringKit.wrap(lang, translator.cipher(artOfWar), gridWidth - 2);
+            for (int i = len; i < lang.size(); i++) {
+                lang.set(i, StringKit.padRight(" " + lang.get(i), gridWidth));
+            }
             translator.initialize(rng.getRandomElement(FakeLanguageGen.registered), 0L);
         }
     }
@@ -443,16 +447,10 @@ public class BasicDemo2 extends ApplicationAdapter {
         for (int i = 0; i < toCursor.size(); i++) {
             pt = toCursor.get(i);
             // use a brighter light to trace the path to the cursor, from 170 max lightness to 0 min.
-            display.put(pt.x, pt.y, line[i + 1], SColor.CW_FLUSH_JADE, bgColors[pt.x][pt.y], 130);
+            display.put(pt.x, pt.y, line[i + 1], SColor.CW_FLUSH_JADE.toFloatBits(), bgColors[pt.x][pt.y], 130);
         }
-        //this helps compatibility with the HTML target, which doesn't support String.format()
-        char[] spaceArray = new char[gridWidth];
-        Arrays.fill(spaceArray, ' ');
-        String spaces = String.valueOf(spaceArray);
-
         for (int i = 0; i < bonusHeight - 1; i++) {
-            display.putString(0, gridHeight + i + 1, spaces, SColor.BLACK, SColor.COSMIC_LATTE);
-            display.putString(1, gridHeight + i + 1, lang.get(i), SColor.BLACK, SColor.COSMIC_LATTE);
+            display.putString(0, gridHeight + i + 1, lang.get(i), SColor.BLACK, SColor.COSMIC_LATTE);
         }
     }
 

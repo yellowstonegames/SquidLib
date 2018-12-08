@@ -284,7 +284,7 @@
 <span class="sourceLineNo">276</span>        public void setFont(BitmapFont font) {<a name="line.276"></a>
 <span class="sourceLineNo">277</span>                this.font = font;<a name="line.277"></a>
 <span class="sourceLineNo">278</span>        tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))<a name="line.278"></a>
-<span class="sourceLineNo">279</span>                .width(MathUtils.round(font.getSpaceWidth()));<a name="line.279"></a>
+<span class="sourceLineNo">279</span>                .width(MathUtils.round(font.getSpaceXadvance()));<a name="line.279"></a>
 <span class="sourceLineNo">280</span>                if (markup != null)<a name="line.280"></a>
 <span class="sourceLineNo">281</span>                        font.getData().markupEnabled = true;<a name="line.281"></a>
 <span class="sourceLineNo">282</span>        }<a name="line.282"></a>

@@ -1,0 +1,212 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package com.badlogic.gdx.graphics.g2d;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import com.badlogic.gdx.graphics.Color;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import com.badlogic.gdx.graphics.glutils.ShaderProgram;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import squidpony.squidgrid.gui.gdx.FloatFilter;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import squidpony.squidgrid.gui.gdx.FloatFilters;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import squidpony.squidmath.NumberTools;<a name="line.7"></a>
+<span class="sourceLineNo">008</span><a name="line.8"></a>
+<span class="sourceLineNo">009</span>/**<a name="line.9"></a>
+<span class="sourceLineNo">010</span> * A drop-in substitute for {@link SpriteBatch} that filters any colors used to tint text or images using a<a name="line.10"></a>
+<span class="sourceLineNo">011</span> * {@link FloatFilter}. The filter may have an effect on speed in some cases, but even moderately complex filters like<a name="line.11"></a>
+<span class="sourceLineNo">012</span> * {@link FloatFilters.YCbCrFilter} seem to perform perfectly well, spiking at above 1000 FPS on SparseDemo with a<a name="line.12"></a>
+<span class="sourceLineNo">013</span> * filter that changes parameters.<a name="line.13"></a>
+<span class="sourceLineNo">014</span> * &lt;br&gt;<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * This unfortunately has to be in a libGDX package because a field of SpriteBatch that is vital for the operation of<a name="line.15"></a>
+<span class="sourceLineNo">016</span> * this class was changed from having a trivial setter to a significantly more expensive one, and accessing the<a name="line.16"></a>
+<span class="sourceLineNo">017</span> * package-private field without using the pricey setter needs the accessing code to be in the same package.<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * &lt;br&gt;<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * Created by Tommy Ettinger on 12/8/2018.<a name="line.19"></a>
+<span class="sourceLineNo">020</span> */<a name="line.20"></a>
+<span class="sourceLineNo">021</span>public class FilterBatch extends SpriteBatch {<a name="line.21"></a>
+<span class="sourceLineNo">022</span>    public FloatFilter filter;<a name="line.22"></a>
+<span class="sourceLineNo">023</span><a name="line.23"></a>
+<span class="sourceLineNo">024</span>    public FloatFilter getFilter() {<a name="line.24"></a>
+<span class="sourceLineNo">025</span>        return filter;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>    }<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>    public void setFilter(FloatFilter filter) {<a name="line.28"></a>
+<span class="sourceLineNo">029</span>        this.filter = filter;<a name="line.29"></a>
+<span class="sourceLineNo">030</span>    }<a name="line.30"></a>
+<span class="sourceLineNo">031</span><a name="line.31"></a>
+<span class="sourceLineNo">032</span>    /**<a name="line.32"></a>
+<span class="sourceLineNo">033</span>     * Constructs a new SpriteBatch with a size of 1000, one buffer, and the default shader.<a name="line.33"></a>
+<span class="sourceLineNo">034</span>     *<a name="line.34"></a>
+<span class="sourceLineNo">035</span>     * @see SpriteBatch#SpriteBatch(int, ShaderProgram)<a name="line.35"></a>
+<span class="sourceLineNo">036</span>     */<a name="line.36"></a>
+<span class="sourceLineNo">037</span>    public FilterBatch() {<a name="line.37"></a>
+<span class="sourceLineNo">038</span>        super();<a name="line.38"></a>
+<span class="sourceLineNo">039</span>        filter = new FloatFilters.IdentityFilter();<a name="line.39"></a>
+<span class="sourceLineNo">040</span>    }<a name="line.40"></a>
+<span class="sourceLineNo">041</span><a name="line.41"></a>
+<span class="sourceLineNo">042</span>    /**<a name="line.42"></a>
+<span class="sourceLineNo">043</span>     * Constructs a SpriteBatch with one buffer and the default shader.<a name="line.43"></a>
+<span class="sourceLineNo">044</span>     *<a name="line.44"></a>
+<span class="sourceLineNo">045</span>     * @param size<a name="line.45"></a>
+<span class="sourceLineNo">046</span>     * @see SpriteBatch#SpriteBatch(int, ShaderProgram)<a name="line.46"></a>
+<span class="sourceLineNo">047</span>     */<a name="line.47"></a>
+<span class="sourceLineNo">048</span>    public FilterBatch(int size) {<a name="line.48"></a>
+<span class="sourceLineNo">049</span>        super(size);<a name="line.49"></a>
+<span class="sourceLineNo">050</span>        filter = new FloatFilters.IdentityFilter();<a name="line.50"></a>
+<span class="sourceLineNo">051</span>    }<a name="line.51"></a>
+<span class="sourceLineNo">052</span><a name="line.52"></a>
+<span class="sourceLineNo">053</span>    /**<a name="line.53"></a>
+<span class="sourceLineNo">054</span>     * Constructs a new SpriteBatch. Sets the projection matrix to an orthographic projection with y-axis point upwards, x-axis<a name="line.54"></a>
+<span class="sourceLineNo">055</span>     * point to the right and the origin being in the bottom left corner of the screen. The projection will be pixel perfect with<a name="line.55"></a>
+<span class="sourceLineNo">056</span>     * respect to the current screen resolution.<a name="line.56"></a>
+<span class="sourceLineNo">057</span>     * &lt;p&gt;<a name="line.57"></a>
+<span class="sourceLineNo">058</span>     * The defaultShader specifies the shader to use. Note that the names for uniforms for this default shader are different than<a name="line.58"></a>
+<span class="sourceLineNo">059</span>     * the ones expected for shaders set with {@link #setShader(ShaderProgram)}. See {@link #createDefaultShader()}.<a name="line.59"></a>
+<span class="sourceLineNo">060</span>     *<a name="line.60"></a>
+<span class="sourceLineNo">061</span>     * @param size          The max number of sprites in a single batch. Max of 8191.<a name="line.61"></a>
+<span class="sourceLineNo">062</span>     * @param defaultShader The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.<a name="line.62"></a>
+<span class="sourceLineNo">063</span>     */<a name="line.63"></a>
+<span class="sourceLineNo">064</span>    public FilterBatch(int size, ShaderProgram defaultShader) {<a name="line.64"></a>
+<span class="sourceLineNo">065</span>        super(size, defaultShader);<a name="line.65"></a>
+<span class="sourceLineNo">066</span>        filter = new FloatFilters.IdentityFilter();<a name="line.66"></a>
+<span class="sourceLineNo">067</span>    }<a name="line.67"></a>
+<span class="sourceLineNo">068</span><a name="line.68"></a>
+<span class="sourceLineNo">069</span>    /**<a name="line.69"></a>
+<span class="sourceLineNo">070</span>     * Constructs a new SpriteBatch with a size of 1000, one buffer, the default shader, and the given FloatFilter.<a name="line.70"></a>
+<span class="sourceLineNo">071</span>     * @param filter        a {@link FloatFilter}, such as one from {@link FloatFilters}<a name="line.71"></a>
+<span class="sourceLineNo">072</span>     * @see SpriteBatch#SpriteBatch(int, ShaderProgram)<a name="line.72"></a>
+<span class="sourceLineNo">073</span>     */<a name="line.73"></a>
+<span class="sourceLineNo">074</span>    public FilterBatch(FloatFilter filter) {<a name="line.74"></a>
+<span class="sourceLineNo">075</span>        super();<a name="line.75"></a>
+<span class="sourceLineNo">076</span>        this.filter = filter;<a name="line.76"></a>
+<span class="sourceLineNo">077</span>    }<a name="line.77"></a>
+<span class="sourceLineNo">078</span><a name="line.78"></a>
+<span class="sourceLineNo">079</span>    /**<a name="line.79"></a>
+<span class="sourceLineNo">080</span>     * Constructs a SpriteBatch with one buffer of the given size, the default shader, and the given FloatFilter.<a name="line.80"></a>
+<span class="sourceLineNo">081</span>     *<a name="line.81"></a>
+<span class="sourceLineNo">082</span>     * @param size          The max number of sprites in a single batch. Max of 8191.<a name="line.82"></a>
+<span class="sourceLineNo">083</span>     * @param filter        a {@link FloatFilter}, such as one from {@link FloatFilters}<a name="line.83"></a>
+<span class="sourceLineNo">084</span>     * @see SpriteBatch#SpriteBatch(int, ShaderProgram)<a name="line.84"></a>
+<span class="sourceLineNo">085</span>     */<a name="line.85"></a>
+<span class="sourceLineNo">086</span>    public FilterBatch(int size, FloatFilter filter) {<a name="line.86"></a>
+<span class="sourceLineNo">087</span>        super(size);<a name="line.87"></a>
+<span class="sourceLineNo">088</span>        this.filter = filter;<a name="line.88"></a>
+<span class="sourceLineNo">089</span>    }<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>    /**<a name="line.91"></a>
+<span class="sourceLineNo">092</span>     * Constructs a new SpriteBatch with the given FloatFilter.<a name="line.92"></a>
+<span class="sourceLineNo">093</span>     * Sets the projection matrix to an orthographic projection with y-axis pointing upwards, x-axis pointing to the<a name="line.93"></a>
+<span class="sourceLineNo">094</span>     * right and the origin being in the bottom left corner of the screen. The projection will be pixel perfect with<a name="line.94"></a>
+<span class="sourceLineNo">095</span>     * respect to the current screen resolution.<a name="line.95"></a>
+<span class="sourceLineNo">096</span>     * &lt;p&gt;<a name="line.96"></a>
+<span class="sourceLineNo">097</span>     * The defaultShader specifies the shader to use. Note that the names for uniforms for this default shader are different than<a name="line.97"></a>
+<span class="sourceLineNo">098</span>     * the ones expected for shaders set with {@link #setShader(ShaderProgram)}. See {@link #createDefaultShader()}.<a name="line.98"></a>
+<span class="sourceLineNo">099</span>     *<a name="line.99"></a>
+<span class="sourceLineNo">100</span>     * @param size          The max number of sprites in a single batch. Max of 8191.<a name="line.100"></a>
+<span class="sourceLineNo">101</span>     * @param defaultShader The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.<a name="line.101"></a>
+<span class="sourceLineNo">102</span>     * @param filter        a {@link FloatFilter}, such as one from {@link FloatFilters}<a name="line.102"></a>
+<span class="sourceLineNo">103</span>     */<a name="line.103"></a>
+<span class="sourceLineNo">104</span>    public FilterBatch(int size, ShaderProgram defaultShader, FloatFilter filter) {<a name="line.104"></a>
+<span class="sourceLineNo">105</span>        super(size, defaultShader);<a name="line.105"></a>
+<span class="sourceLineNo">106</span>        this.filter = filter;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>    }<a name="line.107"></a>
+<span class="sourceLineNo">108</span><a name="line.108"></a>
+<span class="sourceLineNo">109</span>    @Override<a name="line.109"></a>
+<span class="sourceLineNo">110</span>    public void setColor(Color tint) {<a name="line.110"></a>
+<span class="sourceLineNo">111</span>        colorPacked = filter.alter(tint);<a name="line.111"></a>
+<span class="sourceLineNo">112</span>        Color.abgr8888ToColor(super.getColor(), colorPacked);<a name="line.112"></a>
+<span class="sourceLineNo">113</span>    }<a name="line.113"></a>
+<span class="sourceLineNo">114</span><a name="line.114"></a>
+<span class="sourceLineNo">115</span>    @Override<a name="line.115"></a>
+<span class="sourceLineNo">116</span>    public void setColor(float r, float g, float b, float a) {<a name="line.116"></a>
+<span class="sourceLineNo">117</span>        int intBits = ((int)(255 * a) &amp; 0xFE) &lt;&lt; 24 | (int)(255 * b) &lt;&lt; 16 | (int)(255 * g) &lt;&lt; 8 | (int)(255 * r);<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        colorPacked = (filter.alter(NumberTools.intBitsToFloat(intBits)));<a name="line.118"></a>
+<span class="sourceLineNo">119</span>    }<a name="line.119"></a>
+<span class="sourceLineNo">120</span><a name="line.120"></a>
+<span class="sourceLineNo">121</span>    public void setColor(float color) {<a name="line.121"></a>
+<span class="sourceLineNo">122</span>        colorPacked = (filter.alter(color));<a name="line.122"></a>
+<span class="sourceLineNo">123</span>    }<a name="line.123"></a>
+<span class="sourceLineNo">124</span><a name="line.124"></a>
+<span class="sourceLineNo">125</span>    @Override<a name="line.125"></a>
+<span class="sourceLineNo">126</span>    public Color getColor() {<a name="line.126"></a>
+<span class="sourceLineNo">127</span>        Color.abgr8888ToColor(super.getColor(), getPackedColor());<a name="line.127"></a>
+<span class="sourceLineNo">128</span>        return super.getColor();<a name="line.128"></a>
+<span class="sourceLineNo">129</span>    }<a name="line.129"></a>
+<span class="sourceLineNo">130</span><a name="line.130"></a>
+<span class="sourceLineNo">131</span>    @Override<a name="line.131"></a>
+<span class="sourceLineNo">132</span>    public void setPackedColor(float packedColor) {<a name="line.132"></a>
+<span class="sourceLineNo">133</span>        colorPacked = filter.alter(packedColor);<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    }<a name="line.134"></a>
+<span class="sourceLineNo">135</span><a name="line.135"></a>
+<span class="sourceLineNo">136</span>    @Override<a name="line.136"></a>
+<span class="sourceLineNo">137</span>    public float getPackedColor() {<a name="line.137"></a>
+<span class="sourceLineNo">138</span>        return colorPacked;<a name="line.138"></a>
+<span class="sourceLineNo">139</span>    }<a name="line.139"></a>
+<span class="sourceLineNo">140</span>}<a name="line.140"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

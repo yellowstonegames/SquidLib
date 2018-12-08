@@ -1,9 +1,7 @@
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import squidpony.squidmath.NumberTools;
 
 /**
  * A drop-in substitute for {@link SpriteBatch} that filters any colors used to tint text or images using a
@@ -11,19 +9,12 @@ import squidpony.squidmath.NumberTools;
  * {@link FloatFilters.YCbCrFilter} seem to perform perfectly well, spiking at above 1000 FPS on SparseDemo with a
  * filter that changes parameters.
  * <br>
+ * Delegates pretty much everything to a different FilterBatch class in a libGDX package, needed for package-private
+ * access to an important field.
+ * <br>
  * Created by Tommy Ettinger on 8/2/2018.
  */
-public class FilterBatch extends SpriteBatch {
-    public FloatFilter filter;
-
-    public FloatFilter getFilter() {
-        return filter;
-    }
-
-    public void setFilter(FloatFilter filter) {
-        this.filter = filter;
-    }
-
+public class FilterBatch extends com.badlogic.gdx.graphics.g2d.FilterBatch {
     /**
      * Constructs a new SpriteBatch with a size of 1000, one buffer, and the default shader.
      *
@@ -99,21 +90,5 @@ public class FilterBatch extends SpriteBatch {
     public FilterBatch(int size, ShaderProgram defaultShader, FloatFilter filter) {
         super(size, defaultShader);
         this.filter = filter;
-    }
-
-    @Override
-    public void setColor(Color tint) {
-        super.setColor(filter.alter(tint));
-    }
-
-    @Override
-    public void setColor(float r, float g, float b, float a) {
-        int intBits = ((int)(255 * a) & 0xFE) << 24 | (int)(255 * b) << 16 | (int)(255 * g) << 8 | (int)(255 * r);
-        super.setColor(filter.alter(NumberTools.intBitsToFloat(intBits)));
-    }
-
-    @Override
-    public void setColor(float color) {
-        super.setColor(filter.alter(color));
     }
 }

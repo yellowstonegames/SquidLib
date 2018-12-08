@@ -1221,6 +1221,16 @@
 <div class="block">Sets the seed of this generator using two longs, using them without changes unless both are 0 (then it makes the
  state variable corresponding to stateA 1 instead).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setSeed-int-">setSeed(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
+<dd>
+<div class="block">Sets the state of this generator using one int, running it through a GWT-compatible variant of SplitMix32 four
+ times to get four ints of state, all guaranteed to be different.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setSeed-long-">setSeed(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
+<dd>
+<div class="block">Sets the state of this generator using one long, running it through a GWT-compatible variant of SplitMix32 four
+ times to get four ints of state, guaranteed to repeat a state no more than two times.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#setSelectedByte-double-int-byte-">setSelectedByte(double, int, byte)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">Like <a href="../squidpony/squidmath/NumberTools.html#getSelectedByte-double-int-"><code>NumberTools.getSelectedByte(double, int)</code></a>, this sets the byte at a selected position in the int representation of
@@ -1372,6 +1382,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/VanDerCorputQRNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setState-int-int-int-int-">setState(int, int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
+<dd>
+<div class="block">Sets the current internal state of this XoshiroStarPhi32RNG with four ints, where each can be any int unless
+ they are all 0 (which will be treated as if stateA is 1 and the rest are 0).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Zag32RNG.html#setState-long-">setState(long)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></dt>
 <dd>
 <div class="block">Set the current internal state of this StatefulRandomness with a long.</div>
@@ -1419,6 +1434,10 @@
 <dd>
 <div class="block">Set the "A" part of the internal state with a long.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setStateA-int-">setStateA(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
+<dd>
+<div class="block">Sets the first part of the state to the given int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Zag32RNG.html#setStateA-int-">setStateA(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
@@ -1451,10 +1470,22 @@
 <dd>
 <div class="block">Set the "B" part of the internal state with a long; the least significant bit is ignored (will always be odd).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
+<dd>
+<div class="block">Sets the second part of the state to the given int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Zag32RNG.html#setStateB-int-">setStateB(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Oriole32RNG.html#setStateC-int-">setStateC(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Oriole32RNG.html" title="class in squidpony.squidmath">Oriole32RNG</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setStateC-int-">setStateC(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
+<dd>
+<div class="block">Sets the third part of the state to the given int.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#setStateD-int-">setStateD(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
+<dd>
+<div class="block">Sets the second part of the state to the given int.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#setStep-int-">setStep(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ObText.ContentMatcher.html#setTarget-java.lang.CharSequence-">setTarget(CharSequence)</a></span> - Method in class squidpony.<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a></dt>
@@ -2507,6 +2538,10 @@
 <dd>
 <div class="block">Constructs a new random SquidID.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SquidID.html#SquidID-int-int-int-int-">SquidID(int, int, int, int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SquidID.html" title="class in squidpony.squidmath">SquidID</a></dt>
+<dd>
+<div class="block">Constructs a fixed SquidID with the given four 32-bit ints, which will be used exactly.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/SquidID.html#SquidID-long-long-">SquidID(long, long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/SquidID.html" title="class in squidpony.squidmath">SquidID</a></dt>
 <dd>
 <div class="block">Constructs a fixed SquidID with the given low and high 64-bit longs.</div>
@@ -2767,6 +2802,8 @@
 <dd>
 <div class="block">Internal use.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SquidID.html#store--">store()</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/SquidID.html" title="class in squidpony.squidmath">SquidID</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#storeCellFOV-int-">storeCellFOV(int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>
 <div class="block">Packs FOV for a point as a center, and returns it to be stored.</div>
