@@ -13,5 +13,4 @@
     <inherits name="squidlib-util"/>
     <super-source path="emu" />
     <source path="squidpony/squidgrid/gui/gdx"/>
-    <source path="com/badlogic/gdx/graphics/g2d"/>
 </module>
