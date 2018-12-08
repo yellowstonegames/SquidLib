@@ -22,6 +22,9 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     public GWTRNG(final int stateA, final int stateB) {
         setState(stateA, stateB);
     }
+    public GWTRNG(String seed) {
+        setState(CrossHash.hash(seed), seed == null ? 1 : seed.hashCode());
+    }
     @Override
     public final int next(int bits) {
         final int s0 = stateA;
