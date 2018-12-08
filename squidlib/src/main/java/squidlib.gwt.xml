@@ -11,6 +11,7 @@
     <inherits name='com.badlogic.gdx.backends.gdx_backends_gwt' />
     <inherits name="regexodus"/>
     <inherits name="squidlib-util"/>
-    <source path="com/badlogic/gdx/graphics/g2d"/>
+    <super-source path="emu" />
     <source path="squidpony/squidgrid/gui/gdx"/>
+    <source path="com/badlogic/gdx/graphics/g2d"/>
 </module>
