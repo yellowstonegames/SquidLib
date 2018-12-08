@@ -13324,6 +13324,14 @@ public class SColor extends Color implements Serializable {
      * @return a float encoding a color with the given properties
      */
     public static float floatGetYCoCg(float y, float co, float cg, float opacity) {
+//        if (luma <= 0.0039f) {
+//            return floatGet(0f, 0f, 0f, opacity);
+//        } else if (luma >= 0.9961f) {
+//            return floatGet(1f, 1f, 1f, opacity);
+//        }
+//        if (co >= -0.0039f && co <= 0.0039f && cg >= -0.0039f && cg <= 0.0039f) {
+//            return floatGet(y, y, y, opacity);
+//        }
         /*
 t = Y - Cg;
 R = t + Co;

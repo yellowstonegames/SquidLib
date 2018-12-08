@@ -1,4 +1,4 @@
-package com.badlogic.gdx.graphics.g2d;
+package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
 import squidpony.IFilter;
@@ -6,7 +6,7 @@ import squidpony.IFilter;
 /**
  * Like {@link IFilter}, but produces packed floats that encode colors instead of {@link Color} objects.
  * Accepts packed float colors (as produced by {@link Color#toFloatBits()}, or given in SColor documentation) or Color
- * objects (including SColor instances).
+ * objects (including {@link SColor} instances).
  * <br>
  * Created by Tommy Ettinger on 7/22/2018.
  */
@@ -18,32 +18,13 @@ public abstract class FloatFilter {
      */
     public abstract float alter(float color);
     /**
-     * Takes a {@link Color} or subclass of Color (such as SColor, which is a little more efficient here) and
+     * Takes a {@link Color} or subclass of Color (such as {@link SColor}, which is a little more efficient here) and
      * produces a packed float color that this FloatFilter edited.
-     * @param color a {@link Color} or instance of a subclass such as SColor 
+     * @param color a {@link Color} or instance of a subclass such as {@link SColor} 
      * @return a packed float color, as produced by {@link Color#toFloatBits()}
      */
     public float alter(Color color)
     {
         return alter(color.toFloatBits());
     }
-
-    /**
-     * A FloatFilter that makes no changes to the colors given to it; useful as a default for when no filter is wanted.
-     * This is nested in FloatFilter because it is likely that this should be the default FloatFilter even if none is
-     * being used currently.
-     */
-    public static class IdentityFilter extends FloatFilter {
-        /**
-         * Takes a packed float color and returns it un-edited.
-         *
-         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
-         * @return a packed float color, as produced by {@link Color#toFloatBits()}
-         */
-        @Override
-        public float alter(float color) {
-            return color;
-        }
-    }
-
 }
