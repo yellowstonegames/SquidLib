@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.FloatFilter;
 import com.badlogic.gdx.math.MathUtils;
 import squidpony.squidmath.NumberTools;
 
@@ -134,7 +133,17 @@ public final class FloatFilters {
     /**
      * A FloatFilter that makes no changes to the colors given to it; useful as a default for when no filter is wanted.
      */
-    public static class IdentityFilter extends Filters.IdentityFilter {
+    public static class IdentityFilter extends FloatFilter {
+        /**
+         * Takes a packed float color and returns it un-edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            return color;
+        }
     }
 
     /**
