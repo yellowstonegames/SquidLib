@@ -76,7 +76,7 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
      * String.hashCode() on it and will instead use 1 as that state (to avoid the forbidden double-zero case).
      * @param seed any String; may be null
      */
-    public GWTRNG(String seed) {
+    public GWTRNG(final String seed) {
         setState(CrossHash.hash(seed), seed == null ? 1 : seed.hashCode());
     }
 
