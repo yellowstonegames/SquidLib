@@ -215,7 +215,7 @@ public class DefaultResources implements LifecycleListener {
             + "\n"
             + "void main() {\n"
             + "  vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
-            + "  gl_FragColor = vec4(v_color.rgb, clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (3.875 * u_smoothing) + 0.5, 0.0, 1.0) * v_color.a);\n"
+            + "  gl_FragColor = vec4(v_color.rgb, clamp((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) * u_smoothing + 0.5, 0.0, 1.0) * v_color.a);\n"
             //+ " float dist = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.5) / (2.75 * u_smoothing);\n"
             //+ " float d = u_smoothing * 1.75;\n" 
             //+ " float d = fwidth(dist);\n"
@@ -1817,6 +1817,8 @@ public class DefaultResources implements LifecycleListener {
      * deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
      * version SquidLib has with an MSDF effect, {@link #getCrispLeanFamily()}.
      * <br>
+     * This TextFamily has its smoothing multiplier set to 1.55 instead of the default 1.2, which helps it stay sharp.
+     * <br>
      * Preview: <a href="https://i.imgur.com/wRNlpL5.png">image link</a>, with bold at the bottom.
      * <br>
      * This creates a TextFamily instead of a BitmapFont because it needs to set some extra information so the
@@ -1836,7 +1838,9 @@ public class DefaultResources implements LifecycleListener {
         {
             try {
                 instance.familySlabMSDF = new TextFamily();
-                instance.familySlabMSDF.fontMultiDistanceField("Iosevka-Slab-Family-msdf.fnt", "Iosevka-Slab-Family-msdf.png");
+                instance.familySlabMSDF
+                        .fontMultiDistanceField("Iosevka-Slab-Family-msdf.fnt", "Iosevka-Slab-Family-msdf.png")
+                        .setSmoothingMultiplier(1.55f);
             } catch (Exception e) {
                 e.printStackTrace();
             }

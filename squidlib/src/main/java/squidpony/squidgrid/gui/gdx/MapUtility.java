@@ -1,6 +1,8 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import squidpony.ArrayTools;
 import squidpony.squidmath.PerlinNoise;
 
 /**
@@ -1306,6 +1308,128 @@ public class MapUtility {
             }
         }
         return lights;
+    }
+
+    /**
+     * Meant to be used with {@link TextCellFactory#draw(Batch, float[][], float, float, int, int)}, this produces a
+     * triple-width, triple-height float color array by finding the box-drawing characters in {@code map} and placing
+     * 3x3 boxes into that triple-size array with the matching color from {@code colors} in the shape of that
+     * box-drawing character. {@code map} and {@code colors} should be the same size. Will return a new 2D float array.
+     * This should usually be passed to the aforementioned TextCellFactory draw method with 3 xSubCells and 3 ySubCells.
+     * An intended purpose for this is to draw box-drawing-like blocks when the font doesn't support box-drawing
+     * characters or those characters don't line up correctly for any reason.
+     * @param map a 2D char array that will not be modified; box drawing characters in this will be drawn in the returned array
+     * @param colors a 2D float array of packed float colors to use for drawing boxes (possibly produced by
+     *               {@link #fillDefaultColorsFloat(float[][], char[][])} or other methods in this class)
+     * @return a 2D float array that can be drawn by {@link TextCellFactory#draw(Batch, float[][], float, float, int, int)} with 3x3 subcells
+     */
+    public static float[][] generateLinesToBoxes(char[][] map, float[][] colors) {
+        return fillLinesToBoxes(null, map, colors);
+    }
+
+    /**
+     * Meant to be used with {@link TextCellFactory#draw(Batch, float[][], float, float, int, int)}, this finds the
+     * box-drawing characters in {@code map} and fills 3x3 boxes in {@code into} with the matching color from
+     * {@code colors} in the shape of that box-drawing character. This means {@code into} must have at least 3 times the
+     * width and height of {@code map}, and {@code map} and {@code colors} should be the same size. If {@code into} is
+     * appropriately-sized, then this will modify {@code into} in-place; otherwise it will return a new 2D float array.
+     * This should usually be passed to the aforementioned TextCellFactory draw method with 3 xSubCells and 3 ySubCells.
+     * An intended purpose for this is to draw box-drawing-like blocks when the font doesn't support box-drawing
+     * characters or those characters don't line up correctly for any reason.
+     * @param into a 2D float array that will be cleared, then modified in-place and returned; should be 3x the width
+     *             and 3x the height of map and colors, but if it is not (or is null) a new array will be allocated
+     * @param map a 2D char array that will not be modified; box drawing characters in this will be drawn in into
+     * @param colors a 2D float array of packed float colors to use for drawing boxes (possibly produced by
+     *               {@link #fillDefaultColorsFloat(float[][], char[][])} or other methods in this class)
+     * @return {@code into}, if modified, or a new 2D float array if into was null or incorrectly sized
+     */
+    public static float[][] fillLinesToBoxes(float[][] into, char[][] map, float[][] colors) {
+        final int width = Math.min(map.length, colors.length);
+        final int height = Math.min(map[0].length, colors[0].length);
+        if(into == null || into.length < width * 3 || into[0].length < height * 3)
+            into = new float[width * 3][height * 3];
+        else
+            ArrayTools.fill(into, 0f);
+        for (int i = 0, x = 0; i < width; i++, x+=3) {
+            for (int j = 0, y = 0; j < height; j++, y+=3) {
+                switch (map[i][j]) {
+                    case '\1':
+                    case '#':
+                        into[x][y] = into[x+1][y] = into[x+2][y] =
+                                into[x][y+1] = into[x+1][y+1] = into[x+2][y+1] =
+                                        into[x][y+2] = into[x+1][y+2] = into[x+2][y+2] = colors[i][j];
+                        break;
+                    case '├':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            /*into[x][y+1] =*/ into[x+1][y+1] = into[x+2][y+1] =
+                            /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '┤':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            into[x][y+1] = into[x+1][y+1] = /*into[x+2][y+1] =*/
+                                    /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '┴':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            into[x][y+1] = into[x+1][y+1] = into[x+2][y+1] =
+                                    /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '┬':
+                        /*into[x][y] = into[x+1][y] = into[x+2][y] =*/
+                        into[x][y+1] = into[x+1][y+1] = into[x+2][y+1] =
+                                /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '┌':
+                        /*into[x][y] = into[x+1][y] = into[x+2][y] =*/
+                        /*into[x][y+1] =*/ into[x+1][y+1] = into[x+2][y+1] =
+                            /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '┐':
+                        /*into[x][y] = into[x+1][y] = into[x+2][y] =*/
+                        into[x][y+1] = into[x+1][y+1] = /*into[x+2][y+1] =*/
+                                /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '└':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            /*into[x][y+1] =*/ into[x+1][y+1] = into[x+2][y+1] =
+                            /*into[x][y+2] = into[x+1][y+2] = into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '┘':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            into[x][y+1] = into[x+1][y+1] = /*into[x+2][y+1] =*/
+                                    /*into[x][y+2] = into[x+1][y+2] = into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '│':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            /*into[x][y+1] =*/ into[x+1][y+1] = /*into[x+2][y+1] =*/
+                            /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '─':
+                        into[x][y+1] = into[x+1][y+1] = into[x+2][y+1] = colors[i][j];
+                        break;
+                    case '╴':
+                        into[x][y+1] = into[x+1][y+1] = colors[i][j];
+                        break;
+                    case '╵':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            /*into[x][y+1] =*/ into[x+1][y+1] = /*into[x+2][y+1] =*/ colors[i][j];
+                        break;
+                    case '╶':
+                        into[x+1][y+1] = into[x+2][y+1] = colors[i][j];
+                        break;
+                    case '╷':
+                            /*into[x][y+1] =*/ into[x+1][y+1] = /*into[x+2][y+1] =*/
+                            /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                    case '┼':
+                        /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
+                            into[x][y+1] = into[x+1][y+1] = into[x+2][y+1] =
+                                    /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                        break;
+                }
+            }
+        }
+        return into;
     }
 
 }
