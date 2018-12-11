@@ -5,9 +5,9 @@ import squidpony.StringKit;
 import java.io.Serializable;
 
 public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
-    private int stateA, stateB;
+    public int stateA, stateB;
 
     public GWTRNG()
     {

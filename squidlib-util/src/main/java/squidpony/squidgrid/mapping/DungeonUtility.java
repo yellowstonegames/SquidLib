@@ -1202,6 +1202,20 @@ public class DungeonUtility {
                     case '─':
                         portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
                         break;
+                    case '╴':
+                        portion[x][y+1] = portion[x+1][y+1] = 1.0;
+                        break;
+                    case '╵':
+                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
+                            /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/ 1.0;
+                        break;
+                    case '╶':
+                        portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
+                        break;
+                    case '╷':
+                        /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/
+                            /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
+                        break;
                     case '┼':
                         /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
                                 portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
@@ -1218,12 +1232,6 @@ public class DungeonUtility {
                                 portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] =
                                         portion[x][y+2] = portion[x+1][y+2] = portion[x+2][y+2] = 0.95;
                         break;
-//                    case '.':
-//                    case ',':
-//                    case '~':
-//                    case '^':
-//                    default:
-//                        portion[i][j] = 0.0;
                 }
             }
         }
@@ -1346,6 +1354,20 @@ public class DungeonUtility {
                         break;
                     case '─':
                         portion[x][y+1] = portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
+                        break;
+                    case '╴':
+                        portion[x][y+1] = portion[x+1][y+1] = 1.0;
+                        break;
+                    case '╵':
+                        /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/
+                            /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/ 1.0;
+                        break;
+                    case '╶':
+                        portion[x+1][y+1] = portion[x+2][y+1] = 1.0;
+                        break;
+                    case '╷':
+                        /*portion[x][y+1] =*/ portion[x+1][y+1] = /*portion[x+2][y+1] =*/
+                            /*portion[x][y+2] =*/ portion[x+1][y+2] = /*portion[x+2][y+2] =*/ 1.0;
                         break;
                     case '┼':
                         /*portion[x][y] =*/ portion[x+1][y] = /*portion[x+2][y] =*/

@@ -694,7 +694,7 @@ public class SparseDemo extends ApplicationAdapter {
         stage.getViewport().apply(false);
         // stage has its own batch and must be explicitly told to draw().
         batch.setProjectionMatrix(stage.getCamera().combined);
-        screenPosition.set(cellWidth * 6, cellHeight);
+        screenPosition.set(cellWidth * 12, cellHeight);
         stage.screenToStageCoordinates(screenPosition);
         batch.begin();
         stage.getRoot().draw(batch, 1);

@@ -1964,7 +1964,7 @@ public class TextCellFactory implements Disposable {
             if(msdf)
             {
                 batch.setShader(shader);
-                shader.setUniformf("u_smoothing", 0.35f / (2.875f * smoothingMultiplier * bmpFont.getData().scaleX));
+                shader.setUniformf("u_smoothing", 2.1198158f * smoothingMultiplier * bmpFont.getData().scaleX);
             }
             else if (distanceField) {
                 batch.setShader(shader);
