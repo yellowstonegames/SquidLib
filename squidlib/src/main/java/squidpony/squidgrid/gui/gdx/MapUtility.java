@@ -1372,7 +1372,7 @@ public class MapUtility {
                     case '┴':
                         /*into[x][y] =*/ into[x+1][y] = /*into[x+2][y] =*/
                             into[x][y+1] = into[x+1][y+1] = into[x+2][y+1] =
-                                    /*into[x][y+2] =*/ into[x+1][y+2] = /*into[x+2][y+2] =*/ colors[i][j];
+                                    /*into[x][y+2] = into[x+1][y+2] = into[x+2][y+2] =*/ colors[i][j];
                         break;
                     case '┬':
                         /*into[x][y] = into[x+1][y] = into[x+2][y] =*/
