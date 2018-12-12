@@ -11517,7 +11517,8 @@ public class SColor extends Color implements Serializable {
      * tones steadily going from warm and saturated colors at {@link #AURORA_LIGHT_SKIN_1} to more pale at 9, and the
      * PINK skin tones meant for accents on some body parts that aren't quite skin-colored, like the lips and ears).
      * <a href="https://i.imgur.com/CrI1LyU.png">Preview of all 256 colors, each with the hex number for its index in
-     * this array.</a>
+     * this array.</a> <a href="https://i.imgur.com/hufvt0v.png">Another preview of all 256 colors, but with the name of
+     * each color instead (without "Aurora " at the start).</a>
      */
     public static final SColor[] DAWNBRINGER_AURORA = {
             AURORA_TRANSPARENT, AURORA_PITCH_BLACK, AURORA_COAL_BLACK, AURORA_SHADOW, AURORA_GRAPHITE, AURORA_SMOKE, AURORA_LEAD, AURORA_IRON,
@@ -12704,7 +12705,7 @@ public class SColor extends Color implements Serializable {
     {
         return (color.r * 0.299f) +
                (color.g * 0.587f) +
-               (color.r * 0.114f);
+               (color.b * 0.114f);
     }
 
     /**
@@ -12723,6 +12724,47 @@ public class SColor extends Color implements Serializable {
         return  (bits & 0x000000ff) * (0x1.010102p-8f  * 0.299f) +
                 (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
                 (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f);
+    }
+    /**
+     * The "Chroma B," or Cb, of the given libGDX Color in YCbCr format; ranges from -0.5f to 0.5f .
+     * This is related to Chroma R; when Chroma B is high and Chroma R is low, the color is more blue; when Chroma R is
+     * high and Chroma B is low, the color is more red, when both are low it is more green, and when both are high it is
+     * more purple. When Chroma R and Chroma B are both near 0.0f, the color is closer to gray. Because Chroma values
+     * are centered on 0.0f, you can multiply them by a value like 0.5f to halve the colorfulness of the color.
+     * You can go back to an RGB color as a packed float with {@link #floatGetYCbCr(float, float, float, float)}.
+     * YCbCr is useful for modifications to colors because you can get a grayscale version of a color by setting Cb and
+     * Cr to 0, you can desaturate by multiplying Cb and Cr by a number between 0 and 1, you can oversaturate by
+     * multiplying Cb and Cr by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth.
+     * @param color a libGDX Color or SColor
+     * @return the Chroma B as a float from -0.5f to 0.5f
+     */
+    public static float chromaB(final Color color)
+    {
+        return (color.r * -0.168736f) +
+                (color.g * -0.331264f) +
+                (color.b * 0.5f);
+    }
+
+    /**
+     * The "Chroma R," or Cr, of the given libGDX Color in YCbCr format; ranges from -0.5f to 0.5f .
+     * This is related to Chroma B; when Chroma B is high and Chroma R is low, the color is more blue; when Chroma R is
+     * high and Chroma B is low, the color is more red, when both are low it is more green, and when both are high it is
+     * more purple. When Chroma R and Chroma B are both near 0.0f, the color is closer to gray. Because Chroma values
+     * are centered on 0.0f, you can multiply them by a value like 0.5f to halve the colorfulness of the color.
+     * You can go back to an RGB color as a packed float with {@link #floatGetYCbCr(float, float, float, float)}.
+     * YCbCr is useful for modifications to colors because you can get a grayscale version of a color by setting Cb and
+     * Cr to 0, you can desaturate by multiplying Cb and Cr by a number between 0 and 1, you can oversaturate by
+     * multiplying Cb and Cr by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth.
+     * @param color a libGDX Color or SColor
+     * @return the Chroma R as a float from -0.5f to 0.5f
+     */
+    public static float chromaR(final Color color)
+    {
+        return (color.r * 0.5f) +
+                (color.g * -0.418688f) +
+                (color.b * -0.081312f);
     }
 
     /**

@@ -6,14 +6,19 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
-import squidpony.squidgrid.gui.gdx.*;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.SColor;
+import squidpony.squidgrid.gui.gdx.SquidLayers;
+import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidmath.MathExtras;
 
 import static squidpony.StringKit.safeSubstring;
+import static squidpony.squidgrid.gui.gdx.SColor.DAWNBRINGER_AURORA;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
 
 /**
@@ -23,7 +28,8 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-    private static int gridWidth = 64;
+    private static int gridWidth = 160;
+//    private static int gridWidth = 64;
 //    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
@@ -342,7 +348,7 @@ public class ColorTest extends ApplicationAdapter {
         viewport = new StretchViewport(totalWidth, totalHeight);
         display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight, tcf);//.setTextSize(cellWidth + 1f, cellHeight + 1f);
         stage = new Stage(viewport, batch);
-        SquidColorCenter scc = DefaultResources.getSCC();
+        //SquidColorCenter scc = DefaultResources.getSCC();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
@@ -356,7 +362,8 @@ public class ColorTest extends ApplicationAdapter {
         SColor col;// = new SColor(0, 0, 0, 0);
         for (int i = 0; i < 256; i++) {
             col = SColor.DAWNBRINGER_AURORA[i];
-            display.putString(i >>> 2 & 0xF8, i & 31, String.format("   %02X   ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+            display.putString((i >>> 5) * 20, i & 31, "  " + StringKit.padRightStrict(col.name.substring(7), ' ', 18), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            display.putString(i >>> 2 & 0xF8, i & 31, String.format("   %02X   ", i), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
         }
 //            SColor col = SColor.DAWNBRINGER_AURORA[i];
 //        for (int i = 0; i < 48; i++) {
@@ -547,7 +554,96 @@ public class ColorTest extends ApplicationAdapter {
 //        }
         stage.addActor(display);
 
-   //This block, when uncommented, will generate the color wheel palette code for SColor and print it to stdout.
+        byte[] paletteMapping = new byte[1 << 19];
+        int[] reverse = new int[256];
+        int[][] ramps = new int[256][4];
+        float[] lumas = new float[256], cbs = new float[256], crs = new float[256];
+        int c2;
+        double dist;
+        for (int i = 1; i < 256; i++) {
+            paletteMapping[reverse[i] = 
+                      (int) ((lumas[i] = SColor.luma(DAWNBRINGER_AURORA[i])) * 127)
+                    | (int) (((cbs[i] = SColor.chromaB(DAWNBRINGER_AURORA[i])) + 0.5f) * 63) << 7
+                    | (int) (((crs[i] = SColor.chromaR(DAWNBRINGER_AURORA[i])) + 0.5f) * 63) << 13] = (byte) i;
+        }
+        float crf, cbf, yf;
+        for (int cr = 0; cr < 64; cr++) {
+            crf = cr / 63f - 0.5f;
+            for (int cb = 0; cb < 64; cb++) {
+                cbf = cb / 63f - 0.5f;
+                for (int y = 0; y < 128; y++) {
+                    c2 = cr << 13 | cb << 7 | y;
+                    if (paletteMapping[c2] == 0) {
+                        yf = y / 127f;
+                        dist = Double.POSITIVE_INFINITY;
+                        for (int i = 1; i < 256; i++) {
+                            if (Math.abs(lumas[i] - yf) < 0.1f && dist > (dist = Math.min(dist, difference(lumas[i], cbs[i], crs[i], yf, cbf, crf))))
+                                paletteMapping[c2] = (byte) i;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int i = 1; i < 256; i++) {
+            int rev = reverse[i], y = rev & 127, match = i;
+//            yf = lumas[i];
+            cbf = cbs[i];
+            crf = crs[i];
+            ramps[i][1] = Color.rgba8888(DAWNBRINGER_AURORA[i]);
+            ramps[i][0] = 0xFFFFFFFF; // white
+            ramps[i][2] = 0x010101FF; // black
+            ramps[i][3] = 0x010101FF; // black
+            for (int yy = y + 1, rr = rev + 1; yy < 128; yy++, rr++) {
+                if ((paletteMapping[rr] & 255) != i) {
+                    ramps[i][0] = Color.rgba8888(DAWNBRINGER_AURORA[paletteMapping[rr] & 255]);
+                    break;
+                }
+            }
+            for (int yy = y - 1, rr = rev - 1; yy > 0; rr--) {
+                if ((paletteMapping[rr] & 255) != i) {
+                    ramps[i][2] = Color.rgba8888(DAWNBRINGER_AURORA[paletteMapping[rr] & 255]);
+                    rev = rr;
+                    y = yy;
+                    match = paletteMapping[rr] & 255;
+                    break;
+                }
+                cbf = MathUtils.clamp(cbf * 0.9375f, -0.5f, 0.5f);
+                crf = MathUtils.clamp(crf * 0.9375f, -0.5f, 0.5f);
+                rr = yy
+                        | (int) ((cbf + 0.5f) * 63) << 7
+                        | (int) ((crf + 0.5f) * 63) << 13;
+                if (--yy == 0) {
+                    match = -1;
+                }
+            }
+            if (match >= 0) {
+                for (int yy = y - 1, rr = rev - 1; yy > 0; yy--, rr--) {
+                    if ((paletteMapping[rr] & 255) != match) {
+                        ramps[i][3] = Color.rgba8888(DAWNBRINGER_AURORA[paletteMapping[rr] & 255]);
+                        break;
+                    }
+                    cbf = MathUtils.clamp(cbf * 0.9375f, -0.5f, 0.5f);
+                    crf = MathUtils.clamp(crf * 0.9375f, -0.5f, 0.5f);
+                    rr = yy
+                            | (int) ((cbf + 0.5f) * 63) << 7
+                            | (int) ((crf + 0.5f) * 63) << 13;
+                }
+            }
+        }
+
+        System.out.println("int[][] RAMPS = new int[][]{");
+        for (int i = 0; i < 256; i++) {
+            System.out.println("{ 0x" + StringKit.hex(ramps[i][0])
+                    + ", 0x" + StringKit.hex(ramps[i][1])
+                    + ", 0x" + StringKit.hex(ramps[i][2])
+                    + ", 0x" + StringKit.hex(ramps[i][3]) + " },"
+            );
+        }
+        System.out.println("};");
+
+
+        //This block, when uncommented, will generate the color wheel palette code for SColor and print it to stdout.
 //        String template = "NAME\tFEDCBA\tName";
 //        // 0 red, 1 brown, 2 orange, 3 apricot, 4 gold, 5 yellow, 6 chartreuse, 7 lime, 8 honeydew, 10 green, 12 jade,
 //        // 14 seafoam, 16 cyan, 17 azure, 19 blue, 21 sapphire, 23 indigo, 24 violet, 26 purple, 28 magenta, 30 rose
@@ -656,42 +752,50 @@ public class ColorTest extends ApplicationAdapter {
 
         // This block, when uncommented, will read in color names and values from ColorData.txt and produce a formatted
         // block of partial Java source as ColorOutput.txt , to be put in SColor.java .
-        String templateFull = "/**\n" +
-            "* This color constant \"Name\" has RGB code {@code 0xFEDCBA}, red `RED, green `GREEN, blue `BLUE, alpha 1, hue `HUE, saturation `SAT, and value `VAL.\n" +
-            "* It can be represented as a packed float with the constant {@code `PACKEDF}.\n" +
-            "* <pre>\n" +
-            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
-            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
-            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
-            "* </pre>\n" +
-//            "* <br>\n" +
-//            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>\n" +
-//            "* <font style='background-color: #ff0000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #FEDCBA'>&nbsp;@&nbsp;</font>\n" +
-//            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>\n" +
-            "*/\n" +
-        "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
-        String data = Gdx.files.classpath("special/ColorData.txt").readString();
-        String[] lines = StringKit.split(data, "\n"), rec = new String[3];
-        Color c = new Color();
-        StringBuilder sb = new StringBuilder(100000);
-        for (int i = 0; i < lines.length; i++) {
-            tabSplit(rec, lines[i]);
-            Color.argb8888ToColor(c, Integer.parseInt(rec[1], 16) | 0xFF000000);
-            sb.append(templateFull.replace("Name", rec[2])
-                    .replace("NAME", rec[0])
-                    .replace("FEDCBA", rec[1].toUpperCase())
-                    .replace("`RED", Float.toString(c.r))
-                    .replace("`GREEN", Float.toString(c.g))
-                    .replace("`BLUE", Float.toString(c.b))
-                    .replace("`HUE", Float.toString(scc.getHue(c)))
-                    .replace("`SAT", Float.toString(scc.getSaturation(c)))
-                    .replace("`VAL", Float.toString(scc.getValue(c)))
-                    .replace("`PACKED", Float.toHexString(c.toFloatBits()))
-            );
-            //System.out.println("Processed " + i);
-        }
-        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
+//        String templateFull = "/**\n" +
+//            "* This color constant \"Name\" has RGB code {@code 0xFEDCBA}, red `RED, green `GREEN, blue `BLUE, alpha 1, hue `HUE, saturation `SAT, and value `VAL.\n" +
+//            "* It can be represented as a packed float with the constant {@code `PACKEDF}.\n" +
+//            "* <pre>\n" +
+//            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #000000'>&nbsp;@&nbsp;</font>\n" +
+//            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #888888; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffffff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #FEDCBA; color: #888888'>&nbsp;@&nbsp;</font>\n" +
+//            "* <font style='background-color: #FEDCBA;>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #000000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #888888; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffffff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #FEDCBA; color: #ffffff'>&nbsp;@&nbsp;</font>\n" +
+//            "* </pre>\n" +
+////            "* <br>\n" +
+////            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font>\n" +
+////            "* <font style='background-color: #ff0000; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #ffff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #00ff00; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #0000ff; color: #FEDCBA'>&nbsp;@&nbsp;</font><font style='background-color: #964b00; color: #FEDCBA'>&nbsp;@&nbsp;</font>\n" +
+////            "* <font style='background-color: #ff0000; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #ffff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #00ff00; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #0000ff; color: #000000'>&nbsp;&nbsp;&nbsp;</font><font style='background-color: #964b00; color: #000000'>&nbsp;&nbsp;&nbsp;</font></pre>\n" +
+//            "*/\n" +
+//        "public static final SColor NAME = new SColor(0xFEDCBA, \"Name\");\n\n";
+//        String data = Gdx.files.classpath("special/ColorData.txt").readString();
+//        String[] lines = StringKit.split(data, "\n"), rec = new String[3];
+//        Color c = new Color();
+//        StringBuilder sb = new StringBuilder(100000);
+//        for (int i = 0; i < lines.length; i++) {
+//            tabSplit(rec, lines[i]);
+//            Color.argb8888ToColor(c, Integer.parseInt(rec[1], 16) | 0xFF000000);
+//            sb.append(templateFull.replace("Name", rec[2])
+//                    .replace("NAME", rec[0])
+//                    .replace("FEDCBA", rec[1].toUpperCase())
+//                    .replace("`RED", Float.toString(c.r))
+//                    .replace("`GREEN", Float.toString(c.g))
+//                    .replace("`BLUE", Float.toString(c.b))
+//                    .replace("`HUE", Float.toString(scc.getHue(c)))
+//                    .replace("`SAT", Float.toString(scc.getSaturation(c)))
+//                    .replace("`VAL", Float.toString(scc.getValue(c)))
+//                    .replace("`PACKED", Float.toHexString(c.toFloatBits()))
+//            );
+//            //System.out.println("Processed " + i);
+//        }
+//        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
     }
+
+    private double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
+//        float angle1 = NumberTools.atan2_(cb1, cr1);
+//        float angle2 = NumberTools.atan2_(cb2, cr2);
+        return Math.abs(y1 - y2) + Math.sqrt((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2));
+                //+ ((angle1 - angle2) % 0.5f + 0.5f) % 0.5f;
+    }
+
     public static void tabSplit(String[] receiving, String source) {
         int dl = 1, idx = -1, idx2;
         for (int i = 0; i < 2; i++) {
