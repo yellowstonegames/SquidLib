@@ -79,7 +79,7 @@ public class StarterKit {
      * RNG (and some that specifically require or prefer StatefulRNG) throughout squidlib-util.
      * <br>
      * This field defaults to a StatefulRNG seeded with the number SQUIDLIB (written in base 36), or 2252637788195L in
-     * base 10. Like most StatefulRNG instances, it uses a LinnormRNG internally, which is very fast and has a good-enough
+     * base 10. Like most StatefulRNG instances, it uses a DiverRNG internally, which is very fast and has a good-enough
      * period (how many numbers it generates before repeating the cycle) at (2 to the 64) random numbers.
      */
     public StatefulRNG rng = new StatefulRNG(2252637788195L);

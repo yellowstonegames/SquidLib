@@ -16,7 +16,7 @@ import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidgrid.gui.gdx.TextPanel;
 import squidpony.squidgrid.mapping.LineKit;
 import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.LinnormRNG;
+import squidpony.squidmath.DiverRNG;
 
 import java.util.ArrayList;
 
@@ -201,7 +201,7 @@ public class FontTest extends ApplicationAdapter {
         stage = new Stage(viewport, batch);
 
         Gdx.input.setInputProcessor(new InputAdapter() {
-            LinnormRNG rng = new LinnormRNG(System.nanoTime());
+            DiverRNG rng = new DiverRNG(System.nanoTime());
             @Override
             public boolean keyUp(int keycode) {
                 if(keycode == Input.Keys.B)

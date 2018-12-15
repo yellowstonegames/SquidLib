@@ -3244,10 +3244,10 @@ public class Noise {
         public Basic1D(long seed)
         {
             lastSeed = seed;
-            alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-            alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-            alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-            alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+            alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+            alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+            alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+            alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
         }
         @Override
         public double getNoise(double x) {
@@ -3263,10 +3263,10 @@ public class Noise {
             if(lastSeed != seed)
             {
                 lastSeed = seed;
-                alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-                alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-                alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-                alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+                alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+                alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+                alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+                alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
             }
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
@@ -3282,10 +3282,10 @@ public class Noise {
         }
 
         public static double noise(double x, long seed) {
-            final double alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
-                    alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
+            final double alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
+                    alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
                     cubicSway(alter4 + x * alter3) +

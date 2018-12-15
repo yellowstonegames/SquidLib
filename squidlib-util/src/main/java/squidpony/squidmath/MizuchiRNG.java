@@ -1,29 +1,23 @@
 package squidpony.squidmath;
 
 import squidpony.StringKit;
+import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
 /**
- * A very-high-quality StatefulRandomness based on {@link LinnormRNG} but modified to allow any odd number as a stream,
- * instead of LinnormRNG's hardcoded stream of 1. Has 64 bits of state, 64 bits used to store a stream (which cannot be
+ * A mid-quality StatefulRandomness based on {@link LinnormRNG} but modified to allow any odd number as a stream,
+ * instead of LinnormRNG's hardcoded stream of 1; at least some streams fail statistical testing, but only after at
+ * least 8TB of data is analyzed, failing at 16TB. Has 64 bits of state, 64 bits used to store a stream (which cannot be
  * changed after construction) and natively outputs 64 bits at a time. Changes its state with a basic linear
  * congruential generator (it is simply {@code state = state * 1103515245 + stream}). Starting with that LCG's
  * output, it xorshifts that output, multiplies by a very large negative long, then returns another xorshift. Like
  * LinnormRNG, the output of this simple function passes all 32TB of PractRand with no anomalies (at least for the
  * tested streams), meaning its statistical quality is excellent. The speed of this particular class isn't fully clear
  * yet, but benchmarks performed under the heavy load of PractRand testing happening at the same time appeared to show
- * no significant difference between LinnormRNG and MizuchiRNG in speed (which means it's tied for first place in its
- * category). Some streams may have statistical issues, even failures, but such streams are unlikely to exist because
- * the theory on LCGs shows that any odd-number increments are all fundamentally similar (I'm no expert, I've just read
- * <a href="http://www.pcg-random.org/posts/critiquing-pcg-streams.html">this blog post on the related PCG family</a>).
- * If streams are problematic, they are more likely to be in the "3 structure" than the "1 structure" in that blog post,
- * where the 3 structure is the structure shared by all LCG increments where {@code (increment & 3) == 3} and the 1
- * structure is where {@code (increment & 3) == 1}. Really in-depth testing has so far only been done on streams where
- * {@code (increment & 7) == 1} (this should be a subset of the 1 structure). If issues are found with a group of
- * streams, this class will be updated and the stream setting will change from {@code this.stream = (stream | 1L);} to
- * some more involved technique, like potentially {@code this.stream = ((stream & -3L) | 1L);}, which would make
- * {@code (this.stream & 3) == 1} always true.
+ * no significant difference between LinnormRNG and MizuchiRNG in speed (which means it's tied for second place in its
+ * category, behind {@link DiverRNG}). Since at least some streams fail before the 32TB goal, this class will probably
+ * be changed to use a different algorithm, and as such is marked as Beta.
  * <br>
  * This generator is a StatefulRandomness but not a SkippingRandomness, so it can't (efficiently) have the skip() method
  * that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the
@@ -49,6 +43,7 @@ import java.io.Serializable;
  * the generator (LinnormRNG passes over 100TB of HWD, and probably would pass much more if I gave it more days to run).
  * @author Tommy Ettinger
  */
+@Beta
 public final class MizuchiRNG implements StatefulRandomness, Serializable {
 
     private static final long serialVersionUID = 153186732328748834L;

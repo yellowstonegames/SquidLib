@@ -38,7 +38,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
-import squidpony.squidmath.LinnormRNG;
+import squidpony.squidmath.DiverRNG;
 import squidpony.squidmath.NumberTools;
 
 import java.util.concurrent.TimeUnit;
@@ -616,7 +616,7 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
 //        System.out.println("ClimatianoLP     : " + u.measureCosApproxClimatianoLP());
         for (int r = 0; r < 0x1000; r++) {
             //margin += 0.0001;
-            short i = (short) (LinnormRNG.determine(r) & 0xFFFF);
+            short i = (short) (DiverRNG.determine(r) & 0xFFFF);
             u.mathCos = i;
             u.mathSin = i;
             u.cosOld = i;
@@ -679,8 +679,8 @@ java -jar target/benchmarks.jar UncommonBenchmark -wi 5 -i 5 -f 1 -gc true
         double atan2ApproxError = 0, atan2GDXError = 0, atan2AltError = 0, at;
         for(int r = 0; r < 0x10000; r++)
         {
-            short i = (short) (LinnormRNG.determine(r) & 0xFFFF);
-            short j = (short) (LinnormRNG.determine(-0x20000 - r - i) & 0xFFFF);
+            short i = (short) (DiverRNG.determine(r) & 0xFFFF);
+            short j = (short) (DiverRNG.determine(-0x20000 - r - i) & 0xFFFF);
             u.mathAtan2X = i;
             u.mathAtan2Y = j;
             u.atan2ApproxX = i;

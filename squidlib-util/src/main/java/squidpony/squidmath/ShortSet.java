@@ -218,7 +218,7 @@ public class ShortSet implements Serializable{
         int i = 0, pushIterations = this.pushIterations;
         do {
             // Replace the key and value for one of the hashes.
-            switch (LinnormRNG.determineBounded(++rngState, 3)) {
+            switch (DiverRNG.determineBounded(++rngState, 3)) {
                 case 0:
                     evictedKey = key1;
                     keyTable[index1] = insertKey;

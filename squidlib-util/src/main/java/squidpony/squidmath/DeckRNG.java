@@ -490,13 +490,13 @@ public class DeckRNG extends StatefulRNG implements Serializable {
 //            array[i] = LightRNG.determineDouble(lastShuffledState + (i << 1) + 1) * 0.0625 + t;
 //        }
         for (int i = n; i > 1; i--) {
-            final int r = LinnormRNG.determineBounded(lastShuffledState + i, i);
+            final int r = DiverRNG.determineBounded(lastShuffledState + i, i);
             final double t = array[i - 1];
             array[i - 1] = array[r];
             array[r] = t;
         }
         for (int i = 0; i < n; i++) {
-            array[i] += LinnormRNG.determineDouble(lastShuffledState ^ ~i) * 0.0625;
+            array[i] += DiverRNG.determineDouble(lastShuffledState ^ ~i) * 0.0625;
         }
 
     }

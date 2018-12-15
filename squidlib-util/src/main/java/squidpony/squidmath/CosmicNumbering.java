@@ -45,7 +45,7 @@ public class CosmicNumbering implements Serializable {
         seeds = new long[len];
         seeds[0] = seed | 1L;
         for (int i = 1; i < len; i++) {
-            seeds[i] = LinnormRNG.determine(seed + i) | 1L;
+            seeds[i] = DiverRNG.determine(seed + i) | 1L;
         }
         effect = 0x1.81p-62 * Math.pow(1.1875, len);
     }
@@ -67,7 +67,7 @@ public class CosmicNumbering implements Serializable {
             long seed = seeds[0];
             seeds = new long[len];
             for (int i = 1; i < len; i++) {
-                seeds[i] = LinnormRNG.determine(seed + i) | 1L;
+                seeds[i] = DiverRNG.determine(seed + i) | 1L;
             }
             effect = 0x1.81p-62 * Math.pow(1.1875, len);
         }
@@ -191,7 +191,7 @@ public class CosmicNumbering implements Serializable {
     }
 
     /**
-     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by
+     * The same as {@link DiverRNG#determine(long)}, except this assumes state has already been multiplied by
      * 0x632BE59BD9B4E019L.
      * @param state a long that should change in increments of 0x632BE59BD9B4E019L
      * @return a pseudo-random permutation of state

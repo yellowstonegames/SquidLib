@@ -3423,7 +3423,7 @@ public class CrossHash {
      * <br>
      * Its design is similar to Lightning or Wisp, but it doesn't use bitwise rotations and runs what would otherwise be
      * the output through MurmurHash3's finalization step (its {@code fmix64()} function) at the very end. Parts of the
-     * code here are inspired by the design of {@link LinnormRNG}, particularly its determine() method since both use an
+     * code here are inspired by the design of {@link DiverRNG}, particularly its determine() method since both use an
      * XLCG as a processing step.
      */
     @Beta
@@ -4176,7 +4176,7 @@ public class CrossHash {
      * bitwise-rotates one at each step. It combines the states (xorshifting one state, multiplying it by a huge
      * constant, and adding that to the other state) and then runs that through MurmurHash3's finalization function (its
      * {@code fmix64()} function; the main algorithm elides one xorshift at the end that proved unnecessary). Parts of
-     * the code here are inspired by the design of {@link LinnormRNG}, particularly its determine() method since both
+     * the code here are inspired by the design of {@link DiverRNG}, particularly its determine() method since both
      * use an XLCG (XOR Linear Congruential Generator, as PractRand calls it) as a processing step.
      * <br>
      * The name comes from the song I was listening to when I finally got the tests to pass ("Slave The Hive" by High On

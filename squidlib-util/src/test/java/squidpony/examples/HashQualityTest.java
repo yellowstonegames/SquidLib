@@ -719,7 +719,7 @@ public class HashQualityTest {
 //                    for (int i = 0; i < 31; i++) {
 //                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
 //                    }
-                    LinnormRNG rng = new LinnormRNG(1L);
+                    DiverRNG rng = new DiverRNG(1L);
                     SNShuffledIntSequence
                             xShuffle = new SNShuffledIntSequence(WIDTH, 1), 
                             yShuffle = new SNShuffledIntSequence(HEIGHT, -1);
@@ -797,11 +797,11 @@ public class HashQualityTest {
         UnorderedSet<String> strings = new UnorderedSet<>(LIMIT);
         for (int i = 0; i < (LIMIT << 2) && strings.size() < LIMIT; i++) {
             // usually not necessary
-            //strings.add(markovText.chain(LinnormRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 100));
+            //strings.add(markovText.chain(DiverRNG.determine(i * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L), 100));
             // try changing length
-            //strings.add(markovText.chain(LinnormRNG.determine(i + 0x1234567890L), 190));
+            //strings.add(markovText.chain(DiverRNG.determine(i + 0x1234567890L), 190));
             strings.add(String.format("       %16s       ", Integer.toString(i, 5)));
-            //strings.add(FakeLanguageGen.JAPANESE_ROMANIZED.sentence(LinnormRNG.determine(i + 0x12345678), 10, 10));
+            //strings.add(FakeLanguageGen.JAPANESE_ROMANIZED.sentence(DiverRNG.determine(i + 0x12345678), 10, 10));
         }
         int stringHashLength = strings.size();
         IntDoubleOrderedMap colliderJDK = new IntDoubleOrderedMap(stringHashLength, 0.5f),
@@ -814,8 +814,8 @@ public class HashQualityTest {
                 colliderSpl = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderYur = new IntDoubleOrderedMap(stringHashLength, 0.5f),
                 colliderBuz = new IntDoubleOrderedMap(stringHashLength, 0.5f);
-//        LightRNG rng1 = new LightRNG(LinnormRNG.determine(System.nanoTime() * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L));
-//        LinnormRNG rng2 = new LinnormRNG(LightRNG.determine(System.nanoTime() * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L));
+//        LightRNG rng1 = new LightRNG(DiverRNG.determine(System.nanoTime() * 0x9E3779B97F4A7C15L + 0xC6BC279692B5CC83L));
+//        DiverRNG rng2 = new DiverRNG(LightRNG.determine(System.nanoTime() * 0xC6BC279692B5CC83L + 0x9E3779B97F4A7C15L));
 //        final int SIZE = 1024;
 //        int[][] pairs = new int[SIZE][2];
 //        IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[SIZE];

@@ -23,26 +23,26 @@ public class CriticalRNG extends RNG {
     public float luck = 0f;
 
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded LinnormRNG for its RandomnessSource.
+     * Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded DiverRNG for its RandomnessSource.
      */
     public CriticalRNG() {
-        super(new LinnormRNG());
+        super(new DiverRNG());
     }
 
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource.
+     * Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource.
      * @param seed any long
      */
     public CriticalRNG(long seed) {
-        super(new LinnormRNG(seed));
+        super(new DiverRNG(seed));
     }
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
-     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the LinnormRNG).
+     * Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the DiverRNG).
      * @param seedString any String
      */
     public CriticalRNG(CharSequence seedString) {
-        super(new LinnormRNG(CrossHash.hash64(seedString)));
+        super(new DiverRNG(CrossHash.hash64(seedString)));
     }
 
     /**
@@ -54,32 +54,32 @@ public class CriticalRNG extends RNG {
     }
 
     /**
-     * Makes a CriticalRNG with the given luck factor and a randomly-seeded LinnormRNG for its RandomnessSource.
+     * Makes a CriticalRNG with the given luck factor and a randomly-seeded DiverRNG for its RandomnessSource.
      * @param luck typically a small float, often between -0.5f and 0.5f, that will affect the results this returns
      */
     public CriticalRNG(float luck) {
-        super(new LinnormRNG());
+        super(new DiverRNG());
         this.luck = luck;
     }
 
     /**
-     * Makes a CriticalRNG with the given luck factor and a LinnormRNG with the given seed for its RandomnessSource.
+     * Makes a CriticalRNG with the given luck factor and a DiverRNG with the given seed for its RandomnessSource.
      * @param seed any long
      * @param luck typically a small float, often between -0.5f and 0.5f, that will affect the results this returns
      */
     public CriticalRNG(long seed, float luck) {
-        super(new LinnormRNG(seed));
+        super(new DiverRNG(seed));
         this.luck = luck;
     }
 
     /**
-     * Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
-     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the LinnormRNG).
+     * Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+     * will hash seedString using {@link CrossHash#hash64(CharSequence)} and use the result to seed the DiverRNG).
      * @param seedString any String
      * @param luck typically a small float, often between -0.5f and 0.5f, that will affect the results this returns
      */
     public CriticalRNG(CharSequence seedString, float luck) {
-        super(new LinnormRNG(CrossHash.hash64(seedString)));
+        super(new DiverRNG(CrossHash.hash64(seedString)));
         this.luck = luck;
     }
 

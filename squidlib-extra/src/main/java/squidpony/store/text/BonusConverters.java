@@ -56,7 +56,7 @@ public class BonusConverters {
                 return sr;
             }catch (Exception re)
             {
-                return new LinnormRNG(state);
+                return new DiverRNG(state);
             }
         }
     };

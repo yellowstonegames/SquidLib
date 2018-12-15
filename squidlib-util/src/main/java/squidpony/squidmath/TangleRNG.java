@@ -12,7 +12,7 @@ import java.io.Serializable;
  * close to ThrustAltRNG in JMH benchmarks, making it arguably the fastest random number generator algorithm here that
  * can produce all long values (it just needs multiple generator objects to do so, all seeded differently). If you
  * expect to have many individual RandomnessSources all seeded differently, this should be a good pick; if you only have
- * one RandomnessSource in use, you should prefer {@link LinnormRNG} if you don't mind that it can't produce duplicates,
+ * one RandomnessSource in use, you should prefer {@link DiverRNG} if you don't mind that it can't produce duplicates,
  * {@link OrbitRNG} if you want something similar to this generator that allows all state pairs, or {@link GWTRNG} if
  * you expect to use GWT to target HTML.
  * <br>

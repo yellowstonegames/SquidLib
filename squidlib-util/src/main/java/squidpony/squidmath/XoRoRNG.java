@@ -16,14 +16,14 @@ import java.io.Serializable;
  * Testing shows it is within 5% the speed of LightRNG, sometimes faster and sometimes slower, and has a larger period.
  * It's called XoRo because it involves Xor as well as Rotate operations on the 128-bit pseudo-random state. Note that
  * xoroshiro128+ fails some statistical quality tests systematically, and fails others often; if this could be a concern
- * for you, {@link LinnormRNG}, which is the default for {@link RNG}, will be faster and won't fail (those) tests, and
+ * for you, {@link DiverRNG}, which is the default for {@link RNG}, will be faster and won't fail tests, and
  * though its period is shorter, it would still take years to exhaust on one core generating only random numbers.
  * <br>
  * {@link LightRNG} is also very fast, but relative to XoRoRNG it has a significantly shorter period (the amount of
  * random numbers it will go through before repeating), at {@code pow(2, 64)} as opposed to XorRNG and XoRoRNG's
  * {@code pow(2, 128) - 1}, but LightRNG also allows the current RNG state to be retrieved and altered with
- * {@code getState()} and {@code setState()}. For most cases, you should decide between LinnormRNG, LightRNG, XoRoRNG,
- * and other RandomnessSource implementations based on your needs for period length and state manipulation (LinnormRNG
+ * {@code getState()} and {@code setState()}. For most cases, you should decide between DiverRNG, LightRNG, XoRoRNG,
+ * and other RandomnessSource implementations based on your needs for period length and state manipulation (DiverRNG
  * is also used internally by almost all StatefulRNG objects). You might want significantly less predictable random
  * results, which {@link IsaacRNG} can provide, along with a large period. You may want a very long period of random
  * numbers, which  would suggest {@link LongPeriodRNG} as a good choice or {@link MersenneTwister} as a potential
