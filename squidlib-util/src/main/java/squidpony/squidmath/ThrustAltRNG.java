@@ -11,12 +11,12 @@ import java.io.Serializable;
  * "testunif" checks, this does very well on 100GB of tested data, with the "Overall summary one sided P-value P =
  * 0.981", where 1 is perfect and 0.1 or less is a failure. On <a href="http://pracrand.sourceforge.net/">PractRand</a>,
  * this passes all 32TB of generated numbers without finding any failures (and very rarely finding anomalies). Like
- * {@link LightRNG}, this changes its state with a steady fixed increment, and does cipher-like adjustments to the
- * current state to randomize it (the change is not a true cipher because it is not reversible; this may be an advantage
+ * {@link LightRNG}, this changes its state with a steady fixed increment, and does hash-like adjustments to the
+ * current state to randomize it (the change is not a cipher because it is not reversible; this may be an advantage
  * for some usage). The period on ThrustAltRNG is 2 to the 64. ThrustAltRNG is very strong on speed, outpacing the
- * default generator for {@link RNG}, {@link LinnormRNG}, by a small margin, and most other RandomnessSources in
- * SquidLib by a larger margin (it is slower than {@link JabRNG}, but JabRNG fails some statistical tests). Similarly to
- * other cipher-like PRNGs, ThrustAltRNG has a {@link #determine(long)} method that takes a state as a long and returns
+ * default generator for {@link RNG}, {@link DiverRNG}, by a small margin, and most other RandomnessSources in
+ * SquidLib by a larger margin (it is slower than {@link MiniMover64RNG}, but this has a better period). Similarly to
+ * other hash-like PRNGs, ThrustAltRNG has a {@link #determine(long)} method that takes a state as a long and returns
  * a deterministic random number (each input has one output, though in this case the reverse isn't true and some outputs
  * will be returned by multiple inputs). Like LightRNG, but unlike an LCG such as {@link java.util.Random}, changing the
  * seed even slightly generally produces completely different results, which applies primarily to determine() but also
@@ -25,9 +25,9 @@ import java.io.Serializable;
  * <br>
  * Because this generator can't produce all longs (it is not equidistributed), that alone is enough to discount its use
  * in some (mainly scientific) scenarios, although it passes all major testing suites (TestU01's BigCrush, PractRand
- * over the full 32TB of tests, and gjrand to some degree, at least better than most). LinnormRNG is the default
- * generator after ThrustAltRNG was used extensively for some time, since LinnormRNG passes the same tests (not quite as
- * well on gjrand, notably), is almost as fast, and is known to produce all longs over the course of its period.
+ * over the full 32TB of tests, and gjrand to some degree, at least better than most). DiverRNG is the default
+ * generator after ThrustAltRNG was used extensively for some time, since DiverRNG passes the same tests, is almost as
+ * fast, and is known to produce all longs over the course of its period.
  * <br>
  * There was a ThrustRNG in SquidLib, but it failed statistical tests badly in roughly a minute of testing, so even
  * though it was faster it probably wasn't a good idea to use it. ThrustAltRNG modifies ThrustRNG's algorithm very

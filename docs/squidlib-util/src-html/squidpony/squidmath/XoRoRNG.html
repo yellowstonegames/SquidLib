@@ -24,14 +24,14 @@
 <span class="sourceLineNo">016</span> * Testing shows it is within 5% the speed of LightRNG, sometimes faster and sometimes slower, and has a larger period.<a name="line.16"></a>
 <span class="sourceLineNo">017</span> * It's called XoRo because it involves Xor as well as Rotate operations on the 128-bit pseudo-random state. Note that<a name="line.17"></a>
 <span class="sourceLineNo">018</span> * xoroshiro128+ fails some statistical quality tests systematically, and fails others often; if this could be a concern<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * for you, {@link LinnormRNG}, which is the default for {@link RNG}, will be faster and won't fail (those) tests, and<a name="line.19"></a>
+<span class="sourceLineNo">019</span> * for you, {@link DiverRNG}, which is the default for {@link RNG}, will be faster and won't fail tests, and<a name="line.19"></a>
 <span class="sourceLineNo">020</span> * though its period is shorter, it would still take years to exhaust on one core generating only random numbers.<a name="line.20"></a>
 <span class="sourceLineNo">021</span> * &lt;br&gt;<a name="line.21"></a>
 <span class="sourceLineNo">022</span> * {@link LightRNG} is also very fast, but relative to XoRoRNG it has a significantly shorter period (the amount of<a name="line.22"></a>
 <span class="sourceLineNo">023</span> * random numbers it will go through before repeating), at {@code pow(2, 64)} as opposed to XorRNG and XoRoRNG's<a name="line.23"></a>
 <span class="sourceLineNo">024</span> * {@code pow(2, 128) - 1}, but LightRNG also allows the current RNG state to be retrieved and altered with<a name="line.24"></a>
-<span class="sourceLineNo">025</span> * {@code getState()} and {@code setState()}. For most cases, you should decide between LinnormRNG, LightRNG, XoRoRNG,<a name="line.25"></a>
-<span class="sourceLineNo">026</span> * and other RandomnessSource implementations based on your needs for period length and state manipulation (LinnormRNG<a name="line.26"></a>
+<span class="sourceLineNo">025</span> * {@code getState()} and {@code setState()}. For most cases, you should decide between DiverRNG, LightRNG, XoRoRNG,<a name="line.25"></a>
+<span class="sourceLineNo">026</span> * and other RandomnessSource implementations based on your needs for period length and state manipulation (DiverRNG<a name="line.26"></a>
 <span class="sourceLineNo">027</span> * is also used internally by almost all StatefulRNG objects). You might want significantly less predictable random<a name="line.27"></a>
 <span class="sourceLineNo">028</span> * results, which {@link IsaacRNG} can provide, along with a large period. You may want a very long period of random<a name="line.28"></a>
 <span class="sourceLineNo">029</span> * numbers, which  would suggest {@link LongPeriodRNG} as a good choice or {@link MersenneTwister} as a potential<a name="line.29"></a>

@@ -120,14 +120,14 @@ implements <a href="../../squidpony/squidmath/RandomnessSource.html" title="inte
  Testing shows it is within 5% the speed of LightRNG, sometimes faster and sometimes slower, and has a larger period.
  It's called XoRo because it involves Xor as well as Rotate operations on the 128-bit pseudo-random state. Note that
  xoroshiro128+ fails some statistical quality tests systematically, and fails others often; if this could be a concern
- for you, <a href="../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a>, which is the default for <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a>, will be faster and won't fail (those) tests, and
+ for you, <a href="../../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath"><code>DiverRNG</code></a>, which is the default for <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath"><code>RNG</code></a>, will be faster and won't fail tests, and
  though its period is shorter, it would still take years to exhaust on one core generating only random numbers.
  <br>
  <a href="../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath"><code>LightRNG</code></a> is also very fast, but relative to XoRoRNG it has a significantly shorter period (the amount of
  random numbers it will go through before repeating), at <code>pow(2, 64)</code> as opposed to XorRNG and XoRoRNG's
  <code>pow(2, 128) - 1</code>, but LightRNG also allows the current RNG state to be retrieved and altered with
- <code>getState()</code> and <code>setState()</code>. For most cases, you should decide between LinnormRNG, LightRNG, XoRoRNG,
- and other RandomnessSource implementations based on your needs for period length and state manipulation (LinnormRNG
+ <code>getState()</code> and <code>setState()</code>. For most cases, you should decide between DiverRNG, LightRNG, XoRoRNG,
+ and other RandomnessSource implementations based on your needs for period length and state manipulation (DiverRNG
  is also used internally by almost all StatefulRNG objects). You might want significantly less predictable random
  results, which <a href="../../squidpony/squidmath/IsaacRNG.html" title="class in squidpony.squidmath"><code>IsaacRNG</code></a> can provide, along with a large period. You may want a very long period of random
  numbers, which  would suggest <a href="../../squidpony/squidmath/LongPeriodRNG.html" title="class in squidpony.squidmath"><code>LongPeriodRNG</code></a> as a good choice or <a href="../../squidpony/squidmath/MersenneTwister.html" title="class in squidpony.squidmath"><code>MersenneTwister</code></a> as a potential

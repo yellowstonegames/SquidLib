@@ -626,9 +626,9 @@ implements <a href="../../squidpony/squidmath/Noise.Noise2D.html" title="interfa
                                      int&nbsp;height,
                                      long&nbsp;seed)</pre>
 <div class="block">Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.
- Does allow taking a seed because internally it uses a LinnormRNG to quickly generate initial white noise before
+ Does allow taking a seed because internally it uses a DiverRNG to quickly generate initial white noise before
  processing it into more continuous noise. This generates a lot of random numbers (at least 1 + 14 * height, or
- more if width is greater than 64), so LinnormRNG's high speed and fairly good period are both assets here.
+ more if width is greater than 64), so DiverRNG's high speed and fairly good period are both assets here.
  <br>
  The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is
  impossible for this to generate, it should be fine to use values from this as denominators in division.</div>

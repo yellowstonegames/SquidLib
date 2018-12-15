@@ -74,6 +74,8 @@
 </a>
 <h2 class="title">C</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SquidID.html#c">c</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SquidID.html" title="class in squidpony.squidmath">SquidID</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/Tile.html#c_constraint">c_constraint</a></span> - Variable in class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/Tile.html" title="class in squidpony.squidgrid.mapping.styled">Tile</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html#ca">ca</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/FlowingCaveGenerator.html" title="class in squidpony.squidgrid.mapping">FlowingCaveGenerator</a></dt>
@@ -1467,6 +1469,11 @@
 <div class="block">Creates a copy of this DharmaRNG; it will generate the same random numbers, given the same calls in order, as
  this DharmaRNG at the point copy() is called.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#copy--">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/EditRNG.html#copy--">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/EditRNG.html" title="class in squidpony.squidmath">EditRNG</a></dt>
 <dd>
 <div class="block">Creates a copy of this StatefulRNG; it will generate the same random numbers, given the same calls in order, as
@@ -1650,6 +1657,11 @@
  copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/XorRNG.html#copy--">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XorRNG.html" title="class in squidpony.squidmath">XorRNG</a></dt>
+<dd>
+<div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
+ copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html#copy--">copy()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/XoshiroStarPhi32RNG.html" title="class in squidpony.squidmath">XoshiroStarPhi32RNG</a></dt>
 <dd>
 <div class="block">Produces a copy of this RandomnessSource that, if next() and/or nextLong() are called on this object and the
  copy, both will generate the same sequence of random numbers from the point copy() was called.</div>
@@ -1905,16 +1917,16 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG--">CriticalRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded LinnormRNG for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded DiverRNG for its RandomnessSource.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG-long-">CriticalRNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG-java.lang.CharSequence-">CriticalRNG(CharSequence)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
- will hash seedString using <a href="../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the LinnormRNG).</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+ will hash seedString using <a href="../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the DiverRNG).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG-squidpony.squidmath.RandomnessSource-">CriticalRNG(RandomnessSource)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>
@@ -1922,16 +1934,16 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG-float-">CriticalRNG(float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>
-<div class="block">Makes a CriticalRNG with the given luck factor and a randomly-seeded LinnormRNG for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with the given luck factor and a randomly-seeded DiverRNG for its RandomnessSource.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG-long-float-">CriticalRNG(long, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>
-<div class="block">Makes a CriticalRNG with the given luck factor and a LinnormRNG with the given seed for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with the given luck factor and a DiverRNG with the given seed for its RandomnessSource.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG-java.lang.CharSequence-float-">CriticalRNG(CharSequence, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
- will hash seedString using <a href="../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the LinnormRNG).</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+ will hash seedString using <a href="../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the DiverRNG).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#CriticalRNG-squidpony.squidmath.RandomnessSource-float-">CriticalRNG(RandomnessSource, float)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
 <dd>

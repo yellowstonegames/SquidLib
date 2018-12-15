@@ -186,13 +186,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-java.lang.CharSequence-">StatefulRNG</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</code>
-<div class="block">String-seeded constructor uses the hash of the String as a seed for LinnormRNG, which is of high quality, but
+<div class="block">String-seeded constructor uses the hash of the String as a seed for DiverRNG, which is of high quality, but
  low period (which rarely matters for games), and has good speed and tiny state size.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/StatefulRNG.html#StatefulRNG-long-">StatefulRNG</a></span>(long&nbsp;seed)</code>
-<div class="block">Seeded constructor uses LinnormRNG, which is of high quality, but low period (which rarely matters for games),
+<div class="block">Seeded constructor uses DiverRNG, which is of high quality, but low period (which rarely matters for games),
  and has good speed and tiny state size.</div>
 </td>
 </tr>
@@ -309,7 +309,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <li class="blockList">
 <h4>StatefulRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.27">StatefulRNG</a>(long&nbsp;seed)</pre>
-<div class="block">Seeded constructor uses LinnormRNG, which is of high quality, but low period (which rarely matters for games),
+<div class="block">Seeded constructor uses DiverRNG, which is of high quality, but low period (which rarely matters for games),
  and has good speed and tiny state size.</div>
 </li>
 </ul>
@@ -320,7 +320,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <li class="blockList">
 <h4>StatefulRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/StatefulRNG.html#line.43">StatefulRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</pre>
-<div class="block">String-seeded constructor uses the hash of the String as a seed for LinnormRNG, which is of high quality, but
+<div class="block">String-seeded constructor uses the hash of the String as a seed for DiverRNG, which is of high quality, but
  low period (which rarely matters for games), and has good speed and tiny state size.
 
  Note: This constructor changed behavior on April 22, 2017, again on December 23, 2017, and again on June 14,
@@ -330,7 +330,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
  <code>new StatefulRNG(text)</code> with <code>new StatefulRNG(new LightRNG(CrossHash.hash(text)))</code>. The new technique
  assigns to all 64 bits and has less correlation between similar inputs causing similar starting states. It's also
  faster, but that shouldn't matter in a constructor. It uses a better hashing algorithm because CrossHash no
- longer has the older, worse one. The latest change in June switched to LinnormRNG instead of LightRNG.</div>
+ longer has the older, worse one. The latest change in June switched to DiverRNG instead of LightRNG.</div>
 </li>
 </ul>
 </li>

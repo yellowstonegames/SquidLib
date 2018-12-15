@@ -357,7 +357,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001, 0.0625, 2.5);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, octaveCounter * 0.001);
         world.generate(0.95 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.15,
-                LinnormRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.2 + 1.0, seed);
+                DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.2 + 1.0, seed);
         dbm.makeBiomes(world);
         ttg = System.currentTimeMillis() - startTime;
     }

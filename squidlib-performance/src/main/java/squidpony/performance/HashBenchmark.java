@@ -256,14 +256,14 @@ public class HashBenchmark {
         public void setup() {
             FakeLanguageGen[] languages = new FakeLanguageGen[16];
             for (int i = 0; i < 16; i++) {
-                languages[i] = FakeLanguageGen.randomLanguage(LinnormRNG.determine(i)).addAccents(0.8, 0.6);
+                languages[i] = FakeLanguageGen.randomLanguage(DiverRNG.determine(i)).addAccents(0.8, 0.6);
             }
             RNG random = new RNG(1000L);
             words = new String[4096];
             chars = new char[4096][];
             longs = new long[4096][];
             for (int i = 0; i < 65536; i++) {
-                intInputs[i] = (int)(longInputs[i] = LinnormRNG.determine(i));
+                intInputs[i] = (int)(longInputs[i] = DiverRNG.determine(i));
             }
             for (int i = 0; i < 4096; i++) {
                 chars[i] = (words[i] = languages[i & 15].word(random, random.nextBoolean(), random.next(3)+1)).toCharArray();

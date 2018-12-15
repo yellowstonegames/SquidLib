@@ -140,7 +140,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  bitwise-rotates one at each step. It combines the states (xorshifting one state, multiplying it by a huge
  constant, and adding that to the other state) and then runs that through MurmurHash3's finalization function (its
  <code>fmix64()</code> function; the main algorithm elides one xorshift at the end that proved unnecessary). Parts of
- the code here are inspired by the design of <a href="../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a>, particularly its determine() method since both
+ the code here are inspired by the design of <a href="../../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath"><code>DiverRNG</code></a>, particularly its determine() method since both
  use an XLCG (XOR Linear Congruential Generator, as PractRand calls it) as a processing step.
  <br>
  The name comes from the song I was listening to when I finally got the tests to pass ("Slave The Hive" by High On

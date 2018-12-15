@@ -28,52 +28,63 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * worse performance on 64-bit PCs and mobile devices, but should also have better
  * performance on 32-bit PCs and mobile devices.
  * <br>
- * But if you do want advice on what RandomnessSource to use... {@link LinnormRNG}
- * is the default, and is the fastest generator that passes stringent tests, but
- * relative to many of the others it has a significantly shorter period (the
- * amount of random  numbers it will go through before repeating the sequence),
- * at {@code pow(2, 64)} as opposed to {@link XoRoRNG}'s {@code pow(2, 128) - 1},
- * or {@link LongPeriodRNG}'s {@code pow(2, 1024) - 1}. {@link LightRNG} is a solid
- * choice and the former default RandomnessSource; additional features of LightRNG
- * are exposed in {@link MoonwalkRNG} and using MoonwalkRNG is recommended if you
- * need unusual features like skipping backwards in a random number sequence, taking
- * a result of a nextLong() call and reversing it to get the state that produced it,
- * or calculating the distance in number of nextLong() calls between two results of
- * nextLong() calls. LightRNG is a StatefulRandomness, which lets it be used in
- * {@link StatefulRNG}, and so is LinnormRNG, but LightRNG is also a
- * {@link SkippingRandomness}, which means you can leap forward or backwards in
- * its sequence very efficiently (LinnormRNG is not a SkippingRandomness).
- * {@link ThrustAltRNG} provides similar qualities to LightRNG,
- * and can be faster, but can't produce all possible 64-bit values (possibly some 32-bit
- * values as well); it was the default at one point so you may want to keep compatibility
- * with some versions by specifying ThrustAltRNG (before and after ThrustAltRNG was the
- * default, LightRNG was used). For most cases, you should decide between
- * LinnormRNG, ThrustAltRNG, LightRNG, LongPeriodRNG, and XoRoRNG based on your priorities.
- * LinnormRNG is the best if you want high speed, very good quality of randomness, and
- * expect to either generate less than 18446744073709551616 numbers or don't care if
- * patterns appear after you generate that many numbers. LightRNG is the second-best at
- * the above criteria, but is the best option if you need an RNG that can skip backwards
- * or jump forwards without incurring speed penalties. LongPeriodRNG is best if you for some
- * reason need a massive amount of random numbers (as in, ten quintillion would be far too
- * little) or want to split up such a large generator into unrelated subsequences. XoRoRNG
- * is best if you want good speed and quality but need to generate more than
- * 18446744073709551616 numbers, though less than 340282366920938463463374607431768211456
- * numbers. ThrustAltRNG is faster than LinnormRNG usually, but its inability to generate
- * some outputs may make it a poor choice for some usage (it also has some bias toward
- * specific numbers and produces them more frequently, but not frequently enough to make it
- * fail statistical tests). {@link JabRNG} and {@link LapRNG} are competitors in the
- * no-quality-guarantees department; JabRNG is slightly slower than LapRNG but faster than
- * ThrustAltRNG, actually can pass a fair amount of quality tests, and can't produce a
- * majority of all possible 64-bit values. Its period is half that of ThrustAltRNG and
- * LightRNG, at 2 to the 63. LapRNG doesn't pass any tests, really, but it can fool a human
- * observer; its period is probably 2 to the 65 and it's incredibly fast but offers no
- * special features.
+ * But if you do want advice on what RandomnessSource to use... {@link DiverRNG}
+ * is the default, and is the fastest generator that passes most tests and can
+ * produce all 64-bit values, and though relative to many of the others it has a
+ * significantly shorter period (the amount of random numbers it will go through
+ * before repeating the sequence), this almost never matters in games, and is
+ * primarily relevant for massively-parallel scientific programs. DiverRNG has a
+ * period of {@code pow(2, 64)} as opposed to {@link XoRoRNG}'s
+ * {@code pow(2, 128) - 1}, or {@link LongPeriodRNG}'s {@code pow(2, 1024) - 1}.
+ * {@link LightRNG} is a solid choice and a former default RandomnessSource;
+ * additional features of LightRNG are exposed in {@link MoonwalkRNG} and using
+ * MoonwalkRNG is recommended if you need unusual features like skipping backwards
+ * in a random number sequence, taking a result of a nextLong() call and reversing
+ * it to get the state that produced it, or calculating the distance in number of
+ * nextLong() calls between two results of nextLong() calls. LightRNG is a
+ * StatefulRandomness, which lets it be used in {@link StatefulRNG}, and so is
+ * DiverRNG, but LightRNG is also a {@link SkippingRandomness}, which means you can
+ * leap forward or backwards in its sequence very efficiently (DiverRNG is not a
+ * SkippingRandomness). {@link ThrustAltRNG} provides similar qualities to LightRNG,
+ * and is one of the fastest generators here, but can't produce all possible 64-bit
+ * values (possibly some 32-bit values as well); it was the default at one point so
+ * you may want to keep compatibility with some versions by specifying ThrustAltRNG.
+ * The defaults have changed in the past as issues are found in various generators;
+ * LightRNG has high quality all-around but is slower than the other defaults,
+ * ThrustAltRNG can't produce all results, LinnormRNG passed tests in an earlier
+ * version of the PractRand test suite but now fails in the current version, and now
+ * the default is DiverRNG, which shares the known issue of LightRNG and LinnormRNG
+ * that it can't produce the same result twice from {@link #nextLong()} until the
+ * generator exhausts its period and repeats its output from the beginning.
+ * For most cases, you should decide between DiverRNG, ThrustAltRNG, LightRNG,
+ * LongPeriodRNG, MiniMover64RNG, and XoshiroStarPhi32RNG based on your priorities.
+ * Some tasks are better solved by using a different class, usually {@link GWTRNG},
+ * which can always be serialized on GWT to save its state easily and is usually the
+ * fastest substitute for RNG on that platform. DiverRNG is the best if you want high
+ * speed, very good quality of randomness, and expect to generate a reasonable quantity
+ * of numbers for a game (less than 18446744073709551616 numbers) without any single
+ * results being impossible. LightRNG is the second-best at the above criteria, but is
+ * the best option if you need an RNG that can skip backwards or jump forwards without
+ * incurring speed penalties. LongPeriodRNG is best if you for some reason need a massive
+ * amount of random numbers (as in, ten quintillion would be far too little) or want to
+ * split up such a large generator into unrelated subsequences. XoshiroStarPhi32RNG is
+ * best if GWT is a possible target but you either need to generate more than
+ * 18446744073709551616 numbers (but less than 340282366920938463463374607431768211455
+ * numbers) or you need to ensure that each 128-bit chunk of output is unique; if GWT is
+ * a target but those specific needs don't matter, use GWTRNG. ThrustAltRNG and
+ * MiniMover64RNG are both faster than DiverRNG usually (MiniMover64RNG is the fastest),
+ * but because they are unable to generate some outputs, that may make them a poor choice
+ * for some usage (ThrustAltRNG also has some bias toward specific numbers and produces
+ * them more frequently, but not frequently enough to make it fail statistical tests, and
+ * ThrustAltRNG can skip around in its output sequence like LightRNG). {@link JabRNG} is
+ * a mediocre choice for quality but is tied for the fastest with MiniMover64RNG.
  * <br>
  * There are many more RandomnessSource implementations! You might want significantly less
  * predictable random results, which  {@link IsaacRNG} can provide, along with a
  * large period. The quality of {@link PermutedRNG} is also good, usually, and it
  * has a sound basis in PCG-Random, an involved library with many variants on its
  * RNGs.
+ * <br>
  * There may be reasons why you would want a random number generator that uses 32-bit
  * math instead of the more common 64-bit math, but using a 32-bit int on desktop and
  * Android won't act the same as that same 32-bit int on GWT. Since GWT is stuck with
@@ -106,7 +117,7 @@ public class RNG implements Serializable, IRNG {
 
 
     /**
-     * Default constructor; uses {@link LinnormRNG}, which is of high quality, but low period (which rarely matters
+     * Default constructor; uses {@link DiverRNG}, which is of high quality, but low period (which rarely matters
      * for games), and has excellent speed, tiny state size, and natively generates 64-bit numbers.
      * <br>
      * Previous versions of SquidLib used different implementations, including {@link LightRNG}, {@link ThrustAltRNG},
@@ -114,39 +125,39 @@ public class RNG implements Serializable, IRNG {
      * to {@link #RNG(RandomnessSource)}, which may be the best way to ensure the same results across versions.
      */
     public RNG() {
-        this(new LinnormRNG());
+        this(new DiverRNG());
     }
 
     /**
-     * Default constructor; uses {@link LinnormRNG}, which is of high quality, but low period (which rarely matters
+     * Default constructor; uses {@link DiverRNG}, which is of high quality, but low period (which rarely matters
      * for games), and has excellent speed, tiny state size, and natively generates 64-bit numbers. The seed can be
      * any long, including 0.
      * @param seed any long
      */
     public RNG(long seed) {
-        this(new LinnormRNG(seed));
+        this(new DiverRNG(seed));
     }
 
     /**
      * String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode,
-     * instead using {@link CrossHash#hash64(CharSequence)}) as a seed for {@link LinnormRNG}, which is of high quality,
+     * instead using {@link CrossHash#hash64(CharSequence)}) as a seed for {@link DiverRNG}, which is of high quality,
      * but low period (which rarely matters for games), and has excellent speed, tiny state size, and natively generates
      * 64-bit numbers.
      */
     public RNG(CharSequence seedString) {
-        this(new LinnormRNG(CrossHash.hash64(seedString)));
+        this(new DiverRNG(CrossHash.hash64(seedString)));
     }
 
     /**
      * Uses the provided source of randomness for all calculations. This constructor should be used if an alternate
-     * RandomnessSource other than LinnormRNG is desirable, such as to keep compatibility with earlier SquidLib
+     * RandomnessSource other than DiverRNG is desirable, such as to keep compatibility with earlier SquidLib
      * versions that defaulted to LightRNG or ThrustAltRNG.
      * <br>
      * If the parameter is null, this is equivalent to using {@link #RNG()} as the constructor.
      * @param random the source of pseudo-randomness, such as a LightRNG or LongPeriodRNG object
      */
     public RNG(RandomnessSource random) {
-        this.random = (random == null) ? new LinnormRNG() : random;
+        this.random = (random == null) ? new DiverRNG() : random;
     }
 
     /**
@@ -161,10 +172,10 @@ public class RNG implements Serializable, IRNG {
 
         /**
          * Creates a new random number generator. This constructor uses
-         * a LinnormRNG with a random seed.
+         * a DiverRNG with a random seed.
          */
         public CustomRandom() {
-            randomnessSource = new LinnormRNG();
+            randomnessSource = new DiverRNG();
         }
 
         /**
@@ -816,7 +827,7 @@ public class RNG implements Serializable, IRNG {
     /**
      * Get a random bit of state, interpreted as true or false with approximately equal likelihood.
      * This may have better behavior than {@code rng.next(1)}, depending on the RandomnessSource implementation; the
-     * default LinnormRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
+     * default DiverRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
      * the  normally-high-quality XoRoRNG will produce very predictable output with {@code rng.next(1)} and very good
      * output with {@code rng.nextBoolean()}. This is a known and considered flaw of Xoroshiro128+, the algorithm used
      * by XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-

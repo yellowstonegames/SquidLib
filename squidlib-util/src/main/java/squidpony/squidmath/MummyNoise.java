@@ -319,16 +319,16 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     }
 
     public MummyNoise(final int seed) {
-        seedX = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seed + 0xC6BC279692B5CC83L);
-        seedY = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedX ^ 0xC7BC279692B5CB83L);
-        seedZ = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedY ^ 0xC8BC279692B5CA83L);
-        seedW = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedZ ^ 0xC9BC279692B5C983L);
-        seedU = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedW ^ 0xCABC279692B5C883L);
-        seedV = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedU ^ 0xCBBC279692B5C783L);
+        seedX = 0x9E3779B97F4A7C15L * DiverRNG.determine(seed + 0xC6BC279692B5CC83L);
+        seedY = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedX ^ 0xC7BC279692B5CB83L);
+        seedZ = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedY ^ 0xC8BC279692B5CA83L);
+        seedW = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedZ ^ 0xC9BC279692B5C983L);
+        seedU = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedW ^ 0xCABC279692B5C883L);
+        seedV = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedU ^ 0xCBBC279692B5C783L);
     }
 
     /**
-     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by
+     * The same as {@link DiverRNG#determine(long)}, except this assumes state has already been multiplied by
      * 0x632BE59BD9B4E019L.
      * @param state a long that should change in increments of 0x632BE59BD9B4E019L
      * @return a pseudo-random permutation of state
@@ -494,7 +494,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
 //    @Override
 //    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {
 //        final long
-//                rs = LinnormRNG.determine(seed ^ ~seed << 32),
+//                rs = DiverRNG.determine(seed ^ ~seed << 32),
 //                rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
 //                ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
 //                rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L);
@@ -534,7 +534,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {
         final long
-                rs = LinnormRNG.determine(seed ^ ~seed << 32),
+                rs = DiverRNG.determine(seed ^ ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L),
@@ -591,7 +591,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
     @Override
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {
         final long
-                rs = LinnormRNG.determine(seed ^ ~seed << 32),
+                rs = DiverRNG.determine(seed ^ ~seed << 32),
                 rx = 0x9E3779B97F4A7C15L * (rs >>> 23 ^ rs << 23) * (rs | 1L),
                 ry = 0x9E3779B97F4A7C15L * (rx >>> 23 ^ rx << 23) * (rx | 1L),
                 rz = 0x9E3779B97F4A7C15L * (ry >>> 23 ^ ry << 23) * (ry | 1L),
@@ -740,7 +740,7 @@ public class MummyNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, 
         if(scratch == null || scratch.length < upper)
             scratch = new double[upper];
         for (int i = 0; i < len; i++) {
-            seed = LinnormRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed << 32);
+            seed = DiverRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed << 32);
             scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(coordinates[i])) * seed) + seed;
         }
         long working;

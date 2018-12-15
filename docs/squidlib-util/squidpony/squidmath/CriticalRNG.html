@@ -198,36 +198,36 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#CriticalRNG--">CriticalRNG</a></span>()</code>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded LinnormRNG for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded DiverRNG for its RandomnessSource.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#CriticalRNG-java.lang.CharSequence-">CriticalRNG</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</code>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
- will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the LinnormRNG).</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+ will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the DiverRNG).</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#CriticalRNG-java.lang.CharSequence-float-">CriticalRNG</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString,
            float&nbsp;luck)</code>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
- will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the LinnormRNG).</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+ will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the DiverRNG).</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#CriticalRNG-float-">CriticalRNG</a></span>(float&nbsp;luck)</code>
-<div class="block">Makes a CriticalRNG with the given luck factor and a randomly-seeded LinnormRNG for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with the given luck factor and a randomly-seeded DiverRNG for its RandomnessSource.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#CriticalRNG-long-">CriticalRNG</a></span>(long&nbsp;seed)</code>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#CriticalRNG-long-float-">CriticalRNG</a></span>(long&nbsp;seed,
            float&nbsp;luck)</code>
-<div class="block">Makes a CriticalRNG with the given luck factor and a LinnormRNG with the given seed for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with the given luck factor and a DiverRNG with the given seed for its RandomnessSource.</div>
 </td>
 </tr>
 <tr class="altColor">
@@ -400,7 +400,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <li class="blockList">
 <h4>CriticalRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.28">CriticalRNG</a>()</pre>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded LinnormRNG for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a randomly-seeded DiverRNG for its RandomnessSource.</div>
 </li>
 </ul>
 <a name="CriticalRNG-long-">
@@ -410,7 +410,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <li class="blockList">
 <h4>CriticalRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.36">CriticalRNG</a>(long&nbsp;seed)</pre>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - any long</dd>
@@ -424,8 +424,8 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <li class="blockList">
 <h4>CriticalRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.44">CriticalRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</pre>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
- will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the LinnormRNG).</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+ will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the DiverRNG).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seedString</code> - any String</dd>
@@ -453,7 +453,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <li class="blockList">
 <h4>CriticalRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.60">CriticalRNG</a>(float&nbsp;luck)</pre>
-<div class="block">Makes a CriticalRNG with the given luck factor and a randomly-seeded LinnormRNG for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with the given luck factor and a randomly-seeded DiverRNG for its RandomnessSource.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>luck</code> - typically a small float, often between -0.5f and 0.5f, that will affect the results this returns</dd>
@@ -468,7 +468,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <h4>CriticalRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.70">CriticalRNG</a>(long&nbsp;seed,
                    float&nbsp;luck)</pre>
-<div class="block">Makes a CriticalRNG with the given luck factor and a LinnormRNG with the given seed for its RandomnessSource.</div>
+<div class="block">Makes a CriticalRNG with the given luck factor and a DiverRNG with the given seed for its RandomnessSource.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seed</code> - any long</dd>
@@ -484,8 +484,8 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <h4>CriticalRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.81">CriticalRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString,
                    float&nbsp;luck)</pre>
-<div class="block">Makes a CriticalRNG with a luck factor of 0 and a LinnormRNG with the given seed for its RandomnessSource (this
- will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the LinnormRNG).</div>
+<div class="block">Makes a CriticalRNG with a luck factor of 0 and a DiverRNG with the given seed for its RandomnessSource (this
+ will hash seedString using <a href="../../squidpony/squidmath/CrossHash.html#hash64-java.lang.CharSequence-"><code>CrossHash.hash64(CharSequence)</code></a> and use the result to seed the DiverRNG).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>seedString</code> - any String</dd>
@@ -590,7 +590,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/RNG.html#nextBoolean--">RNG</a></code></span></div>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
  This may have better behavior than <code>rng.next(1)</code>, depending on the RandomnessSource implementation; the
- default LinnormRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
+ default DiverRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
  the  normally-high-quality XoRoRNG will produce very predictable output with <code>rng.next(1)</code> and very good
  output with <code>rng.nextBoolean()</code>. This is a known and considered flaw of Xoroshiro128+, the algorithm used
  by XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-

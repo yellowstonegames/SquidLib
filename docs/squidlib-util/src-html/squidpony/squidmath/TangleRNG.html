@@ -20,7 +20,7 @@
 <span class="sourceLineNo">012</span> * close to ThrustAltRNG in JMH benchmarks, making it arguably the fastest random number generator algorithm here that<a name="line.12"></a>
 <span class="sourceLineNo">013</span> * can produce all long values (it just needs multiple generator objects to do so, all seeded differently). If you<a name="line.13"></a>
 <span class="sourceLineNo">014</span> * expect to have many individual RandomnessSources all seeded differently, this should be a good pick; if you only have<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * one RandomnessSource in use, you should prefer {@link LinnormRNG} if you don't mind that it can't produce duplicates,<a name="line.15"></a>
+<span class="sourceLineNo">015</span> * one RandomnessSource in use, you should prefer {@link DiverRNG} if you don't mind that it can't produce duplicates,<a name="line.15"></a>
 <span class="sourceLineNo">016</span> * {@link OrbitRNG} if you want something similar to this generator that allows all state pairs, or {@link GWTRNG} if<a name="line.16"></a>
 <span class="sourceLineNo">017</span> * you expect to use GWT to target HTML.<a name="line.17"></a>
 <span class="sourceLineNo">018</span> * &lt;br&gt;<a name="line.18"></a>

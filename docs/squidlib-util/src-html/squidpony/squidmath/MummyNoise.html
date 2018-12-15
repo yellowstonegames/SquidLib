@@ -327,16 +327,16 @@
 <span class="sourceLineNo">319</span>    }<a name="line.319"></a>
 <span class="sourceLineNo">320</span><a name="line.320"></a>
 <span class="sourceLineNo">321</span>    public MummyNoise(final int seed) {<a name="line.321"></a>
-<span class="sourceLineNo">322</span>        seedX = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seed + 0xC6BC279692B5CC83L);<a name="line.322"></a>
-<span class="sourceLineNo">323</span>        seedY = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedX ^ 0xC7BC279692B5CB83L);<a name="line.323"></a>
-<span class="sourceLineNo">324</span>        seedZ = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedY ^ 0xC8BC279692B5CA83L);<a name="line.324"></a>
-<span class="sourceLineNo">325</span>        seedW = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedZ ^ 0xC9BC279692B5C983L);<a name="line.325"></a>
-<span class="sourceLineNo">326</span>        seedU = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedW ^ 0xCABC279692B5C883L);<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        seedV = 0x9E3779B97F4A7C15L * LinnormRNG.determine(seedU ^ 0xCBBC279692B5C783L);<a name="line.327"></a>
+<span class="sourceLineNo">322</span>        seedX = 0x9E3779B97F4A7C15L * DiverRNG.determine(seed + 0xC6BC279692B5CC83L);<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        seedY = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedX ^ 0xC7BC279692B5CB83L);<a name="line.323"></a>
+<span class="sourceLineNo">324</span>        seedZ = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedY ^ 0xC8BC279692B5CA83L);<a name="line.324"></a>
+<span class="sourceLineNo">325</span>        seedW = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedZ ^ 0xC9BC279692B5C983L);<a name="line.325"></a>
+<span class="sourceLineNo">326</span>        seedU = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedW ^ 0xCABC279692B5C883L);<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        seedV = 0x9E3779B97F4A7C15L * DiverRNG.determine(seedU ^ 0xCBBC279692B5C783L);<a name="line.327"></a>
 <span class="sourceLineNo">328</span>    }<a name="line.328"></a>
 <span class="sourceLineNo">329</span><a name="line.329"></a>
 <span class="sourceLineNo">330</span>    /**<a name="line.330"></a>
-<span class="sourceLineNo">331</span>     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by<a name="line.331"></a>
+<span class="sourceLineNo">331</span>     * The same as {@link DiverRNG#determine(long)}, except this assumes state has already been multiplied by<a name="line.331"></a>
 <span class="sourceLineNo">332</span>     * 0x632BE59BD9B4E019L.<a name="line.332"></a>
 <span class="sourceLineNo">333</span>     * @param state a long that should change in increments of 0x632BE59BD9B4E019L<a name="line.333"></a>
 <span class="sourceLineNo">334</span>     * @return a pseudo-random permutation of state<a name="line.334"></a>
@@ -502,7 +502,7 @@
 <span class="sourceLineNo">494</span>//    @Override<a name="line.494"></a>
 <span class="sourceLineNo">495</span>//    public double getNoiseWithSeed(final double x, final double y, final double z, final long seed) {<a name="line.495"></a>
 <span class="sourceLineNo">496</span>//        final long<a name="line.496"></a>
-<span class="sourceLineNo">497</span>//                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.497"></a>
+<span class="sourceLineNo">497</span>//                rs = DiverRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.497"></a>
 <span class="sourceLineNo">498</span>//                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.498"></a>
 <span class="sourceLineNo">499</span>//                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.499"></a>
 <span class="sourceLineNo">500</span>//                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L);<a name="line.500"></a>
@@ -542,7 +542,7 @@
 <span class="sourceLineNo">534</span>    @Override<a name="line.534"></a>
 <span class="sourceLineNo">535</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final long seed) {<a name="line.535"></a>
 <span class="sourceLineNo">536</span>        final long<a name="line.536"></a>
-<span class="sourceLineNo">537</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.537"></a>
+<span class="sourceLineNo">537</span>                rs = DiverRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.537"></a>
 <span class="sourceLineNo">538</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.538"></a>
 <span class="sourceLineNo">539</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.539"></a>
 <span class="sourceLineNo">540</span>                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L),<a name="line.540"></a>
@@ -599,7 +599,7 @@
 <span class="sourceLineNo">591</span>    @Override<a name="line.591"></a>
 <span class="sourceLineNo">592</span>    public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, long seed) {<a name="line.592"></a>
 <span class="sourceLineNo">593</span>        final long<a name="line.593"></a>
-<span class="sourceLineNo">594</span>                rs = LinnormRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.594"></a>
+<span class="sourceLineNo">594</span>                rs = DiverRNG.determine(seed ^ ~seed &lt;&lt; 32),<a name="line.594"></a>
 <span class="sourceLineNo">595</span>                rx = 0x9E3779B97F4A7C15L * (rs &gt;&gt;&gt; 23 ^ rs &lt;&lt; 23) * (rs | 1L),<a name="line.595"></a>
 <span class="sourceLineNo">596</span>                ry = 0x9E3779B97F4A7C15L * (rx &gt;&gt;&gt; 23 ^ rx &lt;&lt; 23) * (rx | 1L),<a name="line.596"></a>
 <span class="sourceLineNo">597</span>                rz = 0x9E3779B97F4A7C15L * (ry &gt;&gt;&gt; 23 ^ ry &lt;&lt; 23) * (ry | 1L),<a name="line.597"></a>
@@ -748,7 +748,7 @@
 <span class="sourceLineNo">740</span>        if(scratch == null || scratch.length &lt; upper)<a name="line.740"></a>
 <span class="sourceLineNo">741</span>            scratch = new double[upper];<a name="line.741"></a>
 <span class="sourceLineNo">742</span>        for (int i = 0; i &lt; len; i++) {<a name="line.742"></a>
-<span class="sourceLineNo">743</span>            seed = LinnormRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed &lt;&lt; 32);<a name="line.743"></a>
+<span class="sourceLineNo">743</span>            seed = DiverRNG.determine(seed + 0xC6BC279692B5CC83L ^ ~seed &lt;&lt; 32);<a name="line.743"></a>
 <span class="sourceLineNo">744</span>            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(coordinates[i])) * seed) + seed;<a name="line.744"></a>
 <span class="sourceLineNo">745</span>        }<a name="line.745"></a>
 <span class="sourceLineNo">746</span>        long working;<a name="line.746"></a>

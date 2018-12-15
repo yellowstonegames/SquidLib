@@ -3252,10 +3252,10 @@
 <span class="sourceLineNo">3244</span>        public Basic1D(long seed)<a name="line.3244"></a>
 <span class="sourceLineNo">3245</span>        {<a name="line.3245"></a>
 <span class="sourceLineNo">3246</span>            lastSeed = seed;<a name="line.3246"></a>
-<span class="sourceLineNo">3247</span>            alter1 = (LinnormRNG.determine(seed) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3247"></a>
-<span class="sourceLineNo">3248</span>            alter2 = (LinnormRNG.determine(seed + 1) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3248"></a>
-<span class="sourceLineNo">3249</span>            alter3 = (LinnormRNG.determine(seed + 2) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3249"></a>
-<span class="sourceLineNo">3250</span>            alter4 = (LinnormRNG.determine(seed + 3) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3250"></a>
+<span class="sourceLineNo">3247</span>            alter1 = (DiverRNG.determine(seed) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3247"></a>
+<span class="sourceLineNo">3248</span>            alter2 = (DiverRNG.determine(seed + 1) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3248"></a>
+<span class="sourceLineNo">3249</span>            alter3 = (DiverRNG.determine(seed + 2) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3249"></a>
+<span class="sourceLineNo">3250</span>            alter4 = (DiverRNG.determine(seed + 3) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3250"></a>
 <span class="sourceLineNo">3251</span>        }<a name="line.3251"></a>
 <span class="sourceLineNo">3252</span>        @Override<a name="line.3252"></a>
 <span class="sourceLineNo">3253</span>        public double getNoise(double x) {<a name="line.3253"></a>
@@ -3271,10 +3271,10 @@
 <span class="sourceLineNo">3263</span>            if(lastSeed != seed)<a name="line.3263"></a>
 <span class="sourceLineNo">3264</span>            {<a name="line.3264"></a>
 <span class="sourceLineNo">3265</span>                lastSeed = seed;<a name="line.3265"></a>
-<span class="sourceLineNo">3266</span>                alter1 = (LinnormRNG.determine(seed) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3266"></a>
-<span class="sourceLineNo">3267</span>                alter2 = (LinnormRNG.determine(seed + 1) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3267"></a>
-<span class="sourceLineNo">3268</span>                alter3 = (LinnormRNG.determine(seed + 2) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3268"></a>
-<span class="sourceLineNo">3269</span>                alter4 = (LinnormRNG.determine(seed + 3) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3269"></a>
+<span class="sourceLineNo">3266</span>                alter1 = (DiverRNG.determine(seed) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3266"></a>
+<span class="sourceLineNo">3267</span>                alter2 = (DiverRNG.determine(seed + 1) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3267"></a>
+<span class="sourceLineNo">3268</span>                alter3 = (DiverRNG.determine(seed + 2) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3268"></a>
+<span class="sourceLineNo">3269</span>                alter4 = (DiverRNG.determine(seed + 3) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;<a name="line.3269"></a>
 <span class="sourceLineNo">3270</span>            }<a name="line.3270"></a>
 <span class="sourceLineNo">3271</span>            return (cubicSway(alter2 + x * alter1) +<a name="line.3271"></a>
 <span class="sourceLineNo">3272</span>                    cubicSway(alter3 - x * alter2) +<a name="line.3272"></a>
@@ -3290,10 +3290,10 @@
 <span class="sourceLineNo">3282</span>        }<a name="line.3282"></a>
 <span class="sourceLineNo">3283</span><a name="line.3283"></a>
 <span class="sourceLineNo">3284</span>        public static double noise(double x, long seed) {<a name="line.3284"></a>
-<span class="sourceLineNo">3285</span>            final double alter1 = (LinnormRNG.determine(seed) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25,<a name="line.3285"></a>
-<span class="sourceLineNo">3286</span>                    alter2 = (LinnormRNG.determine(seed + 1) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25,<a name="line.3286"></a>
-<span class="sourceLineNo">3287</span>                    alter3 = (LinnormRNG.determine(seed + 2) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25, <a name="line.3287"></a>
-<span class="sourceLineNo">3288</span>                    alter4 = (LinnormRNG.determine(seed + 3) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;                    <a name="line.3288"></a>
+<span class="sourceLineNo">3285</span>            final double alter1 = (DiverRNG.determine(seed) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25,<a name="line.3285"></a>
+<span class="sourceLineNo">3286</span>                    alter2 = (DiverRNG.determine(seed + 1) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25,<a name="line.3286"></a>
+<span class="sourceLineNo">3287</span>                    alter3 = (DiverRNG.determine(seed + 2) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25, <a name="line.3287"></a>
+<span class="sourceLineNo">3288</span>                    alter4 = (DiverRNG.determine(seed + 3) &gt;&gt;&gt; 11) * 0x1.5p-54 + 0.25;                    <a name="line.3288"></a>
 <span class="sourceLineNo">3289</span>            return (cubicSway(alter2 + x * alter1) +<a name="line.3289"></a>
 <span class="sourceLineNo">3290</span>                    cubicSway(alter3 - x * alter2) +<a name="line.3290"></a>
 <span class="sourceLineNo">3291</span>                    cubicSway(alter4 + x * alter3) +<a name="line.3291"></a>

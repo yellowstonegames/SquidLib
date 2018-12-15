@@ -82,7 +82,7 @@ public class DungeonGeneratorTest {
 
     public static void main(String[] args) {
         //seed is, in base 36, the number SQUIDLIB
-        StatefulRNG rng = new StatefulRNG(new LinnormRNG(2252637788195L));
+        StatefulRNG rng = new StatefulRNG(new DiverRNG(2252637788195L));
         System.out.println("MixedGenerator");
         DungeonGenerator dungeonGenerator = new DungeonGenerator(width, height, rng);
         char[][] dungeon;

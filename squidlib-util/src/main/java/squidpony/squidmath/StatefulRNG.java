@@ -17,18 +17,18 @@ public class StatefulRNG extends RNG implements Serializable, IStatefulRNG {
     }
 
     public StatefulRNG(RandomnessSource random) {
-        super((random instanceof StatefulRandomness) ? random : new LinnormRNG(random.nextLong()));
+        super((random instanceof StatefulRandomness) ? random : new DiverRNG(random.nextLong()));
     }
 
     /**
-     * Seeded constructor uses LinnormRNG, which is of high quality, but low period (which rarely matters for games),
+     * Seeded constructor uses DiverRNG, which is of high quality, but low period (which rarely matters for games),
      * and has good speed and tiny state size.
      */
     public StatefulRNG(long seed) {
-        this(new LinnormRNG(seed));
+        this(new DiverRNG(seed));
     }
     /**
-     * String-seeded constructor uses the hash of the String as a seed for LinnormRNG, which is of high quality, but
+     * String-seeded constructor uses the hash of the String as a seed for DiverRNG, which is of high quality, but
      * low period (which rarely matters for games), and has good speed and tiny state size.
      *
      * Note: This constructor changed behavior on April 22, 2017, again on December 23, 2017, and again on June 14,
@@ -38,16 +38,16 @@ public class StatefulRNG extends RNG implements Serializable, IStatefulRNG {
      * {@code new StatefulRNG(text)} with {@code new StatefulRNG(new LightRNG(CrossHash.hash(text)))}. The new technique
      * assigns to all 64 bits and has less correlation between similar inputs causing similar starting states. It's also
      * faster, but that shouldn't matter in a constructor. It uses a better hashing algorithm because CrossHash no
-     * longer has the older, worse one. The latest change in June switched to LinnormRNG instead of LightRNG.
+     * longer has the older, worse one. The latest change in June switched to DiverRNG instead of LightRNG.
      */
     public StatefulRNG(CharSequence seedString) {
-        this(new LinnormRNG(CrossHash.hash64(seedString)));
+        this(new DiverRNG(CrossHash.hash64(seedString)));
     }
 
     @Override
     public void setRandomness(RandomnessSource random) {
-        super.setRandomness(random == null ? new LinnormRNG() :
-                (random instanceof StatefulRandomness) ? random : new LinnormRNG(random.nextLong()));
+        super.setRandomness(random == null ? new DiverRNG() :
+                (random instanceof StatefulRandomness) ? random : new DiverRNG(random.nextLong()));
     }
 
     /**

@@ -95,6 +95,7 @@ public class JsonConverter extends Json {
         json.addClassTag("#DecR", DeckRNG.class);
         json.addClassTag("#Ligh", LightRNG.class);
         json.addClassTag("#Linn", LinnormRNG.class);
+        json.addClassTag("#DivR", DiverRNG.class);
         json.addClassTag("#LonP", LongPeriodRNG.class);
         json.addClassTag("#MnwR", MoonwalkRNG.class);
         json.addClassTag("#ThrA", ThrustAltRNG.class);

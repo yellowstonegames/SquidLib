@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9,"i23":9,"i24":9,"i25":9,"i26":9,"i27":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -108,7 +108,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.9">MapUtility</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.11">MapUtility</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Created by Tommy Ettinger on 7/9/2017.</div>
 </li>
@@ -264,13 +264,23 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>static float[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#fillLinesToBoxes-float:A:A-char:A:A-float:A:A-">fillLinesToBoxes</a></span>(float[][]&nbsp;into,
+                char[][]&nbsp;map,
+                float[][]&nbsp;colors)</code>
+<div class="block">Meant to be used with <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float:A:A-float-float-int-int-"><code>TextCellFactory.draw(Batch, float[][], float, float, int, int)</code></a>, this finds the
+ box-drawing characters in <code>map</code> and fills 3x3 boxes in <code>into</code> with the matching color from
+ <code>colors</code> in the shape of that box-drawing character.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColors-char:A:A-">generateDefaultBGColors</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
  chars in map.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColors-char:A:A-char-com.badlogic.gdx.graphics.Color-char-com.badlogic.gdx.graphics.Color-">generateDefaultBGColors</a></span>(char[][]&nbsp;map,
                        char&nbsp;deepChar,
@@ -281,14 +291,14 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  chars in map.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColorsFloat-char:A:A-">generateDefaultBGColorsFloat</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
  usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColorsFloat-char:A:A-char-float-char-float-">generateDefaultBGColorsFloat</a></span>(char[][]&nbsp;map,
                             char&nbsp;deepChar,
@@ -299,7 +309,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColorsFloat-char:A:A-char-float-char-float-float-float-float-">generateDefaultBGColorsFloat</a></span>(char[][]&nbsp;map,
                             char&nbsp;deepChar,
@@ -313,7 +323,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultBGColorsFloat-char:A:A-float-float-float-">generateDefaultBGColorsFloat</a></span>(char[][]&nbsp;map,
                             float&nbsp;hueChange,
@@ -323,13 +333,13 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-">generateDefaultColors</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static com.badlogic.gdx.graphics.Color[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColors-char:A:A-char-com.badlogic.gdx.graphics.Color-char-com.badlogic.gdx.graphics.Color-">generateDefaultColors</a></span>(char[][]&nbsp;map,
                      char&nbsp;deepChar,
@@ -339,13 +349,13 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColorsFloat-char:A:A-">generateDefaultColorsFloat</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColorsFloat-char:A:A-char-float-char-float-">generateDefaultColorsFloat</a></span>(char[][]&nbsp;map,
                           char&nbsp;deepChar,
@@ -355,7 +365,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColorsFloat-char:A:A-char-float-char-float-float-float-float-">generateDefaultColorsFloat</a></span>(char[][]&nbsp;map,
                           char&nbsp;deepChar,
@@ -368,7 +378,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>static float[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateDefaultColorsFloat-char:A:A-float-float-float-">generateDefaultColorsFloat</a></span>(char[][]&nbsp;map,
                           float&nbsp;hueChange,
@@ -377,13 +387,13 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-">generateLightnessModifiers</a></span>(char[][]&nbsp;map)</code>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-">generateLightnessModifiers</a></span>(char[][]&nbsp;map,
                           double&nbsp;frame)</code>
@@ -391,7 +401,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>static int[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLightnessModifiers-char:A:A-double-char-char-">generateLightnessModifiers</a></span>(char[][]&nbsp;map,
                           double&nbsp;frame,
@@ -399,6 +409,16 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
                           char&nbsp;shallowLiquid)</code>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
  animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
+</td>
+</tr>
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code>static float[][]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#generateLinesToBoxes-char:A:A-float:A:A-">generateLinesToBoxes</a></span>(char[][]&nbsp;map,
+                    float[][]&nbsp;colors)</code>
+<div class="block">Meant to be used with <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float:A:A-float-float-int-int-"><code>TextCellFactory.draw(Batch, float[][], float, float, int, int)</code></a>, this produces a
+ triple-width, triple-height float color array by finding the box-drawing characters in <code>map</code> and placing
+ 3x3 boxes into that triple-size array with the matching color from <code>colors</code> in the shape of that
+ box-drawing character.</div>
 </td>
 </tr>
 </table>
@@ -429,7 +449,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>MapUtility</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.9">MapUtility</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.11">MapUtility</a>()</pre>
 </li>
 </ul>
 </li>
@@ -446,7 +466,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.26">generateDefaultColors</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.28">generateDefaultColors</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces a Color[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
  <br>
  This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>; if that field is changed then the colors this returns
@@ -472,7 +492,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.99">generateDefaultColors</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.101">generateDefaultColors</a>(char[][]&nbsp;map,
                                                                         char&nbsp;deepChar,
                                                                         com.badlogic.gdx.graphics.Color&nbsp;deepColor,
                                                                         char&nbsp;shallowChar,
@@ -511,7 +531,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.170">generateDefaultColorsFloat</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.172">generateDefaultColorsFloat</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces a float[][] that corresponds to appropriate default colors for the usual meanings of the chars in map.
  Each float represents a color in an efficient way; <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily uses this kind of packed float
  to represent colors, and <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a> uses it internally.
@@ -539,7 +559,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.192">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.194">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
                                                char[][]&nbsp;map)</pre>
 <div class="block">Fills an existing float[][] with packed float colors that correspond to appropriate default colors for the usual
  meanings of the chars in map. Each float represents a color in an efficient way; <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx"><code>SparseLayers</code></a> primarily
@@ -569,7 +589,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.272">generateDefaultColorsFloat</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.274">generateDefaultColorsFloat</a>(char[][]&nbsp;map,
                                                    char&nbsp;deepChar,
                                                    float&nbsp;deepColor,
                                                    char&nbsp;shallowChar,
@@ -610,7 +630,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.304">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.306">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
                                                char[][]&nbsp;map,
                                                char&nbsp;deepChar,
                                                float&nbsp;deepColor,
@@ -653,7 +673,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.384">generateDefaultColorsFloat</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.386">generateDefaultColorsFloat</a>(char[][]&nbsp;map,
                                                    float&nbsp;hueChange,
                                                    float&nbsp;saturationChange,
                                                    float&nbsp;valueChange)</pre>
@@ -688,7 +708,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.410">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.412">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
                                                char[][]&nbsp;map,
                                                float&nbsp;hueChange,
                                                float&nbsp;saturationChange,
@@ -725,7 +745,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.494">generateDefaultColorsFloat</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.496">generateDefaultColorsFloat</a>(char[][]&nbsp;map,
                                                    char&nbsp;deepChar,
                                                    float&nbsp;deepColor,
                                                    char&nbsp;shallowChar,
@@ -773,7 +793,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.531">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.533">fillDefaultColorsFloat</a>(float[][]&nbsp;packed,
                                                char[][]&nbsp;map,
                                                char&nbsp;deepChar,
                                                float&nbsp;deepColor,
@@ -823,7 +843,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.603">generateDefaultBGColors</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.605">generateDefaultBGColors</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces a Color[][] that corresponds to appropriate default background colors for the usual meanings of the
  chars in map. This takes its values from <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#LIMITED_PALETTE"><code>SColor.LIMITED_PALETTE</code></a>, and if that field is changed then the
  colors this returns will also change. Most backgrounds will be black. but deep water ('~') will be dark
@@ -845,7 +865,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColors</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.680">generateDefaultBGColors</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;com.badlogic.gdx.graphics.Color[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.682">generateDefaultBGColors</a>(char[][]&nbsp;map,
                                                                           char&nbsp;deepChar,
                                                                           com.badlogic.gdx.graphics.Color&nbsp;deepColor,
                                                                           char&nbsp;shallowChar,
@@ -882,7 +902,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.755">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.757">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces a float[][] of packed float colors that corresponds to appropriate default background colors for the
  usual meanings of the chars in map.
  <br>
@@ -909,7 +929,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.775">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.777">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
                                                  char[][]&nbsp;map)</pre>
 <div class="block">Fills an existing float[][] with packed float colors that correspond to appropriate default background colors for
  the usual meanings of the chars in map. The sizes of map and packed should be identical.
@@ -938,7 +958,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.833">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.835">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map,
                                                      char&nbsp;deepChar,
                                                      float&nbsp;deepColor,
                                                      char&nbsp;shallowChar,
@@ -978,7 +998,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.864">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.866">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
                                                  char[][]&nbsp;map,
                                                  char&nbsp;deepChar,
                                                  float&nbsp;deepColor,
@@ -1021,7 +1041,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.918">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.920">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map,
                                                      float&nbsp;hueChange,
                                                      float&nbsp;saturationChange,
                                                      float&nbsp;valueChange)</pre>
@@ -1052,7 +1072,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.943">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.945">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
                                                  char[][]&nbsp;map,
                                                  float&nbsp;hueChange,
                                                  float&nbsp;saturationChange,
@@ -1089,7 +1109,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1006">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1008">generateDefaultBGColorsFloat</a>(char[][]&nbsp;map,
                                                      char&nbsp;deepChar,
                                                      float&nbsp;deepColor,
                                                      char&nbsp;shallowChar,
@@ -1137,7 +1157,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillDefaultBGColorsFloat</h4>
-<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1043">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1045">fillDefaultBGColorsFloat</a>(float[][]&nbsp;packed,
                                                  char[][]&nbsp;map,
                                                  char&nbsp;deepChar,
                                                  float&nbsp;deepColor,
@@ -1188,7 +1208,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1086">generateLightnessModifiers</a>(char[][]&nbsp;map)</pre>
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1088">generateLightnessModifiers</a>(char[][]&nbsp;map)</pre>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -1204,7 +1224,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1095">fillLightnessModifiers</a>(int[][]&nbsp;lights,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1097">fillLightnessModifiers</a>(int[][]&nbsp;lights,
                                              char[][]&nbsp;map)</pre>
 <div class="block">Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors.</div>
 <dl>
@@ -1221,7 +1241,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1157">generateLightnessModifiers</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1159">generateLightnessModifiers</a>(char[][]&nbsp;map,
                                                  double&nbsp;frame)</pre>
 <div class="block">Produces an int[][] that can be used with SquidLayers to alter the background colors, accepting a parameter for
  animation frame if rippling water and waving grass using Perlin Noise are desired.</div>
@@ -1243,7 +1263,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>fillLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1173">fillLightnessModifiers</a>(int[][]&nbsp;lights,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1175">fillLightnessModifiers</a>(int[][]&nbsp;lights,
                                              char[][]&nbsp;map,
                                              double&nbsp;frame)</pre>
 <div class="block">Fills an existing int[][] with lighting values that can be used with SquidLayers to alter the background colors,
@@ -1267,7 +1287,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>generateLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1238">generateLightnessModifiers</a>(char[][]&nbsp;map,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1240">generateLightnessModifiers</a>(char[][]&nbsp;map,
                                                  double&nbsp;frame,
                                                  char&nbsp;deepLiquid,
                                                  char&nbsp;shallowLiquid)</pre>
@@ -1291,10 +1311,10 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <a name="fillLightnessModifiers-int:A:A-char:A:A-double-char-char-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fillLightnessModifiers</h4>
-<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1256">fillLightnessModifiers</a>(int[][]&nbsp;lights,
+<pre>public static&nbsp;int[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1258">fillLightnessModifiers</a>(int[][]&nbsp;lights,
                                              char[][]&nbsp;map,
                                              double&nbsp;frame,
                                              char&nbsp;deepLiquid,
@@ -1314,6 +1334,60 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <dd><code>shallowLiquid</code> - a char that will be treated like shallow water when animating ripples</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 2D array of lightness values from -255 to 255 but usually close to 0; can be passed to SquidLayers</dd>
+</dl>
+</li>
+</ul>
+<a name="generateLinesToBoxes-char:A:A-float:A:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>generateLinesToBoxes</h4>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1326">generateLinesToBoxes</a>(char[][]&nbsp;map,
+                                             float[][]&nbsp;colors)</pre>
+<div class="block">Meant to be used with <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float:A:A-float-float-int-int-"><code>TextCellFactory.draw(Batch, float[][], float, float, int, int)</code></a>, this produces a
+ triple-width, triple-height float color array by finding the box-drawing characters in <code>map</code> and placing
+ 3x3 boxes into that triple-size array with the matching color from <code>colors</code> in the shape of that
+ box-drawing character. <code>map</code> and <code>colors</code> should be the same size. Will return a new 2D float array.
+ This should usually be passed to the aforementioned TextCellFactory draw method with 3 xSubCells and 3 ySubCells.
+ An intended purpose for this is to draw box-drawing-like blocks when the font doesn't support box-drawing
+ characters or those characters don't line up correctly for any reason.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>map</code> - a 2D char array that will not be modified; box drawing characters in this will be drawn in the returned array</dd>
+<dd><code>colors</code> - a 2D float array of packed float colors to use for drawing boxes (possibly produced by
+               <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#fillDefaultColorsFloat-float:A:A-char:A:A-"><code>fillDefaultColorsFloat(float[][], char[][])</code></a> or other methods in this class)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 2D float array that can be drawn by <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float:A:A-float-float-int-int-"><code>TextCellFactory.draw(Batch, float[][], float, float, int, int)</code></a> with 3x3 subcells</dd>
+</dl>
+</li>
+</ul>
+<a name="fillLinesToBoxes-float:A:A-char:A:A-float:A:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fillLinesToBoxes</h4>
+<pre>public static&nbsp;float[][]&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/MapUtility.html#line.1346">fillLinesToBoxes</a>(float[][]&nbsp;into,
+                                         char[][]&nbsp;map,
+                                         float[][]&nbsp;colors)</pre>
+<div class="block">Meant to be used with <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float:A:A-float-float-int-int-"><code>TextCellFactory.draw(Batch, float[][], float, float, int, int)</code></a>, this finds the
+ box-drawing characters in <code>map</code> and fills 3x3 boxes in <code>into</code> with the matching color from
+ <code>colors</code> in the shape of that box-drawing character. This means <code>into</code> must have at least 3 times the
+ width and height of <code>map</code>, and <code>map</code> and <code>colors</code> should be the same size. If <code>into</code> is
+ appropriately-sized, then this will modify <code>into</code> in-place; otherwise it will return a new 2D float array.
+ This should usually be passed to the aforementioned TextCellFactory draw method with 3 xSubCells and 3 ySubCells.
+ An intended purpose for this is to draw box-drawing-like blocks when the font doesn't support box-drawing
+ characters or those characters don't line up correctly for any reason.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>into</code> - a 2D float array that will be cleared, then modified in-place and returned; should be 3x the width
+             and 3x the height of map and colors, but if it is not (or is null) a new array will be allocated</dd>
+<dd><code>map</code> - a 2D char array that will not be modified; box drawing characters in this will be drawn in into</dd>
+<dd><code>colors</code> - a 2D float array of packed float colors to use for drawing boxes (possibly produced by
+               <a href="../../../../squidpony/squidgrid/gui/gdx/MapUtility.html#fillDefaultColorsFloat-float:A:A-char:A:A-"><code>fillDefaultColorsFloat(float[][], char[][])</code></a> or other methods in this class)</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd><code>into</code>, if modified, or a new 2D float array if into was null or incorrectly sized</dd>
 </dl>
 </li>
 </ul>

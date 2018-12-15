@@ -5,37 +5,45 @@ import squidpony.StringKit;
 import java.io.Serializable;
 
 /**
- * A very-high-quality StatefulRandomness that is the fastest 64-bit generator in this library that passes statistical
- * tests and is equidistributed. Has 64 bits of state and natively outputs 64 bits at a time, changing the state with a
- * basic linear congruential generator (it is simply {@code state = state * 1103515245 + 1}). Starting with that LCG's
- * output, it xorshifts that long, multiplies by a very large negative long, then returns another xorshift. For
- * whatever reason, the output of this simple function passes all 32TB of PractRand with no anomalies, meaning its
- * statistical quality is excellent. As mentioned earlier, this is the fastest high-quality generator here other than
- * {@link ThrustAltRNG}. Unlike ThrustAltRNG, this can produce all long values as output; ThrustAltRNG bunches some
- * outputs and makes producing them more likely while others can't be produced at all. Notably, this generator is faster
- * than {@link LightRNG} while keeping the same or higher quality, and also faster than {@link XoRoRNG} while passing
- * tests that XoRoRNG always or frequently fails, such as binary matrix rank tests. It is not the fastest option on GWT;
- * if you intend to target GWT then {@link Lathe32RNG} or {@link GWTRNG} is recommended (they use the same algorithm,
- * xoroshiro64++ as it has recently been termed, and it has almost identical period to LinnormRNG but avoids math on
- * longs to increase performance on GWT).
+ * A mid-high-quality StatefulRandomness that is the second-fastest 64-bit generator in this library that is
+ * 1-dimensionally equidistributed across its 64-bit outputs. Has a period of 2 to the 64, and permits all states.
+ * Passes all but one statistical test in PractRand, only failing the recently-added TMFn test (Triple Mirror Frequency)
+ * at 16TB. {@link DiverRNG} does not fail at that point and is faster, while keeping the same other qualities, so it is
+ * currently recommended over LinnormRNG. Has 64 bits of state and natively outputs 64 bits at a time, changing the
+ * state with a basic linear congruential generator (it is simply {@code state = state * 1103515245 + 1}). Starting with
+ * that LCG's output, it xorshifts that output, multiplies by a very large negative long, then returns another xorshift.
+ * Considering that it needs analysis of 8TB to even find an anomaly in Linnorm, the quality is probably fine, and
+ * PractRand 0.93 didn't find any failures in it (PractRand 0.94 added the TMFn test, which detects LCGs).
+ * {@link ThrustAltRNG} and {@link MiniMover64RNG} are faster (tied for first place), but unlike those, Linnorm can
+ * produce all long values as output; ThrustAltRNG bunches some outputs and makes producing them more likely while
+ * others can't be produced at all, while MiniMover64RNG cycles at some point before 2 to the 64 but after 2 to the 42
+ * (it doesn't produce any duplicates until then, but it also can't produce all values). Notably, this generator is
+ * faster than {@link LightRNG} with similar quality other than the TMFn failure, and also faster than {@link XoRoRNG}
+ * while passing tests that XoRoRNG always or frequently fails (and fails early), such as binary matrix rank tests. It
+ * is slower than {@link DiverRNG}, which is a variant on the structure of LinnormRNG, and DiverRNG passes PractRand to
+ * a further point than LinnormRNG (Diver passes 32TB, and doesn't show any of the problems where Linnorm fails).
  * <br>
  * This generator is a StatefulRandomness but not a SkippingRandomness, so it can't (efficiently) have the skip() method
  * that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the
- * state from an output of {@link #nextLong()}. At least in theory, and supported in practice by how PCG-Random works,
- * this type of generator could be used to make a generator with multiple non-overlapping streams by changing the linear
- * congruential generator to add a different odd number instead of 1; any odd number should work, but optimizations can
- * apply to adding 1 that aren't possible for other numbers, so that's a good default to use here. LinnormRNG has a
- * static determine() method that uses a slightly different algorithm; it performs similar operations to
- * {@link LightRNG#determine(long)}. That involves 3 multiplications by constants, 3 "xorshifts" that each use a XOR and
- * a bitwise right shift on a local variable, and 3 temporary assignments; this determine() uses 3 multiplications by
- * constants, only 2 xorshifts, only 2 temporary assignments, and one XOR by a constant. Like LightRNG's determine(),
- * LinnormRNG.determine() can take any long as input and has all longs as possible outputs. Unlike LightRNG's
- * determine(), an input of 0 does not produce a result of 0.
+ * state from an output of {@link #nextLong()}. {@link MizuchiRNG} uses the same algorithm except for the number added
+ * in the LCG state update; here this number is always 1, but in MizuchiRNG it can be any odd long. This means that any
+ * given MizuchiRNG object has two long values stored in it instead of the one here, but it allows two MizuchiRNG
+ * objects with different streams to produce different, probably-not-correlated sequences of results, even with the same
+ * seed. This property may be useful for cases where an adversary is trying to predict results in some way, though using
+ * different streams for this purpose isn't enough and should be coupled with truncation of a large part of output (see
+ * PCG-Random's techniques for this).
  * <br>
  * The name comes from LINear congruential generator this uses to change it state, while the rest is a NORMal
  * SplitMix64-like generator. "Linnorm" is a Norwegian name for a kind of dragon, as well. 
  * <br>
- * Written May 9, 2018 by Tommy Ettinger.
+ * Written May 19, 2018 by Tommy Ettinger. Thanks to M.E. O'Neill for her insights into the family of generators both
+ * this and her PCG-Random fall into, and to the team that worked on SplitMix64 for SplittableRandom in JDK 8. Chris
+ * Doty-Humphrey's work on PractRand has been invaluable, and the LCG multiplier this uses is the same one used by
+ * PractRand in its "varqual" LCGs (the other, longer multiplier is from PCG-Random, and that's both the
+ * nothing-up-my-sleeve numbers used here). Thanks also to Sebastiano Vigna and David Blackwell for creating the
+ * incredibly fast xoroshiro128+ generator and also very fast <a href="http://xoshiro.di.unimi.it/hwd.php">HWD tool</a>;
+ * the former inspired me to make my code even faster and the latter tool seems useful so far in proving the quality of
+ * the generator (LinnormRNG passes over 100TB of HWD, and probably would pass much more if I gave it more days to run).
  * @author Tommy Ettinger
  */
 public final class LinnormRNG implements RandomnessSource, StatefulRandomness, Serializable {

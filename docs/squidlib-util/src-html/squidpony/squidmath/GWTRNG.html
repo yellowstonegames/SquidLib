@@ -41,7 +41,7 @@
 <span class="sourceLineNo">033</span> * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)<a name="line.33"></a>
 <span class="sourceLineNo">034</span> */<a name="line.34"></a>
 <span class="sourceLineNo">035</span>public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {<a name="line.35"></a>
-<span class="sourceLineNo">036</span>    private static final long serialVersionUID = 1L;<a name="line.36"></a>
+<span class="sourceLineNo">036</span>    private static final long serialVersionUID = 2L;<a name="line.36"></a>
 <span class="sourceLineNo">037</span><a name="line.37"></a>
 <span class="sourceLineNo">038</span>    public int stateA, stateB;<a name="line.38"></a>
 <span class="sourceLineNo">039</span><a name="line.39"></a>
@@ -84,7 +84,7 @@
 <span class="sourceLineNo">076</span>     * String.hashCode() on it and will instead use 1 as that state (to avoid the forbidden double-zero case).<a name="line.76"></a>
 <span class="sourceLineNo">077</span>     * @param seed any String; may be null<a name="line.77"></a>
 <span class="sourceLineNo">078</span>     */<a name="line.78"></a>
-<span class="sourceLineNo">079</span>    public GWTRNG(String seed) {<a name="line.79"></a>
+<span class="sourceLineNo">079</span>    public GWTRNG(final String seed) {<a name="line.79"></a>
 <span class="sourceLineNo">080</span>        setState(CrossHash.hash(seed), seed == null ? 1 : seed.hashCode());<a name="line.80"></a>
 <span class="sourceLineNo">081</span>    }<a name="line.81"></a>
 <span class="sourceLineNo">082</span><a name="line.82"></a>

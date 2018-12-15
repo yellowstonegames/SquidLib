@@ -53,7 +53,7 @@
 <span class="sourceLineNo">045</span>        seeds = new long[len];<a name="line.45"></a>
 <span class="sourceLineNo">046</span>        seeds[0] = seed | 1L;<a name="line.46"></a>
 <span class="sourceLineNo">047</span>        for (int i = 1; i &lt; len; i++) {<a name="line.47"></a>
-<span class="sourceLineNo">048</span>            seeds[i] = LinnormRNG.determine(seed + i) | 1L;<a name="line.48"></a>
+<span class="sourceLineNo">048</span>            seeds[i] = DiverRNG.determine(seed + i) | 1L;<a name="line.48"></a>
 <span class="sourceLineNo">049</span>        }<a name="line.49"></a>
 <span class="sourceLineNo">050</span>        effect = 0x1.81p-62 * Math.pow(1.1875, len);<a name="line.50"></a>
 <span class="sourceLineNo">051</span>    }<a name="line.51"></a>
@@ -75,7 +75,7 @@
 <span class="sourceLineNo">067</span>            long seed = seeds[0];<a name="line.67"></a>
 <span class="sourceLineNo">068</span>            seeds = new long[len];<a name="line.68"></a>
 <span class="sourceLineNo">069</span>            for (int i = 1; i &lt; len; i++) {<a name="line.69"></a>
-<span class="sourceLineNo">070</span>                seeds[i] = LinnormRNG.determine(seed + i) | 1L;<a name="line.70"></a>
+<span class="sourceLineNo">070</span>                seeds[i] = DiverRNG.determine(seed + i) | 1L;<a name="line.70"></a>
 <span class="sourceLineNo">071</span>            }<a name="line.71"></a>
 <span class="sourceLineNo">072</span>            effect = 0x1.81p-62 * Math.pow(1.1875, len);<a name="line.72"></a>
 <span class="sourceLineNo">073</span>        }<a name="line.73"></a>
@@ -199,7 +199,7 @@
 <span class="sourceLineNo">191</span>    }<a name="line.191"></a>
 <span class="sourceLineNo">192</span><a name="line.192"></a>
 <span class="sourceLineNo">193</span>    /**<a name="line.193"></a>
-<span class="sourceLineNo">194</span>     * The same as {@link LinnormRNG#determine(long)}, except this assumes state has already been multiplied by<a name="line.194"></a>
+<span class="sourceLineNo">194</span>     * The same as {@link DiverRNG#determine(long)}, except this assumes state has already been multiplied by<a name="line.194"></a>
 <span class="sourceLineNo">195</span>     * 0x632BE59BD9B4E019L.<a name="line.195"></a>
 <span class="sourceLineNo">196</span>     * @param state a long that should change in increments of 0x632BE59BD9B4E019L<a name="line.196"></a>
 <span class="sourceLineNo">197</span>     * @return a pseudo-random permutation of state<a name="line.197"></a>

@@ -56,7 +56,7 @@ public class SquidStorageTest extends ApplicationAdapter {
             FakeLanguageGen randomLanguage = FakeLanguageGen.randomLanguage(0x1337BEEFCAFEBABEL).mix(4, FakeLanguageGen.ARABIC_ROMANIZED, 5, FakeLanguageGen.JAPANESE_ROMANIZED, 3), lang2;
             SpillWorldMap world = new SpillWorldMap(120, 80, "FutureLandXtreme"), w2;
             world.generate(15, true);
-            GreasedRegion grease = new GreasedRegion(new LinnormRNG(75L), 75, 75), g2;
+            GreasedRegion grease = new GreasedRegion(new DiverRNG(75L), 75, 75), g2;
             store.put("rng", srng);
             store.put("language", randomLanguage);
             store.put("world", world);

@@ -128,17 +128,24 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></span></code>
+<div class="block">A very-high-quality StatefulRandomness that is the fastest 64-bit generator in this library that passes statistical
+ tests and is one-dimensionally equidistributed across all 64-bit outputs.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/EditRNG.html" title="class in squidpony.squidmath">EditRNG</a></span></code>
 <div class="block">A subclass of StatefulRNG (and thus RNG) that allows customizing many parts of the random number generation.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></span></code>
 <div class="block">Like PintRNG (uses 32-bit int math, good for older desktops and phones), but much faster at the expense of quality.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></span></code>
 <div class="block">An IRNG implementation that is meant to provide random numbers very quickly when targeting GWT but also to produce
@@ -146,14 +153,14 @@
  StatefulRandomness.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/JabRNG.html" title="class in squidpony.squidmath">JabRNG</a></span></code>
 <div class="block">A very fast and high-quality generator, but one that is not equidistributed because it produces 64-bit longs from 63
  bits of state (meaning at least half of all possible long values cannot be returned by this generator).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath">Lathe32RNG</a></span></code>
 <div class="block">A modification of Blackman and Vigna's xoroshiro128+ generator using two 32-bit ints of state instead of two 64-bit
@@ -161,34 +168,35 @@
  generator on GWT I have found without statistical failures, and a StatefulRandomness.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></span></code>
 <div class="block">A Linear Feedback Shift Register that may be used like a StatefulRandomness but is not truly random.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></span></code>
 <div class="block">This is a SplittableRandom-style generator, meant to have a tiny state
  that permits storing many different generators with low overhead.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath">LinnormRNG</a></span></code>
-<div class="block">A very-high-quality StatefulRandomness that is the fastest 64-bit generator in this library that passes statistical
- tests and is equidistributed.</div>
+<div class="block">A mid-high-quality StatefulRandomness that is the second-fastest 64-bit generator in this library that is
+ 1-dimensionally equidistributed across its 64-bit outputs.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></span></code>
+<div class="block">A mid-quality StatefulRandomness based on <a href="../../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a> but modified to allow any odd number as a stream,
+ instead of LinnormRNG's hardcoded stream of 1; at least some streams fail statistical testing, but only after at
+ least 8TB of data is analyzed, failing at 16TB.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MizuchiRNG.html" title="class in squidpony.squidmath">MizuchiRNG</a></span></code>
-<div class="block">A very-high-quality StatefulRandomness based on <a href="../../../squidpony/squidmath/LinnormRNG.html" title="class in squidpony.squidmath"><code>LinnormRNG</code></a> but modified to allow any odd number as a stream,
- instead of LinnormRNG's hardcoded stream of 1.</div>
-</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/MoonwalkRNG.html" title="class in squidpony.squidmath">MoonwalkRNG</a></span></code>
 <div class="block">An IRNG implementation that allows the extra functionality of a StatefulRandomness and a SkippingRandomness, as well
@@ -196,64 +204,64 @@
  and distance checks between two generated numbers with the static <a href="../../../squidpony/squidmath/MoonwalkRNG.html#distance-long-long-"><code>MoonwalkRNG.distance(long, long)</code></a> method.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/NLFSR.html" title="class in squidpony.squidmath">NLFSR</a></span></code>
 <div class="block">A Non-Linear Feedback Shift Register that may be used like a StatefulRandomness but is not truly random.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></span></code>
 <div class="block">This is a RandomnessSource in the PCG-Random family.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/PintRNG.html" title="class in squidpony.squidmath">PintRNG</a></span></code>
 <div class="block">A RandomnessSource based on PCG-Random that has a single int of state.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/SaltyQRNG.html" title="class in squidpony.squidmath">SaltyQRNG</a></span></code>
 <div class="block">A different kind of quasi-random number generator (also called a sub-random sequence) that can be "salted" like some
  hashing functions can, to produce many distinct sub-random sequences without changing its performance qualities.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Starfish32RNG.html" title="class in squidpony.squidmath">Starfish32RNG</a></span></code>
 <div class="block">A modification of Blackman and Vigna's xoroshiro64** generator; uses two 32-bit ints of state like <a href="../../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a>
  but has better equidistribution.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></span></code>
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ThrustAlt32RNG.html" title="class in squidpony.squidmath">ThrustAlt32RNG</a></span></code>
 <div class="block">A variant on <a href="../../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that uses only 32-bit math when producing 32-bit numbers.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath">ThrustAltRNG</a></span></code>
 <div class="block">A random number generator that is extremely fast but can't return all possible results.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/VanDerCorputQRNG.html" title="class in squidpony.squidmath">VanDerCorputQRNG</a></span></code>
 <div class="block">A quasi-random number generator that goes through one of many sub-random sequences found by J.G.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/Zag32RNG.html" title="class in squidpony.squidmath">Zag32RNG</a></span></code>
 <div class="block">A 32-bit generator that needs no math on 64-bit values to calculate high-quality pseudo-random numbers, and has been

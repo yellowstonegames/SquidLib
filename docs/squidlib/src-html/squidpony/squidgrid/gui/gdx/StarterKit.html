@@ -87,7 +87,7 @@
 <span class="sourceLineNo">079</span>     * RNG (and some that specifically require or prefer StatefulRNG) throughout squidlib-util.<a name="line.79"></a>
 <span class="sourceLineNo">080</span>     * &lt;br&gt;<a name="line.80"></a>
 <span class="sourceLineNo">081</span>     * This field defaults to a StatefulRNG seeded with the number SQUIDLIB (written in base 36), or 2252637788195L in<a name="line.81"></a>
-<span class="sourceLineNo">082</span>     * base 10. Like most StatefulRNG instances, it uses a LinnormRNG internally, which is very fast and has a good-enough<a name="line.82"></a>
+<span class="sourceLineNo">082</span>     * base 10. Like most StatefulRNG instances, it uses a DiverRNG internally, which is very fast and has a good-enough<a name="line.82"></a>
 <span class="sourceLineNo">083</span>     * period (how many numbers it generates before repeating the cycle) at (2 to the 64) random numbers.<a name="line.83"></a>
 <span class="sourceLineNo">084</span>     */<a name="line.84"></a>
 <span class="sourceLineNo">085</span>    public StatefulRNG rng = new StatefulRNG(2252637788195L);<a name="line.85"></a>

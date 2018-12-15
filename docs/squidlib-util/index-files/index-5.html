@@ -74,6 +74,8 @@
 </a>
 <h2 class="title">D</h2>
 <dl>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/SquidID.html#d">d</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/SquidID.html" title="class in squidpony.squidmath">SquidID</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/styled/Tile.html#d_constraint">d_constraint</a></span> - Variable in class squidpony.squidgrid.mapping.styled.<a href="../squidpony/squidgrid/mapping/styled/Tile.html" title="class in squidpony.squidgrid.mapping.styled">Tile</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/DamerauLevenshteinAlgorithm.html" title="class in squidpony"><span class="typeNameLink">DamerauLevenshteinAlgorithm</span></a> - Class in <a href="../squidpony/package-summary.html">squidpony</a></dt>
@@ -517,8 +519,12 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CosmicNumbering.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CosmicNumbering.html" title="class in squidpony.squidmath">CosmicNumbering</a></dt>
 <dd>
-<div class="block">The same as <a href="../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a>, except this assumes state has already been multiplied by
+<div class="block">The same as <a href="../squidpony/squidmath/DiverRNG.html#determine-long-"><code>DiverRNG.determine(long)</code></a>, except this assumes state has already been multiplied by
  0x632BE59BD9B4E019L.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlapRNG.html#determine-int-">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></dt>
 <dd>
@@ -554,7 +560,7 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MummyNoise.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a></dt>
 <dd>
-<div class="block">The same as <a href="../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a>, except this assumes state has already been multiplied by
+<div class="block">The same as <a href="../squidpony/squidmath/DiverRNG.html#determine-long-"><code>DiverRNG.determine(long)</code></a>, except this assumes state has already been multiplied by
  0x632BE59BD9B4E019L.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutedRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutedRNG.html" title="class in squidpony.squidmath">PermutedRNG</a></dt>
@@ -608,6 +614,11 @@
 <dd>
 <div class="block">Method to get a double from the van der Corput sequence with the base 2 at a scrambling of the requested
  <code>index</code> without needing to construct a VanDerCorputQRNG.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)
+ and bound (exclusive); state is expected to change between calls to this.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FlapRNG.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/FlapRNG.html" title="class in squidpony.squidmath">FlapRNG</a></dt>
 <dd>
@@ -680,6 +691,11 @@
 <dd>
 <div class="block">Gets the next number from 1 to 255 that a different kind of LFSR would produce if its state was <code>state</code>.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#determineDouble-long-">determineDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determineDouble-long-">determineDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
@@ -698,6 +714,11 @@
 <dd>
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
  will return the same float.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#determineFloat-long-">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+ return the same float.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determineFloat-long-">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>
@@ -764,13 +785,13 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#DharmaRNG-java.lang.CharSequence-">DharmaRNG(CharSequence)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>
 <div class="block">String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
- seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+ seed for DiverRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
  tiny state size, and excellent 64-bit number generation.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#DharmaRNG-java.lang.String-double-">DharmaRNG(String, double)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
 <dd>
 <div class="block">String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
- seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+ seed for DiverRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
  tiny state size, and excellent 64-bit number generation.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#DharmaRNG-squidpony.squidmath.RandomnessSource-">DharmaRNG(RandomnessSource)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
@@ -1007,6 +1028,19 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Viny4D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Viny4D.html" title="class in squidpony.squidmath">Noise.Viny4D</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.Viny6D.html#disturbance">disturbance</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.Viny6D.html" title="class in squidpony.squidmath">Noise.Viny6D</a></dt>
+<dd>&nbsp;</dd>
+<dt><a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">DiverRNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">A very-high-quality StatefulRandomness that is the fastest 64-bit generator in this library that passes statistical
+ tests and is one-dimensionally equidistributed across all 64-bit outputs.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#DiverRNG--">DiverRNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Creates a new generator seeded using Math.random.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#DiverRNG-long-">DiverRNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#DiverRNG-java.lang.String-">DiverRNG(String)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#divide-squidpony.squidmath.Coord-">divide(Coord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>

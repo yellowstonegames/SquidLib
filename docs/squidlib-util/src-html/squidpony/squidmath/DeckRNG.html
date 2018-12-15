@@ -498,13 +498,13 @@
 <span class="sourceLineNo">490</span>//            array[i] = LightRNG.determineDouble(lastShuffledState + (i &lt;&lt; 1) + 1) * 0.0625 + t;<a name="line.490"></a>
 <span class="sourceLineNo">491</span>//        }<a name="line.491"></a>
 <span class="sourceLineNo">492</span>        for (int i = n; i &gt; 1; i--) {<a name="line.492"></a>
-<span class="sourceLineNo">493</span>            final int r = LinnormRNG.determineBounded(lastShuffledState + i, i);<a name="line.493"></a>
+<span class="sourceLineNo">493</span>            final int r = DiverRNG.determineBounded(lastShuffledState + i, i);<a name="line.493"></a>
 <span class="sourceLineNo">494</span>            final double t = array[i - 1];<a name="line.494"></a>
 <span class="sourceLineNo">495</span>            array[i - 1] = array[r];<a name="line.495"></a>
 <span class="sourceLineNo">496</span>            array[r] = t;<a name="line.496"></a>
 <span class="sourceLineNo">497</span>        }<a name="line.497"></a>
 <span class="sourceLineNo">498</span>        for (int i = 0; i &lt; n; i++) {<a name="line.498"></a>
-<span class="sourceLineNo">499</span>            array[i] += LinnormRNG.determineDouble(lastShuffledState ^ ~i) * 0.0625;<a name="line.499"></a>
+<span class="sourceLineNo">499</span>            array[i] += DiverRNG.determineDouble(lastShuffledState ^ ~i) * 0.0625;<a name="line.499"></a>
 <span class="sourceLineNo">500</span>        }<a name="line.500"></a>
 <span class="sourceLineNo">501</span><a name="line.501"></a>
 <span class="sourceLineNo">502</span>    }<a name="line.502"></a>

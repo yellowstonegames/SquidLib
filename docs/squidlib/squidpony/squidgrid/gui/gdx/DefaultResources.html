@@ -2025,7 +2025,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>narrowFontSymbols</h4>
-<pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2015">narrowFontSymbols</a></pre>
+<pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2019">narrowFontSymbols</a></pre>
 <div class="block">Special symbols that can be used as icons if you use the narrow default font.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -2039,7 +2039,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>narrowFontAll</h4>
-<pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2016">narrowFontAll</a></pre>
+<pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2020">narrowFontAll</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../constant-values.html#squidpony.squidgrid.gui.gdx.DefaultResources.narrowFontAll">Constant Field Values</a></dd>
@@ -2052,7 +2052,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>iconFontAll</h4>
-<pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2042">iconFontAll</a></pre>
+<pre>public static final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2046">iconFontAll</a></pre>
 <div class="block">All of the Font-Awesome Free (solid style) characters in <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getCrispIconFont--"><code>getCrispIconFont()</code></a>, as a String.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -3287,7 +3287,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCrispSlabFamily</h4>
-<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1832">getCrispSlabFamily</a>()</pre>
+<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1834">getCrispSlabFamily</a>()</pre>
 <div class="block">Returns a TextFamily already configured to use a highly-legible fixed-width font with good Unicode support and a
  slab-serif geometric style, that should scale cleanly to many sizes (using an MSDF technique) and supports 4
  styles (regular, bold, italic, and bold italic). Caches the result for later calls. The font used is Iosevka with
@@ -3304,6 +3304,8 @@ implements com.badlogic.gdx.LifecycleListener</pre>
  true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
  deserves an award."</a> You may want to try using both this version of Iosevka with slab serifs and the other
  version SquidLib has with an MSDF effect, <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getCrispLeanFamily--"><code>getCrispLeanFamily()</code></a>.
+ <br>
+ This TextFamily has its smoothing multiplier set to 1.55 instead of the default 1.2, which helps it stay sharp.
  <br>
  Preview: <a href="https://i.imgur.com/wRNlpL5.png">image link</a>, with bold at the bottom.
  <br>
@@ -3327,7 +3329,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCrispPrintFamily</h4>
-<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1869">getCrispPrintFamily</a>()</pre>
+<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextFamily.html" title="class in squidpony.squidgrid.gui.gdx">TextFamily</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1873">getCrispPrintFamily</a>()</pre>
 <div class="block">Returns a TextFamily already configured to use a variable-width serif font that should look like the serif
  fonts used in many novels' main texts, and that should scale cleanly to many sizes using an MSDF technique, and
  supports 4 styles (regular, bold, italic, and bold italic). Caches the result for later calls. The font used is 
@@ -3357,7 +3359,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCrispIconFont</h4>
-<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1906">getCrispIconFont</a>()</pre>
+<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1910">getCrispIconFont</a>()</pre>
 <div class="block">Returns a TextCellFactory already configured to use a fixed-width icon font (no letters are supported) using the
  Font-Awesome icon set, that should scale cleanly to even very large sizes. Caches the result for later calls.
  The icon font used is the popular Font-Awesome free set (solid style), an open-source (SIL Open Font License)
@@ -3389,7 +3391,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getTentacle</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1937">getTentacle</a>()</pre>
+<pre>public static&nbsp;com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1941">getTentacle</a>()</pre>
 <div class="block">Gets an image of a (squid-like, for SquidLib) tentacle, 32x32px.
  Source is public domain: http://opengameart.org/content/496-pixel-art-icons-for-medievalfantasy-rpg
  Created by Henrique Lazarini (7Soul1, http://7soul1.deviantart.com/ )
@@ -3410,7 +3412,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIconAtlas</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.g2d.TextureAtlas&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1972">getIconAtlas</a>()</pre>
+<pre>public static&nbsp;com.badlogic.gdx.graphics.g2d.TextureAtlas&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1976">getIconAtlas</a>()</pre>
 <div class="block">Gets a TextureAtlas containing many icons with a distance field effect applied, allowing them to be used with
  "stretchable" fonts and be resized in the same way. These will not look as-expected if stretchable fonts are not
  in use, and will seem hazy and indistinct if the shader hasn't been set up for a distance field effect by
@@ -3440,7 +3442,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getGuiRandom</h4>
-<pre>public static&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath">StatefulRNG</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1989">getGuiRandom</a>()</pre>
+<pre>public static&nbsp;<a href="http://squidpony.github.io/SquidLib/squidlib-util/squidpony/squidmath/StatefulRNG.html?is-external=true" title="class or interface in squidpony.squidmath">StatefulRNG</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.1993">getGuiRandom</a>()</pre>
 <div class="block">This is a static global StatefulRNG that's meant for usage in cases where the seed does not matter and any
  changes to this RNG's state will not change behavior elsewhere in the program; this means the GUI mainly.</div>
 </li>
@@ -3451,7 +3453,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getSCC</h4>
-<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2002">getSCC</a>()</pre>
+<pre>public static&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SquidColorCenter.html" title="class in squidpony.squidgrid.gui.gdx">SquidColorCenter</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2006">getSCC</a>()</pre>
 <div class="block">This is a static global SquidColorCenter that can be used in places that just need an existing object that can do
  things like analyze hue or saturation of a color.</div>
 </li>
@@ -3462,7 +3464,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>pause</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2048">pause</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2052">pause</a>()</pre>
 <div class="block">Called when the <code>Application</code> is about to pause</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -3476,7 +3478,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>resume</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2055">resume</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2059">resume</a>()</pre>
 <div class="block">Called when the Application is about to be resumed</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -3490,7 +3492,7 @@ implements com.badlogic.gdx.LifecycleListener</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>dispose</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2062">dispose</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/DefaultResources.html#line.2066">dispose</a>()</pre>
 <div class="block">Called when the <code>Application</code> is about to be disposed</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

@@ -123,7 +123,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
  <p>
- This takes a RandomnessSource, defaulting to a LinnormRNG, and uses it to generate random values, but tracks the total
+ This takes a RandomnessSource, defaulting to a DiverRNG, and uses it to generate random values, but tracks the total
  and compares it to the potential total of a generator of only numbers with a desired value (default 0.54,
  so it compares against a sequence of all 0.54). If the current generated total is too high or low compared to the
  desired total, the currently used seed is possibly changed, the generated number is moved in the direction of the
@@ -205,7 +205,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DharmaRNG.html#DharmaRNG-java.lang.CharSequence-">DharmaRNG</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</code>
 <div class="block">String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
- seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+ seed for DiverRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
  tiny state size, and excellent 64-bit number generation.</div>
 </td>
 </tr>
@@ -235,7 +235,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DharmaRNG.html#DharmaRNG-java.lang.String-double-">DharmaRNG</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seedString,
          double&nbsp;fairness)</code>
 <div class="block">String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
- seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+ seed for DiverRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
  tiny state size, and excellent 64-bit number generation.</div>
 </td>
 </tr>
@@ -477,7 +477,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <h4>DharmaRNG</h4>
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DharmaRNG.html#line.85">DharmaRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;seedString)</pre>
 <div class="block">String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
- seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+ seed for DiverRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
  tiny state size, and excellent 64-bit number generation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -494,7 +494,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/DharmaRNG.html#line.97">DharmaRNG</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;seedString,
                  double&nbsp;fairness)</pre>
 <div class="block">String-seeded constructor; uses a platform-independent hash of the String (it does not use String.hashCode) as a
- seed for LinnormRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
+ seed for DiverRNG, which is of high quality, but low period (which rarely matters for games), and has good speed,
  tiny state size, and excellent 64-bit number generation.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -793,7 +793,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/RNG.html#nextBoolean--">RNG</a></code></span></div>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.
  This may have better behavior than <code>rng.next(1)</code>, depending on the RandomnessSource implementation; the
- default LinnormRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
+ default DiverRNG will behave fine, as will LightRNG and ThrustAltRNG (these all use similar algorithms), but
  the  normally-high-quality XoRoRNG will produce very predictable output with <code>rng.next(1)</code> and very good
  output with <code>rng.nextBoolean()</code>. This is a known and considered flaw of Xoroshiro128+, the algorithm used
  by XoRoRNG, and a large number of generators have lower quality on the least-significant bit than the most-

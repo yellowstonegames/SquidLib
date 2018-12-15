@@ -19,12 +19,12 @@
 <span class="sourceLineNo">011</span> * "testunif" checks, this does very well on 100GB of tested data, with the "Overall summary one sided P-value P =<a name="line.11"></a>
 <span class="sourceLineNo">012</span> * 0.981", where 1 is perfect and 0.1 or less is a failure. On &lt;a href="http://pracrand.sourceforge.net/"&gt;PractRand&lt;/a&gt;,<a name="line.12"></a>
 <span class="sourceLineNo">013</span> * this passes all 32TB of generated numbers without finding any failures (and very rarely finding anomalies). Like<a name="line.13"></a>
-<span class="sourceLineNo">014</span> * {@link LightRNG}, this changes its state with a steady fixed increment, and does cipher-like adjustments to the<a name="line.14"></a>
-<span class="sourceLineNo">015</span> * current state to randomize it (the change is not a true cipher because it is not reversible; this may be an advantage<a name="line.15"></a>
+<span class="sourceLineNo">014</span> * {@link LightRNG}, this changes its state with a steady fixed increment, and does hash-like adjustments to the<a name="line.14"></a>
+<span class="sourceLineNo">015</span> * current state to randomize it (the change is not a cipher because it is not reversible; this may be an advantage<a name="line.15"></a>
 <span class="sourceLineNo">016</span> * for some usage). The period on ThrustAltRNG is 2 to the 64. ThrustAltRNG is very strong on speed, outpacing the<a name="line.16"></a>
-<span class="sourceLineNo">017</span> * default generator for {@link RNG}, {@link LinnormRNG}, by a small margin, and most other RandomnessSources in<a name="line.17"></a>
-<span class="sourceLineNo">018</span> * SquidLib by a larger margin (it is slower than {@link JabRNG}, but JabRNG fails some statistical tests). Similarly to<a name="line.18"></a>
-<span class="sourceLineNo">019</span> * other cipher-like PRNGs, ThrustAltRNG has a {@link #determine(long)} method that takes a state as a long and returns<a name="line.19"></a>
+<span class="sourceLineNo">017</span> * default generator for {@link RNG}, {@link DiverRNG}, by a small margin, and most other RandomnessSources in<a name="line.17"></a>
+<span class="sourceLineNo">018</span> * SquidLib by a larger margin (it is slower than {@link MiniMover64RNG}, but this has a better period). Similarly to<a name="line.18"></a>
+<span class="sourceLineNo">019</span> * other hash-like PRNGs, ThrustAltRNG has a {@link #determine(long)} method that takes a state as a long and returns<a name="line.19"></a>
 <span class="sourceLineNo">020</span> * a deterministic random number (each input has one output, though in this case the reverse isn't true and some outputs<a name="line.20"></a>
 <span class="sourceLineNo">021</span> * will be returned by multiple inputs). Like LightRNG, but unlike an LCG such as {@link java.util.Random}, changing the<a name="line.21"></a>
 <span class="sourceLineNo">022</span> * seed even slightly generally produces completely different results, which applies primarily to determine() but also<a name="line.22"></a>
@@ -33,9 +33,9 @@
 <span class="sourceLineNo">025</span> * &lt;br&gt;<a name="line.25"></a>
 <span class="sourceLineNo">026</span> * Because this generator can't produce all longs (it is not equidistributed), that alone is enough to discount its use<a name="line.26"></a>
 <span class="sourceLineNo">027</span> * in some (mainly scientific) scenarios, although it passes all major testing suites (TestU01's BigCrush, PractRand<a name="line.27"></a>
-<span class="sourceLineNo">028</span> * over the full 32TB of tests, and gjrand to some degree, at least better than most). LinnormRNG is the default<a name="line.28"></a>
-<span class="sourceLineNo">029</span> * generator after ThrustAltRNG was used extensively for some time, since LinnormRNG passes the same tests (not quite as<a name="line.29"></a>
-<span class="sourceLineNo">030</span> * well on gjrand, notably), is almost as fast, and is known to produce all longs over the course of its period.<a name="line.30"></a>
+<span class="sourceLineNo">028</span> * over the full 32TB of tests, and gjrand to some degree, at least better than most). DiverRNG is the default<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * generator after ThrustAltRNG was used extensively for some time, since DiverRNG passes the same tests, is almost as<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * fast, and is known to produce all longs over the course of its period.<a name="line.30"></a>
 <span class="sourceLineNo">031</span> * &lt;br&gt;<a name="line.31"></a>
 <span class="sourceLineNo">032</span> * There was a ThrustRNG in SquidLib, but it failed statistical tests badly in roughly a minute of testing, so even<a name="line.32"></a>
 <span class="sourceLineNo">033</span> * though it was faster it probably wasn't a good idea to use it. ThrustAltRNG modifies ThrustRNG's algorithm very<a name="line.33"></a>

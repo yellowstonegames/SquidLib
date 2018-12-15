@@ -502,7 +502,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //world.setCenterLongitude((System.currentTimeMillis() & 0xFFFFFFF) * 0.0002);
         //world.setCenterLongitude(++counter * 0.02);
         world.generate(1.0 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
-                LinnormRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.35 + 0.9, seed);
+                DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.35 + 0.9, seed);
         dbm.makeBiomes(world);
         //randomizeColors(seed);
         //political = fpm.generate(seed + 1000L, world, dbm, null, 50, 1.0);

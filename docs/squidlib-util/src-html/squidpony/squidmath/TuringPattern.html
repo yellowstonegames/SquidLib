@@ -44,7 +44,7 @@
 <span class="sourceLineNo">036</span>        if(substance == null) return null;<a name="line.36"></a>
 <span class="sourceLineNo">037</span>        long seed = 65537;<a name="line.37"></a>
 <span class="sourceLineNo">038</span>        for (int i = 0; i &lt; substance.length; i++) {<a name="line.38"></a>
-<span class="sourceLineNo">039</span>            substance[i] = (LinnormRNG.determine(++seed) &gt;&gt; 11) * fraction;<a name="line.39"></a>
+<span class="sourceLineNo">039</span>            substance[i] = (DiverRNG.determine(++seed) &gt;&gt; 11) * fraction;<a name="line.39"></a>
 <span class="sourceLineNo">040</span>        }<a name="line.40"></a>
 <span class="sourceLineNo">041</span>        return substance;<a name="line.41"></a>
 <span class="sourceLineNo">042</span>    }<a name="line.42"></a>
@@ -68,7 +68,7 @@
 <span class="sourceLineNo">060</span>    public static double[] initializeInto(double[] substance, int seed){<a name="line.60"></a>
 <span class="sourceLineNo">061</span>        if(substance == null) return null;<a name="line.61"></a>
 <span class="sourceLineNo">062</span>        for (int i = 0; i &lt; substance.length; i++) {<a name="line.62"></a>
-<span class="sourceLineNo">063</span>            substance[i] = (LinnormRNG.determine(++seed) &gt;&gt; 11) * fraction;<a name="line.63"></a>
+<span class="sourceLineNo">063</span>            substance[i] = (DiverRNG.determine(++seed) &gt;&gt; 11) * fraction;<a name="line.63"></a>
 <span class="sourceLineNo">064</span>        }<a name="line.64"></a>
 <span class="sourceLineNo">065</span>        return substance;<a name="line.65"></a>
 <span class="sourceLineNo">066</span>    }<a name="line.66"></a>

@@ -242,9 +242,9 @@
 <span class="sourceLineNo">234</span><a name="line.234"></a>
 <span class="sourceLineNo">235</span>    /**<a name="line.235"></a>
 <span class="sourceLineNo">236</span>     * Generates higher-quality continuous-style noise than the other methods, but requires pre-calculating a grid.<a name="line.236"></a>
-<span class="sourceLineNo">237</span>     * Does allow taking a seed because internally it uses a LinnormRNG to quickly generate initial white noise before<a name="line.237"></a>
+<span class="sourceLineNo">237</span>     * Does allow taking a seed because internally it uses a DiverRNG to quickly generate initial white noise before<a name="line.237"></a>
 <span class="sourceLineNo">238</span>     * processing it into more continuous noise. This generates a lot of random numbers (at least 1 + 14 * height, or<a name="line.238"></a>
-<span class="sourceLineNo">239</span>     * more if width is greater than 64), so LinnormRNG's high speed and fairly good period are both assets here.<a name="line.239"></a>
+<span class="sourceLineNo">239</span>     * more if width is greater than 64), so DiverRNG's high speed and fairly good period are both assets here.<a name="line.239"></a>
 <span class="sourceLineNo">240</span>     * &lt;br&gt;<a name="line.240"></a>
 <span class="sourceLineNo">241</span>     * The 2D int array this produces has ints ranging from 1 to 255, with extreme values very unlikely. Because 0 is<a name="line.241"></a>
 <span class="sourceLineNo">242</span>     * impossible for this to generate, it should be fine to use values from this as denominators in division.<a name="line.242"></a>
@@ -255,7 +255,7 @@
 <span class="sourceLineNo">247</span>     * @return a 2D int array where each int should be between 1 and 255, inclusive<a name="line.247"></a>
 <span class="sourceLineNo">248</span>     */<a name="line.248"></a>
 <span class="sourceLineNo">249</span>    public static int[][] preCalcNoise2D(int width, int height, long seed) {<a name="line.249"></a>
-<span class="sourceLineNo">250</span>        LinnormRNG random = new LinnormRNG(seed);<a name="line.250"></a>
+<span class="sourceLineNo">250</span>        DiverRNG random = new DiverRNG(seed);<a name="line.250"></a>
 <span class="sourceLineNo">251</span>        int w = (width &lt;&lt; 1) + 2, h = (height &lt;&lt; 1) + 2;<a name="line.251"></a>
 <span class="sourceLineNo">252</span>        GreasedRegion[] regions = new GreasedRegion[]{<a name="line.252"></a>
 <span class="sourceLineNo">253</span>                new GreasedRegion(random, w, h).retract().expand(3), new GreasedRegion(random, w, h).retract().expand(3),<a name="line.253"></a>
