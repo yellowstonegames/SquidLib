@@ -12827,6 +12827,65 @@ public class SColor extends Color implements Serializable {
         final int bits = NumberTools.floatToIntBits(encoded);
         return ((bits & 0x000000ff) + ((bits & 0x0000ff00) >>> 7) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
     }
+
+    /**
+     * The "luminance" of the given libGDX Color, which is like its lightness, in YCoCg format; ranges from 0.0f to
+     * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCoCg(float, float, float, float)}.
+     * YCoCg is useful for modifications to colors because you can get a grayscale version of a color by setting Co and
+     * Cg to 0, you can desaturate by multiplying Co and Cg by a number between 0 and 1, you can oversaturate by
+     * multiplying Co and Cg by a number greater than 1, you can lighten or darken by increasing or decreasing
+     * luminance, and so on and so forth. YCoCg is also a little more efficient to process than YCbCr, which other
+     * methods like {@link #floatGetYCbCr(float, float, float, float)} use. This might not be as perceptually accurate
+     * at determining lightness as {@link #lumaOfFloat(float)}.
+     * @param color a libGDX Color or SColor
+     * @return the luminance as a float from 0.0f to 1.0f
+     */
+    public static float luminanceYCoCg(final Color color)
+    {
+        //This structure should receive dot-product optimizations on recent HotSpot JDKs.
+        return (color.r * 0.25f) +
+                (color.g * 0.5f) +
+                (color.b * 0.25f);
+    }
+    /**
+     * The "chrominance orange" of the given libGDX Color, which when combined with chrominance green describes the
+     * shade and saturation of a color, in YCoCg format; ranges from -0.5f to 0.5f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCoCg(float, float, float, float)}. YCoCg is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Co and Cg to 0, you can desaturate by
+     * multiplying Co and Cg by a number between 0 and 1, you can oversaturate by multiplying Co and Cg by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luminance, and so on and so forth. YCoCg is
+     * also a little more efficient to process than YCbCr, which other methods like
+     * {@link #floatGetYCbCr(float, float, float, float)} use.
+     * @param color a libGDX Color or SColor
+     * @return the chrominance orange as a float from -0.5f to 0.5f
+     */
+    public static float chrominanceOrange(final Color color)
+    {
+        return (color.r * 0.5f) +
+                //(color.g * -0.331264f) +
+                (color.b * -0.5f);
+    }
+
+    /**
+     * The "chrominance green" of the given libGDX Color, which when combined with chrominance orange describes the
+     * shade and saturation of a color, in YCoCg format; ranges from -0.5f to 0.5f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCoCg(float, float, float, float)}. YCoCg is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Co and Cg to 0, you can desaturate by
+     * multiplying Co and Cg by a number between 0 and 1, you can oversaturate by multiplying Co and Cg by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luminance, and so on and so forth. YCoCg is
+     * also a little more efficient to process than YCbCr, which other methods like
+     * {@link #floatGetYCbCr(float, float, float, float)} use.
+     * @param color a libGDX Color or SColor
+     * @return the chrominance green as a float from -0.5f to 0.5f
+     */
+    public static float chrominanceGreen(final Color color)
+    {
+        //This structure should receive dot-product optimizations on recent HotSpot JDKs.
+        return (color.r * -0.25f) +
+                (color.g * 0.5f) +
+                (color.b * -0.25f);
+    }
+
     /**
      * The "chrominance orange" of the given packed float, which when combined with chrominance green describes the
      * shade and saturation of a color, in YCoCg format; ranges from -0.5f to 0.5f . You can go back to an RGB color as
@@ -12854,7 +12913,7 @@ public class SColor extends Color implements Serializable {
      * also a little more efficient to process than YCbCr, which other methods like
      * {@link #floatGetYCbCr(float, float, float, float)} use.
      * @param encoded a packed float
-     * @return the chrominance orange as a float from -0.5f to 0.5f
+     * @return the chrominance green as a float from -0.5f to 0.5f
      */
     public static float chrominanceGreen(final float encoded)
     {

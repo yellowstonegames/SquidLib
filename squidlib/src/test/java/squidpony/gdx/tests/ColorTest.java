@@ -367,10 +367,12 @@ public class ColorTest extends ApplicationAdapter {
         int c2;
         double dist;
         for (int i = 1; i < 256; i++) {
+            col = DAWNBRINGER_AURORA[i];
             paletteMapping[reverse[i] =
-                    (int) ((lumas[i] = SColor.luma(DAWNBRINGER_AURORA[i])) * 127)
-                            | (int) (((cbs[i] = SColor.chromaB(DAWNBRINGER_AURORA[i])) + 0.5f) * 63) << 7
-                            | (int) (((crs[i] = SColor.chromaR(DAWNBRINGER_AURORA[i])) + 0.5f) * 63) << 13] = (byte) i;
+                    //(int)((lumas[i] = col.r * 0xBp-5f + col.g * 0x10p-5f + col.b * 0x5p-5f) * 127)
+                    (int) ((lumas[i] = SColor.luma(col)) * 127)
+                            | (int) (((cbs[i] = SColor.chromaB(col)) + 0.5f) * 63) << 7
+                            | (int) (((crs[i] = SColor.chromaR(col)) + 0.5f) * 63) << 13] = (byte) i;
         }
         float crf, cbf, yf;
         for (int cr = 0; cr < 64; cr++) {
@@ -390,7 +392,7 @@ public class ColorTest extends ApplicationAdapter {
                 }
             }
         }
-
+        float adj;
         for (int i = 1; i < 256; i++) {
             int rev = reverse[i], y = rev & 127, match = i;
 //            yf = lumas[i];
@@ -400,13 +402,23 @@ public class ColorTest extends ApplicationAdapter {
             ramps[i][0] = 15;//0xFFFFFFFF; // white
             ramps[i][2] = 1;//0x010101FF; // black
             ramps[i][3] = 1;//0x010101FF; // black
-            for (int yy = y + 1, rr = rev + 1; yy < 128; yy++, rr++) {
+            for (int yy = y + 2, rr = rev + 2; yy < 128; yy++, rr++) {
                 if ((paletteMapping[rr] & 255) != i) {
                     ramps[i][0] = paletteMapping[rr];
                     break;
-                }
+                }                 
+                adj = 1f + (64 - yy) * 0x1p-10f;
+                cbf = MathUtils.clamp(cbf * adj, -0.5f, 0.5f);
+                crf = MathUtils.clamp(crf * adj, -0.5f, 0.5f);
+//                cbf = (cbf + 0.5f) * 0.984375f - 0.5f;
+//                crf = (crf - 0.5f) * 0.96875f + 0.5f;
+                rr = yy
+                        | (int) ((cbf + 0.5f) * 63) << 7 
+                        | (int) ((crf + 0.5f) * 63) << 13;
             }
-            for (int yy = y - 1, rr = rev - 1; yy > 0; rr--) {
+            cbf = cbs[i];
+            crf = crs[i];
+            for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
                 if ((paletteMapping[rr] & 255) != i) {
                     ramps[i][2] = paletteMapping[rr];
                     rev = rr;
@@ -414,41 +426,61 @@ public class ColorTest extends ApplicationAdapter {
                     match = paletteMapping[rr] & 255;
                     break;
                 }
-                cbf = MathUtils.clamp(cbf * 0.9375f, -0.5f, 0.5f);
-                crf = MathUtils.clamp(crf * 0.9375f, -0.5f, 0.5f);
+                adj = 1f + (yy - 64) * 0x1p-10f;
+                cbf = MathUtils.clamp(cbf * adj, -0.5f, 0.5f);
+                crf = MathUtils.clamp(crf * adj, -0.5f, 0.5f);
+//                cbf = (cbf - 0.5f) * 0.984375f + 0.5f;
+//                crf = (crf + 0.5f) * 0.984375f - 0.5f;
                 rr = yy
                         | (int) ((cbf + 0.5f) * 63) << 7
                         | (int) ((crf + 0.5f) * 63) << 13;
+
+//                cbf = MathUtils.clamp(cbf * 0.9375f, -0.5f, 0.5f);
+//                crf = MathUtils.clamp(crf * 0.9375f, -0.5f, 0.5f);
+//                rr = yy
+//                        | (int) ((cbf + 0.5f) * 63) << 7
+//                        | (int) ((crf + 0.5f) * 63) << 13;
                 if (--yy == 0) {
                     match = -1;
                 }
             }
             if (match >= 0) {
-                for (int yy = y - 1, rr = rev - 1; yy > 0; yy--, rr--) {
+                for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
                     if ((paletteMapping[rr] & 255) != match) {
                         ramps[i][3] = paletteMapping[rr];
                         break;
                     }
-                    cbf = MathUtils.clamp(cbf * 0.9375f, -0.5f, 0.5f);
-                    crf = MathUtils.clamp(crf * 0.9375f, -0.5f, 0.5f);
+                    adj = 1f + (yy - 64) * 0x1p-10f;
+                    cbf = MathUtils.clamp(cbf * adj, -0.5f, 0.5f);
+                    crf = MathUtils.clamp(crf * adj, -0.5f, 0.5f);
+//                    cbf = (cbf - 0.5f) * 0.96875f + 0.5f;
+//                    crf = (crf + 0.5f) * 0.96875f - 0.5f;
                     rr = yy
                             | (int) ((cbf + 0.5f) * 63) << 7
                             | (int) ((crf + 0.5f) * 63) << 13;
+
+//                    cbf = MathUtils.clamp(cbf * 0.9375f, -0.5f, 0.5f);
+//                    crf = MathUtils.clamp(crf * 0.9375f, -0.5f, 0.5f);
+//                    rr = yy
+//                            | (int) ((cbf + 0.5f) * 63) << 7
+//                            | (int) ((crf + 0.5f) * 63) << 13;
                 }
             }
         }
-
-        System.out.println("byte[][] RAMPS = new byte[][]{");
+        
+        //0xFF6262, 0xFC3A8C, 0xE61E78, 0xBF3FBF
+        System.out.println("byte[][] RAMPS2 = new byte[][]{");
         for (int i = 0; i < 256; i++) {
-            System.out.println("{ " + (ramps[i][0])
-                    + ", " + StringKit.padLeftStrict(Byte.toString(ramps[i][1]), 4)
-                    + ", " + StringKit.padLeftStrict(Byte.toString(ramps[i][2]), 4)
-                    + ", " + StringKit.padLeftStrict(Byte.toString(ramps[i][3]), 4) + " },"
+            System.out.println(
+                      "{ " + ramps[i][0]
+                    + ", " + ramps[i][1]
+                    + ", " + ramps[i][2]
+                    + ", " + ramps[i][3] + " },"
             );
         }
         System.out.println("};");
 
-        System.out.println("int[][] RAMP_VALUES = new int[][]{");
+        System.out.println("int[][] RAMP_VALUES2 = new int[][]{");
         for (int i = 0; i < 256; i++) {
             System.out.println("{ 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][0] & 255]))
                     + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][1] & 255]))
@@ -804,7 +836,7 @@ public class ColorTest extends ApplicationAdapter {
     private double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
 //        float angle1 = NumberTools.atan2_(cb1, cr1);
 //        float angle2 = NumberTools.atan2_(cb2, cr2);
-        return (y1 - y2) * (y1 - y2) + ((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2)) * 0.875;
+        return (y1 - y2) * (y1 - y2) + ((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2)) * 0.375;
                 //+ ((angle1 - angle2) % 0.5f + 0.5f) % 0.5f;
     }
 
