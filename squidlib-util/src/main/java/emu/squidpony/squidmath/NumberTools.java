@@ -176,6 +176,10 @@ public class NumberTools {
         dv.setFloat32(0, value, true);
         return dv.getInt32(0, false);
     }
+    public static float reversedIntBitsToFloat(final int bits) {
+        dv.setInt32(0, bits, true);
+        return dv.getFloat32(0, false);
+    }
 
     public static float intBitsToFloat(final int bits) {
         wia.set(0, bits);

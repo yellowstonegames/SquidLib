@@ -6,6 +6,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ByteArray;
 import com.badlogic.gdx.utils.IntIntMap;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.NumberTools;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -842,6 +844,86 @@ public class PaletteReducer {
         }
         pixmap.setBlending(blending);
         return pixmap;
+    }
+    /**
+     * Retrieves a random non-0 color index for the palette this would reduce to, with a higher likelihood for colors
+     * that are used more often in reductions (those with few similar colors). The index is returned as a byte that,
+     * when masked with 255 as with {@code (palette.randomColorIndex(random) & 255)}, can be used as an index into a
+     * palette array with 256 or less elements that should have been used with {@link #exact(int[])} before to set the
+     * palette this uses.
+     * @param random an IRNG instance, such as a GWTRNG or RNG
+     * @return a randomly selected color index from this palette with a non-uniform distribution, can be any byte but 0
+     */
+    public byte randomColorIndex(IRNG random)
+    {
+        return paletteMapping[random.next(15)];
+    }
+
+    /**
+     * Retrieves a random non-transparent color from the palette this would reduce to, with a higher likelihood for
+     * colors that are used more often in reductions (those with few similar colors). The color is returned as an
+     * RGBA8888 int; you can assign one of these into a Color with {@link Color#rgba8888ToColor(Color, int)} or
+     * {@link Color#set(int)}.
+     * @param random an IRNG instance, such as a GWTRNG or RNG
+     * @return a randomly selected color from this palette with a non-uniform distribution
+     */
+    public int randomColor(IRNG random)
+    {
+        return paletteArray[paletteMapping[random.next(15)] & 255];
+    }
+
+    /**
+     * Looks up {@code color} as if it was part of an image being color-reduced and finds the closest color to it in the
+     * palette this holds. Both the parameter and the returned color are RGBA8888 ints.
+     * @param color an RGBA8888 int that represents a color this should try to find a similar color for in its palette
+     * @return an RGBA8888 int representing a color from this palette, or 0 if color is mostly transparent
+     * (0 is often but not always in the palette)
+     */
+    public int reduceSingle(int color)
+    {
+        if((color & 0x80) == 0) // less visible than half-transparent
+            return 0; // transparent
+        return paletteArray[paletteMapping[
+                (color >>> 17 & 0x7C00) 
+                        | (color >>> 14 & 0x3E0)
+                        | (color >>> 11)] & 0xFF];
+    }
+
+    /**
+     * Looks up {@code color} as if it was part of an image being color-reduced and finds the closest color to it in the
+     * palette this holds. Both the parameter and the returned color are packed float colors, as produced by
+     * {@link Color#toFloatBits()} or many methods in SColor.
+     * @param packedColor a packed float color this should try to find a similar color for in its palette
+     * @return a packed float color from this palette, or 0f if color is mostly transparent
+     * (0f is often but not always in the palette)
+     */
+    public float reduceFloat(float packedColor)
+    {
+        final int color = NumberTools.floatToIntBits(packedColor);
+        if(color >= 0) // if color is non-negative, then alpha is less than half of opaque
+            return 0f;
+        return NumberTools.reversedIntBitsToFloat(paletteArray[paletteMapping[
+                (color << 7 & 0x7C00)
+                        | (color >>> 6 & 0x3E0)
+                        | (color >>> 19)] & 0xFF] & 0xFFFFFFFE);
+        
+    }
+    
+    /**
+     * Modifies {@code color} so its RGB values will match the closest color in this PaletteReducer's palette. If color
+     * has {@link Color#a} less than 0.5f, this will simply set color to be fully transparent, with rgba all 0.
+     * @param color a libGDX Color that will be modified in-place; do not use a Color constant, use {@link Color#cpy()}
+     *              or a temporary Color
+     * @return color, after modifications.
+     */
+    public Color reduceInPlace(Color color)
+    {
+        if(color.a < 0.5f)
+            return color.set(0);
+        return color.set(paletteArray[paletteMapping[
+                ((int) (color.r * 0x1f.8p+10) & 0x7C00)
+                        | ((int) (color.g * 0x1f.8p+5) & 0x3E0)
+                        | ((int) (color.r * 0x1f.8p+0))] & 0xFF]);
     }
 
 }
