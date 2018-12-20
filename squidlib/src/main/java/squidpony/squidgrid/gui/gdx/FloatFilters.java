@@ -422,11 +422,10 @@ public final class FloatFilters {
     }
 
     /**
-     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of
-     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the
-     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the
-     * resulting alpha. Changing the alpha of the colors this is given can be done easily with
-     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.
+     * A FloatFilter that limits the colors it can return to a fixed palette, and won't return any colors that are
+     * missing from that palette (although it can always return fully-transparent). {@link PaletteReducerFilter} is also
+     * an option; it uses more memory but is faster to look up colors in larger palettes (it has a maximum size of 256
+     * colors, though, which this class doesn't).
      */
     public static class PaletteFilter extends FloatFilter {
         public float[] targets;
@@ -469,6 +468,58 @@ public final class FloatFilters {
                     choice = i;
             }
             return targets[choice];
+        }
+    }
+
+    /**
+     * A FloatFilter that limits the colors it can return to a fixed palette as determined by a {@link PaletteReducer},
+     * and won't return any colors that are missing from that palette (although it can always return fully-transparent).
+     * This is like {@link PaletteFilter} but trades off memory usage (it uses about 33KB to store a large-ish lookup
+     * table) to improve speed on large palettes. This can't use a palette larger than 256 colors (including transparent
+     * almost always).
+     */
+    public static class PaletteReducerFilter extends FloatFilter {
+        public PaletteReducer reducer;
+
+        /**
+         * Builds a PaletteReducerFilter that will use the 256-color (including transparent) DawnBringer Aurora palette.
+         */
+        public PaletteReducerFilter()
+        {
+            reducer = new PaletteReducer();
+        }
+        
+        /**
+         * Builds a PaletteReducerFilter with the given PaletteReducer, which will be referenced without copying. You
+         * can call {@link PaletteReducer#exact(Color[])} or other similar methods before this filter is used to set up
+         * the palette, and this is often done before the PaletteReducer is passed here.
+         * @param palette a PaletteReducer that should have the desired palette set up before this is used
+         */
+        public PaletteReducerFilter(final PaletteReducer palette) {
+            reducer = palette;
+        }
+
+        /**
+         * Builds a PaletteReducerFilter with an array or vararg of libGDX colors (at most 256 colors, and often
+         * starting with a transparent color) that this will choose from. The array will have its contents read but will
+         * not be held onto, so later changes won't affect it.
+         * @param targets an array or vararg of libGDX colors; must not be null
+         */
+
+        public PaletteReducerFilter(final Color... targets)
+        {
+            reducer = new PaletteReducer(targets);
+        }
+
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            return reducer.reduceFloat(color);
         }
     }
 

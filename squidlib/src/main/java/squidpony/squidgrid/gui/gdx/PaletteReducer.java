@@ -899,13 +899,13 @@ public class PaletteReducer {
      */
     public float reduceFloat(float packedColor)
     {
-        final int color = NumberTools.floatToIntBits(packedColor);
+        final int color = NumberTools.floatToIntBits(packedColor); // color is ABGR8888
         if(color >= 0) // if color is non-negative, then alpha is less than half of opaque
             return 0f;
         return NumberTools.reversedIntBitsToFloat(paletteArray[paletteMapping[
                 (color << 7 & 0x7C00)
                         | (color >>> 6 & 0x3E0)
-                        | (color >>> 19)] & 0xFF] & 0xFFFFFFFE);
+                        | (color >>> 19 & 0x1F)] & 0xFF] & 0xFFFFFFFE);
         
     }
     
