@@ -144,10 +144,13 @@ public class SparseLightingDemo extends ApplicationAdapter {
             GRAY_FLOAT = -0x1.7e7e7ep125F; // same result as SColor.CW_GRAY_BLACK.toFloatBits()
     // This filters colors in a way we adjust over time, producing a sort of hue shift effect.
     // It can also be used to over- or under-saturate colors, change their brightness, or any combination of these. 
-//    private FloatFilters.PaletteFilter pal;
+    private FloatFilters.PaletteFilter pal;
+    private FloatFilters.PaletteReducerFilter prf;
 //    private FloatFilters.MultiLerpFilter mlerp;
     private FloatFilters.YCbCrFilter ycbcr;
-//    private FloatFilter sepia;
+    private FloatFilters.ColorizeFilter sepia;
+    private FloatFilter[] filters;
+    private int filterChoice = 0;
     @Override
     public void create () {
         // gotta have a random number generator. We can seed an RNG with any long we want, or even a String.
@@ -156,7 +159,8 @@ public class SparseLightingDemo extends ApplicationAdapter {
         // just removing the String seed, making the line "rng = new RNG();" . Keeping the seed as a default allows
         // changes to be more easily reproducible, and using a fixed seed is strongly recommended for tests. 
         rng = new RNG(artOfWar);
-//        pal = new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_32);
+        pal = new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_AURORA);
+        prf = new FloatFilters.PaletteReducerFilter();
 //        mlerp = new FloatFilters.MultiLerpFilter(1f,
 //                SColor.translucentColor(SColor.CW_RICH_GREEN, 0.6f),
 //                SColor.translucentColor(SColor.CW_LIGHT_AZURE, 0.4f),
@@ -165,12 +169,14 @@ public class SparseLightingDemo extends ApplicationAdapter {
 //        );
         // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
         ycbcr = new FloatFilters.YCbCrFilter(1.125f, 1.1f, 1.1f);
-//        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
+        sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
+        filters = new FloatFilter[]{ycbcr, sepia, prf, pal};
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
         // FilterBatch is exactly like the normal libGDX SpriteBatch except that it filters all colors used for text or
         // for tinting images.
         batch = new FilterBatch(ycbcr);
+        
         StretchViewport mainViewport = new StretchViewport(gridWidth * cellWidth, gridHeight * cellHeight),
                 languageViewport = new StretchViewport(gridWidth * cellWidth, bonusHeight * cellHeight);
         mainViewport.setScreenBounds(0, 0, gridWidth * cellWidth, gridHeight * cellHeight);
@@ -433,6 +439,13 @@ public class SparseLightingDemo extends ApplicationAdapter {
                     case SquidInput.ESCAPE:
                     {
                         Gdx.app.exit();
+                        break;
+                    }
+                    case 'f':
+                    case 'F':
+                    {
+                        filterChoice++;
+                        batch.setFilter(filters[filterChoice & 3]);
                         break;
                     }
                     case 'c':
