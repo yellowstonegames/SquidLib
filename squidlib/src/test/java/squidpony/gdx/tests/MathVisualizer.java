@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SparseLayers;
@@ -161,7 +161,7 @@ public class MathVisualizer extends ApplicationAdapter {
         xs128 = new RandomXS128();
         xsp = new XSP();
         batch = new SpriteBatch();
-        stage = new Stage(new ScreenViewport(), batch);
+        stage = new Stage(new StretchViewport(512, 520), batch);
         layers = new SparseLayers(512, 520, 1, 1, new TextCellFactory().includedFont());
         layers.setDefaultForeground(SColor.WHITE);
         input = new InputAdapter(){
@@ -646,37 +646,51 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 19: {
-                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Halton[striding 1](2,3) sequence, first " + size + " points");
                 int x, y, a = 421;
                 for (int i = 0; i < size; i++) {
                     //a = determinePositive16(a);
+                    a++;
                     x = (int) (VanDerCorputQRNG.determine2(a) * 512);
                     y = (int) (VanDerCorputQRNG.determine(3, a) * 512);
-                    a++;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
                     } else
                         layers.put(x, y, SColor.FLOAT_BLACK);
                 }
+                x = (int) (VanDerCorputQRNG.determine2(a) * 512);
+                y = (int) (VanDerCorputQRNG.determine(3, a) * 512);
+                layers.put(x+1, y, -0x1.794bfep125F);
+                layers.put(x, y+1, -0x1.794bfep125F);
+                layers.put(x-1, y, -0x1.794bfep125F);
+                layers.put(x, y-1, -0x1.794bfep125F);
+
             }
             break;
             case 20: {
-                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Halton[striding 1](2,39) sequence, first " + size + " points");
                 int x, y, a = 421;
                 for (int i = 0; i < size; i++) {
 //                    a = determinePositive16(a);
+                    a++;
                     x = (int) (VanDerCorputQRNG.determine2(a) * 512);
                     y = (int) (VanDerCorputQRNG.determine(39, a) * 512);
-                    a++;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.put(x, y, -0x1.7677e8p125F);
                         System.out.println("Overlap on index " + i);
                     } else
                         layers.put(x, y, SColor.FLOAT_BLACK);
                 }
+                x = (int) (VanDerCorputQRNG.determine2(a) * 512);
+                y = (int) (VanDerCorputQRNG.determine(39, a) * 512);
+                layers.put(x+1, y, -0x1.794bfep125F);
+                layers.put(x, y+1, -0x1.794bfep125F);
+                layers.put(x-1, y, -0x1.794bfep125F);
+                layers.put(x, y-1, -0x1.794bfep125F);
+
             }
             break;
             // from http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences/
@@ -684,22 +698,22 @@ public class MathVisualizer extends ApplicationAdapter {
             // correctly, and this caused a pattern in the output because there was a pattern in the input.
             // Notably, with very large indices this still doesn't get collisions, but Halton does.
             case 21: {
-                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
+                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Roberts sequence, first " + size + " points");
-                int x, y, a = 421;
-                int t;
+                int x, y, a = 1;
 //                double p, q;
+
                 for (int i = 0; i < size; i++) {
                     //1.32471795724474602596 0.7548776662466927 0.5698402909980532
 //                    a = determinePositive16(a);
-                    x = (int)((((t = a * 0xC13FA9A9) ^ (t >>> 11)) & 0xFFFFFFFFL) * 512 >>> 32);
-                    y = (int)((((t = a * 0x91E10DA5) ^ (t >>> 11)) & 0xFFFFFFFFL) * 512 >>> 32);
+                    a++;
+                    x = (a * 0xC13FA9A9) >>> 23;
+                    y = (a * 0x91E10DA5) >>> 23;
 
 //                    p = 0.5 + a * 0.7548776662466927;
 //                    q = 0.5 + a * 0.5698402909980532;
 //                    x = (int) ((p - (int)p) * 512);
 //                    y = (int) ((q - (int)q) * 512);
-                    a++;
 //                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
 //                    x = a & 0x1ff;
 //                    y = a >>> 16 & 0x1ff;
@@ -713,12 +727,18 @@ public class MathVisualizer extends ApplicationAdapter {
                     } else
                         layers.put(x, y, SColor.FLOAT_BLACK);
                 }
+                x = (a * 0xC13FA9A9) >>> 23;
+                y = (a * 0x91E10DA5) >>> 23;
+                layers.put(x+1, y, -0x1.794bfep125F);
+                layers.put(x, y+1, -0x1.794bfep125F);
+                layers.put(x-1, y, -0x1.794bfep125F);
+                layers.put(x, y-1, -0x1.794bfep125F);
             }
             break;
             case 22: {
-                long size = (System.nanoTime() >>> 22 & 0xfff) + 1L;
-                Gdx.graphics.setTitle("Roberts sequence (int math), first " + size + " points");
-                int x, y, a = 421;
+                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
+                Gdx.graphics.setTitle("Roberts sequence (later start), first " + size + " points");
+                int x, y, a = 100000;
                 for (int i = 0; i < size; i++) {
                     //1.32471795724474602596 0.7548776662466927 0.5698402909980532
                     //0x5320B74F 0xC13FA9A9 0x91E10DA5
@@ -727,9 +747,10 @@ public class MathVisualizer extends ApplicationAdapter {
                     //a = determinePositive16(a);
 //                    x = (int) (0x8000000000000000L + a * 0xC13FA9A902A6328FL >>> 55);
 //                    y = (int) (0x8000000000000000L + a * 0x91E10DA5C79E7B1DL >>> 55);
-                    x = (int)((a * 0xC13FA9A9L & 0xFFFFFFFFL) * 512 >>> 32);
-                    y = (int)((a * 0x91E10DA5L & 0xFFFFFFFFL) * 512 >>> 32);
                     a++;
+                    x = (a * 0xC13FA9A9) >>> 23;
+                    y = (a * 0x91E10DA5) >>> 23;
+
 //                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
 //                    x = a & 0x1ff;
 //                    y = a >>> 16 & 0x1ff;
@@ -743,6 +764,13 @@ public class MathVisualizer extends ApplicationAdapter {
                     } else
                         layers.put(x, y, SColor.FLOAT_BLACK);
                 }
+                x = (a * 0xC13FA9A9) >>> 23;
+                y = (a * 0x91E10DA5) >>> 23;
+                layers.put(x+1, y, -0x1.794bfep125F);
+                layers.put(x, y+1, -0x1.794bfep125F);
+                layers.put(x-1, y, -0x1.794bfep125F);
+                layers.put(x, y-1, -0x1.794bfep125F);
+
             }
             break;
 
@@ -899,8 +927,8 @@ public class MathVisualizer extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Visualizer for Math Testing/Checking";
-        config.width = 512;
-        config.height = 520;
+        config.width = 512 << 1;
+        config.height = 520 << 1;
         config.foregroundFPS = 0;
         config.vSyncEnabled = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
