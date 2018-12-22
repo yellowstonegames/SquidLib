@@ -133,7 +133,7 @@ public class RotationDemo extends ApplicationAdapter {
         // cases but probably not all.
         //textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
         //        .width(cellWidth).height(cellHeight).initBySize();
-        textFactory = DefaultResources.getStretchableWideSlabFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
+        textFactory = DefaultResources.getCrispSlabFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
                 .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
 
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and

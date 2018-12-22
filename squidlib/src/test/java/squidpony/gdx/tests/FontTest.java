@@ -54,15 +54,15 @@ public class FontTest extends ApplicationAdapter {
     private SquidPanel[] displays;
     private TextPanel<Color> text;
     private ArrayList<TextPanel<Color>> texts;
-    private int index = 6;
+    private int index = 17;
     private static final int ZOOM = 1;
     @Override
     public void create() {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 105, 105, 105, 105, 130, 170, 200, 220};
-        heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  27,  27,  27,  27,  45, 25,  25,  25};
+        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105,  70, 200, 220};
+        heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
                 DefaultResources.getCrispSlabFamily().width(ZOOM * 14).height(28).initBySize(),
@@ -83,12 +83,12 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getStretchableLeanFont().width(ZOOM * 13).height(21).initBySize(),
                 DefaultResources.getStretchableLeanLightFont().width(ZOOM * 13).height(21).initBySize(),
 
-                DefaultResources.getStretchableWideSlabFont().width(ZOOM * 15).height(21).initBySize(),
-                DefaultResources.getStretchableWideSlabLightFont().width(ZOOM * 15).height(21).initBySize(),
-                DefaultResources.getStretchableWideFont().width(ZOOM * 15).height(21).initBySize(),
-                DefaultResources.getStretchableWideLightFont().width(ZOOM * 15).height(21).initBySize(),
                 DefaultResources.getStretchableCodeJPFont().width(ZOOM * 21).height(ZOOM * 22).initBySize(),
-                DefaultResources.getStretchableOrbitFont().initBySize(),
+                DefaultResources.getCrispCurvySquareFont().width(ZOOM * 19).height(19).initBySize(),
+                DefaultResources.getCrispLeanFont().width(ZOOM * 19).height(19).initBySize(),
+                DefaultResources.getCrispSlabFont().width(ZOOM * 19).height(19).initBySize(),
+                DefaultResources.getGoFamily().width(ZOOM * 14).height(25).initBySize(),
+                DefaultResources.getCrispPrintFamily().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
                 DefaultResources.getStretchableCleanFont().initBySize(),
         };
@@ -134,9 +134,9 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[13], heights[13], factories[13]).setTextSize(factories[13].width() + 2f * ZOOM, factories[13].height() + 2.75f * ZOOM),
                 new SquidPanel(widths[14], heights[14], factories[14]).setTextSize(factories[14].width() + 2f * ZOOM, factories[14].height() + 2.75f * ZOOM),
                 new SquidPanel(widths[15], heights[15], factories[15]).setTextSize(factories[15].width() + 2f * ZOOM, factories[15].height() + 2.75f * ZOOM),
-                new SquidPanel(widths[16], heights[16], factories[16]).setTextSize(factories[16].width() + 2f * ZOOM, factories[16].height() + 2.75f * ZOOM),
-                new SquidPanel(widths[17], heights[17], factories[17]).setTextSize(factories[17].width() + 2f * ZOOM, factories[17].height() + 2.75f * ZOOM),
-                new SquidPanel(widths[18], heights[18], factories[18]).setTextSize(factories[18].width() + 2f * ZOOM, factories[18].height() + 2.75f * ZOOM),
+                new SquidPanel(widths[16], heights[16], factories[16]).setTextSize(factories[16].width() + -1f * ZOOM, factories[16].height() + -1f * ZOOM),
+                new SquidPanel(widths[17], heights[17], factories[17]).setTextSize(factories[17].width() + 1f * ZOOM, factories[17].height() + 1f * ZOOM),
+                new SquidPanel(widths[18], heights[18], factories[18]).setTextSize(factories[18].width() + 1f * ZOOM, factories[18].height() + 1f * ZOOM),
                 new SquidPanel(widths[19], heights[19], factories[19]).setTextSize(factories[19].width() + 0f * ZOOM, factories[19].height() + 0f * ZOOM),
                 new SquidPanel(widths[20], heights[20], factories[20]).setTextSize(factories[20].width() + 1f * ZOOM, factories[20].height() + 2f * ZOOM),
                 new SquidPanel(widths[21], heights[21], factories[21]).setTextSize(factories[21].width() + 1f * ZOOM, factories[21].height() + 2f * ZOOM),
@@ -144,8 +144,12 @@ public class FontTest extends ApplicationAdapter {
         };
         final String[] samples = {"The quick brown fox jumps over the lazy dog.",
                 "HAMBURGEVONS",
-                "Black Sphinx Of Quartz: Judge Ye My Vow!"};
-        texts = new ArrayList<>(4);
+                "Black Sphinx Of Quartz: Judge Ye My Vow!",
+                "Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.",
+                "So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.",
+                "Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting."
+};
+        texts = new ArrayList<>(3);
         text = new TextPanel<Color>(null, factories[factories.length - 3]);
         text.init(totalWidth, totalHeight, Color.WHITE, samples);
         texts.add(text);

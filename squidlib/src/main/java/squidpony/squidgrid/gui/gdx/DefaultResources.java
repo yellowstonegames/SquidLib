@@ -65,7 +65,7 @@ import squidpony.squidmath.StatefulRNG;
  */
 public class DefaultResources implements LifecycleListener {
     private BitmapFont narrow1 = null, narrow2 = null, narrow3 = null,
-            smooth1 = null, smooth2 = null, smoothSquare = null, smoothSquareOld = null,
+            smooth1 = null, smooth2 = null, smoothSquare = null,
             square1 = null, square2 = null,
             unicode1 = null, unicode2 = null,
             arial15 = null, tiny = null, lessTiny;
@@ -73,8 +73,8 @@ public class DefaultResources implements LifecycleListener {
     private TextCellFactory distanceNarrow = null, distanceSquare = null, typewriterDistanceNarrow = null,
             distancePrint = null, distanceClean = null, distanceCode = null, distanceCodeJP = null,
             distanceDejaVu = null, distanceOrbit = null, distanceHeavySquare = null,
-            distanceSlab = null, distanceSlabLight = null, distanceWideSlab = null,  distanceWideSlabLight = null,
-            distanceLean = null, distanceLeanLight = null, distanceWide = null,  distanceWideLight = null,
+            distanceSlab = null, distanceSlabLight = null,
+            distanceLean = null, distanceLeanLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
             msdfDejaVu = null, msdfCurvySquare = null,
             msdfIcons = null;
@@ -121,14 +121,6 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldSlabLightTexture = "Iosevka-Slab-Light-distance.png",
             distanceFieldSlab = "Iosevka-Slab-distance.fnt",
             distanceFieldSlabTexture = "Iosevka-Slab-distance.png",
-            distanceFieldWideSlab = "Iosevka-Wide-Slab-distance.fnt",
-            distanceFieldWideSlabTexture = "Iosevka-Wide-Slab-distance.png",
-            distanceFieldWideSlabLight = "Iosevka-Wide-Slab-Light-distance.fnt",
-            distanceFieldWideSlabLightTexture = "Iosevka-Wide-Slab-Light-distance.png",
-            distanceFieldWide = "Iosevka-Wide-distance.fnt",
-            distanceFieldWideTexture = "Iosevka-Wide-distance.png",
-            distanceFieldWideLight = "Iosevka-Wide-Light-distance.fnt",
-            distanceFieldWideLightTexture = "Iosevka-Wide-Light-distance.png",
             crispSlab = "Iosevka-Slab-msdf.fnt",
             crispSlabTexture = "Iosevka-Slab-msdf.png",
             crispSlabItalic = "Iosevka-Slab-Oblique-msdf.fnt",
@@ -139,8 +131,6 @@ public class DefaultResources implements LifecycleListener {
             crispLeanItalicTexture = "Iosevka-Oblique-msdf.png",
             crispDejaVu = "DejaVuSansMono-msdf.fnt",
             crispDejaVuTexture = "DejaVuSansMono-msdf.png",
-            crispDejaVuItalic = "DejaVuSansMono-Oblique-msdf.fnt",
-            crispDejaVuItalicTexture = "DejaVuSansMono-Oblique-msdf.png",
             crispNotoSerif = "NotoSerif-Family-msdf.fnt",
             crispNotoSerifTexture = "NotoSerif-Family-msdf.png",
             crispCurvySquare = "square-msdf.fnt",
@@ -1071,185 +1061,7 @@ public class DefaultResources implements LifecycleListener {
             return instance.distanceSlabLight.copy();
         return null;
     }
-
-    /**
-     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
-     * and a slab-serif geometric style, that should scale cleanly to many sizes; this is extremely similar to
-     * {@link #getStretchableSlabFont()} but it is wider without stretching the vertical and horizontal lines unevenly.
-     * Caches the result for later calls. The font used is Iosevka with Slab style and Expanded width, an open-source
-     * (SIL Open Font License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several
-     * customizations thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of
-     * extended Latin, Greek, and Cyrillic, but also circled letters and digits and the necessary box drawing
-     * characters. The high glyph count means the part of the image for each glyph is smaller, though, so this may look
-     * slightly pixelated if it starts small and is resized to much larger. A cell width of 11 and cell height of 20 is
-     * ideal (or some approximate multiple of that aspect ratio); this allows the font to resize fairly well to larger
-     * sizes using Viewports. As an aside, Luc Devroye (a true typography expert) called Iosevka
-     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a> You may want to
-     * try using the various versions of Iosevka that SquidLib has, all Stretchable and either Lean or Slab, potentially
-     * Wide and/or Light as well.
-     * <br>
-     * Preview:
-     * <br>
-     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work.
-     * <br>
-     * Needs files:
-     * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-Slab-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-Slab-distance.png</li>
-     * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Wide-Slab.ttf
-     */
-    public static TextCellFactory getStretchableWideSlabFont()
-    {
-        initialize();
-        if(instance.distanceWideSlab == null)
-        {
-            try {
-                instance.distanceWideSlab = new TextCellFactory()
-                        .fontDistanceField(distanceFieldWideSlab, distanceFieldWideSlabTexture);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if(instance.distanceWideSlab != null)
-            return instance.distanceWideSlab.copy();
-        return null;
-    }
-    /**
-     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
-     * and a slab-serif geometric style, that should scale cleanly to many sizes; this is extremely similar to
-     * {@link #getStretchableSlabLightFont()} but it is wider without stretching the vertical and horizontal lines
-     * unevenly, and maintains a lighter stroke weight. Caches the result for later calls. The font used is Iosevka with
-     * Slab style, Light weight, and Expanded width, an open-source (SIL Open Font License) typeface by Belleve Invis
-     * (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations thanks to Iosevka's special build
-     * process. It supports a lot of glyphs, including quite a bit of extended Latin, Greek, and Cyrillic, but also
-     * circled letters and digits and the necessary box drawing characters. The high glyph count means the part of the
-     * image for each glyph is smaller, though, so this may look slightly pixelated if it starts small and is resized to
-     * much larger. A cell width of 13 and cell height of 20 is ideal (or some approximate multiple of that aspect
-     * ratio); this allows the font to resize fairly well to larger sizes using Viewports. As an aside, Luc Devroye (a
-     * true typography expert) called Iosevka <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that
-     * deserves an award."</a> You may want to try using the various versions of Iosevka that SquidLib has, all
-     * Stretchable and either Lean or Slab, potentially Wide and/or Light as well.
-     * <br>
-     * Preview:
-     * <br>
-     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work.
-     * <br>
-     * Needs files:
-     * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-Slab-Light-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-Slab-Light-distance.png</li>
-     * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Wide-Slab-Light.ttf
-     */
-    public static TextCellFactory getStretchableWideSlabLightFont()
-    {
-        initialize();
-        if(instance.distanceWideSlabLight == null)
-        {
-            try {
-                instance.distanceWideSlabLight = new TextCellFactory()
-                        .fontDistanceField(distanceFieldWideSlabLight, distanceFieldWideSlabLightTexture);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if(instance.distanceWideSlabLight != null)
-            return instance.distanceWideSlabLight.copy();
-        return null;
-    }
-    /**
-     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
-     * and a thin, geometric style, that should scale cleanly to many sizes; this is extremely similar to
-     * {@link #getStretchableLeanFont()} but it is wider without stretching the vertical and horizontal lines unevenly.
-     * Caches the result for later calls. The font used is Iosevka with Expanded width, an open-source (SIL Open Font
-     * License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it uses several customizations
-     * thanks to Iosevka's special build process. It supports a lot of glyphs, including quite a bit of extended Latin,
-     * Greek, and Cyrillic, but also circled letters and digits and the necessary box drawing characters. The high glyph
-     * count means the part of the image for each glyph is smaller, though, so this may look slightly pixelated if it
-     * starts small and is resized to much larger. A cell width of 13 and cell height of 20 is ideal (or some
-     * approximate multiple of that aspect ratio); this allows the font to resize fairly well to larger sizes using
-     * Viewports. As an aside, Luc Devroye (a true typography expert) called Iosevka
-     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a> You may want to
-     * try using the various versions of Iosevka that SquidLib has, all Stretchable and either Lean or Slab, potentially
-     * Wide and/or Light as well.
-     * <br>
-     * Preview:
-     * <br>
-     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work.
-     * <br>
-     * Needs files:
-     * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-distance.png</li>
-     * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Wide.ttf
-     */
-    public static TextCellFactory getStretchableWideFont()
-    {
-        initialize();
-        if(instance.distanceWide == null)
-        {
-            try {
-                instance.distanceWide = new TextCellFactory()
-                        .fontDistanceField(distanceFieldWide, distanceFieldWideTexture);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if(instance.distanceWide != null)
-            return instance.distanceWide.copy();
-        return null;
-    }
-
-    /**
-     * Returns a TextCellFactory already configured to use a highly-legible fixed-width font with good Unicode support
-     * and a thin, geometric style, that should scale cleanly to many sizes; this is extremely similar to
-     * {@link #getStretchableLeanLightFont()} but it is wider without stretching the vertical and horizontal lines
-     * unevenly. Caches the result for later calls. The font used is Iosevka with Expanded width and Light weight, an
-     * open-source (SIL Open Font License) typeface by Belleve Invis (see https://be5invis.github.io/Iosevka/ ), and it
-     * uses several customizations thanks to Iosevka's special build process. It supports a lot of glyphs, including
-     * quite a bit of extended Latin, Greek, and Cyrillic, but also circled letters and digits and the necessary box
-     * drawing characters. The high glyph count means the part of the image for each glyph is smaller, though, so this
-     * may look slightly pixelated if it starts small and is resized to much larger. A cell width of 13 and cell height
-     * of 20 is ideal (or some approximate multiple of that aspect ratio); this allows the font to resize fairly well to
-     * larger sizes using Viewports. As an aside, Luc Devroye (a true typography expert) called Iosevka
-     * <a href="http://luc.devroye.org/fonts-82704.html">"A tour de force that deserves an award."</a> You may want to
-     * try using the various versions of Iosevka that SquidLib has, all Stretchable and either Lean or Slab, potentially
-     * Wide and/or Light as well.
-     * <br>
-     * Preview:
-     * <br>
-     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
-     * distance field font technique this uses can work.
-     * <br>
-     * Needs files:
-     * <ul>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-Light-distance.fnt</li>
-     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/Iosevka-Wide-Light-distance.png</li>
-     * </ul>
-     * @return the TextCellFactory object that can represent many sizes of the font Iosevka-Wide-Light.ttf
-     */
-    public static TextCellFactory getStretchableWideLightFont()
-    {
-        initialize();
-        if(instance.distanceWideLight == null)
-        {
-            try {
-                instance.distanceWideLight = new TextCellFactory()
-                        .fontDistanceField(distanceFieldWideLight, distanceFieldWideLightTexture);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        if(instance.distanceWideLight != null)
-            return instance.distanceWideLight.copy();
-        return null;
-    }
-
+    
     /**
      * Returns a TextCellFactory already configured to use a font with extremely wide Unicode support that should scale
      * cleanly to many sizes. Caches the result for later calls. The font is DejaVu Sans Mono, a common font on Linux
@@ -1876,7 +1688,8 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.familyPrintMSDF = new TextFamily();
                 instance.familyPrintMSDF.fontMultiDistanceField(crispNotoSerif, crispNotoSerifTexture)
-                        .height(42).width(32);
+                        .width(12).height(30).setSmoothingMultiplier(1.5f);
+                instance.familyPrintMSDF.font().setUseIntegerPositions(false);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -2100,10 +1913,6 @@ public class DefaultResources implements LifecycleListener {
             smoothSquare.dispose();
             smoothSquare = null;
         }
-        if(smoothSquareOld != null) {
-            smoothSquareOld.dispose();
-            smoothSquareOld = null;
-        }
         if(distanceSquare != null) {
             distanceSquare.dispose();
             distanceSquare = null;
@@ -2143,22 +1952,6 @@ public class DefaultResources implements LifecycleListener {
         if(distanceSlabLight != null) {
             distanceSlabLight.dispose();
             distanceSlabLight = null;
-        }
-        if(distanceWide != null) {
-            distanceWide.dispose();
-            distanceWide = null;
-        }
-        if(distanceWideSlab != null) {
-            distanceWideSlab.dispose();
-            distanceWideSlab = null;
-        }
-        if(distanceWideLight != null) {
-            distanceWideLight.dispose();
-            distanceWideLight = null;
-        }
-        if(distanceWideSlabLight != null) {
-            distanceWideSlabLight.dispose();
-            distanceWideSlabLight = null;
         }
         if(distanceClean != null) {
             distanceClean.dispose();
@@ -2212,6 +2005,14 @@ public class DefaultResources implements LifecycleListener {
             unicode2.dispose();
             unicode2 = null;
         }
+        if(tiny != null){
+            tiny.dispose();
+            tiny = null;
+        }
+        if(lessTiny != null){
+            lessTiny.dispose();
+            lessTiny = null;
+        }
         if(familyLean != null) {
             familyLean.dispose();
             familyLean = null;
@@ -2231,6 +2032,10 @@ public class DefaultResources implements LifecycleListener {
         if(familySlabMSDF != null) {
             familySlabMSDF.dispose();
             familySlabMSDF = null;
+        }
+        if(familyPrintMSDF != null) {
+            familyPrintMSDF.dispose();
+            familyPrintMSDF = null;
         }
         if(tentacle != null) {
             tentacle.dispose();
