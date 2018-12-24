@@ -15,9 +15,12 @@ import squidpony.squidgrid.gui.gdx.PaletteReducer;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidmath.CoordPacker;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedSet;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Comparator;
 
 import static squidpony.squidgrid.gui.gdx.SColor.*;
 
@@ -37,7 +40,7 @@ public class QuantizeDemo extends ApplicationAdapter {
     private SpriteBatch batch;
     private SquidInput input;
     private Viewport view;
-    private int mode = 13, maxModes = 27;
+    private int mode = 17, maxModes = 27;
     private Pixmap edit, bivaOriginal, monaOriginal, colors;
     private ByteBuffer pixels;
     private Texture pt;
@@ -105,14 +108,25 @@ public class QuantizeDemo extends ApplicationAdapter {
         monaOriginal.setBlending(Pixmap.Blending.None);
         colors = new Pixmap(512, 512, Pixmap.Format.RGBA8888);
 //        SColor[] full = FULL_PALETTE;
-        int idx = 0;
-        //int len = full.length;
+        OrderedSet<? extends Color> full = new OrderedSet<>(FULL_PALETTE);
+        full.sort(new Comparator<Color>() {
+            @Override
+            public int compare(Color c1, Color c2) {
+                float diff = SColor.hue(c1) - SColor.hue(c2);
+                if(diff != 0)
+                    return NumberTools.floatToIntBits(diff);
+                return NumberTools.floatToIntBits(SColor.luma(c1) - SColor.luma(c2));
+            }
+        });
+        //int idx = 0;
+        int len = full.size();
         CoordPacker.init();
-        for (int h = 0; h < 512; h++) {
-            colors.setColor((CoordPacker.hilbert3X[h] * 73 << 23 & 0xFF000000)
-                    | (CoordPacker.hilbert3Y[h] * 73 << 15 & 0xFF0000)
-                    | (CoordPacker.hilbert3Z[h] * 73 << 7) | 0xFF);
-            colors.fillRectangle(CoordPacker.hilbertX[h] << 5, CoordPacker.hilbertY[h] << 4, 32, 16);
+        for (int h = 0; h < 65536; h++) {
+//            colors.setColor((CoordPacker.hilbert3X[h] * 73 << 23 & 0xFF000000)
+//                    | (CoordPacker.hilbert3Y[h] * 73 << 15 & 0xFF0000)
+//                    | (CoordPacker.hilbert3Z[h] * 73 << 7) | 0xFF);
+            colors.setColor(full.getAt(h % len));
+            colors.fillRectangle(CoordPacker.hilbertX[h] << 1, CoordPacker.hilbertY[h] << 1, 2, 2);
         }
 //        for (int x = 0; x < 256; x++) {
 //            for (int y = 0; y < 256; y++) {
