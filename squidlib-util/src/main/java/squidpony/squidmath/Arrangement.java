@@ -2630,4 +2630,31 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     {
         return alter(keyAt(index), replacement);
     }
+
+
+    /**
+     * Sorts this whole Arrangement using the supplied Comparator.
+     * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
+     */
+    public void sort(Comparator<? super K> comparator)
+    {
+        sort(comparator, 0, size);
+    }
+
+    /**
+     * Sorts a sub-range of this Arrangement from what is currently the index {@code start} up to (but not including)
+     * the index {@code end}, using the supplied Comparator.
+     * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
+     * @param start the first index of a key to sort (the index can change after this)
+     * @param end the exclusive bound on the indices to sort; often this is just {@link #size()}
+     */
+    public void sort(Comparator<? super K> comparator, int start, int end)
+    {
+        TimSort.sort(key, order, start, end, comparator);
+        final int[] indices = order.items;
+        for (int i = start; i < end; i++) {
+            value[indices[i]] = i;
+        }
+    }
+    
 }

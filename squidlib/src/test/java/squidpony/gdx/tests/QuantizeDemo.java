@@ -411,11 +411,11 @@ public class QuantizeDemo extends ApplicationAdapter {
                 pixels.rewind();
                 break;
             case 18:
-                Gdx.graphics.setTitle("(Original) R6G6B6 Palette");
+                Gdx.graphics.setTitle("(Original) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 break;
             case 19:
-                Gdx.graphics.setTitle("(64-value channels) R6G6B6 Palette");
+                Gdx.graphics.setTitle("(64-value channels) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 while (pixels.remaining() >= 4)
                 {
@@ -426,37 +426,37 @@ public class QuantizeDemo extends ApplicationAdapter {
                 pixels.rewind();
                 break;
             case 20:
-                Gdx.graphics.setTitle("(Adaptive Palette, Sierra Lite dither) R6G6B6 Palette");
+                Gdx.graphics.setTitle("(Adaptive Palette, Sierra Lite dither) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 colorsPalette.reduce(edit);
                 break;
             case 21:
-                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) R6G6B6 Palette");
+                Gdx.graphics.setTitle("(Adaptive Palette, Burkes dither) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 colorsPalette.reduceBurkes(edit);
                 break;
             case 22:
-                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) R6G6B6 Palette");
+                Gdx.graphics.setTitle("(Adaptive Palette, Noise-Based dither) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 colorsPalette.reduceWithNoise(edit);
                 break;
             case 23:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Sierra Lite dither)  R6G6B6 Palette");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Sierra Lite dither)  Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 auroraPalette.reduce(edit);
                 break;
             case 24:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) R6G6B6 Palette");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Burkes dither) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 auroraPalette.reduce(edit);
                 break;
             case 25:
-                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither)  R6G6B6 Palette");
+                Gdx.graphics.setTitle("(DawnBringer Aurora, Noise-Based dither)  Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 auroraPalette.reduceWithNoise(edit);
                 break;
             case 26:
-                Gdx.graphics.setTitle("(6-value channels) R6G6B6 Palette");
+                Gdx.graphics.setTitle("(6-value channels) Hilbert Hues");
                 edit.drawPixmap(colors, 0, 0);
                 switch (edit.getFormat()) {
                     case RGBA8888: {
