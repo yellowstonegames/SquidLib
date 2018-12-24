@@ -188,9 +188,4 @@ public class CriticalRNG extends RNG {
             t = it.next();
         return t;
     }
-
-    @Override
-    public double nextGaussian() {
-        return NumberTools.formCurvedDouble(random.nextLong()) * 1.75 + luck * 2.0;
-    }
 }

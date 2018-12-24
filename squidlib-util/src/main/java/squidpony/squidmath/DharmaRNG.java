@@ -1,8 +1,6 @@
 package squidpony.squidmath;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * An alteration to a RandomnessSource that attempts to produce values that are perceived as fair to an imperfect user.
@@ -314,51 +312,6 @@ public class DharmaRNG extends RNG implements Serializable{
         next.produced = produced;
         next.baseline = baseline;
         return next;
-    }
-
-    /**
-     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
-     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
-     * shuffling a copy of data and getting a section of it that matches the length of output.
-     *
-     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
-     * copying or creating a new generic array (a problem on GWT).
-     * @param data an array of T; will not be modified.
-     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
-     * @param <T> can be any non-primitive type.
-     * @return an array of T that has length equal to output's length and may contain null elements if output is shorter
-     * than data
-     */
-    @Override
-    public <T> T[] randomPortion(T[] data, T[] output) {
-        return super.randomPortion(data, output);
-    }
-
-    /**
-     * Gets a random portion of a List and returns it as a new List. Will only use a given position in the given
-     * List at most once; does this by shuffling a copy of the List and getting a section of it.
-     *
-     * @param data  a List of T; will not be modified.
-     * @param count the non-negative number of elements to randomly take from data
-     * @return a List of T that has length equal to the smaller of count or data.length
-     */
-    @Override
-    public <T> List<T> randomPortion(Collection<T> data, int count) {
-        return super.randomPortion(data, count);
-    }
-
-    /**
-     * Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.
-     * May return an empty array if the parameters are invalid (end is less than/equal to start, or start is negative).
-     *
-     * @param start the start of the range of numbers to potentially use (inclusive)
-     * @param end   the end of the range of numbers to potentially use (exclusive)
-     * @param count the total number of elements to use; will be less if the range is smaller than count
-     * @return an int array that contains at most one of each number in the range
-     */
-    @Override
-    public int[] randomRange(int start, int end, int count) {
-        return super.randomRange(start, end, count);
     }
 
     @Override

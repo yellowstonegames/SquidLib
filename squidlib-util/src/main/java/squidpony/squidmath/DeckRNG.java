@@ -223,28 +223,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
         return t;
     }
 
-
-    /**
-     * @return a value from the gaussian distribution
-     */
-    @Override
-    public double nextGaussian() {
-        if (haveNextNextGaussian) {
-            haveNextNextGaussian = false;
-            return nextNextGaussian;
-        } else {
-            double v1, v2, s;
-            do {
-                v1 = 2 * nextDouble() - 1; // between -1 and 1
-                v2 = 2 * nextDouble() - 1; // between -1 and 1
-                s = v1 * v1 + v2 * v2;
-            } while (s >= 1 || s == 0);
-            double multiplier = Math.sqrt(-2 * Math.log(s) / s);
-            nextNextGaussian = v2 * multiplier;
-            haveNextNextGaussian = true;
-            return v1 * multiplier;
-        }
-    }
     /**
      * Returns a random integer below the given bound, or 0 if the bound is 0 or
      * negative. Affects the current fortune.
@@ -394,25 +372,7 @@ public class DeckRNG extends StatefulRNG implements Serializable {
     public long between(long min, long max) {
         return nextLong(max - min) + min;
     }
-
-    /**
-     * Shuffle an array using the Fisher-Yates algorithm.
-     *
-     * @param elements an array of T; will not be modified
-     * @param dest     Where to put the shuffle. It MUST have the same length as {@code elements}
-     * @return {@code dest}
-     * @throws IllegalStateException If {@code dest.length != elements.length}
-     */
-    @Override
-    public <T> T[] shuffle(T[] elements, T[] dest) {
-        return super.shuffle(elements, dest);
-    }
-
-    @Override
-    public <T> ArrayList<T> shuffle(Collection<T> elements) {
-        return super.shuffle(elements);
-    }
-
+    
     @Override
     public float nextFloat() {
         return (float)nextDouble();
@@ -453,24 +413,6 @@ public class DeckRNG extends StatefulRNG implements Serializable {
         System.arraycopy(deck, 0, next.deck, 0, deck.length);
         next.step = step;
         return next;
-    }
-
-    /**
-     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
-     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
-     * shuffling a copy of data and getting a section of it that matches the length of output.
-     *
-     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
-     * copying or creating a new generic array (a problem on GWT).
-     * @param data an array of T; will not be modified.
-     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
-     * @param <T> can be any non-primitive type.
-     * @return an array of T that has length equal to output's length and may contain null elements if output is shorter
-     * than data
-     */
-    @Override
-    public <T> T[] randomPortion(T[] data, T[] output) {
-        return super.randomPortion(data, output);
     }
 
     /**

@@ -183,6 +183,16 @@
 <dd>
 <div class="block">Blends the colors A and B by a random degree.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#randomColor-squidpony.squidmath.IRNG-">randomColor(IRNG)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
+<dd>
+<div class="block">Retrieves a random non-transparent color from the palette this would reduce to, with a higher likelihood for
+ colors that are used more often in reductions (those with few similar colors).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#randomColorIndex-squidpony.squidmath.IRNG-">randomColorIndex(IRNG)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
+<dd>
+<div class="block">Retrieves a random non-0 color index for the palette this would reduce to, with a higher likelihood for colors
+ that are used more often in reductions (those with few similar colors).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#randomColorSequence-java.lang.CharSequence-">randomColorSequence(CharSequence)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
 <div class="block">Returns an infinite Iterator (also an Iterable) over different colors from <a href="../squidpony/squidgrid/gui/gdx/SColor.html#COLOR_WHEEL_PALETTE"><code>SColor.COLOR_WHEEL_PALETTE</code></a>, with
@@ -428,6 +438,22 @@
 <dd>
 <div class="block">Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can using
  Burkes dithering instead of the Sierra Lite dithering that <a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduce-com.badlogic.gdx.graphics.Pixmap-"><code>PaletteReducer.reduce(Pixmap)</code></a> uses.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduceFloat-float-">reduceFloat(float)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
+<dd>
+<div class="block">Looks up <code>color</code> as if it was part of an image being color-reduced and finds the closest color to it in the
+ palette this holds.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduceInPlace-com.badlogic.gdx.graphics.Color-">reduceInPlace(Color)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
+<dd>
+<div class="block">Modifies <code>color</code> so its RGB values will match the closest color in this PaletteReducer's palette.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#reducer">reducer</a></span> - Variable in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.PaletteReducerFilter</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduceSingle-int-">reduceSingle(int)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
+<dd>
+<div class="block">Looks up <code>color</code> as if it was part of an image being color-reduced and finds the closest color to it in the
+ palette this holds.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html#reduceSolid-com.badlogic.gdx.graphics.Pixmap-">reduceSolid(Pixmap)</a></span> - Method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a></dt>
 <dd>

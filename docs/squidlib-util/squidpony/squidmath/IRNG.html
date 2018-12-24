@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6,"i22":6,"i23":6,"i24":6,"i25":6,"i26":6,"i27":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6,"i22":6,"i23":6,"i24":6,"i25":6,"i26":6,"i27":6,"i28":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -285,45 +285,53 @@ extends <a href="../../squidpony/squidmath/RandomnessSource.html" title="interfa
 </td>
 </tr>
 <tr id="i21" class="rowColor">
+<td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#randomPortion-T:A-T:A-">randomPortion</a></span>(T[]&nbsp;data,
+             T[]&nbsp;output)</code>
+<div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+ it can, and then returns output.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#shuffle-java.util.Collection-">shuffle</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements)</code>
 <div class="block">Shuffles a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm and returns an ArrayList of T.</div>
 </td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;elements,
        <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;T&gt;&nbsp;buf)</code>
 <div class="block">Shuffles a <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util"><code>Collection</code></a> of T using the Fisher-Yates algorithm and puts it in a buffer.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#shuffle-T:A-">shuffle</a></span>(T[]&nbsp;elements)</code>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm and returns a shuffled copy, freshly-allocated, without
  modifying elements.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#shuffle-T:A-T:A-">shuffle</a></span>(T[]&nbsp;elements,
        T[]&nbsp;dest)</code>
 <div class="block">Shuffle an array using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#shuffleInPlace-java.util.List-">shuffleInPlace</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;T&gt;&nbsp;elements)</code>
 <div class="block">Shuffles a Collection of T items in-place using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;T[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></span>(T[]&nbsp;elements)</code>
 <div class="block">Shuffles an array in-place using the Fisher-Yates algorithm.</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IRNG.html#toSerializable--">toSerializable</a></span>()</code>
 <div class="block">Gets a view of this IRNG in a way that implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io"><code>Serializable</code></a>, which may simply be this IRNG if it
@@ -871,13 +879,36 @@ extends <a href="../../squidpony/squidmath/RandomnessSource.html" title="interfa
 </dl>
 </li>
 </ul>
+<a name="randomPortion-java.lang.Object:A-java.lang.Object:A-">
+<!--   -->
+</a><a name="randomPortion-T:A-T:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomPortion</h4>
+<pre>&lt;T&gt;&nbsp;T[]&nbsp;<a href="../../src-html/squidpony/squidmath/IRNG.html#line.315">randomPortion</a>(T[]&nbsp;data,
+                      T[]&nbsp;output)</pre>
+<div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+ it can, and then returns output. Will only use a given position in the given data at most once.</div>
+<dl>
+<dt><span class="paramLabel">Type Parameters:</span></dt>
+<dd><code>T</code> - can be any non-primitive type.</dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>data</code> - an array of T; will not be modified.</dd>
+<dd><code>output</code> - an array of T that will be overwritten; should always be instantiated with the portion length</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>output, after <code>Math.min(output.length, data.length)</code> unique items have been put into it from data</dd>
+</dl>
+</li>
+</ul>
 <a name="copy--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>copy</h4>
-<pre><a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IRNG.html#line.315">copy</a>()</pre>
+<pre><a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IRNG.html#line.324">copy</a>()</pre>
 <div class="block">Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
  IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not
  permit copying itself, it is suggested to either throw an <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/UnsupportedOperationException.html?is-external=true" title="class or interface in java.lang"><code>UnsupportedOperationException</code></a> or return a new
@@ -896,7 +927,7 @@ extends <a href="../../squidpony/squidmath/RandomnessSource.html" title="interfa
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toSerializable</h4>
-<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IRNG.html#line.327">toSerializable</a>()</pre>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IRNG.html#line.336">toSerializable</a>()</pre>
 <div class="block">Gets a view of this IRNG in a way that implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io"><code>Serializable</code></a>, which may simply be this IRNG if it
  implements Serializable as well as IRNG.
  <br>

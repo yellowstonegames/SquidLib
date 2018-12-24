@@ -77,7 +77,7 @@
 <span class="sourceLineNo">069</span>    @Override<a name="line.69"></a>
 <span class="sourceLineNo">070</span>    public final int next(int bits)<a name="line.70"></a>
 <span class="sourceLineNo">071</span>    {<a name="line.71"></a>
-<span class="sourceLineNo">072</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.72"></a>
+<span class="sourceLineNo">072</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.72"></a>
 <span class="sourceLineNo">073</span>        z = (z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L;<a name="line.73"></a>
 <span class="sourceLineNo">074</span>        return (int)(z ^ z &gt;&gt;&gt; 25) &gt;&gt;&gt; (32 - bits);<a name="line.74"></a>
 <span class="sourceLineNo">075</span>    }<a name="line.75"></a>
@@ -89,7 +89,7 @@
 <span class="sourceLineNo">081</span>     */<a name="line.81"></a>
 <span class="sourceLineNo">082</span>    @Override<a name="line.82"></a>
 <span class="sourceLineNo">083</span>    public final long nextLong() {<a name="line.83"></a>
-<span class="sourceLineNo">084</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.84"></a>
+<span class="sourceLineNo">084</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.84"></a>
 <span class="sourceLineNo">085</span>        z = (z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L;<a name="line.85"></a>
 <span class="sourceLineNo">086</span>        return (z ^ z &gt;&gt;&gt; 25);<a name="line.86"></a>
 <span class="sourceLineNo">087</span>    }<a name="line.87"></a>
@@ -112,7 +112,7 @@
 <span class="sourceLineNo">104</span>     * @return any int, all 32 bits are random<a name="line.104"></a>
 <span class="sourceLineNo">105</span>     */<a name="line.105"></a>
 <span class="sourceLineNo">106</span>    public final int nextInt() {<a name="line.106"></a>
-<span class="sourceLineNo">107</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.107"></a>
+<span class="sourceLineNo">107</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.107"></a>
 <span class="sourceLineNo">108</span>        z = (z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L;<a name="line.108"></a>
 <span class="sourceLineNo">109</span>        return (int)(z ^ z &gt;&gt;&gt; 25);<a name="line.109"></a>
 <span class="sourceLineNo">110</span>    }<a name="line.110"></a>
@@ -125,7 +125,7 @@
 <span class="sourceLineNo">117</span>     * @return a random int between 0 (inclusive) and bound (exclusive)<a name="line.117"></a>
 <span class="sourceLineNo">118</span>     */<a name="line.118"></a>
 <span class="sourceLineNo">119</span>    public final int nextInt(final int bound) {<a name="line.119"></a>
-<span class="sourceLineNo">120</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.120"></a>
+<span class="sourceLineNo">120</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.120"></a>
 <span class="sourceLineNo">121</span>        z = (z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L;<a name="line.121"></a>
 <span class="sourceLineNo">122</span>        return (int)((bound * ((z ^ z &gt;&gt;&gt; 25) &amp; 0xFFFFFFFFL)) &gt;&gt; 32);<a name="line.122"></a>
 <span class="sourceLineNo">123</span>    }<a name="line.123"></a>
@@ -183,7 +183,7 @@
 <span class="sourceLineNo">175</span>     * @return a random double at least equal to 0.0 and less than 1.0<a name="line.175"></a>
 <span class="sourceLineNo">176</span>     */<a name="line.176"></a>
 <span class="sourceLineNo">177</span>    public final double nextDouble() {<a name="line.177"></a>
-<span class="sourceLineNo">178</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.178"></a>
+<span class="sourceLineNo">178</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.178"></a>
 <span class="sourceLineNo">179</span>        z = (z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L;<a name="line.179"></a>
 <span class="sourceLineNo">180</span>        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.180"></a>
 <span class="sourceLineNo">181</span><a name="line.181"></a>
@@ -197,7 +197,7 @@
 <span class="sourceLineNo">189</span>     * @return a random double between 0.0 (inclusive) and outer (exclusive)<a name="line.189"></a>
 <span class="sourceLineNo">190</span>     */<a name="line.190"></a>
 <span class="sourceLineNo">191</span>    public final double nextDouble(final double outer) {<a name="line.191"></a>
-<span class="sourceLineNo">192</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.192"></a>
+<span class="sourceLineNo">192</span>        long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.192"></a>
 <span class="sourceLineNo">193</span>        z = (z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L;<a name="line.193"></a>
 <span class="sourceLineNo">194</span>        return ((z ^ z &gt;&gt;&gt; 25) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53 * outer;<a name="line.194"></a>
 <span class="sourceLineNo">195</span>    }<a name="line.195"></a>
@@ -208,7 +208,7 @@
 <span class="sourceLineNo">200</span>     * @return a random float at least equal to 0.0 and less than 1.0<a name="line.200"></a>
 <span class="sourceLineNo">201</span>     */<a name="line.201"></a>
 <span class="sourceLineNo">202</span>    public final float nextFloat() {<a name="line.202"></a>
-<span class="sourceLineNo">203</span>        final long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.203"></a>
+<span class="sourceLineNo">203</span>        final long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.203"></a>
 <span class="sourceLineNo">204</span>        return ((z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L &gt;&gt;&gt; 40) * 0x1p-24f;<a name="line.204"></a>
 <span class="sourceLineNo">205</span>    }<a name="line.205"></a>
 <span class="sourceLineNo">206</span><a name="line.206"></a>
@@ -219,7 +219,7 @@
 <span class="sourceLineNo">211</span>     * @return a random true or false value.<a name="line.211"></a>
 <span class="sourceLineNo">212</span>     */<a name="line.212"></a>
 <span class="sourceLineNo">213</span>    public final boolean nextBoolean() {<a name="line.213"></a>
-<span class="sourceLineNo">214</span>        final long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);;<a name="line.214"></a>
+<span class="sourceLineNo">214</span>        final long z = (state = (state ^ 0x6C8E9CF570932BD5L) * 0xC6BC279692B5CC83L);<a name="line.214"></a>
 <span class="sourceLineNo">215</span>        return ((z &lt;&lt; 27 | z &gt;&gt;&gt; 37) * 0xDB4F0B9175AE2165L) &lt; 0;<a name="line.215"></a>
 <span class="sourceLineNo">216</span>    }<a name="line.216"></a>
 <span class="sourceLineNo">217</span><a name="line.217"></a>
@@ -323,7 +323,7 @@
 <span class="sourceLineNo">315</span>     *              generate numbers in reverse order<a name="line.315"></a>
 <span class="sourceLineNo">316</span>     * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}<a name="line.316"></a>
 <span class="sourceLineNo">317</span>     */<a name="line.317"></a>
-<span class="sourceLineNo">318</span>    public static float determineFloat(long state) { return ((((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 32) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 40) * 0x1p-24f; }<a name="line.318"></a>
+<span class="sourceLineNo">318</span>    public static float determineFloat(long state) { return ((((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state &gt;&gt;&gt; 27) * 0xAEF17502108EF2D9L) &gt;&gt;&gt; 40) * 0x1p-24f; }<a name="line.318"></a>
 <span class="sourceLineNo">319</span><a name="line.319"></a>
 <span class="sourceLineNo">320</span>    /**<a name="line.320"></a>
 <span class="sourceLineNo">321</span>     * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this<a name="line.321"></a>

@@ -363,27 +363,6 @@ public class EditRNG extends StatefulRNG implements Serializable{
         return next;
     }
 
-    /**
-     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.
-     *
-     * @return a long that can be used as state.
-     */
-    @Override
-    public long getState() {
-        return super.getState();
-    }
-
-    /**
-     * Sets the state of the random number generator to a given long, which will alter future random numbers this
-     * produces based on the state.
-     *
-     * @param state a long, which typically should not be 0 (some implementations may tolerate a state of 0, however).
-     */
-    @Override
-    public void setState(long state) {
-        super.setState(state);
-    }
-
     @Override
     public String toString() {
         return "EditRNG{" +

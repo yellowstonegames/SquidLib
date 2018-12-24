@@ -852,15 +852,6 @@
 <dd>
 <div class="block">This returns a random float between 0.0f (inclusive) and outer (inclusive).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CriticalRNG.html#nextGaussian--">nextGaussian()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CriticalRNG.html" title="class in squidpony.squidmath">CriticalRNG</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#nextGaussian--">nextGaussian()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#nextGaussian--">nextGaussian()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>
-<div class="block">Gets a pseudo-random double from the Gaussian distribution, which will usually be between -1.0 and 1.0 but is not
- always in that range.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/AbstractRNG.html#nextInt--">nextInt()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
 <dd>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
@@ -1335,6 +1326,11 @@
 <div class="block">Using this method, any algorithm that needs to efficiently generate more
  than 32 bits of random data can interface with this randomness source.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.CustomRandom.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.CustomRandom.html" title="class in squidpony.squidmath">RNG.CustomRandom</a></dt>
+<dd>
+<div class="block">Returns the next pseudorandom, uniformly distributed <code>long</code>
+ value from this random number generator's sequence.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#nextLong--">nextLong()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
@@ -1413,8 +1409,6 @@
 <dd>
 <div class="block">Generate a random vector.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#nextNextGaussian">nextNextGaussian</a></span> - Variable in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/PermutationGenerator.html#nextPermutationAsArray-T:A-">nextPermutationAsArray(T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/PermutationGenerator.html" title="class in squidpony.squidmath">PermutationGenerator</a></dt>
 <dd>
 <div class="block">Generate the next permutation and return an array containing

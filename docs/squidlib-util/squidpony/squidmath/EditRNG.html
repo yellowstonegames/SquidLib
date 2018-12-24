@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -221,7 +221,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></h3>
-<code><a href="../../squidpony/squidmath/RNG.html#haveNextNextGaussian">haveNextNextGaussian</a>, <a href="../../squidpony/squidmath/RNG.html#nextNextGaussian">nextNextGaussian</a>, <a href="../../squidpony/squidmath/RNG.html#ran">ran</a>, <a href="../../squidpony/squidmath/RNG.html#random">random</a></code></li>
+<code><a href="../../squidpony/squidmath/RNG.html#ran">ran</a>, <a href="../../squidpony/squidmath/RNG.html#random">random</a></code></li>
 </ul>
 </li>
 </ul>
@@ -345,119 +345,113 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#getState--">getState</a></span>()</code>
-<div class="block">Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.</div>
-</td>
-</tr>
-<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#next-int-">next</a></span>(int&nbsp;bits)</code>
 <div class="block">Get up to 32 bits (inclusive) of random output; the int this produces
  will not require more than <code>bits</code> bits to represent.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextBoolean--">nextBoolean</a></span>()</code>
 <div class="block">Get a random bit of state, interpreted as true or false with approximately equal likelihood.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextDouble--">nextDouble</a></span>()</code>
 <div class="block">Generate a random double, altered to try to match the expected average and centrality.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextDouble-double-">nextDouble</a></span>(double&nbsp;max)</code>
 <div class="block">This returns a random double between 0.0 (inclusive) and max (exclusive).</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextFloat--">nextFloat</a></span>()</code>
 <div class="block">Gets a random float between 0.0f inclusive and 1.0f exclusive.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextInt--">nextInt</a></span>()</code>
 <div class="block">Returns a random integer, which may be positive or negative.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextInt-int-">nextInt</a></span>(int&nbsp;bound)</code>
 <div class="block">Returns a random integer below the given bound, or 0 if the bound is 0 or
  negative.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextIntHasty-int-">nextIntHasty</a></span>(int&nbsp;bound)</code>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Returns a random long, which may be positive or negative.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#nextLong-long-">nextLong</a></span>(long&nbsp;bound)</code>
 <div class="block">Returns a random long below the given bound, or 0 if the bound is 0 or
  negative.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#setCentrality-double-">setCentrality</a></span>(double&nbsp;centrality)</code>
 <div class="block">Gets the current centrality measure of this EditRNG.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#setExpected-double-">setExpected</a></span>(double&nbsp;expected)</code>
 <div class="block">Sets the expected average for random doubles this produces, which must always be between 0.1 and 0.9, and will be
  set to 0.5 if an invalid value is passed.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#setRandomness-squidpony.squidmath.RandomnessSource-">setRandomness</a></span>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;random)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#setState-long-">setState</a></span>(long&nbsp;state)</code>
-<div class="block">Sets the state of the random number generator to a given long, which will alter future random numbers this
- produces based on the state.</div>
-</td>
-</tr>
-<tr id="i22" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#toSerializable--">toSerializable</a></span>()</code>
 <div class="block">Returns this EditRNG in a way that can be deserialized even if only <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a>'s methods can be called.</div>
 </td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/EditRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidmath.StatefulRNG">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></h3>
+<code><a href="../../squidpony/squidmath/StatefulRNG.html#getState--">getState</a>, <a href="../../squidpony/squidmath/StatefulRNG.html#setState-long-">setState</a></code></li>
+</ul>
+<ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.squidpony.squidmath.RNG">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></h3>
-<code><a href="../../squidpony/squidmath/RNG.html#approximateBits-int-">approximateBits</a>, <a href="../../squidpony/squidmath/RNG.html#asRandom--">asRandom</a>, <a href="../../squidpony/squidmath/RNG.html#between-double-double-">between</a>, <a href="../../squidpony/squidmath/RNG.html#between-int-int-">between</a>, <a href="../../squidpony/squidmath/RNG.html#between-long-long-">between</a>, <a href="../../squidpony/squidmath/RNG.html#betweenWeighted-int-int-int-">betweenWeighted</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomCellsIterable-int-int-int-">getRandomCellsIterable</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-java.util.Collection-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-java.util.List-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-squidpony.squidmath.ShortSet-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-T:A-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomStartIterable-java.util.List-">getRandomStartIterable</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-squidpony.squidmath.Coord:A-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-int-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#maxDoubleOf-double-int-">maxDoubleOf</a>, <a href="../../squidpony/squidmath/RNG.html#maxFloatOf-float-int-">maxFloatOf</a>, <a href="../../squidpony/squidmath/RNG.html#maxIntOf-int-int-">maxIntOf</a>, <a href="../../squidpony/squidmath/RNG.html#maxLongOf-long-int-">maxLongOf</a>, <a href="../../squidpony/squidmath/RNG.html#minDoubleOf-double-int-">minDoubleOf</a>, <a href="../../squidpony/squidmath/RNG.html#minFloatOf-float-int-">minFloatOf</a>, <a href="../../squidpony/squidmath/RNG.html#minIntOf-int-int-">minIntOf</a>, <a href="../../squidpony/squidmath/RNG.html#minLongOf-long-int-">minLongOf</a>, <a href="../../squidpony/squidmath/RNG.html#nextBytes-byte:A-">nextBytes</a>, <a href="../../squidpony/squidmath/RNG.html#nextCoord-int-int-">nextCoord</a>, <a href="../../squidpony/squidmath/RNG.html#nextCurvedFloat--">nextCurvedFloat</a>, <a href="../../squidpony/squidmath/RNG.html#nextDoubleInclusive--">nextDoubleInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextDoubleInclusive-double-">nextDoubleInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextFloat-float-">nextFloat</a>, <a href="../../squidpony/squidmath/RNG.html#nextFloatInclusive--">nextFloatInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextFloatInclusive-float-">nextFloatInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextGaussian--">nextGaussian</a>, <a href="../../squidpony/squidmath/RNG.html#nextSignedInt-int-">nextSignedInt</a>, <a href="../../squidpony/squidmath/RNG.html#nextSignedLong-long-">nextSignedLong</a>, <a href="../../squidpony/squidmath/RNG.html#randomInterleave--">randomInterleave</a>, <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-">randomOrdering</a>, <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-">randomOrdering</a>, <a href="../../squidpony/squidmath/RNG.html#randomPortion-java.util.Collection-int-">randomPortion</a>, <a href="../../squidpony/squidmath/RNG.html#randomPortion-T:A-T:A-">randomPortion</a>, <a href="../../squidpony/squidmath/RNG.html#randomRange-int-int-int-">randomRange</a>, <a href="../../squidpony/squidmath/RNG.html#randomRotation-java.util.List-">randomRotation</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffleInPlace-java.util.List-">shuffleInPlace</a>, <a href="../../squidpony/squidmath/RNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></code></li>
+<code><a href="../../squidpony/squidmath/RNG.html#approximateBits-int-">approximateBits</a>, <a href="../../squidpony/squidmath/RNG.html#asRandom--">asRandom</a>, <a href="../../squidpony/squidmath/RNG.html#between-double-double-">between</a>, <a href="../../squidpony/squidmath/RNG.html#between-int-int-">between</a>, <a href="../../squidpony/squidmath/RNG.html#between-long-long-">between</a>, <a href="../../squidpony/squidmath/RNG.html#betweenWeighted-int-int-int-">betweenWeighted</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomCellsIterable-int-int-int-">getRandomCellsIterable</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-java.util.Collection-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-java.util.List-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-squidpony.squidmath.ShortSet-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomElement-T:A-">getRandomElement</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomStartIterable-java.util.List-">getRandomStartIterable</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-squidpony.squidmath.Coord:A-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#getRandomUniqueCells-int-int-int-int-int-">getRandomUniqueCells</a>, <a href="../../squidpony/squidmath/RNG.html#maxDoubleOf-double-int-">maxDoubleOf</a>, <a href="../../squidpony/squidmath/RNG.html#maxFloatOf-float-int-">maxFloatOf</a>, <a href="../../squidpony/squidmath/RNG.html#maxIntOf-int-int-">maxIntOf</a>, <a href="../../squidpony/squidmath/RNG.html#maxLongOf-long-int-">maxLongOf</a>, <a href="../../squidpony/squidmath/RNG.html#minDoubleOf-double-int-">minDoubleOf</a>, <a href="../../squidpony/squidmath/RNG.html#minFloatOf-float-int-">minFloatOf</a>, <a href="../../squidpony/squidmath/RNG.html#minIntOf-int-int-">minIntOf</a>, <a href="../../squidpony/squidmath/RNG.html#minLongOf-long-int-">minLongOf</a>, <a href="../../squidpony/squidmath/RNG.html#nextBytes-byte:A-">nextBytes</a>, <a href="../../squidpony/squidmath/RNG.html#nextCoord-int-int-">nextCoord</a>, <a href="../../squidpony/squidmath/RNG.html#nextCurvedFloat--">nextCurvedFloat</a>, <a href="../../squidpony/squidmath/RNG.html#nextDoubleInclusive--">nextDoubleInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextDoubleInclusive-double-">nextDoubleInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextFloat-float-">nextFloat</a>, <a href="../../squidpony/squidmath/RNG.html#nextFloatInclusive--">nextFloatInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextFloatInclusive-float-">nextFloatInclusive</a>, <a href="../../squidpony/squidmath/RNG.html#nextSignedInt-int-">nextSignedInt</a>, <a href="../../squidpony/squidmath/RNG.html#nextSignedLong-long-">nextSignedLong</a>, <a href="../../squidpony/squidmath/RNG.html#randomInterleave--">randomInterleave</a>, <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-">randomOrdering</a>, <a href="../../squidpony/squidmath/RNG.html#randomOrdering-int-int:A-">randomOrdering</a>, <a href="../../squidpony/squidmath/RNG.html#randomPortion-java.util.Collection-int-">randomPortion</a>, <a href="../../squidpony/squidmath/RNG.html#randomPortion-T:A-T:A-">randomPortion</a>, <a href="../../squidpony/squidmath/RNG.html#randomRange-int-int-int-">randomRange</a>, <a href="../../squidpony/squidmath/RNG.html#randomRotation-java.util.List-">randomRotation</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffle-T:A-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/RNG.html#shuffleInPlace-java.util.List-">shuffleInPlace</a>, <a href="../../squidpony/squidmath/RNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -471,7 +465,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></h3>
-<code><a href="../../squidpony/squidmath/IRNG.html#between-double-double-">between</a>, <a href="../../squidpony/squidmath/IRNG.html#between-int-int-">between</a>, <a href="../../squidpony/squidmath/IRNG.html#between-long-long-">between</a>, <a href="../../squidpony/squidmath/IRNG.html#getRandomElement-java.util.Collection-">getRandomElement</a>, <a href="../../squidpony/squidmath/IRNG.html#getRandomElement-java.util.List-">getRandomElement</a>, <a href="../../squidpony/squidmath/IRNG.html#getRandomElement-T:A-">getRandomElement</a>, <a href="../../squidpony/squidmath/IRNG.html#nextFloat-float-">nextFloat</a>, <a href="../../squidpony/squidmath/IRNG.html#nextSignedInt-int-">nextSignedInt</a>, <a href="../../squidpony/squidmath/IRNG.html#nextSignedLong-long-">nextSignedLong</a>, <a href="../../squidpony/squidmath/IRNG.html#randomOrdering-int-">randomOrdering</a>, <a href="../../squidpony/squidmath/IRNG.html#randomOrdering-int-int:A-">randomOrdering</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-java.util.Collection-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-T:A-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffleInPlace-java.util.List-">shuffleInPlace</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></code></li>
+<code><a href="../../squidpony/squidmath/IRNG.html#between-double-double-">between</a>, <a href="../../squidpony/squidmath/IRNG.html#between-int-int-">between</a>, <a href="../../squidpony/squidmath/IRNG.html#between-long-long-">between</a>, <a href="../../squidpony/squidmath/IRNG.html#getRandomElement-java.util.Collection-">getRandomElement</a>, <a href="../../squidpony/squidmath/IRNG.html#getRandomElement-java.util.List-">getRandomElement</a>, <a href="../../squidpony/squidmath/IRNG.html#getRandomElement-T:A-">getRandomElement</a>, <a href="../../squidpony/squidmath/IRNG.html#nextFloat-float-">nextFloat</a>, <a href="../../squidpony/squidmath/IRNG.html#nextSignedInt-int-">nextSignedInt</a>, <a href="../../squidpony/squidmath/IRNG.html#nextSignedLong-long-">nextSignedLong</a>, <a href="../../squidpony/squidmath/IRNG.html#randomOrdering-int-">randomOrdering</a>, <a href="../../squidpony/squidmath/IRNG.html#randomOrdering-int-int:A-">randomOrdering</a>, <a href="../../squidpony/squidmath/IRNG.html#randomPortion-T:A-T:A-">randomPortion</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-java.util.Collection-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-java.util.Collection-java.util.ArrayList-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffle-T:A-T:A-">shuffle</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffleInPlace-java.util.List-">shuffleInPlace</a>, <a href="../../squidpony/squidmath/IRNG.html#shuffleInPlace-T:A-">shuffleInPlace</a></code></li>
 </ul>
 </li>
 </ul>
@@ -999,50 +993,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </dl>
 </li>
 </ul>
-<a name="getState--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getState</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.372">getState</a>()</pre>
-<div class="block">Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidmath/StatefulRandomness.html#getState--">getState</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></dd>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../squidpony/squidmath/StatefulRNG.html#getState--">getState</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a long that can be used as state.</dd>
-</dl>
-</li>
-</ul>
-<a name="setState-long-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setState</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.383">setState</a>(long&nbsp;state)</pre>
-<div class="block">Sets the state of the random number generator to a given long, which will alter future random numbers this
- produces based on the state.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../squidpony/squidmath/StatefulRandomness.html#setState-long-">setState</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath">StatefulRandomness</a></code></dd>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../squidpony/squidmath/StatefulRNG.html#setState-long-">setState</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>state</code> - a long, which typically should not be 0 (some implementations may tolerate a state of 0, however).</dd>
-</dl>
-</li>
-</ul>
 <a name="toString--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.388">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.367">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/StatefulRNG.html#toString--">toString</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/StatefulRNG.html" title="class in squidpony.squidmath">StatefulRNG</a></code></dd>
@@ -1055,7 +1012,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.397">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.376">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RNG.html#equals-java.lang.Object-">equals</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
@@ -1068,7 +1025,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.409">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.388">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../squidpony/squidmath/RNG.html#hashCode--">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
@@ -1081,7 +1038,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>nextIntHasty</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.427">nextIntHasty</a>(int&nbsp;bound)</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.406">nextIntHasty</a>(int&nbsp;bound)</pre>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0.
  Uses a slightly optimized technique. This method is considered "hasty" since
  it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also
@@ -1103,7 +1060,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toSerializable</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.435">toSerializable</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>&nbsp;<a href="../../src-html/squidpony/squidmath/EditRNG.html#line.414">toSerializable</a>()</pre>
 <div class="block">Returns this EditRNG in a way that can be deserialized even if only <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a>'s methods can be called.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

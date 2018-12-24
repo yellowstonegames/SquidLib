@@ -129,7 +129,7 @@
 <span class="sourceLineNo">121</span>            z = (z &lt;&lt; 17) - z;<a name="line.121"></a>
 <span class="sourceLineNo">122</span>            z ^= z &gt;&gt;&gt; 14;<a name="line.122"></a>
 <span class="sourceLineNo">123</span>            z = (z &lt;&lt; 13) - z;<a name="line.123"></a>
-<span class="sourceLineNo">124</span>            func += (keys[i] = (int)((bound * ((z ^ z &gt;&gt;&gt; 15) &amp; 0xFFFFFFFFL)) &gt;&gt; 32)); // can we avoid this multiply?<a name="line.124"></a>
+<span class="sourceLineNo">124</span>            func += (keys[i] = (int)((bound * ((z ^ z &gt;&gt;&gt; 15) &amp; 0xFFFFFFFFL)) &gt;&gt; 32)) ^ z; // can we avoid this multiply?<a name="line.124"></a>
 <span class="sourceLineNo">125</span>            // func may be out of range for an int on GWT; this is OK because it always has bitwise<a name="line.125"></a>
 <span class="sourceLineNo">126</span>            // ops used on it before anything else. Bitwise ops fix the range to a valid int.<a name="line.126"></a>
 <span class="sourceLineNo">127</span>        }<a name="line.127"></a>

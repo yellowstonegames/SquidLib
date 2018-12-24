@@ -428,27 +428,23 @@
 <div class="block">Generates a random permutation of the range from 0 (inclusive) to length (exclusive) and stores it in
  the dest parameter, avoiding allocations.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/AbstractRNG.html#randomPortion-T:A-T:A-">randomPortion(T[], T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/AbstractRNG.html" title="class in squidpony.squidmath">AbstractRNG</a></dt>
+<dd>
+<div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+ it can, and then returns output.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordPacker.html#randomPortion-short:A-int-squidpony.squidmath.IRNG-">randomPortion(short[], int, IRNG)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath">CoordPacker</a></dt>
 <dd>
 <div class="block">Gets a fixed number of randomly chosen positions that are "on" in the given packed array, without unpacking it,
  and returns a List of Coord with a count equal to size (or less if there aren't enough "on" cells).</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DeckRNG.html#randomPortion-T:A-T:A-">randomPortion(T[], T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DeckRNG.html" title="class in squidpony.squidmath">DeckRNG</a></dt>
-<dd>
-<div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
- it can, and then returns output.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#randomPortion-T:A-T:A-">randomPortion(T[], T[])</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
-<dd>
-<div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
- it can, and then returns output.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#randomPortion-java.util.Collection-int-">randomPortion(Collection&lt;T&gt;, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
-<dd>
-<div class="block">Gets a random portion of a List and returns it as a new List.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#randomPortion-squidpony.squidmath.IRNG-int-">randomPortion(IRNG, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IRNG.html#randomPortion-T:A-T:A-">randomPortion(T[], T[])</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
+<dd>
+<div class="block">Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+ it can, and then returns output.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#randomPortion-java.util.Collection-int-">randomPortion(Collection&lt;T&gt;, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
 <div class="block">Gets a random portion of a Collection and returns it as a new List.</div>
@@ -463,10 +459,6 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/K2V1.html#randomQ-squidpony.squidmath.IRNG-">randomQ(IRNG)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/K2V1.html" title="class in squidpony.squidmath">K2V1</a></dt>
 <dd>
 <div class="block">Gets a random Q from this K2V1 using the given IRNG.</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DharmaRNG.html#randomRange-int-int-int-">randomRange(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DharmaRNG.html" title="class in squidpony.squidmath">DharmaRNG</a></dt>
-<dd>
-<div class="block">Gets a random subrange of the non-negative ints from start (inclusive) to end (exclusive), using count elements.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/RNG.html#randomRange-int-int-int-">randomRange(int, int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></dt>
 <dd>
@@ -1862,6 +1854,10 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#reverse--">reverse()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#reversedIntBitsToFloat-int-">reversedIntBitsToFloat(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Reverses the byte order of <code>bits</code> and converts that to a float.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/AestheticDifference.html#rgba8888">rgba8888</a></span> - Static variable in interface squidpony.squidgrid.<a href="../squidpony/squidgrid/AestheticDifference.html" title="interface in squidpony.squidgrid">AestheticDifference</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Mist.html#rho">rho</a></span> - Static variable in class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Mist.html" title="class in squidpony.squidmath">CrossHash.Mist</a></dt>

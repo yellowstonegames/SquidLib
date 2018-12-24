@@ -430,57 +430,108 @@
 <span class="sourceLineNo">422</span>    }<a name="line.422"></a>
 <span class="sourceLineNo">423</span><a name="line.423"></a>
 <span class="sourceLineNo">424</span>    /**<a name="line.424"></a>
-<span class="sourceLineNo">425</span>     * A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of<a name="line.425"></a>
-<span class="sourceLineNo">426</span>     * given colors. Uses {@link SColor#lerpFloatColorsBlended(float, float, float)} to mix a requested color with the<a name="line.426"></a>
-<span class="sourceLineNo">427</span>     * chosen target color, and this means the alpha of the target color affects the amount of change instead of the<a name="line.427"></a>
-<span class="sourceLineNo">428</span>     * resulting alpha. Changing the alpha of the colors this is given can be done easily with<a name="line.428"></a>
-<span class="sourceLineNo">429</span>     * {@link SColor#translucentColor(float, float)}, and this allows you to specify varying amounts to mix by.<a name="line.429"></a>
-<span class="sourceLineNo">430</span>     */<a name="line.430"></a>
-<span class="sourceLineNo">431</span>    public static class PaletteFilter extends FloatFilter {<a name="line.431"></a>
-<span class="sourceLineNo">432</span>        public float[] targets;<a name="line.432"></a>
-<span class="sourceLineNo">433</span>        /**<a name="line.433"></a>
-<span class="sourceLineNo">434</span>         * Builds a PaletteFilter with an array of Color objects that this will choose from. The array will be converted<a name="line.434"></a>
-<span class="sourceLineNo">435</span>         * to an array of packed float colors, and not referenced directly.<a name="line.435"></a>
-<span class="sourceLineNo">436</span>         * @param targets an array of libGDX Color objects; must not be null or empty<a name="line.436"></a>
-<span class="sourceLineNo">437</span>         */<a name="line.437"></a>
-<span class="sourceLineNo">438</span>        public PaletteFilter(final Color[] targets) {<a name="line.438"></a>
-<span class="sourceLineNo">439</span>            this.targets = new float[targets.length];<a name="line.439"></a>
-<span class="sourceLineNo">440</span>            for (int i = 0; i &lt; targets.length; i++) {<a name="line.440"></a>
-<span class="sourceLineNo">441</span>                this.targets[i] = targets[i].toFloatBits();<a name="line.441"></a>
-<span class="sourceLineNo">442</span>            }<a name="line.442"></a>
-<span class="sourceLineNo">443</span>        }<a name="line.443"></a>
-<span class="sourceLineNo">444</span><a name="line.444"></a>
-<span class="sourceLineNo">445</span>        /**<a name="line.445"></a>
-<span class="sourceLineNo">446</span>         * Builds a PaletteFilter with an array of packed float colors that this will choose from. The array will be<a name="line.446"></a>
-<span class="sourceLineNo">447</span>         * referenced directly, not copied, so if you change the contents of targets, it will be reflected here.<a name="line.447"></a>
-<span class="sourceLineNo">448</span>         * @param targets an array or vararg of packed float colors; must not be null or empty<a name="line.448"></a>
-<span class="sourceLineNo">449</span>         */<a name="line.449"></a>
-<span class="sourceLineNo">450</span><a name="line.450"></a>
-<span class="sourceLineNo">451</span>        public PaletteFilter(final float... targets)<a name="line.451"></a>
-<span class="sourceLineNo">452</span>        {<a name="line.452"></a>
-<span class="sourceLineNo">453</span>            this.targets = targets;<a name="line.453"></a>
-<span class="sourceLineNo">454</span>        }<a name="line.454"></a>
-<span class="sourceLineNo">455</span><a name="line.455"></a>
-<span class="sourceLineNo">456</span>        /**<a name="line.456"></a>
-<span class="sourceLineNo">457</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.457"></a>
-<span class="sourceLineNo">458</span>         *<a name="line.458"></a>
-<span class="sourceLineNo">459</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.459"></a>
-<span class="sourceLineNo">460</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.460"></a>
-<span class="sourceLineNo">461</span>         */<a name="line.461"></a>
-<span class="sourceLineNo">462</span>        @Override<a name="line.462"></a>
-<span class="sourceLineNo">463</span>        public float alter(float color) {<a name="line.463"></a>
-<span class="sourceLineNo">464</span>            if(color &gt;= 0f) //if color is halfway-transparent or closer to transparent...<a name="line.464"></a>
-<span class="sourceLineNo">465</span>                return 0f; // return fully transparent<a name="line.465"></a>
-<span class="sourceLineNo">466</span>            int choice = 0, diff = SColor.difference2(targets[0], color);<a name="line.466"></a>
-<span class="sourceLineNo">467</span>            for (int i = 1; i &lt; targets.length; i++) {<a name="line.467"></a>
-<span class="sourceLineNo">468</span>                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))<a name="line.468"></a>
-<span class="sourceLineNo">469</span>                    choice = i;<a name="line.469"></a>
-<span class="sourceLineNo">470</span>            }<a name="line.470"></a>
-<span class="sourceLineNo">471</span>            return targets[choice];<a name="line.471"></a>
-<span class="sourceLineNo">472</span>        }<a name="line.472"></a>
-<span class="sourceLineNo">473</span>    }<a name="line.473"></a>
-<span class="sourceLineNo">474</span><a name="line.474"></a>
-<span class="sourceLineNo">475</span>}<a name="line.475"></a>
+<span class="sourceLineNo">425</span>     * A FloatFilter that limits the colors it can return to a fixed palette, and won't return any colors that are<a name="line.425"></a>
+<span class="sourceLineNo">426</span>     * missing from that palette (although it can always return fully-transparent). {@link PaletteReducerFilter} is also<a name="line.426"></a>
+<span class="sourceLineNo">427</span>     * an option; it uses more memory but is faster to look up colors in larger palettes (it has a maximum size of 256<a name="line.427"></a>
+<span class="sourceLineNo">428</span>     * colors, though, which this class doesn't).<a name="line.428"></a>
+<span class="sourceLineNo">429</span>     */<a name="line.429"></a>
+<span class="sourceLineNo">430</span>    public static class PaletteFilter extends FloatFilter {<a name="line.430"></a>
+<span class="sourceLineNo">431</span>        public float[] targets;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>        /**<a name="line.432"></a>
+<span class="sourceLineNo">433</span>         * Builds a PaletteFilter with an array of Color objects that this will choose from. The array will be converted<a name="line.433"></a>
+<span class="sourceLineNo">434</span>         * to an array of packed float colors, and not referenced directly.<a name="line.434"></a>
+<span class="sourceLineNo">435</span>         * @param targets an array of libGDX Color objects; must not be null or empty<a name="line.435"></a>
+<span class="sourceLineNo">436</span>         */<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        public PaletteFilter(final Color[] targets) {<a name="line.437"></a>
+<span class="sourceLineNo">438</span>            this.targets = new float[targets.length];<a name="line.438"></a>
+<span class="sourceLineNo">439</span>            for (int i = 0; i &lt; targets.length; i++) {<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                this.targets[i] = targets[i].toFloatBits();<a name="line.440"></a>
+<span class="sourceLineNo">441</span>            }<a name="line.441"></a>
+<span class="sourceLineNo">442</span>        }<a name="line.442"></a>
+<span class="sourceLineNo">443</span><a name="line.443"></a>
+<span class="sourceLineNo">444</span>        /**<a name="line.444"></a>
+<span class="sourceLineNo">445</span>         * Builds a PaletteFilter with an array of packed float colors that this will choose from. The array will be<a name="line.445"></a>
+<span class="sourceLineNo">446</span>         * referenced directly, not copied, so if you change the contents of targets, it will be reflected here.<a name="line.446"></a>
+<span class="sourceLineNo">447</span>         * @param targets an array or vararg of packed float colors; must not be null or empty<a name="line.447"></a>
+<span class="sourceLineNo">448</span>         */<a name="line.448"></a>
+<span class="sourceLineNo">449</span><a name="line.449"></a>
+<span class="sourceLineNo">450</span>        public PaletteFilter(final float... targets)<a name="line.450"></a>
+<span class="sourceLineNo">451</span>        {<a name="line.451"></a>
+<span class="sourceLineNo">452</span>            this.targets = targets;<a name="line.452"></a>
+<span class="sourceLineNo">453</span>        }<a name="line.453"></a>
+<span class="sourceLineNo">454</span><a name="line.454"></a>
+<span class="sourceLineNo">455</span>        /**<a name="line.455"></a>
+<span class="sourceLineNo">456</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.456"></a>
+<span class="sourceLineNo">457</span>         *<a name="line.457"></a>
+<span class="sourceLineNo">458</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.458"></a>
+<span class="sourceLineNo">459</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.459"></a>
+<span class="sourceLineNo">460</span>         */<a name="line.460"></a>
+<span class="sourceLineNo">461</span>        @Override<a name="line.461"></a>
+<span class="sourceLineNo">462</span>        public float alter(float color) {<a name="line.462"></a>
+<span class="sourceLineNo">463</span>            if(color &gt;= 0f) //if color is halfway-transparent or closer to transparent...<a name="line.463"></a>
+<span class="sourceLineNo">464</span>                return 0f; // return fully transparent<a name="line.464"></a>
+<span class="sourceLineNo">465</span>            int choice = 0, diff = SColor.difference2(targets[0], color);<a name="line.465"></a>
+<span class="sourceLineNo">466</span>            for (int i = 1; i &lt; targets.length; i++) {<a name="line.466"></a>
+<span class="sourceLineNo">467</span>                if(diff != (diff = Math.min(SColor.difference2(targets[i], color), diff)))<a name="line.467"></a>
+<span class="sourceLineNo">468</span>                    choice = i;<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            }<a name="line.469"></a>
+<span class="sourceLineNo">470</span>            return targets[choice];<a name="line.470"></a>
+<span class="sourceLineNo">471</span>        }<a name="line.471"></a>
+<span class="sourceLineNo">472</span>    }<a name="line.472"></a>
+<span class="sourceLineNo">473</span><a name="line.473"></a>
+<span class="sourceLineNo">474</span>    /**<a name="line.474"></a>
+<span class="sourceLineNo">475</span>     * A FloatFilter that limits the colors it can return to a fixed palette as determined by a {@link PaletteReducer},<a name="line.475"></a>
+<span class="sourceLineNo">476</span>     * and won't return any colors that are missing from that palette (although it can always return fully-transparent).<a name="line.476"></a>
+<span class="sourceLineNo">477</span>     * This is like {@link PaletteFilter} but trades off memory usage (it uses about 33KB to store a large-ish lookup<a name="line.477"></a>
+<span class="sourceLineNo">478</span>     * table) to improve speed on large palettes. This can't use a palette larger than 256 colors (including transparent<a name="line.478"></a>
+<span class="sourceLineNo">479</span>     * almost always).<a name="line.479"></a>
+<span class="sourceLineNo">480</span>     */<a name="line.480"></a>
+<span class="sourceLineNo">481</span>    public static class PaletteReducerFilter extends FloatFilter {<a name="line.481"></a>
+<span class="sourceLineNo">482</span>        public PaletteReducer reducer;<a name="line.482"></a>
+<span class="sourceLineNo">483</span><a name="line.483"></a>
+<span class="sourceLineNo">484</span>        /**<a name="line.484"></a>
+<span class="sourceLineNo">485</span>         * Builds a PaletteReducerFilter that will use the 256-color (including transparent) DawnBringer Aurora palette.<a name="line.485"></a>
+<span class="sourceLineNo">486</span>         */<a name="line.486"></a>
+<span class="sourceLineNo">487</span>        public PaletteReducerFilter()<a name="line.487"></a>
+<span class="sourceLineNo">488</span>        {<a name="line.488"></a>
+<span class="sourceLineNo">489</span>            reducer = new PaletteReducer();<a name="line.489"></a>
+<span class="sourceLineNo">490</span>        }<a name="line.490"></a>
+<span class="sourceLineNo">491</span>        <a name="line.491"></a>
+<span class="sourceLineNo">492</span>        /**<a name="line.492"></a>
+<span class="sourceLineNo">493</span>         * Builds a PaletteReducerFilter with the given PaletteReducer, which will be referenced without copying. You<a name="line.493"></a>
+<span class="sourceLineNo">494</span>         * can call {@link PaletteReducer#exact(Color[])} or other similar methods before this filter is used to set up<a name="line.494"></a>
+<span class="sourceLineNo">495</span>         * the palette, and this is often done before the PaletteReducer is passed here.<a name="line.495"></a>
+<span class="sourceLineNo">496</span>         * @param palette a PaletteReducer that should have the desired palette set up before this is used<a name="line.496"></a>
+<span class="sourceLineNo">497</span>         */<a name="line.497"></a>
+<span class="sourceLineNo">498</span>        public PaletteReducerFilter(final PaletteReducer palette) {<a name="line.498"></a>
+<span class="sourceLineNo">499</span>            reducer = palette;<a name="line.499"></a>
+<span class="sourceLineNo">500</span>        }<a name="line.500"></a>
+<span class="sourceLineNo">501</span><a name="line.501"></a>
+<span class="sourceLineNo">502</span>        /**<a name="line.502"></a>
+<span class="sourceLineNo">503</span>         * Builds a PaletteReducerFilter with an array or vararg of libGDX colors (at most 256 colors, and often<a name="line.503"></a>
+<span class="sourceLineNo">504</span>         * starting with a transparent color) that this will choose from. The array will have its contents read but will<a name="line.504"></a>
+<span class="sourceLineNo">505</span>         * not be held onto, so later changes won't affect it.<a name="line.505"></a>
+<span class="sourceLineNo">506</span>         * @param targets an array or vararg of libGDX colors; must not be null<a name="line.506"></a>
+<span class="sourceLineNo">507</span>         */<a name="line.507"></a>
+<span class="sourceLineNo">508</span><a name="line.508"></a>
+<span class="sourceLineNo">509</span>        public PaletteReducerFilter(final Color... targets)<a name="line.509"></a>
+<span class="sourceLineNo">510</span>        {<a name="line.510"></a>
+<span class="sourceLineNo">511</span>            reducer = new PaletteReducer(targets);<a name="line.511"></a>
+<span class="sourceLineNo">512</span>        }<a name="line.512"></a>
+<span class="sourceLineNo">513</span><a name="line.513"></a>
+<span class="sourceLineNo">514</span>        /**<a name="line.514"></a>
+<span class="sourceLineNo">515</span>         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.<a name="line.515"></a>
+<span class="sourceLineNo">516</span>         *<a name="line.516"></a>
+<span class="sourceLineNo">517</span>         * @param color a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.517"></a>
+<span class="sourceLineNo">518</span>         * @return a packed float color, as produced by {@link Color#toFloatBits()}<a name="line.518"></a>
+<span class="sourceLineNo">519</span>         */<a name="line.519"></a>
+<span class="sourceLineNo">520</span>        @Override<a name="line.520"></a>
+<span class="sourceLineNo">521</span>        public float alter(float color) {<a name="line.521"></a>
+<span class="sourceLineNo">522</span>            return reducer.reduceFloat(color);<a name="line.522"></a>
+<span class="sourceLineNo">523</span>        }<a name="line.523"></a>
+<span class="sourceLineNo">524</span>    }<a name="line.524"></a>
+<span class="sourceLineNo">525</span><a name="line.525"></a>
+<span class="sourceLineNo">526</span>}<a name="line.526"></a>
 
 
 

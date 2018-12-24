@@ -371,81 +371,60 @@
 <span class="sourceLineNo">363</span>        return next;<a name="line.363"></a>
 <span class="sourceLineNo">364</span>    }<a name="line.364"></a>
 <span class="sourceLineNo">365</span><a name="line.365"></a>
-<span class="sourceLineNo">366</span>    /**<a name="line.366"></a>
-<span class="sourceLineNo">367</span>     * Get a long that can be used to reproduce the sequence of random numbers this object will generate starting now.<a name="line.367"></a>
-<span class="sourceLineNo">368</span>     *<a name="line.368"></a>
-<span class="sourceLineNo">369</span>     * @return a long that can be used as state.<a name="line.369"></a>
-<span class="sourceLineNo">370</span>     */<a name="line.370"></a>
-<span class="sourceLineNo">371</span>    @Override<a name="line.371"></a>
-<span class="sourceLineNo">372</span>    public long getState() {<a name="line.372"></a>
-<span class="sourceLineNo">373</span>        return super.getState();<a name="line.373"></a>
-<span class="sourceLineNo">374</span>    }<a name="line.374"></a>
-<span class="sourceLineNo">375</span><a name="line.375"></a>
-<span class="sourceLineNo">376</span>    /**<a name="line.376"></a>
-<span class="sourceLineNo">377</span>     * Sets the state of the random number generator to a given long, which will alter future random numbers this<a name="line.377"></a>
-<span class="sourceLineNo">378</span>     * produces based on the state.<a name="line.378"></a>
-<span class="sourceLineNo">379</span>     *<a name="line.379"></a>
-<span class="sourceLineNo">380</span>     * @param state a long, which typically should not be 0 (some implementations may tolerate a state of 0, however).<a name="line.380"></a>
-<span class="sourceLineNo">381</span>     */<a name="line.381"></a>
-<span class="sourceLineNo">382</span>    @Override<a name="line.382"></a>
-<span class="sourceLineNo">383</span>    public void setState(long state) {<a name="line.383"></a>
-<span class="sourceLineNo">384</span>        super.setState(state);<a name="line.384"></a>
+<span class="sourceLineNo">366</span>    @Override<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    public String toString() {<a name="line.367"></a>
+<span class="sourceLineNo">368</span>        return "EditRNG{" +<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                "expected=" + expected +<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                ", centrality=" + centrality +<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                ", Randomness Source=" + random +<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                '}';<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    }<a name="line.373"></a>
+<span class="sourceLineNo">374</span><a name="line.374"></a>
+<span class="sourceLineNo">375</span>    @Override<a name="line.375"></a>
+<span class="sourceLineNo">376</span>    public boolean equals(Object o) {<a name="line.376"></a>
+<span class="sourceLineNo">377</span>        if (this == o) return true;<a name="line.377"></a>
+<span class="sourceLineNo">378</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        if (!super.equals(o)) return false;<a name="line.379"></a>
+<span class="sourceLineNo">380</span><a name="line.380"></a>
+<span class="sourceLineNo">381</span>        EditRNG editRNG = (EditRNG) o;<a name="line.381"></a>
+<span class="sourceLineNo">382</span><a name="line.382"></a>
+<span class="sourceLineNo">383</span>        if (Double.compare(editRNG.expected, expected) != 0) return false;<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        return Double.compare(editRNG.centrality, centrality) == 0;<a name="line.384"></a>
 <span class="sourceLineNo">385</span>    }<a name="line.385"></a>
 <span class="sourceLineNo">386</span><a name="line.386"></a>
 <span class="sourceLineNo">387</span>    @Override<a name="line.387"></a>
-<span class="sourceLineNo">388</span>    public String toString() {<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        return "EditRNG{" +<a name="line.389"></a>
-<span class="sourceLineNo">390</span>                "expected=" + expected +<a name="line.390"></a>
-<span class="sourceLineNo">391</span>                ", centrality=" + centrality +<a name="line.391"></a>
-<span class="sourceLineNo">392</span>                ", Randomness Source=" + random +<a name="line.392"></a>
-<span class="sourceLineNo">393</span>                '}';<a name="line.393"></a>
-<span class="sourceLineNo">394</span>    }<a name="line.394"></a>
-<span class="sourceLineNo">395</span><a name="line.395"></a>
-<span class="sourceLineNo">396</span>    @Override<a name="line.396"></a>
-<span class="sourceLineNo">397</span>    public boolean equals(Object o) {<a name="line.397"></a>
-<span class="sourceLineNo">398</span>        if (this == o) return true;<a name="line.398"></a>
-<span class="sourceLineNo">399</span>        if (o == null || getClass() != o.getClass()) return false;<a name="line.399"></a>
-<span class="sourceLineNo">400</span>        if (!super.equals(o)) return false;<a name="line.400"></a>
-<span class="sourceLineNo">401</span><a name="line.401"></a>
-<span class="sourceLineNo">402</span>        EditRNG editRNG = (EditRNG) o;<a name="line.402"></a>
-<span class="sourceLineNo">403</span><a name="line.403"></a>
-<span class="sourceLineNo">404</span>        if (Double.compare(editRNG.expected, expected) != 0) return false;<a name="line.404"></a>
-<span class="sourceLineNo">405</span>        return Double.compare(editRNG.centrality, centrality) == 0;<a name="line.405"></a>
-<span class="sourceLineNo">406</span>    }<a name="line.406"></a>
-<span class="sourceLineNo">407</span><a name="line.407"></a>
-<span class="sourceLineNo">408</span>    @Override<a name="line.408"></a>
-<span class="sourceLineNo">409</span>    public int hashCode() {<a name="line.409"></a>
-<span class="sourceLineNo">410</span>        int result = super.hashCode() * 31;<a name="line.410"></a>
-<span class="sourceLineNo">411</span>        result += NumberTools.doubleToMixedIntBits(expected);<a name="line.411"></a>
-<span class="sourceLineNo">412</span>        result = 31 * result + NumberTools.doubleToMixedIntBits(centrality);<a name="line.412"></a>
-<span class="sourceLineNo">413</span>        return result;<a name="line.413"></a>
-<span class="sourceLineNo">414</span>    }<a name="line.414"></a>
-<span class="sourceLineNo">415</span><a name="line.415"></a>
-<span class="sourceLineNo">416</span>    /**<a name="line.416"></a>
-<span class="sourceLineNo">417</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.417"></a>
-<span class="sourceLineNo">418</span>     * Uses a slightly optimized technique. This method is considered "hasty" since<a name="line.418"></a>
-<span class="sourceLineNo">419</span>     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also<a name="line.419"></a>
-<span class="sourceLineNo">420</span>     * has undefined behavior if bound is negative, though it will probably produce a negative<a name="line.420"></a>
-<span class="sourceLineNo">421</span>     * number (just how negative is an open question).<a name="line.421"></a>
-<span class="sourceLineNo">422</span>     *<a name="line.422"></a>
-<span class="sourceLineNo">423</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.423"></a>
-<span class="sourceLineNo">424</span>     * @return the found number<a name="line.424"></a>
-<span class="sourceLineNo">425</span>     */<a name="line.425"></a>
-<span class="sourceLineNo">426</span>    @Override<a name="line.426"></a>
-<span class="sourceLineNo">427</span>    public int nextIntHasty(int bound) {<a name="line.427"></a>
-<span class="sourceLineNo">428</span>        return (int)(nextDouble() * bound);<a name="line.428"></a>
-<span class="sourceLineNo">429</span>    }<a name="line.429"></a>
-<span class="sourceLineNo">430</span>    /**<a name="line.430"></a>
-<span class="sourceLineNo">431</span>     * Returns this EditRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.<a name="line.431"></a>
-<span class="sourceLineNo">432</span>     * @return a {@link Serializable} view of this EditRNG; always {@code this}<a name="line.432"></a>
-<span class="sourceLineNo">433</span>     */<a name="line.433"></a>
-<span class="sourceLineNo">434</span>    @Override<a name="line.434"></a>
-<span class="sourceLineNo">435</span>    public Serializable toSerializable() {<a name="line.435"></a>
-<span class="sourceLineNo">436</span>        return this;<a name="line.436"></a>
-<span class="sourceLineNo">437</span>    }<a name="line.437"></a>
-<span class="sourceLineNo">438</span><a name="line.438"></a>
-<span class="sourceLineNo">439</span><a name="line.439"></a>
-<span class="sourceLineNo">440</span>}<a name="line.440"></a>
+<span class="sourceLineNo">388</span>    public int hashCode() {<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        int result = super.hashCode() * 31;<a name="line.389"></a>
+<span class="sourceLineNo">390</span>        result += NumberTools.doubleToMixedIntBits(expected);<a name="line.390"></a>
+<span class="sourceLineNo">391</span>        result = 31 * result + NumberTools.doubleToMixedIntBits(centrality);<a name="line.391"></a>
+<span class="sourceLineNo">392</span>        return result;<a name="line.392"></a>
+<span class="sourceLineNo">393</span>    }<a name="line.393"></a>
+<span class="sourceLineNo">394</span><a name="line.394"></a>
+<span class="sourceLineNo">395</span>    /**<a name="line.395"></a>
+<span class="sourceLineNo">396</span>     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0.<a name="line.396"></a>
+<span class="sourceLineNo">397</span>     * Uses a slightly optimized technique. This method is considered "hasty" since<a name="line.397"></a>
+<span class="sourceLineNo">398</span>     * it should be faster than nextInt() doesn't check for "less-valid" bounds values. It also<a name="line.398"></a>
+<span class="sourceLineNo">399</span>     * has undefined behavior if bound is negative, though it will probably produce a negative<a name="line.399"></a>
+<span class="sourceLineNo">400</span>     * number (just how negative is an open question).<a name="line.400"></a>
+<span class="sourceLineNo">401</span>     *<a name="line.401"></a>
+<span class="sourceLineNo">402</span>     * @param bound the upper bound (exclusive); behavior is undefined if bound is negative<a name="line.402"></a>
+<span class="sourceLineNo">403</span>     * @return the found number<a name="line.403"></a>
+<span class="sourceLineNo">404</span>     */<a name="line.404"></a>
+<span class="sourceLineNo">405</span>    @Override<a name="line.405"></a>
+<span class="sourceLineNo">406</span>    public int nextIntHasty(int bound) {<a name="line.406"></a>
+<span class="sourceLineNo">407</span>        return (int)(nextDouble() * bound);<a name="line.407"></a>
+<span class="sourceLineNo">408</span>    }<a name="line.408"></a>
+<span class="sourceLineNo">409</span>    /**<a name="line.409"></a>
+<span class="sourceLineNo">410</span>     * Returns this EditRNG in a way that can be deserialized even if only {@link IRNG}'s methods can be called.<a name="line.410"></a>
+<span class="sourceLineNo">411</span>     * @return a {@link Serializable} view of this EditRNG; always {@code this}<a name="line.411"></a>
+<span class="sourceLineNo">412</span>     */<a name="line.412"></a>
+<span class="sourceLineNo">413</span>    @Override<a name="line.413"></a>
+<span class="sourceLineNo">414</span>    public Serializable toSerializable() {<a name="line.414"></a>
+<span class="sourceLineNo">415</span>        return this;<a name="line.415"></a>
+<span class="sourceLineNo">416</span>    }<a name="line.416"></a>
+<span class="sourceLineNo">417</span><a name="line.417"></a>
+<span class="sourceLineNo">418</span><a name="line.418"></a>
+<span class="sourceLineNo">419</span>}<a name="line.419"></a>
 
 
 

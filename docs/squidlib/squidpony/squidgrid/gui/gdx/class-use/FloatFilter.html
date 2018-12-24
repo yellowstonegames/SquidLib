@@ -145,17 +145,24 @@
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/FloatFilters.PaletteFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.PaletteFilter</a></span></code>
-<div class="block">A FloatFilter that linearly interpolates (lerps) any color it is given toward the most-similar of a group of
- given colors.</div>
+<div class="block">A FloatFilter that limits the colors it can return to a fixed palette, and won't return any colors that are
+ missing from that palette (although it can always return fully-transparent).</div>
 </td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.PaletteReducerFilter</a></span></code>
+<div class="block">A FloatFilter that limits the colors it can return to a fixed palette as determined by a <a href="../../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx"><code>PaletteReducer</code></a>,
+ and won't return any colors that are missing from that palette (although it can always return fully-transparent).</div>
+</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.YCbCrFilter</a></span></code>
 <div class="block">Like <a href="../../../../../squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.HSVFilter</code></a>, but edits its input colors in YCbCr color space, and multiplies rather than adds.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilters.YCoCgFilter</a></span></code>
 <div class="block">Like <a href="../../../../../squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.HSVFilter</code></a> or <a href="../../../../../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a>, but edits its input colors in YCoCg color space, and multiplies

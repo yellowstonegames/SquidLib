@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -181,7 +181,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;squidpony.squidmath.<a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></h3>
-<code><a href="../../squidpony/squidmath/RNG.html#haveNextNextGaussian">haveNextNextGaussian</a>, <a href="../../squidpony/squidmath/RNG.html#nextNextGaussian">nextNextGaussian</a>, <a href="../../squidpony/squidmath/RNG.html#ran">ran</a>, <a href="../../squidpony/squidmath/RNG.html#random">random</a></code></li>
+<code><a href="../../squidpony/squidmath/RNG.html#ran">ran</a>, <a href="../../squidpony/squidmath/RNG.html#random">random</a></code></li>
 </ul>
 </li>
 </ul>
@@ -308,39 +308,32 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 </td>
 </tr>
 <tr id="i8" class="altColor">
-<td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#nextGaussian--">nextGaussian</a></span>()</code>
-<div class="block">Gets a pseudo-random double from the Gaussian distribution, which will usually be between -1.0 and 1.0 but is not
- always in that range.</div>
-</td>
-</tr>
-<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#nextInt--">nextInt</a></span>()</code>
 <div class="block">Get a random integer between Integer.MIN_VALUE to Integer.MAX_VALUE (both inclusive).</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#nextInt-int-">nextInt</a></span>(int&nbsp;bound)</code>
 <div class="block">Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
  negative.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#nextIntHasty-int-">nextIntHasty</a></span>(int&nbsp;bound)</code>
 <div class="block">Returns a random non-negative integer between 0 (inclusive) and the given bound (exclusive),
  or 0 if the bound is 0.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#nextLong--">nextLong</a></span>()</code>
 <div class="block">Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CriticalRNG.html#nextLong-long-">nextLong</a></span>(long&nbsp;bound)</code>
 <div class="block">Exclusive on bound (which must be positive), with an inner bound of 0.</div>
@@ -810,7 +803,7 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <a name="getRandomElement-java.util.Collection-">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getRandomElement</h4>
 <pre>public&nbsp;&lt;T&gt;&nbsp;T&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.179">getRandomElement</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;T&gt;&nbsp;coll)</pre>
@@ -838,26 +831,6 @@ extends <a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.s
 <dd><code>coll</code> - the Collection to get an element from; remember, Map does not implement Collection</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the randomly selected element</dd>
-</dl>
-</li>
-</ul>
-<a name="nextGaussian--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>nextGaussian</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CriticalRNG.html#line.193">nextGaussian</a>()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../squidpony/squidmath/RNG.html#nextGaussian--">RNG</a></code></span></div>
-<div class="block">Gets a pseudo-random double from the Gaussian distribution, which will usually be between -1.0 and 1.0 but is not
- always in that range. If you do want values to always be between -1 and 1 and a float is OK, consider using
- <a href="../../squidpony/squidmath/RNG.html#nextCurvedFloat--"><code>RNG.nextCurvedFloat()</code></a>, which is a different distribution that is less sharply-curved towards 0 and
- terminates at -1 and 1.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../squidpony/squidmath/RNG.html#nextGaussian--">nextGaussian</a></code>&nbsp;in class&nbsp;<code><a href="../../squidpony/squidmath/RNG.html" title="class in squidpony.squidmath">RNG</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>a value from the Gaussian distribution</dd>
 </dl>
 </li>
 </ul>

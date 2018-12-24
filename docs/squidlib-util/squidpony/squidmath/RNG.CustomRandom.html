@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -122,7 +122,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/squidmath/RNG.html#line.168">RNG.CustomRandom</a>
+<pre>public static class <a href="../../src-html/squidpony/squidmath/RNG.html#line.167">RNG.CustomRandom</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a></pre>
 <div class="block">A subclass of java.util.Random that uses a RandomnessSource supplied by the user instead of the default.</div>
 <dl>
@@ -179,13 +179,20 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html
 <div class="block">Generates the next pseudorandom number.</div>
 </td>
 </tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/RNG.CustomRandom.html#nextLong--">nextLong</a></span>()</code>
+<div class="block">Returns the next pseudorandom, uniformly distributed <code>long</code>
+ value from this random number generator's sequence.</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.util.Random">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.util.<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a></h3>
-<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles--" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles-double-double-" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles-long-" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles-long-double-double-" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints--" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints-int-int-" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints-long-" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints-long-int-int-" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs--" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs-long-" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs-long-long-" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs-long-long-long-" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextBoolean--" title="class or interface in java.util">nextBoolean</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextBytes-byte:A-" title="class or interface in java.util">nextBytes</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextDouble--" title="class or interface in java.util">nextDouble</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextFloat--" title="class or interface in java.util">nextFloat</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextGaussian--" title="class or interface in java.util">nextGaussian</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextInt--" title="class or interface in java.util">nextInt</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextInt-int-" title="class or interface in java.util">nextInt</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextLong--" title="class or interface in java.util">nextLong</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#setSeed-long-" title="class or interface in java.util">setSeed</a></code></li>
+<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles--" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles-double-double-" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles-long-" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#doubles-long-double-double-" title="class or interface in java.util">doubles</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints--" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints-int-int-" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints-long-" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#ints-long-int-int-" title="class or interface in java.util">ints</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs--" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs-long-" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs-long-long-" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#longs-long-long-long-" title="class or interface in java.util">longs</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextBoolean--" title="class or interface in java.util">nextBoolean</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextBytes-byte:A-" title="class or interface in java.util">nextBytes</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextDouble--" title="class or interface in java.util">nextDouble</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextFloat--" title="class or interface in java.util">nextFloat</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextGaussian--" title="class or interface in java.util">nextGaussian</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextInt--" title="class or interface in java.util">nextInt</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextInt-int-" title="class or interface in java.util">nextInt</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#setSeed-long-" title="class or interface in java.util">setSeed</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -214,7 +221,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html
 <ul class="blockList">
 <li class="blockList">
 <h4>CustomRandom</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.177">CustomRandom</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.176">CustomRandom</a>()</pre>
 <div class="block">Creates a new random number generator. This constructor uses
  a DiverRNG with a random seed.</div>
 </li>
@@ -225,7 +232,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CustomRandom</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.187">CustomRandom</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;randomnessSource)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.186">CustomRandom</a>(<a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath">RandomnessSource</a>&nbsp;randomnessSource)</pre>
 <div class="block">Creates a new random number generator. This constructor uses
  the seed of the given RandomnessSource if it has been seeded.</div>
 <dl>
@@ -245,10 +252,10 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html
 <a name="next-int-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.217">next</a>(int&nbsp;bits)</pre>
+<pre>protected&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.216">next</a>(int&nbsp;bits)</pre>
 <div class="block">Generates the next pseudorandom number. Subclasses should
  override this, as this is used by all other methods.
  <p>
@@ -277,6 +284,26 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html
  generator's sequence</dd>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>1.1</dd>
+</dl>
+</li>
+</ul>
+<a name="nextLong--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>nextLong</h4>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/RNG.CustomRandom.html#line.230">nextLong</a>()</pre>
+<div class="block">Returns the next pseudorandom, uniformly distributed <code>long</code>
+ value from this random number generator's sequence. The general
+ contract of <code>nextLong</code> is that one <code>long</code> value is
+ pseudorandomly generated and returned.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true#nextLong--" title="class or interface in java.util">nextLong</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Random.html?is-external=true" title="class or interface in java.util">Random</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the next pseudorandom, uniformly distributed <code>long</code>
+ value from this random number generator's sequence</dd>
 </dl>
 </li>
 </ul>

@@ -365,7 +365,7 @@ public abstract class AbstractRNG implements IRNG {
     @Override
     public <T> T[] shuffle(T[] elements, T[] dest) {
         if (dest.length != elements.length)
-            throw new IllegalArgumentException("Not allowed! In AbstractRNG.shuffle(), elements and dest do not have the same length.");
+            throw new IllegalArgumentException("Not allowed! In AbstractRNG.shuffle(), elements and dest must not have the same length.");
         System.arraycopy(elements, 0, dest, 0, elements.length);
         shuffleInPlace(dest);
         return dest;
@@ -450,7 +450,7 @@ public abstract class AbstractRNG implements IRNG {
      * the dest parameter, avoiding allocations.
      * Useful for passing to OrderedMap or OrderedSet's reorder() methods.
      *
-     * @param length the size of the ordering to produce
+     * @param length the size of the ordering to produce; the smaller of {@code dest.length} and length will be used
      * @param dest   the destination array; will be modified
      * @return dest, filled with a random ordering containing all ints from 0 to length (exclusive)
      */
@@ -469,6 +469,51 @@ public abstract class AbstractRNG implements IRNG {
             dest[i] = t;
         }
         return dest;
+    }
+    /**
+     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+     * it can, and then returns output. Will only use a given position in the given data at most once; uses the
+     * Swap-Or-Not Shuffle to accomplish this without allocations. Internally, makes 1 call to {@link #nextInt()} and
+     * 6 calls to {@link #nextSignedInt(int)}, regardless of the data being randomized.
+     * <br>
+     * Uses approximately the same code as {@link SwapOrNotShuffler}, but without any object or array allocations.
+     *
+     * @param data   an array of T; will not be modified.
+     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
+     * @param <T>    can be any non-primitive type.
+     * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data
+     */
+    @Override
+    public <T> T[] randomPortion(T[] data, T[] output) {
+        final int length = data.length, n = Math.min(length, output.length),
+                func = nextInt(),
+                a = nextSignedInt(length), b = nextSignedInt(length), c = nextSignedInt(length),
+                d = nextSignedInt(length), e = nextSignedInt(length), f = nextSignedInt(length);
+        int key, index;
+        for (int i = 0; i < n; i++) {
+            index = i;
+            key = a - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = b - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = c - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = d - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = e - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = f - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+
+            output[i] = data[index];
+        }
+        return output;
     }
 
     /**

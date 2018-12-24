@@ -311,29 +311,38 @@
 <span class="sourceLineNo">303</span>     * @return dest, filled with a random ordering containing all ints from 0 to length (exclusive)<a name="line.303"></a>
 <span class="sourceLineNo">304</span>     */<a name="line.304"></a>
 <span class="sourceLineNo">305</span>    int[] randomOrdering(int length, int[] dest);<a name="line.305"></a>
-<span class="sourceLineNo">306</span><a name="line.306"></a>
-<span class="sourceLineNo">307</span>    /**<a name="line.307"></a>
-<span class="sourceLineNo">308</span>     * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this<a name="line.308"></a>
-<span class="sourceLineNo">309</span>     * IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not<a name="line.309"></a>
-<span class="sourceLineNo">310</span>     * permit copying itself, it is suggested to either throw an {@link UnsupportedOperationException} or return a new<a name="line.310"></a>
-<span class="sourceLineNo">311</span>     * IRNG of the same type but with a random seed, with the latter meant as a partial defense against cheating.<a name="line.311"></a>
-<span class="sourceLineNo">312</span>     *<a name="line.312"></a>
-<span class="sourceLineNo">313</span>     * @return a copy of this IRNG<a name="line.313"></a>
+<span class="sourceLineNo">306</span>    /**<a name="line.306"></a>
+<span class="sourceLineNo">307</span>     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as<a name="line.307"></a>
+<span class="sourceLineNo">308</span>     * it can, and then returns output. Will only use a given position in the given data at most once.<a name="line.308"></a>
+<span class="sourceLineNo">309</span>     * <a name="line.309"></a>
+<span class="sourceLineNo">310</span>     * @param data   an array of T; will not be modified.<a name="line.310"></a>
+<span class="sourceLineNo">311</span>     * @param output an array of T that will be overwritten; should always be instantiated with the portion length<a name="line.311"></a>
+<span class="sourceLineNo">312</span>     * @param &lt;T&gt;    can be any non-primitive type.<a name="line.312"></a>
+<span class="sourceLineNo">313</span>     * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data<a name="line.313"></a>
 <span class="sourceLineNo">314</span>     */<a name="line.314"></a>
-<span class="sourceLineNo">315</span>    IRNG copy();<a name="line.315"></a>
-<span class="sourceLineNo">316</span><a name="line.316"></a>
-<span class="sourceLineNo">317</span>    /**<a name="line.317"></a>
-<span class="sourceLineNo">318</span>     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it<a name="line.318"></a>
-<span class="sourceLineNo">319</span>     * implements Serializable as well as IRNG.<a name="line.319"></a>
-<span class="sourceLineNo">320</span>     * &lt;br&gt;<a name="line.320"></a>
-<span class="sourceLineNo">321</span>     * For implementors: It is suggested to return an {@link RNG} initialized by calling <a name="line.321"></a>
-<span class="sourceLineNo">322</span>     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the<a name="line.322"></a>
-<span class="sourceLineNo">323</span>     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,<a name="line.323"></a>
-<span class="sourceLineNo">324</span>     * however, so it is simply a last resort in case you don't want to throw an exception.<a name="line.324"></a>
-<span class="sourceLineNo">325</span>     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}<a name="line.325"></a>
-<span class="sourceLineNo">326</span>     */<a name="line.326"></a>
-<span class="sourceLineNo">327</span>    Serializable toSerializable();<a name="line.327"></a>
-<span class="sourceLineNo">328</span>}<a name="line.328"></a>
+<span class="sourceLineNo">315</span>    &lt;T&gt; T[] randomPortion(T[] data, T[] output);<a name="line.315"></a>
+<span class="sourceLineNo">316</span>    /**<a name="line.316"></a>
+<span class="sourceLineNo">317</span>     * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this<a name="line.317"></a>
+<span class="sourceLineNo">318</span>     * IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not<a name="line.318"></a>
+<span class="sourceLineNo">319</span>     * permit copying itself, it is suggested to either throw an {@link UnsupportedOperationException} or return a new<a name="line.319"></a>
+<span class="sourceLineNo">320</span>     * IRNG of the same type but with a random seed, with the latter meant as a partial defense against cheating.<a name="line.320"></a>
+<span class="sourceLineNo">321</span>     *<a name="line.321"></a>
+<span class="sourceLineNo">322</span>     * @return a copy of this IRNG<a name="line.322"></a>
+<span class="sourceLineNo">323</span>     */<a name="line.323"></a>
+<span class="sourceLineNo">324</span>    IRNG copy();<a name="line.324"></a>
+<span class="sourceLineNo">325</span><a name="line.325"></a>
+<span class="sourceLineNo">326</span>    /**<a name="line.326"></a>
+<span class="sourceLineNo">327</span>     * Gets a view of this IRNG in a way that implements {@link Serializable}, which may simply be this IRNG if it<a name="line.327"></a>
+<span class="sourceLineNo">328</span>     * implements Serializable as well as IRNG.<a name="line.328"></a>
+<span class="sourceLineNo">329</span>     * &lt;br&gt;<a name="line.329"></a>
+<span class="sourceLineNo">330</span>     * For implementors: It is suggested to return an {@link RNG} initialized by calling <a name="line.330"></a>
+<span class="sourceLineNo">331</span>     * {@link RNG#RNG(long)} with {@link #nextLong()} if you are unable to save the current state of this IRNG and the<a name="line.331"></a>
+<span class="sourceLineNo">332</span>     * caller still needs something saved. This won't preserve the current state or the choice of IRNG implementation,<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * however, so it is simply a last resort in case you don't want to throw an exception.<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * @return a {@link Serializable} view of this IRNG or a similar one; may be {@code this}<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     */<a name="line.335"></a>
+<span class="sourceLineNo">336</span>    Serializable toSerializable();<a name="line.336"></a>
+<span class="sourceLineNo">337</span>}<a name="line.337"></a>
 
 
 
