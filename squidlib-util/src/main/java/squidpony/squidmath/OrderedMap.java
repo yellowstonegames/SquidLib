@@ -2673,4 +2673,46 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     {
         return new OrderedMap<>();
     }
+
+
+    /**
+     * Sorts this whole OrderedMap on its keys using the supplied Comparator.
+     * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
+     */
+    public void sort(Comparator<? super K> comparator)
+    {
+        sort(comparator, 0, size);
+    }
+
+    /**
+     * Sorts a sub-range of this OrderedMap on its keys from what is currently the index {@code start} up to (but not
+     * including) the index {@code end}, using the supplied Comparator.
+     * @param comparator a Comparator that can be used on the same type this uses for its keys (may need wildcards)
+     * @param start the first index of a key to sort (the index can change after this)
+     * @param end the exclusive bound on the indices to sort; often this is just {@link #size()}
+     */
+    public void sort(Comparator<? super K> comparator, int start, int end)
+    {
+        TimSort.sort(key, order, start, end, comparator);
+    }
+    /**
+     * Sorts this whole OrderedMap on its values using the supplied Comparator.
+     * @param comparator a Comparator that can be used on the same type this uses for its values (may need wildcards)
+     */
+    public void sortByValue(Comparator<? super V> comparator)
+    {
+        sortByValue(comparator, 0, size);
+    }
+
+    /**
+     * Sorts a sub-range of this OrderedMap on its values from what is currently the index {@code start} up to (but not
+     * including) the index {@code end}, using the supplied Comparator.
+     * @param comparator a Comparator that can be used on the same type this uses for its values (may need wildcards)
+     * @param start the first index of a value to sort (the index can change after this)
+     * @param end the exclusive bound on the indices to sort; often this is just {@link #size()}
+     */
+    public void sortByValue(Comparator<? super V> comparator, int start, int end)
+    {
+        TimSort.sort(value, order, start, end, comparator);
+    }
 }
