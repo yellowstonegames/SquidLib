@@ -14,9 +14,9 @@ import java.io.Serializable;
  * generation time in use, and O(n) time to construct a WeightedTable instance), this may be useful to consider if you
  * don't need all the features of ProbabilityTable or if you want deeper control over the random aspects of it.
  * <br>
- * Internally, this uses LightRNG's algorithm as found in {@link LightRNG#determineBounded(long, int)} and
- * {@link LightRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
- * and the other used to determine the chosen column, which is bounded to an arbitrary positive int. It does thsi with
+ * Internally, this uses LinnormRNG's algorithm as found in {@link LinnormRNG#determineBounded(long, int)} and
+ * {@link LinnormRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
+ * and the other used to determine the chosen column, which is bounded to an arbitrary positive int. It does this with
  * just one randomized 64-bit value, allowing the state given to {@link #random(long)} to be just one long.
  * <br>
  * Created by Tommy Ettinger on 1/5/2018.
@@ -50,15 +50,11 @@ public class WeightedTable implements Serializable {
         if ((size = prob.length) == 0)
             throw new IllegalArgumentException("Array 'probabilities' given to WeightedTable must be nonempty.");
 
-        /* Allocate space for the probability and alias tables. */
-//        probability = new int[size];
-//        alias = new int[size];
         mixed = new int[size<<1];
 
-        /* Compute the average probability and cache it for later use. */
         double sum = 0.0;
 
-        /* Make a copy of the probabilities list, since we will be making
+        /* Make a copy of the probabilities array, since we will be making
          * changes to it.
          */
         double[] probabilities = new double[size];
@@ -68,7 +64,7 @@ public class WeightedTable implements Serializable {
         }
         if(sum <= 0)
             throw new IllegalArgumentException("At least one probability must be positive");
-        final double average = sum / size;
+        final double average = sum / size, invAverage = 1.0 / average;
 
         /* Create two stacks to act as worklists as we populate the tables. */
         IntVLA small = new IntVLA(size);
@@ -99,7 +95,7 @@ public class WeightedTable implements Serializable {
             /* These probabilities have not yet been scaled up to be such that
              * sum/n is given weight 1.0.  We do this here instead.
              */
-            mixed[less2] = (int)(0x7FFFFFFF * (probabilities[less] / average));
+            mixed[less2] = (int)(0x7FFFFFFF * (probabilities[less] * invAverage));
             mixed[less2|1] = more;
 
             probabilities[more] += probabilities[less] - average;
@@ -134,25 +130,25 @@ public class WeightedTable implements Serializable {
      */
     public int random(long state)
     {
-        // This is ThrustAltRNG's algorithm to generate a random long given sequential states
-        state = ((state = ((state = ((state *= 0x9E3779B97F4A7C15L) ^ state >>> 30) * 0xBF58476D1CE4E5B9L) ^ state >>> 27) * 0x94D049BB133111EBL) ^ state >>> 31);
+        // This is LinnormRNG's (and DiverRNG's) algorithm to generate a random long given sequential states
+        state = (state = ((state = ((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
         // get a random int (using half the bits of our previously-calculated state) that is less than size
         int column = (int)((size * (state & 0xFFFFFFFFL)) >> 32);
-        // use the other half of the bits of state to get a double, compare to probability and choose either the
+        // use the other half of the bits of state to get a 31-bit int, compare to probability and choose either the
         // current column or the alias for that column based on that probability
         return ((state >>> 33) <= mixed[column << 1]) ? column : mixed[column << 1 | 1];
     }
     
     public String serializeToString()
     {
-        return size + ":" + StringKit.join(",", mixed);
+        return StringKit.join(",", mixed);
     }
     public static WeightedTable deserializeFromString(String data)
     {
         if(data == null || data.isEmpty())
             return null;
-        int pos = data.indexOf(':');
-        int size = StringKit.intFromDec(data, 0, pos);
+        int pos = -1;//data.indexOf(':');
+        //int size = StringKit.intFromDec(data, 0, pos);
         int count = StringKit.count(data, ',') + 1;
         int[] mixed = new int[count];
         for (int i = 0; i < count; i++) {
