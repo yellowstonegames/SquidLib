@@ -146,7 +146,6 @@ public class SparseLightingDemo extends ApplicationAdapter {
     // It can also be used to over- or under-saturate colors, change their brightness, or any combination of these. 
     private FloatFilters.PaletteFilter pal;
     private FloatFilters.PaletteReducerFilter prf;
-//    private FloatFilters.MultiLerpFilter mlerp;
     private FloatFilters.YCbCrFilter ycbcr;
     private FloatFilters.ColorizeFilter sepia;
     private FloatFilter[] filters;
@@ -159,16 +158,16 @@ public class SparseLightingDemo extends ApplicationAdapter {
         // just removing the String seed, making the line "rng = new RNG();" . Keeping the seed as a default allows
         // changes to be more easily reproducible, and using a fixed seed is strongly recommended for tests. 
         rng = new RNG(artOfWar);
+        // comparing PaletteFilter with PaletteReducerFilter.
+        // PaletteFilter is only reasonable with very small palettes, and DAWNBRINGER_AURORA has 256 colors (large).
         pal = new FloatFilters.PaletteFilter(SColor.DAWNBRINGER_AURORA);
+        // PaletteReducerFilter is much faster with large palettes, but uses a decent chunk of memory as a lookup table.
         prf = new FloatFilters.PaletteReducerFilter();
-//        mlerp = new FloatFilters.MultiLerpFilter(1f,
-//                SColor.translucentColor(SColor.CW_RICH_GREEN, 0.6f),
-//                SColor.translucentColor(SColor.CW_LIGHT_AZURE, 0.4f),
-//                SColor.translucentColor(SColor.CW_ROSE, 0.8f),
-//                SColor.translucentColor(SColor.CW_LIGHT_BROWN, 0.5f)
-//        );
-        // testing FloatFilter; YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color 
+        // YCbCrFilter multiplies the brightness (Y) and chroma (Cb, Cr) of a color; the settings here make all colors
+        // a little bolder and brighter.
         ycbcr = new FloatFilters.YCbCrFilter(1.125f, 1.1f, 1.1f);
+        // ColorizeFilter is a variant on YCbCrFilter that takes a color, here Clove Brown, and makes all colors that it
+        // filters have the same chroma as Clove Brown but keep their own lightness. This makes an old-photo effect.
         sepia = new FloatFilters.ColorizeFilter(SColor.CLOVE_BROWN, 0.6f, 0.0f);
 
         filters = new FloatFilter[]{ycbcr, sepia, prf, pal};
@@ -441,6 +440,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
                         Gdx.app.exit();
                         break;
                     }
+                    // changes the filter to the next in the sequence, wrapping around after PaletteFilter.
                     case 'f':
                     case 'F':
                     {

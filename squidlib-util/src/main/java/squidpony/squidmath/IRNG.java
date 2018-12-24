@@ -303,7 +303,16 @@ public interface IRNG extends RandomnessSource {
      * @return dest, filled with a random ordering containing all ints from 0 to length (exclusive)
      */
     int[] randomOrdering(int length, int[] dest);
-
+    /**
+     * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
+     * it can, and then returns output. Will only use a given position in the given data at most once.
+     * 
+     * @param data   an array of T; will not be modified.
+     * @param output an array of T that will be overwritten; should always be instantiated with the portion length
+     * @param <T>    can be any non-primitive type.
+     * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data
+     */
+    <T> T[] randomPortion(T[] data, T[] output);
     /**
      * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
      * IRNG at the point copy() is called. The copy will not share references with this IRNG. If this IRNG does not

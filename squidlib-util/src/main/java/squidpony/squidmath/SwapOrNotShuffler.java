@@ -121,7 +121,7 @@ public class SwapOrNotShuffler implements Serializable {
             z = (z << 17) - z;
             z ^= z >>> 14;
             z = (z << 13) - z;
-            func += (keys[i] = (int)((bound * ((z ^ z >>> 15) & 0xFFFFFFFFL)) >> 32)); // can we avoid this multiply?
+            func += (keys[i] = (int)((bound * ((z ^ z >>> 15) & 0xFFFFFFFFL)) >> 32)) ^ z; // can we avoid this multiply?
             // func may be out of range for an int on GWT; this is OK because it always has bitwise
             // ops used on it before anything else. Bitwise ops fix the range to a valid int.
         }

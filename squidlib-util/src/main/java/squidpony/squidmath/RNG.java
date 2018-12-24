@@ -109,8 +109,6 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
 public class RNG implements Serializable, IRNG {
 
 	protected RandomnessSource random;
-	protected double nextNextGaussian;
-	protected boolean haveNextNextGaussian = false;
 	protected Random ran = null;
 
     private static final long serialVersionUID = 2352426757973945105L;
@@ -121,8 +119,9 @@ public class RNG implements Serializable, IRNG {
      * for games), and has excellent speed, tiny state size, and natively generates 64-bit numbers.
      * <br>
      * Previous versions of SquidLib used different implementations, including {@link LightRNG}, {@link ThrustAltRNG},
-     * and {@link MersenneTwister}. You can still use one of these by instantiating one of those classes and passing it
-     * to {@link #RNG(RandomnessSource)}, which may be the best way to ensure the same results across versions.
+     * {@link LinnormRNG}, and {@link MersenneTwister}. You can still use one of these by instantiating one of those
+     * classes and passing it to {@link #RNG(RandomnessSource)}, which may be the best way to ensure the same results
+     * across versions.
      */
     public RNG() {
         this(new DiverRNG());
@@ -151,7 +150,7 @@ public class RNG implements Serializable, IRNG {
     /**
      * Uses the provided source of randomness for all calculations. This constructor should be used if an alternate
      * RandomnessSource other than DiverRNG is desirable, such as to keep compatibility with earlier SquidLib
-     * versions that defaulted to LightRNG or ThrustAltRNG.
+     * versions that defaulted to MersenneTwister, LightRNG, ThrustAltRNG, or LinnormRNG.
      * <br>
      * If the parameter is null, this is equivalent to using {@link #RNG()} as the constructor.
      * @param random the source of pseudo-randomness, such as a LightRNG or LongPeriodRNG object
@@ -216,6 +215,20 @@ public class RNG implements Serializable, IRNG {
         @Override
         protected int next(int bits) {
             return randomnessSource.next(bits);
+        }
+
+        /**
+         * Returns the next pseudorandom, uniformly distributed {@code long}
+         * value from this random number generator's sequence. The general
+         * contract of {@code nextLong} is that one {@code long} value is
+         * pseudorandomly generated and returned.
+         *
+         * @return the next pseudorandom, uniformly distributed {@code long}
+         * value from this random number generator's sequence
+         */
+        @Override
+        public long nextLong() {
+            return randomnessSource.nextLong();
         }
     }
 
@@ -735,9 +748,9 @@ public class RNG implements Serializable, IRNG {
 
     /**
      * Generates a random float with a curved distribution that centers on 0 (where it has a bias) and can (rarely)
-     * approach -1f and 1f, but not go beyond those bounds. This is similar to {@link #nextGaussian()} in that it uses
-     * a curved distribution, but it is not the same. The distribution for the values is similar to Irwin-Hall, and is
-     * frequently near 0 but not too-rarely near -1f or 1f. It cannot produce values greater than or equal to 1f, or
+     * approach -1f and 1f, but not go beyond those bounds. This is similar to {@link Random#nextGaussian()} in that it
+     * uses a curved distribution, but it is not the same. The distribution for the values is similar to Irwin-Hall, and
+     * is frequently near 0 but not too-rarely near -1f or 1f. It cannot produce values greater than or equal to 1f, or
      * less than -1f, but it can produce -1f.
      * @return a deterministic float between -1f (inclusive) and 1f (exclusive), that is very likely to be close to 0f
      */
@@ -750,30 +763,6 @@ public class RNG implements Serializable, IRNG {
                 - 3f);
     }
 
-    /**
-     * Gets a pseudo-random double from the Gaussian distribution, which will usually be between -1.0 and 1.0 but is not
-     * always in that range. If you do want values to always be between -1 and 1 and a float is OK, consider using
-     * {@link #nextCurvedFloat()}, which is a different distribution that is less sharply-curved towards 0 and
-     * terminates at -1 and 1.
-     * @return a value from the Gaussian distribution
-     */
-    public double nextGaussian() {
-        if (haveNextNextGaussian) {
-            haveNextNextGaussian = false;
-            return nextNextGaussian;
-        } else {
-            double v1, v2, s;
-            do {
-                v1 = 2 * nextDouble() - 1; // between -1 and 1
-                v2 = 2 * nextDouble() - 1; // between -1 and 1
-                s = v1 * v1 + v2 * v2;
-            } while (s >= 1 || s == 0);
-            double multiplier = Math.sqrt(-2 * Math.log(s) / s);
-            nextNextGaussian = v2 * multiplier;
-            haveNextNextGaussian = true;
-            return v1 * multiplier;
-        }
-    }
 
     /**
      * Gets a random double between 0.0 inclusive and 1.0 exclusive.
@@ -1248,29 +1237,47 @@ public class RNG implements Serializable, IRNG {
 
     /**
      * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
-     * it can, and then returns output. Will only use a given position in the given data at most once; does this by
-     * generating random indices for data's elements, but only as much as needed, assigning the copied section to output
-     * and not modifying data.
+     * it can, and then returns output. Will only use a given position in the given data at most once; uses the
+     * Swap-Or-Not Shuffle to accomplish this without allocations. Internally, makes 1 call to {@link #nextInt()} and
+     * 6 calls to {@link #nextSignedInt(int)}, regardless of the data being randomized.
      * <br>
-     * Based on http://stackoverflow.com/a/21460179 , credit to Vincent van der Weele; modifications were made to avoid
-     * copying or creating a new generic array (a problem on GWT).
+     * Uses approximately the same code as {@link SwapOrNotShuffler}, but without any object or array allocations.
      *
      * @param data   an array of T; will not be modified.
      * @param output an array of T that will be overwritten; should always be instantiated with the portion length
      * @param <T>    can be any non-primitive type.
-     * @return an array of T that has length equal to output's length and may contain unchanged elements (null if output
-     * was empty) if data is shorter than output
+     * @return output, after {@code Math.min(output.length, data.length)} unique items have been put into it from data
      */
+    @Override
     public <T> T[] randomPortion(T[] data, T[] output) {
-        int length = data.length;
-        int n = Math.min(length, output.length);
-        int[] mapping = ArrayTools.range(n);
+        final int length = data.length, n = Math.min(length, output.length),
+                func = nextInt(),
+                a = nextSignedInt(length), b = nextSignedInt(length), c = nextSignedInt(length),
+                d = nextSignedInt(length), e = nextSignedInt(length), f = nextSignedInt(length);
+        int key, index;
         for (int i = 0; i < n; i++) {
-            int r = nextIntHasty(length);
-            output[i] = data[mapping[r]];
-            mapping[r] = mapping[--length];
+            index = i;
+            key = a - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = b - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = c - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = d - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = e - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            key = f - index;
+            key += (key >> 31 & length);
+            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            
+            output[i] = data[index];
         }
-
         return output;
     }
 
