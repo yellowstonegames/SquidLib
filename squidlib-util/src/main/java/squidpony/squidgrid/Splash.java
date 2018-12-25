@@ -100,7 +100,7 @@ public class Splash {
 
 		Direction[] dirs = new Direction[Direction.OUTWARDS.length];
 
-		final LinkedList<Coord> toTry = new LinkedList<>();
+		final ArrayDeque<Coord> toTry = new ArrayDeque<>();
 		toTry.add(start);
 		final Set<Coord> trieds = new HashSet<>();
 

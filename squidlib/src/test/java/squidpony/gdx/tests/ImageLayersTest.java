@@ -128,7 +128,9 @@ public class ImageLayersTest extends ApplicationAdapter{
     public void pause() {
         super.pause();
     }
-
+    
+    private final Direction[] dirs = new Direction[4];
+    
     @Override
     public void render() {
         super.render();
@@ -151,7 +153,6 @@ public class ImageLayersTest extends ApplicationAdapter{
 
         if(!layers.hasActiveAnimations() && ctr > 0.4) {
             ctr -= 0.4;
-            Direction[] dirs = new Direction[4];
             Coord alter, pt;
             AnimatedEntity ent;
             for (int i = 0; i < things.size(); i++) {

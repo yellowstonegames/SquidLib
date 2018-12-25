@@ -4,7 +4,7 @@ package squidpony.squidmath;
 import squidpony.annotation.Beta;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +31,7 @@ public class NeuralParticle implements Serializable{
 
     private final IRNG rng;
     private final int maxDistance, minDistance, width, height;
-    private final LinkedList<Coord> distribution = new LinkedList<>();
+    private final ArrayList<Coord> distribution = new ArrayList<>();
 
     public NeuralParticle(int width, int height, int maxDistance, IRNG rng) {
         this.rng = rng;
@@ -58,7 +58,7 @@ public class NeuralParticle implements Serializable{
      * @return the distribution as a List of Coord
      */
     public List<Coord> asList() {
-        return new LinkedList<>(distribution);
+        return new ArrayList<>(distribution);
     }
 
     /**
@@ -68,7 +68,7 @@ public class NeuralParticle implements Serializable{
      * @return a 2D int array, with all elements equal to either 0 or scale
      */
     public int[][] asIntMap(int scale) {
-        int ret[][] = new int[width][height];
+        int[][] ret = new int[width][height];
         for (Coord p : distribution) {
             ret[p.x][p.y] = scale;
         }
@@ -118,7 +118,7 @@ public class NeuralParticle implements Serializable{
             return center;
         }
 
-        Coord nearestPoint = distribution.getFirst();
+        Coord nearestPoint = distribution.get(0);
         double nearestDistance = point.distance(nearestPoint);
         for (Coord candidatePoint : distribution) {
             double candidateDistance = point.distance(candidatePoint);

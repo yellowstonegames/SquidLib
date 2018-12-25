@@ -113,6 +113,8 @@ public class LightingTest extends ApplicationAdapter{
         stage.getViewport().update(width, height, false);
     }
 
+    private final Direction[] dirs = new Direction[4];
+
     @Override
     public void render() {
         super.render();
@@ -122,7 +124,6 @@ public class LightingTest extends ApplicationAdapter{
         ctr += Gdx.graphics.getDeltaTime();
         if(ctr > 1.5) {
             ctr -= 1.5;
-            Direction[] dirs = new Direction[4];
             Coord alter;
             for (int i = 0; i < points.length; i++) {
                 Coord pt = points[i];

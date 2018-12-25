@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 /**
@@ -67,19 +67,22 @@ public class Bresenham {
      * @param endx the x coordinate of the starting point
      * @param endy the y coordinate of the starting point
      * @param endz the z coordinate of the starting point
-     * @return a Queue (internally, a LinkedList) of Coord3D points along the line
+     * @return a Queue (internally, an ArrayDeque) of Coord3D points along the line
      */
     public static Queue<Coord3D> line3D(int startx, int starty, int startz, int endx, int endy, int endz) {
-        Queue<Coord3D> result = new LinkedList<>();
-
         int dx = endx - startx;
         int dy = endy - starty;
         int dz = endz - startz;
 
-        int ax = Math.abs(dx) << 1;
-        int ay = Math.abs(dy) << 1;
-        int az = Math.abs(dz) << 1;
+        int ax = Math.abs(dx);
+        int ay = Math.abs(dy);
+        int az = Math.abs(dz);
+        Queue<Coord3D> result = new ArrayDeque<>(Math.max(Math.max(ax, ay), az));
 
+        ax <<= 1;
+        ay <<= 1;
+        az <<= 1;
+        
         int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
         int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
         int signz = dz == 0 ? 0 : (dz >> 31 | 1); // signum with less converting to/from float
@@ -135,7 +138,7 @@ public class Bresenham {
                 deltax += ax;
                 deltaz += az;
             }
-        } else if (az >= Math.max(ax, ay)) /* z dominant */ {
+        } else {
             deltax = ax - (az >> 1);
             deltay = ay - (az >> 1);
             while (true) {
@@ -159,7 +162,6 @@ public class Bresenham {
                 deltay += ay;
             }
         }
-        return result;
     }
 
     /**
@@ -178,7 +180,7 @@ public class Bresenham {
      * @param starty the y coordinate of the starting point
      * @param endx the x coordinate of the starting point
      * @param endy the y coordinate of the starting point
-     * @return a Queue (internally, a LinkedList) of Coord points along the line
+     * @return a Queue (internally, an ArrayDeque) of Coord points along the line
      */
     public static Queue<Coord> line2D(int startx, int starty, int endx, int endy) {
         // largest positive int for maxLength; a Queue cannot actually be given that many elements on the JVM
@@ -203,17 +205,20 @@ public class Bresenham {
      * @param endx the x coordinate of the starting point
      * @param endy the y coordinate of the starting point
      * @param maxLength the largest count of Coord points this can return; will stop early if reached
-     * @return a Queue (internally, a LinkedList) of Coord points along the line
+     * @return a Queue (internally, a ArrayDeque) of Coord points along the line
      */
     public static Queue<Coord> line2D(int startx, int starty, int endx, int endy, int maxLength) {
-        Queue<Coord> result = new LinkedList<>();
-
         int dx = endx - startx;
         int dy = endy - starty;
 
-        int ax = Math.abs(dx) << 1;
-        int ay = Math.abs(dy) << 1;
+        int ax = Math.abs(dx);
+        int ay = Math.abs(dy);
 
+        Queue<Coord> result = new ArrayDeque<>(Math.max(ax, ay));
+
+        ax <<= 1;
+        ay <<= 1;
+        
         int signx = dx == 0 ? 0 : (dx >> 31 | 1); // signum with less converting to/from float
         int signy = dy == 0 ? 0 : (dy >> 31 | 1); // signum with less converting to/from float
 

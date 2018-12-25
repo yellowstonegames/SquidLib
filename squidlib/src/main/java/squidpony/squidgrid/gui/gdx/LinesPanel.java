@@ -14,8 +14,8 @@ import com.badlogic.gdx.utils.Align;
 import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
-import java.util.LinkedList;
-import java.util.ListIterator;
+import java.util.ArrayDeque;
+import java.util.Iterator;
 
 /**
  * An actor capable of drawing {@link IColoredString}s. It is lines-oriented:
@@ -65,7 +65,7 @@ public class LinesPanel<T extends Color> extends Actor {
 	protected final TextCellFactory tcf;
 
 	/** What to display. Doesn't contain {@code null} entries. */
-	protected final LinkedList<IColoredString<T>> content;
+	protected final ArrayDeque<IColoredString<T>> content;
 
 	/** The maximal size of {@link #content} */
 	protected final int maxLines;
@@ -140,11 +140,11 @@ public class LinesPanel<T extends Color> extends Actor {
 		this.tcf = null;
 		if (markup != null)
 			this.font.getData().markupEnabled = true;
-		this.content = new LinkedList<IColoredString<T>>();
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
 					+ getClass().getSimpleName() + " must be greater or equal than zero");
 		this.maxLines = maxLines;
+		this.content = new ArrayDeque<>(maxLines);
 	}
 	/**
 	 * @param markup
@@ -166,11 +166,11 @@ public class LinesPanel<T extends Color> extends Actor {
 		this.font = font.bmpFont;
 		if (markup != null)
 			this.font.getData().markupEnabled = true;
-		this.content = new LinkedList<IColoredString<T>>();
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
 					+ getClass().getSimpleName() + " must be greater or equal than zero");
 		this.maxLines = maxLines;
+		this.content = new ArrayDeque<>(maxLines);
 	}
 
 	/**
@@ -268,7 +268,7 @@ public class LinesPanel<T extends Color> extends Actor {
 		final float x = getX() + xOffset;
 		float y = getY() + (drawBottomUp ? lineHeight : height - lineHeight) - data.descent + yOffset;
 
-		final ListIterator<IColoredString<T>> it = content.listIterator();
+		final Iterator<IColoredString<T>> it = content.iterator();
 		int ydx = 0;
 		float consumed = 0;
 		while (it.hasNext()) {

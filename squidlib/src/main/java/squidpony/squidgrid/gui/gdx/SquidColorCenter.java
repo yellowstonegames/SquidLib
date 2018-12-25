@@ -765,13 +765,13 @@ public class SquidColorCenter implements IColorCenter<Color> {
      */
     public ArrayList<Color> loopingGradient(Color fromColor, Color midColor, int steps, Interpolation interpolation)
     {
-        ArrayList<Color> colors = new ArrayList<>((steps > 3) ? steps : 3);
+        ArrayList<Color> colors = new ArrayList<>(Math.max(3, steps));
         colors.add(filter(fromColor));
-        for (float i = 1; i < steps / 2; i++) {
-            colors.add(lerp(fromColor, midColor, interpolation.apply(i / (steps / 2))));
+        for (float i = 1; i < steps * 0.5f; i++) {
+            colors.add(lerp(fromColor, midColor, interpolation.apply(i / (steps * 0.5f))));
         }
-        for (float i = 0, c = steps / 2; c < steps; i++, c++) {
-            colors.add(lerp(midColor, fromColor, interpolation.apply(i / (steps / 2))));
+        for (float i = 0, c = steps * 0.5f; c < steps; i++, c++) {
+            colors.add(lerp(midColor, fromColor, interpolation.apply(i / (steps * 0.5f))));
         }
         return colors;
     }

@@ -7,8 +7,8 @@ import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
 import squidpony.squidmath.OrderedSet;
 
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -199,7 +199,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     }
 
     private void connectRooms() {
-        List<ClassicRogueRoom> unconnected = new LinkedList<>();
+        List<ClassicRogueRoom> unconnected = new ArrayList<>();
         for (int x = 0; x < horizontalRooms; x++) {
             for (int y = 0; y < verticalRooms; y++) {
                 unconnected.add(rooms[x][y]);
@@ -231,19 +231,19 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     }
 
     private void connectUnconnectedRooms() {
+        Direction[]  dirToCheck = new Direction[4];
         for (int x = 0; x < horizontalRooms; x++) {
             for (int y = 0; y < verticalRooms; y++) {
                 ClassicRogueRoom room = rooms[x][y];
 
                 if (room.connections.isEmpty()) {
-                    List<Direction> dirToCheck = Arrays.asList(Direction.CARDINALS);
-                    dirToCheck = rng.shuffle(dirToCheck);
+                    rng.shuffle(Direction.CARDINALS, dirToCheck);
 
                     boolean validRoom = false;
                     ClassicRogueRoom otherRoom = null;
-
+                    int idx = 0;
                     do {
-                        Direction dir = dirToCheck.remove(0);
+                        Direction dir = dirToCheck[idx++];
 
                         int nextX = x + dir.deltaX;
                         if (nextX < 0 || nextX >= horizontalRooms) {
@@ -263,7 +263,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
                         else {
                             break;
                         }
-                    } while (!dirToCheck.isEmpty());
+                    } while (idx < 4);
 
                     if (validRoom) {
                         room.connections.add(otherRoom);
@@ -276,13 +276,13 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
     private void fullyConnect() {
         boolean allGood;
         do {
-            LinkedList<ClassicRogueRoom> deq = new LinkedList<>();
+            ArrayDeque<ClassicRogueRoom> deq = new ArrayDeque<>(horizontalRooms * verticalRooms);
             for (int x = 0; x < horizontalRooms; x++) {
                 for (int y = 0; y < verticalRooms; y++) {
                     deq.offer(rooms[x][y]);
                 }
             }
-            LinkedList<ClassicRogueRoom> connected = new LinkedList<>();
+            ArrayList<ClassicRogueRoom> connected = new ArrayList<>();
             connected.add(deq.removeFirst());
             boolean changed = true;
             testing:
@@ -291,7 +291,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
                 for (ClassicRogueRoom test : deq) {
                     for (ClassicRogueRoom r : connected) {
                         if (test.connections.contains(r) || r.connections.contains(test)) {
-                            connected.offer(test);
+                            connected.add(test);
                             deq.remove(test);
                             changed = true;
                             continue testing;
@@ -353,8 +353,8 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
                     }
                 }
 
-                int sxOffset = Math.round(rng.nextInt(cwp - roomw) / 2);
-                int syOffset = Math.round(rng.nextInt(chp - roomh) / 2);
+                int sxOffset = Math.round(rng.nextInt(cwp - roomw) * 0.5f);
+                int syOffset = Math.round(rng.nextInt(chp - roomh) * 0.5f);
 
                 while (sx + sxOffset + roomw >= dungeonWidth) {
                     if (sxOffset > 0) {
@@ -442,7 +442,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         int xpos = start.x;
         int ypos = start.y;
 
-        List<Magnitude> moves = new LinkedList<>();
+        ArrayDeque<Magnitude> moves = new ArrayDeque<>();
 
         int xAbs = Math.abs(xOffset);
         int yAbs = Math.abs(yOffset);
@@ -470,7 +470,7 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
         map[xpos][ypos] = Terrain.FLOOR;
 
         while (!moves.isEmpty()) {
-            Magnitude move = moves.remove(0);
+            Magnitude move = moves.removeFirst();
             Direction dir = move.dir;
             int dist = move.distance;
             while (dist > 0) {

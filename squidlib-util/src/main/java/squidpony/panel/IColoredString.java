@@ -200,13 +200,13 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	 */
 	class Impl<T> implements IColoredString<T> {
 
-		protected final LinkedList<Bucket<T>> fragments;
+		protected final ArrayList<Bucket<T>> fragments;
 
 		/**
 		 * An empty instance.
 		 */
 		public Impl() {
-			fragments = new LinkedList<>();
+			fragments = new ArrayList<>();
 		}
 
 		/**
@@ -325,12 +325,12 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (fragments.isEmpty())
 				fragments.add(new Bucket<>(text, color));
 			else {
-				final Bucket<T> last = fragments.getLast();
+				final Bucket<T> last = fragments.get(fragments.size() - 1);
 				if (equals(last.color, color)) {
 					/* Append to the last bucket, to avoid extending the list */
 					final Bucket<T> novel = last.append(text);
-					fragments.removeLast();
-					fragments.addLast(novel);
+					fragments.remove(fragments.size() - 1);
+					fragments.add(novel);
 				} else
 					fragments.add(new Bucket<>(text, color));
 			}
@@ -432,7 +432,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (width <= 0) {
 				/* Really, you should not rely on this behavior */
 				System.err.println("Cannot wrap string in empty display");
-				final List<IColoredString<T>> result = new LinkedList<>();
+				final List<IColoredString<T>> result = new ArrayList<>();
 				result.add(this);
 				return result;
 			}
@@ -445,7 +445,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (width <= 0) {
 				/* Really, you should not rely on this behavior */
 				System.err.println("Cannot wrap string in empty display");
-				final List<IColoredString<T>> result = new LinkedList<>();
+				final List<IColoredString<T>> result = new ArrayList<>();
 				result.add(this);
 				return result;
 			}
@@ -697,7 +697,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 
 		@Override
 		public T lastColor() {
-			return fragments.isEmpty() ? null : fragments.getLast().color;
+			return fragments.isEmpty() ? null : fragments.get(fragments.size() - 1).color;
 		}
 
 		@Override

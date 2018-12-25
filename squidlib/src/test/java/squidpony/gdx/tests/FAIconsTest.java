@@ -94,7 +94,9 @@ public class FAIconsTest extends ApplicationAdapter{
     public void resize(int width, int height) {
         super.resize(width, height);
     }
-    
+
+    private final Direction[] dirs = new Direction[4];
+
     @Override
     public void render() {
         super.render();
@@ -116,7 +118,6 @@ public class FAIconsTest extends ApplicationAdapter{
 
             if (!hasActiveAnimations) 
             {
-                Direction[] dirs = new Direction[4];
                 Coord alter, pt;
                 SquidPanel fg = layers.getLayer(3);
                 for (int i = 0; i < things.size(); i++) {

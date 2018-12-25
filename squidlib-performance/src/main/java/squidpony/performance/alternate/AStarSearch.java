@@ -5,8 +5,8 @@ import squidpony.squidgrid.Direction;
 import squidpony.squidmath.Coord;
 
 import java.io.Serializable;
+import java.util.ArrayDeque;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.Queue;
 
 /**
@@ -175,8 +175,7 @@ public class AStarSearch implements Serializable{
             }
         }
 
-        /* Not using Deque nor ArrayDeque, they aren't Gwt compatible */
-        final LinkedList<Coord> deq = new LinkedList<>();
+        final ArrayDeque<Coord> deq = new ArrayDeque<>();
         while (!p.equals(start)) {
             deq.addFirst(p);
             p = parent[p.x][p.y];
