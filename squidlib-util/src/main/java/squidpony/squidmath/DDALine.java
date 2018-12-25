@@ -1,6 +1,6 @@
 package squidpony.squidmath;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,7 +35,7 @@ public class DDALine {
         int dx = endX - startX, dy = endY - startY, nx = Math.abs(dx), ny = Math.abs(dy),
                 octant = ((dy < 0) ? 4 : 0) | ((dx < 0) ? 2 : 0) | ((ny > nx) ? 1 : 0), move, frac = 0,
                 mn = Math.max(nx, ny);
-        LinkedList<Coord> drawn = new LinkedList<>();
+        ArrayList<Coord> drawn = new ArrayList<>(mn);
         if(mn == 0)
         {
             drawn.add(Coord.get(startX, startY));

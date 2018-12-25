@@ -122,7 +122,7 @@ public interface Rectangle extends Zone {
 			 * bl.y - ... : because we're in SquidLib coordinates (0,0) is top
 			 * left
 			 */
-			return Coord.get(bl.x + Math.round(r.getWidth() / 2), bl.y - Math.round(r.getHeight() / 2));
+			return Coord.get(bl.x + Math.round(r.getWidth() * 0.5f), bl.y - Math.round(r.getHeight() * 0.5f));
 		}
 
 		/**

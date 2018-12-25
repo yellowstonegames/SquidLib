@@ -4,7 +4,7 @@ import squidpony.ArrayTools;
 import squidpony.squidgrid.Direction;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.Queue;
 
 /**
@@ -161,8 +161,7 @@ public class AStarSearch implements Serializable {
         gCache[start.x][start.y] = 0;
 
 
-        /* Not using Deque nor ArrayDeque, they aren't Gwt compatible */
-        final LinkedList<Coord> deq = new LinkedList<>();
+        final ArrayDeque<Coord> deq = new ArrayDeque<>();
 
         Coord p = start;
         open.add(p);

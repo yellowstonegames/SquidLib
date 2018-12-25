@@ -474,7 +474,8 @@ public abstract class AbstractRNG implements IRNG {
      * Gets a random portion of data (an array), assigns that portion to output (an array) so that it fills as much as
      * it can, and then returns output. Will only use a given position in the given data at most once; uses the
      * Swap-Or-Not Shuffle to accomplish this without allocations. Internally, makes 1 call to {@link #nextInt()} and
-     * 6 calls to {@link #nextSignedInt(int)}, regardless of the data being randomized.
+     * 6 calls to {@link #nextSignedInt(int)}, regardless of the data being randomized. It will get progressively less
+     * random as output gets larger.
      * <br>
      * Uses approximately the same code as {@link SwapOrNotShuffler}, but without any object or array allocations.
      *
@@ -494,22 +495,22 @@ public abstract class AbstractRNG implements IRNG {
             index = i;
             key = a - index;
             key += (key >> 31 & length);
-            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            if(((func) + Math.max(index, key) & 1) == 0) index = key;
             key = b - index;
             key += (key >> 31 & length);
-            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            if(((func >>> 1) + Math.max(index, key) & 1) == 0) index = key;
             key = c - index;
             key += (key >> 31 & length);
-            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            if(((func >>> 2) + Math.max(index, key) & 1) == 0) index = key;
             key = d - index;
             key += (key >> 31 & length);
-            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            if(((func >>> 3) + Math.max(index, key) & 1) == 0) index = key;
             key = e - index;
             key += (key >> 31 & length);
-            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            if(((func >>> 4) + Math.max(index, key) & 1) == 0) index = key;
             key = f - index;
             key += (key >> 31 & length);
-            if(((func >>> i) + Math.max(index, key) & 1) == 0) index = key;
+            if(((func >>> 5) + Math.max(index, key) & 1) == 0) index = key;
 
             output[i] = data[index];
         }

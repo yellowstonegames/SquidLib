@@ -148,10 +148,10 @@ public class ZoneDemo extends ApplicationAdapter {
         Gdx.input.setInputProcessor(input);
     }
 
+    private final Direction[] dirs = new Direction[4];
     public void move() {
         for (int i = 0; i < centers.length; i++) {
             AnimatedEntity ae = centerEntities[i];
-            Direction[] dirs = new Direction[4];
             rng.shuffle(Direction.CARDINALS, dirs);
             for (int j = 0; j < dirs.length; j++) {
                 int newX = ae.gridX + dirs[j].deltaX, newY = ae.gridY + dirs[j].deltaY;

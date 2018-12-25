@@ -114,6 +114,8 @@ public class IconsTest extends ApplicationAdapter{
         super.pause();
     }
 
+    private final Direction[] dirs = new Direction[4];
+    
     @Override
     public void render() {
         super.render();
@@ -135,7 +137,6 @@ public class IconsTest extends ApplicationAdapter{
 
             if (!hasActiveAnimations) 
             {
-                Direction[] dirs = new Direction[4];
                 Coord alter, pt;
                 SquidPanel fg = layers.getForegroundLayer();
                 for (int i = 0; i < things.size(); i++) {

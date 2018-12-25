@@ -5,7 +5,7 @@ import squidpony.squidmath.Coord;
 import squidpony.squidmath.PerlinNoise;
 import squidpony.squidmath.StatefulRNG;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +50,7 @@ public class MetsaMapFactory {
     private int height;
     private int CITYAMOUNT = 14;
 
-    private List<Coord> cities = new LinkedList<>();
+    private List<Coord> cities = new ArrayList<>();
     private StatefulRNG rng;
     private double maxPeak = 0;
     private double[][] map;
