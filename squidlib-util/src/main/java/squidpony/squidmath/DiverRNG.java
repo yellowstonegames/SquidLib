@@ -28,9 +28,12 @@ import java.io.Serializable;
  * that LightRNG has. A method could be written to run the generator's state backwards, though, as well as to get the
  * state from an output of {@link #nextLong()}.
  * <br>
- * The static determine() methods in this class are currently identical to the ones in LinnormRNG, and haven't been
- * checked with PractRand 0.94 (only 0.93, which doesn't have a TMFn test). They may change if the methods from Linnorm
- * turn out to fail like its {@link LinnormRNG#nextLong()} and other instance methods.
+ * The static determine() methods in this class are a completely different algorithm from the {@link #nextLong()} and
+ * similar instance methods here; they're a little faster than {@link LinnormRNG#determine(long)} and its family while
+ * actually having much better stability in case an increment is a poor fit for the internals of the generator. Like
+ * {@link #nextLong()}, {@link #determine(long)} can produce all possible long outputs and can take any long input; 
+ * among determine() methods in this library that satisfy that constraint on input and output, this class' appears to be
+ * the fastest.
  * <br>
  * The name comes in a roundabout way from Xmulzencab, Maya mythology's bee god who is also called the Diving God,
  * because the state transition is built around Xor and MUL. I was also listening to a Dio song, Holy Diver, at the
@@ -273,13 +276,26 @@ public final class DiverRNG implements StatefulRandomness, Serializable {
      * any odd-number increment. All longs are accepted by this method, and all longs can be produced; unlike several
      * other classes' determine() methods, passing 0 here does not return 0.
      * <br>
-     * This is currently identical to {@link LinnormRNG#determine(long)}, but this may change separately from that.
+     * This was the same as {@link LinnormRNG#determine(long)}, but was changed to a slightly-faster method that also
+     * has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's version,
+     * some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
+     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
+     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
+     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
+     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
+     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
+     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
+     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
+     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
+     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
+     * have passed to 16TB and 32TB with no anomalies as well).
      * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
      * @return any long
      */
     public static long determine(long state)
     {
-        return (state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
+        return ((state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
+                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27);
     }
 
     /**
@@ -291,45 +307,86 @@ public final class DiverRNG implements StatefulRandomness, Serializable {
      * by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any
      * odd-number values for bound, this isn't possible for most generators). The bound can be negative.
      * <br>
-     * This is currently identical to {@link LinnormRNG#determineBounded(long, int)}, but this may change separately.
+     * This was the same as {@link LinnormRNG#determineBounded(long, int)}, but was changed to a slightly-faster method
+     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
+     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
+     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
+     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
+     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
+     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
+     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
+     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
+     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
+     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
+     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
+     * have passed to 16TB and 32TB with no anomalies as well).
      * @param state any long; subsequent calls should change by an odd number, such as with {@code ++state}
      * @param bound the outer exclusive bound, as an int
      * @return an int between 0 (inclusive) and bound (exclusive)
      */
     public static int determineBounded(long state, final int bound)
     {
-        return (int)((bound * (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) & 0x7FFFFFFFL)) >> 31);
+        return (int)((bound * (((state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
+                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27) & 0x7FFFFFFFL)) >> 31);
     }
 
     /**
      * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
      * return the same float. This is expected to be called with a changing variable, e.g. {@code determine(++state)},
-     * where the increment for state should be odd but otherwise doesn't really matter. This multiplies state by
-     * {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much different from using a
-     * very large one, as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
+     * where the increment for state should be odd but otherwise doesn't really matter. This should tolerate just about
+     * any increment as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
      * only 2 to the 30 possible floats between 0 and 1.
      * <br>
-     * This is currently identical to {@link LinnormRNG#determineFloat(long)}, but this may change separately.
+     * This was the same as {@link LinnormRNG#determineFloat(long)} , but was changed to a slightly-faster method
+     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
+     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
+     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
+     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
+     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
+     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
+     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
+     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
+     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
+     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
+     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
+     * have passed to 16TB and 32TB with no anomalies as well).
      * @param state a variable that should be different every time you want a different random result;
      *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
      *              generate numbers in reverse order
      * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
      */
-    public static float determineFloat(long state) { return ((((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) >>> 40) * 0x1p-24f; }
+    public static float determineFloat(long state) {
+        return (((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
+                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L >>> 40) * 0x1p-24f;
+    }
 
     /**
      * Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
      * will return the same float. This is expected to be called with a changing variable, e.g.
-     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't really matter. This
-     * multiplies state by {@code 0x632BE59BD9B4E019L} within this method, so using a small increment won't be much
-     * different from using a very large one, as long as it is odd. The period is 2 to the 64 if you increment or
+     * {@code determine(++state)}, where the increment for state should be odd but otherwise doesn't matter. This should
+     * tolerate just about any increment, as long as it is odd. The period is 2 to the 64 if you increment or
      * decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
      * <br>
-     * This is currently identical to {@link LinnormRNG#determineDouble(long)}, but this may change separately.
+     * This was the same as {@link LinnormRNG#determineDouble(long)}, but was changed to a slightly-faster method
+     * that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
+     * version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
+     * increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
+     * modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
+     * first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
+     * incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
+     * in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
+     * PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
+     * multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
+     * method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
+     * and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
+     * have passed to 16TB and 32TB with no anomalies as well).
      * @param state a variable that should be different every time you want a different random result;
      *              using {@code determine(++state)} is recommended to go forwards or {@code determine(--state)} to
      *              generate numbers in reverse order
      * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}
      */
-    public static double determineDouble(long state) { return (((state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25) & 0x1FFFFFFFFFFFFFL) * 0x1p-53; }
+    public static double determineDouble(long state) {
+        return (((state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
+                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
+    }
 }

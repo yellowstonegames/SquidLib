@@ -14,8 +14,8 @@ import java.io.Serializable;
  * generation time in use, and O(n) time to construct a WeightedTable instance), this may be useful to consider if you
  * don't need all the features of ProbabilityTable or if you want deeper control over the random aspects of it.
  * <br>
- * Internally, this uses LinnormRNG's algorithm as found in {@link LinnormRNG#determineBounded(long, int)} and
- * {@link LinnormRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
+ * Internally, this uses DiverRNG's algorithm as found in {@link DiverRNG#determineBounded(long, int)} and
+ * {@link DiverRNG#determine(long)} to generate two ints, one used for probability and treated as a 31-bit integer
  * and the other used to determine the chosen column, which is bounded to an arbitrary positive int. It does this with
  * just one randomized 64-bit value, allowing the state given to {@link #random(long)} to be just one long.
  * <br>
@@ -130,8 +130,9 @@ public class WeightedTable implements Serializable {
      */
     public int random(long state)
     {
-        // This is LinnormRNG's (and DiverRNG's) algorithm to generate a random long given sequential states
-        state = (state = ((state = ((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
+        // This is DiverRNG's algorithm to generate a random long given sequential states
+        state = (state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
+                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27;
         // get a random int (using half the bits of our previously-calculated state) that is less than size
         int column = (int)((size * (state & 0xFFFFFFFFL)) >> 32);
         // use the other half of the bits of state to get a 31-bit int, compare to probability and choose either the
