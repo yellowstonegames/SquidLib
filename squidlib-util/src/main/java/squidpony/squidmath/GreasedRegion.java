@@ -1162,7 +1162,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
             return;
         }
         if(ySections == 1) {
-            System.arraycopy(data2, 0, data, 0, dataWidth);
+            System.arraycopy(data2, 0, data, 0, Math.min(dataWidth, width));
         }
         else
         {
@@ -1217,7 +1217,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(ySections2 == 0)
             return this;
         if(ySections == 1) {
-            System.arraycopy(data2, 0, data, 0, dataWidth);
+            System.arraycopy(data2, 0, data, 0, Math.min(dataWidth, width));
         }
         else
         {
