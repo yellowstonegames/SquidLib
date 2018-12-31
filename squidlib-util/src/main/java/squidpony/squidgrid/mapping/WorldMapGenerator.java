@@ -29,21 +29,18 @@ import java.util.Arrays;
  * last map should be noted as being the simplest way to find what is land and what is water; any height code 4 or
  * greater is land, and any height code 3 or less is water.
  * <br>
- * The main trade-off this makes to obtain better quality is reduced speed; generating a 512x512 map on a circa-2016
- * laptop (i7-6700HQ processor at 2.6 GHz) takes about 1 second (about 1.15 seconds for an un-zoomed map, 0.95 or so
- * seconds to increase zoom at double resolution). If you don't need a 512x512 map, this takes commensurately less time
- * to generate less grid cells, with 64x64 maps generating faster than they can be accurately seen on the same hardware.
+ * Biome mapping is likely to need customization per-game, but some good starting points are {@link SimpleBiomeMapper},
+ * which stores one biome per cell, and {@link DetailedBiomeMapper}, which gives each cell a midway value between two
+ * biomes.
  */
 @Beta
 public abstract class WorldMapGenerator implements Serializable {
+    private static final long serialVersionUID = 1L;
     public final int width, height;
     public int seedA, seedB, cacheA, cacheB;
     public GWTRNG rng;
     public final double[][] heightData, heatData, moistureData;
-    public final GreasedRegion landData
-            ;//, riverData, lakeData,
-    //partialRiverData, partialLakeData;
-    //protected transient GreasedRegion workingData;
+    public final GreasedRegion landData;
     public final int[][] heightCodeData;
     public double landModifier = -1.0, coolingModifier = 1.0,
             minHeight = Double.POSITIVE_INFINITY, maxHeight = Double.NEGATIVE_INFINITY,
@@ -352,7 +349,7 @@ public abstract class WorldMapGenerator implements Serializable {
      * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
      * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
      * generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
-     * the projection for a given lat-lon coordinate, this returns null. The default implementation always returns null..
+     * the projection for a given lat-lon coordinate, this returns null. The default implementation always returns null.
      * If this is a supported operation and the parameters are valid, this returns a Coord with x between 0 and
      * {@link #width}, and y between 0 and {@link #height}, both exclusive. Automatically wraps the Coord's values using
      * {@link #wrapX(int, int)} and {@link #wrapY(int, int)}.
@@ -3402,7 +3399,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Given a latitude and longitude in radians (the conventional way of describing points on a globe), this gets the
          * (x,y) Coord on the map projection this generator uses that corresponds to the given lat-lon coordinates. If this
          * generator does not represent a globe (if it is toroidal, for instance) or if there is no "good way" to calculate
-         * the projection for a given lat-lon coordinate, this returns null. The default implementation always returns null..
+         * the projection for a given lat-lon coordinate, this returns null. This implementation never returns null.
          * If this is a supported operation and the parameters are valid, this returns a Coord with x between 0 and
          * {@link #width}, and y between 0 and {@link #height}, both exclusive. Automatically wraps the Coord's values using
          * {@link #wrapX(int, int)} and {@link #wrapY(int, int)}.
@@ -3990,7 +3987,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 yPositions,
                 zPositions;
         protected final int[] edges;
-        public final SphereMap storedMap;
+        public final EllipticalMap storedMap;
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
@@ -4095,7 +4092,7 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[mapWidth][mapHeight];
             zPositions = new double[mapWidth][mapHeight];
             edges = new int[height << 1];
-            storedMap = new SphereMap(initialSeed, mapWidth << 1, mapHeight, noiseGenerator, octaveMultiplier);
+            storedMap = new EllipticalMap(initialSeed, mapWidth << 1, mapHeight, noiseGenerator, octaveMultiplier);
         }
 
         @Override
@@ -4112,11 +4109,10 @@ public abstract class WorldMapGenerator implements Serializable {
         @Override
         public void setCenterLongitude(double centerLongitude) {
             super.setCenterLongitude(centerLongitude);
-            int ax, ay;
             double
                     ps, pc,
                     qs, qc,
-                    h, yPos, xPos, iyPos, ixPos,
+                    h,
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
                     th, lon, lat, rho,
@@ -4124,57 +4120,42 @@ public abstract class WorldMapGenerator implements Serializable {
                     rx = width * 0.5, irx = i_uw / rx,
                     ry = height * 0.5, iry = i_uh / ry;
 
-            yPos = startY - ry;
-            iyPos = yPos / ry;
-            for (int y = 0; y < height; y++, yPos += i_uh, iyPos += iry) {
+            for (int y = 0, ay = 0; y < height; y++, ay++) {
                 boolean inSpace = true;
-                xPos = startX - rx;
-                ixPos = xPos / rx;
-                for (int x = 0; x < width; x++, xPos += i_uw, ixPos += irx) {
-                    rho = (ixPos * ixPos + iyPos * iyPos);
-                    if(rho > 1.0) {
+                int left = (storedMap.edges[y << 1]), right = (storedMap.edges[y << 1 | 1]), diff = (right - left);
+                //int start = (int)((NumberTools.cos(centerLongitude - Math.PI * 0.5) * 0.5 + 0.5) * width);
+                int start = (int) (centerLongitude * diff * i_pi) % diff + left;
+                for (int x = 0, ax = start; x < width; x++) {
+                    if((left >> 1) > x || (right >> 1) < x) {
                         heightCodeData[x][y] = 1000;
                         inSpace = true;
                         continue;
                     }
-                    rho = Math.sqrt(rho);
                     if(inSpace)
                     {
                         inSpace = false;
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-                    th = asin(rho); // c
-                    lat = asin(iyPos);
-                    lon = removeExcess((centerLongitude + (NumberTools.atan2(ixPos * rho, rho * NumberTools.cos(th)))) * 0.5);
+                    ++ax;
+                    
+                    if(ax > right || ax > storedMap.width)
+                        ax = left;
+                    else if(ax < 0)
+                        ax = right;
+//                    if(storedMap.heightCodeData[ax][ay] >= 1000) // for the seam we get when looping around
+//                    {
+//                        ay = storedMap.wrapY(ax, ay);
+//                        ax = storedMap.wrapX(ax, ay);
+//                    }
 
-                    qc = NumberTools.cos(lat);
-                    qs = NumberTools.sin(lat);
+                    xPositions[x][y] = storedMap.xPositions[ax][ay];
+                    yPositions[x][y] = storedMap.yPositions[ax][ay];
+                    zPositions[x][y] = storedMap.zPositions[ax][ay];
 
-                    pc = NumberTools.cos(lon);
-                    ps = NumberTools.sin(lon);
-
-                    ax = (int)((lon * i_pi + 1.0) * width);
-                    ay = (int)((qs + 1.0) * ry);
-//                    // Hammer projection, not an inverse projection like we usually use
-//                    z = 1.0 / Math.sqrt(1 + qc * NumberTools.cos(lon * 0.5));
-//                    ax = (int)((qc * NumberTools.sin(lon * 0.5) * z + 1.0) * width);
-//                    ay = (int)((qs * z + 1.0) * height * 0.5);
-
-                    if(ax >= storedMap.width || ax < 0 || ay >= storedMap.height || ay < 0)
-                    {
-                        heightCodeData[x][y] = 1000;
-                        continue;
-                    }
-                    if(storedMap.heightCodeData[ax][ay] >= 1000) // for the seam we get when looping around
-                    {
-                        ay = storedMap.wrapY(ax, ay);
-                        ax = storedMap.wrapX(ax, ay);
-                    }
-
-                    xPositions[x][y] = pc * qc;
-                    yPositions[x][y] = ps * qc;
-                    zPositions[x][y] = qs;
+//                    xPositions[x][y] = pc * qc;
+//                    yPositions[x][y] = ps * qc;
+//                    zPositions[x][y] = qs;
 
                     heightData[x][y] = h = storedMap.heightData[ax][ay];
                     heightCodeData[x][y] = codeHeight(h);
