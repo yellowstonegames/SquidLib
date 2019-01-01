@@ -3987,7 +3987,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 yPositions,
                 zPositions;
         protected final int[] edges;
-        public final EllipticalMap storedMap;
+        public final SphereMap storedMap;
         /**
          * Constructs a concrete WorldMapGenerator for a map that can be used to view a spherical world from space,
          * showing only one hemisphere at a time.
@@ -4092,7 +4092,7 @@ public abstract class WorldMapGenerator implements Serializable {
             yPositions = new double[mapWidth][mapHeight];
             zPositions = new double[mapWidth][mapHeight];
             edges = new int[height << 1];
-            storedMap = new EllipticalMap(initialSeed, mapWidth << 1, mapHeight, noiseGenerator, octaveMultiplier);
+            storedMap = new SphereMap(initialSeed, mapWidth << 1, mapHeight, noiseGenerator, octaveMultiplier);
         }
 
         @Override
@@ -4109,10 +4109,11 @@ public abstract class WorldMapGenerator implements Serializable {
         @Override
         public void setCenterLongitude(double centerLongitude) {
             super.setCenterLongitude(centerLongitude);
+            int ax, ay;
             double
                     ps, pc,
                     qs, qc,
-                    h,
+                    h, yPos, xPos, iyPos, ixPos,
                     i_uw = usedWidth / (double)width,
                     i_uh = usedHeight / (double)height,
                     th, lon, lat, rho,
@@ -4120,42 +4121,75 @@ public abstract class WorldMapGenerator implements Serializable {
                     rx = width * 0.5, irx = i_uw / rx,
                     ry = height * 0.5, iry = i_uh / ry;
 
-            for (int y = 0, ay = 0; y < height; y++, ay++) {
+            yPos = startY - ry;
+            iyPos = yPos / ry;
+            for (int y = 0; y < height; y++, yPos += i_uh, iyPos += iry) {
                 boolean inSpace = true;
-                int left = (storedMap.edges[y << 1]), right = (storedMap.edges[y << 1 | 1]), diff = (right - left);
-                //int start = (int)((NumberTools.cos(centerLongitude - Math.PI * 0.5) * 0.5 + 0.5) * width);
-                int start = (int) (centerLongitude * diff * i_pi) % diff + left;
-                for (int x = 0, ax = start; x < width; x++) {
-                    if((left >> 1) > x || (right >> 1) < x) {
+                xPos = startX - rx;
+                ixPos = xPos / rx;
+                lat = asin(iyPos);
+                for (int x = 0; x < width; x++, xPos += i_uw, ixPos += irx) {
+                    rho = (ixPos * ixPos + iyPos * iyPos);
+                    if(rho > 1.0) {
                         heightCodeData[x][y] = 1000;
                         inSpace = true;
                         continue;
                     }
+                    rho = Math.sqrt(rho);
                     if(inSpace)
                     {
                         inSpace = false;
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-                    ++ax;
+                    th = asin(rho); // c
+                    lon = removeExcess((centerLongitude + (NumberTools.atan2(ixPos * rho, rho * NumberTools.cos(th)))) * 0.5);
+
+                    qs = lat * 0.6366197723675814;
+                    qc = qs + 1.0;
+                    int sf = (qs >= 0.0 ? (int) qs : (int) qs - 1) & -2;
+                    int cf = (qc >= 0.0 ? (int) qc : (int) qc - 1) & -2;
+                    qs -= sf;
+                    qc -= cf;
+                    qs *= 2.0 - qs;
+                    qc *= 2.0 - qc;
+                    qs = qs * (-0.775 - 0.225 * qs) * ((sf & 2) - 1);
+                    qc = qc * (-0.775 - 0.225 * qc) * ((cf & 2) - 1);
+
+
+                    ps = lon * 0.6366197723675814;
+                    pc = ps + 1.0;
+                    sf = (ps >= 0.0 ? (int) ps : (int) ps - 1) & -2;
+                    cf = (pc >= 0.0 ? (int) pc : (int) pc - 1) & -2;
+                    ps -= sf;
+                    pc -= cf;
+                    ps *= 2.0 - ps;
+                    pc *= 2.0 - pc;
+                    ps = ps * (-0.775 - 0.225 * ps) * ((sf & 2) - 1);
+                    pc = pc * (-0.775 - 0.225 * pc) * ((cf & 2) - 1);
+
+                    ax = (int)((lon * i_pi + 1.0) * width);
+                    ay = (int)((qs + 1.0) * ry);
                     
-                    if(ax > right || ax > storedMap.width)
-                        ax = left;
-                    else if(ax < 0)
-                        ax = right;
-//                    if(storedMap.heightCodeData[ax][ay] >= 1000) // for the seam we get when looping around
-//                    {
-//                        ay = storedMap.wrapY(ax, ay);
-//                        ax = storedMap.wrapX(ax, ay);
-//                    }
+//                    // Hammer projection, not an inverse projection like we usually use
+//                    z = 1.0 / Math.sqrt(1 + qc * NumberTools.cos(lon * 0.5));
+//                    ax = (int)((qc * NumberTools.sin(lon * 0.5) * z + 1.0) * width);
+//                    ay = (int)((qs * z + 1.0) * height * 0.5);
 
-                    xPositions[x][y] = storedMap.xPositions[ax][ay];
-                    yPositions[x][y] = storedMap.yPositions[ax][ay];
-                    zPositions[x][y] = storedMap.zPositions[ax][ay];
+                    if(ax >= storedMap.width || ax < 0 || ay >= storedMap.height || ay < 0)
+                    {
+                        heightCodeData[x][y] = 1000;
+                        continue;
+                    }
+                    if(storedMap.heightCodeData[ax][ay] >= 1000) // for the seam we get when looping around
+                    {
+                        ay = storedMap.wrapY(ax, ay);
+                        ax = storedMap.wrapX(ax, ay);
+                    }
 
-//                    xPositions[x][y] = pc * qc;
-//                    yPositions[x][y] = ps * qc;
-//                    zPositions[x][y] = qs;
+                    xPositions[x][y] = pc * qc;
+                    yPositions[x][y] = ps * qc;
+                    zPositions[x][y] = qs;
 
                     heightData[x][y] = h = storedMap.heightData[ax][ay];
                     heightCodeData[x][y] = codeHeight(h);
@@ -4204,5 +4238,4 @@ public abstract class WorldMapGenerator implements Serializable {
             setCenterLongitude(centerLongitude);
             landData.refill(heightCodeData, 4, 999);
         }
-    }
-}
+    }}

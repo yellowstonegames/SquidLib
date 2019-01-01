@@ -47,12 +47,12 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 314 * 3, height = 300;
 //    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
-    private static final int width = 400, height = 400; // fast rotations
+//    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
 //    private static final int width = 1600, height = 800;
 //    private static final int width = 900, height = 900;
 //    private static final int width = 700, height = 700;
-//    private static final int width = 512, height = 512;
+    private static final int width = 512, height = 512;
 //    private static final int width = 128, height = 128;
     
     private SpriteBatch batch;
