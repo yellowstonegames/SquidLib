@@ -594,17 +594,45 @@ public class LightingHandler implements Serializable {
      */
     public double[][] calculateFOV(int viewerX, int viewerY)
     {
+        return calculateFOV(viewerX, viewerY, 0, 0, width, height);
+    }
+
+    /**
+     * Used to calculate what cells are visible as if any flicker or strobe effects were simply constant light sources.
+     * Runs part of the calculations to draw lighting as if all radii are at their widest, but does no actual drawing.
+     * This should be called any time the viewer moves to a different cell, and it is critical that this is called (at
+     * least) once after a move but before {@link #update()} gets called to change lighting at the new cell. This sets
+     * important information on what lights might need to be calculated during each update(Coord) call; it does not need
+     * to be called before {@link #updateAll()} (with no arguments) because that doesn't need a viewer. This overload
+     * allows the area this processes to be restricted to a rectangle between {@code minX} and {@code maxX} and between
+     * {@code minY} and {@code maxY}, ignoring any lights outside that area (typically because they are a long way out
+     * from the map's shown area). Sets {@link #fovResult}, {@link #losResult}, and {@link #noticeable} based on the
+     * given viewer position and any lights in {@link #lights}.
+     * @param viewerX the x-position of the player or other viewer
+     * @param viewerY the y-position of the player or other viewer
+     * @param minX inclusive lower bound on x to calculate
+     * @param minY inclusive lower bound on y to calculate
+     * @param maxX exclusive upper bound on x to calculate
+     * @param maxY exclusive upper bound on y to calculate
+     * @return the calculated FOV 2D array, which is also stored in {@link #fovResult}
+     */
+    public double[][] calculateFOV(int viewerX, int viewerY, int minX, int minY, int maxX, int maxY)
+    {
         Radiance radiance;
         FOV.reuseFOV(resistances, fovResult, viewerX, viewerY, viewerRange, radiusStrategy);
-        FOV.reuseLOS(resistances, losResult, viewerX, viewerY);
         SColor.eraseColoredLighting(colorLighting);
         final int sz = lights.size();
-        float maxRange = 0;
-        for (int i = 0; i < sz; i++) {
-            maxRange = Math.max(maxRange, lights.getAt(i).range);
-        }
-        noticeable.refill(losResult, 0.0001, Double.POSITIVE_INFINITY).expand8way((int) Math.ceil(maxRange));
+        float maxRange = 0, range;
         Coord pos;
+        for (int i = 0; i < sz; i++) {
+            pos = lights.keyAt(i);
+            range = lights.getAt(i).range;
+            if(range > maxRange && 
+                    pos.x + range >= minX && pos.x - range < maxX && pos.y + range >= minY && pos.y - range < maxY) 
+                maxRange = range;
+        }
+        FOV.reuseLOS(resistances, losResult, viewerX, viewerY, minX, minY, maxX, maxY);
+        noticeable.refill(losResult, 0.0001, Double.POSITIVE_INFINITY).expand8way((int) Math.ceil(maxRange));
         for (int i = 0; i < sz; i++) {
             pos = lights.keyAt(i);
             if(!noticeable.contains(pos))
@@ -614,8 +642,8 @@ public class LightingHandler implements Serializable {
             //SColor.colorLightingInto(tempColorLighting, tempFOV, radiance.color);
             mixColoredLighting(radiance.flare, radiance.color);
         }
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        for (int x = Math.max(0, minX); x < maxX && x < width; x++) {
+            for (int y = Math.max(0, minY); y < maxY && y < height; y++) {
                 if (losResult[x][y] > 0.0) {
                     fovResult[x][y] = MathUtils.clamp(fovResult[x][y] + colorLighting[0][x][y], 0, 1);
                 }
