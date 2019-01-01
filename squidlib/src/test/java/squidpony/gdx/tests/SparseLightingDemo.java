@@ -304,7 +304,7 @@ public class SparseLightingDemo extends ApplicationAdapter {
 //                gridHeight * cellHeight * 0.5f - display.worldY(player.y));
         display.setPosition(0f, 0f);
         
-        lighting.calculateFOV(player);
+        lighting.calculateFOV(player.x, player.y, player.x - 10, player.y - 10, player.x + 11, player.y + 11);
         
         // 0.01 is the upper bound (inclusive), so any Coord in visible that is more well-lit than 0.01 will _not_ be in
         // the blockage Collection, but anything 0.01 or less will be in it. This lets us use blockage to prevent access
@@ -560,7 +560,8 @@ public class SparseLightingDemo extends ApplicationAdapter {
         {
             display.slide(pg, player.x, player.y, newX, newY, 0.12f, null);
             player = player.translate(xmod, ymod);
-            lighting.calculateFOV(player);
+            lighting.calculateFOV(player.x, player.y, player.x - 10, player.y - 10, player.x + 11, player.y + 11);
+
             //FOV.reuseFOV(resistance, visible, player.x, player.y, 9.0, Radius.CIRCLE);//, (System.currentTimeMillis() & 0xFFFF) * 0x1p-4, 60.0);
             // This is just like the constructor used earlier, but affects an existing GreasedRegion without making
             // a new one just for this movement.
