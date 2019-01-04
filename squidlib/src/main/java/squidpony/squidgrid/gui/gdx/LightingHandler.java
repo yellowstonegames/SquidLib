@@ -619,6 +619,10 @@ public class LightingHandler implements Serializable {
     public double[][] calculateFOV(int viewerX, int viewerY, int minX, int minY, int maxX, int maxY)
     {
         Radiance radiance;
+        minX = MathUtils.clamp(minX, 0, width);
+        maxX = MathUtils.clamp(maxX, 0, width);
+        minY = MathUtils.clamp(minY, 0, height);
+        maxY = MathUtils.clamp(maxY, 0, height);
         FOV.reuseFOV(resistances, fovResult, viewerX, viewerY, viewerRange, radiusStrategy);
         SColor.eraseColoredLighting(colorLighting);
         final int sz = lights.size();
