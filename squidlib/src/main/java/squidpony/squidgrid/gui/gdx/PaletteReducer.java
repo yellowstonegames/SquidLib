@@ -886,7 +886,7 @@ public class PaletteReducer {
         return paletteArray[paletteMapping[
                 (color >>> 17 & 0x7C00) 
                         | (color >>> 14 & 0x3E0)
-                        | (color >>> 11)] & 0xFF];
+                        | (color >>> 11 & 0x1F)] & 0xFF];
     }
 
     /**
