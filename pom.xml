@@ -54,8 +54,8 @@
     </distributionManagement>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.version>3.7.0</maven.compiler.version>
-        <maven.javadoc.version>3.0.0</maven.javadoc.version>
+        <maven.compiler.version>3.8.0</maven.compiler.version>
+        <maven.javadoc.version>3.0.1</maven.javadoc.version>
         <maven.resources.version>3.1.0</maven.resources.version>
         <maven.source.version>3.0.1</maven.source.version>
         <maven.gpg.version>1.6</maven.gpg.version>
@@ -188,7 +188,7 @@
                 </executions>
                 <configuration>
                     <notimestamp>true</notimestamp>
-                    <outputDirectory>../docs/${project.name}</outputDirectory>
+                    <outputDirectory>../docs/${project.name}/apidocs/</outputDirectory>
                     <debug>false</debug>
                     <minmemory>256m</minmemory>
                     <maxmemory>1024m</maxmemory>
@@ -203,11 +203,12 @@
                         <link>http://docs.oracle.com/javase/7/docs/api/</link>
                         <link>http://docs.oracle.com/javase/6/docs/api/</link>
                         <link>http://docs.oracle.com/javase/1.5.0/docs/api/</link>
-                        <link>http://squidpony.github.io/SquidLib/squidlib-util/</link>
-                        <link>http://squidpony.github.io/SquidLib/squidlib/</link>
-                        <link>http://squidpony.github.io/SquidLib/squidlib-extra/</link>
+                        <link>https://squidpony.github.io/SquidLib/squidlib-util/</link>
+                        <link>https://squidpony.github.io/SquidLib/squidlib/</link>
+                        <link>https://squidpony.github.io/SquidLib/squidlib-extra/</link>
                     </links>
                     <linksource>true</linksource>
+                    <detectLinks>true</detectLinks>
                     <detectOfflineLinks>true</detectOfflineLinks>
                     <excludePackageNames>*emu*</excludePackageNames>
                 </configuration>

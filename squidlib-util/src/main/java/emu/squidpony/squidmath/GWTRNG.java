@@ -46,6 +46,17 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     }
 
     @Override
+    public int nextInt(final int bound) {
+        final int s0 = stateA;
+        final int s1 = stateB ^ s0;
+        final int result = s0 * 31;
+        stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
+        stateB = (s1 << 13 | s1 >>> 19);
+        return (int) ((bound * ((result << 28 | result >>> 4) + 0x9E3779BD & 0xFFFFFFFFL)) >>> 32) & ~(bound >> 31);
+    }
+
+
+    @Override
     public final long nextLong() {
         int s0 = stateA;
         int s1 = stateB ^ s0;
@@ -55,8 +66,8 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         final int low = s0 * 31;
         stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
         stateB = (s1 << 13 | s1 >>> 19);
-        final long result = ((high << 28 | high >>> 4) + 0x9E3779BD);
-        return result << 32 ^ ((low << 28 | low >>> 4) + 0x9E3779BD);
+        return ((high << 28 | high >>> 4) + 0x9E3779BDL) << 32
+                | ((low << 28 | low >>> 4) + 0x9E3779BD & 0xFFFFFFFFL);
     }
 
     @Override
@@ -65,7 +76,7 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         final int s1 = stateB ^ s0;
         stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
         stateB = (s1 << 13 | s1 >>> 19);
-        return (s0 * 31 << 28) < 0;
+        return (s0 * 31 & 8) == 8; // same effect as a sign check if this was rotated as normal
     }
 
     @Override
@@ -78,9 +89,9 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         final int low = s0 * 31;
         stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
         stateB = (s1 << 13 | s1 >>> 19);
-        final long result = ((high << 28 | high >>> 4) + 0x9E3779BD);
-        return ((result << 32 ^ ((low << 28 | low >>> 4) + 0x9E3779BD))
-                & 0x1fffffffffffffL) * 0x1p-53;
+        return  ((((high << 28 | high >>> 4) + 0x9E3779BDL) << 32
+                | ((low << 28 | low >>> 4) + 0x9E3779BD & 0xFFFFFFFFL))
+                & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
 
     @Override

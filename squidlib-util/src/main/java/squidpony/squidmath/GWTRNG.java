@@ -27,7 +27,7 @@ import java.io.Serializable;
  * <a href="http://xoshiro.di.unimi.it/xoroshiro64starstar.c">Original version here for xoroshiro64**</a>.
  * <br>
  * Written in 2018 by David Blackman and Sebastiano Vigna (vigna@acm.org)
- * Ported and modified in 2018 by Tommy Ettinger
+ * Ported and modified in 2018  and 2019 by Tommy Ettinger
  * @author Sebastiano Vigna
  * @author David Blackman
  * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)
@@ -111,6 +111,22 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         stateB = (s1 << 13 | s1 >>> 19);
         return (result << 28 | result >>> 4) + 0x9E3779BD;
     }
+    /**
+     * Returns a random non-negative integer below the given bound, or 0 if the bound is 0 or
+     * negative.
+     *
+     * @param bound the upper bound (exclusive)
+     * @return the found number
+     */
+    @Override
+    public final int nextInt(final int bound) {
+        final int s0 = stateA;
+        final int s1 = stateB ^ s0;
+        final int result = s0 * 31;
+        stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
+        stateB = (s1 << 13 | s1 >>> 19);
+        return (int) ((bound * ((result << 28 | result >>> 4) + 0x9E3779BD & 0xFFFFFFFFL)) >>> 32) & ~(bound >> 31);
+    }
 
     /**
      * Get a random long between Long.MIN_VALUE to Long.MAX_VALUE (both inclusive).
@@ -127,8 +143,8 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         final int low = s0 * 31;
         stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
         stateB = (s1 << 13 | s1 >>> 19);
-        final long result = ((high << 28 | high >>> 4) + 0x9E3779BD);
-        return result << 32 ^ ((low << 28 | low >>> 4) + 0x9E3779BD);
+        return ((high << 28 | high >>> 4) + 0x9E3779BDL) << 32
+                | ((low << 28 | low >>> 4) + 0x9E3779BD & 0xFFFFFFFFL);
     }
 
     /**
@@ -144,16 +160,12 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         final int s1 = stateB ^ s0;
         stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
         stateB = (s1 << 13 | s1 >>> 19);
-        return (s0 * 31 << 28) < 0;
+        return (s0 * 31 & 8) == 8; // same effect as a sign check if this was rotated as normal
     }
 
     /**
      * Gets a random double between 0.0 inclusive and 1.0 exclusive.
      * This returns a maximum of 0.9999999999999999 because that is the largest double value that is less than 1.0 .
-     * <br>
-     * This is abstract because some generators may natively work with double or float values, but others may need to
-     * convert a long to a double as with {@code (nextLong() & 0x1fffffffffffffL) * 0x1p-53}, which is recommended if
-     * longs are fast to produce.
      *
      * @return a double between 0.0 (inclusive) and 0.9999999999999999 (inclusive)
      */
@@ -167,20 +179,14 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         final int low = s0 * 31;
         stateA = (s0 << 26 | s0 >>> 6) ^ s1 ^ (s1 << 9);
         stateB = (s1 << 13 | s1 >>> 19);
-        final long result = ((high << 28 | high >>> 4) + 0x9E3779BD);
-        return ((result << 32 ^ ((low << 28 | low >>> 4) + 0x9E3779BD))
-                & 0x1fffffffffffffL) * 0x1p-53;
+        return  ((((high << 28 | high >>> 4) + 0x9E3779BDL) << 32
+                | ((low << 28 | low >>> 4) + 0x9E3779BD & 0xFFFFFFFFL))
+                & 0x1FFFFFFFFFFFFFL) * 0x1p-53;
     }
 
     /**
      * Gets a random float between 0.0f inclusive and 1.0f exclusive.
      * This returns a maximum of 0.99999994 because that is the largest float value that is less than 1.0f .
-     * <br>
-     * This is abstract because some generators may natively work with double or float values, but others may need to
-     * convert an int or long to a float as with {@code (nextInt() & 0xffffff) * 0x1p-24f},
-     * {@code (nextLong() & 0xffffffL) * 0x1p-24f}, or {@code next(24) * 0x1p-24f}, any of which can work when the
-     * method they call is high-quality and fast. You probably would want to use nextInt() or next() if your
-     * implementation is natively 32-bit and is slower at producing longs, for example.
      *
      * @return a float between 0f (inclusive) and 0.99999994f (inclusive)
      */
@@ -195,11 +201,10 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     }
 
     /**
-     * Creates a copy of this IRNG; it will generate the same random numbers, given the same calls in order, as this
-     * IRNG at the point copy() is called. The copy will not share references with this IRNG. This implementation will
-     * faithfully reproduce this generator as a copied GWTRNG.
+     * Creates a copy of this GWTRNG; it will generate the same random numbers, given the same calls in order, as this
+     * GWTRNG at the point copy() is called. The copy will not share references with this GWTRNG.
      * 
-     * @return a copy of this IRNG
+     * @return a copy of this GWTRNG
      */
     @Override
     public GWTRNG copy() {

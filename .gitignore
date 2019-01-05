@@ -19,3 +19,5 @@ out/
 # Asset bundles, large and better distributed via SquidSetup
 assets.tar.gz
 assets.zip
+
+ColorOutput\.txt
