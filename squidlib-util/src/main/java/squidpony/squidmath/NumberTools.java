@@ -340,8 +340,6 @@ public final class NumberTools {
      * @param value a double that typically changes slowly, by less than 1.0, with direction changes at integer inputs
      * @return a pseudo-random double between -1.0 and 1.0 (both exclusive), smoothly changing with value
      */
-
-
     public static double swayRandomized(long seed, double value)
     {
         final long floor = value >= 0.0 ? (long) value : (long) value - 1L;

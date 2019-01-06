@@ -72,9 +72,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 82, otherMode = 0;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 102, otherMode = 0;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -112,67 +112,74 @@ public class HashVisualizer extends ApplicationAdapter {
     private final double[] doubleCoordinates = new double[2], doubleCoordinate = new double[1];
     private final double[][][][] seamless = new double[3][64][64][64];
     private final SeededNoise seeded = new SeededNoise(0xDEADD00D);
-    private final Noise.Noise2D layered2D = new Noise.Layered2D(WhirlingNoise.instance, 3);
-    private final Noise.Noise3D layered3D = new Noise.Layered3D(WhirlingNoise.instance, 3);
-    private final Noise.Noise4D layered4D = new Noise.Layered4D(WhirlingNoise.instance, 3);
+    private final Noise.Layered2D layered2D = new Noise.Layered2D(WhirlingNoise.instance, 3);
+    private final Noise.Layered3D layered3D = new Noise.Layered3D(WhirlingNoise.instance, 3);
+    private final Noise.Layered4D layered4D = new Noise.Layered4D(WhirlingNoise.instance, 3);
     private final FastNoise fn = new FastNoise(0xDEADBEEF);
-    private final Noise.Noise2D invLayered2D = new Noise.InverseLayered2D(WhirlingNoise.instance, 3);
-    private final Noise.Noise3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
-    private final Noise.Noise4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
+    private final Noise.InverseLayered2D invLayered2D = new Noise.InverseLayered2D(WhirlingNoise.instance, 3);
+    private final Noise.InverseLayered3D invLayered3D = new Noise.InverseLayered3D(WhirlingNoise.instance, 3);
+    private final Noise.InverseLayered4D invLayered4D = new Noise.InverseLayered4D(WhirlingNoise.instance, 3);
     //private final Noise.Noise6D layered6D = new Noise.Layered6D(WhirlingNoise.instance, 3, 1.75);
-    private final Noise.Noise2D value2D = new Noise.Layered2D(ValueNoise.instance, 2);
-    private final Noise.Noise3D value3D = new Noise.Layered3D(ValueNoise.instance, 2);
-    private final Noise.Noise4D value4D = new Noise.Layered4D(ValueNoise.instance, 2);
-    private final Noise.Noise6D value6D = new Noise.Layered6D(ValueNoise.instance, 2);
-    private final Noise.Noise2D scaled2D = new Noise.Scaled2D(seeded, 1.43, 1.43);
-    private final Noise.Noise3D scaled3D = new Noise.Scaled3D(seeded, 1.43, 1.43, 1.43);
-    private final Noise.Noise4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
-    private final Noise.Noise6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
+    private final Noise.Layered2D value2D = new Noise.Layered2D(ValueNoise.instance, 2);
+    private final Noise.Layered3D value3D = new Noise.Layered3D(ValueNoise.instance, 2);
+    private final Noise.Layered4D value4D = new Noise.Layered4D(ValueNoise.instance, 2);
+    private final Noise.Layered6D value6D = new Noise.Layered6D(ValueNoise.instance, 2);
+    private final Noise.Scaled2D scaled2D = new Noise.Scaled2D(seeded, 1.43, 1.43);
+    private final Noise.Scaled3D scaled3D = new Noise.Scaled3D(seeded, 1.43, 1.43, 1.43);
+    private final Noise.Scaled4D scaled4D = new Noise.Scaled4D(seeded, 1.43, 1.43, 1.43, 1.43);
+    private final Noise.Scaled6D scaled6D = new Noise.Scaled6D(seeded, 1.43, 1.43, 1.43, 1.43, 1.43, 1.43);
 
-    private final Noise.Noise2D ridged2D = new Noise.Ridged2D(WhirlingNoise.instance, 1, 1.45); // 1.45
-    private final Noise.Noise3D ridged3D = new Noise.Ridged3D(WhirlingNoise.instance, 1, 1.45); // 1.45
-    private final Noise.Noise4D ridged4D = new Noise.Ridged4D(WhirlingNoise.instance, 1, 1.45); // 1.45
-    private final Noise.Noise6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Ridged2D ridged2D = new Noise.Ridged2D(WhirlingNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Ridged3D ridged3D = new Noise.Ridged3D(WhirlingNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Ridged4D ridged4D = new Noise.Ridged4D(WhirlingNoise.instance, 1, 1.45); // 1.45
+    private final Noise.Ridged6D ridged6D = new Noise.Ridged6D(SeededNoise.instance, 1, 1.45); // 1.45
                                                                                    
     private final Noise.Noise2D slick2D = new Noise.Slick2D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise3D slick3D = new Noise.Slick3D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise4D slick4D = new Noise.Slick4D(SeededNoise.instance, Noise.alternate, 1);
     private final Noise.Noise6D slick6D = new Noise.Slick6D(SeededNoise.instance, Noise.alternate, 1);
 
-    private final Noise.Noise2D turb2D = new Noise.Turbulent2D(WhirlingNoise.instance, ridged2D, 3, 2);
-    private final Noise.Noise3D turb3D = new Noise.Turbulent3D(WhirlingNoise.instance, ridged3D, 3, 2);
-    private final Noise.Noise4D turb4D = new Noise.Turbulent4D(WhirlingNoise.instance, ridged4D, 3, 2);
-    private final Noise.Noise6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
-    private final Noise.Noise2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
-    private final Noise.Noise3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
-    private final Noise.Noise2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
+    private final Noise.Turbulent2D turb2D = new Noise.Turbulent2D(WhirlingNoise.instance, ridged2D, 3, 2);
+    private final Noise.Turbulent3D turb3D = new Noise.Turbulent3D(WhirlingNoise.instance, ridged3D, 3, 2);
+    private final Noise.Turbulent4D turb4D = new Noise.Turbulent4D(WhirlingNoise.instance, ridged4D, 3, 2);
+    private final Noise.Turbulent6D turb6D = new Noise.Turbulent6D(SeededNoise.instance, ridged6D, 3, 2);
+    private final Noise.Scaled2D stretchScaled2D = new Noise.Scaled2D(SeededNoise.instance, 0.035, 0.035);
+    private final Noise.Scaled3D stretchScaled3D = new Noise.Scaled3D(SeededNoise.instance, 0.035, 0.035, 0.035);
+    private final Noise.Layered2D masonLayered2D = new Noise.Layered2D(MasonNoise.instance, 3, 2.2);
     private final Noise.Layered3D layeredWhirling = new Noise.Layered3D(WhirlingNoise.instance,1);
     private final Noise.Layered3D layeredSeeded = new Noise.Layered3D(SeededNoise.instance,1);
     private final FastNoise layeredFN = FastNoise.instance;
     private final GlitchNoise glitch = GlitchNoise.instance;
-    private final Noise.Noise1D basic1D = new Noise.Basic1D();
-    private final Noise.Noise1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
 
-    private final Noise.Ridged2D classic2_2D = new Noise.Ridged2D(MummyNoise.instance, 2, 2f);
-    private final Noise.Ridged2D classic3_2D = new Noise.Ridged2D(MummyNoise.instance, 3, 2f);
+    private final Noise.Basic1D basic1D = new Noise.Basic1D();
+    private final Noise.Layered1D layered1D = new Noise.Layered1D(new Noise.Basic1D(), 5, 5.0);
+
+    private final Noise.Sway1D sway1D = new Noise.Sway1D();
+    private final Noise.Layered1D layeredSway1D = new Noise.Layered1D(new Noise.Sway1D(123L), 5, 5.0);
+
+    private final Noise.Sway2D sway2D = new Noise.Sway2D();
+    private final Noise.Layered2D layeredSway2D = new Noise.Layered2D(new Noise.Sway2D(123L), 5, 5.0);
+
+    private final Noise.Ridged2D classic2_2D = new Noise.Ridged2D(ClassicNoise.instance, 2, 2f);
+    private final Noise.Ridged2D classic3_2D = new Noise.Ridged2D(ClassicNoise.instance, 3, 2f);
 
     private final Noise.Ridged2D whirling2_2D = new Noise.Ridged2D(JitterNoise.instance, 2, 2f);
     private final Noise.Ridged2D whirling3_2D = new Noise.Ridged2D(JitterNoise.instance, 3, 2f);
 
-    private final Noise.Ridged2D classic2_lf_2D = new Noise.Ridged2D(MummyNoise.instance, 2, 1.3f);
-    private final Noise.Ridged2D classic3_lf_2D = new Noise.Ridged2D(MummyNoise.instance, 3, 1.3f);
+    private final Noise.Ridged2D classic2_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 2, 1.3f);
+    private final Noise.Ridged2D classic3_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 3, 1.3f);
 
     private final Noise.Ridged2D whirling2_lf_2D = new Noise.Ridged2D(JitterNoise.instance, 2, 1.3f);
     private final Noise.Ridged2D whirling3_lf_2D = new Noise.Ridged2D(JitterNoise.instance, 3, 1.3f);
 
-    private final Noise.Ridged3D classic2_3D = new Noise.Ridged3D(MummyNoise.instance, 2, 2);
-    private final Noise.Ridged3D classic3_3D = new Noise.Ridged3D(MummyNoise.instance, 3, 2);
+    private final Noise.Ridged3D classic2_3D = new Noise.Ridged3D(ClassicNoise.instance, 2, 2);
+    private final Noise.Ridged3D classic3_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 2);
 
     private final Noise.Ridged3D whirling2_3D = new Noise.Ridged3D(JitterNoise.instance, 2, 2f);
     private final Noise.Ridged3D whirling3_3D = new Noise.Ridged3D(JitterNoise.instance, 3, 2f);
 
-    private final Noise.Ridged3D classic2_lf_3D = new Noise.Ridged3D(MummyNoise.instance, 2, 1.3);
-    private final Noise.Ridged3D classic3_lf_3D = new Noise.Ridged3D(MummyNoise.instance, 3, 1.3);
+    private final Noise.Ridged3D classic2_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 2, 1.3);
+    private final Noise.Ridged3D classic3_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 1.3);
 
     private final Noise.Ridged3D whirling2_lf_3D = new Noise.Ridged3D(JitterNoise.instance, 2, 1.3f);
     private final Noise.Ridged3D whirling3_lf_3D = new Noise.Ridged3D(JitterNoise.instance, 3, 1.3f);
@@ -4035,23 +4042,42 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 102:
-                        Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("Mummy 7D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                back[x][y] = floatGet(
+//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr))) * 0.50f + 0.50f,
+//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr))) * 0.50f + 0.50f,
+//                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr))) * 0.50f + 0.50f,
+//                                        1.0f);
+//                            }
+//                        }
+                        Gdx.graphics.setTitle("Sway 2D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                back[x][y] = floatGet(
-                                        (float)(MummyNoise.instance.arbitraryNoise(seedX0, alter7D(x, y, ctr))) * 0.50f + 0.50f,
-                                        (float)(MummyNoise.instance.arbitraryNoise(seedX1, alter7D(x, y, ctr))) * 0.50f + 0.50f,
-                                        (float)(MummyNoise.instance.arbitraryNoise(seedX2, alter7D(x, y, ctr))) * 0.50f + 0.50f,
-                                        1.0f);
+                                bright = (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30.12345, seedX0) * 0.50f) + 0.50f;
+                                back[x][y] =
+                                        floatGet(bright, bright, bright, 1.0f);
                             }
                         }
                         break;
                     case 103:
-                        Gdx.graphics.setTitle("Mummy 7D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("Mummy 7D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int x = 0; x < width; x++) {
+//                            for (int y = 0; y < height; y++) {
+//                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr))) * 0.50f + 0.50f;
+//                                back[x][y] = floatGet(bright, bright, bright, 1f);
+//                            }
+//                        }
+                        Gdx.graphics.setTitle("Sway 2D Color Noise, one octave per channel at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float) (MummyNoise.instance.arbitraryNoise(seedX3, alter7D(x, y, ctr))) * 0.50f + 0.50f;
-                                back[x][y] = floatGet(bright, bright, bright, 1f);
+                                back[x][y] =
+                                        floatGet(
+                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 20, y * 0.11125f + ctr * 0.11125f + 30.12345, seedX0) * 0.50f) + 0.50f,
+                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 30, y * 0.11125f + ctr * 0.11125f + 10.23456, seedX1) * 0.50f) + 0.50f,
+                                                (float)(Noise.Sway2D.instance.getNoiseWithSeed(x * 0.11125f + ctr * 0.11125f + 10, y * 0.11125f + ctr * 0.11125f + 20.34567, seedX2) * 0.50f) + 0.50f,
+                                                1.0f);
                             }
                         }
                         break;
@@ -4100,35 +4126,56 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 106:
-                        Gdx.graphics.setTitle("NumberTools.sin() approximation at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        Gdx.graphics.setTitle("NumberTools.sin() approximation at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+//                        for (int i = 0; i < 511; i++)
+//                            System.arraycopy(back[i+1], 0, back[i], 0, 512);
+//                        Arrays.fill(back[511], FLOAT_WHITE);
+//                        //if((ctr & 3) == 0)
+//                    {
+//                        bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
+//                        iBright = (int)(NumberTools.sin(ctr * 0.03125) * 64.0);
+//                        back[511][255 + iBright] =  bright;
+//                        back[511][256 + iBright] =  bright;
+//                        back[511][257 + iBright] =  bright;
+//
+//                        back[510][255 + iBright] =  bright;
+//                        back[510][256 + iBright] =  bright;
+//                        back[510][257 + iBright] =  bright;
+//
+//                        back[509][255 + iBright] =  bright;
+//                        back[509][256 + iBright] =  bright;
+//                        back[509][257 + iBright] =  bright;
+//                    }
+                        Gdx.graphics.setTitle("Sway1D Noise, one octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, 512);
                         Arrays.fill(back[511], FLOAT_WHITE);
                         //if((ctr & 3) == 0)
-                    {
-                        bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1,1);
-                        iBright = (int)(NumberTools.sin(ctr * 0.03125) * 64.0);
-                        back[511][255 + iBright] =  bright;
-                        back[511][256 + iBright] =  bright;
-                        back[511][257 + iBright] =  bright;
+                        {
+                            bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
+                            iBright = (int) (sway1D.getNoise(ctr * 0.0125f) * 240.0);
+                            back[511][255 + iBright] =  bright;
+                            back[511][256 + iBright] =  bright;
+                            back[511][257 + iBright] =  bright;
 
-                        back[510][255 + iBright] =  bright;
-                        back[510][256 + iBright] =  bright;
-                        back[510][257 + iBright] =  bright;
+                            back[510][255 + iBright] =  bright;
+                            back[510][256 + iBright] =  bright;
+                            back[510][257 + iBright] =  bright;
 
-                        back[509][255 + iBright] =  bright;
-                        back[509][256 + iBright] =  bright;
-                        back[509][257 + iBright] =  bright;
-                    }
-                    break;
+                            back[509][255 + iBright] =  bright;
+                            back[509][256 + iBright] =  bright;
+                            back[509][257 + iBright] =  bright;
+                        }
+                        break;
                     case 107:
-                        Gdx.graphics.setTitle("NumberTools.swayRandomized() at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Sway1D Noise, 5 inverse octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int i = 0; i < 511; i++)
                             System.arraycopy(back[i+1], 0, back[i], 0, 512);
                         Arrays.fill(back[511], FLOAT_WHITE);
-                        if((ctr & 3) == 0) {
+                        //if((ctr & 3) == 0)
+                        {
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 1, 1);
-                            iBright = (int) (NumberTools.swayRandomized(9001L, ctr * 0.0125f) * 240.0);
+                            iBright = (int)(layeredSway1D.getNoise(ctr * 0x1p-6) * 240);
                             back[511][255 + iBright] =  bright;
                             back[511][256 + iBright] =  bright;
                             back[511][257 + iBright] =  bright;
