@@ -3244,10 +3244,10 @@ public class Noise {
         public Basic1D(long seed)
         {
             lastSeed = seed;
-            alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-            alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-            alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-            alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+            alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+            alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+            alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+            alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
         }
         @Override
         public double getNoise(double x) {
@@ -3263,10 +3263,10 @@ public class Noise {
             if(lastSeed != seed)
             {
                 lastSeed = seed;
-                alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-                alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-                alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-                alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+                alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+                alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+                alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+                alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
             }
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
@@ -3282,14 +3282,98 @@ public class Noise {
         }
 
         public static double noise(double x, long seed) {
-            final double alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
-                    alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
+            final double alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
+                    alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
                     cubicSway(alter4 + x * alter3) +
                     cubicSway(alter1 - x * alter4)) * 0.25f;
+        }
+    }
+
+    public static class Sway1D implements Noise1D
+    {
+        public static final Sway1D instance = new Sway1D();
+        public long seed;
+        public Sway1D()
+        {
+            seed = 0L;
+        }
+        public Sway1D(long seed)
+        {
+            this.seed = seed;
+        }
+
+        @Override
+        public double getNoise(double x) {
+            return NumberTools.swayRandomized(seed, x);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, long seed) {
+            return NumberTools.swayRandomized(seed, x);
+        }
+    }
+    public static class Sway2D implements Noise2D
+    {
+        public static final Sway2D instance = new Sway2D();
+        public long seed;
+        public Sway2D()
+        {
+            seed = 0L;
+        }
+        public Sway2D(long seed)
+        {
+            this.seed = seed;
+        }
+
+        @Override
+        public double getNoise(double x, double y) {
+            return getNoiseWithSeed(x, y, seed);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, long seed) {
+            double xx = NumberTools.swayRandomized(seed - 0xC13FA9A902A6328FL, x + y) * 0.75,
+                    yy = NumberTools.swayRandomized(seed - 0xABC98388FB8FAC03L, y - x) * 0.75;
+            return NumberTools.sway((NumberTools.swayRandomized(seed, x + yy) +
+                    NumberTools.swayRandomized(0x8CB92BA72F3D8DD7L - seed, y + xx)) * 1.25 + 0.5);
+//            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
+//            long yf = y >= 0.0 ? (long) y : (long) y - 1L;
+//            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;
+//            double xSmall = x - xf;
+//            //, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+//            double start = (((s += xf * 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,
+//                    start2 = (((s2 += xf * 0x6C8E9CF570932BD5L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63,
+//                    end = (((s += 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,
+//                    end2 = (((s2 += 0x6C8E9CF570932BD5L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;
+////            double x0y0 = HastyPointHash.hashAll(xf, yf, seed) * 0x0.fffffffffffffbp-63,
+////                    x1y0 = HastyPointHash.hashAll(xf+1L, yf, seed) * 0x0.fffffffffffffbp-63,
+////                    x0y1 = HastyPointHash.hashAll(xf, yf+1L, seed) * 0x0.fffffffffffffbp-63,
+////                    x1y1 = HastyPointHash.hashAll(xf+1L, yf+1L, seed) * 0x0.fffffffffffffbp-63, y0, y1;
+//            xSmall = xSmall * xSmall * (3.0 - 2.0 * xSmall);
+////            double a2 = xSmall * xSmall, a4 = a2 * a2, a6 = a4 * a2;
+////            xSmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;
+////            y0 = (1.0 - xSmall) * x0y0 + xSmall * x1y0;
+////            y1 = (1.0 - xSmall) * x0y1 + xSmall * x1y1;
+//            double ySmall = y - yf;
+//            ySmall = ySmall * ySmall * (3.0 - 2.0 * ySmall);
+////            a2 = ySmall * ySmall;
+////            a4 = a2 * a2;
+////            a6 = a4 * a2;
+////            ySmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;
+//            return (1.0 - ySmall) * ((1.0 - xSmall) * start + xSmall * end) + ySmall * ((1.0 - xSmall) * start2 + xSmall * end2);
+////            x1 = (1.0 - xSmall) * start2 + xSmall * end2;
+////            s = HastyPointHash.hashAll(xf, yf, seed);//((0xC13FA9A902A6328FL ^ seed)) * 0x91E10DA5C79E7B1DL;
+////            start = (((s += yf * 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;
+//////            start2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;
+////            end = (((s += 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;
+//////            end2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;
+////            y0 = (1.0 - ySmall) * start + ySmall * end;
+//////            y1 = (1.0 - ySmall) * start2 + ySmall * end2;
+////            return NumberTools.sway(x0 + y0 + 0.5);
         }
     }
 }
