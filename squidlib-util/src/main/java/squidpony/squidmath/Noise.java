@@ -3336,10 +3336,25 @@ public class Noise {
 
         @Override
         public double getNoiseWithSeed(double x, double y, long seed) {
-            double xx = NumberTools.swayRandomized(seed - 0xC13FA9A902A6328FL, x + y) * 0.75,
-                    yy = NumberTools.swayRandomized(seed - 0xABC98388FB8FAC03L, y - x) * 0.75;
-            return NumberTools.sway((NumberTools.swayRandomized(seed, x + yy) +
-                    NumberTools.swayRandomized(0x8CB92BA72F3D8DD7L - seed, y + xx)) * 1.25 + 0.5);
+//            double xx = NumberTools.swayRandomized(seed - 0xC13FA9A902A6328FL, x + y) * 0.75,
+//                    yy = NumberTools.swayRandomized(seed - 0xABC98388FB8FAC03L, y - x) * 0.75;
+//            return NumberTools.sway((NumberTools.swayRandomized(seed, x + yy) +
+//                    NumberTools.swayRandomized(0x8CB92BA72F3D8DD7L - seed, y + xx)) * 1.25 + 0.5);
+
+//            return NumberTools.swayRandomized(seed,
+//                    (NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, (x + y))
+//                    + NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 0.5 - y * 1.5)
+//                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 1.5 - y * 0.5)) * 4.0);
+
+            double adjust0 = NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.75 + y * -0.25) + 1.,
+                    adjust1 = NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x * 0.25 + y * -1.75) + 1.,
+                    adjust2 = NumberTools.swayRandomized(seed - 0x8CB92BA72F3D8DD7L, x + y) + 1.;
+            return NumberTools.sway(
+                    (NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.5 + y * 0.5) * adjust0
+                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 0.5 + y * 1.5) * adjust1
+                    + NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x - y) * adjust2 
+                    ) * 0.75 + 0.5);
+
 //            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
 //            long yf = y >= 0.0 ? (long) y : (long) y - 1L;
 //            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;

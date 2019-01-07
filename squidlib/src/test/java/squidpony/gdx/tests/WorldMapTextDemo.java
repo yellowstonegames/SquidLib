@@ -1,9 +1,13 @@
 package squidpony.gdx.tests;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -86,8 +90,9 @@ public static final char[]  terrainChars = {
 
 };
     //private static final int bigWidth = 314 * 3, bigHeight = 300;
-    //private static final int bigWidth = 1024, bigHeight = 512;
-    private static final int bigWidth = 512, bigHeight = 256;
+    private static final int bigWidth = 1024, bigHeight = 512;
+    //private static final int bigWidth = 512, bigHeight = 256;
+//    private static final int bigWidth = 2048, bigHeight = 1024;
     //private static final int bigWidth = 400, bigHeight = 400;
     private static final int cellWidth = 16, cellHeight = 16;
     private static final int shownWidth = 96, shownHeight = 48;
@@ -204,15 +209,30 @@ public static final char[]  terrainChars = {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispCurvySquareFont());
+        display = new SparseLayers(bigWidth, bigHeight, cellWidth, cellHeight, DefaultResources.getCrispLeanFont());
         //display.font.tweakHeight(13f).tweakWidth(13f).initBySize();
         view = new StretchViewport(shownWidth * cellWidth, shownHeight * cellHeight);
         stage = new Stage(view, batch);
-        seed = 0xDEBACL;
+        seed = 1234567890L;
         rng = new StatefulRNG(seed);
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 1.25);
         //world = new WorldMapGenerator.EllipticalMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.8);
-        world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
+        
+        Pixmap pix = new Pixmap(Gdx.files.internal("special/fantasy_map.png"));
+        GreasedRegion basis = new GreasedRegion(bigWidth, bigHeight);
+        for (int x = 0; x < bigWidth; x++) {
+            for (int y = 0; y < bigHeight; y++) {
+                if(pix.getPixel(x << 1, y << 1) < 0)
+                    basis.insert(x, y);
+            }
+        }
+        basis = WorldMapGenerator.MimicMap.reprojectToElliptical(basis);
+        //// at this point you could get the GreasedRegion as a String, and save the compressed output to a file:
+        //// Gdx.files.local("map.txt").writeString(LZSPlus.compress(basis.serializeToString()), false, "UTF16");
+        //// you could reload basis without needing the original map image with
+        //// basis = GreasedRegion.deserializeFromString(LZSPlus.decompress(Gdx.files.local("map.txt").readString("UTF16")));
+        world = new WorldMapGenerator.MimicMap(seed, basis, FastNoise.instance, 0.8);
+        pix.dispose();
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         pm = new PoliticalMapper(FakeLanguageGen.SIMPLISH.word(rng, true));

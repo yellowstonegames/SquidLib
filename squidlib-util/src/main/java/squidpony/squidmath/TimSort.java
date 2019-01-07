@@ -87,7 +87,7 @@ class TimSort<T> {
 
 	/** Asserts have been placed in if-statements for performance. To enable them, set this field to true and enable them in VM with
 	 * a command line flag. If you modify this class, please do test the asserts! */
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 
 	TimSort () {
 		tmp = new int[INITIAL_TMP_STORAGE_LENGTH];
