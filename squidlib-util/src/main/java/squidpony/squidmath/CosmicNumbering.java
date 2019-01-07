@@ -2,9 +2,6 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.cerp;
-import static squidpony.squidmath.Noise.longFloor;
-
 /**
  * Like a kind of RNG, but fully deterministic in a way that depends on certain connected variables.
  * Intended as a way to produce similar values when small changes occur in the connections, while potentially producing
@@ -119,24 +116,12 @@ public class CosmicNumbering implements Serializable {
      * @return a double between -1.0 and 1.0; will be the same value until/unless connections change
      */
     public final double getDoubleBase() {
-        for (int i = 0; i < len; i++) {
-            long seed = seeds[i];
-            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(connections[i])) * seed) + seed;
+        //return (getDouble() - 0.5) * 2.0;
+        double sum = NumberTools.swayRandomized(seeds[0], connections[len - 1] + connections[0]);
+        for (int i = 1; i < len; i++) {
+            sum += NumberTools.swayRandomized(seeds[i], sum + connections[i - 1] + connections[i]);
         }
-        long working;
-        for (int i = 0; i < upper; i++) {
-            working = 0L;
-            for (int j = 0; j < len; j++) {
-                working += scratch3[j * 3 + (i >> j & 1)];
-            }
-            scratch[i] = determine(working) * effect;
-        }
-        for (int i = 0; i < len; ++i) {
-            for (int j = 0, t = upper >> i; j < t; j += 2) {
-                scratch[j >> 1] = cerp(scratch[j], scratch[j + 1], connections[i] - scratch3[i * 3 + 2]);
-            }
-        }
-        return NumberTools.sway(scratch[0]);
+        return sum / len;
     }
 
 //    {
@@ -164,7 +149,32 @@ public class CosmicNumbering implements Serializable {
      */
     public double getDouble()
     {
-        return getDoubleBase() * 0.5 + 0.5;
+//        for (int i = 0; i < len; i++) {
+//            long seed = seeds[i];
+//            scratch3[i * 3 + 1] = (scratch3[i * 3] = (scratch3[i * 3 + 2] = longFloor(connections[i])) * seed) + seed;
+//        }
+//        long working;
+//        for (int i = 0; i < upper; i++) {
+//            working = 0L;
+//            for (int j = 0; j < len; j++) {
+//                working += scratch3[j * 3 + (i >>> j & 1)];
+//            }
+//            scratch[i] = determine(working) * effect;
+//        }
+//        for (int i = 0; i < len; ++i) {
+//            for (int j = 0, t = upper >> i; j < t; j += 2) {
+//                scratch[j >>> 1] = cerp(scratch[j], scratch[j + 1], connections[i] - scratch3[i * 3 + 2]);
+//            }
+//        }
+//        return scratch[0] - longFloor(scratch[0]);
+//// has a different look than the above line
+////        return NumberTools.sway(scratch[0]);
+        double sum = NumberTools.swayRandomized(seeds[0], connections[len - 1] + connections[0]);
+        for (int i = 1; i < len; i++) {
+            sum += NumberTools.swayRandomized(seeds[i], sum + connections[i - 1] + connections[i]);
+        }
+        return sum / (len << 1) + 0.5;
+
     }
 
 //    public double getDouble()
