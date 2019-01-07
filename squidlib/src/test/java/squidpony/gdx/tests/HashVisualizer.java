@@ -7,7 +7,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -74,7 +73,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 5 RNG results
     private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 102, otherMode = 0;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 78, otherMode = 0;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -3776,46 +3775,47 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                     case 80:
                         Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = MathUtils.sin(ctr * 0.625f + 1.1f) * 0.015f;
-                        c0 = MathUtils.cos(ctr * 0.625f + 1.1f) * 0.015f;
-                        s1 = MathUtils.sin(ctr * 0.625f + 1.41f) * 0.015f;
-                        c1 = MathUtils.cos(ctr * 0.625f + 1.41f) * 0.015f;
-                        s2 = MathUtils.sin(ctr * 0.625f + 2.61f) * 0.015f;
-                        c2 = MathUtils.cos(ctr * 0.625f + 2.61f) * 0.015f;
+                        s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, ctr * 0x5p-8f - 1.11f) * 0.025f;
+                        c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, ctr * 0x5p-8f - 1.11f) * 0.025f;
+                        s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, ctr * 0x5p-8f + 1.41f) * 0.025f;
+                        c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, ctr * 0x5p-8f + 1.41f) * 0.025f;
+                        s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, ctr * 0x5p-8f + 2.61f) * 0.025f;
+                        c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, ctr * 0x5p-8f + 2.61f) * 0.025f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 connections[0] = ctr * 0.007 + x * c0 - y * s0;
                                 connections[1] = ctr * 0.009 - x * c1 + y * s1;
                                 connections[2] = ctr * 0.013 + x * c2 + y * s2;
-                                connections[0] = cosmos.getDouble() * 0.25;
-                                connections[1] = cosmos.getDouble() * 0.25;
-                                connections[2] = cosmos.getDouble() * 0.25;
+                                
+                                connections[0] = cosmos.getDoubleBase() + 0.5;
+                                connections[1] = cosmos.getDoubleBase() + 0.5;
+                                connections[2] = cosmos.getDoubleBase() + 0.5;
                                 back[x][y] = 
                                         floatGet(
-                                                (float)connections[0] * 4f,//NumberTools.sway((float)connections[0]) * 0.5f + 0.5f,
-                                                (float)connections[1] * 4f,//NumberTools.sway((float)connections[1]) * 0.5f + 0.5f,
-                                                (float)connections[2] * 4f,//NumberTools.sway((float)connections[2]) * 0.5f + 0.5f,
+                                                NumberTools.swayTight((float)connections[0]), //(float)connections[0] * 4f,
+                                                NumberTools.swayTight((float)connections[1]), //(float)connections[1] * 4f,
+                                                NumberTools.swayTight((float)connections[2]), //(float)connections[2] * 4f,
                                                 1.0f);
                             }
                         }
                         break;
                     case 81:
                         Gdx.graphics.setTitle("Cosmic 3D Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = MathUtils.sin(ctr * 0.625f + 1.1f) * 0.015f;
-                        c0 = MathUtils.cos(ctr * 0.625f + 1.1f) * 0.015f;
-                        s1 = MathUtils.sin(ctr * 0.625f + 1.41f) * 0.015f;
-                        c1 = MathUtils.cos(ctr * 0.625f + 1.41f) * 0.015f;
-                        s2 = MathUtils.sin(ctr * 0.625f + 2.61f) * 0.015f;
-                        c2 = MathUtils.cos(ctr * 0.625f + 2.61f) * 0.015f;
+                        s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, ctr * 0x5p-10f - 1.1f) * 0.015f;
+                        c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, ctr * 0x5p-10f - 1.1f) * 0.015f;
+                        s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, ctr * 0x5p-10f + 1.41f) * 0.015f;
+                        c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, ctr * 0x5p-10f + 1.41f) * 0.015f;
+                        s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, ctr * 0x5p-10f + 2.61f) * 0.015f;
+                        c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, ctr * 0x5p-10f + 2.61f) * 0.015f;
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 connections[0] = ctr * 0.007 + x * c0 - y * s0;
                                 connections[1] = ctr * 0.009 - x * c1 + y * s1;
                                 connections[2] = ctr * 0.013 + x * c2 + y * s2;
-                                connections[0] = cosmos.getDouble() * 0.25;
-                                connections[1] = cosmos.getDouble() * 0.25;
-                                connections[2] = cosmos.getDouble() * 0.25;
-                                bright = (float)connections[1] * 4f;
+                                connections[0] = cosmos.getDoubleBase() + 0.5;
+                                connections[1] = cosmos.getDoubleBase() + 0.5;
+                                connections[2] = cosmos.getDoubleBase() + 0.5;
+                                bright = NumberTools.swayTight((float)connections[1]);//(float)connections[1] * 4f;
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
