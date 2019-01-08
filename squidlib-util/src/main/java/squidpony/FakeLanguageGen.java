@@ -20,7 +20,8 @@ public class FakeLanguageGen implements Serializable {
     public final String[] openingVowels, midVowels, openingConsonants, midConsonants, closingConsonants,
             vowelSplitters, closingSyllables;
     public final boolean clean;
-    public final IntDoubleOrderedMap syllableFrequencies;
+    //public final IntDoubleOrderedMap syllableFrequencies;
+    public final double[] syllableFrequencies;
     protected double totalSyllableFrequency = 0.0;
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
@@ -29,6 +30,8 @@ public class FakeLanguageGen implements Serializable {
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64);
     protected String summary = null;
     private String name = "Nameless Language";
+    private static transient StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12),
+            ssb = new StringBuilder(80);
     /**
      * A pattern String that will match any vowel FakeLanguageGen can produce out-of-the-box, including Latin, Greek,
      * and Cyrillic; for use when a String will be interpreted as a regex (as in {@link FakeLanguageGen.Alteration}).
@@ -2651,9 +2654,12 @@ public class FakeLanguageGen implements Serializable {
         this.vowelSplitters = vowelSplitters;
         this.closingSyllables = closingSyllables;
 
-        this.syllableFrequencies = new IntDoubleOrderedMap(syllableLengths, syllableFrequencies, 0.75f);
+        this.syllableFrequencies = new double[syllableLengths[syllableLengths.length - 1]];
+        totalSyllableFrequency = 0.0;
+        for (int i = 0; i < syllableLengths.length; i++) {
+            totalSyllableFrequency += (this.syllableFrequencies[syllableLengths[i]-1] = syllableFrequencies[i]);
+        }
 
-        totalSyllableFrequency = this.syllableFrequencies.values().sum();
         if (vowelStartFrequency > 1.0)
             this.vowelStartFrequency = 1.0 / vowelStartFrequency;
         else
@@ -2676,12 +2682,12 @@ public class FakeLanguageGen implements Serializable {
             this.syllableEndFrequency = syllableEndFrequency;
         this.clean = clean;
         sanityChecks = sane;
-        modifiers = new ArrayList<>(16);
+        modifiers = new ArrayList<>(4);
     }
 
     private FakeLanguageGen(String[] openingVowels, String[] midVowels, String[] openingConsonants,
                             String[] midConsonants, String[] closingConsonants, String[] closingSyllables,
-                            String[] vowelSplitters, IntDoubleOrderedMap syllableFrequencies,
+                            String[] vowelSplitters, double[] syllableFrequencies,
                             double vowelStartFrequency, double vowelEndFrequency, double vowelSplitFrequency,
                             double syllableEndFrequency, Pattern[] sanityChecks, boolean clean,
                             List<Modifier> modifiers) {
@@ -2692,13 +2698,13 @@ public class FakeLanguageGen implements Serializable {
         this.closingConsonants = copyStrings(closingConsonants);
         this.closingSyllables = copyStrings(closingSyllables);
         this.vowelSplitters = copyStrings(vowelSplitters);
-        this.syllableFrequencies = new IntDoubleOrderedMap(syllableFrequencies);
+        this.syllableFrequencies = Arrays.copyOf(syllableFrequencies, syllableFrequencies.length);
         this.vowelStartFrequency = vowelStartFrequency;
         this.vowelEndFrequency = vowelEndFrequency;
         this.vowelSplitFrequency = vowelSplitFrequency;
         this.syllableEndFrequency = syllableEndFrequency;
-        for (Double freq : this.syllableFrequencies.values()) {
-            totalSyllableFrequency += freq;
+        for (int i = 0; i < syllableFrequencies.length; i++) {
+            totalSyllableFrequency += syllableFrequencies[i];
         }
         if (sanityChecks == null)
             this.sanityChecks = null;
@@ -3074,15 +3080,20 @@ public class FakeLanguageGen implements Serializable {
      */
     public String word(IRNG rng, boolean capitalize) {
         while (true) {
-            StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12);
+            sb.setLength(0);
+            ender.setLength(0);
+
             double syllableChance = rng.nextDouble(totalSyllableFrequency);
             int syllables = 1, i = 0;
-            for (IntDoubleOrderedMap.MapEntry kv : syllableFrequencies.mapEntrySet()) {
-                if (syllableChance < kv.getDoubleValue()) {
-                    syllables = kv.getIntKey();
+            for (int s = 0; s < syllableFrequencies.length; s++) {
+                if(syllableChance < syllableFrequencies[s])
+                {
+                    syllables = s + 1;
                     break;
                 } else
-                    syllableChance -= kv.getDoubleValue();
+                {
+                    syllableChance -= syllableFrequencies[s];
+                }
             }
             if (rng.nextDouble() < vowelStartFrequency) {
                 sb.append(rng.getRandomElement(openingVowels));
@@ -3154,17 +3165,21 @@ public class FakeLanguageGen implements Serializable {
             }
 
             if (sanityChecks != null && !checkAll(sb, sanityChecks))
+            {
                 continue;
+            }
 
-            for (Modifier mod : modifiers) {
-                sb = mod.modify(rng, sb);
+            for (int m = 0; m < modifiers.size(); m++) {
+                modifiers.get(m).modify(rng, sb);
             }
 
             if (capitalize)
                 sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
 
             if (clean && !checkAll(sb, vulgarChecks))
+            {
                 continue;
+            }
             return sb.toString();
         }
     }
@@ -3227,15 +3242,17 @@ public class FakeLanguageGen implements Serializable {
      */
     public String word(IRNG rng, boolean capitalize, int approxSyllables, Pattern[] additionalChecks) {
         if (approxSyllables <= 0) {
-            StringBuilder sb = new StringBuilder(rng.getRandomElement(openingVowels));
-            for (Modifier mod : modifiers) {
-                sb = mod.modify(rng, sb);
+            sb.setLength(0);
+            sb.append(rng.getRandomElement(openingVowels));
+            for (int m = 0; m < modifiers.size(); m++) {
+                modifiers.get(m).modify(rng, sb);
             }
             if (capitalize) sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
             return sb.toString();
         }
         while (true) {
-            StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12);
+            sb.setLength(0);
+            ender.setLength(0);
             int i = 0;
             if (rng.nextDouble() < vowelStartFrequency) {
                 sb.append(rng.getRandomElement(openingVowels));
@@ -3308,8 +3325,8 @@ public class FakeLanguageGen implements Serializable {
             if (sanityChecks != null && !checkAll(sb, sanityChecks))
                 continue;
 
-            for (Modifier mod : modifiers) {
-                sb = mod.modify(rng, sb);
+            for (int m = 0; m < modifiers.size(); m++) {
+                modifiers.get(m).modify(rng, sb);
             }
 
             if (clean && !checkAll(sb, vulgarChecks))
@@ -3338,9 +3355,10 @@ public class FakeLanguageGen implements Serializable {
      */
     public String word(IStatefulRNG rng, boolean capitalize, int approxSyllables, long... reseeds) {
         if (approxSyllables <= 0) {
-            StringBuilder sb = new StringBuilder(rng.getRandomElement(openingVowels));
-            for (Modifier mod : modifiers) {
-                sb = mod.modify(rng, sb);
+            sb.setLength(0);
+            sb.append(rng.getRandomElement(openingVowels));
+            for (int m = 0; m < modifiers.size(); m++) {
+                modifiers.get(m).modify(rng, sb);
             }
             if (capitalize) sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
             return sb.toString();
@@ -3350,7 +3368,8 @@ public class FakeLanguageGen implements Serializable {
             numSeeds = Math.min(reseeds.length, approxSyllables - 1);
         else numSeeds = 0;
         while (true) {
-            StringBuilder sb = new StringBuilder(20), ender = new StringBuilder(12);
+            sb.setLength(0);
+            ender.setLength(0);
             int i = 0;
             if (rng.nextDouble() < vowelStartFrequency) {
                 sb.append(rng.getRandomElement(openingVowels));
@@ -3425,8 +3444,8 @@ public class FakeLanguageGen implements Serializable {
             if (sanityChecks != null && !checkAll(sb, sanityChecks))
                 continue;
 
-            for (Modifier mod : modifiers) {
-                sb = mod.modify(rng, sb);
+            for (int m = 0; m < modifiers.size(); m++) {
+                modifiers.get(m).modify(rng, sb);
             }
 
             if (capitalize)
@@ -3552,23 +3571,24 @@ public class FakeLanguageGen implements Serializable {
         if (midPunctuationFrequency > 1.0) {
             midPunctuationFrequency = 1.0 / midPunctuationFrequency;
         }
-        StringBuilder sb = new StringBuilder(12 * maxWords);
-        sb.append(word(rng, true));
+        ssb.setLength(0);
+        ssb.ensureCapacity(12 * maxWords);
+        ssb.append(word(rng, true));
         for (int i = 1; i < minWords; i++) {
             if (rng.nextDouble() < midPunctuationFrequency) {
-                sb.append(rng.getRandomElement(midPunctuation));
+                ssb.append(rng.getRandomElement(midPunctuation));
             }
-            sb.append(' ').append(word(rng, false));
+            ssb.append(' ').append(word(rng, false));
         }
         for (int i = minWords; i < maxWords && rng.nextInt(2 * maxWords) > i; i++) {
             if (rng.nextDouble() < midPunctuationFrequency) {
-                sb.append(rng.getRandomElement(midPunctuation));
+                ssb.append(rng.getRandomElement(midPunctuation));
             }
-            sb.append(' ').append(word(rng, false));
+            ssb.append(' ').append(word(rng, false));
         }
         if (endPunctuation != null && endPunctuation.length > 0)
-            sb.append(rng.getRandomElement(endPunctuation));
-        return sb.toString();
+            ssb.append(rng.getRandomElement(endPunctuation));
+        return ssb.toString();
     }
 
     /**
@@ -3656,52 +3676,53 @@ public class FakeLanguageGen implements Serializable {
             maxWords = 1;
         }
         int frustration = 0;
-        StringBuilder sb = new StringBuilder(maxChars);
+        ssb.setLength(0); 
+        ssb.ensureCapacity(maxChars);
         String next = word(rng, true);
         while (next.length() >= maxChars - 1 && frustration < 50) {
             next = word(rng, true);
             frustration++;
         }
         if (frustration >= 50) return "!";
-        sb.append(next);
-        for (int i = 1; i < minWords && frustration < 50 && sb.length() < maxChars - 7; i++) {
-            if (rng.nextDouble() < midPunctuationFrequency && sb.length() < maxChars - 3) {
-                sb.append(rng.getRandomElement(midPunctuation));
+        ssb.append(next);
+        for (int i = 1; i < minWords && ssb.length() < maxChars - 7; i++) {
+            if (rng.nextDouble() < midPunctuationFrequency && ssb.length() < maxChars - 3) {
+                ssb.append(rng.getRandomElement(midPunctuation));
             }
             next = word(rng, false);
-            while (sb.length() + next.length() >= maxChars - 2 && frustration < 50) {
+            while (ssb.length() + next.length() >= maxChars - 2 && frustration < 50) {
                 next = word(rng, false);
                 frustration++;
             }
             if (frustration >= 50) break;
-            sb.append(' ').append(next);
+            ssb.append(' ').append(next);
         }
-        for (int i = minWords; i < maxWords && sb.length() < maxChars - 7 && rng.nextInt(2 * maxWords) > i && frustration < 50; i++) {
-            if (rng.nextDouble() < midPunctuationFrequency && sb.length() < maxChars - 3) {
-                sb.append(rng.getRandomElement(midPunctuation));
+        for (int i = minWords; i < maxWords && ssb.length() < maxChars - 7 && rng.nextInt(2 * maxWords) > i && frustration < 50; i++) {
+            if (rng.nextDouble() < midPunctuationFrequency && ssb.length() < maxChars - 3) {
+                ssb.append(rng.getRandomElement(midPunctuation));
             }
             next = word(rng, false);
-            while (sb.length() + next.length() >= maxChars - 2 && frustration < 50) {
+            while (ssb.length() + next.length() >= maxChars - 2 && frustration < 50) {
                 next = word(rng, false);
                 frustration++;
             }
             if (frustration >= 50) break;
-            sb.append(' ');
-            sb.append(next);
+            ssb.append(' ');
+            ssb.append(next);
         }
 
         if (endPunctuation != null && endPunctuation.length > 0) {
 
             next = rng.getRandomElement(endPunctuation);
-            if (sb.length() + next.length() >= maxChars)
-                sb.append('.');
+            if (ssb.length() + next.length() >= maxChars)
+                ssb.append('.');
             else
-                sb.append(next);
+                ssb.append(next);
         }
 
-        if (sb.length() > maxChars)
+        if (ssb.length() > maxChars)
             return "!";
-        return sb.toString();
+        return ssb.toString();
     }
 
     protected String[] merge1000(IRNG rng, String[] me, String[] other, double otherInfluence) {
@@ -3921,17 +3942,15 @@ public class FakeLanguageGen implements Serializable {
                         Math.max(0.0, Math.min(1.0, other.syllableEndFrequency - syllableEndFrequency))),
                 splitters = merge1000(rng, vowelSplitters, other.vowelSplitters, otherInfluence);
 
-        IntDoubleOrderedMap freqs = new IntDoubleOrderedMap(syllableFrequencies);
-        for (IntDoubleOrderedMap.MapEntry kv : other.syllableFrequencies.mapEntrySet()) {
-            if (freqs.containsKey(kv.getIntKey()))
-                freqs.put(kv.getIntKey(), kv.getDoubleValue() + freqs.get(kv.getIntKey()));
-            else
-                freqs.put(kv.getIntKey(), kv.getDoubleValue());
+        double[] fr = new double[Math.max(syllableFrequencies.length, other.syllableFrequencies.length)];
+        System.arraycopy(syllableFrequencies, 0, fr, 0, syllableFrequencies.length);
+        for (int i = 0; i < other.syllableFrequencies.length; i++) {
+            fr[i] += other.syllableFrequencies[i];
         }
-        List<Modifier> mods = new ArrayList<>(modifiers.size() + other.modifiers.size());
+        ArrayList<Modifier> mods = new ArrayList<>(modifiers.size() + other.modifiers.size());
         mods.addAll(modifiers);
         mods.addAll(other.modifiers);
-        return new FakeLanguageGen(ov, mv, oc, mc, cc, cs, splitters, freqs,
+        return new FakeLanguageGen(ov, mv, oc, mc, cc, cs, splitters, fr,
                 vowelStartFrequency * myInfluence + other.vowelStartFrequency * otherInfluence,
                 vowelEndFrequency * myInfluence + other.vowelEndFrequency * otherInfluence,
                 vowelSplitFrequency * myInfluence + other.vowelSplitFrequency * otherInfluence,
@@ -4010,22 +4029,22 @@ public class FakeLanguageGen implements Serializable {
                 mixer = mixer.mix(languages[i], weight / total / (current += weight / total));
         }
         if (summarize) {
-            StringBuilder brief = new StringBuilder(64);
+            sb.setLength(0);
             String c;
             int idx;
             for (int i = 0; i < summaries.length; i++) {
                 c = summaries[i];
                 idx = c.indexOf('@');
                 if (idx >= 0) {
-                    brief.append(c, 0, idx + 1).append(weights[i]);
+                    sb.append(c, 0, idx + 1).append(weights[i]);
                     if (i < summaries.length - 1)
-                        brief.append('~');
+                        sb.append('~');
                 }
             }
             for (int i = 0; i < mods.size(); i++) {
-                brief.append('℗').append(mods.getAt(i).serializeToString());
+                sb.append('℗').append(mods.getAt(i).serializeToString());
             }
-            return mixer.addModifiers(mods).summarize(brief.toString());
+            return mixer.addModifiers(mods).summarize(sb.toString());
         } else
             return mixer.addModifiers(mods);
     }
@@ -4281,8 +4300,8 @@ public class FakeLanguageGen implements Serializable {
         result = 31L * result + CrossHash.hash64(closingConsonants);
         result = 31L * result + CrossHash.hash64(vowelSplitters);
         result = 31L * result + CrossHash.hash64(closingSyllables);
+        result = 31L * result + CrossHash.hash64(syllableFrequencies);
         result = 31L * result + (clean ? 1L : 0L);
-        result = 31L * result + syllableFrequencies.hash64();
         result = 31L * result + NumberTools.doubleToLongBits(totalSyllableFrequency);
         result = 31L * result + NumberTools.doubleToLongBits(vowelStartFrequency);
         result = 31L * result + NumberTools.doubleToLongBits(vowelEndFrequency);
@@ -4309,7 +4328,7 @@ public class FakeLanguageGen implements Serializable {
                 ", vowelSplitters=" + Arrays.toString(vowelSplitters) +
                 ", closingSyllables=" + Arrays.toString(closingSyllables) +
                 ", clean=" + clean +
-                ", syllableFrequencies=" + syllableFrequencies +
+                ", syllableFrequencies=" + Arrays.toString(syllableFrequencies) +
                 ", totalSyllableFrequency=" + totalSyllableFrequency +
                 ", vowelStartFrequency=" + vowelStartFrequency +
                 ", vowelEndFrequency=" + vowelEndFrequency +
@@ -4378,6 +4397,7 @@ public class FakeLanguageGen implements Serializable {
 
     public static class Modifier implements Serializable {
         private static final long serialVersionUID = 1734863678490422371L;
+        private transient static final StringBuilder modSB = new StringBuilder(32);
         public final Alteration[] alterations;
 
         public Modifier() {
@@ -4398,15 +4418,14 @@ public class FakeLanguageGen implements Serializable {
 
         public StringBuilder modify(IRNG rng, StringBuilder sb) {
             Matcher m;
-            Replacer.StringBuilderBuffer tb, working = Replacer.wrap(sb);
-            StringBuilder tmp;
+            Replacer.StringBuilderBuffer tb;
             boolean found;
             Alteration alt;
             for (int a = 0; a < alterations.length; a++) {
                 alt = alterations[a];
-                tmp = working.sb;
-                tb = Replacer.wrap(new StringBuilder(tmp.length()));
-                m = alt.replacer.getPattern().matcher(tmp);
+                modSB.setLength(0);
+                tb = Replacer.wrap(modSB);
+                m = alt.replacer.getPattern().matcher(sb);
 
                 found = false;
                 while (true) {
@@ -4425,10 +4444,11 @@ public class FakeLanguageGen implements Serializable {
                 }
                 if (found) {
                     m.getGroup(MatchResult.TARGET, tb);
-                    working = tb;
+                    sb.setLength(0);
+                    sb.append(modSB);
                 }
             }
-            return working.sb;
+            return sb;
         }
 
         /**
@@ -4716,11 +4736,12 @@ public class FakeLanguageGen implements Serializable {
         }
 
         public String serializeToString() {
-            if (alterations == null || alterations.length == 0) return "\6";
-            StringBuilder sb = new StringBuilder(32).append('\6');
+            if (alterations.length == 0) return "\6";
+            modSB.setLength(0);
+            modSB.append('\6');
             for (int i = 0; i < alterations.length; i++)
-                sb.append(alterations[i].serializeToString()).append('\6');
-            return sb.toString();
+                modSB.append(alterations[i].serializeToString()).append('\6');
+            return modSB.toString();
         }
 
         public static Modifier deserializeFromString(String data) {
