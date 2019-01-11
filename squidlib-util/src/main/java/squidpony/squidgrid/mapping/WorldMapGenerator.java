@@ -3,6 +3,7 @@ package squidpony.squidgrid.mapping;
 import squidpony.LZSPlus;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.*;
+import squidpony.squidmath.Noise.Noise2D;
 import squidpony.squidmath.Noise.Noise3D;
 import squidpony.squidmath.Noise.Noise4D;
 
@@ -1231,7 +1232,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -1250,7 +1251,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * times. The detail level, which is the {@code octaveMultiplier} parameter that can be passed to another
          * constructor, is always 1.0 with this constructor.
          *
-         * @param initialSeed      the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed      the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth         the width of the map(s) to generate; cannot be changed later
          * @param mapHeight        the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator   an instance of a noise generator capable of 4D noise, recommended to be {@link FastNoise#instance}
@@ -1271,7 +1272,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * times. The {@code octaveMultiplier} parameter should probably be no lower than 0.5, but can be arbitrarily
          * high if you're willing to spend much more time on generating detail only noticeable at very high zoom;
          * normally 1.0 is fine and may even be too high for maps that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 4D noise, almost always {@link FastNoise}
@@ -1541,7 +1542,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -1558,7 +1559,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -1576,7 +1577,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -1601,7 +1602,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise#instance}
@@ -1903,7 +1904,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -1919,7 +1920,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -1937,7 +1938,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
          * implementation to use is {@link FastNoise#instance}.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -1961,7 +1962,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -2185,7 +2186,7 @@ public abstract class WorldMapGenerator implements Serializable {
         public GreasedRegion earth;
         public GreasedRegion shallow;
         public GreasedRegion coast;
-        public GreasedRegion earthOriginal, shallowOriginal, coastOriginal;
+        public GreasedRegion earthOriginal;
         /**
          * Constructs a concrete WorldMapGenerator for a map that should look like Earth using an elliptical projection
          * (specifically, a Mollweide projection).
@@ -2220,7 +2221,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          */
         public MimicMap(long initialSeed, GreasedRegion toMimic) {
@@ -2236,7 +2237,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
          */
@@ -2256,7 +2257,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * {@link FastNoise#instance} or {@link FastNoise#instance} because they have no changing state between runs
          * of the program). Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}
          */
@@ -2279,7 +2280,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -2628,7 +2629,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -2644,7 +2645,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -2661,7 +2662,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -2685,7 +2686,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -2964,7 +2965,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -2980,7 +2981,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -2998,7 +2999,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
          * implementation to use is {@link FastNoise#instance}
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -3022,7 +3023,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -3300,7 +3301,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -3316,7 +3317,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -3334,7 +3335,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
          * implementation to use is {@link FastNoise#instance}.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -3358,7 +3359,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -3383,7 +3384,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -3708,7 +3709,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -3726,7 +3727,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -3746,7 +3747,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail. The suggested Noise3D
          * implementation to use is {@link FastNoise#instance}.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -3772,7 +3773,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -4053,7 +4054,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          */
@@ -4069,7 +4070,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
@@ -4086,7 +4087,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * The width and height of the map cannot be changed after the fact, but you can zoom in.
          * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
          *
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth    the width of the map(s) to generate; cannot be changed later
          * @param mapHeight   the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -4110,7 +4111,7 @@ public abstract class WorldMapGenerator implements Serializable {
          * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
          * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
          * that don't require zooming.
-         * @param initialSeed the seed for the StatefulRNG this uses; this may also be set per-call to generate
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
          * @param mapWidth the width of the map(s) to generate; cannot be changed later
          * @param mapHeight the height of the map(s) to generate; cannot be changed later
          * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
@@ -4268,4 +4269,593 @@ public abstract class WorldMapGenerator implements Serializable {
             setCenterLongitude(centerLongitude);
             landData.refill(heightCodeData, 4, 999);
         }
-    }}
+    }
+    /**
+     * A concrete implementation of {@link WorldMapGenerator} that does no projection of the map, as if the area were
+     * completely flat or small enough that curvature is impossible to see. This also does not change heat levels at the
+     * far north and south regions of the map, since it is meant for areas that are all about the same heat level.
+     */
+    public static class LocalMap extends WorldMapGenerator {
+        protected static final double terrainFreq = 1.45, terrainRidgedFreq = 3.1, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375;
+        //protected static final double terrainFreq = 1.65, terrainRidgedFreq = 1.8, heatFreq = 2.1, moistureFreq = 2.125, otherFreq = 3.375, riverRidgedFreq = 21.7;
+        protected double minHeat0 = Double.POSITIVE_INFINITY, maxHeat0 = Double.NEGATIVE_INFINITY,
+                minHeat1 = Double.POSITIVE_INFINITY, maxHeat1 = Double.NEGATIVE_INFINITY,
+                minWet0 = Double.POSITIVE_INFINITY, maxWet0 = Double.NEGATIVE_INFINITY;
+
+        public final Noise.Ridged2D terrain, otherRidged;
+        public final Noise.InverseLayered2D heat, moisture, terrainLayered;
+        public final double[][] xPositions,
+                yPositions,
+                zPositions;
+
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Always makes a 256x128 map.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * If you were using {@link LocalMap#LocalMap(long, int, int, Noise2D, double)}, then this would be the
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0}.
+         */
+        public LocalMap() {
+            this(0x1337BABE1337D00DL, 256, 128, FastNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes only the width/height of the map. The initial seed is set to the same large long
+         * every time, and it's likely that you would set the seed when you call {@link #generate(long)}. The width and
+         * height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param mapWidth  the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         */
+        public LocalMap(int mapWidth, int mapHeight) {
+            this(0x1337BABE1337D00DL, mapWidth, mapHeight,  FastNoise.instance,1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         */
+        public LocalMap(long initialSeed, int mapWidth, int mapHeight) {
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public LocalMap(long initialSeed, int mapWidth, int mapHeight, double octaveMultiplier) {
+            this(initialSeed, mapWidth, mapHeight, FastNoise.instance, octaveMultiplier);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed and the width/height of the map. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact, but you can zoom in.
+         * Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param mapWidth    the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight   the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise}
+         */
+        public LocalMap(long initialSeed, int mapWidth, int mapHeight, Noise2D noiseGenerator) {
+            this(initialSeed, mapWidth, mapHeight, noiseGenerator, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
+         * 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
+         * have significantly-exaggerated-in-size features while the equator is not distorted.
+         * Takes an initial seed, the width/height of the map, and parameters for noise
+         * generation (a {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a
+         * multiplier on how many octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers
+         * producing even more detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
+         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
+         * cannot be changed after the fact, but you can zoom in. FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param mapWidth the width of the map(s) to generate; cannot be changed later
+         * @param mapHeight the height of the map(s) to generate; cannot be changed later
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise#instance}
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public LocalMap(long initialSeed, int mapWidth, int mapHeight, Noise2D noiseGenerator, double octaveMultiplier) {
+            super(initialSeed, mapWidth, mapHeight);
+            xPositions = new double[width][height];
+            yPositions = new double[width][height];
+            zPositions = new double[width][height];
+
+            terrain = new Noise.Ridged2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 10), terrainFreq);
+            terrainLayered = new Noise.InverseLayered2D(noiseGenerator, (int) (1 + octaveMultiplier * 6), terrainRidgedFreq * 0.325);
+            heat = new Noise.InverseLayered2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 3), heatFreq, 0.75);
+            moisture = new Noise.InverseLayered2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 4), moistureFreq, 0.55);
+            otherRidged = new Noise.Ridged2D(noiseGenerator, (int) (0.5 + octaveMultiplier * 6), otherFreq);
+        }
+        @Override
+        public int wrapY(final int x, final int y)  {
+            return Math.max(0, Math.min(y, height - 1));
+        }
+        
+        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                                  double landMod, double coolMod, int stateA, int stateB)
+        {
+            boolean fresh = false;
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
+            {
+                minHeight = Double.POSITIVE_INFINITY;
+                maxHeight = Double.NEGATIVE_INFINITY;
+                minHeat0 = Double.POSITIVE_INFINITY;
+                maxHeat0 = Double.NEGATIVE_INFINITY;
+                minHeat1 = Double.POSITIVE_INFINITY;
+                maxHeat1 = Double.NEGATIVE_INFINITY;
+                minHeat = Double.POSITIVE_INFINITY;
+                maxHeat = Double.NEGATIVE_INFINITY;
+                minWet0 = Double.POSITIVE_INFINITY;
+                maxWet0 = Double.NEGATIVE_INFINITY;
+                minWet = Double.POSITIVE_INFINITY;
+                maxWet = Double.NEGATIVE_INFINITY;
+                cacheA = stateA;
+                cacheB = stateB;
+                fresh = true;
+            }
+            rng.setState(stateA, stateB);
+            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
+            int t;
+
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;
+            coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
+
+            double p,
+                    ps, pc,
+                    qs, qc,
+                    h, temp,
+                    i_w = 1.0 / width, i_h = 1.0 / (height),
+                    i_uw = usedWidth * i_w * i_w, i_uh = usedHeight * i_h * i_h, xPos, yPos = startY * i_h;
+            for (int y = 0; y < height; y++, yPos += i_uh) { 
+                xPos = startX * i_w;
+                for (int x = 0, xt = 0; x < width; x++, xPos += i_uw) {
+                    xPositions[x][y] = (xPos - .5) * 2.0;
+                    yPositions[x][y] = (yPos - .5) * 2.0;
+                    zPositions[x][y] = 0.0;
+                    heightData[x][y] = (h = terrainLayered.getNoiseWithSeed(xPos +
+                                    terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,
+                            yPos, seedA) + landModifier - 1.0);
+                    heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos
+                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),
+                            seedB));
+                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);
+                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));
+
+                    minHeightActual = Math.min(minHeightActual, h);
+                    maxHeightActual = Math.max(maxHeightActual, h);
+                    if(fresh) {
+                        minHeight = Math.min(minHeight, h);
+                        maxHeight = Math.max(maxHeight, h);
+
+                        minHeat0 = Math.min(minHeat0, p);
+                        maxHeat0 = Math.max(maxHeat0, p);
+
+                        minWet0 = Math.min(minWet0, temp);
+                        maxWet0 = Math.max(maxWet0, temp);
+                    }
+                }
+                minHeightActual = Math.min(minHeightActual, minHeight);
+                maxHeightActual = Math.max(maxHeightActual, maxHeight);
+
+            }
+            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),
+                    wetDiff = 1.0 / (maxWet0 - minWet0),
+                    hMod;
+            yPos = startY * i_h + i_uh;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                for (int x = 0; x < width; x++) {
+                    h = heightData[x][y];
+                    heightCodeData[x][y] = (t = codeHeight(h));
+                    hMod = 1.0;
+                    switch (t) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            h = 0.4;
+                            hMod = 0.2;
+                            break;
+                        case 6:
+                            h = -0.1 * (h - forestLower - 0.08);
+                            break;
+                        case 7:
+                            h *= -0.25;
+                            break;
+                        case 8:
+                            h *= -0.4;
+                            break;
+                        default:
+                            h *= 0.05;
+                    }
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6);
+                    if (fresh) {
+                        ps = Math.min(ps, h); //minHeat0
+                        pc = Math.max(pc, h); //maxHeat0
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat1 = ps;
+                maxHeat1 = pc;
+            }
+            heatDiff = coolingModifier / (maxHeat1 - minHeat1);
+            qs = Double.POSITIVE_INFINITY;
+            qc = Double.NEGATIVE_INFINITY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
+                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
+                    if (fresh) {
+                        qs = Math.min(qs, h);
+                        qc = Math.max(qc, h);
+                        ps = Math.min(ps, temp);
+                        pc = Math.max(pc, temp);
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat = qs;
+                maxHeat = qc;
+                minWet = ps;
+                maxWet = pc;
+            }
+            landData.refill(heightCodeData, 4, 999);
+        }
+    }
+
+    /**
+     * An unusual map generator that imitates an existing local map (such as a map of Australia, which it can do by
+     * default), without applying any projection or changing heat levels in the polar regions or equator.
+     */
+    public static class LocalMimicMap extends LocalMap
+    {
+        public GreasedRegion earth;
+        public GreasedRegion shallow;
+        public GreasedRegion coast;
+        public GreasedRegion earthOriginal;
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should look like Australia, without projecting the
+         * land positions or changing heat by latitude. Always makes a 256x256 map.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         * If you were using {@link LocalMimicMap#LocalMimicMap(long, Noise2D, double)}, then this would be the
+         * same as passing the parameters {@code 0x1337BABE1337D00DL, FastNoise.instance, 1.0}.
+         */
+        public LocalMimicMap() {
+            this(0x1337BABE1337D00DL
+                    , FastNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
+         * The initial seed is set to the same large long every time, and it's likely that you would set the seed when
+         * you call {@link #generate(long)}. The width and height of the map cannot be changed after the fact.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         */
+        public LocalMimicMap(GreasedRegion toMimic) {
+            this(0x1337BABE1337D00DL, toMimic,  FastNoise.instance,1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
+         * Takes an initial seed and the GreasedRegion containing land positions. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact.
+         * Uses FastNoise as its noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         */
+        public LocalMimicMap(long initialSeed, GreasedRegion toMimic) {
+            this(initialSeed, toMimic, FastNoise.instance, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
+         * Takes an initial seed, the GreasedRegion containing land positions, and a multiplier that affects the level
+         * of detail by increasing or decreasing the number of octaves of noise used. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call {@link #generate(long)}.
+         * The width and height of the map cannot be changed after the fact.
+         * Uses FastNoise as its noise generator, with the given octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, double octaveMultiplier) {
+            this(initialSeed, toMimic, FastNoise.instance, octaveMultiplier);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, without projecting the land positions or changing heat by latitude.
+         * Takes an initial seed, the GreasedRegion containing land positions, and parameters for noise generation (a
+         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}. The {@code initialSeed}
+         * parameter may or may not be used, since you can specify the seed to use when you call
+         * {@link #generate(long)}. The width and height of the map cannot be changed after the fact. Both FastNoise
+         * and FastNoise make sense to use for {@code noiseGenerator}, and the seed it's constructed with doesn't matter
+         * because this will change the seed several times at different scales of noise (it's fine to use the static
+         * {@link FastNoise#instance} or {@link FastNoise#instance} because they have no changing state between runs
+         * of the program). Uses the given noise generator, with 1.0 as the octave multiplier affecting detail.
+         *
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}
+         */
+        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, Noise2D noiseGenerator) {
+            this(initialSeed, toMimic, noiseGenerator, 1.0);
+        }
+
+        /**
+         * Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+         * given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).
+         * Takes an initial seed, the GreasedRegion containing land positions, parameters for noise generation (a
+         * {@link Noise3D} implementation, which is usually {@link FastNoise#instance}, and a multiplier on how many
+         * octaves of noise to use, with 1.0 being normal (high) detail and higher multipliers producing even more
+         * detailed noise when zoomed-in). The {@code initialSeed} parameter may or may not be used,
+         * since you can specify the seed to use when you call {@link #generate(long)}. The width and height of the map
+         * cannot be changed after the fact.  FastNoise will be the fastest 3D generator to use for
+         * {@code noiseGenerator}, and the seed it's constructed with doesn't matter because this will change the
+         * seed several times at different scales of noise (it's fine to use the static {@link FastNoise#instance}
+         * because it has no changing state between runs of the program). The {@code octaveMultiplier} parameter should
+         * probably be no lower than 0.5, but can be arbitrarily high if you're willing to spend much more time on
+         * generating detail only noticeable at very high zoom; normally 1.0 is fine and may even be too high for maps
+         * that don't require zooming.
+         * @param initialSeed the seed for the GWTRNG this uses; this may also be set per-call to generate
+         * @param toMimic the world map to imitate, as a GreasedRegion with land as "on"; the height and width will be copied
+         * @param noiseGenerator an instance of a noise generator capable of 3D noise, usually {@link FastNoise} or {@link FastNoise}
+         * @param octaveMultiplier used to adjust the level of detail, with 0.5 at the bare-minimum detail and 1.0 normal
+         */
+        public LocalMimicMap(long initialSeed, GreasedRegion toMimic, Noise2D noiseGenerator, double octaveMultiplier) {
+            super(initialSeed, toMimic.width, toMimic.height, noiseGenerator, octaveMultiplier);
+            earth = toMimic;
+            earthOriginal = earth.copy();
+            coast   = earth.copy().not().fringe(2);
+            shallow = earth.copy().fringe(2);
+        }
+
+        /**
+         * Constructs a 256x256 unprojected local map that will use land forms with a similar shape to Australia.
+         * @param initialSeed
+         * @param noiseGenerator
+         * @param octaveMultiplier
+         */
+        public LocalMimicMap(long initialSeed, Noise2D noiseGenerator, double octaveMultiplier)
+        {
+            this(initialSeed,
+                    GreasedRegion.deserializeFromString(LZSPlus.decompress(
+                            "ঢ堻\u0089⤠怹؈䊺䯼曵䟗温撞⎠ࣦಡ泡⠣乹ƹ畗♛Ղມ᳝⦱Ħ♮塳6Ð⸨劙⦤䤶氦ф䱾悽䐱⥑۴挬塉历㊳ኻǨ䀫⇆㭩䧏ᡃᮀ呣吰撤✽ڱ䪪䌥\u0E74䒉䂰䱁牪\u0D5Dᠠ\u2B69ร硘₤↖ଵ࠵ቬ䇏惒稊泈⇬㋖⼨੦䐳Ñթత汬ぺ皨ќ⟫恱椧㴈䥤❩ڔ坋悦±\u0FEEយ䭔嗈Ⓒ͆४ニ嬧柩ኅ娅ấ㞺ᑆиऩ䦙䥖审撣筬礐かྫྷüඈ䖮⡑ቀ䋋ᢐ吽卣£ឌ৪樬兾᳠䌡惇䉡䤐嘰㥈᧹᪐Ģ傢\u209Eईㅥ剭匼才吺ཤ筜啭್刂\u0D49\u1CAD䬒棡s㦉簬⌤爘\u08DAᥤௐ㙯ᱭ吝ό䑌\u3098ᒟ嵶ㇹ㲍➇∊獬⏬ዹ癳㍱㜸嚻㥂Ꮝㄇ㳹㜊\u16FBㅿ㚈䕿\u2B76琧笙䑘瘄打≓坻Ȏ䣪\u0D5B礭⿹ೇ凛㵗\u0FE8ॽᤵন幯\u0FE6䱚懌煚睆Ἑ䊩ࣰᒐ燞盇獹亪咑ḟ⽔\u0E80乞悐箆䨎罘呮ॉ懜ὗᢥ炑ϳ㵏\u1DEA擕⍖ኗ☻ಽ斳Ǔկ仡㿣ₑ䨅┄嵋孨ဤӰ\u1AAF捺Α᰿⡻؎Ⴔ⠂ᆱ\u05CC愦aҠ翪⦄ᐥ籀瀍Ƞ牦粤Ṯ¶㼪棙ᖠ哧㧢̰溣秄ከၮォ\u0600栿䣔\u0B4F禆ैə〰䊢ጽ؛㪏ㇸ拂⋘挵\u058E⬺榈ᴺ⏘墲搘咿ᢀ溠碘碰匤夌君Ⲽ挘嬹◎\u1C4Aጔ䒰ጬ䶬㊌\u1CBF卄暴䂼㖭ਃ\u1ABFሬ䲋ΩƢґⶭ敾⤀版ᬥ㍼涾㍿ূ㎘妸卑㪥ௌ榱刭㹍௴箷㒔究猌牫劂䩲氪䙷䫧⇪ᄦɦᄶ↧↱⸌煎ቸ⭒䈤灌ڧ\u208F㚮…Ӣ椒⎲\u2B92䑸䡫㵰წἭ炊㭼櫢汿㏺䮳㊶棢ᯢ屰䇍ৣ㡆٣䣾⺦䗺戲歪売孬༣檔ᐰ\u1A5F㎬㋂ ⧪①ત嘿㮬⇢㧚堣ሆ粢ᇚ䬮创ⳤ⌼俾℞䉥⒡䌼᭗ᛁ㷶⢡⥧ݳ㯡婏㰚枤筱礯慚㶬ᆤ\u0C5Aギᵦ⥾⢡ᢙࡕŞᏡㅠᕓسூ屍ᚪ曩䝙⟙傽᳛ᒌ㍱揢楊噯熣Ӷⷆ文\u1ABA䝧䐅宎摶痋ᒄ㔾堲⭙値カ縛⚵䑮㫦旸㉀䴔⥛㥂␃墑丳夐壍ウ旫∞ᯒ㡝傸娴珐ཽ䍴܌⋂წ↬♴建机ᶧ成您唶ⅎ\u312Eㆮ堥歓䗏ᔴㆣᡗㅼᑙ䵱榓姫滜煾澱窴\u1AC1噀Γ㤜֖\u1C9C㡓⼘翔ু㍥亁殟⬜柹溅礙仺ཟ爎䄋\u31EA∰庺ጓ㡷捎⇷徵徺挒榷斓⩁䜢ỳ娙\u1F4F儙ޏ垓溻拍῾羿\u1F4Eᰗ澻掷ܲ⒮㖯⪅瀝઼䐭䪨⩑嫓ཤ㉚倸殅盲ຜѭᕱ䄥稽捻㦡՞Ѐ缣䤝䐝爺䢐㤦ₒञᐷ繈冶䄬䓊䞨玩嗬ޣ硃玕㐆䮆劁\u0B64ڂέҼ\u0588【您ࠄ©\u3101ແㄹȲḨ剌㈘ኀ懈䞞⊫Ω\u0CD8唱ᡊɈ掯䧅ݢԼ公ព汽䕄礵凈⽢剚拜ྀv䊨㓱䊓˄✻䉋#ῶ㱛侥椿䛘亗⌢狦䛊䛮 ᅅ処Ꮑ䩍ᅸ塭壍ᗴᔮ僂ɭᜮᏢ㢩ూ掠㵶\u0871瓼璿履ᕁ秥ᄋ彅⩠Щ㒠焏Éʱ䤮\u2E6Cİ㈌ದ⪗寤兪\u082Fƀ⤢ঌ歈眶Ң䯲帨ᄄ⓮屿䖨⅍灉ᒑ嚤絢⢆\u0A63䮀刪祔䯹⺿ᩒᑃ嵵且㵥ӋᎠ\u08A1⠽䢠᮸ㅜ杬\u20BE䧒冧㽌䗐掳碌䃀㑤\u0B04ᯰ䝚淍ỉ\u2066熀䔨䋥␥ࡋ榳ᵡ㽒獝下㑆ࠐ積ケૄ抺䦐師紺妨乩䑘Ⴗᠬ㜨଼ᖿ碟Ղ翰怠⊢悙䈸㏭㌞炒䙳ᥲᶭ儷痑判⣀哲瓅睖⧮⪼禡潴ㇴ\u1DEA幵厮䎴ઢ䠡曖亿壑ᤳᣣ抑嘄࿋ᨚّ\u0883⾼丰ㆆ嗽፡၆Ꮒ॔\u20FA磤䰪䲕ጢ瘊ޢ\u1755䍆ぇ宷欱\u0089啔爡㋄ଁ喒巪˪ჺ悐䆜đじ䚦ಎУኃ泴ƅᡰ懎㮰⺡⊆⊢㔁\u171C瀓\u2456ᄘᄃ玗⥨溉䩁➴㮿怵\u2BC8ᭆ焃♸\u10C8Ȩ䭦⊚⦭仼倴ઙ樤ᓳ䎤ἠᩌᇡ捷\u0099甡䢴Ȩጹ獰⟸はᮺᏤ㞁и滏磀唡竱᪀⚨ʗ猔ܥ㐶䇈珰䋵【ȯूῐਣᒒ畐撆ഘᨫ兡ߑ奈瀾⎛ⵖ歘੦偺\u0080儢悝䬪ǹ炈ኡ稴䁄༡㺞「仂悴ล∽璥崬爰ಘ㿵懯㉰翌↶\u08D1嫊⏇㰢氲砘㾠瀤䏡㢄း惛䣡\u2BE2ခవ䌸͒⼏倨忈፨氭\u2FEE区\u0BE1䵚愔\u242B捛吊₌仆湁嗰⇄ῑ㐩折ດ倪<\u1ACE炳⌳᜴刜ᔖ娸䎶ڤ㉥⇰ଭ㸲᎐井ߘ儃桓ϐ⇴䑙๊䙍烏Ɖ琳\u1DEAসᨡေ斢⠯䐰樧ັ㋅ҍᙨ獎ʰ壅䡃旔⡋糈戩㘬\u0EE7䁍孚〥⥹畱烚傊榇傟◀ኁ䄍䗃⦦ɕ啴磻ᮋ秈䈨⃦ĩ䞪Ỉぇ⫽⦥甧右⛅㌜ガ䊜淚ཁ㳧䋘⾼䒀♺朠樒̬͛愱㔴想䊽䐢嬀惉ધ䎃㚼ᓾ㣾昍㮬寝玥涿Ả㽜Ѳᩬឰњ壍च⺱涥㍸丸秆⓼姁⪾Ԟ丿牢ỡ瞻⡕\u0CD1咊ߐ⠣吣惢ॠ䇺ള癇喌⣉碝⥪䵥\u2452㐉玀Żツٛ剌㾇⁼秌皔䴕໙昆㹅恌\u1ACE縆冸㦡樲峫柆ⲅ緊\u0E79ᑳ粤禐㱵愋์禐ɼ䮎穂啈墓竘䀣㫷䯹⋪䍥級〚᷈瞚ؕํ㍖⢽㚐䵖璍䓜\u2E3C氓Ḿ塱ኋ宱㮴㚑㫃\u2BC0⌙瞅秿烋巳敟Τ縖⬬侔䶙☥Ⅴẉ杷ю漭䠛乖㍒婔᷃ไ⻄ᬶ䰴⇚玥∫䐋崫ガ䞲澍⍂᎙䘛⨭疹㗖Ի⦐⒚倁缹秬瀎ा潮恜Ḗݗ獭捾ēૡ䫳喛ോѺ⳿ᖘଦ纠\u08D3ɱ燭濄ㆱ㇗仔\u07B9咫簾笨౾с⧀獜䩦宵த⛉挣㴟\u1F46翖▇梪द㳔礝⾀⬣犹棠ᢞ愵ㅁᅌ揬牧㐷㧈֞攤绊磿潔吨咹ᢆ䋰⫇ⱛᘐẊ伥⿒䆇殡✗Ȫ䡫䣨䆣ᠧ䄩ؖⱧ傗攔Ⲩ展㱉璟\u2434乁⌣\u4DB6¦濱巐䦤ᨢ䎠ఠࡉê䱄矝污ր➡\u08C2䈨᭤狆柝䰩ׁ݄⠺甝柁㈫≑⇉⼺紫恷၅ь⬪㕅ᒝঁ癵䛒昌ᓈ婱䪠想䎖并㲷ᔎ➪ࣷ₂ᕜṼ珇ⷜ䴡䗖ᛧ弻ℒζ哖ᆹⲺन笕ૃ⡷⫝̸⻖≍F\u0CFC݃硰熓\u0AD8㮰Ἰ䀲ǜ\u0EE4温点\u0BD8௦咺灧␊㘨渺㴗⩐暮㫋⌔ฎ儕ၨ↣⸜捄ཕ㦿䴬ڢ䛝䄔ช溭㫑洠⛔ः࿙ᥙ䕬ᄦ\u2455帚\u1AB2如嫓ᄮ惰̗ጳ焉䧌㦀倢堪ᅾ\u0530㣄䐰ڌ缡瀨⸗榨ⷥṓၸñ㉆䝛壒懨⫱ᒑ㡍漪㉰Ⱡ慚॔狡䴵〾\u0B3A䋑᷒壆䅸姆\u1CA0唞Ñ䩔䌷疧拤犒†䵛⋊氣液䈘˚ѕ㠡ᅐ䠰紦睐䁗ɠ猠ろቨ૩䜣㉫\u13F9ᗩ†"
+                    )),
+                    noiseGenerator, octaveMultiplier);
+        }
+        
+        protected void regenerate(int startX, int startY, int usedWidth, int usedHeight,
+                                  double landMod, double coolMod, int stateA, int stateB)
+        {
+            boolean fresh = false;
+            if(cacheA != stateA || cacheB != stateB || landMod != landModifier || coolMod != coolingModifier)
+            {
+                minHeight = Double.POSITIVE_INFINITY;
+                maxHeight = Double.NEGATIVE_INFINITY;
+                minHeat0 = Double.POSITIVE_INFINITY;
+                maxHeat0 = Double.NEGATIVE_INFINITY;
+                minHeat1 = Double.POSITIVE_INFINITY;
+                maxHeat1 = Double.NEGATIVE_INFINITY;
+                minHeat = Double.POSITIVE_INFINITY;
+                maxHeat = Double.NEGATIVE_INFINITY;
+                minWet0 = Double.POSITIVE_INFINITY;
+                maxWet0 = Double.NEGATIVE_INFINITY;
+                minWet = Double.POSITIVE_INFINITY;
+                maxWet = Double.NEGATIVE_INFINITY;
+                cacheA = stateA;
+                cacheB = stateB;
+                fresh = true;
+            }
+            rng.setState(stateA, stateB);
+            long seedA = rng.nextLong(), seedB = rng.nextLong(), seedC = rng.nextLong();
+            int t;
+
+            landModifier = (landMod <= 0) ? rng.nextDouble(0.29) + 0.91 : landMod;
+            coolingModifier = (coolMod <= 0) ? rng.nextDouble(0.45) * (rng.nextDouble()-0.5) + 1.1 : coolMod;
+
+            earth.remake(earthOriginal);
+
+            if(zoom > 0)
+            {
+                int stx = Math.min(Math.max((zoomStartX - (width  >> 1)) / ((2 << zoom) - 2), 0), width ),
+                        sty = Math.min(Math.max((zoomStartY - (height >> 1)) / ((2 << zoom) - 2), 0), height);
+                for (int z = 0; z < zoom; z++) {
+                    earth.zoom(stx, sty).expand8way().fray(0.5).expand();
+                }
+                coast.remake(earth).not().fringe(2 << zoom).expand().fray(0.5);
+                shallow.remake(earth).fringe(2 << zoom).expand().fray(0.5);
+            }
+            else
+            {
+                coast.remake(earth).not().fringe(2);
+                shallow.remake(earth).fringe(2);
+            }
+            double p,
+                    ps, pc,
+                    qs, qc,
+                    h, temp,
+                    i_w = 1.0 / width, i_h = 1.0 / (height),
+                    i_uw = usedWidth * i_w * i_w, i_uh = usedHeight * i_h * i_h, xPos, yPos = startY * i_h;
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                xPos = startX * i_w;
+                for (int x = 0, xt = 0; x < width; x++, xPos += i_uw) {
+                    xPositions[x][y] = (xPos - .5) * 2.0;
+                    yPositions[x][y] = (yPos - .5) * 2.0;
+                    zPositions[x][y] = 0.0;
+
+                    if(earth.contains(x, y))
+                    {
+                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(xPos +
+                                        terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,
+                                yPos, seedA)) * 0.85;
+                        if(coast.contains(x, y))
+                            h += 0.05;
+                        else
+                            h += 0.15;
+                    }
+                    else
+                    {
+                        h = NumberTools.swayTight(terrainLayered.getNoiseWithSeed(xPos +
+                                        terrain.getNoiseWithSeed(xPos, yPos, seedB - seedA) * 0.5,
+                                yPos, seedA)) * -0.9;
+                        if(shallow.contains(x, y))
+                            h = (h - 0.08) * 0.375;
+                        else
+                            h = (h - 0.125) * 0.75;
+                    }
+                    h += landModifier - 1.0;
+                    heightData[x][y] = h;
+                    heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos
+                                    + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),
+                            seedB));
+                    temp = otherRidged.getNoiseWithSeed(xPos, yPos, seedC + seedA);
+                    moistureData[x][y] = (temp = moisture.getNoiseWithSeed(xPos - temp, yPos + temp, seedC));
+
+                    minHeightActual = Math.min(minHeightActual, h);
+                    maxHeightActual = Math.max(maxHeightActual, h);
+                    if(fresh) {
+                        minHeight = Math.min(minHeight, h);
+                        maxHeight = Math.max(maxHeight, h);
+
+                        minHeat0 = Math.min(minHeat0, p);
+                        maxHeat0 = Math.max(maxHeat0, p);
+
+                        minWet0 = Math.min(minWet0, temp);
+                        maxWet0 = Math.max(maxWet0, temp);
+                    }
+                }
+                minHeightActual = Math.min(minHeightActual, minHeight);
+                maxHeightActual = Math.max(maxHeightActual, maxHeight);
+
+            }
+            double  heatDiff = 0.8 / (maxHeat0 - minHeat0),
+                    wetDiff = 1.0 / (maxWet0 - minWet0),
+                    hMod;
+            yPos = startY * i_h + i_uh;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+            for (int y = 0; y < height; y++, yPos += i_uh) {
+                for (int x = 0; x < width; x++) {
+                    h = heightData[x][y];
+                    heightCodeData[x][y] = (t = codeHeight(h));
+                    hMod = 1.0;
+                    switch (t) {
+                        case 0:
+                        case 1:
+                        case 2:
+                        case 3:
+                            h = 0.4;
+                            hMod = 0.2;
+                            break;
+                        case 6:
+                            h = -0.1 * (h - forestLower - 0.08);
+                            break;
+                        case 7:
+                            h *= -0.25;
+                            break;
+                        case 8:
+                            h *= -0.4;
+                            break;
+                        default:
+                            h *= 0.05;
+                    }
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat0) * heatDiff * hMod) + h + 0.6);
+                    if (fresh) {
+                        ps = Math.min(ps, h); //minHeat0
+                        pc = Math.max(pc, h); //maxHeat0
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat1 = ps;
+                maxHeat1 = pc;
+            }
+            heatDiff = coolingModifier / (maxHeat1 - minHeat1);
+            qs = Double.POSITIVE_INFINITY;
+            qc = Double.NEGATIVE_INFINITY;
+            ps = Double.POSITIVE_INFINITY;
+            pc = Double.NEGATIVE_INFINITY;
+
+
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++) {
+                    heatData[x][y] = (h = ((heatData[x][y] - minHeat1) * heatDiff));
+                    moistureData[x][y] = (temp = (moistureData[x][y] - minWet0) * wetDiff);
+                    if (fresh) {
+                        qs = Math.min(qs, h);
+                        qc = Math.max(qc, h);
+                        ps = Math.min(ps, temp);
+                        pc = Math.max(pc, temp);
+                    }
+                }
+            }
+            if(fresh)
+            {
+                minHeat = qs;
+                maxHeat = qc;
+                minWet = ps;
+                maxWet = pc;
+            }
+            landData.refill(heightCodeData, 4, 999);
+        }
+    }
+}

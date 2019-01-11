@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
@@ -90,7 +89,8 @@ public static final char[]  terrainChars = {
 
 };
     //private static final int bigWidth = 314 * 3, bigHeight = 300;
-    private static final int bigWidth = 1024, bigHeight = 512;
+    private static final int bigWidth = 256, bigHeight = 256;
+//    private static final int bigWidth = 1024, bigHeight = 512;
     //private static final int bigWidth = 512, bigHeight = 256;
 //    private static final int bigWidth = 2048, bigHeight = 1024;
     //private static final int bigWidth = 400, bigHeight = 400;
@@ -104,7 +104,7 @@ public static final char[]  terrainChars = {
     private StatefulRNG rng;
     private long seed;
     private Vector3 position, previousPosition, nextPosition;
-    private WorldMapGenerator.MimicMap world;
+    private WorldMapGenerator.LocalMimicMap world;
     private PoliticalMapper pm;
     private OrderedMap<Character, FakeLanguageGen> atlas;
     private OrderedMap<Coord, String> cities;
@@ -113,7 +113,7 @@ public static final char[]  terrainChars = {
     private long counter = 0;
     //private float nation = 0f;
     private long ttg = 0; // time to generate
-    private float moveAmount = 0f, moveLength = 1000f;
+    private float moveAmount = 0f;
     private WorldMapGenerator.DetailedBiomeMapper dbm;
     private char[][] political;
     private static float black = SColor.FLOAT_BLACK,
@@ -215,24 +215,25 @@ public static final char[]  terrainChars = {
         stage = new Stage(view, batch);
         seed = 1234567890L;
         rng = new StatefulRNG(seed);
-        //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 1.25);
-        //world = new WorldMapGenerator.EllipticalMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.8);
-        
-        Pixmap pix = new Pixmap(Gdx.files.internal("special/fantasy_map.png"));
-        GreasedRegion basis = new GreasedRegion(bigWidth, bigHeight);
-        for (int x = 0; x < bigWidth; x++) {
-            for (int y = 0; y < bigHeight; y++) {
-                if(pix.getPixel(x << 1, y << 1) < 0)
-                    basis.insert(x, y);
-            }
-        }
-        basis = WorldMapGenerator.MimicMap.reprojectToElliptical(basis);
-        //// at this point you could get the GreasedRegion as a String, and save the compressed output to a file:
-        //// Gdx.files.local("map.txt").writeString(LZSPlus.compress(basis.serializeToString()), false, "UTF16");
-        //// you could reload basis without needing the original map image with
-        //// basis = GreasedRegion.deserializeFromString(LZSPlus.decompress(Gdx.files.local("map.txt").readString("UTF16")));
-        world = new WorldMapGenerator.MimicMap(seed, basis, FastNoise.instance, 0.8);
-        pix.dispose();
+//// you can use whatever map you have instead of fantasy_map.png, where white means land and black means water
+//        Pixmap pix = new Pixmap(Gdx.files.internal("special/fantasy_map.png"));
+//        GreasedRegion basis = new GreasedRegion(bigWidth, bigHeight);
+//        for (int x = 0; x < bigWidth; x++) {
+//            for (int y = 0; y < bigHeight; y++) {
+//                if(pix.getPixel(x << 2, y << 2) < 0)
+//                    basis.insert(x, y);
+//            }
+//        }
+//        basis = WorldMapGenerator.MimicMap.reprojectToElliptical(basis);
+//// at this point you could get the GreasedRegion as a String, and save the compressed output to a file:
+//// Gdx.files.local("map.txt").writeString(LZSPlus.compress(basis.serializeToString()), false, "UTF16");
+//// you could reload basis without needing the original map image with
+//// basis = GreasedRegion.deserializeFromString(LZSPlus.decompress(Gdx.files.local("map.txt").readString("UTF16")));
+//// it's also possible to store the compressed map as a String in code, but you need to be careful about escaped chars.
+//        world = new WorldMapGenerator.LocalMimicMap(seed, basis, FastNoise.instance, 0.8);
+//        pix.dispose();
+
+        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.8); // uses a map of Australia for land
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         pm = new PoliticalMapper(FakeLanguageGen.SIMPLISH.word(rng, true));

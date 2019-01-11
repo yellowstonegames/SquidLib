@@ -17,10 +17,10 @@ public class CosmicNumbering implements Serializable {
     private static final long serialVersionUID = 0L;
     protected double[] connections;
     protected int len;
-    private int upper;
-    protected long[] seeds;
-    private transient long[] scratch3;
-    private transient double[] scratch;
+//    private int upper;
+    protected long seed;
+//    private transient long[] scratch3;
+//    private transient double[] scratch;
 
     protected double effect;
     public CosmicNumbering() {
@@ -36,15 +36,11 @@ public class CosmicNumbering implements Serializable {
         else
             this.connections = connections;
         len = this.connections.length;
-        upper = 1 << len;
-        scratch3 = new long[len * 3];
-        scratch = new double[upper];
-        seeds = new long[len];
-        seeds[0] = seed | 1L;
-        for (int i = 1; i < len; i++) {
-            seeds[i] = DiverRNG.determine(seed + i) | 1L;
-        }
-        effect = 0x1.81p-62 * Math.pow(1.1875, len);
+//        upper = 1 << len;
+//        scratch3 = new long[len * 3];
+//        scratch = new double[upper];
+        this.seed = seed;
+//        effect = 0x1.81p-62 * Math.pow(1.1875, len);
     }
 
     public double[] getConnections() {
@@ -58,15 +54,10 @@ public class CosmicNumbering implements Serializable {
             this.connections = connections;
         if (len != this.connections.length) {
             len = this.connections.length;
-            upper = 1 << len;
-            scratch3 = new long[len * 3];
-            scratch = new double[upper];
-            long seed = seeds[0];
-            seeds = new long[len];
-            for (int i = 1; i < len; i++) {
-                seeds[i] = DiverRNG.determine(seed + i) | 1L;
-            }
-            effect = 0x1.81p-62 * Math.pow(1.1875, len);
+//            upper = 1 << len;
+//            scratch3 = new long[len * 3];
+//            scratch = new double[upper];
+//            effect = 0x1.81p-62 * Math.pow(1.1875, len);
         }
     }
 //    /*
@@ -117,9 +108,9 @@ public class CosmicNumbering implements Serializable {
      */
     public final double getDoubleBase() {
         //return (getDouble() - 0.5) * 2.0;
-        double sum = NumberTools.swayRandomized(seeds[0], connections[len - 1] + connections[0]);
+        double sum = NumberTools.swayRandomized(seed, connections[len - 1] + connections[0]);
         for (int i = 1; i < len; i++) {
-            sum += NumberTools.swayRandomized(seeds[i], sum + connections[i - 1] + connections[i]);
+            sum += NumberTools.swayRandomized(seed, sum + connections[i - 1] + connections[i]);
         }
         return sum / len;
     }
@@ -169,9 +160,9 @@ public class CosmicNumbering implements Serializable {
 //        return scratch[0] - longFloor(scratch[0]);
 //// has a different look than the above line
 ////        return NumberTools.sway(scratch[0]);
-        double sum = NumberTools.swayRandomized(seeds[0], connections[len - 1] + connections[0]);
+        double sum = NumberTools.swayRandomized(seed, connections[len - 1] + connections[0]);
         for (int i = 1; i < len; i++) {
-            sum += NumberTools.swayRandomized(seeds[i], sum + connections[i - 1] + connections[i]);
+            sum += NumberTools.swayRandomized(seed, sum + connections[i - 1] + connections[i]);
         }
         return sum / (len << 1) + 0.5;
 

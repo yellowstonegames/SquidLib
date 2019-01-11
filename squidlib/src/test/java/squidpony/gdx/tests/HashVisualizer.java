@@ -3775,12 +3775,13 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                     case 80:
                         Gdx.graphics.setTitle("Cosmic 3D Color Noise at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
-                        s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, ctr * 0x5p-8f - 1.11f) * 0.025f;
-                        c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, ctr * 0x5p-8f - 1.11f) * 0.025f;
-                        s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, ctr * 0x5p-8f + 1.41f) * 0.025f;
-                        c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, ctr * 0x5p-8f + 1.41f) * 0.025f;
-                        s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, ctr * 0x5p-8f + 2.61f) * 0.025f;
-                        c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, ctr * 0x5p-8f + 2.61f) * 0.025f;
+                        bright = ctr * 0x5p-8f;
+                        s0 = NumberTools.swayRandomized(0x9E3779B97F4A7C15L, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                        c0 = NumberTools.swayRandomized(0xC13FA9A902A6328FL, bright - 1.11f) * 0.025f; //ctr * 0x5p-8f
+                        s1 = NumberTools.swayRandomized(0xD1B54A32D192ED03L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                        c1 = NumberTools.swayRandomized(0xDB4F0B9175AE2165L, bright + 1.41f) * 0.025f; //ctr * 0x5p-8f
+                        s2 = NumberTools.swayRandomized(0xE19B01AA9D42C633L, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
+                        c2 = NumberTools.swayRandomized(0xE60E2B722B53AEEBL, bright + 2.61f) * 0.025f; //ctr * 0x5p-8f
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
                                 connections[0] = ctr * 0.007 + x * c0 - y * s0;
