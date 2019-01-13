@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Frustum;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -2830,11 +2829,15 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
-     * Draws the actor. The batch is configured to draw in the parent's coordinate system.
-     * {@link Batch#draw(TextureRegion, float, float, float, float, float, float, float, float, float)
-     * This draw method} is convenient to draw a rotated and scaled TextureRegion. {@link Batch#begin()} has already been called on
-     * the batch. If {@link Batch#end()} is called to draw without the batch then {@link Batch#begin()} must be called before the
-     * method returns.
+     * Draws the SparseLayers and all glyphs it tracks. {@link Batch#begin()} must have already been called on the
+     * batch, and {@link Batch#end()} should be called after this returns and before the rendering code finishes for the
+     * frame.
+     * <br>
+     * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not
+     * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the
+     * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
+     * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
+     * draw full-color art, and end the Batch between drawing this object and the other art.
      *
      * @param batch a Batch such as a SpriteBatch that must be between a begin() and end() call; usually done by Stage
      * @param parentAlpha currently ignored
