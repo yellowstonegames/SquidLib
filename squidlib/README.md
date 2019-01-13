@@ -1,7 +1,8 @@
-SquidLib is a Java library that provides a full featured toolbox for working with turn based games in Swing and libGDX.
+SquidLib is a Java library that provides a diverse toolbox for working with procedural generation in games using libGDX.
 --  
 
-SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
+SquidLib is used for Wyrm, [Epigon](https://github.com/SquidPony/Epigon), Attack the Geth, Assault Fish,
+[Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
 
 You can see [a small example](http://tommyettinger.github.io/SquidLib-Demos/tsar/index.html) online; it is part of the
 [SquidLib-Demos](https://github.com/tommyettinger/SquidLib-Demos) collection. It uses `squidlib-util` to generate
@@ -14,9 +15,12 @@ and smoothly slide the player and enemies around when they move. A much more pol
 
 You don't need to use a text-based display to use many features of this library; there's a demo of this (not yet a game)
 in [ColorGuard](https://github.com/tommyettinger/ColorGuard), which uses `squidlib-util` to handle random numbers, world
-map generation, and text generation in fictional languages.
+map generation, and text generation in fictional languages. SquidLib-Demos has another that only uses `squidlib-util`
+and libGDX; [it can be seen here](https://tommyettinger.github.io/SquidLib-Demos/graphical/index.html).
 
 [![Join the slow-paced chat at https://gitter.im/SquidPony/SquidLib](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/SquidPony/SquidLib)
+
+There's a [SquidLib IRC channel on Freenode](http://webchat.freenode.net/?channels=%23squidlib&uio=MT1mYWxzZSY5PXRydWUmMTE9MjU242); it is usually more active than Gitter.
 
 Documentation:
 ---
@@ -37,9 +41,9 @@ The completely-optional squidlib-extra module (primarily used for serialization;
 and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9-sources.jar).
 
 You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.0-b9, but no older) here:
-  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/index.html)
-  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/index.html)
-  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/index.html)
+  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/apidocs/index.html)
+  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/apidocs/index.html)
+  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/apidocs/index.html)
 The docs here are updated whenever the project is rebuilt fully, which only coincides with releases occasionally.
 
 Current Features:
