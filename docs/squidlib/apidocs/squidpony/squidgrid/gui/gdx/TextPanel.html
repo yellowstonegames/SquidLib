@@ -108,7 +108,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.71">TextPanel</a>&lt;T extends com.badlogic.gdx.graphics.Color&gt;
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.77">TextPanel</a>&lt;T extends com.badlogic.gdx.graphics.Color&gt;
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">A panel to display some text using libgdx directly (i.e. without using
  <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx"><code>SquidPanel</code></a>) as in these examples (no scrolling first, then with a
@@ -147,6 +147,13 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  In addition to what <code>ScrollPane</code> does (knobs, handling of the wheel);
  this class plugs scrolling with arrow keys (up, down, page up, page down) and
  vim shortcuts (j/k).
+ </p>
+ <p>
+ Drawing the result of <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#getScrollPane--"><code>getScrollPane()</code></a> will set the shader of <code>batch</code> if using a distance field or MSDF
+ font and the shader is currently not configured for such a font; it does not reset the shader to the default so that
+ multiple Actors can all use the same shader and so specific extra glyphs or other items can be rendered after calling
+ draw(). If you need to draw both a distance field font and full-color art, you should set the shader on the Batch to
+ null when you want to draw full-color art, and end the Batch between drawing this object and the other art.
  </p></div>
 <dl>
 <dt><span class="simpleTagLabel">Author:</span></dt>
@@ -382,7 +389,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>backgroundColor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.77">backgroundColor</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.83">backgroundColor</a></pre>
 <div class="block">The color to use to paint the background (outside buttons) using
  <code>ShapeRenderer</code>. Or <code>null</code> to disable background coloring.</div>
 </li>
@@ -393,7 +400,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>borderColor</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.83">borderColor</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.89">borderColor</a></pre>
 <div class="block">The color of the border around this panel, if any. If set, it'll be
  rendered using <code>ShapeRenderer</code> and <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#borderStyle"><code>borderStyle</code></a>.</div>
 </li>
@@ -404,7 +411,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>borderSize</h4>
-<pre>public&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.86">borderSize</a></pre>
+<pre>public&nbsp;float <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.92">borderSize</a></pre>
 <div class="block">The size of the border, if any</div>
 </li>
 </ul>
@@ -414,7 +421,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>borderStyle</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.CornerStyle.html" title="enum in squidpony.squidgrid.gui.gdx">UIUtil.CornerStyle</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.88">borderStyle</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/UIUtil.CornerStyle.html" title="enum in squidpony.squidgrid.gui.gdx">UIUtil.CornerStyle</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.94">borderStyle</a></pre>
 </li>
 </ul>
 <a name="vimShortcuts">
@@ -423,7 +430,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>vimShortcuts</h4>
-<pre>public&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.94">vimShortcuts</a></pre>
+<pre>public&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.100">vimShortcuts</a></pre>
 <div class="block">Whether to use 'j' to scroll down, and 'k' to scroll up. Serious
  roguelikes leave that to <code>true</code>, assuming they don't use j and k for movement...</div>
 </li>
@@ -434,7 +441,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>markup</h4>
-<pre>protected&nbsp;squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.96">markup</a></pre>
+<pre>protected&nbsp;squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.102">markup</a></pre>
 </li>
 </ul>
 <a name="font">
@@ -443,7 +450,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>font</h4>
-<pre>protected&nbsp;com.badlogic.gdx.graphics.g2d.BitmapFont <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.98">font</a></pre>
+<pre>protected&nbsp;com.badlogic.gdx.graphics.g2d.BitmapFont <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.104">font</a></pre>
 </li>
 </ul>
 <a name="distanceField">
@@ -452,7 +459,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>distanceField</h4>
-<pre>protected&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.99">distanceField</a></pre>
+<pre>protected&nbsp;boolean <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.105">distanceField</a></pre>
 </li>
 </ul>
 <a name="tcf">
@@ -461,7 +468,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>tcf</h4>
-<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.100">tcf</a></pre>
+<pre>protected&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.106">tcf</a></pre>
 </li>
 </ul>
 <a name="text">
@@ -470,7 +477,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>text</h4>
-<pre>protected&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color&gt;&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.102">text</a></pre>
+<pre>protected&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a> extends com.badlogic.gdx.graphics.Color&gt;&gt; <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.108">text</a></pre>
 <div class="block">The text to display</div>
 </li>
 </ul>
@@ -480,7 +487,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>builder</h4>
-<pre>protected&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.104">builder</a></pre>
+<pre>protected&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/StringBuilder.html?is-external=true" title="class or interface in java.lang">StringBuilder</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.110">builder</a></pre>
 </li>
 </ul>
 <a name="scrollPane">
@@ -489,7 +496,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>scrollPane</h4>
-<pre>protected final&nbsp;com.badlogic.gdx.scenes.scene2d.ui.ScrollPane <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.106">scrollPane</a></pre>
+<pre>protected final&nbsp;com.badlogic.gdx.scenes.scene2d.ui.ScrollPane <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.112">scrollPane</a></pre>
 </li>
 </ul>
 <a name="textActor">
@@ -498,7 +505,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>textActor</h4>
-<pre>protected final&nbsp;com.badlogic.gdx.scenes.scene2d.Actor <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.112">textActor</a></pre>
+<pre>protected final&nbsp;com.badlogic.gdx.scenes.scene2d.Actor <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.118">textActor</a></pre>
 <div class="block">The actor whose size is adjusted to the text. When scrolling is required,
  it is bigger than <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#scrollPane"><code>scrollPane</code></a>.</div>
 </li>
@@ -517,7 +524,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>TextPanel</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.128">TextPanel</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;markup,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.134">TextPanel</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;markup,
                  com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;font)</pre>
 <div class="block">The text to display MUST be set later on with
  <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#init-float-float-java.util.Collection-"><code>init(float, float, Collection)</code></a>.</div>
@@ -536,7 +543,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TextPanel</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.195">TextPanel</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;markup,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.201">TextPanel</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;markup,
                  <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;distanceFieldFont)</pre>
 <div class="block">The text to display MUST be set later on with
  <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#init-float-float-java.util.Collection-"><code>init(float, float, Collection)</code></a>.</div>
@@ -562,7 +569,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setMarkup</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.262">setMarkup</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;m)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.268">setMarkup</a>(squidpony.panel.IMarkup&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;m)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - The markup to use.</dd>
@@ -575,7 +582,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>setFont</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.276">setFont</a>(com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;font)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.282">setFont</a>(com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;font)</pre>
 <div class="block">Sets the font to use. This method should be called once before
  <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#init-float-float-java.util.Collection-"><code>init(float, float, Collection)</code></a> if the font wasn't given at
  creation-time.</div>
@@ -591,7 +598,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.295">init</a>(float&nbsp;width,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.301">init</a>(float&nbsp;width,
                  float&nbsp;maxHeight,
                  <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;? extends squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&gt;&nbsp;text)</pre>
 <div class="block">This method sets the sizes of <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#scrollPane"><code>scrollPane</code></a> and <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#textActor"><code>textActor</code></a>.
@@ -613,7 +620,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.319">init</a>(float&nbsp;width,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.325">init</a>(float&nbsp;width,
                  float&nbsp;maxHeight,
                  <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&nbsp;color,
                  <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;text)</pre>
@@ -625,7 +632,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>drawBorder</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.336">drawBorder</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.342">drawBorder</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch)</pre>
 <div class="block">Draws the border. You have to call this method manually, because the
  border is outside the actor and hence should be drawn at the very end,
  otherwise it can get overwritten by UI element.</div>
@@ -641,7 +648,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getTypesetText</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.360">getTypesetText</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.366">getTypesetText</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The text to draw, after applying <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#present-squidpony.panel.IColoredString-"><code>present(IColoredString)</code></a>
@@ -655,7 +662,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getScrollPane</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.ScrollPane&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.381">getScrollPane</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.ui.ScrollPane&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.387">getScrollPane</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The <code>ScrollPane</code> containing <a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html#getTextActor--"><code>getTextActor()</code></a>.</dd>
@@ -668,7 +675,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getTextActor</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.389">getTextActor</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Actor&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.395">getTextActor</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The <code>Actor</code> where the text is drawn. It may be bigger than
@@ -682,7 +689,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>getFont</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.396">getFont</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.g2d.BitmapFont&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.402">getFont</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The font used, if set.</dd>
@@ -695,7 +702,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>dispose</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.400">dispose</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.406">dispose</a>()</pre>
 </li>
 </ul>
 <a name="yScrollingCallback-boolean-">
@@ -704,7 +711,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>yScrollingCallback</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.411">yScrollingCallback</a>(boolean&nbsp;required)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.417">yScrollingCallback</a>(boolean&nbsp;required)</pre>
 <div class="block">Callback done to do stuff according to whether y-scrolling is required</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -718,7 +725,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>present</h4>
-<pre>protected&nbsp;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.427">present</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;ics)</pre>
+<pre>protected&nbsp;squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.433">present</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;ics)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ics</code> - Text set when building <code>this</code></dd>
@@ -735,7 +742,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>applyMarkup</h4>
-<pre>protected&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.435">applyMarkup</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;ics)</pre>
+<pre>protected&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.441">applyMarkup</a>(squidpony.panel.IColoredString&lt;<a href="../../../../squidpony/squidgrid/gui/gdx/TextPanel.html" title="type parameter in TextPanel">T</a>&gt;&nbsp;ics)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ics</code> - </dd>
@@ -750,7 +757,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>buildRenderer</h4>
-<pre>protected&nbsp;com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.442">buildRenderer</a>()</pre>
+<pre>protected&nbsp;com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.448">buildRenderer</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A fresh renderer.</dd>
@@ -763,7 +770,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getRenderer</h4>
-<pre>protected&nbsp;com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.449">getRenderer</a>()</pre>
+<pre>protected&nbsp;com.badlogic.gdx.graphics.glutils.ShapeRenderer&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/TextPanel.html#line.455">getRenderer</a>()</pre>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>The renderer to use.</dd>

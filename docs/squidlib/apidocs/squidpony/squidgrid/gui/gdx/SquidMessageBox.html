@@ -259,7 +259,10 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title=
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SquidMessageBox.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a></span>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
-    float&nbsp;parentAlpha)</code>&nbsp;</td>
+    float&nbsp;parentAlpha)</code>
+<div class="block">Draws this SquidPanel and any <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a> it has, and calls <code>Actor.act(float)</code> for each
+ AnimatedEntity this contains in <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#animatedEntities"><code>SquidPanel.animatedEntities</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a>.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -529,9 +532,21 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title=
 <h4>draw</h4>
 <pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SquidMessageBox.html#line.207">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  float&nbsp;parentAlpha)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">SquidPanel</a></code></span></div>
+<div class="block">Draws this SquidPanel and any <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a> it has, and calls <code>Actor.act(float)</code> for each
+ AnimatedEntity this contains in <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#animatedEntities"><code>SquidPanel.animatedEntities</code></a> or <a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#autoActors"><code>SquidPanel.autoActors</code></a>.
+ <br>
+ This will set the shader of <code>batch</code> if using a distance field or MSDF font and the shader is currently not
+ configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the
+ same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
+ both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
+ draw full-color art, and end the Batch between drawing this object and the other art.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a></code>&nbsp;in class&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/SquidPanel.html" title="class in squidpony.squidgrid.gui.gdx">SquidPanel</a></code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>batch</code> - a Batch such as a SpriteBatch that must be between a begin() and end() call; usually done by Stage</dd>
+<dd><code>parentAlpha</code> - only used when drawing children of this SquidPanel</dd>
 </dl>
 </li>
 </ul>

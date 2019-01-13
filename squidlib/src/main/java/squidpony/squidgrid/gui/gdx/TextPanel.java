@@ -62,7 +62,13 @@ import java.util.List;
  * this class plugs scrolling with arrow keys (up, down, page up, page down) and
  * vim shortcuts (j/k).
  * </p>
- * 
+ * <p>
+ * Drawing the result of {@link #getScrollPane()} will set the shader of {@code batch} if using a distance field or MSDF
+ * font and the shader is currently not configured for such a font; it does not reset the shader to the default so that
+ * multiple Actors can all use the same shader and so specific extra glyphs or other items can be rendered after calling
+ * draw(). If you need to draw both a distance field font and full-color art, you should set the shader on the Batch to
+ * null when you want to draw full-color art, and end the Batch between drawing this object and the other art.
+ * </p>
  * @author smelC
  * 
  * @see ScrollPane A libGDX widget for general scrolling through only the visible part of a large widget

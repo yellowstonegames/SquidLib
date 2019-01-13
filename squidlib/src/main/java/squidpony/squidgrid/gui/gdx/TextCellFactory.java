@@ -1951,8 +1951,10 @@ public class TextCellFactory implements Disposable {
      * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you
      * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.
      * <br>
-     * SquidLayers and SquidPanel already call this method in their draw overrides, so you don't need to call this
-     * manually if you use SquidLayers or SquidPanel.
+     * SquidLayers, SparseLayers, SubcellLayers, SquidPanel, TextPanel, LinesPanel, and ImageSquidPanel already call
+     * this method in their draw overrides, so you don't need to call this manually if you use any of those. None of
+     * those classes change the shader after they set it for their uses, so you may need to set the shader on your Batch
+     * to null to revert to the default shader if you need to draw full-color art.
      * <br>
      * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.
      *
@@ -1963,11 +1965,13 @@ public class TextCellFactory implements Disposable {
         {
             if(msdf)
             {
-                batch.setShader(shader);
+                if(!shader.equals(batch.getShader())) 
+                    batch.setShader(shader);
                 shader.setUniformf("u_smoothing", 2.1198158f * smoothingMultiplier * bmpFont.getData().scaleX);
             }
             else if (distanceField) {
-                batch.setShader(shader);
+                if(!shader.equals(batch.getShader()))
+                    batch.setShader(shader);
                 shader.setUniformf("u_smoothing", 0.35f / (1.9f * smoothingMultiplier * (bmpFont.getData().scaleX + bmpFont.getData().scaleY)));
             }
         }

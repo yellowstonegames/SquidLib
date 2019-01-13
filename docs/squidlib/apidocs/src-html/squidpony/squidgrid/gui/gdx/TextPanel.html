@@ -70,451 +70,457 @@
 <span class="sourceLineNo">062</span> * this class plugs scrolling with arrow keys (up, down, page up, page down) and<a name="line.62"></a>
 <span class="sourceLineNo">063</span> * vim shortcuts (j/k).<a name="line.63"></a>
 <span class="sourceLineNo">064</span> * &lt;/p&gt;<a name="line.64"></a>
-<span class="sourceLineNo">065</span> * <a name="line.65"></a>
-<span class="sourceLineNo">066</span> * @author smelC<a name="line.66"></a>
-<span class="sourceLineNo">067</span> * <a name="line.67"></a>
-<span class="sourceLineNo">068</span> * @see ScrollPane A libGDX widget for general scrolling through only the visible part of a large widget<a name="line.68"></a>
-<span class="sourceLineNo">069</span> * @see LinesPanel An alternative for displaying lines of text in a variable-width font<a name="line.69"></a>
-<span class="sourceLineNo">070</span> */<a name="line.70"></a>
-<span class="sourceLineNo">071</span>public class TextPanel&lt;T extends Color&gt; {<a name="line.71"></a>
-<span class="sourceLineNo">072</span><a name="line.72"></a>
-<span class="sourceLineNo">073</span>        /**<a name="line.73"></a>
-<span class="sourceLineNo">074</span>         * The color to use to paint the background (outside buttons) using<a name="line.74"></a>
-<span class="sourceLineNo">075</span>         * {@link ShapeRenderer}. Or {@code null} to disable background coloring.<a name="line.75"></a>
-<span class="sourceLineNo">076</span>         */<a name="line.76"></a>
-<span class="sourceLineNo">077</span>        public /* @Nullable */ T backgroundColor;<a name="line.77"></a>
+<span class="sourceLineNo">065</span> * &lt;p&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * Drawing the result of {@link #getScrollPane()} will set the shader of {@code batch} if using a distance field or MSDF<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * font and the shader is currently not configured for such a font; it does not reset the shader to the default so that<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * multiple Actors can all use the same shader and so specific extra glyphs or other items can be rendered after calling<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * draw(). If you need to draw both a distance field font and full-color art, you should set the shader on the Batch to<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * null when you want to draw full-color art, and end the Batch between drawing this object and the other art.<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * &lt;/p&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * @author smelC<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * <a name="line.73"></a>
+<span class="sourceLineNo">074</span> * @see ScrollPane A libGDX widget for general scrolling through only the visible part of a large widget<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * @see LinesPanel An alternative for displaying lines of text in a variable-width font<a name="line.75"></a>
+<span class="sourceLineNo">076</span> */<a name="line.76"></a>
+<span class="sourceLineNo">077</span>public class TextPanel&lt;T extends Color&gt; {<a name="line.77"></a>
 <span class="sourceLineNo">078</span><a name="line.78"></a>
 <span class="sourceLineNo">079</span>        /**<a name="line.79"></a>
-<span class="sourceLineNo">080</span>         * The color of the border around this panel, if any. If set, it'll be<a name="line.80"></a>
-<span class="sourceLineNo">081</span>         * rendered using {@link ShapeRenderer} and {@link #borderStyle}.<a name="line.81"></a>
+<span class="sourceLineNo">080</span>         * The color to use to paint the background (outside buttons) using<a name="line.80"></a>
+<span class="sourceLineNo">081</span>         * {@link ShapeRenderer}. Or {@code null} to disable background coloring.<a name="line.81"></a>
 <span class="sourceLineNo">082</span>         */<a name="line.82"></a>
-<span class="sourceLineNo">083</span>        public /* @Nullable */ T borderColor;<a name="line.83"></a>
+<span class="sourceLineNo">083</span>        public /* @Nullable */ T backgroundColor;<a name="line.83"></a>
 <span class="sourceLineNo">084</span><a name="line.84"></a>
-<span class="sourceLineNo">085</span>        /** The size of the border, if any */<a name="line.85"></a>
-<span class="sourceLineNo">086</span>        public float borderSize;<a name="line.86"></a>
-<span class="sourceLineNo">087</span><a name="line.87"></a>
-<span class="sourceLineNo">088</span>        public CornerStyle borderStyle = CornerStyle.ROUNDED;<a name="line.88"></a>
-<span class="sourceLineNo">089</span><a name="line.89"></a>
-<span class="sourceLineNo">090</span>        /**<a name="line.90"></a>
-<span class="sourceLineNo">091</span>         * Whether to use 'j' to scroll down, and 'k' to scroll up. Serious<a name="line.91"></a>
-<span class="sourceLineNo">092</span>         * roguelikes leave that to {@code true}, assuming they don't use j and k for movement...<a name="line.92"></a>
-<span class="sourceLineNo">093</span>         */<a name="line.93"></a>
-<span class="sourceLineNo">094</span>        public boolean vimShortcuts = true;<a name="line.94"></a>
+<span class="sourceLineNo">085</span>        /**<a name="line.85"></a>
+<span class="sourceLineNo">086</span>         * The color of the border around this panel, if any. If set, it'll be<a name="line.86"></a>
+<span class="sourceLineNo">087</span>         * rendered using {@link ShapeRenderer} and {@link #borderStyle}.<a name="line.87"></a>
+<span class="sourceLineNo">088</span>         */<a name="line.88"></a>
+<span class="sourceLineNo">089</span>        public /* @Nullable */ T borderColor;<a name="line.89"></a>
+<span class="sourceLineNo">090</span><a name="line.90"></a>
+<span class="sourceLineNo">091</span>        /** The size of the border, if any */<a name="line.91"></a>
+<span class="sourceLineNo">092</span>        public float borderSize;<a name="line.92"></a>
+<span class="sourceLineNo">093</span><a name="line.93"></a>
+<span class="sourceLineNo">094</span>        public CornerStyle borderStyle = CornerStyle.ROUNDED;<a name="line.94"></a>
 <span class="sourceLineNo">095</span><a name="line.95"></a>
-<span class="sourceLineNo">096</span>        protected /* @Nullable */ IMarkup&lt;T&gt; markup;<a name="line.96"></a>
-<span class="sourceLineNo">097</span><a name="line.97"></a>
-<span class="sourceLineNo">098</span>        protected BitmapFont font;<a name="line.98"></a>
-<span class="sourceLineNo">099</span>    protected boolean distanceField;<a name="line.99"></a>
-<span class="sourceLineNo">100</span>    protected TextCellFactory tcf;<a name="line.100"></a>
-<span class="sourceLineNo">101</span>        /** The text to display */<a name="line.101"></a>
-<span class="sourceLineNo">102</span>        protected List&lt;IColoredString&lt;T&gt;&gt; text;<a name="line.102"></a>
+<span class="sourceLineNo">096</span>        /**<a name="line.96"></a>
+<span class="sourceLineNo">097</span>         * Whether to use 'j' to scroll down, and 'k' to scroll up. Serious<a name="line.97"></a>
+<span class="sourceLineNo">098</span>         * roguelikes leave that to {@code true}, assuming they don't use j and k for movement...<a name="line.98"></a>
+<span class="sourceLineNo">099</span>         */<a name="line.99"></a>
+<span class="sourceLineNo">100</span>        public boolean vimShortcuts = true;<a name="line.100"></a>
+<span class="sourceLineNo">101</span><a name="line.101"></a>
+<span class="sourceLineNo">102</span>        protected /* @Nullable */ IMarkup&lt;T&gt; markup;<a name="line.102"></a>
 <span class="sourceLineNo">103</span><a name="line.103"></a>
-<span class="sourceLineNo">104</span>    protected StringBuilder builder;<a name="line.104"></a>
-<span class="sourceLineNo">105</span><a name="line.105"></a>
-<span class="sourceLineNo">106</span>        protected final ScrollPane scrollPane;<a name="line.106"></a>
-<span class="sourceLineNo">107</span><a name="line.107"></a>
-<span class="sourceLineNo">108</span>        /**<a name="line.108"></a>
-<span class="sourceLineNo">109</span>         * The actor whose size is adjusted to the text. When scrolling is required,<a name="line.109"></a>
-<span class="sourceLineNo">110</span>         * it is bigger than {@link #scrollPane}.<a name="line.110"></a>
-<span class="sourceLineNo">111</span>         */<a name="line.111"></a>
-<span class="sourceLineNo">112</span>        protected final Actor textActor;<a name="line.112"></a>
+<span class="sourceLineNo">104</span>        protected BitmapFont font;<a name="line.104"></a>
+<span class="sourceLineNo">105</span>    protected boolean distanceField;<a name="line.105"></a>
+<span class="sourceLineNo">106</span>    protected TextCellFactory tcf;<a name="line.106"></a>
+<span class="sourceLineNo">107</span>        /** The text to display */<a name="line.107"></a>
+<span class="sourceLineNo">108</span>        protected List&lt;IColoredString&lt;T&gt;&gt; text;<a name="line.108"></a>
+<span class="sourceLineNo">109</span><a name="line.109"></a>
+<span class="sourceLineNo">110</span>    protected StringBuilder builder;<a name="line.110"></a>
+<span class="sourceLineNo">111</span><a name="line.111"></a>
+<span class="sourceLineNo">112</span>        protected final ScrollPane scrollPane;<a name="line.112"></a>
 <span class="sourceLineNo">113</span><a name="line.113"></a>
-<span class="sourceLineNo">114</span>        /** Do not access directly, use {@link #getRenderer()} */<a name="line.114"></a>
-<span class="sourceLineNo">115</span>        private /* @Nullable */ ShapeRenderer renderer;<a name="line.115"></a>
-<span class="sourceLineNo">116</span><a name="line.116"></a>
-<span class="sourceLineNo">117</span>    /**<a name="line.117"></a>
-<span class="sourceLineNo">118</span>     * The text to display MUST be set later on with<a name="line.118"></a>
-<span class="sourceLineNo">119</span>     * {@link #init(float, float, Collection)}.<a name="line.119"></a>
-<span class="sourceLineNo">120</span>     *<a name="line.120"></a>
-<span class="sourceLineNo">121</span>     * @param markup<a name="line.121"></a>
-<span class="sourceLineNo">122</span>     *            An optional way to compute markup.<a name="line.122"></a>
-<span class="sourceLineNo">123</span>     * @param font<a name="line.123"></a>
-<span class="sourceLineNo">124</span>     *            The font to use. It can be set later using<a name="line.124"></a>
-<span class="sourceLineNo">125</span>     *            {@link #setFont(BitmapFont)}, but it MUST be set before<a name="line.125"></a>
-<span class="sourceLineNo">126</span>     *            drawing this panel.<a name="line.126"></a>
-<span class="sourceLineNo">127</span>     */<a name="line.127"></a>
-<span class="sourceLineNo">128</span>    public TextPanel(/* @Nullable */IMarkup&lt;T&gt; markup, /* @Nullable */ BitmapFont font) {<a name="line.128"></a>
-<span class="sourceLineNo">129</span>        if (markup != null)<a name="line.129"></a>
-<span class="sourceLineNo">130</span>            setMarkup(markup);<a name="line.130"></a>
-<span class="sourceLineNo">131</span>        if (font != null)<a name="line.131"></a>
-<span class="sourceLineNo">132</span>            setFont(font);<a name="line.132"></a>
-<span class="sourceLineNo">133</span>        builder = new StringBuilder(512);<a name="line.133"></a>
-<span class="sourceLineNo">134</span>        textActor = new TextActor();<a name="line.134"></a>
-<span class="sourceLineNo">135</span><a name="line.135"></a>
-<span class="sourceLineNo">136</span>        this.scrollPane = new ScrollPane(textActor);<a name="line.136"></a>
-<span class="sourceLineNo">137</span><a name="line.137"></a>
-<span class="sourceLineNo">138</span>        this.scrollPane.addListener(new InputListener() {<a name="line.138"></a>
-<span class="sourceLineNo">139</span>            @Override<a name="line.139"></a>
-<span class="sourceLineNo">140</span>            public boolean keyDown(InputEvent event, int keycode) {<a name="line.140"></a>
-<span class="sourceLineNo">141</span>                                /* To receive key up */<a name="line.141"></a>
-<span class="sourceLineNo">142</span>                return true;<a name="line.142"></a>
-<span class="sourceLineNo">143</span>            }<a name="line.143"></a>
-<span class="sourceLineNo">144</span><a name="line.144"></a>
+<span class="sourceLineNo">114</span>        /**<a name="line.114"></a>
+<span class="sourceLineNo">115</span>         * The actor whose size is adjusted to the text. When scrolling is required,<a name="line.115"></a>
+<span class="sourceLineNo">116</span>         * it is bigger than {@link #scrollPane}.<a name="line.116"></a>
+<span class="sourceLineNo">117</span>         */<a name="line.117"></a>
+<span class="sourceLineNo">118</span>        protected final Actor textActor;<a name="line.118"></a>
+<span class="sourceLineNo">119</span><a name="line.119"></a>
+<span class="sourceLineNo">120</span>        /** Do not access directly, use {@link #getRenderer()} */<a name="line.120"></a>
+<span class="sourceLineNo">121</span>        private /* @Nullable */ ShapeRenderer renderer;<a name="line.121"></a>
+<span class="sourceLineNo">122</span><a name="line.122"></a>
+<span class="sourceLineNo">123</span>    /**<a name="line.123"></a>
+<span class="sourceLineNo">124</span>     * The text to display MUST be set later on with<a name="line.124"></a>
+<span class="sourceLineNo">125</span>     * {@link #init(float, float, Collection)}.<a name="line.125"></a>
+<span class="sourceLineNo">126</span>     *<a name="line.126"></a>
+<span class="sourceLineNo">127</span>     * @param markup<a name="line.127"></a>
+<span class="sourceLineNo">128</span>     *            An optional way to compute markup.<a name="line.128"></a>
+<span class="sourceLineNo">129</span>     * @param font<a name="line.129"></a>
+<span class="sourceLineNo">130</span>     *            The font to use. It can be set later using<a name="line.130"></a>
+<span class="sourceLineNo">131</span>     *            {@link #setFont(BitmapFont)}, but it MUST be set before<a name="line.131"></a>
+<span class="sourceLineNo">132</span>     *            drawing this panel.<a name="line.132"></a>
+<span class="sourceLineNo">133</span>     */<a name="line.133"></a>
+<span class="sourceLineNo">134</span>    public TextPanel(/* @Nullable */IMarkup&lt;T&gt; markup, /* @Nullable */ BitmapFont font) {<a name="line.134"></a>
+<span class="sourceLineNo">135</span>        if (markup != null)<a name="line.135"></a>
+<span class="sourceLineNo">136</span>            setMarkup(markup);<a name="line.136"></a>
+<span class="sourceLineNo">137</span>        if (font != null)<a name="line.137"></a>
+<span class="sourceLineNo">138</span>            setFont(font);<a name="line.138"></a>
+<span class="sourceLineNo">139</span>        builder = new StringBuilder(512);<a name="line.139"></a>
+<span class="sourceLineNo">140</span>        textActor = new TextActor();<a name="line.140"></a>
+<span class="sourceLineNo">141</span><a name="line.141"></a>
+<span class="sourceLineNo">142</span>        this.scrollPane = new ScrollPane(textActor);<a name="line.142"></a>
+<span class="sourceLineNo">143</span><a name="line.143"></a>
+<span class="sourceLineNo">144</span>        this.scrollPane.addListener(new InputListener() {<a name="line.144"></a>
 <span class="sourceLineNo">145</span>            @Override<a name="line.145"></a>
-<span class="sourceLineNo">146</span>            public boolean keyUp(InputEvent event, int keycode) {<a name="line.146"></a>
-<span class="sourceLineNo">147</span>                final YMoveKind d = UIUtil.YMoveKind.of(keycode, vimShortcuts);<a name="line.147"></a>
-<span class="sourceLineNo">148</span>                if (d == null)<a name="line.148"></a>
-<span class="sourceLineNo">149</span>                    return false;<a name="line.149"></a>
-<span class="sourceLineNo">150</span>                else {<a name="line.150"></a>
-<span class="sourceLineNo">151</span>                    switch (d) {<a name="line.151"></a>
-<span class="sourceLineNo">152</span>                        case DOWN:<a name="line.152"></a>
-<span class="sourceLineNo">153</span>                        case UP: {<a name="line.153"></a>
-<span class="sourceLineNo">154</span>                            handleArrow(!d.isDown());<a name="line.154"></a>
-<span class="sourceLineNo">155</span>                            return true;<a name="line.155"></a>
-<span class="sourceLineNo">156</span>                        }<a name="line.156"></a>
-<span class="sourceLineNo">157</span>                        case PAGE_DOWN:<a name="line.157"></a>
-<span class="sourceLineNo">158</span>                        case PAGE_UP:<a name="line.158"></a>
-<span class="sourceLineNo">159</span>                            final float scrollY = scrollPane.getScrollY();<a name="line.159"></a>
-<span class="sourceLineNo">160</span>                            final int mult = d.isDown() ? 1 : -1;<a name="line.160"></a>
-<span class="sourceLineNo">161</span>                            scrollPane.setScrollY(scrollY + mult * textActor.getHeight());<a name="line.161"></a>
-<span class="sourceLineNo">162</span>                            return true;<a name="line.162"></a>
-<span class="sourceLineNo">163</span>                    }<a name="line.163"></a>
-<span class="sourceLineNo">164</span>                    throw new IllegalStateException(<a name="line.164"></a>
-<span class="sourceLineNo">165</span>                            "Unmatched YMoveKind: " + d);<a name="line.165"></a>
-<span class="sourceLineNo">166</span>                }<a name="line.166"></a>
-<span class="sourceLineNo">167</span>            }<a name="line.167"></a>
-<span class="sourceLineNo">168</span><a name="line.168"></a>
-<span class="sourceLineNo">169</span>            @Override<a name="line.169"></a>
-<span class="sourceLineNo">170</span>            public boolean keyTyped(InputEvent event, char character) {<a name="line.170"></a>
-<span class="sourceLineNo">171</span>                if (vimShortcuts &amp;&amp; (character == 'j' || character == 'k'))<a name="line.171"></a>
-<span class="sourceLineNo">172</span>                    return true;<a name="line.172"></a>
-<span class="sourceLineNo">173</span>                else<a name="line.173"></a>
-<span class="sourceLineNo">174</span>                    return super.keyTyped(event, character);<a name="line.174"></a>
-<span class="sourceLineNo">175</span>            }<a name="line.175"></a>
-<span class="sourceLineNo">176</span><a name="line.176"></a>
-<span class="sourceLineNo">177</span>            private void handleArrow(boolean up) {<a name="line.177"></a>
-<span class="sourceLineNo">178</span>                final float scrollY = scrollPane.getScrollY();<a name="line.178"></a>
-<span class="sourceLineNo">179</span>                final int mult = up ? -1 : 1;<a name="line.179"></a>
-<span class="sourceLineNo">180</span>                scrollPane.setScrollY(scrollY + (scrollPane.getHeight() * 0.8f * mult));<a name="line.180"></a>
+<span class="sourceLineNo">146</span>            public boolean keyDown(InputEvent event, int keycode) {<a name="line.146"></a>
+<span class="sourceLineNo">147</span>                                /* To receive key up */<a name="line.147"></a>
+<span class="sourceLineNo">148</span>                return true;<a name="line.148"></a>
+<span class="sourceLineNo">149</span>            }<a name="line.149"></a>
+<span class="sourceLineNo">150</span><a name="line.150"></a>
+<span class="sourceLineNo">151</span>            @Override<a name="line.151"></a>
+<span class="sourceLineNo">152</span>            public boolean keyUp(InputEvent event, int keycode) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span>                final YMoveKind d = UIUtil.YMoveKind.of(keycode, vimShortcuts);<a name="line.153"></a>
+<span class="sourceLineNo">154</span>                if (d == null)<a name="line.154"></a>
+<span class="sourceLineNo">155</span>                    return false;<a name="line.155"></a>
+<span class="sourceLineNo">156</span>                else {<a name="line.156"></a>
+<span class="sourceLineNo">157</span>                    switch (d) {<a name="line.157"></a>
+<span class="sourceLineNo">158</span>                        case DOWN:<a name="line.158"></a>
+<span class="sourceLineNo">159</span>                        case UP: {<a name="line.159"></a>
+<span class="sourceLineNo">160</span>                            handleArrow(!d.isDown());<a name="line.160"></a>
+<span class="sourceLineNo">161</span>                            return true;<a name="line.161"></a>
+<span class="sourceLineNo">162</span>                        }<a name="line.162"></a>
+<span class="sourceLineNo">163</span>                        case PAGE_DOWN:<a name="line.163"></a>
+<span class="sourceLineNo">164</span>                        case PAGE_UP:<a name="line.164"></a>
+<span class="sourceLineNo">165</span>                            final float scrollY = scrollPane.getScrollY();<a name="line.165"></a>
+<span class="sourceLineNo">166</span>                            final int mult = d.isDown() ? 1 : -1;<a name="line.166"></a>
+<span class="sourceLineNo">167</span>                            scrollPane.setScrollY(scrollY + mult * textActor.getHeight());<a name="line.167"></a>
+<span class="sourceLineNo">168</span>                            return true;<a name="line.168"></a>
+<span class="sourceLineNo">169</span>                    }<a name="line.169"></a>
+<span class="sourceLineNo">170</span>                    throw new IllegalStateException(<a name="line.170"></a>
+<span class="sourceLineNo">171</span>                            "Unmatched YMoveKind: " + d);<a name="line.171"></a>
+<span class="sourceLineNo">172</span>                }<a name="line.172"></a>
+<span class="sourceLineNo">173</span>            }<a name="line.173"></a>
+<span class="sourceLineNo">174</span><a name="line.174"></a>
+<span class="sourceLineNo">175</span>            @Override<a name="line.175"></a>
+<span class="sourceLineNo">176</span>            public boolean keyTyped(InputEvent event, char character) {<a name="line.176"></a>
+<span class="sourceLineNo">177</span>                if (vimShortcuts &amp;&amp; (character == 'j' || character == 'k'))<a name="line.177"></a>
+<span class="sourceLineNo">178</span>                    return true;<a name="line.178"></a>
+<span class="sourceLineNo">179</span>                else<a name="line.179"></a>
+<span class="sourceLineNo">180</span>                    return super.keyTyped(event, character);<a name="line.180"></a>
 <span class="sourceLineNo">181</span>            }<a name="line.181"></a>
-<span class="sourceLineNo">182</span>        });<a name="line.182"></a>
-<span class="sourceLineNo">183</span>    }<a name="line.183"></a>
-<span class="sourceLineNo">184</span><a name="line.184"></a>
-<span class="sourceLineNo">185</span>    /**<a name="line.185"></a>
-<span class="sourceLineNo">186</span>     * The text to display MUST be set later on with<a name="line.186"></a>
-<span class="sourceLineNo">187</span>     * {@link #init(float, float, Collection)}.<a name="line.187"></a>
-<span class="sourceLineNo">188</span>     *<a name="line.188"></a>
-<span class="sourceLineNo">189</span>     * @param markup<a name="line.189"></a>
-<span class="sourceLineNo">190</span>     *            An optional way to compute markup.<a name="line.190"></a>
-<span class="sourceLineNo">191</span>     * @param distanceFieldFont<a name="line.191"></a>
-<span class="sourceLineNo">192</span>     *            A distance field font as a TextCellFactory to use.<a name="line.192"></a>
-<span class="sourceLineNo">193</span>     *            Won't be used for drawing in cells, just the distance field code it has matters.<a name="line.193"></a>
-<span class="sourceLineNo">194</span>     */<a name="line.194"></a>
-<span class="sourceLineNo">195</span>    public TextPanel(/* @Nullable */IMarkup&lt;T&gt; markup, /* @Nullable */ TextCellFactory distanceFieldFont) {<a name="line.195"></a>
-<span class="sourceLineNo">196</span>        if (markup != null)<a name="line.196"></a>
-<span class="sourceLineNo">197</span>            setMarkup(markup);<a name="line.197"></a>
-<span class="sourceLineNo">198</span>        if (distanceFieldFont != null)<a name="line.198"></a>
-<span class="sourceLineNo">199</span>        {<a name="line.199"></a>
-<span class="sourceLineNo">200</span>            tcf = distanceFieldFont;<a name="line.200"></a>
-<span class="sourceLineNo">201</span>            distanceField = distanceFieldFont.distanceField || distanceFieldFont.msdf;<a name="line.201"></a>
-<span class="sourceLineNo">202</span>            tcf.initBySize();<a name="line.202"></a>
-<span class="sourceLineNo">203</span>            font = tcf.font();<a name="line.203"></a>
-<span class="sourceLineNo">204</span>            if (markup != null)<a name="line.204"></a>
-<span class="sourceLineNo">205</span>                font.getData().markupEnabled = true;<a name="line.205"></a>
-<span class="sourceLineNo">206</span>        }<a name="line.206"></a>
-<span class="sourceLineNo">207</span>        builder = new StringBuilder(512);<a name="line.207"></a>
-<span class="sourceLineNo">208</span>        textActor = new TextActor();<a name="line.208"></a>
-<span class="sourceLineNo">209</span>        scrollPane = new ScrollPane(textActor);<a name="line.209"></a>
-<span class="sourceLineNo">210</span><a name="line.210"></a>
-<span class="sourceLineNo">211</span>        this.scrollPane.addListener(new InputListener() {<a name="line.211"></a>
-<span class="sourceLineNo">212</span>            @Override<a name="line.212"></a>
-<span class="sourceLineNo">213</span>            public boolean keyDown(InputEvent event, int keycode) {<a name="line.213"></a>
-<span class="sourceLineNo">214</span>                                /* To receive key up */<a name="line.214"></a>
-<span class="sourceLineNo">215</span>                return true;<a name="line.215"></a>
-<span class="sourceLineNo">216</span>            }<a name="line.216"></a>
-<span class="sourceLineNo">217</span><a name="line.217"></a>
+<span class="sourceLineNo">182</span><a name="line.182"></a>
+<span class="sourceLineNo">183</span>            private void handleArrow(boolean up) {<a name="line.183"></a>
+<span class="sourceLineNo">184</span>                final float scrollY = scrollPane.getScrollY();<a name="line.184"></a>
+<span class="sourceLineNo">185</span>                final int mult = up ? -1 : 1;<a name="line.185"></a>
+<span class="sourceLineNo">186</span>                scrollPane.setScrollY(scrollY + (scrollPane.getHeight() * 0.8f * mult));<a name="line.186"></a>
+<span class="sourceLineNo">187</span>            }<a name="line.187"></a>
+<span class="sourceLineNo">188</span>        });<a name="line.188"></a>
+<span class="sourceLineNo">189</span>    }<a name="line.189"></a>
+<span class="sourceLineNo">190</span><a name="line.190"></a>
+<span class="sourceLineNo">191</span>    /**<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     * The text to display MUST be set later on with<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * {@link #init(float, float, Collection)}.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     *<a name="line.194"></a>
+<span class="sourceLineNo">195</span>     * @param markup<a name="line.195"></a>
+<span class="sourceLineNo">196</span>     *            An optional way to compute markup.<a name="line.196"></a>
+<span class="sourceLineNo">197</span>     * @param distanceFieldFont<a name="line.197"></a>
+<span class="sourceLineNo">198</span>     *            A distance field font as a TextCellFactory to use.<a name="line.198"></a>
+<span class="sourceLineNo">199</span>     *            Won't be used for drawing in cells, just the distance field code it has matters.<a name="line.199"></a>
+<span class="sourceLineNo">200</span>     */<a name="line.200"></a>
+<span class="sourceLineNo">201</span>    public TextPanel(/* @Nullable */IMarkup&lt;T&gt; markup, /* @Nullable */ TextCellFactory distanceFieldFont) {<a name="line.201"></a>
+<span class="sourceLineNo">202</span>        if (markup != null)<a name="line.202"></a>
+<span class="sourceLineNo">203</span>            setMarkup(markup);<a name="line.203"></a>
+<span class="sourceLineNo">204</span>        if (distanceFieldFont != null)<a name="line.204"></a>
+<span class="sourceLineNo">205</span>        {<a name="line.205"></a>
+<span class="sourceLineNo">206</span>            tcf = distanceFieldFont;<a name="line.206"></a>
+<span class="sourceLineNo">207</span>            distanceField = distanceFieldFont.distanceField || distanceFieldFont.msdf;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>            tcf.initBySize();<a name="line.208"></a>
+<span class="sourceLineNo">209</span>            font = tcf.font();<a name="line.209"></a>
+<span class="sourceLineNo">210</span>            if (markup != null)<a name="line.210"></a>
+<span class="sourceLineNo">211</span>                font.getData().markupEnabled = true;<a name="line.211"></a>
+<span class="sourceLineNo">212</span>        }<a name="line.212"></a>
+<span class="sourceLineNo">213</span>        builder = new StringBuilder(512);<a name="line.213"></a>
+<span class="sourceLineNo">214</span>        textActor = new TextActor();<a name="line.214"></a>
+<span class="sourceLineNo">215</span>        scrollPane = new ScrollPane(textActor);<a name="line.215"></a>
+<span class="sourceLineNo">216</span><a name="line.216"></a>
+<span class="sourceLineNo">217</span>        this.scrollPane.addListener(new InputListener() {<a name="line.217"></a>
 <span class="sourceLineNo">218</span>            @Override<a name="line.218"></a>
-<span class="sourceLineNo">219</span>            public boolean keyUp(InputEvent event, int keycode) {<a name="line.219"></a>
-<span class="sourceLineNo">220</span>                final YMoveKind d = UIUtil.YMoveKind.of(keycode, vimShortcuts);<a name="line.220"></a>
-<span class="sourceLineNo">221</span>                if (d == null)<a name="line.221"></a>
-<span class="sourceLineNo">222</span>                    return false;<a name="line.222"></a>
-<span class="sourceLineNo">223</span>                else {<a name="line.223"></a>
-<span class="sourceLineNo">224</span>                    switch (d) {<a name="line.224"></a>
-<span class="sourceLineNo">225</span>                        case DOWN:<a name="line.225"></a>
-<span class="sourceLineNo">226</span>                        case UP: {<a name="line.226"></a>
-<span class="sourceLineNo">227</span>                            handleArrow(!d.isDown());<a name="line.227"></a>
-<span class="sourceLineNo">228</span>                            return true;<a name="line.228"></a>
-<span class="sourceLineNo">229</span>                        }<a name="line.229"></a>
-<span class="sourceLineNo">230</span>                        case PAGE_DOWN:<a name="line.230"></a>
-<span class="sourceLineNo">231</span>                        case PAGE_UP:<a name="line.231"></a>
-<span class="sourceLineNo">232</span>                            final float scrollY = scrollPane.getScrollY();<a name="line.232"></a>
-<span class="sourceLineNo">233</span>                            final int mult = d.isDown() ? 1 : -1;<a name="line.233"></a>
-<span class="sourceLineNo">234</span>                            scrollPane.setScrollY(scrollY + mult * textActor.getHeight());<a name="line.234"></a>
-<span class="sourceLineNo">235</span>                            return true;<a name="line.235"></a>
-<span class="sourceLineNo">236</span>                    }<a name="line.236"></a>
-<span class="sourceLineNo">237</span>                    throw new IllegalStateException(<a name="line.237"></a>
-<span class="sourceLineNo">238</span>                                                        "Unmatched YMoveKind: " + d);<a name="line.238"></a>
-<span class="sourceLineNo">239</span>                }<a name="line.239"></a>
-<span class="sourceLineNo">240</span>            }<a name="line.240"></a>
-<span class="sourceLineNo">241</span><a name="line.241"></a>
-<span class="sourceLineNo">242</span>            @Override<a name="line.242"></a>
-<span class="sourceLineNo">243</span>            public boolean keyTyped(InputEvent event, char character) {<a name="line.243"></a>
-<span class="sourceLineNo">244</span>                if (vimShortcuts &amp;&amp; (character == 'j' || character == 'k'))<a name="line.244"></a>
-<span class="sourceLineNo">245</span>                    return true;<a name="line.245"></a>
-<span class="sourceLineNo">246</span>                else<a name="line.246"></a>
-<span class="sourceLineNo">247</span>                    return super.keyTyped(event, character);<a name="line.247"></a>
-<span class="sourceLineNo">248</span>            }<a name="line.248"></a>
-<span class="sourceLineNo">249</span><a name="line.249"></a>
-<span class="sourceLineNo">250</span>            private void handleArrow(boolean up) {<a name="line.250"></a>
-<span class="sourceLineNo">251</span>                final float scrollY = scrollPane.getScrollY();<a name="line.251"></a>
-<span class="sourceLineNo">252</span>                final int mult = up ? -1 : 1;<a name="line.252"></a>
-<span class="sourceLineNo">253</span>                scrollPane.setScrollY(scrollY + (scrollPane.getHeight() * 0.8f * mult));<a name="line.253"></a>
+<span class="sourceLineNo">219</span>            public boolean keyDown(InputEvent event, int keycode) {<a name="line.219"></a>
+<span class="sourceLineNo">220</span>                                /* To receive key up */<a name="line.220"></a>
+<span class="sourceLineNo">221</span>                return true;<a name="line.221"></a>
+<span class="sourceLineNo">222</span>            }<a name="line.222"></a>
+<span class="sourceLineNo">223</span><a name="line.223"></a>
+<span class="sourceLineNo">224</span>            @Override<a name="line.224"></a>
+<span class="sourceLineNo">225</span>            public boolean keyUp(InputEvent event, int keycode) {<a name="line.225"></a>
+<span class="sourceLineNo">226</span>                final YMoveKind d = UIUtil.YMoveKind.of(keycode, vimShortcuts);<a name="line.226"></a>
+<span class="sourceLineNo">227</span>                if (d == null)<a name="line.227"></a>
+<span class="sourceLineNo">228</span>                    return false;<a name="line.228"></a>
+<span class="sourceLineNo">229</span>                else {<a name="line.229"></a>
+<span class="sourceLineNo">230</span>                    switch (d) {<a name="line.230"></a>
+<span class="sourceLineNo">231</span>                        case DOWN:<a name="line.231"></a>
+<span class="sourceLineNo">232</span>                        case UP: {<a name="line.232"></a>
+<span class="sourceLineNo">233</span>                            handleArrow(!d.isDown());<a name="line.233"></a>
+<span class="sourceLineNo">234</span>                            return true;<a name="line.234"></a>
+<span class="sourceLineNo">235</span>                        }<a name="line.235"></a>
+<span class="sourceLineNo">236</span>                        case PAGE_DOWN:<a name="line.236"></a>
+<span class="sourceLineNo">237</span>                        case PAGE_UP:<a name="line.237"></a>
+<span class="sourceLineNo">238</span>                            final float scrollY = scrollPane.getScrollY();<a name="line.238"></a>
+<span class="sourceLineNo">239</span>                            final int mult = d.isDown() ? 1 : -1;<a name="line.239"></a>
+<span class="sourceLineNo">240</span>                            scrollPane.setScrollY(scrollY + mult * textActor.getHeight());<a name="line.240"></a>
+<span class="sourceLineNo">241</span>                            return true;<a name="line.241"></a>
+<span class="sourceLineNo">242</span>                    }<a name="line.242"></a>
+<span class="sourceLineNo">243</span>                    throw new IllegalStateException(<a name="line.243"></a>
+<span class="sourceLineNo">244</span>                                                        "Unmatched YMoveKind: " + d);<a name="line.244"></a>
+<span class="sourceLineNo">245</span>                }<a name="line.245"></a>
+<span class="sourceLineNo">246</span>            }<a name="line.246"></a>
+<span class="sourceLineNo">247</span><a name="line.247"></a>
+<span class="sourceLineNo">248</span>            @Override<a name="line.248"></a>
+<span class="sourceLineNo">249</span>            public boolean keyTyped(InputEvent event, char character) {<a name="line.249"></a>
+<span class="sourceLineNo">250</span>                if (vimShortcuts &amp;&amp; (character == 'j' || character == 'k'))<a name="line.250"></a>
+<span class="sourceLineNo">251</span>                    return true;<a name="line.251"></a>
+<span class="sourceLineNo">252</span>                else<a name="line.252"></a>
+<span class="sourceLineNo">253</span>                    return super.keyTyped(event, character);<a name="line.253"></a>
 <span class="sourceLineNo">254</span>            }<a name="line.254"></a>
-<span class="sourceLineNo">255</span>        });<a name="line.255"></a>
-<span class="sourceLineNo">256</span>    }<a name="line.256"></a>
-<span class="sourceLineNo">257</span><a name="line.257"></a>
-<span class="sourceLineNo">258</span>    /**<a name="line.258"></a>
-<span class="sourceLineNo">259</span>         * @param m<a name="line.259"></a>
-<span class="sourceLineNo">260</span>         *            The markup to use.<a name="line.260"></a>
-<span class="sourceLineNo">261</span>         */<a name="line.261"></a>
-<span class="sourceLineNo">262</span>        public void setMarkup(IMarkup&lt;T&gt; m) {<a name="line.262"></a>
-<span class="sourceLineNo">263</span>                if (font != null)<a name="line.263"></a>
-<span class="sourceLineNo">264</span>                        font.getData().markupEnabled = true;<a name="line.264"></a>
-<span class="sourceLineNo">265</span>                this.markup = m;<a name="line.265"></a>
-<span class="sourceLineNo">266</span>        }<a name="line.266"></a>
-<span class="sourceLineNo">267</span><a name="line.267"></a>
-<span class="sourceLineNo">268</span>        /**<a name="line.268"></a>
-<span class="sourceLineNo">269</span>         * Sets the font to use. This method should be called once before<a name="line.269"></a>
-<span class="sourceLineNo">270</span>         * {@link #init(float, float, Collection)} if the font wasn't given at<a name="line.270"></a>
-<span class="sourceLineNo">271</span>         * creation-time.<a name="line.271"></a>
-<span class="sourceLineNo">272</span>         * <a name="line.272"></a>
-<span class="sourceLineNo">273</span>         * @param font<a name="line.273"></a>
-<span class="sourceLineNo">274</span>         *            The font to use.<a name="line.274"></a>
-<span class="sourceLineNo">275</span>         */<a name="line.275"></a>
-<span class="sourceLineNo">276</span>        public void setFont(BitmapFont font) {<a name="line.276"></a>
-<span class="sourceLineNo">277</span>                this.font = font;<a name="line.277"></a>
-<span class="sourceLineNo">278</span>        tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))<a name="line.278"></a>
-<span class="sourceLineNo">279</span>                .width(MathUtils.round(font.getSpaceWidth()));<a name="line.279"></a>
-<span class="sourceLineNo">280</span>                if (markup != null)<a name="line.280"></a>
-<span class="sourceLineNo">281</span>                        font.getData().markupEnabled = true;<a name="line.281"></a>
-<span class="sourceLineNo">282</span>        }<a name="line.282"></a>
-<span class="sourceLineNo">283</span><a name="line.283"></a>
-<span class="sourceLineNo">284</span>        /**<a name="line.284"></a>
-<span class="sourceLineNo">285</span>         * This method sets the sizes of {@link #scrollPane} and {@link #textActor}.<a name="line.285"></a>
-<span class="sourceLineNo">286</span>         * This method MUST be called before rendering.<a name="line.286"></a>
-<span class="sourceLineNo">287</span>         * <a name="line.287"></a>
-<span class="sourceLineNo">288</span>         * @param maxHeight<a name="line.288"></a>
-<span class="sourceLineNo">289</span>         *            The maximum height that the scrollpane can take (equal or<a name="line.289"></a>
-<span class="sourceLineNo">290</span>         *            smaller than the height of the text actor).<a name="line.290"></a>
-<span class="sourceLineNo">291</span>         * @param width<a name="line.291"></a>
-<span class="sourceLineNo">292</span>         *            The width of the scrollpane and the text actor.<a name="line.292"></a>
-<span class="sourceLineNo">293</span>         * @param text<a name="line.293"></a>
-<span class="sourceLineNo">294</span>         */<a name="line.294"></a>
-<span class="sourceLineNo">295</span>        public void init(float width, float maxHeight, Collection&lt;? extends IColoredString&lt;T&gt;&gt; text) {<a name="line.295"></a>
-<span class="sourceLineNo">296</span>        this.text = new ArrayList&lt;IColoredString&lt;T&gt;&gt;(text);<a name="line.296"></a>
-<span class="sourceLineNo">297</span><a name="line.297"></a>
-<span class="sourceLineNo">298</span>        scrollPane.setWidth(width);<a name="line.298"></a>
-<span class="sourceLineNo">299</span>        textActor.setWidth(width);<a name="line.299"></a>
-<span class="sourceLineNo">300</span><a name="line.300"></a>
-<span class="sourceLineNo">301</span>        if (tcf == null)<a name="line.301"></a>
-<span class="sourceLineNo">302</span>            throw new NullPointerException(<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                    "The font should be set before calling TextPanel.init()");<a name="line.303"></a>
-<span class="sourceLineNo">304</span><a name="line.304"></a>
-<span class="sourceLineNo">305</span>        final BitmapFontCache cache = font.getCache();<a name="line.305"></a>
-<span class="sourceLineNo">306</span>        final List&lt;String&gt; toDisplay = getTypesetText();<a name="line.306"></a>
-<span class="sourceLineNo">307</span>        float totalTextHeight = tcf.height();<a name="line.307"></a>
-<span class="sourceLineNo">308</span>        GlyphLayout layout = cache.addText(builder, 0, 0, 0, builder.length(), width, Align.left, true);<a name="line.308"></a>
-<span class="sourceLineNo">309</span>        totalTextHeight += layout.height;<a name="line.309"></a>
-<span class="sourceLineNo">310</span>        if(totalTextHeight &lt; 0)<a name="line.310"></a>
-<span class="sourceLineNo">311</span>            totalTextHeight = 0;<a name="line.311"></a>
-<span class="sourceLineNo">312</span>                textActor.setHeight(/* Entire height */ totalTextHeight);<a name="line.312"></a>
-<span class="sourceLineNo">313</span>                final boolean yscroll = maxHeight &lt; totalTextHeight;<a name="line.313"></a>
-<span class="sourceLineNo">314</span>                scrollPane.setHeight(/* Maybe not the entire height */ Math.min(totalTextHeight, maxHeight));<a name="line.314"></a>
-<span class="sourceLineNo">315</span>        scrollPane.setActor(new TextActor());<a name="line.315"></a>
-<span class="sourceLineNo">316</span>                yScrollingCallback(yscroll);<a name="line.316"></a>
-<span class="sourceLineNo">317</span>        }<a name="line.317"></a>
-<span class="sourceLineNo">318</span><a name="line.318"></a>
-<span class="sourceLineNo">319</span>    public void init(float width, float maxHeight, T color, String... text)<a name="line.319"></a>
-<span class="sourceLineNo">320</span>    {<a name="line.320"></a>
-<span class="sourceLineNo">321</span>        ArrayList&lt;IColoredString.Impl&lt;T&gt;&gt; coll = new ArrayList&lt;&gt;(text.length);<a name="line.321"></a>
-<span class="sourceLineNo">322</span>        for(String t : text)<a name="line.322"></a>
-<span class="sourceLineNo">323</span>        {<a name="line.323"></a>
-<span class="sourceLineNo">324</span>            coll.add(new IColoredString.Impl&lt;T&gt;(t, color));<a name="line.324"></a>
-<span class="sourceLineNo">325</span>        }<a name="line.325"></a>
-<span class="sourceLineNo">326</span>        init(width, maxHeight, coll);<a name="line.326"></a>
-<span class="sourceLineNo">327</span>    }<a name="line.327"></a>
-<span class="sourceLineNo">328</span><a name="line.328"></a>
-<span class="sourceLineNo">329</span>        /**<a name="line.329"></a>
-<span class="sourceLineNo">330</span>         * Draws the border. You have to call this method manually, because the<a name="line.330"></a>
-<span class="sourceLineNo">331</span>         * border is outside the actor and hence should be drawn at the very end,<a name="line.331"></a>
-<span class="sourceLineNo">332</span>         * otherwise it can get overwritten by UI element.<a name="line.332"></a>
-<span class="sourceLineNo">333</span>         * <a name="line.333"></a>
-<span class="sourceLineNo">334</span>         * @param batch<a name="line.334"></a>
-<span class="sourceLineNo">335</span>         */<a name="line.335"></a>
-<span class="sourceLineNo">336</span>        public void drawBorder(Batch batch) {<a name="line.336"></a>
-<span class="sourceLineNo">337</span>                if (borderColor != null &amp;&amp; 0 &lt; borderSize) {<a name="line.337"></a>
-<span class="sourceLineNo">338</span>                        final boolean reset = batch.isDrawing();<a name="line.338"></a>
-<span class="sourceLineNo">339</span>                        if (reset)<a name="line.339"></a>
-<span class="sourceLineNo">340</span>                                batch.end();<a name="line.340"></a>
-<span class="sourceLineNo">341</span><a name="line.341"></a>
-<span class="sourceLineNo">342</span>                        final ShapeRenderer sr = getRenderer();<a name="line.342"></a>
-<span class="sourceLineNo">343</span>                        final Matrix4 m = batch.getTransformMatrix();<a name="line.343"></a>
-<span class="sourceLineNo">344</span>                        sr.setTransformMatrix(m);<a name="line.344"></a>
-<span class="sourceLineNo">345</span>                        sr.begin(ShapeType.Filled);<a name="line.345"></a>
-<span class="sourceLineNo">346</span>                        sr.setColor(borderColor);<a name="line.346"></a>
-<span class="sourceLineNo">347</span>                        UIUtil.drawMarginsAround(sr, scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(),<a name="line.347"></a>
-<span class="sourceLineNo">348</span>                                        scrollPane.getHeight() - 1, borderSize, borderColor, borderStyle, 1f, 1f);<a name="line.348"></a>
-<span class="sourceLineNo">349</span>                        sr.end();<a name="line.349"></a>
-<span class="sourceLineNo">350</span><a name="line.350"></a>
-<span class="sourceLineNo">351</span>                        if (reset)<a name="line.351"></a>
-<span class="sourceLineNo">352</span>                                batch.begin();<a name="line.352"></a>
-<span class="sourceLineNo">353</span>                }<a name="line.353"></a>
-<span class="sourceLineNo">354</span>        }<a name="line.354"></a>
-<span class="sourceLineNo">355</span><a name="line.355"></a>
-<span class="sourceLineNo">356</span>        /**<a name="line.356"></a>
-<span class="sourceLineNo">357</span>         * @return The text to draw, after applying {@link #present(IColoredString)}<a name="line.357"></a>
-<span class="sourceLineNo">358</span>         *         and {@link #applyMarkup(IColoredString)}.<a name="line.358"></a>
-<span class="sourceLineNo">359</span>         */<a name="line.359"></a>
-<span class="sourceLineNo">360</span>        public /* @Nullable */ List&lt;String&gt; getTypesetText() {<a name="line.360"></a>
-<span class="sourceLineNo">361</span>                if (text == null)<a name="line.361"></a>
-<span class="sourceLineNo">362</span>                        return null;<a name="line.362"></a>
-<span class="sourceLineNo">363</span>        builder.delete(0, builder.length());<a name="line.363"></a>
-<span class="sourceLineNo">364</span>                final List&lt;String&gt; result = new ArrayList&lt;&gt;();<a name="line.364"></a>
-<span class="sourceLineNo">365</span>                for (IColoredString&lt;T&gt; line : text) {<a name="line.365"></a>
-<span class="sourceLineNo">366</span>                        /* This code must be consistent with #draw in the custom Actor */<a name="line.366"></a>
-<span class="sourceLineNo">367</span>                        final IColoredString&lt;T&gt; tmp = present(line);<a name="line.367"></a>
-<span class="sourceLineNo">368</span>            final String marked = applyMarkup(tmp);<a name="line.368"></a>
-<span class="sourceLineNo">369</span>                        result.add(marked);<a name="line.369"></a>
-<span class="sourceLineNo">370</span>            builder.append(marked);<a name="line.370"></a>
-<span class="sourceLineNo">371</span>            builder.append('\n');<a name="line.371"></a>
-<span class="sourceLineNo">372</span>                }<a name="line.372"></a>
-<span class="sourceLineNo">373</span>        if(builder.length() &gt; 0)<a name="line.373"></a>
-<span class="sourceLineNo">374</span>            builder.deleteCharAt(builder.length() - 1);<a name="line.374"></a>
-<span class="sourceLineNo">375</span>                return result;<a name="line.375"></a>
-<span class="sourceLineNo">376</span>        }<a name="line.376"></a>
-<span class="sourceLineNo">377</span><a name="line.377"></a>
-<span class="sourceLineNo">378</span>        /**<a name="line.378"></a>
-<span class="sourceLineNo">379</span>         * @return The {@link ScrollPane} containing {@link #getTextActor()}.<a name="line.379"></a>
-<span class="sourceLineNo">380</span>         */<a name="line.380"></a>
-<span class="sourceLineNo">381</span>        public ScrollPane getScrollPane() {<a name="line.381"></a>
-<span class="sourceLineNo">382</span>                return scrollPane;<a name="line.382"></a>
-<span class="sourceLineNo">383</span>        }<a name="line.383"></a>
-<span class="sourceLineNo">384</span><a name="line.384"></a>
-<span class="sourceLineNo">385</span>        /**<a name="line.385"></a>
-<span class="sourceLineNo">386</span>         * @return The {@link Actor} where the text is drawn. It may be bigger than<a name="line.386"></a>
-<span class="sourceLineNo">387</span>         *         {@link #getScrollPane()}.<a name="line.387"></a>
-<span class="sourceLineNo">388</span>         */<a name="line.388"></a>
-<span class="sourceLineNo">389</span>        public Actor getTextActor() {<a name="line.389"></a>
-<span class="sourceLineNo">390</span>                return textActor;<a name="line.390"></a>
-<span class="sourceLineNo">391</span>        }<a name="line.391"></a>
-<span class="sourceLineNo">392</span><a name="line.392"></a>
-<span class="sourceLineNo">393</span>        /**<a name="line.393"></a>
-<span class="sourceLineNo">394</span>         * @return The font used, if set.<a name="line.394"></a>
-<span class="sourceLineNo">395</span>         */<a name="line.395"></a>
-<span class="sourceLineNo">396</span>        public /* @Nullable */ BitmapFont getFont() {<a name="line.396"></a>
-<span class="sourceLineNo">397</span>                return font;<a name="line.397"></a>
-<span class="sourceLineNo">398</span>        }<a name="line.398"></a>
-<span class="sourceLineNo">399</span><a name="line.399"></a>
-<span class="sourceLineNo">400</span>        public void dispose() {<a name="line.400"></a>
-<span class="sourceLineNo">401</span>                if (renderer != null)<a name="line.401"></a>
-<span class="sourceLineNo">402</span>                        renderer.dispose();<a name="line.402"></a>
-<span class="sourceLineNo">403</span>        }<a name="line.403"></a>
-<span class="sourceLineNo">404</span><a name="line.404"></a>
-<span class="sourceLineNo">405</span>        /**<a name="line.405"></a>
-<span class="sourceLineNo">406</span>         * Callback done to do stuff according to whether y-scrolling is required<a name="line.406"></a>
-<span class="sourceLineNo">407</span>         * <a name="line.407"></a>
-<span class="sourceLineNo">408</span>         * @param required<a name="line.408"></a>
-<span class="sourceLineNo">409</span>         *            Whether y scrolling is required.<a name="line.409"></a>
-<span class="sourceLineNo">410</span>         */<a name="line.410"></a>
-<span class="sourceLineNo">411</span>        protected void yScrollingCallback(boolean required) {<a name="line.411"></a>
-<span class="sourceLineNo">412</span>                if (required) {<a name="line.412"></a>
-<span class="sourceLineNo">413</span>                        /* Disable borders, they don't mix well with scrollbars */<a name="line.413"></a>
-<span class="sourceLineNo">414</span>                        borderSize = 0;<a name="line.414"></a>
-<span class="sourceLineNo">415</span>                        scrollPane.setFadeScrollBars(false);<a name="line.415"></a>
-<span class="sourceLineNo">416</span>                        scrollPane.setForceScroll(false, true);<a name="line.416"></a>
-<span class="sourceLineNo">417</span>                }<a name="line.417"></a>
-<span class="sourceLineNo">418</span>        }<a name="line.418"></a>
-<span class="sourceLineNo">419</span><a name="line.419"></a>
-<span class="sourceLineNo">420</span>        /**<a name="line.420"></a>
-<span class="sourceLineNo">421</span>         * @param ics<a name="line.421"></a>
-<span class="sourceLineNo">422</span>         *            Text set when building {@code this}<a name="line.422"></a>
-<span class="sourceLineNo">423</span>         * @return The text to display to screen. If you wanna<a name="line.423"></a>
-<span class="sourceLineNo">424</span>         *         {@link squidpony.IColorCenter#filter(IColoredString) filter} your<a name="line.424"></a>
-<span class="sourceLineNo">425</span>         *         text , do it here.<a name="line.425"></a>
-<span class="sourceLineNo">426</span>         */<a name="line.426"></a>
-<span class="sourceLineNo">427</span>        protected IColoredString&lt;T&gt; present(IColoredString&lt;T&gt; ics) {<a name="line.427"></a>
-<span class="sourceLineNo">428</span>                return ics;<a name="line.428"></a>
-<span class="sourceLineNo">429</span>        }<a name="line.429"></a>
-<span class="sourceLineNo">430</span><a name="line.430"></a>
-<span class="sourceLineNo">431</span>        /**<a name="line.431"></a>
-<span class="sourceLineNo">432</span>         * @param ics<a name="line.432"></a>
-<span class="sourceLineNo">433</span>         * @return The text obtained after applying {@link #markup}.<a name="line.433"></a>
-<span class="sourceLineNo">434</span>         */<a name="line.434"></a>
-<span class="sourceLineNo">435</span>        protected String applyMarkup(IColoredString&lt;T&gt; ics) {<a name="line.435"></a>
-<span class="sourceLineNo">436</span>                return markup == null ? ics.toString() : ics.presentWithMarkup(markup);<a name="line.436"></a>
-<span class="sourceLineNo">437</span>        }<a name="line.437"></a>
-<span class="sourceLineNo">438</span><a name="line.438"></a>
-<span class="sourceLineNo">439</span>        /**<a name="line.439"></a>
-<span class="sourceLineNo">440</span>         * @return A fresh renderer.<a name="line.440"></a>
-<span class="sourceLineNo">441</span>         */<a name="line.441"></a>
-<span class="sourceLineNo">442</span>        protected ShapeRenderer buildRenderer() {<a name="line.442"></a>
-<span class="sourceLineNo">443</span>                return new ShapeRenderer();<a name="line.443"></a>
-<span class="sourceLineNo">444</span>        }<a name="line.444"></a>
-<span class="sourceLineNo">445</span><a name="line.445"></a>
-<span class="sourceLineNo">446</span>        /**<a name="line.446"></a>
-<span class="sourceLineNo">447</span>         * @return The renderer to use.<a name="line.447"></a>
-<span class="sourceLineNo">448</span>         */<a name="line.448"></a>
-<span class="sourceLineNo">449</span>        protected ShapeRenderer getRenderer() {<a name="line.449"></a>
-<span class="sourceLineNo">450</span>                if (renderer == null)<a name="line.450"></a>
-<span class="sourceLineNo">451</span>                        renderer = buildRenderer();<a name="line.451"></a>
-<span class="sourceLineNo">452</span>                return renderer;<a name="line.452"></a>
-<span class="sourceLineNo">453</span>        }<a name="line.453"></a>
-<span class="sourceLineNo">454</span><a name="line.454"></a>
-<span class="sourceLineNo">455</span>    private class TextActor extends Actor<a name="line.455"></a>
-<span class="sourceLineNo">456</span>    {<a name="line.456"></a>
-<span class="sourceLineNo">457</span>        TextActor()<a name="line.457"></a>
-<span class="sourceLineNo">458</span>        {<a name="line.458"></a>
-<span class="sourceLineNo">459</span><a name="line.459"></a>
-<span class="sourceLineNo">460</span>        }<a name="line.460"></a>
-<span class="sourceLineNo">461</span>        @Override<a name="line.461"></a>
-<span class="sourceLineNo">462</span>        public void draw(Batch batch, float parentAlpha) {<a name="line.462"></a>
-<span class="sourceLineNo">463</span>            final float tx = 0;//getX();<a name="line.463"></a>
-<span class="sourceLineNo">464</span>            final float ty = 0;//getY();<a name="line.464"></a>
-<span class="sourceLineNo">465</span>            final float twidth = getWidth();<a name="line.465"></a>
-<span class="sourceLineNo">466</span>            final float theight = getHeight();<a name="line.466"></a>
-<span class="sourceLineNo">467</span><a name="line.467"></a>
-<span class="sourceLineNo">468</span>            final float height = scrollPane.getHeight();<a name="line.468"></a>
-<span class="sourceLineNo">469</span><a name="line.469"></a>
-<span class="sourceLineNo">470</span>            if (backgroundColor != null) {<a name="line.470"></a>
-<span class="sourceLineNo">471</span>                batch.setColor(backgroundColor);<a name="line.471"></a>
-<span class="sourceLineNo">472</span>                batch.draw(tcf.getSolid(), tx, ty, twidth, theight);<a name="line.472"></a>
-<span class="sourceLineNo">473</span>                batch.setColor(Color.WHITE);<a name="line.473"></a>
-<span class="sourceLineNo">474</span>                /*<a name="line.474"></a>
-<span class="sourceLineNo">475</span>                batch.end();<a name="line.475"></a>
-<span class="sourceLineNo">476</span><a name="line.476"></a>
-<span class="sourceLineNo">477</span>                final Matrix4 m = batch.getTransformMatrix();<a name="line.477"></a>
-<span class="sourceLineNo">478</span>                final ShapeRenderer sr = getRenderer();<a name="line.478"></a>
-<span class="sourceLineNo">479</span>                sr.setTransformMatrix(m);<a name="line.479"></a>
-<span class="sourceLineNo">480</span>                sr.begin(ShapeType.Filled);<a name="line.480"></a>
-<span class="sourceLineNo">481</span>                sr.setColor(backgroundColor);<a name="line.481"></a>
-<span class="sourceLineNo">482</span>                UIUtil.drawRectangle(renderer, tx, ty, twidth, theight, ShapeType.Filled,<a name="line.482"></a>
-<span class="sourceLineNo">483</span>                        backgroundColor);<a name="line.483"></a>
-<span class="sourceLineNo">484</span>                sr.end();<a name="line.484"></a>
-<span class="sourceLineNo">485</span><a name="line.485"></a>
-<span class="sourceLineNo">486</span>                batch.begin();<a name="line.486"></a>
-<span class="sourceLineNo">487</span>                */<a name="line.487"></a>
-<span class="sourceLineNo">488</span>            }<a name="line.488"></a>
-<span class="sourceLineNo">489</span><a name="line.489"></a>
-<span class="sourceLineNo">490</span>            if (font == null)<a name="line.490"></a>
-<span class="sourceLineNo">491</span>                throw new NullPointerException(<a name="line.491"></a>
-<span class="sourceLineNo">492</span>                        "The font should be set when drawing a " + getClass().getSimpleName());<a name="line.492"></a>
-<span class="sourceLineNo">493</span>            if (text == null)<a name="line.493"></a>
-<span class="sourceLineNo">494</span>                throw new NullPointerException(<a name="line.494"></a>
-<span class="sourceLineNo">495</span>                        "The text should be set when drawing a " + getClass().getSimpleName());<a name="line.495"></a>
-<span class="sourceLineNo">496</span>            if (tcf != null) {<a name="line.496"></a>
-<span class="sourceLineNo">497</span>                tcf.configureShader(batch);<a name="line.497"></a>
-<span class="sourceLineNo">498</span>            }<a name="line.498"></a>
-<span class="sourceLineNo">499</span>            float yscroll = scrollPane.getScrollY();<a name="line.499"></a>
-<span class="sourceLineNo">500</span><a name="line.500"></a>
-<span class="sourceLineNo">501</span>            final float destx = tx, offY = (tcf != null) ? tcf.height * 0.5f : 0;<a name="line.501"></a>
-<span class="sourceLineNo">502</span>            getTypesetText();<a name="line.502"></a>
-<span class="sourceLineNo">503</span>            font.draw(batch, builder, destx, theight + yscroll - offY,<a name="line.503"></a>
-<span class="sourceLineNo">504</span>                    0, builder.length(), twidth, Align.left, true);<a name="line.504"></a>
-<span class="sourceLineNo">505</span><a name="line.505"></a>
-<span class="sourceLineNo">506</span>        }<a name="line.506"></a>
-<span class="sourceLineNo">507</span>    }<a name="line.507"></a>
-<span class="sourceLineNo">508</span><a name="line.508"></a>
-<span class="sourceLineNo">509</span>}<a name="line.509"></a>
+<span class="sourceLineNo">255</span><a name="line.255"></a>
+<span class="sourceLineNo">256</span>            private void handleArrow(boolean up) {<a name="line.256"></a>
+<span class="sourceLineNo">257</span>                final float scrollY = scrollPane.getScrollY();<a name="line.257"></a>
+<span class="sourceLineNo">258</span>                final int mult = up ? -1 : 1;<a name="line.258"></a>
+<span class="sourceLineNo">259</span>                scrollPane.setScrollY(scrollY + (scrollPane.getHeight() * 0.8f * mult));<a name="line.259"></a>
+<span class="sourceLineNo">260</span>            }<a name="line.260"></a>
+<span class="sourceLineNo">261</span>        });<a name="line.261"></a>
+<span class="sourceLineNo">262</span>    }<a name="line.262"></a>
+<span class="sourceLineNo">263</span><a name="line.263"></a>
+<span class="sourceLineNo">264</span>    /**<a name="line.264"></a>
+<span class="sourceLineNo">265</span>         * @param m<a name="line.265"></a>
+<span class="sourceLineNo">266</span>         *            The markup to use.<a name="line.266"></a>
+<span class="sourceLineNo">267</span>         */<a name="line.267"></a>
+<span class="sourceLineNo">268</span>        public void setMarkup(IMarkup&lt;T&gt; m) {<a name="line.268"></a>
+<span class="sourceLineNo">269</span>                if (font != null)<a name="line.269"></a>
+<span class="sourceLineNo">270</span>                        font.getData().markupEnabled = true;<a name="line.270"></a>
+<span class="sourceLineNo">271</span>                this.markup = m;<a name="line.271"></a>
+<span class="sourceLineNo">272</span>        }<a name="line.272"></a>
+<span class="sourceLineNo">273</span><a name="line.273"></a>
+<span class="sourceLineNo">274</span>        /**<a name="line.274"></a>
+<span class="sourceLineNo">275</span>         * Sets the font to use. This method should be called once before<a name="line.275"></a>
+<span class="sourceLineNo">276</span>         * {@link #init(float, float, Collection)} if the font wasn't given at<a name="line.276"></a>
+<span class="sourceLineNo">277</span>         * creation-time.<a name="line.277"></a>
+<span class="sourceLineNo">278</span>         * <a name="line.278"></a>
+<span class="sourceLineNo">279</span>         * @param font<a name="line.279"></a>
+<span class="sourceLineNo">280</span>         *            The font to use.<a name="line.280"></a>
+<span class="sourceLineNo">281</span>         */<a name="line.281"></a>
+<span class="sourceLineNo">282</span>        public void setFont(BitmapFont font) {<a name="line.282"></a>
+<span class="sourceLineNo">283</span>                this.font = font;<a name="line.283"></a>
+<span class="sourceLineNo">284</span>        tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                .width(MathUtils.round(font.getSpaceWidth()));<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                if (markup != null)<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                        font.getData().markupEnabled = true;<a name="line.287"></a>
+<span class="sourceLineNo">288</span>        }<a name="line.288"></a>
+<span class="sourceLineNo">289</span><a name="line.289"></a>
+<span class="sourceLineNo">290</span>        /**<a name="line.290"></a>
+<span class="sourceLineNo">291</span>         * This method sets the sizes of {@link #scrollPane} and {@link #textActor}.<a name="line.291"></a>
+<span class="sourceLineNo">292</span>         * This method MUST be called before rendering.<a name="line.292"></a>
+<span class="sourceLineNo">293</span>         * <a name="line.293"></a>
+<span class="sourceLineNo">294</span>         * @param maxHeight<a name="line.294"></a>
+<span class="sourceLineNo">295</span>         *            The maximum height that the scrollpane can take (equal or<a name="line.295"></a>
+<span class="sourceLineNo">296</span>         *            smaller than the height of the text actor).<a name="line.296"></a>
+<span class="sourceLineNo">297</span>         * @param width<a name="line.297"></a>
+<span class="sourceLineNo">298</span>         *            The width of the scrollpane and the text actor.<a name="line.298"></a>
+<span class="sourceLineNo">299</span>         * @param text<a name="line.299"></a>
+<span class="sourceLineNo">300</span>         */<a name="line.300"></a>
+<span class="sourceLineNo">301</span>        public void init(float width, float maxHeight, Collection&lt;? extends IColoredString&lt;T&gt;&gt; text) {<a name="line.301"></a>
+<span class="sourceLineNo">302</span>        this.text = new ArrayList&lt;IColoredString&lt;T&gt;&gt;(text);<a name="line.302"></a>
+<span class="sourceLineNo">303</span><a name="line.303"></a>
+<span class="sourceLineNo">304</span>        scrollPane.setWidth(width);<a name="line.304"></a>
+<span class="sourceLineNo">305</span>        textActor.setWidth(width);<a name="line.305"></a>
+<span class="sourceLineNo">306</span><a name="line.306"></a>
+<span class="sourceLineNo">307</span>        if (tcf == null)<a name="line.307"></a>
+<span class="sourceLineNo">308</span>            throw new NullPointerException(<a name="line.308"></a>
+<span class="sourceLineNo">309</span>                    "The font should be set before calling TextPanel.init()");<a name="line.309"></a>
+<span class="sourceLineNo">310</span><a name="line.310"></a>
+<span class="sourceLineNo">311</span>        final BitmapFontCache cache = font.getCache();<a name="line.311"></a>
+<span class="sourceLineNo">312</span>        final List&lt;String&gt; toDisplay = getTypesetText();<a name="line.312"></a>
+<span class="sourceLineNo">313</span>        float totalTextHeight = tcf.height();<a name="line.313"></a>
+<span class="sourceLineNo">314</span>        GlyphLayout layout = cache.addText(builder, 0, 0, 0, builder.length(), width, Align.left, true);<a name="line.314"></a>
+<span class="sourceLineNo">315</span>        totalTextHeight += layout.height;<a name="line.315"></a>
+<span class="sourceLineNo">316</span>        if(totalTextHeight &lt; 0)<a name="line.316"></a>
+<span class="sourceLineNo">317</span>            totalTextHeight = 0;<a name="line.317"></a>
+<span class="sourceLineNo">318</span>                textActor.setHeight(/* Entire height */ totalTextHeight);<a name="line.318"></a>
+<span class="sourceLineNo">319</span>                final boolean yscroll = maxHeight &lt; totalTextHeight;<a name="line.319"></a>
+<span class="sourceLineNo">320</span>                scrollPane.setHeight(/* Maybe not the entire height */ Math.min(totalTextHeight, maxHeight));<a name="line.320"></a>
+<span class="sourceLineNo">321</span>        scrollPane.setActor(new TextActor());<a name="line.321"></a>
+<span class="sourceLineNo">322</span>                yScrollingCallback(yscroll);<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        }<a name="line.323"></a>
+<span class="sourceLineNo">324</span><a name="line.324"></a>
+<span class="sourceLineNo">325</span>    public void init(float width, float maxHeight, T color, String... text)<a name="line.325"></a>
+<span class="sourceLineNo">326</span>    {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>        ArrayList&lt;IColoredString.Impl&lt;T&gt;&gt; coll = new ArrayList&lt;&gt;(text.length);<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        for(String t : text)<a name="line.328"></a>
+<span class="sourceLineNo">329</span>        {<a name="line.329"></a>
+<span class="sourceLineNo">330</span>            coll.add(new IColoredString.Impl&lt;T&gt;(t, color));<a name="line.330"></a>
+<span class="sourceLineNo">331</span>        }<a name="line.331"></a>
+<span class="sourceLineNo">332</span>        init(width, maxHeight, coll);<a name="line.332"></a>
+<span class="sourceLineNo">333</span>    }<a name="line.333"></a>
+<span class="sourceLineNo">334</span><a name="line.334"></a>
+<span class="sourceLineNo">335</span>        /**<a name="line.335"></a>
+<span class="sourceLineNo">336</span>         * Draws the border. You have to call this method manually, because the<a name="line.336"></a>
+<span class="sourceLineNo">337</span>         * border is outside the actor and hence should be drawn at the very end,<a name="line.337"></a>
+<span class="sourceLineNo">338</span>         * otherwise it can get overwritten by UI element.<a name="line.338"></a>
+<span class="sourceLineNo">339</span>         * <a name="line.339"></a>
+<span class="sourceLineNo">340</span>         * @param batch<a name="line.340"></a>
+<span class="sourceLineNo">341</span>         */<a name="line.341"></a>
+<span class="sourceLineNo">342</span>        public void drawBorder(Batch batch) {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                if (borderColor != null &amp;&amp; 0 &lt; borderSize) {<a name="line.343"></a>
+<span class="sourceLineNo">344</span>                        final boolean reset = batch.isDrawing();<a name="line.344"></a>
+<span class="sourceLineNo">345</span>                        if (reset)<a name="line.345"></a>
+<span class="sourceLineNo">346</span>                                batch.end();<a name="line.346"></a>
+<span class="sourceLineNo">347</span><a name="line.347"></a>
+<span class="sourceLineNo">348</span>                        final ShapeRenderer sr = getRenderer();<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                        final Matrix4 m = batch.getTransformMatrix();<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                        sr.setTransformMatrix(m);<a name="line.350"></a>
+<span class="sourceLineNo">351</span>                        sr.begin(ShapeType.Filled);<a name="line.351"></a>
+<span class="sourceLineNo">352</span>                        sr.setColor(borderColor);<a name="line.352"></a>
+<span class="sourceLineNo">353</span>                        UIUtil.drawMarginsAround(sr, scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(),<a name="line.353"></a>
+<span class="sourceLineNo">354</span>                                        scrollPane.getHeight() - 1, borderSize, borderColor, borderStyle, 1f, 1f);<a name="line.354"></a>
+<span class="sourceLineNo">355</span>                        sr.end();<a name="line.355"></a>
+<span class="sourceLineNo">356</span><a name="line.356"></a>
+<span class="sourceLineNo">357</span>                        if (reset)<a name="line.357"></a>
+<span class="sourceLineNo">358</span>                                batch.begin();<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                }<a name="line.359"></a>
+<span class="sourceLineNo">360</span>        }<a name="line.360"></a>
+<span class="sourceLineNo">361</span><a name="line.361"></a>
+<span class="sourceLineNo">362</span>        /**<a name="line.362"></a>
+<span class="sourceLineNo">363</span>         * @return The text to draw, after applying {@link #present(IColoredString)}<a name="line.363"></a>
+<span class="sourceLineNo">364</span>         *         and {@link #applyMarkup(IColoredString)}.<a name="line.364"></a>
+<span class="sourceLineNo">365</span>         */<a name="line.365"></a>
+<span class="sourceLineNo">366</span>        public /* @Nullable */ List&lt;String&gt; getTypesetText() {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                if (text == null)<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                        return null;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        builder.delete(0, builder.length());<a name="line.369"></a>
+<span class="sourceLineNo">370</span>                final List&lt;String&gt; result = new ArrayList&lt;&gt;();<a name="line.370"></a>
+<span class="sourceLineNo">371</span>                for (IColoredString&lt;T&gt; line : text) {<a name="line.371"></a>
+<span class="sourceLineNo">372</span>                        /* This code must be consistent with #draw in the custom Actor */<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                        final IColoredString&lt;T&gt; tmp = present(line);<a name="line.373"></a>
+<span class="sourceLineNo">374</span>            final String marked = applyMarkup(tmp);<a name="line.374"></a>
+<span class="sourceLineNo">375</span>                        result.add(marked);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>            builder.append(marked);<a name="line.376"></a>
+<span class="sourceLineNo">377</span>            builder.append('\n');<a name="line.377"></a>
+<span class="sourceLineNo">378</span>                }<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        if(builder.length() &gt; 0)<a name="line.379"></a>
+<span class="sourceLineNo">380</span>            builder.deleteCharAt(builder.length() - 1);<a name="line.380"></a>
+<span class="sourceLineNo">381</span>                return result;<a name="line.381"></a>
+<span class="sourceLineNo">382</span>        }<a name="line.382"></a>
+<span class="sourceLineNo">383</span><a name="line.383"></a>
+<span class="sourceLineNo">384</span>        /**<a name="line.384"></a>
+<span class="sourceLineNo">385</span>         * @return The {@link ScrollPane} containing {@link #getTextActor()}.<a name="line.385"></a>
+<span class="sourceLineNo">386</span>         */<a name="line.386"></a>
+<span class="sourceLineNo">387</span>        public ScrollPane getScrollPane() {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                return scrollPane;<a name="line.388"></a>
+<span class="sourceLineNo">389</span>        }<a name="line.389"></a>
+<span class="sourceLineNo">390</span><a name="line.390"></a>
+<span class="sourceLineNo">391</span>        /**<a name="line.391"></a>
+<span class="sourceLineNo">392</span>         * @return The {@link Actor} where the text is drawn. It may be bigger than<a name="line.392"></a>
+<span class="sourceLineNo">393</span>         *         {@link #getScrollPane()}.<a name="line.393"></a>
+<span class="sourceLineNo">394</span>         */<a name="line.394"></a>
+<span class="sourceLineNo">395</span>        public Actor getTextActor() {<a name="line.395"></a>
+<span class="sourceLineNo">396</span>                return textActor;<a name="line.396"></a>
+<span class="sourceLineNo">397</span>        }<a name="line.397"></a>
+<span class="sourceLineNo">398</span><a name="line.398"></a>
+<span class="sourceLineNo">399</span>        /**<a name="line.399"></a>
+<span class="sourceLineNo">400</span>         * @return The font used, if set.<a name="line.400"></a>
+<span class="sourceLineNo">401</span>         */<a name="line.401"></a>
+<span class="sourceLineNo">402</span>        public /* @Nullable */ BitmapFont getFont() {<a name="line.402"></a>
+<span class="sourceLineNo">403</span>                return font;<a name="line.403"></a>
+<span class="sourceLineNo">404</span>        }<a name="line.404"></a>
+<span class="sourceLineNo">405</span><a name="line.405"></a>
+<span class="sourceLineNo">406</span>        public void dispose() {<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                if (renderer != null)<a name="line.407"></a>
+<span class="sourceLineNo">408</span>                        renderer.dispose();<a name="line.408"></a>
+<span class="sourceLineNo">409</span>        }<a name="line.409"></a>
+<span class="sourceLineNo">410</span><a name="line.410"></a>
+<span class="sourceLineNo">411</span>        /**<a name="line.411"></a>
+<span class="sourceLineNo">412</span>         * Callback done to do stuff according to whether y-scrolling is required<a name="line.412"></a>
+<span class="sourceLineNo">413</span>         * <a name="line.413"></a>
+<span class="sourceLineNo">414</span>         * @param required<a name="line.414"></a>
+<span class="sourceLineNo">415</span>         *            Whether y scrolling is required.<a name="line.415"></a>
+<span class="sourceLineNo">416</span>         */<a name="line.416"></a>
+<span class="sourceLineNo">417</span>        protected void yScrollingCallback(boolean required) {<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                if (required) {<a name="line.418"></a>
+<span class="sourceLineNo">419</span>                        /* Disable borders, they don't mix well with scrollbars */<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                        borderSize = 0;<a name="line.420"></a>
+<span class="sourceLineNo">421</span>                        scrollPane.setFadeScrollBars(false);<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                        scrollPane.setForceScroll(false, true);<a name="line.422"></a>
+<span class="sourceLineNo">423</span>                }<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        }<a name="line.424"></a>
+<span class="sourceLineNo">425</span><a name="line.425"></a>
+<span class="sourceLineNo">426</span>        /**<a name="line.426"></a>
+<span class="sourceLineNo">427</span>         * @param ics<a name="line.427"></a>
+<span class="sourceLineNo">428</span>         *            Text set when building {@code this}<a name="line.428"></a>
+<span class="sourceLineNo">429</span>         * @return The text to display to screen. If you wanna<a name="line.429"></a>
+<span class="sourceLineNo">430</span>         *         {@link squidpony.IColorCenter#filter(IColoredString) filter} your<a name="line.430"></a>
+<span class="sourceLineNo">431</span>         *         text , do it here.<a name="line.431"></a>
+<span class="sourceLineNo">432</span>         */<a name="line.432"></a>
+<span class="sourceLineNo">433</span>        protected IColoredString&lt;T&gt; present(IColoredString&lt;T&gt; ics) {<a name="line.433"></a>
+<span class="sourceLineNo">434</span>                return ics;<a name="line.434"></a>
+<span class="sourceLineNo">435</span>        }<a name="line.435"></a>
+<span class="sourceLineNo">436</span><a name="line.436"></a>
+<span class="sourceLineNo">437</span>        /**<a name="line.437"></a>
+<span class="sourceLineNo">438</span>         * @param ics<a name="line.438"></a>
+<span class="sourceLineNo">439</span>         * @return The text obtained after applying {@link #markup}.<a name="line.439"></a>
+<span class="sourceLineNo">440</span>         */<a name="line.440"></a>
+<span class="sourceLineNo">441</span>        protected String applyMarkup(IColoredString&lt;T&gt; ics) {<a name="line.441"></a>
+<span class="sourceLineNo">442</span>                return markup == null ? ics.toString() : ics.presentWithMarkup(markup);<a name="line.442"></a>
+<span class="sourceLineNo">443</span>        }<a name="line.443"></a>
+<span class="sourceLineNo">444</span><a name="line.444"></a>
+<span class="sourceLineNo">445</span>        /**<a name="line.445"></a>
+<span class="sourceLineNo">446</span>         * @return A fresh renderer.<a name="line.446"></a>
+<span class="sourceLineNo">447</span>         */<a name="line.447"></a>
+<span class="sourceLineNo">448</span>        protected ShapeRenderer buildRenderer() {<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                return new ShapeRenderer();<a name="line.449"></a>
+<span class="sourceLineNo">450</span>        }<a name="line.450"></a>
+<span class="sourceLineNo">451</span><a name="line.451"></a>
+<span class="sourceLineNo">452</span>        /**<a name="line.452"></a>
+<span class="sourceLineNo">453</span>         * @return The renderer to use.<a name="line.453"></a>
+<span class="sourceLineNo">454</span>         */<a name="line.454"></a>
+<span class="sourceLineNo">455</span>        protected ShapeRenderer getRenderer() {<a name="line.455"></a>
+<span class="sourceLineNo">456</span>                if (renderer == null)<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                        renderer = buildRenderer();<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                return renderer;<a name="line.458"></a>
+<span class="sourceLineNo">459</span>        }<a name="line.459"></a>
+<span class="sourceLineNo">460</span><a name="line.460"></a>
+<span class="sourceLineNo">461</span>    private class TextActor extends Actor<a name="line.461"></a>
+<span class="sourceLineNo">462</span>    {<a name="line.462"></a>
+<span class="sourceLineNo">463</span>        TextActor()<a name="line.463"></a>
+<span class="sourceLineNo">464</span>        {<a name="line.464"></a>
+<span class="sourceLineNo">465</span><a name="line.465"></a>
+<span class="sourceLineNo">466</span>        }<a name="line.466"></a>
+<span class="sourceLineNo">467</span>        @Override<a name="line.467"></a>
+<span class="sourceLineNo">468</span>        public void draw(Batch batch, float parentAlpha) {<a name="line.468"></a>
+<span class="sourceLineNo">469</span>            final float tx = 0;//getX();<a name="line.469"></a>
+<span class="sourceLineNo">470</span>            final float ty = 0;//getY();<a name="line.470"></a>
+<span class="sourceLineNo">471</span>            final float twidth = getWidth();<a name="line.471"></a>
+<span class="sourceLineNo">472</span>            final float theight = getHeight();<a name="line.472"></a>
+<span class="sourceLineNo">473</span><a name="line.473"></a>
+<span class="sourceLineNo">474</span>            final float height = scrollPane.getHeight();<a name="line.474"></a>
+<span class="sourceLineNo">475</span><a name="line.475"></a>
+<span class="sourceLineNo">476</span>            if (backgroundColor != null) {<a name="line.476"></a>
+<span class="sourceLineNo">477</span>                batch.setColor(backgroundColor);<a name="line.477"></a>
+<span class="sourceLineNo">478</span>                batch.draw(tcf.getSolid(), tx, ty, twidth, theight);<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                batch.setColor(Color.WHITE);<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                /*<a name="line.480"></a>
+<span class="sourceLineNo">481</span>                batch.end();<a name="line.481"></a>
+<span class="sourceLineNo">482</span><a name="line.482"></a>
+<span class="sourceLineNo">483</span>                final Matrix4 m = batch.getTransformMatrix();<a name="line.483"></a>
+<span class="sourceLineNo">484</span>                final ShapeRenderer sr = getRenderer();<a name="line.484"></a>
+<span class="sourceLineNo">485</span>                sr.setTransformMatrix(m);<a name="line.485"></a>
+<span class="sourceLineNo">486</span>                sr.begin(ShapeType.Filled);<a name="line.486"></a>
+<span class="sourceLineNo">487</span>                sr.setColor(backgroundColor);<a name="line.487"></a>
+<span class="sourceLineNo">488</span>                UIUtil.drawRectangle(renderer, tx, ty, twidth, theight, ShapeType.Filled,<a name="line.488"></a>
+<span class="sourceLineNo">489</span>                        backgroundColor);<a name="line.489"></a>
+<span class="sourceLineNo">490</span>                sr.end();<a name="line.490"></a>
+<span class="sourceLineNo">491</span><a name="line.491"></a>
+<span class="sourceLineNo">492</span>                batch.begin();<a name="line.492"></a>
+<span class="sourceLineNo">493</span>                */<a name="line.493"></a>
+<span class="sourceLineNo">494</span>            }<a name="line.494"></a>
+<span class="sourceLineNo">495</span><a name="line.495"></a>
+<span class="sourceLineNo">496</span>            if (font == null)<a name="line.496"></a>
+<span class="sourceLineNo">497</span>                throw new NullPointerException(<a name="line.497"></a>
+<span class="sourceLineNo">498</span>                        "The font should be set when drawing a " + getClass().getSimpleName());<a name="line.498"></a>
+<span class="sourceLineNo">499</span>            if (text == null)<a name="line.499"></a>
+<span class="sourceLineNo">500</span>                throw new NullPointerException(<a name="line.500"></a>
+<span class="sourceLineNo">501</span>                        "The text should be set when drawing a " + getClass().getSimpleName());<a name="line.501"></a>
+<span class="sourceLineNo">502</span>            if (tcf != null) {<a name="line.502"></a>
+<span class="sourceLineNo">503</span>                tcf.configureShader(batch);<a name="line.503"></a>
+<span class="sourceLineNo">504</span>            }<a name="line.504"></a>
+<span class="sourceLineNo">505</span>            float yscroll = scrollPane.getScrollY();<a name="line.505"></a>
+<span class="sourceLineNo">506</span><a name="line.506"></a>
+<span class="sourceLineNo">507</span>            final float destx = tx, offY = (tcf != null) ? tcf.height * 0.5f : 0;<a name="line.507"></a>
+<span class="sourceLineNo">508</span>            getTypesetText();<a name="line.508"></a>
+<span class="sourceLineNo">509</span>            font.draw(batch, builder, destx, theight + yscroll - offY,<a name="line.509"></a>
+<span class="sourceLineNo">510</span>                    0, builder.length(), twidth, Align.left, true);<a name="line.510"></a>
+<span class="sourceLineNo">511</span><a name="line.511"></a>
+<span class="sourceLineNo">512</span>        }<a name="line.512"></a>
+<span class="sourceLineNo">513</span>    }<a name="line.513"></a>
+<span class="sourceLineNo">514</span><a name="line.514"></a>
+<span class="sourceLineNo">515</span>}<a name="line.515"></a>
 
 
 

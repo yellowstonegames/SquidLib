@@ -231,7 +231,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" titl
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/SubcellLayers.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a></span>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
     float&nbsp;parentAlpha)</code>
-<div class="block">Draws the actor.</div>
+<div class="block">Draws the SubcellLayers and all glyphs it tracks.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -1289,13 +1289,17 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" titl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.675">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/SubcellLayers.html#line.689">draw</a>(com.badlogic.gdx.graphics.g2d.Batch&nbsp;batch,
                  float&nbsp;parentAlpha)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">SparseLayers</a></code></span></div>
-<div class="block">Draws the actor. The batch is configured to draw in the parent's coordinate system.
- <code>This draw method</code> is convenient to draw a rotated and scaled TextureRegion. <code>Batch.begin()</code> has already been called on
- the batch. If <code>Batch.end()</code> is called to draw without the batch then <code>Batch.begin()</code> must be called before the
- method returns.</div>
+<div class="block">Draws the SubcellLayers and all glyphs it tracks. <code>Batch.begin()</code> must have already been called on the
+ batch, and <code>Batch.end()</code> should be called after this returns and before the rendering code finishes for the
+ frame.
+ <br>
+ This will set the shader of <code>batch</code> if using a distance field or MSDF font and the shader is currently not
+ configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the
+ same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
+ both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
+ draw full-color art, and end the Batch between drawing this object and the other art.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html#draw-com.badlogic.gdx.graphics.g2d.Batch-float-">draw</a></code>&nbsp;in class&nbsp;<code><a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a></code></dd>

@@ -679,57 +679,71 @@
 <span class="sourceLineNo">671</span><a name="line.671"></a>
 <span class="sourceLineNo">672</span>        addAction(Actions.sequence(sequence));<a name="line.672"></a>
 <span class="sourceLineNo">673</span>    }<a name="line.673"></a>
-<span class="sourceLineNo">674</span>    @Override<a name="line.674"></a>
-<span class="sourceLineNo">675</span>    public void draw(Batch batch, float parentAlpha) {<a name="line.675"></a>
-<span class="sourceLineNo">676</span>        float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight, gxo, gyo;<a name="line.676"></a>
-<span class="sourceLineNo">677</span>        font.draw(batch, backgrounds, xo, yo, 3, 3);<a name="line.677"></a>
-<span class="sourceLineNo">678</span>        int len = layers.size();<a name="line.678"></a>
-<span class="sourceLineNo">679</span>        Frustum frustum = null;<a name="line.679"></a>
-<span class="sourceLineNo">680</span>        Stage stage = getStage();<a name="line.680"></a>
-<span class="sourceLineNo">681</span>        if(stage != null) {<a name="line.681"></a>
-<span class="sourceLineNo">682</span>            Viewport viewport = stage.getViewport();<a name="line.682"></a>
-<span class="sourceLineNo">683</span>            if(viewport != null)<a name="line.683"></a>
-<span class="sourceLineNo">684</span>            {<a name="line.684"></a>
-<span class="sourceLineNo">685</span>                Camera camera = viewport.getCamera();<a name="line.685"></a>
-<span class="sourceLineNo">686</span>                if(camera != null)<a name="line.686"></a>
-<span class="sourceLineNo">687</span>                {<a name="line.687"></a>
-<span class="sourceLineNo">688</span>                    if(<a name="line.688"></a>
-<span class="sourceLineNo">689</span>                            camera.frustum != null &amp;&amp;<a name="line.689"></a>
-<span class="sourceLineNo">690</span>                                    (!camera.frustum.boundsInFrustum(xo, yOff - font.actualCellHeight - 1f, 0f, font.actualCellWidth, font.actualCellHeight, 0f) ||<a name="line.690"></a>
-<span class="sourceLineNo">691</span>                                            !camera.frustum.boundsInFrustum(xo + font.actualCellWidth * (gridWidth-1), yo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))<a name="line.691"></a>
-<span class="sourceLineNo">692</span>                    )<a name="line.692"></a>
-<span class="sourceLineNo">693</span>                        frustum = camera.frustum;<a name="line.693"></a>
-<span class="sourceLineNo">694</span>                }<a name="line.694"></a>
-<span class="sourceLineNo">695</span>            }<a name="line.695"></a>
-<span class="sourceLineNo">696</span>        }<a name="line.696"></a>
-<span class="sourceLineNo">697</span>        font.configureShader(batch);<a name="line.697"></a>
-<span class="sourceLineNo">698</span>        if(frustum == null) {<a name="line.698"></a>
-<span class="sourceLineNo">699</span>            for (int i = 0; i &lt; len; i++) {<a name="line.699"></a>
-<span class="sourceLineNo">700</span>                layers.get(i).draw(batch, font, xo, yOff);<a name="line.700"></a>
-<span class="sourceLineNo">701</span>            }<a name="line.701"></a>
-<span class="sourceLineNo">702</span>        }<a name="line.702"></a>
-<span class="sourceLineNo">703</span>        else<a name="line.703"></a>
-<span class="sourceLineNo">704</span>        {<a name="line.704"></a>
-<span class="sourceLineNo">705</span>            for (int i = 0; i &lt; len; i++) {<a name="line.705"></a>
-<span class="sourceLineNo">706</span>                layers.get(i).draw(batch, font, frustum, xo, yOff);<a name="line.706"></a>
-<span class="sourceLineNo">707</span>            }<a name="line.707"></a>
-<span class="sourceLineNo">708</span>        }<a name="line.708"></a>
-<span class="sourceLineNo">709</span><a name="line.709"></a>
-<span class="sourceLineNo">710</span>        int x, y;<a name="line.710"></a>
-<span class="sourceLineNo">711</span>        for (int i = 0; i &lt; glyphs.size(); i++) {<a name="line.711"></a>
-<span class="sourceLineNo">712</span>            TextCellFactory.Glyph glyph = glyphs.get(i);<a name="line.712"></a>
-<span class="sourceLineNo">713</span>            if(glyph == null)<a name="line.713"></a>
-<span class="sourceLineNo">714</span>                continue;<a name="line.714"></a>
-<span class="sourceLineNo">715</span>            glyph.act(Gdx.graphics.getDeltaTime());<a name="line.715"></a>
-<span class="sourceLineNo">716</span>            if(!glyph.isVisible() ||<a name="line.716"></a>
-<span class="sourceLineNo">717</span>                            (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) &lt; 0 || x &gt;= gridWidth ||<a name="line.717"></a>
-<span class="sourceLineNo">718</span>                            (y = Math.round((gyo = glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) &lt; 0 || y &gt;= gridHeight ||<a name="line.718"></a>
-<span class="sourceLineNo">719</span>                            backgrounds[x * 3 + 1][y * 3 + 1] == 0f || (frustum != null &amp;&amp; !frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f)))<a name="line.719"></a>
-<span class="sourceLineNo">720</span>                continue;<a name="line.720"></a>
-<span class="sourceLineNo">721</span>            glyph.draw(batch, 1f);<a name="line.721"></a>
+<span class="sourceLineNo">674</span>    /**<a name="line.674"></a>
+<span class="sourceLineNo">675</span>     * Draws the SubcellLayers and all glyphs it tracks. {@link Batch#begin()} must have already been called on the<a name="line.675"></a>
+<span class="sourceLineNo">676</span>     * batch, and {@link Batch#end()} should be called after this returns and before the rendering code finishes for the<a name="line.676"></a>
+<span class="sourceLineNo">677</span>     * frame.<a name="line.677"></a>
+<span class="sourceLineNo">678</span>     * &lt;br&gt;<a name="line.678"></a>
+<span class="sourceLineNo">679</span>     * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not<a name="line.679"></a>
+<span class="sourceLineNo">680</span>     * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the<a name="line.680"></a>
+<span class="sourceLineNo">681</span>     * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw<a name="line.681"></a>
+<span class="sourceLineNo">682</span>     * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to<a name="line.682"></a>
+<span class="sourceLineNo">683</span>     * draw full-color art, and end the Batch between drawing this object and the other art.<a name="line.683"></a>
+<span class="sourceLineNo">684</span>     *<a name="line.684"></a>
+<span class="sourceLineNo">685</span>     * @param batch a Batch such as a SpriteBatch that must be between a begin() and end() call; usually done by Stage<a name="line.685"></a>
+<span class="sourceLineNo">686</span>     * @param parentAlpha currently ignored<a name="line.686"></a>
+<span class="sourceLineNo">687</span>     */<a name="line.687"></a>
+<span class="sourceLineNo">688</span>    @Override<a name="line.688"></a>
+<span class="sourceLineNo">689</span>    public void draw(Batch batch, float parentAlpha) {<a name="line.689"></a>
+<span class="sourceLineNo">690</span>        float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight, gxo, gyo;<a name="line.690"></a>
+<span class="sourceLineNo">691</span>        font.draw(batch, backgrounds, xo, yo, 3, 3);<a name="line.691"></a>
+<span class="sourceLineNo">692</span>        int len = layers.size();<a name="line.692"></a>
+<span class="sourceLineNo">693</span>        Frustum frustum = null;<a name="line.693"></a>
+<span class="sourceLineNo">694</span>        Stage stage = getStage();<a name="line.694"></a>
+<span class="sourceLineNo">695</span>        if(stage != null) {<a name="line.695"></a>
+<span class="sourceLineNo">696</span>            Viewport viewport = stage.getViewport();<a name="line.696"></a>
+<span class="sourceLineNo">697</span>            if(viewport != null)<a name="line.697"></a>
+<span class="sourceLineNo">698</span>            {<a name="line.698"></a>
+<span class="sourceLineNo">699</span>                Camera camera = viewport.getCamera();<a name="line.699"></a>
+<span class="sourceLineNo">700</span>                if(camera != null)<a name="line.700"></a>
+<span class="sourceLineNo">701</span>                {<a name="line.701"></a>
+<span class="sourceLineNo">702</span>                    if(<a name="line.702"></a>
+<span class="sourceLineNo">703</span>                            camera.frustum != null &amp;&amp;<a name="line.703"></a>
+<span class="sourceLineNo">704</span>                                    (!camera.frustum.boundsInFrustum(xo, yOff - font.actualCellHeight - 1f, 0f, font.actualCellWidth, font.actualCellHeight, 0f) ||<a name="line.704"></a>
+<span class="sourceLineNo">705</span>                                            !camera.frustum.boundsInFrustum(xo + font.actualCellWidth * (gridWidth-1), yo, 0f, font.actualCellWidth, font.actualCellHeight, 0f))<a name="line.705"></a>
+<span class="sourceLineNo">706</span>                    )<a name="line.706"></a>
+<span class="sourceLineNo">707</span>                        frustum = camera.frustum;<a name="line.707"></a>
+<span class="sourceLineNo">708</span>                }<a name="line.708"></a>
+<span class="sourceLineNo">709</span>            }<a name="line.709"></a>
+<span class="sourceLineNo">710</span>        }<a name="line.710"></a>
+<span class="sourceLineNo">711</span>        font.configureShader(batch);<a name="line.711"></a>
+<span class="sourceLineNo">712</span>        if(frustum == null) {<a name="line.712"></a>
+<span class="sourceLineNo">713</span>            for (int i = 0; i &lt; len; i++) {<a name="line.713"></a>
+<span class="sourceLineNo">714</span>                layers.get(i).draw(batch, font, xo, yOff);<a name="line.714"></a>
+<span class="sourceLineNo">715</span>            }<a name="line.715"></a>
+<span class="sourceLineNo">716</span>        }<a name="line.716"></a>
+<span class="sourceLineNo">717</span>        else<a name="line.717"></a>
+<span class="sourceLineNo">718</span>        {<a name="line.718"></a>
+<span class="sourceLineNo">719</span>            for (int i = 0; i &lt; len; i++) {<a name="line.719"></a>
+<span class="sourceLineNo">720</span>                layers.get(i).draw(batch, font, frustum, xo, yOff);<a name="line.720"></a>
+<span class="sourceLineNo">721</span>            }<a name="line.721"></a>
 <span class="sourceLineNo">722</span>        }<a name="line.722"></a>
-<span class="sourceLineNo">723</span>    }<a name="line.723"></a>
-<span class="sourceLineNo">724</span>}<a name="line.724"></a>
+<span class="sourceLineNo">723</span><a name="line.723"></a>
+<span class="sourceLineNo">724</span>        int x, y;<a name="line.724"></a>
+<span class="sourceLineNo">725</span>        for (int i = 0; i &lt; glyphs.size(); i++) {<a name="line.725"></a>
+<span class="sourceLineNo">726</span>            TextCellFactory.Glyph glyph = glyphs.get(i);<a name="line.726"></a>
+<span class="sourceLineNo">727</span>            if(glyph == null)<a name="line.727"></a>
+<span class="sourceLineNo">728</span>                continue;<a name="line.728"></a>
+<span class="sourceLineNo">729</span>            glyph.act(Gdx.graphics.getDeltaTime());<a name="line.729"></a>
+<span class="sourceLineNo">730</span>            if(!glyph.isVisible() ||<a name="line.730"></a>
+<span class="sourceLineNo">731</span>                            (x = Math.round((gxo = glyph.getX() - xo) / font.actualCellWidth)) &lt; 0 || x &gt;= gridWidth ||<a name="line.731"></a>
+<span class="sourceLineNo">732</span>                            (y = Math.round((gyo = glyph.getY() - yo)  / -font.actualCellHeight + gridHeight)) &lt; 0 || y &gt;= gridHeight ||<a name="line.732"></a>
+<span class="sourceLineNo">733</span>                            backgrounds[x * 3 + 1][y * 3 + 1] == 0f || (frustum != null &amp;&amp; !frustum.boundsInFrustum(gxo, gyo, 0f, font.actualCellWidth, font.actualCellHeight, 0f)))<a name="line.733"></a>
+<span class="sourceLineNo">734</span>                continue;<a name="line.734"></a>
+<span class="sourceLineNo">735</span>            glyph.draw(batch, 1f);<a name="line.735"></a>
+<span class="sourceLineNo">736</span>        }<a name="line.736"></a>
+<span class="sourceLineNo">737</span>    }<a name="line.737"></a>
+<span class="sourceLineNo">738</span>}<a name="line.738"></a>
 
 
 
