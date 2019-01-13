@@ -1,7 +1,8 @@
-SquidLib is a Java library that provides a full featured toolbox for working with turn based games in Swing and libGDX.
+SquidLib is a Java library that provides a diverse toolbox for working with procedural generation in games using libGDX.
 --  
 
-SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
+SquidLib is used for Wyrm, [Epigon](https://github.com/SquidPony/Epigon), Attack the Geth, Assault Fish,
+[Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
 
 You can see [a small example](http://tommyettinger.github.io/SquidLib-Demos/tsar/index.html) online; it is part of the
 [SquidLib-Demos](https://github.com/tommyettinger/SquidLib-Demos) collection. It uses `squidlib-util` to generate
@@ -40,9 +41,9 @@ The completely-optional squidlib-extra module (primarily used for serialization;
 and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9-sources.jar).
 
 You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.0-b9, but no older) here:
-  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/index.html)
-  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/index.html)
-  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/index.html)
+  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/apidocs/index.html)
+  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/apidocs/index.html)
+  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/apidocs/index.html)
 The docs here are updated whenever the project is rebuilt fully, which only coincides with releases occasionally.
 
 Current Features:

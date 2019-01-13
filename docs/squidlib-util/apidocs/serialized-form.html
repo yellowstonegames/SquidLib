@@ -132,7 +132,7 @@
 </li>
 <li class="blockList">
 <h4>syllableFrequencies</h4>
-<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a> syllableFrequencies</pre>
+<pre>double[] syllableFrequencies</pre>
 </li>
 <li class="blockList">
 <h4>totalSyllableFrequency</h4>
@@ -2486,6 +2486,102 @@
 </li>
 </ul>
 </li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.WorldMapGenerator.LocalMap">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.WorldMapGenerator.LocalMap</a> extends <a href="squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>minHeat0</h4>
+<pre>double minHeat0</pre>
+</li>
+<li class="blockList">
+<h4>maxHeat0</h4>
+<pre>double maxHeat0</pre>
+</li>
+<li class="blockList">
+<h4>minHeat1</h4>
+<pre>double minHeat1</pre>
+</li>
+<li class="blockList">
+<h4>maxHeat1</h4>
+<pre>double maxHeat1</pre>
+</li>
+<li class="blockList">
+<h4>minWet0</h4>
+<pre>double minWet0</pre>
+</li>
+<li class="blockList">
+<h4>maxWet0</h4>
+<pre>double maxWet0</pre>
+</li>
+<li class="blockList">
+<h4>terrain</h4>
+<pre><a href="squidpony/squidmath/Noise.Ridged2D.html" title="class in squidpony.squidmath">Noise.Ridged2D</a> terrain</pre>
+</li>
+<li class="blockList">
+<h4>otherRidged</h4>
+<pre><a href="squidpony/squidmath/Noise.Ridged2D.html" title="class in squidpony.squidmath">Noise.Ridged2D</a> otherRidged</pre>
+</li>
+<li class="blockList">
+<h4>heat</h4>
+<pre><a href="squidpony/squidmath/Noise.InverseLayered2D.html" title="class in squidpony.squidmath">Noise.InverseLayered2D</a> heat</pre>
+</li>
+<li class="blockList">
+<h4>moisture</h4>
+<pre><a href="squidpony/squidmath/Noise.InverseLayered2D.html" title="class in squidpony.squidmath">Noise.InverseLayered2D</a> moisture</pre>
+</li>
+<li class="blockList">
+<h4>terrainLayered</h4>
+<pre><a href="squidpony/squidmath/Noise.InverseLayered2D.html" title="class in squidpony.squidmath">Noise.InverseLayered2D</a> terrainLayered</pre>
+</li>
+<li class="blockList">
+<h4>xPositions</h4>
+<pre>double[][] xPositions</pre>
+</li>
+<li class="blockList">
+<h4>yPositions</h4>
+<pre>double[][] yPositions</pre>
+</li>
+<li class="blockListLast">
+<h4>zPositions</h4>
+<pre>double[][] zPositions</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidgrid.mapping.WorldMapGenerator.LocalMimicMap">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidgrid/mapping/WorldMapGenerator.LocalMimicMap.html" title="class in squidpony.squidgrid.mapping">squidpony.squidgrid.mapping.WorldMapGenerator.LocalMimicMap</a> extends <a href="squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>earth</h4>
+<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> earth</pre>
+</li>
+<li class="blockList">
+<h4>shallow</h4>
+<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> shallow</pre>
+</li>
+<li class="blockList">
+<h4>coast</h4>
+<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> coast</pre>
+</li>
+<li class="blockListLast">
+<h4>earthOriginal</h4>
+<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> earthOriginal</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="squidpony.squidgrid.mapping.WorldMapGenerator.MimicMap">
 <!--   -->
 </a>
@@ -2506,17 +2602,9 @@
 <h4>coast</h4>
 <pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> coast</pre>
 </li>
-<li class="blockList">
+<li class="blockListLast">
 <h4>earthOriginal</h4>
 <pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> earthOriginal</pre>
-</li>
-<li class="blockList">
-<h4>shallowOriginal</h4>
-<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> shallowOriginal</pre>
-</li>
-<li class="blockListLast">
-<h4>coastOriginal</h4>
-<pre><a href="squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> coastOriginal</pre>
 </li>
 </ul>
 </li>
@@ -3305,12 +3393,8 @@
 <pre>int len</pre>
 </li>
 <li class="blockList">
-<h4>upper</h4>
-<pre>int upper</pre>
-</li>
-<li class="blockList">
-<h4>seeds</h4>
-<pre>long[] seeds</pre>
+<h4>seed</h4>
+<pre>long seed</pre>
 </li>
 <li class="blockListLast">
 <h4>effect</h4>

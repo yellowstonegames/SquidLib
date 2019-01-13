@@ -186,80 +186,75 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony">IntDoubleOrderedMap</a>
-<div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntIntOrderedMap.html#squidpony">IntIntOrderedMap</a>
 <div class="block">An int-key and int-value insertion-ordered hash map with with a fast implementation, originally from fastutil as
  Object2ObjectLinkedOpenHashMap but modified (in <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>) to support constant-time indexed access of keys,
  values, and entries, and reordering.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntVLA.html#squidpony">IntVLA</a>
 <div class="block">A resizable, ordered or unordered variable-length int array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IRNG.html#squidpony">IRNG</a>
 <div class="block">Interface for full-featured random number generators to implement (it does more than, and includes all of,
  <a href="../../squidpony/squidmath/RandomnessSource.html" title="interface in squidpony.squidmath"><code>RandomnessSource</code></a>).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IStatefulRNG.html#squidpony">IStatefulRNG</a>
 <div class="block">Simply groups the two interfaces <a href="../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath"><code>IRNG</code></a> and <a href="../../squidpony/squidmath/StatefulRandomness.html" title="interface in squidpony.squidmath"><code>StatefulRandomness</code></a> so some implementations of IRNG can have
  their states read from and written to.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/K2.html#squidpony">K2</a>
 <div class="block">An ordered bidirectional map-like data structure, with unique A keys and unique B keys updated together like a map
  that can be queried by A keys, B keys, or int indices.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony">OrderedMap</a>
 <div class="block">A generic insertion-ordered hash map with with a fast implementation, originally from fastutil as
  Object2ObjectLinkedOpenHashMap but modified to support constant-time indexed access of keys, values, and entries,
  reordering, and optional hash strategies for unusual keys, such as arrays or usually-dense numeric values.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony">OrderedSet</a>
 <div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
  modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
  does differently).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony">RNG</a>
 <div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRNG.html#squidpony">StatefulRNG</a>
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/UnorderedMap.html#squidpony">UnorderedMap</a>
 <div class="block">A generic unordered hash map with with a fast implementation, originally from fastutil as
  Object2ObjectOpenCustomHashMap but modified to support SquidLib's <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath"><code>CrossHash.IHasher</code></a>
  interface for custom hashing instead of fastutil's Strategy interface.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/UnorderedSet.html#squidpony">UnorderedSet</a>
 <div class="block">A generic unordered hash set with with a fast implementation, based on <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> in this library, which is
  based on the fastutil library's ObjectLinkedOpenHashSet class; the ordering and indexed access have been removed to
  potentially reduce the time cost of insertion and removal at the expense of increasing time cost for access by index.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/WeightedTable.html#squidpony">WeightedTable</a>
 <div class="block">A different approach to the same task <a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath"><code>ProbabilityTable</code></a> solves, though this only looks up an appropriate index
  instead of also storing items it can choose; allows positive doubles for weights but does not allow nested tables for
@@ -466,44 +461,53 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.InverseLayered2D.html#squidpony.squidgrid.mapping">Noise.InverseLayered2D</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise2D.html#squidpony.squidgrid.mapping">Noise.Noise2D</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise3D.html#squidpony.squidgrid.mapping">Noise.Noise3D</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise4D.html#squidpony.squidgrid.mapping">Noise.Noise4D</a>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Ridged2D.html#squidpony.squidgrid.mapping">Noise.Ridged2D</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedMap.html#squidpony.squidgrid.mapping">OrderedMap</a>
 <div class="block">A generic insertion-ordered hash map with with a fast implementation, originally from fastutil as
  Object2ObjectLinkedOpenHashMap but modified to support constant-time indexed access of keys, values, and entries,
  reordering, and optional hash strategies for unusual keys, such as arrays or usually-dense numeric values.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrderedSet.html#squidpony.squidgrid.mapping">OrderedSet</a>
 <div class="block">A generic linked hash set with with a fast implementation, originally from fastutil as ObjectLinkedOpenHashSet but
  modified to support indexed access of items, reordering, and optional hash strategies for array keys (which fastutil
  does differently).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RegionMap.html#squidpony.squidgrid.mapping">RegionMap</a>
 <div class="block">A small extension of OrderedMap that specifically handles <code>short[]</code> regions as produced by <a href="../../squidpony/squidmath/CoordPacker.html" title="class in squidpony.squidmath"><code>CoordPacker</code></a>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRNG.html#squidpony.squidgrid.mapping">StatefulRNG</a>
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/UnorderedSet.html#squidpony.squidgrid.mapping">UnorderedSet</a>
 <div class="block">A generic unordered hash set with with a fast implementation, based on <a href="../../squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath"><code>OrderedSet</code></a> in this library, which is
  based on the fastutil library's ObjectLinkedOpenHashSet class; the ordering and indexed access have been removed to
  potentially reduce the time cost of insertion and removal at the expense of increasing time cost for access by index.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/WeightedTable.html#squidpony.squidgrid.mapping">WeightedTable</a>
 <div class="block">A different approach to the same task <a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath"><code>ProbabilityTable</code></a> solves, though this only looks up an appropriate index
  instead of also storing items it can choose; allows positive doubles for weights but does not allow nested tables for
@@ -930,6 +934,12 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Noise6D.html#squidpony.squidmath">Noise.Noise6D</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Sway1D.html#squidpony.squidmath">Noise.Sway1D</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/Noise.Sway2D.html#squidpony.squidmath">Noise.Sway2D</a>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/OrbitRNG.html#squidpony.squidmath">OrbitRNG</a>

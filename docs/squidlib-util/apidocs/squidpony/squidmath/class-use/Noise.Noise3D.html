@@ -320,9 +320,8 @@
         <a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a>&nbsp;toMimic,
         <a href="../../../squidpony/squidmath/Noise.Noise3D.html" title="interface in squidpony.squidmath">Noise.Noise3D</a>&nbsp;noiseGenerator,
         double&nbsp;octaveMultiplier)</code>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+ given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).</div>
 </td>
 </tr>
 <tr class="rowColor">

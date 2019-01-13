@@ -609,6 +609,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#maxHeat0">maxHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#maxHeat0">maxHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#maxHeat0">maxHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html#maxHeat0">maxHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a></dt>
@@ -620,6 +622,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html#maxHeat1">maxHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#maxHeat1">maxHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#maxHeat1">maxHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#maxHeat1">maxHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a></dt>
 <dd>&nbsp;</dd>
@@ -658,6 +662,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html#maxWet0">maxWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#maxWet0">maxWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#maxWet0">maxWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#maxWet0">maxWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a></dt>
 <dd>&nbsp;</dd>
@@ -843,9 +849,8 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#MimicMap-long-squidpony.squidmath.GreasedRegion-squidpony.squidmath.Noise.Noise3D-double-">MimicMap(long, GreasedRegion, Noise.Noise3D, double)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a></dt>
 <dd>
-<div class="block">Constructs a concrete WorldMapGenerator for a map that can be used to wrap a sphere (as with a texture on a
- 3D model), with seamless east-west wrapping, no north-south wrapping, and distortion that causes the poles to
- have significantly-exaggerated-in-size features while the equator is not distorted.</div>
+<div class="block">Constructs a concrete WorldMapGenerator for a map that should have land in roughly the same places as the
+ given GreasedRegion's "on" cells, using an elliptical projection (specifically, a Mollweide projection).</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html#MimicMap-long-squidpony.squidmath.Noise.Noise3D-double-">MimicMap(long, Noise.Noise3D, double)</a></span> - Constructor for class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.MimicMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.MimicMap</a></dt>
 <dd>
@@ -884,6 +889,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#minHeat0">minHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#minHeat0">minHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#minHeat0">minHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html#minHeat0">minHeat0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a></dt>
@@ -895,6 +902,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html#minHeat1">minHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#minHeat1">minHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#minHeat1">minHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#minHeat1">minHeat1</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a></dt>
 <dd>&nbsp;</dd>
@@ -939,6 +948,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html#minWet0">minWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#minWet0">minWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#minWet0">minWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html#minWet0">minWet0</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RotatingSpaceMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RotatingSpaceMap</a></dt>
 <dd>&nbsp;</dd>
@@ -1175,6 +1186,8 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#moisture">moisture</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#moisture">moisture</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html#moisture">moisture</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html#moisture">moisture</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.SpaceViewMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.SpaceViewMap</a></dt>
@@ -1198,6 +1211,8 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html#moistureFreq">moistureFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.EllipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.EllipticalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html#moistureFreq">moistureFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.HyperellipticalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.HyperellipticalMap</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html#moistureFreq">moistureFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.LocalMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.LocalMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html#moistureFreq">moistureFreq</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.RoundSideMap.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator.RoundSideMap</a></dt>
 <dd>&nbsp;</dd>
