@@ -2459,7 +2459,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         else
                             h = (h - 0.125) * 0.75;
                     }
-                    h += landModifier - 1.0;
+                    //h += landModifier - 1.0;
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(pc, ps
                                     + otherRidged.getNoiseWithSeed(pc, ps, qs,seedB + seedC)
@@ -4760,7 +4760,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         else
                             h = (h - 0.125) * 0.75;
                     }
-                    h += landModifier - 1.0;
+                    //h += landModifier - 1.0;
                     heightData[x][y] = h;
                     heatData[x][y] = (p = heat.getNoiseWithSeed(xPos, yPos
                                     + otherRidged.getNoiseWithSeed(xPos, yPos, seedB + seedC),
