@@ -18,7 +18,6 @@ import squidpony.squidgrid.gui.gdx.TextCellFactory;
 import squidpony.squidmath.MathExtras;
 
 import static squidpony.StringKit.safeSubstring;
-import static squidpony.squidgrid.gui.gdx.SColor.DAWNBRINGER_AURORA;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
 
 /**
@@ -91,17 +90,17 @@ public class ColorTest extends ApplicationAdapter {
             0x414859FF, 0x68717AFF, 0x90A1A8FF, 0xB6CBCFFF,
             0xD3E5EDFF, 0xFFFFFFFF, 0x5C3A41FF, 0x826481FF,
             0x966C6CFF, 0xAB947AFF, 0xF68181FF, 0xF53333FF,
-            0xD75748FF, 0xAE4539FF, 0x8A503EFF, 0xCD683DFF,
-            0xDE6A38FF, 0xFB6B1DFF, 0xB58057FF, 0xFCBF8AFF,
-            0xFF9E17FF, 0xFFBF40FF, 0xE3C896FF, 0xFFE596FF,
+            0xFF5A4AFF, 0xAE4539FF, 0x8A503EFF, 0xCD683DFF,
+            0xFBA458FF, 0xFB6B1DFF, 0x9F8562FF, 0xFCBF8AFF,
+            0xFF9E17FF, 0xF0B628FF, 0xE3C896FF, 0xFBE626FF,
             0xEDD500FF, 0xFBFF86FF, 0xB4D645FF, 0x729446FF,
             0x91DB69FF, 0x358510FF, 0x51C43FFF, 0x4BA14AFF,
             0x1EBC73FF, 0x30E1B9FF, 0x8FF8E2FF, 0xB8FDFFFF,
             0x94D2D4FF, 0x0B8A8FFF, 0x63C2C9FF, 0x4C93ADFF,
             0x417291FF, 0x8FD3FFFF, 0x264F6EFF, 0x4D9BE6FF,
             0x233663FF, 0x3F4DD0FF, 0x6858F0FF, 0x484A77FF,
-            0x8657CCFF, 0xA884F3FF, 0x621075FF, 0x905EA9FF,
-            0x6B3E75FF, 0xEAADEDFF, 0x852D66FF, 0xC32454FF,
+            0x8657CCFF, 0xA884F3FF, 0x621075FF, 0xA03EB2FF,
+            0xAB4ED5FF, 0xF598EAFF, 0xB53D86FF, 0xF34FE9FF,
             0x7A3045FF, 0xF04F78FF, 0xC27182FF, 0xC93038FF,
     };
 
@@ -423,8 +422,9 @@ public class ColorTest extends ApplicationAdapter {
         });
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
         SColor col = new SColor(0, 0, 0, 0);
-        final int COUNT = DAWNBRINGER_AURORA.length;
-        final double threshold = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
+        int[] PALETTE = FLESURRECT;
+        final int COUNT = PALETTE.length;
+        final double threshold = 0.011;//0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
         byte[] paletteMapping = new byte[1 << 16];
         int[] reverse = new int[COUNT];
         byte[][] ramps = new byte[COUNT][4];
@@ -448,7 +448,7 @@ public class ColorTest extends ApplicationAdapter {
         for (int i = 1; i < COUNT; i++) {
             //col.set(flesurrectSet.getAt(i));
             //FLESURRECT[i] = Color.rgba8888(col);
-            col = DAWNBRINGER_AURORA[i];
+            col.set(PALETTE[i]);
             //names[i] = col.name;
             reverse[i] =
                     (int) ((lumas[i] = lumaYOG(col)) * yLim)
@@ -489,9 +489,11 @@ public class ColorTest extends ApplicationAdapter {
                         yf = (float) y / yLim;
                         double dist = Double.POSITIVE_INFINITY;
                         for (int i = 1; i < COUNT; i++) {
-                            if (Math.abs(lumas[i] - yf) < 0.1f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
+                            if (Math.abs(lumas[i] - yf) < 0.2f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
                                 paletteMapping[c2] = (byte) i;
                         }
+                        if(paletteMapping[c2] == 0)
+                            System.out.println("what gives? y=" + y + ", co=" + cb + ", cg=" + cr);
                     }
                 }
             }
@@ -514,14 +516,14 @@ public class ColorTest extends ApplicationAdapter {
             cof = cos[i];
             cgf = cgs[i];
             ramps[i][1] = (byte)i;//Color.rgba8888(DAWNBRINGER_AURORA[i]);
-            ramps[i][0] = 15; //9;  //0xFFFFFFFF, white
+            ramps[i][0] = 9;//15;  //0xFFFFFFFF, white
             ramps[i][2] = 1;//0x010101FF, black
             ramps[i][3] = 1;//0x010101FF, black
             for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
                 if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > threshold) {
                     ramps[i][0] = paletteMapping[rr];
                     break;
-                }                 
+                }
                 adj = 1f + ((yLim + 1 >>> 1) - yy) * 0x1p-10f;
                 cof = MathUtils.clamp(cof * adj, -0.5f, 0.5f);
                 cgf = MathUtils.clamp(cgf * adj + 0x1.8p-10f, -0.5f, 0.5f);
@@ -598,33 +600,31 @@ public class ColorTest extends ApplicationAdapter {
         System.out.println("};");
 
         System.out.println("int[][] RAMP_VALUES = new int[][]{");
-//        for (int i = 0; i < COUNT; i++) {
-//            System.out.println("{ 0x" + StringKit.hex(FLESURRECT[ramps[i][0] & 255])
-//                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][1] & 255])
-//                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][2] & 255])
-//                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][3] & 255]) + " },"
-//            );
-//        }
         for (int i = 0; i < COUNT; i++) {
-            System.out.println("{ 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][0] & 255]))
-                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][1] & 255]))
-                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][2] & 255]))
-                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][3] & 255])) + " },"
+            System.out.println("{ 0x" + StringKit.hex(FLESURRECT[ramps[i][0] & 255])
+                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][1] & 255])
+                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][2] & 255])
+                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][3] & 255]) + " },"
             );
         }
+//        for (int i = 0; i < COUNT; i++) {
+//            System.out.println("{ 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][0] & 255]))
+//                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][1] & 255]))
+//                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][2] & 255]))
+//                    + ", 0x" + StringKit.hex(Color.rgba8888(DAWNBRINGER_AURORA[ramps[i][3] & 255])) + " },"
+//            );
+//        }
         System.out.println("};");
         for (int i = 0; i < COUNT; i++) {
-//                col.set(flesurrectSet.getAt(i)).clamp();
-//                display.putString((i >>> 5) << 4, i & 31, "    " + StringKit.hex(Color.rgba8888(col)) + "    ", col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
-//            for (int j = 0; j < 4; j++) {
-//                float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();
-//                display.put((i >>> 5) << 3 | j << 1, i & 31, '\0', cf);
-//                display.put((i >>> 5) << 3 | j << 1 | 1, i & 31, '\0', cf);
-//            }
             for (int j = 0; j < 4; j++) {
-                display.put((i >>> 5) << 3 | j << 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
-                display.put((i >>> 5) << 3 | j << 1 | 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
+                float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();
+                display.put((i >>> 3) << 3 | j << 1, i & 7, '\0', cf);
+                display.put((i >>> 3) << 3 | j << 1 | 1, i & 7, '\0', cf);
             }
+//            for (int j = 0; j < 4; j++) {
+//                display.put((i >>> 5) << 3 | j << 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
+//                display.put((i >>> 5) << 3 | j << 1 | 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
+//            }
 
 //            col = SColor.DAWNBRINGER_AURORA[i];
 //            display.putString((i >>> 5) * 20, i & 31, "  " + StringKit.padRightStrict(col.name.substring(7), ' ', 18), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
@@ -968,7 +968,7 @@ public class ColorTest extends ApplicationAdapter {
     private double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
 //        float angle1 = NumberTools.atan2_(cb1, cr1);
 //        float angle2 = NumberTools.atan2_(cb2, cr2);
-        return (y1 - y2) * (y1 - y2) + ((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2)) * 0.4;
+        return (y1 - y2) * (y1 - y2) + ((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2)) * 0.325;
                 //+ ((angle1 - angle2) % 0.5f + 0.5f) % 0.5f;
     }
 
