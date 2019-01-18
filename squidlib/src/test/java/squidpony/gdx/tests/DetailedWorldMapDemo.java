@@ -473,20 +473,32 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     public void zoomIn() {
-        zoomIn(width>>1, height>>1);
+        long startTime = System.nanoTime();
+        world.zoomIn();
+        dbm.makeBiomes(world);
+        ttg = System.nanoTime() - startTime >> 20;
+
+        
+//        zoomIn(width>>2, height>>2);
     }
     public void zoomIn(int zoomX, int zoomY)
     {
         long startTime = System.nanoTime();
         world.zoomIn(1, zoomX<<1, zoomY<<1);
         dbm.makeBiomes(world);
+        ttg = System.nanoTime() - startTime >> 20;
         //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
-        ttg = System.nanoTime() - startTime >> 20;
     }
     public void zoomOut()
     {
-        zoomOut(width>>1, height>>1);
+        long startTime = System.nanoTime();
+        world.zoomOut();
+        dbm.makeBiomes(world);
+        ttg = System.nanoTime() - startTime >> 20;
+
+
+        //zoomOut(width>>2, height>>2);
     }
     public void zoomOut(int zoomX, int zoomY)
     {
