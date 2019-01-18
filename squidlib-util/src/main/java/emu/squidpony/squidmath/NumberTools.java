@@ -35,7 +35,7 @@ public class NumberTools {
 
     public static double longBitsToDouble(final long bits) {
         wia.set(1, (int)(bits >>> 32));
-        wia.set(0, (int)(bits & 0xFFFFFFFF));
+        wia.set(0, (int)(bits & 0xffffffffL));
         return wda.get(0);
     }
 
