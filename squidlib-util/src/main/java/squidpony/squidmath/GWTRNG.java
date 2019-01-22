@@ -327,4 +327,59 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
         return "GWTRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);
     }
 
+    /**
+     * A deterministic random int generator that, given one int {@code state} as input, returns an 
+     * almost-always-different int as a result. Unlike the rest of GWTRNG, this will not produce all possible ints given
+     * all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with
+     * {@code GWTRNG.determineInt(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of forwards),
+     * which will allow overflow in the incremented state to be handled the same on GWT as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineInt(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique int that is usually very different from {@code state}
+     */
+    public static int determineInt(int state)
+    {
+        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
+    }
+    /**
+     * A deterministic random int generator that, given one int {@code state} as input, returns an 
+     * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there
+     * are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should
+     * call this with {@code GWTRNG.determine(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of
+     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determine(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique long that is usually very different from {@code state}
+     */
+    public static long determine(int state)
+    {
+        final long r = (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
+        return (r << 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFFFFL);
+    }
+    /**
+     * A deterministic random float generator that, given one int {@code state} as input, returns an 
+     * almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of GWTRNG, this might not
+     * produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.
+     * You should call this with {@code GWTRNG.determineFloat(state = state + 1 | 0)} (you can subtract 1 to go
+     * backwards instead of forwards), which will allow overflow in the incremented state to be handled the same on GWT
+     * as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineFloat(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique float from 0.0f to 1.0f that is usually very different from {@code state}
+     */
+    public static float determineFloat(int state)
+    {
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFF) * 0x1p-24f;
+    }
+    /**
+     * A deterministic random double generator that, given one int {@code state} as input, returns an 
+     * almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of
+     * all possible doubles because the input is 32 bits and at least 53 bits are needed to represent all doubles from
+     * 0.0 to 1.0. You should call this with {@code GWTRNG.determineDouble(state = state + 1 | 0)} (you can subtract 1
+     * to go backwards instead of forwards), which will allow overflow in the incremented state to be handled the same
+     * on GWT as on desktop.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineDouble(state = state + 1 | 0)} to handle overflow 
+     * @return a not-necessarily-unique double from 0.0 to 1.0 that is usually very different from {@code state}
+     */
+    public static double determineDouble(int state)
+    {
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0x7FFFFFFF) * 0x1p-31;
+    }
 }

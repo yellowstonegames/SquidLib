@@ -182,5 +182,21 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     public String toString() {
         return "GWTRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);
     }
-
+    public static int determineInt(int state)
+    {
+        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
+    }
+    public static long determine(int state)
+    {
+        final long r = (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
+        return (r << 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFFFFL);
+    }
+    public static float determineFloat(int state)
+    {
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFF) * 0x1p-24f;
+    }
+    public static double determineDouble(int state)
+    {
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0x7FFFFFFF) * 0x1p-31;
+    }
 }
