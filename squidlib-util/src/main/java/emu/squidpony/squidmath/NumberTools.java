@@ -162,7 +162,16 @@ public class NumberTools {
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
     }
-
+    public static float swayRandomized(final int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed + floor;
+        final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f,
+                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
+    }
     public static int floatToIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
@@ -211,13 +220,7 @@ public class NumberTools {
         wba.set(whichByte & 3, newValue);
         return wfa.get(0);
     }
-
-    public static long splitMix64(long state) {
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return state ^ (state >>> 31);
-    }
-
+    
     public static double randomDouble(long seed)
     {
         return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) ^ (seed >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53;

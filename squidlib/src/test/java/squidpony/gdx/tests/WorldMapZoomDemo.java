@@ -9,11 +9,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.StringKit;
+import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.gui.gdx.SquidMouse;
@@ -80,7 +82,7 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
 //    private WorldMapGenerator.HyperellipticalMap world;
 //    private WorldMapGenerator.SphereMap world;
     private WorldMapGenerator[][] world = new WorldMapGenerator[4][4];
-
+    private BitmapFont font;
     private Pixmap pm;
     private Texture pt;
     private long ttg = 0; // time to generate
@@ -237,6 +239,8 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         view = new StretchViewport(bigWidth*cellWidth, bigHeight*cellHeight);
+        font = DefaultResources.getLargeSmoothFont();
+        font.setColor(CERISE);
         pm = new Pixmap(width * cellWidth, height * cellHeight, Pixmap.Format.RGB888);
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
@@ -260,8 +264,8 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
                         1.0 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
                         DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.35 + 0.9,
                         seed);
-                world[x][y].zoomIn(1, (x >> 1) * 128 + 64, (y >> 1) * 128 + 64);
-                world[x][y].zoomIn(1, (x & 1) * 128 + 64, (y & 1) * 128 + 64);
+                world[x][y].zoomIn(1, (x >> 1) * 128 + 64, (3 - y >> 1) * 128 + 64);
+                world[x][y].zoomIn(1, (x & 1) * 128 + 64, (3 - y & 1) * 128 + 64);
                 dbm[x][y].makeBiomes(world[x][y]);
             }
         }
@@ -300,8 +304,8 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
                         1.0 + NumberTools.formCurvedDouble((seed ^ 0x123456789ABCDL) * 0x12345689ABL) * 0.3,
                         DiverRNG.determineDouble(seed * 0x12345L + 0x54321L) * 0.35 + 0.9,
                         seed);
-                world[x][y].zoomIn(1, (x >> 1) * 128 + 64, (y >> 1) * 128 + 64);
-                world[x][y].zoomIn(1, (x & 1) * 128 + 64, (y & 1) * 128 + 64);
+                world[x][y].zoomIn(1, (x >> 1) * 128 + 64, (3 - y >> 1) * 128 + 64);
+                world[x][y].zoomIn(1, (x & 1) * 128 + 64, (3 - y & 1) * 128 + 64);
                 dbm[x][y].makeBiomes(world[x][y]);
             }
         }
@@ -369,15 +373,15 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
         pm.setColor(HOT_MAGENTA);
         pm.drawRectangle(0, 0, width, height);
         // end bright line code
-        batch.begin();
         pt.draw(pm, 0, 0);
+        batch.begin();
         // this is the tricky part.
         // offsetX and offsetY are given as multiples of width and height, respectively.
         // we divide offsetX by 2 (using a right shift) because we also divide the shown width by 2, to smooth the map.
         // offsetY was given with WorldMapGenerator (and SquidLib in general) conventions that y points down, but...
         // the batch uses y pointing up, so we need to subtract our offsetY from the highest value it can take, which...
         // is bigHeight - height, or equivalently height * 3 . offsetY and height are also divided by 2.
-        batch.draw(pt, offsetX >> 1, bigHeight - height - offsetY >> 1, width >> 1, height >> 1);
+        batch.draw(pt, offsetX >> 1, offsetY >> 1, width >> 1, height >> 1);
         batch.end();
     }
     @Override
@@ -390,6 +394,13 @@ public class WorldMapZoomDemo extends ApplicationAdapter {
                 putMap(x * width, y * height, world[x][y], dbm[x][y]);
             }
         }
+        batch.begin();
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                font.draw(batch, "x:" + x + ",y:" + y, x * width + 20 >> 1, y * height - 28 + height >> 1);
+            }
+        }
+        batch.end();
         Gdx.graphics.setTitle("Took " + ttg + " ms to generate");
 
         if (input.hasNext()) {
