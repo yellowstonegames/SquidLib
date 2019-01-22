@@ -362,7 +362,7 @@ public final class NumberTools {
      * swayRandomized(long, double), with the float version almost twice as fast after JIT warms up. On GWT, the
      * reverse should be expected because floats must be emulated there.
      * @param seed a long seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
-     * @param value a float that typically changes slowly, by less than 1.0, with direction changes at integer inputs
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
      * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
      */
     public static float swayRandomized(long seed, float value)
@@ -373,6 +373,25 @@ public final class NumberTools {
         value -= floor;
         value *= value * (3f - 2f * value);
         return (1f - value) * start + value * end;
+    }
+
+    /**
+     * A variant on {@link #swayRandomized(long, float)} that takes an int seed instead of a float, and is optimized for
+     * usage on GWT. Like the version with a long seed, this uses cubic interpolation between random peak or valley
+     * points; only the method of generating those random peaks and valleys has changed.
+     * @param seed an int seed that will determine the pattern of peaks and valleys this will generate as value changes; this should not change between calls
+     * @param value a float that typically changes slowly, by less than 2.0, with direction changes at integer inputs
+     * @return a pseudo-random float between -1f and 1f (both exclusive), smoothly changing with value
+     */
+    public static float swayRandomized(final int seed, float value)
+    {
+        final int floor = value >= 0f ? (int) value : (int) value - 1;
+        int z = seed + floor;
+        final float start = (((z = (z ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f,
+                end = (((z = (seed + floor + 1 ^ 0xD1B54A35) * 0x102473) ^ (z << 11 | z >>> 21) ^ (z << 21 | z >>> 11)) * ((z ^ z >>> 15) | 0xFFE00001) + z) * 0x0.ffffffp-31f;
+        value -= floor;
+        value *= value * (3 - 2 * value);
+        return (1 - value) * start + value * end;
     }
     
     /**
@@ -460,18 +479,6 @@ public final class NumberTools {
     {
         return Float.intBitsToFloat((Float.floatToIntBits(value) & ~(255 << ((whichByte & 3) << 3)))
                 | ((newValue & 255) << ((whichByte & 3) << 3)));
-    }
-
-    /**
-     * Get a pseudo-random long from this with {@code splitMix64(z += 0x9E3779B97F4A7C15L)}, where z is a long to use
-     * as state. 0x9E3779B97F4A7C15L can be changed for any odd long if the same number is used across calls.
-     * @param state long, must be changed with each call; {@code splitMix64(z += 0x9E3779B97F4A7C15L)} is recommended
-     * @return a pseudo-random long
-     */
-    public static long splitMix64(long state) {
-        state = ((state >>> 30) ^ state) * 0xBF58476D1CE4E5B9L;
-        state = (state ^ (state >>> 27)) * 0x94D049BB133111EBL;
-        return state ^ (state >>> 31);
     }
 
     /**
