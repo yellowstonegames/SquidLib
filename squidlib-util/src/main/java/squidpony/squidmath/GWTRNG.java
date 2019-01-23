@@ -340,6 +340,22 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     {
         return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
     }
+
+    /**
+     * A deterministic random int generator that, given one int {@code state} and an outer int {@code bound} as input,
+     * returns an int between 0 (inclusive) and {@code bound} (exclusive) as a result, which should have no noticeable
+     * correlation between {@code state} and the result. You should call this with
+     * {@code GWTRNG.determineBound(state = state + 1 | 0, bound)} (you can subtract 1 to go backwards instead of
+     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.
+     * Like most bounded int generation in SquidLib, this uses some long math, but most of the function uses ints.
+     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineBounded(state = state + 1 | 0, bound)} to handle overflow
+     * @param bound the outer exclusive bound, as an int; may be positive or negative
+     * @return an int between 0 (inclusive) and {@code bound} (exclusive)
+     */
+    public static int determineBounded(int state, final int bound)
+    {
+        return (int)(bound * (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFFFFL) >> 32);
+    }
     /**
      * A deterministic random int generator that, given one int {@code state} as input, returns an 
      * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there

@@ -184,19 +184,23 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     }
     public static int determineInt(int state)
     {
-        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
+        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473 | 0) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
+    }
+    public static int determineBounded(int state, final int bound)
+    {
+        return (int)(bound * (((state = ((state = (state ^ 0xD1B54A35) * 0x102473 | 0) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFFFFL) >> 32);
     }
     public static long determine(int state)
     {
-        final long r = (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
-        return (r << 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFFFFL);
+        final long r = (state = ((state = (state ^ 0xD1B54A35) * 0x102473 | 0) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14;
+        return (r << 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473 | 0) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFFFFL);
     }
     public static float determineFloat(int state)
     {
-        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFF) * 0x1p-24f;
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473 | 0) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0xFFFFFF) * 0x1p-24f;
     }
     public static double determineDouble(int state)
     {
-        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0x7FFFFFFF) * 0x1p-31;
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473 | 0) ^ (state << 11 | state >>> 21) ^ (state << 21 | state >>> 11)) * ((state ^ state >>> 15) | 0xFFE00001) + state) ^ state >>> 14) & 0x7FFFFFFF) * 0x1p-31;
     }
 }
