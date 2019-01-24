@@ -398,7 +398,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.7, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
-        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.7);
+        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.6);
+        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), FastNoise.instance, 0.9);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
@@ -475,6 +476,15 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     public void zoomIn() {
         long startTime = System.nanoTime();
         world.zoomIn();
+        //// This code could be used to zoom into arbitrary x and y positions, where x and y don't change between calls
+//        int zoom = world.zoom;
+//        int x = (int) seed; // use some x that is the same between calls
+//        int y = (int) (seed >>> 32); // use some y that is the same between calls
+//        world.zoomOut(world.zoom, 0, 0); // resets zoom
+//        for (int i = 0; i <= zoom; i++) {
+//            // total insanity, specific to a 256x256 map such as the default LocalMimicMap
+//            world.zoomIn(1, ((x >>> i) & 1) * 128 + 64, ((((2 << zoom) - 1 - y) >>> i) & 1) * 128 + 64);
+//        }
         dbm.makeBiomes(world);
         ttg = System.nanoTime() - startTime >> 20;
 
