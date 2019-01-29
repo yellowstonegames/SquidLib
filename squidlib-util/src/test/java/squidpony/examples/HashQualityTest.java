@@ -689,7 +689,7 @@ public class HashQualityTest {
         //x *= 0x41C64E6B;
         //y *= 0x9E3779BD;
 //        return (x += (x >= y ? x * x + y : y * y)) ^ (x << 11 | x >>> 21) ^ (x << 20 | x >>> 12);
-        return ((x += (x >= y ? x * x + y : y * y)) ^ (x << 11 | x >>> 21) ^ (x << 20 | x >>> 12)) * 0X13C6EF;
+        return ((x += (x >= y ? x * x + y : y * y)) ^ (x << 11 | x >>> 21) ^ (x << 20 | x >>> 12)) * 0x13C6EF;
     }
 
 
@@ -704,25 +704,49 @@ public class HashQualityTest {
 //        return (((x+y) * (x+y+1) >> 1) + y);// * 0xA5CB3;
     }
 
-    public static int goldCoord(long x, long y)
+    public static int goldCoord(int x, int y)
     {
-        x += (y + 0xD1B54A32D192ED03L) * 0xABC98388FB8FAC03L + 0x9E3779B97F4A7C15L;
-        y = x * 0x8CB92BA72F3D8DD7L;
-        return (int)(y ^ y >>> 32);
-        //return ((s = (s ^ s >>> 27 ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L) ^ s >>> 25);
+        int s = 42;
+        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
+        x ^= (y ^ 0xFB8FAC03) * 0x157931;
+        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
+        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
     }
+
+    public static int pelotonCoord(int x, int y) {
+        int s = 42 ^ x + y;
+        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1827F5;// ^ 0x02A6328F;
+        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x123C21;// ^ 0xC79E7B1D;
+        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7;
+    }
+
+    public static int peloton3D(int x, int y, int z) {
+        int s = 42 ^ x + y + z;
+        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1A36A9;// ^ 0x02A6328F;
+        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x157931;// ^ 0xC79E7B1D;
+        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+        s = (z ^ (z << 11 | z >>> 21) ^ (z << 23 | z >>> 9) ^ s) * 0x119725;// ^ 0xC79E7B1D;
+        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7;
+        //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+    }
+//        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
+//        x ^= (y ^ 0xFB8FAC03) * 0x157931;
+//        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
+//        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
     @Test
     public void testCoord() {
         final int[] params = ArrayTools.range(10, 26);// new int[]{33, 65, 129, 257, 513};
 //        final int[] params = new int[]{64, 128, 256, 512};
-        long baseTotal = 0L, objeTotal = 0L, szu2Total = 0L, goldTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L,
+        long baseTotal = 0L, objeTotal = 0L, peloTotal = 0L, goldTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L,
                 baseBest = 1000000L,
                 objeBest = 1000000L,
-                szu2Best = 1000000L,
+                peloBest = 1000000L,
                 goldBest = 1000000L,
                 szudBest = 1000000L,
                 cantBest = 1000000L,
-                baseWorst = 0L, objeWorst = 0L, szu2Worst = 0L, goldWorst = 0L, szudWorst = 0L, cantWorst = 0L, t;
+                baseWorst = 0L, objeWorst = 0L, peloWorst = 0L, goldWorst = 0L, szudWorst = 0L, cantWorst = 0L, t;
 //        long[] confTotals = new long[31];
         for (int reduction = 7; reduction >= 0; reduction--) {
 
@@ -735,7 +759,7 @@ public class HashQualityTest {
 
                     IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
-                            colliderSzu2 = new IntDoubleOrderedMap(SIZE, 0.5f),
+                            colliderPelo = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderSzud = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderCant = new IntDoubleOrderedMap(SIZE, 0.5f),
                             colliderGold = new IntDoubleOrderedMap(SIZE, 0.5f);
@@ -745,7 +769,7 @@ public class HashQualityTest {
 //                    }
                     DiverRNG rng = new DiverRNG(1L);
                     SNShuffledIntSequence
-                            xShuffle = new SNShuffledIntSequence(WIDTH, 1), 
+                            xShuffle = new SNShuffledIntSequence(WIDTH, 1),
                             yShuffle = new SNShuffledIntSequence(HEIGHT, -1);
                     UnorderedSet<Coord> points = new UnorderedSet<>(WIDTH * HEIGHT);
                     for (int i = 0; i < WIDTH; i++) {
@@ -759,7 +783,7 @@ public class HashQualityTest {
                             }
                             points.add(c);
                             colliderBase.put(c.hashCode() & restrict, 0.0);
-                            colliderSzu2.put(szudzik2Coord(x, y) & restrict, 0.0);
+                            colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
                             colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
                             colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
                             colliderGold.put(goldCoord(x, y) & restrict, 0.0);
@@ -772,7 +796,7 @@ public class HashQualityTest {
 //                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
                     t = (SIZE - colliderBase.size()); baseBest = Math.min(t, baseBest); baseWorst = Math.max(t, baseWorst);
 //                    System.out.println("Base collisions: " + t);
-                    t = (SIZE - colliderSzu2.size()); szu2Best = Math.min(t, szu2Best); szu2Worst = Math.max(t, szu2Worst);
+                    t = (SIZE - colliderPelo.size()); peloBest = Math.min(t, peloBest); peloWorst = Math.max(t, peloWorst);
 //                    System.out.println("Szu2 collisions: " + t);
                     t = (SIZE - colliderSzud.size()); szudBest = Math.min(t, szudBest); szudWorst = Math.max(t, szudWorst);
 //                    System.out.println("Szud collisions: " + t);
@@ -782,13 +806,13 @@ public class HashQualityTest {
 //                    System.out.println("Gold collisions: " + t);
                     t = (SIZE - colliderObje.size()); objeBest = Math.min(t, objeBest); objeWorst = Math.max(t, objeWorst);
 //                    System.out.println("Obje collisions: " + t);
-                    
+
 //                    for (int i = 0; i < 31; i++) {
 //                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
 //                        confTotals[i] += (SIZE - colliders[i].size());
 //                    }
                     baseTotal += (SIZE - colliderBase.size());
-                    szu2Total += (SIZE - colliderSzu2.size());
+                    peloTotal += (SIZE - colliderPelo.size());
                     szudTotal += (SIZE - colliderSzud.size());
                     cantTotal += (SIZE - colliderCant.size());
                     goldTotal += (SIZE - colliderGold.size());
@@ -800,9 +824,133 @@ public class HashQualityTest {
         System.out.println("Number of Coords added: " + total);
         System.out.println("TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
         System.out.println("TOTAL Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
-        System.out.println("TOTAL Szu2 collisions: " + szu2Total + " (" + (szu2Total * 100.0 / total) + "%), BEST " + szu2Best + ", WORST " + szu2Worst);
+        System.out.println("TOTAL Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
         System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
         System.out.println("TOTAL Gold collisions: " + goldTotal + " (" + (goldTotal * 100.0 / total) + "%), BEST " + goldBest + ", WORST " + goldWorst);
+        System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
+//        for (int i = 0; i < 31; i++) {
+//            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
+//        }
+    }
+    // This one takes a while to run; be advised.
+    @Test
+    public void testCoord3() {
+        final int[] params = ArrayTools.range(8, 18);// new int[]{33, 65, 129, 257, 513};
+//        final int[] params = new int[]{64, 128, 256, 512};
+        long baseTotal = 0L, objeTotal = 0L, peloTotal = 0L, hastTotal = 0L, szudTotal = 0L, cantTotal = 0L, total = 0L,
+                baseBest = 1000000L,
+                objeBest = 1000000L,
+                peloBest = 1000000L,
+                hastBest = 1000000L,
+                szudBest = 1000000L,
+                cantBest = 1000000L,
+                baseWorst = 0L, objeWorst = 0L, peloWorst = 0L, hastWorst = 0L, szudWorst = 0L, cantWorst = 0L, t;
+//        long[] confTotals = new long[31];
+        for (int reduction = 7; reduction >= 0; reduction--) {
+
+            for (int d : params) {
+                int DEPTH = d * 3;
+                for (int w : params) {
+                    int WIDTH = w * 3;
+                    for (int h : params) {
+                        int HEIGHT = h * 3;
+                        int SIZE = WIDTH * HEIGHT * DEPTH;
+                        int restrict = HashCommon.nextPowerOfTwo(SIZE) - 1;
+
+                        IntDoubleOrderedMap colliderBase = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderObje = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderPelo = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderSzud = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderCant = new IntDoubleOrderedMap(SIZE, 0.5f),
+                                colliderHast = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                    IntDoubleOrderedMap[] colliders = new IntDoubleOrderedMap[31];
+//                    for (int i = 0; i < 31; i++) {
+//                        colliders[i] = new IntDoubleOrderedMap(SIZE, 0.5f);
+//                    }
+                        DiverRNG rng = new DiverRNG(1L);
+                        SNShuffledIntSequence
+                                xShuffle = new SNShuffledIntSequence(WIDTH, 1),
+                                yShuffle = new SNShuffledIntSequence(HEIGHT, -1),
+                                zShuffle = new SNShuffledIntSequence(DEPTH, rng.nextInt());
+                        UnorderedSet<Coord3D> points = new UnorderedSet<>(SIZE);
+                        for (int i = 0; i < WIDTH; i++) {
+                            for (int j = 0; j < HEIGHT; j++) {
+                                for (int k = 0; k < DEPTH; k++) {
+//                            int x = xShuffle.next(), y = yShuffle.next();
+                                    int x = xShuffle.next(), y = yShuffle.next(), z = zShuffle.next();
+                                    Coord3D c = Coord3D.get(x, y, z);
+                                    if (rng.next(3) > reduction || points.contains(c)) {
+                                        --SIZE;
+                                        continue;
+                                    }
+                                    points.add(c);
+                                    colliderBase.put((int) Noise.PointHash.hashAll(x, y, z, 42L) & restrict, 0.0);
+                                    colliderPelo.put(peloton3D(x, y, z) & restrict, 0.0);
+                                    colliderSzud.put(szudzikCoord(z, szudzikCoord(x, y)) & restrict, 0.0);
+                                    colliderCant.put(cantorCoord(z, cantorCoord(x, y)) & restrict, 0.0);
+                                    colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 42L) & restrict, 0.0);
+                                    colliderObje.put(Objects.hash(x, y, z) & restrict, 0.0);
+//                            for (int i = 0; i < 31; i++) {
+//                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);
+//                            }
+                                }
+                            }
+                        }
+//                    System.out.println("WIDTH: " + WIDTH + ", HEIGHT: " + HEIGHT + ", SIZE: " + SIZE);
+                        t = (SIZE - colliderBase.size());
+                        baseBest = Math.min(t, baseBest);
+                        baseWorst = Math.max(t, baseWorst);
+//                    System.out.println("Base collisions: " + t);
+                        t = (SIZE - colliderPelo.size());
+                        peloBest = Math.min(t, peloBest);
+                        peloWorst = Math.max(t, peloWorst);
+//                    System.out.println("Szu2 collisions: " + t);
+                        t = (SIZE - colliderSzud.size());
+                        szudBest = Math.min(t, szudBest);
+                        szudWorst = Math.max(t, szudWorst);
+//                    System.out.println("Szud collisions: " + t);
+                        t = (SIZE - colliderCant.size());
+                        cantBest = Math.min(t, cantBest);
+                        cantWorst = Math.max(t, cantWorst);
+//                    System.out.println("Cant collisions: " + t);
+                        t = (SIZE - colliderHast.size());
+                        hastBest = Math.min(t, hastBest);
+                        hastWorst = Math.max(t, hastWorst);
+//                    System.out.println("Gold collisions: " + t);
+                        t = (SIZE - colliderObje.size());
+                        objeBest = Math.min(t, objeBest);
+                        objeWorst = Math.max(t, objeWorst);
+//                    System.out.println("Obje collisions: " + t);
+
+//                    for (int i = 0; i < 31; i++) {
+//                        System.out.println("Lathe " + (i + 1) + ": " + (SIZE - colliders[i].size()));
+//                        confTotals[i] += (SIZE - colliders[i].size());
+//                    }
+                        baseTotal += (SIZE - colliderBase.size());
+                        peloTotal += (SIZE - colliderPelo.size());
+                        szudTotal += (SIZE - colliderSzud.size());
+                        cantTotal += (SIZE - colliderCant.size());
+                        hastTotal += (SIZE - colliderHast.size());
+                        objeTotal += (SIZE - colliderObje.size());
+                        total += SIZE;
+                    }
+                }
+            }
+            System.out.println("INTERMEDIATE number of Coords added: " + total);
+            System.out.println("INTERMEDIATE Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
+            System.out.println("INTERMEDIATE Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
+            System.out.println("INTERMEDIATE Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
+            System.out.println("INTERMEDIATE Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
+            System.out.println("INTERMEDIATE Hast collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
+            System.out.println("INTERMEDIATE Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
+
+        }
+        System.out.println("Number of Coords added: " + total);
+        System.out.println("TOTAL Base collisions: " + baseTotal + " (" + (baseTotal * 100.0 / total) + "%), BEST " + baseBest + ", WORST " + baseWorst);
+        System.out.println("TOTAL Szud collisions: " + szudTotal + " (" + (szudTotal * 100.0 / total) + "%), BEST " + szudBest + ", WORST " + szudWorst);
+        System.out.println("TOTAL Pelo collisions: " + peloTotal + " (" + (peloTotal * 100.0 / total) + "%), BEST " + peloBest + ", WORST " + peloWorst);
+        System.out.println("TOTAL Cant collisions: " + cantTotal + " (" + (cantTotal * 100.0 / total) + "%), BEST " + cantBest + ", WORST " + cantWorst);
+        System.out.println("TOTAL Hast collisions: " + hastTotal + " (" + (hastTotal * 100.0 / total) + "%), BEST " + hastBest + ", WORST " + hastWorst);
         System.out.println("TOTAL Obje collisions: " + objeTotal + " (" + (objeTotal * 100.0 / total) + "%), BEST " + objeBest + ", WORST " + objeWorst);
 //        for (int i = 0; i < 31; i++) {
 //            System.out.println("TOTAL Lath_"+(i+1)+" collisions: " + confTotals[i] + " (" + (confTotals[i] * 100.0 / total) + "%)");
