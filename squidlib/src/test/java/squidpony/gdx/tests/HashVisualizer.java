@@ -268,11 +268,15 @@ public class HashVisualizer extends ApplicationAdapter {
         //return (int)((result ^ (result >>> 25)) * (result | 0xA529L));
     }
     public static int goldInt(int x, int y) {
-        int s = 42;
-        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
-        x ^= (y ^ 0xFB8FAC03) * 0x157931;
-        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
-        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
+        int s = 42 ^ x ^ y;
+        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1827F5;// ^ 0x02A6328F;
+        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x123C21;// ^ 0xC79E7B1D;
+        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7; 
+//        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
+//        x ^= (y ^ 0xFB8FAC03) * 0x157931;
+//        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
+//        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
     }
 
     public static long goldEdit(long x, long y)
