@@ -13403,6 +13403,27 @@ public class SColor extends Color implements Serializable {
                 opacity);
     }
     /**
+     * Gets a libGDX Color given floats representing luma (Y, akin to lightness), blue chroma (Cb, one of two
+     * kinds of chroma used here), red chroma (Cr, the other kind of chroma), and opacity. Luma should be between 0 and
+     * 1, inclusive, with 0 used for very dark colors including but not limited to black, and 1 used for very light
+     * colors including but not limited to white. The two chroma values range from -0.5 to 0.5, and only make sense when
+     * used together. When Chroma B is high and Chroma R is low, the color is more blue; when Chroma R is high and
+     * Chroma B is low, the color is more red, when both are low it is more green, and when both are high it is more
+     * purple. When Chroma R and Chroma B are both near 0.0f, the color is closer to gray. Because Chroma values are
+     * centered on 0.0f, you can multiply them by a value like 0.5f to halve the colorfulness of the color. This
+     * allocates a new Color and clamps its r, g, b, and a values to between 0 and 1, regardless of input range.
+     *
+     * @param luma       0f to 1f, lightness (see {@link #luma(Color)})
+     * @param chromaB    -0.5f to 0.5f, "blueness" of chroma component, with 0.5 more blue (see {@link #chromaB(Color)})
+     * @param chromaR    -0.5f to 0.5f, "redness" of chroma component, with 0.5 more red (see {@link #chromaR(Color)})
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a libGDX Color with the given properties
+     */
+    public static Color ycbcr(float luma, float chromaB, float chromaR, float opacity){
+        return new Color(luma + chromaR * 1.402f, luma - chromaB * 0.344136f - chromaR * 0.714136f, luma + chromaB * 1.772f, opacity);
+    }
+    
+    /**
      * Gets a color as a packed float given floats representing luminance (Y, akin to lightness), orange chrominance
      * (Co, one of two kinds of chroma used here), green chrominance (Cg, the other kind of chroma), and opacity.
      * Luminance should be between 0 and 1, inclusive, with 0 used for very dark colors including but not limited to

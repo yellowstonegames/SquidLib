@@ -71,7 +71,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 130;
     private int hashMode = 0, rngMode = 21, noiseMode = 105, otherMode = 0;//74;//118;//82;
 
@@ -266,6 +266,13 @@ public class HashVisualizer extends ApplicationAdapter {
 //        counter -= (result ^ (result >>> 25)) * (result | 0xA529L);
 //        return (int)(counter ^ counter >>> 22);
         //return (int)((result ^ (result >>> 25)) * (result | 0xA529L));
+    }
+    public static int goldInt(int x, int y) {
+        int s = 42;
+        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
+        x ^= (y ^ 0xFB8FAC03) * 0x157931;
+        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
+        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
     }
 
     public static long goldEdit(long x, long y)
@@ -1394,15 +1401,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 1:
-                        extra = System.nanoTime() >>> 30 & 63;
-                        Gdx.graphics.setTitle("GoldEdit on length 2, bit " + extra);
+                        extra = System.nanoTime() >>> 30 & 31;
+                        Gdx.graphics.setTitle("goldInt on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             //coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 //coordinates[1] = y;
                                 //code = -(Arrays.hashCode(coordinates) >>> extra & 1L) | 255L;
                                 //back[x][y] = (Arrays.hashCode(coordinates) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-                                back[x][y] = (goldEdit(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
+                                back[x][y] = (goldInt(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
                             }
                         }
                         break;
