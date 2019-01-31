@@ -714,22 +714,75 @@ public class HashQualityTest {
     }
 
     public static int pelotonCoord(int x, int y) {
-        int s = 42 ^ x + y;
-        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1827F5;// ^ 0x02A6328F;
-        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
-        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x123C21;// ^ 0xC79E7B1D;
-        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7;
+//        int s = 42 ^ x + y;
+//        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1827F5;// ^ 0x02A6328F;
+//        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+//        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x123C21;// ^ 0xC79E7B1D;
+//        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7;
+        
+        
+//        int s = 0x9E3779B9 + (x * 0x1827F5);
+//        s ^= s << 8 ^ s >>> 15 ^ s >>> 9;
+//        s += (y * 0x123C21);
+//        return s ^ s << 8 ^ s >>> 15 ^ s >>> 9;
+        
+//        int state = 0x9E3779B9 ^ x * 0x1827F5 ^ y * 0x123C21;
+//        return ((state = ((state = (state ^ (state << 19 | state >>> 13) ^ (state << 7 | state >>> 25) ^ 0xD1B54A33) * 0x15DE2D) ^ (state << 20 | state >>> 12) ^ (state << 8 | state >>> 24)) * 0x1B69E5) ^ state >>> 14);
+
+//        int state = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
+//        return ((state = ((state = (state ^ (state << 19 | state >>> 13) ^ (state << 7 | state >>> 25) ^ 0xD1B54A33) * 0x15DE2D) ^ (state << 20 | state >>> 12) ^ (state << 8 | state >>> 24)) * 0x1B69E5) ^ state >>> 14);
+        int s = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
+        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ s >>> 15;
+
+
+//        int s = (x + y ^ 0xD192ED03) * 0x1A36A9;
+//        s ^= s << 13 ^ s >>> 12 ^ s >>> 7;
+//        s ^= (x ^ 0xFB8FAC03) * 0x157931;
+//        s ^= s << 13 ^ s >>> 12 ^ s >>> 7;
+//        s ^= (y ^ 0x2F3D8DD7) * 0x119725;
+//        return s ^ s << 13 ^ s >>> 12 ^ s >>> 7;
+        //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
     }
 
     public static int peloton3D(int x, int y, int z) {
-        int s = 42 ^ x + y + z;
-        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1A36A9;// ^ 0x02A6328F;
-        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
-        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x157931;// ^ 0xC79E7B1D;
-        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
-        s = (z ^ (z << 11 | z >>> 21) ^ (z << 23 | z >>> 9) ^ s) * 0x119725;// ^ 0xC79E7B1D;
-        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7;
-        //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+//        int s = 42 ^ x + y + z;
+//        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1A36A9;// ^ 0x02A6328F;
+//        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+//        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x157931;// ^ 0xC79E7B1D;
+//        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+//        s = (z ^ (z << 11 | z >>> 21) ^ (z << 23 | z >>> 9) ^ s) * 0x119725;// ^ 0xC79E7B1D;
+//        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7;
+//        int s = 0x75AE2165;
+//        s = (s + x + y + z ^ 0x75AE2165) * 0x1B69E1;
+//        s += (x ^ 0x03A4615F) * 0x177C0B;
+//        s += (y ^ 0xA1FE1575) * 0x141E5D;
+//        s += (z ^ 0x7D9ED689) * 0x113C31;
+//        int s = 0x9E3779B9;
+//        s = (s ^ s << 8 ^ s >>> 15 ^ s >>> 9 ^ x) * 0x177C0B;
+//        s = (s ^ s << 8 ^ s >>> 15 ^ s >>> 9 ^ y) * 0x141E5B;
+//        s = (s ^ s << 8 ^ s >>> 15 ^ s >>> 9 ^ z) * 0x113C33;
+//        return s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11);
+//        s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11) ^ x * 3) * 0x177C0B;
+//        s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11) ^ y * 5) * 0x141E5B;
+//        s = (s ^ (s << 11 | s >>> 21) ^ (s << 21 | s >>> 11) ^ z * 7) * 0x113C33;
+        //s ^= s << 8 ^ s >>> 15 ^ s >>> 9;
+//        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
+
+        int s = 0x9E3779B9 ^ 0x1A36A9 * (x ^ 0x157931 * (y ^ z * 0x119725));
+        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ s >>> 15;
+
+
+//        int s = 0x9E3779B9 ^ 0x1A36A9 * (x ^ 0x157931 * (y ^ z * 0x119725));
+//        return ((s = ((s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ (s << 20 | s >>> 12) ^ (s << 8 | s >>> 24)) * 0xDB4F) ^ s >>> 14);
+        
+//        return ((state = ((state = (state ^ (state << 39 | state >>> 25) ^ (state << 14 | state >>> 50) ^ 0xD1B54A32D192ED03L) * 0xAEF17502108EF2D9L) ^ (state << 40 | state >>> 24) ^ (state << 15 | state >>> 49)) * 0xDB4F0B9175AE2165L) ^ state >>> 28);
+//        int s = 0x75AE2165;
+//        s ^= s << 8 ^ s >>> 15 ^ s >>> 9 ^ (x * 0x177C0B);
+//        s ^= s << 8 ^ s >>> 15 ^ s >>> 9 ^ (y * 0x141E5B);
+//        s ^= s << 8 ^ s >>> 15 ^ s >>> 9 ^ (z * 0x113C33);
+//        return s ^ s << 8 ^ s >>> 15 ^ s >>> 9;
+
+        //0xDB4F0B9175AE2165L, 0xBBE0563303A4615FL, 0xA0F2EC75A1FE1575L, 0x89E182857D9ED689L
     }
 //        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
 //        x ^= (y ^ 0xFB8FAC03) * 0x157931;
@@ -783,7 +836,7 @@ public class HashQualityTest {
                             }
                             points.add(c);
                             colliderBase.put(c.hashCode() & restrict, 0.0);
-                            colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
+                            colliderPelo.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
                             colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
                             colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
                             colliderGold.put(goldCoord(x, y) & restrict, 0.0);
@@ -884,11 +937,11 @@ public class HashQualityTest {
                                         continue;
                                     }
                                     points.add(c);
-                                    colliderBase.put((int) Noise.PointHash.hashAll(x, y, z, 42L) & restrict, 0.0);
-                                    colliderPelo.put(peloton3D(x, y, z) & restrict, 0.0);
+                                    colliderBase.put((int) Noise.PointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
+                                    colliderPelo.put(Noise.IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict, 0.0);
                                     colliderSzud.put(szudzikCoord(z, szudzikCoord(x, y)) & restrict, 0.0);
                                     colliderCant.put(cantorCoord(z, cantorCoord(x, y)) & restrict, 0.0);
-                                    colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 42L) & restrict, 0.0);
+                                    colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
                                     colliderObje.put(Objects.hash(x, y, z) & restrict, 0.0);
 //                            for (int i = 0; i < 31; i++) {
 //                                colliders[i].put(latheCoordConfig(x, y, i + 1) & restrict, 0.0);

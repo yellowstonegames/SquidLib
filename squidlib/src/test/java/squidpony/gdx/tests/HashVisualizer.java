@@ -268,15 +268,31 @@ public class HashVisualizer extends ApplicationAdapter {
         //return (int)((result ^ (result >>> 25)) * (result | 0xA529L));
     }
     public static int goldInt(int x, int y) {
-        int s = 42 ^ x ^ y;
-        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1827F5;// ^ 0x02A6328F;
-        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
-        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x123C21;// ^ 0xC79E7B1D;
-        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7; 
-//        y ^= (s ^ 0xD192ED03) * 0x1A36A9;
-//        x ^= (y ^ 0xFB8FAC03) * 0x157931;
-//        s ^= (x ^ 0x2F3D8DD7) * 0x119725;
-//        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
+//        int s = 0;
+//        s = (x ^ (x << 7 | x >>> 25) ^ (x << 19 | x >>> 13) ^ s) * 0x1827F5;// ^ 0x02A6328F;
+//        s ^= s >>> 10 ^ s >>> 15 ^ s << 7;
+//        s = (y ^ (y << 9 | y >>> 23) ^ (y << 21 | y >>> 11) ^ s) * 0x123C21;// ^ 0xC79E7B1D;
+//        return s ^ s >>> 10 ^ s >>> 15 ^ s << 7; 
+
+//        s = (s + x + y ^ 0xD192ED03) * 0x1A36A9;
+//        s ^= s << 13 ^ s >>> 12 ^ s >>> 7;
+//        s += (x ^ 0xFB8FAC03) * 0x157931;
+//        s ^= s << 13 ^ s >>> 12 ^ s >>> 7;
+//        s += (y ^ 0x2F3D8DD7) * 0x119725;
+//        return s ^ s << 13 ^ s >>> 12 ^ s >>> 7;
+
+//        int s = 0x9E3779B9;
+//        s = (s ^ s >>> 8 ^ s << 15 ^ s << 9 ^ x) * 0x1827F5;
+//        s = (s ^ s >>> 8 ^ s << 15 ^ s << 9 ^ y) * 0x123C21;
+//        return s ^ s << 8 ^ s >>> 15 ^ s >>> 9;
+//        int state = 0x9E3779B9 ^ x * 0x1827F5 ^ y * 0x123C21;
+//        return ((state = ((state = (state ^ (state << 19 | state >>> 13) ^ (state << 7 | state >>> 25) ^ 0xD1B54A33) * 0x15DE2D) ^ (state << 20 | state >>> 12) ^ (state << 8 | state >>> 24)) * 0x1B69E5) ^ state >>> 14);
+        int s = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
+        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ s >>> 15;
+//        return ((s = (s ^ (s << 20 | s >>> 12) ^ (s << 8 | s >>> 24)) * 0xDB4F) ^ s >>> 14);
+//        return ((s = ((s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ (s << 20 | s >>> 12) ^ (s << 8 | s >>> 24)) * 0xDB4F) ^ s >>> 14);
+
+        //        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
     }
 
     public static long goldEdit(long x, long y)
