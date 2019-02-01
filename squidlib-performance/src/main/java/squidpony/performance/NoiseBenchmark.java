@@ -123,6 +123,12 @@ import java.util.concurrent.TimeUnit;
  * NoiseBenchmark.measureWhirlingAlt2D  avgt    5   42.433 ± 0.268  ns/op
  * NoiseBenchmark.measureWhirlingAlt3D  avgt    5   49.947 ± 0.322  ns/op
  * </pre>
+ * And with just 6D noise, including FastNoise now that it implements Noise6D:
+ * <pre>
+ * Benchmark                          Mode  Cnt    Score   Error  Units
+ * NoiseBenchmark.measureFastNoise6D  avgt    4  172.374 ± 0.353  ns/op
+ * NoiseBenchmark.measureSeeded6D     avgt    4  185.143 ± 3.575  ns/op
+ * </pre>
  * Note that FastNoise is the best for each dimensionality of noise.
  */
 @State(Scope.Thread)
@@ -145,6 +151,8 @@ public class NoiseBenchmark {
             whirling5_4 = new Noise.Layered4D(new WhirlingNoise(12345), 5, 0.03125);
     {
         fast.setFractalOctaves(1);
+        fast.setNoiseType(FastNoise.SIMPLEX);
+        fast.setFrequency(0.03125f);
         fast3.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
         fast3.setFractalOctaves(3);
         fast5.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
@@ -381,6 +389,11 @@ public class NoiseBenchmark {
     @Benchmark
     public float measureFastNoise4D() {
         return fast.getSimplex(++x, --y, z++, w--);
+    }
+
+    @Benchmark
+    public double measureFastNoise6D() {
+        return fast.getSimplex(++x, --y, z++, w--, ++u, ++v);
     }
 
 //    @Benchmark
