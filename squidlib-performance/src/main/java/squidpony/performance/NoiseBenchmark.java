@@ -41,9 +41,6 @@ import squidpony.squidmath.*;
 
 import java.util.concurrent.TimeUnit;
 
-import static squidpony.squidmath.NumberTools.swayTight;
-import static squidpony.squidmath.NumberTools.zigzag;
-
 /**
  * Various different noise functions, most variants on Simplex noise. These measurements are per-call, in nanoseconds.
  * The Score column is the most relevant; the score is how much time it takes to complete one call, so lower is better.
@@ -106,6 +103,27 @@ import static squidpony.squidmath.NumberTools.zigzag;
  * NoiseBenchmark.measureZigzagDouble          avgt    5    7.111 ±  0.065  ns/op
  * NoiseBenchmark.measureZigzagFloat           avgt    5    6.889 ±  0.089  ns/op
  * </pre>
+ * <br>
+ * Just simplex noise classes in this next set: 
+ * <pre>
+ * Benchmark                            Mode  Cnt    Score   Error  Units
+ * NoiseBenchmark.measureFastNoise2D    avgt    5   35.573 ± 0.219  ns/op
+ * NoiseBenchmark.measureFastNoise3D    avgt    5   46.687 ± 0.126  ns/op
+ * NoiseBenchmark.measureFastNoise4D    avgt    5   84.014 ± 3.109  ns/op
+ * NoiseBenchmark.measurePerlin2D       avgt    5   41.912 ± 0.279  ns/op
+ * NoiseBenchmark.measurePerlin3D       avgt    5   63.417 ± 0.658  ns/op
+ * NoiseBenchmark.measurePerlin4D       avgt    5  125.655 ± 0.710  ns/op
+ * NoiseBenchmark.measureSeeded2D       avgt    5   41.759 ± 0.264  ns/op
+ * NoiseBenchmark.measureSeeded3D       avgt    5   59.276 ± 0.262  ns/op
+ * NoiseBenchmark.measureSeeded4D       avgt    5   85.117 ± 0.383  ns/op
+ * NoiseBenchmark.measureSeeded6D       avgt    5  178.206 ± 2.428  ns/op
+ * NoiseBenchmark.measureWhirling2D     avgt    5   41.902 ± 0.203  ns/op
+ * NoiseBenchmark.measureWhirling3D     avgt    5   63.774 ± 0.538  ns/op
+ * NoiseBenchmark.measureWhirling4D     avgt    5   91.431 ± 0.350  ns/op
+ * NoiseBenchmark.measureWhirlingAlt2D  avgt    5   42.433 ± 0.268  ns/op
+ * NoiseBenchmark.measureWhirlingAlt3D  avgt    5   49.947 ± 0.322  ns/op
+ * </pre>
+ * Note that FastNoise is the best for each dimensionality of noise.
  */
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -116,15 +134,15 @@ import static squidpony.squidmath.NumberTools.zigzag;
 public class NoiseBenchmark {
 
     private short x = 0, y = 0, z = 0, w = 0, u = 0, v = 0;
-    private float[] f = new float[1024];
-    private double[] d = new double[1024];
-    private FastNoise fast = new FastNoise(12345),
+    private final float[] f = new float[1024];
+    private final double[] d = new double[1024];
+    private final FastNoise fast = new FastNoise(12345),
             fast3 = new FastNoise(12345),
             fast5 = new FastNoise(12345);
-    private Noise.Layered3D whirling3 = new Noise.Layered3D(WhirlingNoise.instance, 3, 0.03125),
-            whirling5 = new Noise.Layered3D(WhirlingNoise.instance, 5, 0.03125);
-    private Noise.Layered4D whirling3_4 = new Noise.Layered4D(WhirlingNoise.instance, 3, 0.03125),
-            whirling5_4 = new Noise.Layered4D(WhirlingNoise.instance, 5, 0.03125);
+    private final Noise.Layered3D whirling3 = new Noise.Layered3D(new WhirlingNoise(12345), 3, 0.03125),
+            whirling5 = new Noise.Layered3D(new WhirlingNoise(12345), 5, 0.03125);
+    private final Noise.Layered4D whirling3_4 = new Noise.Layered4D(new WhirlingNoise(12345), 3, 0.03125),
+            whirling5_4 = new Noise.Layered4D(new WhirlingNoise(12345), 5, 0.03125);
     {
         fast.setFractalOctaves(1);
         fast3.setNoiseType(FastNoise.SIMPLEX_FRACTAL);
@@ -304,31 +322,31 @@ public class NoiseBenchmark {
 //    }
 //
 
-    @Benchmark
-    public double measureClassicNoise2D() {
-    return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125);
-}
-    @Benchmark
-    public double measureClassicNoise3D() {
-        return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
-    }
-    @Benchmark
-    public double measureClassicNoise4D() {
-        return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
-    }
+//    @Benchmark
+//    public double measureClassicNoise2D() {
+//    return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125);
+//}
+//    @Benchmark
+//    public double measureClassicNoise3D() {
+//        return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
+//    }
+//    @Benchmark
+//    public double measureClassicNoise4D() {
+//        return ClassicNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
+//    }
     
-    @Benchmark
-    public double measureJitterNoise2D() {
-        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125);
-    }
-    @Benchmark
-    public double measureJitterNoise3D() {
-        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
-    }
-    @Benchmark
-    public double measureJitterNoise4D() {
-        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
-    }
+//    @Benchmark
+//    public double measureJitterNoise2D() {
+//        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125);
+//    }
+//    @Benchmark
+//    public double measureJitterNoise3D() {
+//        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
+//    }
+//    @Benchmark
+//    public double measureJitterNoise4D() {
+//        return JitterNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
+//    }
 
     @Benchmark
     public double measureSeeded2D() {
@@ -365,45 +383,45 @@ public class NoiseBenchmark {
         return fast.getSimplex(++x, --y, z++, w--);
     }
 
-    @Benchmark
-    public float measureFast3Octave3D() {
-        return fast3.getSimplexFractal(++x, --y, z++);
-    }
-
-    @Benchmark
-    public float measureFast5Octave3D() {
-        return fast5.getSimplexFractal(++x, --y, z++);
-    }
-
-    @Benchmark
-    public float measureFast3Octave4D() {
-        return fast3.getSimplexFractal(++x, --y, z++, w--);
-    }
-
-    @Benchmark
-    public float measureFast5Octave4D() {
-        return fast5.getSimplexFractal(++x, --y, z++, w--);
-    }
-
-    @Benchmark
-    public double measureWhirling3Octave3D() {
-        return whirling3.getNoise(++x, --y, z++);
-    }
-
-    @Benchmark
-    public double measureWhirling5Octave3D() {
-        return whirling5.getNoise(++x, --y, z++);
-    }
-
-    @Benchmark
-    public double measureWhirling3Octave4D() {
-        return whirling3_4.getNoise(++x, --y, z++, w--);
-    }
-
-    @Benchmark
-    public double measureWhirling5Octave4D() {
-        return whirling5_4.getNoise(++x, --y, z++, w--);
-    }
+//    @Benchmark
+//    public float measureFast3Octave3D() {
+//        return fast3.getSimplexFractal(++x, --y, z++);
+//    }
+//
+//    @Benchmark
+//    public float measureFast5Octave3D() {
+//        return fast5.getSimplexFractal(++x, --y, z++);
+//    }
+//
+//    @Benchmark
+//    public float measureFast3Octave4D() {
+//        return fast3.getSimplexFractal(++x, --y, z++, w--);
+//    }
+//
+//    @Benchmark
+//    public float measureFast5Octave4D() {
+//        return fast5.getSimplexFractal(++x, --y, z++, w--);
+//    }
+//
+//    @Benchmark
+//    public double measureWhirling3Octave3D() {
+//        return whirling3.getNoise(++x, --y, z++);
+//    }
+//
+//    @Benchmark
+//    public double measureWhirling5Octave3D() {
+//        return whirling5.getNoise(++x, --y, z++);
+//    }
+//
+//    @Benchmark
+//    public double measureWhirling3Octave4D() {
+//        return whirling3_4.getNoise(++x, --y, z++, w--);
+//    }
+//
+//    @Benchmark
+//    public double measureWhirling5Octave4D() {
+//        return whirling5_4.getNoise(++x, --y, z++, w--);
+//    }
 
     /*
      * ============================== HOW TO RUN THIS TEST: ====================================
