@@ -619,178 +619,18 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
 
 
     protected static final int[] SIMPLEX = WhirlingNoise.SIMPLEX_4D;
-
-    /**
-     * Possibly useful outside SeededNoise. Uses a modified version of LinnormRNG's algorithm and generates 8 bits.
-     * @param x a long to incorporate into the hash
-     * @param y a long to incorporate into the hash
-     * @param state a long to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    /*
-    public static int hash(final int x, final int y, final int seed) {
-        return   ((x    ^ 0x9E3779B9 * (seed + y))
-                + (y    ^ 0x632BE5AB * (x + seed))
-                + (seed ^ 0x632BE5AB * (y + x))) >>> 24;
-    }
-    */
-//    public static int hash(final int x, final int y, final long seed) {
-//        int a = 0x632BE5AB;
-//        return  (0x9E3779B9
-//                + (a ^= 0x85157AF5 * seed + x)
-//                + (a ^= 0x85157AF5 * x + y)
-//                + (a ^= 0x85157AF5 * y + seed)) * a >>> 24;
-//    }
-
-    public static int hash(long x, long y, final long state)
-    {
-        x = (x * 0x41C64E6DL + (state + 0x369DEA0F31A53F85L));
-        y = (y * 0x41C64E6DL + (state + 0xF83F4291DB34BB19L));
-        return (int) (((x ^ x >>> 32) * (y ^ y >>> 32) * 0xAEF17502108EF2D9L) >>> 56);
-        //0x25DA53916F1AFBF1L
-//        x = (x ^ x >>> 32) * 0xAEF17502108EF2D9L;
-//        y = (y ^ y >>> 32) * 0xAEF17502108EF2D9L;
-
-//        long s = (state ^ y) * 0x41C64E6DL + x;
-//        s = (s ^ s >>> 32) * 0xAEF17502108EF2D9L;
-//        s = (s ^ s >>> 30) ^ (state ^ x) * 0x41C64E6DL + y;
-//        return (int) ((s ^ s >>> 32) * 0xAEF17502108EF2D9L >>> 56);
-    }
-    /**
-     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param z an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    //0x89 0x95 0xA3 0xB3 0xC5 0xD3 0xE3
-    /*
-    public static int hash(final int x, final int y, final int z, final int seed) {
-        return   (z    + 0xD3 * (seed + y)
-                ^ seed + 0xB5 * (x + z   )
-                ^ x    + 0xC1 * (y + seed)
-                ^ y    + 0xE3 * (z + x   )) & 255;
-    }
-    */
-    public static int hash(final int x, final int y, final int z, final long seed) {
-        int a = 0x632BE5AB;
-        return  (0x9E3779B9
-                + (a ^= 0x85157AF5 * seed + x)
-                + (a ^= 0x85157AF5 * x + y)
-                + (a ^= 0x85157AF5 * y + z)
-                + (a ^= 0x85157AF5 * z + seed)) * a >>> 24;
-    }
     
-    /**
-     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param z an int to incorporate into the hash
-     * @param w an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    public static int hash(final int x, final int y, final int z, final int w, final long seed) {
-        int a = 0x632BE5AB;
-        return (0x9E3779B9
-                + (a ^= 0x85157AF5 * seed + x)
-                + (a ^= 0x85157AF5 * x + y)
-                + (a ^= 0x85157AF5 * y + z)
-                + (a ^= 0x85157AF5 * z + w)
-                + (a ^= 0x85157AF5 * w + seed)) * a >>> 24;
-    }
-
-    /**
-     * Possibly useful outside SeededNoise. An unrolled version of CrossHash.Wisp that only generates 8 bits.
-     * @param x an int to incorporate into the hash
-     * @param y an int to incorporate into the hash
-     * @param z an int to incorporate into the hash
-     * @param w an int to incorporate into the hash
-     * @param u an int to incorporate into the hash
-     * @param v an int to incorporate into the hash
-     * @param seed an int to incorporate into the hash
-     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-     */
-    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, final long seed) {
-        int a = 0x632BE5AB;
-        return (0x9E3779B9
-                + (a ^= 0x85157AF5 * seed + x)
-                + (a ^= 0x85157AF5 * x + y)
-                + (a ^= 0x85157AF5 * y + z)
-                + (a ^= 0x85157AF5 * z + w)
-                + (a ^= 0x85157AF5 * w + u)
-                + (a ^= 0x85157AF5 * u + v)
-                + (a ^= 0x85157AF5 * v + seed)) * a >>> 24;
-    }
-
-//    /**
-//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
-//     * @param x an int to incorporate into the hash
-//     * @param y an int to incorporate into the hash
-//     * @param seed an int to incorporate into the hash
-//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-//     */
-//    public static int hash(final int x, final int y, int seed) {
-//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ seed * 0x63413) ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
-//    }
-//
-//    /**
-//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
-//     * @param x an int to incorporate into the hash
-//     * @param y an int to incorporate into the hash
-//     * @param z an int to incorporate into the hash
-//     * @param seed an int to incorporate into the hash
-//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-//     */
-//    public static int hash(final int x, final int y, final int z, int seed) {
-//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ seed * 0x63413)
-//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
-//    }
-//    /**
-//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
-//     * @param x an int to incorporate into the hash
-//     * @param y an int to incorporate into the hash
-//     * @param z an int to incorporate into the hash
-//     * @param w an int to incorporate into the hash
-//     * @param seed an int to incorporate into the hash
-//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-//     */
-//    public static int hash(final int x, final int y, final int z, final int w, int seed) {
-//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ seed * 0x63413)
-//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
-//    }
-//    /**
-//     * Possibly useful outside SeededNoise. A fast, low-to-mid-quality hash that generates 8 bits.
-//     * @param x an int to incorporate into the hash
-//     * @param y an int to incorporate into the hash
-//     * @param z an int to incorporate into the hash
-//     * @param w an int to incorporate into the hash
-//     * @param u an int to incorporate into the hash
-//     * @param v an int to incorporate into the hash
-//     * @param seed an int to incorporate into the hash
-//     * @return a pseudo-random-like int between 0 and 255, inclusive on both
-//     */
-//    public static int hash(final int x, final int y, final int z, final int w, final int u, final int v, int seed) {
-//        return ((seed = x * 0x5a34f ^ y * 0xc29cb ^ z ^ 0x13333 ^ w * 0x42023 ^ u * 0xb34eb ^ v * 0x2feb7 ^ seed * 0x63413)
-//                ^ ((seed >>> 31 - (seed & 30)) | seed << 1 + (seed & 30))) & 255;
-//    }
-
-
-
-
     protected static final double F2 = 0.36602540378443864676372317075294,
             G2 = 0.21132486540518711774542560974902,
             F3 = 1.0 / 3.0,
             G3 = 1.0 / 6.0,
             F4 = (Math.sqrt(5.0) - 1.0) * 0.25,
             G4 = (5.0 - Math.sqrt(5.0)) * 0.05,
+            LIMIT4 = 0.62,
             F6 = (Math.sqrt(7.0) - 1.0) / 6.0,
             G6 = F6 / (1.0 + 6.0 * F6),
-            LIMIT4 = 0.62,
-            //LIMIT6 = 0.777
             LIMIT6 = 0.75
+            //LIMIT6 = 0.777
             //LIMIT6 = 0.86
             /*
             sideLength = (float)Math.sqrt(6.0) / (6f * F6 + 1f),
@@ -1018,11 +858,11 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 y4 = y0 - 1 + 4 * G4,
                 z4 = z0 - 1 + 4 * G4,
                 w4 = w0 - 1 + 4 * G4;
-        final int h0 = (hash(i, j, k, l, seed) & 0xFC),
-                h1 = (hash(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC),
-                h2 = (hash(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC),
-                h3 = (hash(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC),
-                h4 = (hash(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
+        final int h0 = (hash256(i, j, k, l, seed) & 0xFC),
+                h1 = (hash256(i + i1, j + j1, k + k1, l + l1, seed) & 0xFC),
+                h2 = (hash256(i + i2, j + j2, k + k2, l + l2, seed) & 0xFC),
+                h3 = (hash256(i + i3, j + j3, k + k3, l + l3, seed) & 0xFC),
+                h4 = (hash256(i + 1, j + 1, k + 1, l + 1, seed) & 0xFC);
         double t0 = LIMIT4 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
         if(t0 > 0) {
             t0 *= t0;
@@ -1114,7 +954,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             }
 
             if (tc > 0) {
-                final int h = hash(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
+                final int h = hash256(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
                         intLoc[4], intLoc[5], seed) * 6;
                 double gr = 0;
                 for (int d = 0; d < 6; d++) {
@@ -1125,10 +965,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             }
             skewOffset += G6;
         }
-        //return NumberTools.bounce(5.0 + 13.5 * n);
-        //return NumberTools.bounce(10f + 16.25f * n);
         return 13.5 * n;
-        //return NumberTools.sway(0.5 + n);
 
     }
 
