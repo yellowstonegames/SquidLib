@@ -2522,11 +2522,6 @@
  are only adjacent diagonally are considered <b>one area</b> with this) and returns it as an element in an
  ArrayList of GreasedRegion, with one GreasedRegion per isolated area.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#splitMix64-long-">splitMix64(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
-<dd>
-<div class="block">Get a pseudo-random long from this with <code>splitMix64(z += 0x9E3779B97F4A7C15L)</code>, where z is a long to use
- as state.</div>
-</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/PoliticalMapper.html#spokenLanguages">spokenLanguages</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/PoliticalMapper.html" title="class in squidpony.squidgrid.mapping">PoliticalMapper</a></dt>
 <dd>
 <div class="block">Maps chars, as found in the returned array from generate(), to Strings that store the languages spoken in those
@@ -3127,6 +3122,11 @@
 <dd>
 <div class="block">A mix of the smooth transitions of <a href="../squidpony/squidmath/NumberTools.html#sway-float-"><code>NumberTools.sway(float)</code></a> with (seeded) random peaks and valleys between -1f and
  1f (both exclusive).</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayRandomized-int-float-">swayRandomized(int, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">A variant on <a href="../squidpony/squidmath/NumberTools.html#swayRandomized-long-float-"><code>NumberTools.swayRandomized(long, float)</code></a> that takes an int seed instead of a float, and is optimized for
+ usage on GWT.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#swayTight-float-">swayTight(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>

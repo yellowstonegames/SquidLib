@@ -47,6 +47,7 @@
  */
 package squidpony.squidmath;
 
+import static squidpony.squidmath.Noise.HastyPointHash.hash256;
 import static squidpony.squidmath.Noise.fastFloor;
 import static squidpony.squidmath.PerlinNoise.dot;
 import static squidpony.squidmath.PerlinNoise.phiGrad2;
@@ -100,45 +101,6 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
     public double getNoiseWithSeed(final double x, final double y, final double z, final double w, final double u, final double v, final long seed) {
         return noise(x, y, z, w, u, v, seed);
     }
-
-    protected static final double[] gradient2DLUT = {0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1,
-            0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0, -1, 0,
-            0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1, 1, 0,
-            -1, 0, 0, 1, 0, -1, 1, 0, -1, 0, 0, 1, 0, -1,
-            1, 0, -1, 0};
 
     protected static final double[] gradient6DLUT = {
             0.31733186658157, 0.043599150809166, -0.63578104939541,
@@ -865,9 +827,9 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
                 y2 = y0 - 1 + 2 * G2;
         double n = 0.0;
         final int
-                gi0 = hash(i, j, seed),
-                gi1 = hash(i + i1, j + j1, seed),
-                gi2 = hash(i + 1, j + 1, seed);
+                gi0 = hash256(i, j, seed),
+                gi1 = hash256(i + i1, j + j1, seed),
+                gi2 = hash256(i + 1, j + 1, seed);
         // Calculate the contribution from the three corners
         double t0 = 0.75 - x0 * x0 - y0 * y0;
         if (t0 > 0) {

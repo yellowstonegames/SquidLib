@@ -41,7 +41,7 @@
 <span class="sourceLineNo">033</span> * @author Tommy Ettinger (if there's a flaw, use SquidLib's issues and don't bother Vigna or Blackman, the algorithm here has been adjusted from their work)<a name="line.33"></a>
 <span class="sourceLineNo">034</span> */<a name="line.34"></a>
 <span class="sourceLineNo">035</span>public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {<a name="line.35"></a>
-<span class="sourceLineNo">036</span>    private static final long serialVersionUID = 2L;<a name="line.36"></a>
+<span class="sourceLineNo">036</span>    private static final long serialVersionUID = 3L;<a name="line.36"></a>
 <span class="sourceLineNo">037</span><a name="line.37"></a>
 <span class="sourceLineNo">038</span>    public int stateA, stateB;<a name="line.38"></a>
 <span class="sourceLineNo">039</span><a name="line.39"></a>
@@ -335,7 +335,77 @@
 <span class="sourceLineNo">327</span>        return "GWTRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);<a name="line.327"></a>
 <span class="sourceLineNo">328</span>    }<a name="line.328"></a>
 <span class="sourceLineNo">329</span><a name="line.329"></a>
-<span class="sourceLineNo">330</span>}<a name="line.330"></a>
+<span class="sourceLineNo">330</span>    /**<a name="line.330"></a>
+<span class="sourceLineNo">331</span>     * A deterministic random int generator that, given one int {@code state} as input, irreversibly returns an <a name="line.331"></a>
+<span class="sourceLineNo">332</span>     * almost-always-different int as a result. Unlike the rest of GWTRNG, this will not produce all possible ints given<a name="line.332"></a>
+<span class="sourceLineNo">333</span>     * all ints as inputs, and probably a third of all possible ints cannot be returned. You should call this with<a name="line.333"></a>
+<span class="sourceLineNo">334</span>     * {@code GWTRNG.determineInt(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of forwards),<a name="line.334"></a>
+<span class="sourceLineNo">335</span>     * which will allow overflow in the incremented state to be handled the same on GWT as on desktop.<a name="line.335"></a>
+<span class="sourceLineNo">336</span>     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineInt(state = state + 1 | 0)} to handle overflow <a name="line.336"></a>
+<span class="sourceLineNo">337</span>     * @return a not-necessarily-unique int that is usually very different from {@code state}<a name="line.337"></a>
+<span class="sourceLineNo">338</span>     */<a name="line.338"></a>
+<span class="sourceLineNo">339</span>    public static int determineInt(int state) {<a name="line.339"></a>
+<span class="sourceLineNo">340</span>        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19;<a name="line.340"></a>
+<span class="sourceLineNo">341</span>    }<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    <a name="line.342"></a>
+<span class="sourceLineNo">343</span>    /**<a name="line.343"></a>
+<span class="sourceLineNo">344</span>     * A deterministic random int generator that, given one int {@code state} and an outer int {@code bound} as input,<a name="line.344"></a>
+<span class="sourceLineNo">345</span>     * returns an int between 0 (inclusive) and {@code bound} (exclusive) as a result, which should have no noticeable<a name="line.345"></a>
+<span class="sourceLineNo">346</span>     * correlation between {@code state} and the result. You should call this with<a name="line.346"></a>
+<span class="sourceLineNo">347</span>     * {@code GWTRNG.determineBound(state = state + 1 | 0, bound)} (you can subtract 1 to go backwards instead of<a name="line.347"></a>
+<span class="sourceLineNo">348</span>     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.<a name="line.348"></a>
+<span class="sourceLineNo">349</span>     * Like most bounded int generation in SquidLib, this uses some long math, but most of the function uses ints.<a name="line.349"></a>
+<span class="sourceLineNo">350</span>     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineBounded(state = state + 1 | 0, bound)} to handle overflow<a name="line.350"></a>
+<span class="sourceLineNo">351</span>     * @param bound the outer exclusive bound, as an int; may be positive or negative<a name="line.351"></a>
+<span class="sourceLineNo">352</span>     * @return an int between 0 (inclusive) and {@code bound} (exclusive)<a name="line.352"></a>
+<span class="sourceLineNo">353</span>     */<a name="line.353"></a>
+<span class="sourceLineNo">354</span>    public static int determineBounded(int state, final int bound)<a name="line.354"></a>
+<span class="sourceLineNo">355</span>    {<a name="line.355"></a>
+<span class="sourceLineNo">356</span>        return (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL) * bound &gt;&gt; 32);<a name="line.356"></a>
+<span class="sourceLineNo">357</span>    }<a name="line.357"></a>
+<span class="sourceLineNo">358</span>    /**<a name="line.358"></a>
+<span class="sourceLineNo">359</span>     * A deterministic random long generator that, given one int {@code state} as input, returns an <a name="line.359"></a>
+<span class="sourceLineNo">360</span>     * almost-always-different long as a result. This can only return a tiny fraction of all possible longs, since there<a name="line.360"></a>
+<span class="sourceLineNo">361</span>     * are at most 2 to the 32 possible ints and this doesn't even return different values for each of those. You should<a name="line.361"></a>
+<span class="sourceLineNo">362</span>     * call this with {@code GWTRNG.determine(state = state + 1 | 0)} (you can subtract 1 to go backwards instead of<a name="line.362"></a>
+<span class="sourceLineNo">363</span>     * forwards), which will allow overflow in the incremented state to be handled the same on GWT as on desktop.<a name="line.363"></a>
+<span class="sourceLineNo">364</span>     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determine(state = state + 1 | 0)} to handle overflow <a name="line.364"></a>
+<span class="sourceLineNo">365</span>     * @return a not-necessarily-unique long that is usually very different from {@code state}<a name="line.365"></a>
+<span class="sourceLineNo">366</span>     */<a name="line.366"></a>
+<span class="sourceLineNo">367</span>    public static long determine(int state)<a name="line.367"></a>
+<span class="sourceLineNo">368</span>    {<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        int r = (state ^ 0xD1B54A35) * 0x102473;<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        r = (r = (r ^ r &gt;&gt;&gt; 11 ^ r &gt;&gt;&gt; 21) * (r | 0xFFE00001)) ^ r &gt;&gt;&gt; 13 ^ r &gt;&gt;&gt; 19;<a name="line.370"></a>
+<span class="sourceLineNo">371</span>        return ((long) r &lt;&lt; 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFFFFL);<a name="line.371"></a>
+<span class="sourceLineNo">372</span>    }<a name="line.372"></a>
+<span class="sourceLineNo">373</span>    /**<a name="line.373"></a>
+<span class="sourceLineNo">374</span>     * A deterministic random float generator that, given one int {@code state} as input, returns an <a name="line.374"></a>
+<span class="sourceLineNo">375</span>     * almost-always-different float between 0.0f and 1.0f as a result. Unlike the rest of GWTRNG, this might not<a name="line.375"></a>
+<span class="sourceLineNo">376</span>     * produce all possible floats given all ints as inputs, and some fraction of possible floats cannot be returned.<a name="line.376"></a>
+<span class="sourceLineNo">377</span>     * You should call this with {@code GWTRNG.determineFloat(state = state + 1 | 0)} (you can subtract 1 to go<a name="line.377"></a>
+<span class="sourceLineNo">378</span>     * backwards instead of forwards), which will allow overflow in the incremented state to be handled the same on GWT<a name="line.378"></a>
+<span class="sourceLineNo">379</span>     * as on desktop.<a name="line.379"></a>
+<span class="sourceLineNo">380</span>     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineFloat(state = state + 1 | 0)} to handle overflow <a name="line.380"></a>
+<span class="sourceLineNo">381</span>     * @return a not-necessarily-unique float from 0.0f to 1.0f that is usually very different from {@code state}<a name="line.381"></a>
+<span class="sourceLineNo">382</span>     */<a name="line.382"></a>
+<span class="sourceLineNo">383</span>    public static float determineFloat(int state) {<a name="line.383"></a>
+<span class="sourceLineNo">384</span>        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) &amp; 0xFFFFFF) * 0x1p-24f;<a name="line.384"></a>
+<span class="sourceLineNo">385</span>    }<a name="line.385"></a>
+<span class="sourceLineNo">386</span>    /**<a name="line.386"></a>
+<span class="sourceLineNo">387</span>     * A deterministic random double generator that, given one int {@code state} as input, returns an <a name="line.387"></a>
+<span class="sourceLineNo">388</span>     * almost-always-different double between 0.0 and 1.0 as a result. This cannot produce more than a tiny fraction of<a name="line.388"></a>
+<span class="sourceLineNo">389</span>     * all possible doubles because the input is 32 bits and at least 53 bits are needed to represent most doubles from<a name="line.389"></a>
+<span class="sourceLineNo">390</span>     * 0.0 to 1.0. You should call this with {@code GWTRNG.determineDouble(state = state + 1 | 0)} (you can subtract 1<a name="line.390"></a>
+<span class="sourceLineNo">391</span>     * to go backwards instead of forwards), which will allow overflow in the incremented state to be handled the same<a name="line.391"></a>
+<span class="sourceLineNo">392</span>     * on GWT as on desktop.<a name="line.392"></a>
+<span class="sourceLineNo">393</span>     * @param state an int that should go up or down by 1 each call, as with {@code GWTRNG.determineDouble(state = state + 1 | 0)} to handle overflow <a name="line.393"></a>
+<span class="sourceLineNo">394</span>     * @return a not-necessarily-unique double from 0.0 to 1.0 that is usually very different from {@code state}<a name="line.394"></a>
+<span class="sourceLineNo">395</span>     */<a name="line.395"></a>
+<span class="sourceLineNo">396</span>    public static double determineDouble(int state)<a name="line.396"></a>
+<span class="sourceLineNo">397</span>    {<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        return ((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state &gt;&gt;&gt; 11 ^ state &gt;&gt;&gt; 21) * (state | 0xFFE00001)) ^ state &gt;&gt;&gt; 13 ^ state &gt;&gt;&gt; 19) * 0x1p-32 + 0.5;<a name="line.398"></a>
+<span class="sourceLineNo">399</span>    }<a name="line.399"></a>
+<span class="sourceLineNo">400</span>}<a name="line.400"></a>
 
 
 

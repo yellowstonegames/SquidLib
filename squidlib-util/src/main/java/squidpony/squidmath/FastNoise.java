@@ -31,7 +31,7 @@ package squidpony.squidmath;
 
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.HastyPointHash.*;
+import static squidpony.squidmath.Noise.IntPointHash.*;
 import static squidpony.squidmath.WhirlingNoise.grad4f;
 
 /**
@@ -317,6 +317,15 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y, (float)z, (float)w);
     }
 
+    public float getNoiseWithSeed(float x, float y, int seed) {
+        return singleSimplex(seed, x, y);
+    }
+    public float getNoiseWithSeed(float x, float y, float z, int seed) {
+        return singleSimplex(seed, x, y, z);
+    }
+    public float getNoiseWithSeed(float x, float y, float z, float w, int seed) {
+        return singleSimplex(seed, x, y, z, w);
+    }
     static class Float2 {
         public final float x, y;
 

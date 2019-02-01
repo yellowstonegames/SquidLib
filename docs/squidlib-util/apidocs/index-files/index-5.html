@@ -535,6 +535,11 @@
 <div class="block">A simple "output stage" applied to a two-part state like what FlapRNG uses normally; this method does not update
  state0 or state1 on its own.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determine-int-">determine(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>
+<div class="block">A deterministic random long generator that, given one int <code>state</code> as input, returns an 
+ almost-always-different long as a result.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/JabRNG.html#determine-long-">determine(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/JabRNG.html" title="class in squidpony.squidmath">JabRNG</a></dt>
 <dd>
 <div class="block">Returns a random permutation of state; if state is the same on two calls to this, this will return the same
@@ -628,6 +633,12 @@
 <dd>
 <div class="block">Like <a href="../squidpony/squidmath/FlapRNG.html#determine-int-int-"><code>FlapRNG.determine(int, int)</code></a>, but limits its results to between 0 (inclusive) and bound (exclusive).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determineBounded-int-int-">determineBounded(int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>
+<div class="block">A deterministic random int generator that, given one int <code>state</code> and an outer int <code>bound</code> as input,
+ returns an int between 0 (inclusive) and <code>bound</code> (exclusive) as a result, which should have no noticeable
+ correlation between <code>state</code> and the result.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/JabRNG.html#determineBounded-long-int-">determineBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/JabRNG.html" title="class in squidpony.squidmath">JabRNG</a></dt>
 <dd>
 <div class="block">Given a state that should usually change each time this is called, and a bound that limits the result to some
@@ -696,6 +707,11 @@
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
  will return the same float.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determineDouble-int-">determineDouble(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>
+<div class="block">A deterministic random double generator that, given one int <code>state</code> as input, returns an 
+ almost-always-different double between 0.0 and 1.0 as a result.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determineDouble-long-">determineDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
@@ -720,6 +736,11 @@
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determineFloat-int-">determineFloat(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>
+<div class="block">A deterministic random float generator that, given one int <code>state</code> as input, returns an 
+ almost-always-different float between 0.0f and 1.0f as a result.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LightRNG.html#determineFloat-long-">determineFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LightRNG.html" title="class in squidpony.squidmath">LightRNG</a></dt>
 <dd>
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
@@ -743,6 +764,11 @@
 <dd>
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
  return the same float.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/GWTRNG.html#determineInt-int-">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/GWTRNG.html" title="class in squidpony.squidmath">GWTRNG</a></dt>
+<dd>
+<div class="block">A deterministic random int generator that, given one int <code>state</code> as input, irreversibly returns an 
+ almost-always-different int as a result.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/LFSR.html#determineInt-int-">determineInt(int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/LFSR.html" title="class in squidpony.squidmath">LFSR</a></dt>
 <dd>

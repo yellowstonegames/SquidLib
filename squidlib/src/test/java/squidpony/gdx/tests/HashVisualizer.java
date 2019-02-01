@@ -3877,7 +3877,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         for (int x = 0; x < width; x++) {
                             s0 = (x + ctr);
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredFN.getSimplexFractal(s0, (y + ctr)));
+                                bright = basicPrepare(layeredFN.getSimplex(s0, (y + ctr)));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -3908,7 +3908,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         layeredFN.setFractalGain(2f);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredFN.getSimplexFractal(x, y, ctr)); // , 1.5f
+                                bright = basicPrepare(layeredFN.getSimplex(x, y, ctr)); // , 1.5f
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -3939,10 +3939,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         layeredFN.setFractalOctaves(1);
                         layeredFN.setFractalLacunarity(0.5f);
                         layeredFN.setFractalGain(2f);
-                        dBright = 1.5 * NumberTools.swayRandomized(12345L, 0.03125 * ctr);
+                        s0 = 1.5f * NumberTools.swayRandomized(12345, 0.03125f * ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredFN.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456L)); // , 1.5f
+                                bright = basicPrepare(layeredFN.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, s0, 123456)); // , 1.5f
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -4375,10 +4375,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         layeredFN.setFractalOctaves(1);
                         layeredFN.setFractalLacunarity(0.5f);
                         layeredFN.setFractalGain(2f);
-                        dBright = 1.5 * NumberTools.swayRandomized(12345L, 0.03125 * ctr);
+                        s0 = 1.5f * NumberTools.swayRandomized(12345, 0.03125f * ctr);
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(layeredFN.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, dBright, 123456L)); // , 1.5f
+                                bright = basicPrepare(layeredFN.getNoiseWithSeed(x * 0.03125f, y * 0.03125f, ctr * 0.045f, s0, 123456)); // , 1.5f
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
