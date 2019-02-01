@@ -2686,8 +2686,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             0.16849318602455f, 0.52774964064755f,
     };
 
-    private final float[] mShared = {0, 0, 0, 0, 0, 0}, cellDistShared = {0, 0, 0, 0, 0, 0};
-    private final int[] distOrderShared = {0, 0, 0, 0, 0, 0}, intLocShared = {0, 0, 0, 0, 0, 0};
+    private final float[] m = {0, 0, 0, 0, 0, 0}, cellDist = {0, 0, 0, 0, 0, 0};
+    private final int[] distOrder = {0, 0, 0, 0, 0, 0}, intLoc = {0, 0, 0, 0, 0, 0};
     
     private static final float
             F6 = (float) ((Math.sqrt(7.0) - 1.0) / 6.0),
@@ -2700,9 +2700,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),
                 skewW = fastFloor(w + s), skewU = fastFloor(u + s), skewV = fastFloor(v + s);
-        final float[] m = mShared, cellDist = cellDistShared, gradient6DLUT = FastNoise.gradient6DLUT;
-        final int[] distOrder = distOrderShared,
-                intLoc = intLocShared;
+//        final float[] m = mShared, cellDist = cellDistShared;
+//        final float[] gradient6DLUT = FastNoise.gradient6DLUT;
+//        final int[] distOrder = distOrderShared, intLoc = intLocShared;
         intLoc[0] = skewX;
         intLoc[1] = skewY;
         intLoc[2] = skewZ;
@@ -2754,17 +2754,21 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             if (tc > 0) {
                 final int h = hash256(intLoc[0], intLoc[1], intLoc[2], intLoc[3],
                         intLoc[4], intLoc[5], seed) * 6;
-                double gr = 0;
+                float gr = 0;
                 for (int d = 0; d < 6; d++) {
                     gr += gradient6DLUT[h + d] * m[d];
                 }
-
-                n += gr * tc * tc * tc * tc;
+                tc *= tc;
+                n += gr * tc * tc;
             }
             skewOffset += G6;
         }
         return 13.5f * n;
 
+    }
+
+    public float getSimplex(float x, float y, float z, float w, float u, float v) {
+        return singleSimplex(seed, x * frequency, y * frequency, z * frequency, w * frequency, u * frequency, v * frequency);
     }
 
     // Cubic Noise
