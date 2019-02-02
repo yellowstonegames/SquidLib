@@ -2517,7 +2517,7 @@ public class Noise {
 
 
     public static class Ridged4D implements Noise4D {
-        public double exp[];
+        public double[] exp;
         protected int octaves;
         public double frequency, correct;
         public Noise4D basis;

@@ -622,8 +622,8 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         }
     }
     public boolean containsValue(final int v) {
-        final int value[] = this.value;
-        final int key[] = this.key;
+        final int[] value = this.value;
+        final int[] key = this.key;
         if (containsNullKey && value[n] == v)
             return true;
         for (int i = n; i-- != 0;)
@@ -1464,7 +1464,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
          * @param max    the maximum number of elements to unwrap.
          * @return the number of elements unwrapped.
          */
-        public int unwrap(final KeyIterator i, final int array[], int offset, final int max) {
+        public int unwrap(final KeyIterator i, final int[] array, int offset, final int max) {
             if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
             if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
             int j = max;
@@ -1482,7 +1482,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
          * @param array an array to contain the output of the iterator.
          * @return the number of elements unwrapped.
          */
-        public int unwrap(final KeyIterator i, final int array[]) {
+        public int unwrap(final KeyIterator i, final int[] array) {
             return unwrap(i, array, 0, array.length);
         }
         public int[] toIntArray() {
@@ -1491,7 +1491,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
             return a;
         }
 
-        public int[] toIntArray(int a[]) {
+        public int[] toIntArray(int[] a) {
             if (a == null || a.length < size()) a = new int[size()];
             unwrap(iterator(), a);
             return a;
@@ -1684,11 +1684,11 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
 
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final int key[] = this.key;
-        final int value[] = this.value;
+        final int[] key = this.key;
+        final int[] value = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing macro
-        final int newKey[] = new int[newN + 1];
-        final int newValue[] = new int[newN + 1];
+        final int[] newKey = new int[newN + 1];
+        final int[] newValue = new int[newN + 1];
         final int sz = order.size;
         int k;
         int i, pos;
@@ -1885,7 +1885,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      * @param offset the first element of the array to be returned.
      * @param max the maximum number of elements to unwrap.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max ) {
         if ( max < 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );
         if ( offset < 0 || offset + max > array.length ) throw new IllegalArgumentException();
         int j = max;
@@ -1902,7 +1902,7 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
      * @param i a type-specific iterator.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length );
     }
 
@@ -1935,8 +1935,8 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
     @GwtIncompatible
     private void writeObject(java.io.ObjectOutputStream s)
             throws java.io.IOException {
-        final int key[] = this.key;
-        final int value[] = this.value;
+        final int[] key = this.key;
+        final int[] value = this.value;
         final MapIterator i = new MapIterator();
         s.defaultWriteObject();
         for (int j = size, e; j-- != 0;) {
@@ -1953,8 +1953,8 @@ public class IntIntOrderedMap implements Serializable, Cloneable {
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
-        final int key[] = this.key = new int[n + 1];
-        final int value[] = this.value = new int[n + 1];
+        final int[] key = this.key = new int[n + 1];
+        final int[] value = this.value = new int[n + 1];
         final IntVLA order = this.order = new IntVLA(n + 1);
         int k;
         int v;
