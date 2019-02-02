@@ -1899,7 +1899,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private final static float G3 = (1f / 6f);
     private final static float G33 = -0.5f;
 
-    private float singleSimplex(int seed, float x, float y, float z) {
+    public float singleSimplex(int seed, float x, float y, float z) {
         float t = (x + y + z) * F3;
         int i = fastFloor(x + t);
         int j = fastFloor(y + t);
@@ -2310,7 +2310,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private final static float F2 = 0.5f;
     private final static float G2 = 0.25f;
 
-    private float singleSimplex(int seed, float x, float y) {
+    public float singleSimplex(int seed, float x, float y) {
         float t = (x + y) * F2f;
         int i = fastFloor(x + t);
         int j = fastFloor(y + t);
@@ -2366,7 +2366,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private final static float F4 = (float) ((2.23606797 - 1.0) / 4.0);
     private final static float G4 = (float) ((5.0 - 2.23606797) / 20.0);
 
-    private float singleSimplex(int seed, float x, float y, float z, float w) {
+    public float singleSimplex(int seed, float x, float y, float z, float w) {
         float n = 0f;
         float t = (x + y + z + w) * F4;
         int i = fastFloor(x + t);
@@ -3042,7 +3042,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             LIMIT6 = 0.75f;
 
 
-    private float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
+    public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
         final float s = (x + y + z + w + u + v) * F6;
 
         final int skewX = fastFloor(x + s), skewY = fastFloor(y + s), skewZ = fastFloor(z + s),

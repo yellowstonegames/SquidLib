@@ -71,9 +71,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 105, otherMode = 0;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 3, otherMode = 0;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;

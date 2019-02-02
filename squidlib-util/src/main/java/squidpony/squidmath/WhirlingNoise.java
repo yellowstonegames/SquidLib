@@ -4,10 +4,7 @@ import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 
-import static squidpony.squidmath.Noise.HastyPointHash.perm_x;
-import static squidpony.squidmath.Noise.HastyPointHash.perm_y;
-import static squidpony.squidmath.Noise.HastyPointHash.perm_z;
-import static squidpony.squidmath.Noise.HastyPointHash.perm_w;
+import static squidpony.squidmath.Noise.HastyPointHash.*;
 import static squidpony.squidmath.Noise.fastFloor;
 
 /**
@@ -28,17 +25,17 @@ import static squidpony.squidmath.Noise.fastFloor;
  * with credit to Andrew Kensler, Aaron Knoll and Peter Shirley.
  */
 @Beta
-public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Serializable {
+public class WhirlingNoise extends SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D, Noise.Noise6D,
+        Serializable {
 
-    private static final long serialVersionUID = 5L;
-    public long seed;
+    private static final long serialVersionUID = 6L;
     public static final WhirlingNoise instance = new WhirlingNoise();
     public WhirlingNoise()
     {
         this(123456789);
     }
     public WhirlingNoise(long seed) {
-        this.seed = seed;
+        super(seed);
 //        System.out.println("{");
 //        for (int i = 0; i < grad3f.length; i++) {
 //            System.out.printf("{% 2.15ff, % 2.15ff, % 2.15ff},\n", grad3f[i][0], grad3f[i][1], grad3f[i][2]);
@@ -188,7 +185,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public double getNoise(final double x, final double y) {
-        return noise(x, y, seed);
+        return noise(x, y, defaultSeed);
     }
 
     /**
@@ -213,7 +210,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public double getNoise(final double x, final double y, final double z) {
-        return noise(x, y, z, seed);
+        return noise(x, y, z, defaultSeed);
     }
     /**
      * Identical to {@link #getNoise(double, double, double)}; ignores seed.
@@ -240,7 +237,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public double getNoise(final double x, final double y, final double z, final double w) {
-        return noise(x, y, z, w, seed);
+        return noise(x, y, z, w, defaultSeed);
     }
     /**
      * Identical to {@link #getNoise(double, double, double, double)}; ignores seed.
@@ -268,7 +265,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(final double xin, final double yin){
-        return noise(xin, yin, 123456789);
+        return SeededNoise.noise(xin, yin, 123456789);
     }
 
     /**
@@ -281,91 +278,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(final double xin, final double yin, final long seed) {
-        //xin *= epi;
-        //yin *= epi;
-        double noise0, noise1, noise2; // from the three corners
-        // Skew the input space to figure out which simplex cell we're in
-        double skew = (xin + yin) * F2; // Hairy factor for 2D
-        int i = fastFloor(xin + skew);
-        int j = fastFloor(yin + skew);
-        double t = (i + j) * G2;
-        double X0 = i - t; // Unskew the cell origin back to (x,y) space
-        double Y0 = j - t;
-        double x0 = xin - X0; // The x,y distances from the cell origin
-        double y0 = yin - Y0;
-        // For the 2D case, the simplex shape is an equilateral triangle.
-        // determine which simplex we are in.
-        int i1, j1; // Offsets for second (middle) corner of simplex in (i,j)
-        // coords
-        if (x0 > y0) {
-            i1 = 1;
-            j1 = 0;
-        } // lower triangle, XY order: (0,0)->(1,0)->(1,1)
-        else {
-            i1 = 0;
-            j1 = 1;
-        } // upper triangle, YX order: (0,0)->(0,1)->(1,1)
-        // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
-        // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y),
-        // where
-        // c = (3-sqrt(3))/6
-        double x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y)
-        // unskewed coords
-        double y1 = y0 - j1 + G2;
-        double x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y)
-        // unskewed coords
-        double y2 = y0 - 1.0 + 2.0 * G2;
-        // Work out the hashed gradient indices of the three simplex corners
-        /*
-        int ii = i & 255;
-        int jj = j & 255;
-        int gi0 = perm[ii + perm[jj]] & 15;
-        int gi1 = perm[ii + i1 + perm[jj + j1]] & 15;
-        int gi2 = perm[ii + 1 + perm[jj + 1]] & 15;
-        */
-        /*
-        int hash = (int) rawNoise(i + (j * 0x9E3779B9),
-                i + i1 + ((j + j1) * 0x9E3779B9),
-                i + 1 + ((j + 1) * 0x9E3779B9),
-                seed);
-        int gi0 = hash & 15;
-        int gi1 = (hash >>>= 4) & 15;
-        int gi2 = (hash >>> 4) & 15;
-        */
-//        int gi0 = determine256(seed + i + determine(j));
-//        int gi1 = determine256(seed + i + i1 + determine(j + j1));
-//        int gi2 = determine256(seed + i + 1 + determine(j + 1));
-        final int s0 = (int)(seed & 63), s1 = (int)(seed >>> 6 & 63);
-        final int gi0 = perm_x[i + s0 & 255] ^ perm_y[j + s1 & 255];
-        final int gi1 = perm_x[i + i1 + s0 & 255] ^ perm_y[j + j1 + s1 & 255];
-        final int gi2 = perm_x[i + 1 + s0 & 255] ^ perm_y[j + 1 + s1 & 255];
-
-        // Calculate the contribution from the three corners
-        double t0 = 0.75 - x0 * x0 - y0 * y0;
-        if (t0 < 0) {
-            noise0 = 0.0;
-        } else {
-            t0 *= t0;
-            noise0 = t0 * t0 * dot(SeededNoise.phiGrad2[gi0], x0, y0);
-            // for 2D gradient
-        }
-        double t1 = 0.75 - x1 * x1 - y1 * y1;
-        if (t1 < 0) {
-            noise1 = 0.0;
-        } else {
-            t1 *= t1;
-            noise1 = t1 * t1 * dot(SeededNoise.phiGrad2[gi1], x1, y1);
-        }
-        double t2 = 0.75 - x2 * x2 - y2 * y2;
-        if (t2 < 0) {
-            noise2 = 0.0;
-        } else {
-            t2 *= t2;
-            noise2 = t2 * t2 * dot(SeededNoise.phiGrad2[gi2], x2, y2);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is scaled to return values in the interval [-1,1].
-        return  9.125 * (noise0 + noise1 + noise2);
+        return SeededNoise.noise(xin, yin, seed);
     }
 
 
@@ -382,7 +295,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(final double xin, final double yin, final double zin){
-        return noise(xin, yin, zin, 123456789);
+        return SeededNoise.noise(xin, yin, zin, 123456789);
     }
 
     /**
@@ -396,159 +309,8 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @param zin Z input
      * @return noise from -1.0 to 1.0, inclusive
      */
-    public static double noise(final double xin, final double yin, final double zin, final long seed){
-        double n = 0.0; // Noise contributions are added here
-        // Skew the input space to figure out which simplex cell we're in
-        double s = (xin + yin + zin) * F3; // Very nice and simple skew
-        // factor for 3D
-        int i = fastFloor(xin + s);
-        int j = fastFloor(yin + s);
-        int k = fastFloor(zin + s);
-        double t = (i + j + k) * G3;
-        double X0 = i - t; // Unskew the cell origin back to (x,y,z) space
-        double Y0 = j - t;
-        double Z0 = k - t;
-        double x0 = xin - X0; // The x,y,z distances from the cell origin
-        double y0 = yin - Y0;
-        double z0 = zin - Z0;
-        // For the 3D case, the simplex shape is a slightly irregular
-        // tetrahedron.
-        // determine which simplex we are in.
-        int i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
-        int i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
-        if (x0 >= y0) {
-            if (y0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            } // X Y Z order
-            else if (x0 >= z0) {
-                i1 = 1;
-                j1 = 0;
-                k1 = 0;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            } // X Z Y order
-            else {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 1;
-                j2 = 0;
-                k2 = 1;
-            } // Z X Y order
-        } else { // x0<y0
-            if (y0 < z0) {
-                i1 = 0;
-                j1 = 0;
-                k1 = 1;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } // Z Y X order
-            else if (x0 < z0) {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 0;
-                j2 = 1;
-                k2 = 1;
-            } // Y Z X order
-            else {
-                i1 = 0;
-                j1 = 1;
-                k1 = 0;
-                i2 = 1;
-                j2 = 1;
-                k2 = 0;
-            } // Y X Z order
-        }
-        // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in
-        // (x,y,z),
-        // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in
-        // (x,y,z), and
-        // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in
-        // (x,y,z), where
-        // c = 1/6.
-        double x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
-        double y1 = y0 - j1 + G3;
-        double z1 = z0 - k1 + G3;
-        double x2 = x0 - i2 + F3; // Offsets for third corner in (x,y,z) coords
-        double y2 = y0 - j2 + F3;
-        double z2 = z0 - k2 + F3;
-        double x3 = x0 - 0.5; // Offsets for last corner in (x,y,z) coords
-        double y3 = y0 - 0.5;
-        double z3 = z0 - 0.5;
-
-        // Work out the hashed gradient indices of the four simplex corners
-
-        /*
-        int ii = i & 255;
-        int jj = j & 255;
-        int kk = k & 255;
-
-        int gi0 = perm[ii + perm[jj + perm[kk]]] % 12;
-        int gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1]]] % 12;
-        int gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2]]] % 12;
-        int gi3 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1]]] % 12;
-        */
-//        int gi0 = determine32(seed + i + determine(j + determine(k)));
-//        int gi1 = determine32(seed + i + i1 + determine(j + j1 + determine(k + k1)));
-//        int gi2 = determine32(seed + i + i2 + determine(j + j2 + determine(k + k2)));
-//        int gi3 = determine32(seed + i + 1 + determine(j + 1 + determine(k + 1)));
-
-
-//        final int s0 = (int)(seed & 63), s1 = (int)(seed >>> 6 & 63), s2 = (int)(seed >>> 12 & 63);
-//        final int gi0 = (perm_x[(i) + s0 & 255] ^ perm_y[(j) + s1 & 255]           ^ perm_z[(k) + s2 & 255]) & 31;
-//        final int gi1 = (perm_x[(i + i1) + s0 & 255] ^ perm_y[(j + j1) + s1 & 255] ^ perm_z[(k + k1) + s2 & 255]) & 31;
-//        final int gi2 = (perm_x[(i + i2) + s0 & 255] ^ perm_y[(j + j2) + s1 & 255] ^ perm_z[(k + k2) + s2 & 255]) & 31;
-//        final int gi3 = (perm_x[(i + 1) + s0 & 255] ^ perm_y[(j + 1) + s1 & 255]   ^ perm_z[(k + 1) + s2  & 255]) & 31;
-
-        /*
-        int hash = (int) rawNoise(i + ((j + k * 0x632BE5AB) * 0x9E3779B9),
-                i + i1 + ((j + j1 + (k + k1) * 0x632BE5AB) * 0x9E3779B9),
-                i + i2 + ((j + j2 + (k + k2) * 0x632BE5AB) * 0x9E3779B9),
-                i + 1 + ((j + 1 + ((k + 1) * 0x632BE5AB)) * 0x9E3779B9),
-                seed);
-        int gi0 = (hash >>>= 4) % 12;
-        int gi1 = (hash >>>= 4) % 12;
-        int gi2 = (hash >>>= 4) % 12;
-        int gi3 = (hash >>> 4) % 12;
-        */
-
-        //int hash = (int) rawNoise(i, j, k, seed);
-        //int gi0 = (hash >>>= 4) % 12, gi1 = (hash >>>= 4) % 12, gi2 = (hash >>>= 4) % 12, gi3 = (hash >>>= 4) % 12;
-        // Calculate the contribution from the four corners
-        double t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
-        if (t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * SeededNoise.gradCoord3D(seed, i, j, k, x0, y0, z0);
-        }
-        double t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * SeededNoise.gradCoord3D(seed, i + i1, j + j1, k + k1, x1, y1, z1);
-        }
-        double t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
-        if (t2 > 0) {
-            t2 *= t2;
-            n += t2 * t2 * SeededNoise.gradCoord3D(seed, i + i2, j + j2, k + k2, x2, y2, z2);
-        }
-        double t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
-        if (t3 > 0) {
-            t3 *= t3;
-            n += t3 * t3 * SeededNoise.gradCoord3D(seed, i + 1, j + 1, k + 1, x3, y3, z3);
-        }
-        // Add contributions from each corner to get the final noise value.
-        // The result is scaled to stay just inside [-1,1]
-//        n *= 31.5;
-//        if(n < -1 || n > 1) System.out.println(n);
-        return n * 31.5;
-
+    public static double noise(final double xin, final double yin, final double zin, final long seed){ 
+        return SeededNoise.noise(xin, yin, zin, seed);
     }
 
     /**
@@ -564,7 +326,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(final double x, final double y, final double z, final double w) {
-        return noise(x, y, z, w, 123456789);
+        return SeededNoise.noise(x, y, z, w, 123456789);
     }
 
     /**
@@ -579,88 +341,7 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static double noise(final double x, final double y, final double z, final double w, final long seed) {
-        double n = 0.0;
-        final double s = (x + y + z + w) * F4;
-        final int i = fastFloor(x + s), j = fastFloor(y + s), k = fastFloor(z + s), l = fastFloor(w + s);
-        final double[] gradient4DLUT = SeededNoise.grad4d;
-        final double t = (i + j + k + l) * G4,
-                X0 = i - t,
-                Y0 = j - t,
-                Z0 = k - t,
-                W0 = l - t,
-                x0 = x - X0,
-                y0 = y - Y0,
-                z0 = z - Z0,
-                w0 = w - W0;
-        final int c = (x0 > y0 ? 128 : 0) | (x0 > z0 ? 64 : 0) | (y0 > z0 ? 32 : 0) | (x0 > w0 ? 16 : 0) | (y0 > w0 ? 8 : 0) | (z0 > w0 ? 4 : 0);
-        final int i1 = SeededNoise.SIMPLEX_4D[c] >>> 2,
-                j1 = SeededNoise.SIMPLEX_4D[c | 1] >>> 2,
-                k1 = SeededNoise.SIMPLEX_4D[c | 2] >>> 2,
-                l1 = SeededNoise.SIMPLEX_4D[c | 3] >>> 2,
-                i2 = SeededNoise.SIMPLEX_4D[c] >>> 1 & 1,
-                j2 = SeededNoise.SIMPLEX_4D[c | 1] >>> 1 & 1,
-                k2 = SeededNoise.SIMPLEX_4D[c | 2] >>> 1 & 1,
-                l2 = SeededNoise.SIMPLEX_4D[c | 3] >>> 1 & 1,
-                i3 = SeededNoise.SIMPLEX_4D[c] & 1,
-                j3 = SeededNoise.SIMPLEX_4D[c | 1] & 1,
-                k3 = SeededNoise.SIMPLEX_4D[c | 2] & 1,
-                l3 = SeededNoise.SIMPLEX_4D[c | 3] & 1;
-        final double x1 = x0 - i1 + G4,
-                y1 = y0 - j1 + G4,
-                z1 = z0 - k1 + G4,
-                w1 = w0 - l1 + G4,
-                x2 = x0 - i2 + 2 * G4,
-                y2 = y0 - j2 + 2 * G4,
-                z2 = z0 - k2 + 2 * G4,
-                w2 = w0 - l2 + 2 * G4,
-                x3 = x0 - i3 + 3 * G4,
-                y3 = y0 - j3 + 3 * G4,
-                z3 = z0 - k3 + 3 * G4,
-                w3 = w0 - l3 + 3 * G4,
-                x4 = x0 - 1 + 4 * G4,
-                y4 = y0 - 1 + 4 * G4,
-                z4 = z0 - 1 + 4 * G4,
-                w4 = w0 - 1 + 4 * G4;
-        final int s0 = (int)(seed & 63), s1 = (int)(seed >>> 6 & 63), s2 = (int)(seed >>> 12 & 63), s3 = (int)(seed >>> 18 & 63);
-        final int h0 = (perm_x[(i) + s0 & 255] ^ perm_y[(j) + s1 & 255]           ^ perm_z[(k) + s2 & 255]      ^ perm_w[(l) + s3 & 255]) & 252;
-        final int h1 = (perm_x[(i + i1) + s0 & 255] ^ perm_y[(j + j1) + s1 & 255] ^ perm_z[(k + k1) + s2 & 255] ^ perm_w[(l + l1) + s3 & 255]) & 252;
-        final int h2 = (perm_x[(i + i2) + s0 & 255] ^ perm_y[(j + j2) + s1 & 255] ^ perm_z[(k + k2) + s2 & 255] ^ perm_w[(l + l2) + s3 & 255]) & 252;
-        final int h3 = (perm_x[(i + i3) + s0 & 255] ^ perm_y[(j + j3) + s1 & 255] ^ perm_z[(k + k3) + s2 & 255] ^ perm_w[(l + l3) + s3 & 255]) & 252;
-        final int h4 = (perm_x[(i + 1) + s0 & 255] ^ perm_y[(j + 1) + s1 & 255]   ^ perm_z[(k + 1) + s2  & 255] ^ perm_w[(l + 1) + s3 & 255]) & 252;
-//        final int h0 = hash256_alt(i, j, k, l, seed) & 252;
-//        final int h1 = hash256_alt(i + i1, j + j1, k + k1, l + l1, seed) & 252;
-//        final int h2 = hash256_alt(i + i2, j + j2, k + k2, l + l2, seed) & 252;
-//        final int h3 = hash256_alt(i + i3, j + j3, k + k3, l + l3, seed) & 252;
-//        final int h4 = hash256_alt(i + 1, j + 1, k + 1, l + 1, seed) & 252;
-        double t0 = 0.62 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
-        if(t0 > 0) {
-            t0 *= t0;
-            n += t0 * t0 * (x0 * gradient4DLUT[h0] + y0 * gradient4DLUT[h0 + 1] + z0 * gradient4DLUT[h0 + 2] + w0 * gradient4DLUT[h0 + 3]);
-        }
-        double t1 = 0.62 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
-        if (t1 > 0) {
-            t1 *= t1;
-            n += t1 * t1 * (x1 * gradient4DLUT[h1] + y1 * gradient4DLUT[h1 + 1] + z1 * gradient4DLUT[h1 + 2] + w1 * gradient4DLUT[h1 + 3]);
-        }
-        double t2 = 0.62 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
-        if (t2 > 0) {
-            t2 *= t2;
-            n += t2 * t2 * (x2 * gradient4DLUT[h2] + y2 * gradient4DLUT[h2 + 1] + z2 * gradient4DLUT[h2 + 2] + w2 * gradient4DLUT[h2 + 3]);
-        }
-        double t3 = 0.62 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
-        if (t3 > 0) {
-            t3 *= t3;
-            n += t3 * t3 * (x3 * gradient4DLUT[h3] + y3 * gradient4DLUT[h3 + 1] + z3 * gradient4DLUT[h3 + 2] + w3 * gradient4DLUT[h3 + 3]);
-        }
-        double t4 = 0.62 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
-        if (t4 > 0) {
-            t4 *= t4;
-            n += t4 * t4 * (x4 * gradient4DLUT[h4] + y4 * gradient4DLUT[h4 + 1] + z4 * gradient4DLUT[h4 + 2] + w4 * gradient4DLUT[h4 + 3]);
-        }
-        //n *= 14.75;
-        //if(n > 1.0 || n < -1.0) System.out.printf("x: %f, y: %f, z: %f, w: %f, n is %f\n", x, y, z, w, n);
-        //return NumberTools.bounce(5.0 + 41.0 * n);
-        return n * 14.75;//NumberTools.sway(0.5 + 12.75 * n);
+        return SeededNoise.noise(x, y, z, w, seed);
     }
 
 
@@ -808,8 +489,8 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static float noiseAlt(double x, double y) {
-        //xin *= epi;
-        //yin *= epi;
+        //xin *= SCALE;
+        //yin *= SCALE;
         float noise0, noise1, noise2; // from the three corners
         float xin = (float)x, yin = (float)y;
         // Skew the input space to figure out which simplex cell we're in
@@ -890,9 +571,9 @@ public class WhirlingNoise extends PerlinNoise implements Noise.Noise2D, Noise.N
      * @return noise from -1.0 to 1.0, inclusive
      */
     public static float noiseAlt(double x, double y, double z) {
-        //xin *= epi;
-        //yin *= epi;
-        //zin *= epi;
+        //xin *= SCALE;
+        //yin *= SCALE;
+        //zin *= SCALE;
         float xin = (float)x, yin = (float)y, zin = (float)z;
         float n0, n1, n2, n3; // Noise contributions from the four corners
         // Skew the input space to figure out which simplex cell we're in
