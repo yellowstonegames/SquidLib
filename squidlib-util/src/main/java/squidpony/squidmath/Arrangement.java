@@ -1974,10 +1974,10 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
 
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
+        final K[] key = this.key;
         final int[] value = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing macro
-        final K newKey[] = (K[]) new Object[newN + 1];
+        final K[] newKey = (K[]) new Object[newN + 1];
         final int[] newValue = new int[newN + 1];
         final int sz = order.size;
         K k;
@@ -2149,7 +2149,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param offset the first element of the array to be returned.
      * @param max the maximum number of elements to unwrap.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max ) {
         if ( max < 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );
         if ( offset < 0 || offset + max > array.length ) throw new IllegalArgumentException();
         int j = max;
@@ -2166,7 +2166,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param i a type-specific iterator.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length );
     }
 
@@ -2202,7 +2202,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     @GwtIncompatible
     private void writeObject(java.io.ObjectOutputStream s)
             throws java.io.IOException {
-        final K key[] = this.key;
+        final K[] key = this.key;
         final int[] value = this.value;
         final MapIterator i = new MapIterator();
         s.defaultWriteObject();
@@ -2222,7 +2222,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
-        final K key[] = this.key = (K[]) new Object[n + 1];
+        final K[] key = this.key = (K[]) new Object[n + 1];
         final int[] value = this.value = new int[n + 1];
         final IntVLA order = this.order = new IntVLA(n + 1);
         K k;

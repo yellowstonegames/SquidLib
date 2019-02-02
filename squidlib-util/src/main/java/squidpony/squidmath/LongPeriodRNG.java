@@ -46,7 +46,7 @@ public final class LongPeriodRNG implements RandomnessSource, Serializable {
     public final long[] state = new long[16];
     public int choice;
     private static final long serialVersionUID = 173524490381383244L;
-    private static final long jumpTable[] = {0x84242f96eca9c41dL,
+    private static final long[] jumpTable = {0x84242f96eca9c41dL,
             0xa3c65b8776f96855L, 0x5b34a39f070b5837L, 0x4489affce4f31a1eL,
             0x2ffeeb0a48316f40L, 0xdc2d9891fe68c022L, 0x3659132bb12fea70L,
             0xaac17d8efa43cab8L, 0xc4cb815590989b13L, 0x5ee975283d71c93bL,

@@ -4,10 +4,10 @@ import squidpony.annotation.Beta;
 
 import static squidpony.squidmath.Noise.cerp;
 import static squidpony.squidmath.Noise.fastFloor;
-import static squidpony.squidmath.PerlinNoise.phiGrad2;
+import static squidpony.squidmath.SeededNoise.phiGrad2;
 import static squidpony.squidmath.SeededNoise.gradient6DLUT;
-import static squidpony.squidmath.WhirlingNoise.grad3d;
-import static squidpony.squidmath.WhirlingNoise.grad4;
+import static squidpony.squidmath.SeededNoise.grad3d;
+import static squidpony.squidmath.SeededNoise.grad4d;
 
 /**
  * "Classic Perlin" noise, as opposed to the Simplex Noise also created by Ken Perlin (which is in {@link PerlinNoise}).
@@ -54,7 +54,7 @@ public class ClassicNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D
         final int hash =
                 ((int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed >>> 13) * (seed))
                         >>> 24) & -4;
-        return xd * grad4[hash] + yd * grad4[hash + 1] + zd * grad4[hash + 2] + wd * grad4[hash + 3];
+        return xd * grad4d[hash] + yd * grad4d[hash + 1] + zd * grad4d[hash + 2] + wd * grad4d[hash + 3];
     }
     protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,
                                         double xd, double yd, double zd, double wd, double ud, double vd) {

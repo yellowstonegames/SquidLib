@@ -172,7 +172,7 @@ public class MetsaMapFactory {
 
 	public int[][] makeBiomeMap() {
         //biomes 0 normal 1 snow
-        int biomeMap[][] = new int[width][height];
+        int[][] biomeMap = new int[width][height];
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
                 biomeMap[x][y] = 0;
@@ -194,7 +194,7 @@ public class MetsaMapFactory {
 
 	public int[][] makeNationMap() {
         // nationmap, 4 times less accurate map used for nations -1 no nation
-        int nationMap[][] = new int[width][height];
+        int[][] nationMap = new int[width][height];
         for (int i = 0; i < width / 4; i++) {
             for (int j = 0; j < height / 4; j++) {
                 if (map[i * 4][j * 4] < 0) {
@@ -209,7 +209,7 @@ public class MetsaMapFactory {
 
 	public double[][] makeWeightedMap() {
         //Weighted map for road
-        double weightedMap[][] = new double[width][height];
+        double[][] weightedMap = new double[width][height];
         double SEALEVEL = 0;
         double BEACHLEVEL = 0.05;
         double PLAINSLEVEL = 0.3;

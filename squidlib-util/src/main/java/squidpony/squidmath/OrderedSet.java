@@ -717,7 +717,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             pos = n;
         } else {
             // The starting point.
-            final K key[] = this.key;
+            final K[] key = this.key;
             pos = (hasher.hash(k)) & mask;
             while (!(key[pos] == null)) {
                 if (hasher.areEqual(k, key[pos])) {
@@ -752,7 +752,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             pos = n;
         } else {
             // The starting point.
-            final K key[] = this.key;
+            final K[] key = this.key;
             pos = (hasher.hash(k)) & mask;
             // There's always an unused entry.
             while (!(key[pos] == null)) {
@@ -1303,10 +1303,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
 
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
+        final K[] key = this.key;
         final int mask = newN - 1; // Note that this is used by the hashing
         // macro
-        final K newKey[] = (K[]) new Object[newN + 1];
+        final K[] newKey = (K[]) new Object[newN + 1];
         K k;
         int i, pos, sz = order.size;
         final int[] oi = order.items;
@@ -1502,7 +1502,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @param max    the maximum number of elements to unwrap.
      * @return the number of elements unwrapped.
      */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max) {
         if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
         if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
         int j = max;
@@ -1521,7 +1521,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped.
      */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[]) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length);
     }
 
@@ -1572,7 +1572,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
-        final K key[] = this.key = (K[]) new Object[n + 1];
+        final K[] key = this.key = (K[]) new Object[n + 1];
         final IntVLA order = this.order = new IntVLA(n + 1);
         K k;
         for (int i = size, pos; i-- != 0; ) {

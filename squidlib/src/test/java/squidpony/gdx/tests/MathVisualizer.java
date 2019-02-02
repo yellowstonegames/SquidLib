@@ -840,7 +840,7 @@ public class MathVisualizer extends ApplicationAdapter {
                 int x, y;
                 float color;
                 for (int t = 0; t < 256; t++) {
-                    angle = PerlinNoise.phiGrad2[t];
+                    angle = SeededNoise.phiGrad2[t];
                     color = (t & 4) == 4
                             ? -0x1.c98066p126F
                             : -0x1.d08864p126F;

@@ -741,7 +741,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
                 last = n;
                 return key[ n ];
             }
-            final K key[] = UnorderedSet.this.key;
+            final K[] key = UnorderedSet.this.key;
             for(;;) {
                 if ( --pos < 0 ) {
                     // We are just enumerating elements from the wrapped list.
@@ -887,9 +887,9 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      */
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
+        final K[] key = this.key;
         final int mask = newN - 1;
-        final K newKey[] = (K[]) new Object[newN + 1];
+        final K[] newKey = (K[]) new Object[newN + 1];
         K k;
         int i = -1, pos, sz = size;
         for (int q = 0; q < sz; q++) {
@@ -1034,7 +1034,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      * @param max    the maximum number of elements to unwrap.
      * @return the number of elements unwrapped.
      */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max) {
         if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
         if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
         int j = max;
@@ -1053,7 +1053,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped.
      */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[]) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length);
     }
 
@@ -1104,7 +1104,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
-        final K key[] = this.key = (K[]) new Object[n + 1];
+        final K[] key = this.key = (K[]) new Object[n + 1];
         K k;
         for (int i = size, pos; i-- != 0; ) {
             k = (K) s.readObject();

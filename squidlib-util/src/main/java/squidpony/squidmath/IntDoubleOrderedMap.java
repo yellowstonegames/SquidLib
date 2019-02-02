@@ -802,8 +802,8 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
     }
 
     public boolean containsValue(final double v) {
-        final double value[] = this.value;
-        final int key[] = this.key;
+        final double[] value = this.value;
+        final int[] key = this.key;
         if (containsNullKey && (value[n] == v)) return true;
         for (int i = n; i-- != 0; )
             if (!(key[i] == 0) && (value[i] == v)) return true;
@@ -1645,7 +1645,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
         }
 
 
-        public int[] toArray(int a[]) {
+        public int[] toArray(int[] a) {
             return toIntArray(a);
         }
 
@@ -1653,7 +1653,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             return toIntArray(null);
         }
 
-        public int[] toIntArray(int a[]) {
+        public int[] toIntArray(int[] a) {
             if (a == null || a.length < size()) a = new int[size()];
             unwrap(iterator(), a);
             return a;
@@ -1779,7 +1779,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * @param max    the maximum number of elements to unwrap.
          * @return the number of elements unwrapped.
          */
-        public int unwrap(final KeyIterator i, final int array[], int offset, final int max) {
+        public int unwrap(final KeyIterator i, final int[] array, int offset, final int max) {
             if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
             if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
             int j = max;
@@ -1798,7 +1798,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
          * @param array an array to contain the output of the iterator.
          * @return the number of elements unwrapped.
          */
-        public int unwrap(final KeyIterator i, final int array[]) {
+        public int unwrap(final KeyIterator i, final int[] array) {
             return unwrap(i, array, 0, array.length);
         }
 
@@ -1937,14 +1937,14 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      */
 
     protected void rehash(final int newN) {
-        final int key[] = this.key;
-        final double value[] = this.value;
+        final int[] key = this.key;
+        final double[] value = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing macro
-        final int newKey[] = new int[newN + 1];
-        final double newValue[] = new double[newN + 1];
+        final int[] newKey = new int[newN + 1];
+        final double[] newValue = new double[newN + 1];
         int i = first, prev = -1, newPrev = -1, t, pos;
-        final long link[] = this.link;
-        final long newLink[] = new long[newN + 1];
+        final long[] link = this.link;
+        final long[] newLink = new long[newN + 1];
         first = -1;
         for (int j = size; j-- != 0; ) {
             if (key[i] == 0) pos = newN;
@@ -2090,7 +2090,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
 
     public class DoubleCollection implements Collection<Double> {
 
-        public double[] toArray(double a[]) {
+        public double[] toArray(double[] a) {
             return toDoubleArray(a);
         }
 
@@ -2098,7 +2098,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
             return toDoubleArray(null);
         }
 
-        public double[] toDoubleArray(double a[]) {
+        public double[] toDoubleArray(double[] a) {
             if (a == null || a.length < size()) a = new double[size()];
             unwrap(iterator(), a);
             return a;
@@ -2345,7 +2345,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param max    the maximum number of elements to unwrap.
      * @return the number of elements unwrapped.
      */
-    private static int unwrap(final DoubleIterator i, final double array[], int offset, final int max) {
+    private static int unwrap(final DoubleIterator i, final double[] array, int offset, final int max) {
         if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
         if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
         int j = max;
@@ -2364,7 +2364,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped.
      */
-    private static int unwrap(final DoubleIterator i, final double array[]) {
+    private static int unwrap(final DoubleIterator i, final double[] array) {
         return unwrap(i, array, 0, array.length);
     }
 
@@ -2379,7 +2379,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param offset the first element of the array to be returned.
      * @param max the maximum number of elements to unwrap.
      * @return the number of elements unwrapped. */
-    public static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max ) {
+    public static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max ) {
         if ( max < 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );
         if ( offset < 0 || offset + max > array.length ) throw new IllegalArgumentException();
         int j = max;
@@ -2396,7 +2396,7 @@ public class IntDoubleOrderedMap implements SortedMap<Integer, Double>, java.io.
      * @param i a type-specific iterator.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped. */
-    public static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
+    public static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length );
     }
 

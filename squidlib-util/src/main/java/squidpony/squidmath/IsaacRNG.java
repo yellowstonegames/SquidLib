@@ -22,8 +22,8 @@ import java.util.Arrays;
  */
 public class IsaacRNG implements RandomnessSource {
     private int count;                           /* count through the results in results[] */
-    private long results[];                                /* the results given to the user */
-    private long mem[];                                   /* the internal state */
+    private long[] results;                                /* the results given to the user */
+    private long[] mem;                                   /* the internal state */
     private long a;                                              /* accumulator */
     private long b;                                          /* the last result */
     private long c;              /* counter, guarantees cycle is at least 2^^72 */
@@ -48,7 +48,7 @@ public class IsaacRNG implements RandomnessSource {
      * Arrays larger than 256 items will only have the first 256 used.
      * @param seed an array of longs to use as a seed; ideally it should be 256 individual longs
      */
-    public IsaacRNG(long seed[]) {
+    public IsaacRNG(long[] seed) {
         mem = new long[256];
         results = new long[256];
         if(seed == null)
@@ -163,7 +163,7 @@ public class IsaacRNG implements RandomnessSource {
      * Arrays larger than 256 items will only have the first 256 used.
      * @param seed an array of longs to use as a seed; ideally it should be 256 individual longs
      */
-    public void init(long seed[]) {
+    public void init(long[] seed) {
         if(seed == null)
             init(false);
         else {
