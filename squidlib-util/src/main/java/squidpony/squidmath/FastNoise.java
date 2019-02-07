@@ -409,9 +409,9 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private int seed = 1337;
     private float frequency = 0.03125f;
     private int interpolation = HERMITE;
-    private int noiseType = SIMPLEX;
+    private int noiseType = SIMPLEX_FRACTAL;
 
-    private int octaves = 3;
+    private int octaves = 1;
     private float lacunarity = 2f;
     private float gain = 0.5f;
     private int fractalType = FBM;
@@ -434,11 +434,11 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
     public FastNoise(int seed, float frequency)
     {
-        this(seed, frequency, SIMPLEX, 3, 2f, 0.5f);
+        this(seed, frequency, SIMPLEX_FRACTAL, 1, 2f, 0.5f);
     }
     public FastNoise(int seed, float frequency, int noiseType)
     {
-        this(seed, frequency, noiseType, 3, 2f, 0.5f);
+        this(seed, frequency, noiseType, 1, 2f, 0.5f);
     }
     public FastNoise(int seed, float frequency, int noiseType, int octaves)
     {
@@ -640,53 +640,80 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     @Override
     public double getNoise(double x, double y) {
-        return singleSimplex(seed, (float)x, (float)y);
+        return getConfiguredNoise((float)x, (float)y);
     }
 
     @Override
     public double getNoiseWithSeed(double x, double y, long seed) {
-        return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y);
+        int s = this.seed;
+        this.seed = (int) (seed ^ seed >>> 32);
+        double r = getConfiguredNoise((float)x, (float)y);
+        this.seed = s;
+        return r;
     }
 
     @Override
     public double getNoise(double x, double y, double z) {
-        return singleSimplex(seed, (float)x, (float)y, (float)z);
+        return getConfiguredNoise((float)x, (float)y, (float)z);
     }
 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, long seed) {
-        return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y, (float)z);
+        int s = this.seed;
+        this.seed = (int) (seed ^ seed >>> 32);
+        double r = getConfiguredNoise((float)x, (float)y, (float)z);
+        this.seed = s;
+        return r;
     }
 
     @Override
     public double getNoise(double x, double y, double z, double w) {
-        return singleSimplex(seed, (float)x, (float)y, (float)z, (float)w);
+        return getConfiguredNoise((float)x, (float)y, (float)z, (float)w);
     }
 
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, long seed) {
-        return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y, (float)z, (float)w);
+        int s = this.seed;
+        this.seed = (int) (seed ^ seed >>> 32);
+        double r = getConfiguredNoise((float)x, (float)y, (float)z, (float)w);
+        this.seed = s;
+        return r;
     }
 
+    //TODO: Configured noise is not set up for 6D
     @Override
     public double getNoise(double x, double y, double z, double w, double u, double v) {
         return singleSimplex(seed, (float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
     }
-
+    //TODO: Configured noise is not set up for 6D
     @Override
     public double getNoiseWithSeed(double x, double y, double z, double w, double u, double v, long seed) {
         return singleSimplex((int) (seed ^ seed >>> 32), (float)x, (float)y, (float)z, (float)w, (float)u, (float)v);
     }
 
     public float getNoiseWithSeed(float x, float y, int seed) {
-        return singleSimplex(seed, x, y);
+        int s = this.seed;
+        this.seed = seed;
+        float r = getConfiguredNoise(x, y);
+        this.seed = s;
+        return r;
     }
     public float getNoiseWithSeed(float x, float y, float z, int seed) {
-        return singleSimplex(seed, x, y, z);
+        int s = this.seed;
+        this.seed = seed;
+        float r = getConfiguredNoise(x, y, z);
+        this.seed = s;
+        return r;
     }
     public float getNoiseWithSeed(float x, float y, float z, float w, int seed) {
-        return singleSimplex(seed, x, y, z, w);
+        int s = this.seed;
+        this.seed = seed;
+        float r = getConfiguredNoise(x, y, z, w);
+        this.seed = s;
+        return r;
     }
+    
+    //TODO: Configured noise is not set up for 6D
     public float getNoiseWithSeed(float x, float y, float z, float w, float u, float v, int seed) {
         return singleSimplex(seed, x, y, z, w, u, v);
     }
@@ -1087,11 +1114,76 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         }
     }
 
+    /**
+     * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
+     * {@link #setFrequency(float)}, {@link #setFractalOctaves(int)}, and {@link #setFractalType(int)}, among others,
+     * you can call this method to get the particular variety of noise you specified, in 3D.
+     * @param x
+     * @param y
+     * @param z
+     * @param w 
+     * @return noise as a float from -1f to 1f
+     */
+    public float getConfiguredNoise(float x, float y, float z, float w) {
+        x *= frequency;
+        y *= frequency;
+        z *= frequency;
+        w *= frequency;
+
+        switch (noiseType) {
+            case VALUE:
+                return singleValue(seed, x, y, z, w);
+            case VALUE_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleValueFractalBillow(x, y, z, w);
+                    case RIDGED_MULTI:
+                        return singleValueFractalRidgedMulti(x, y, z, w);
+                    default:
+                        return singleValueFractalFBM(x, y, z, w);
+                }
+            case PERLIN:
+                return singlePerlin(seed, x, y, z, w);
+            case PERLIN_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singlePerlinFractalBillow(x, y, z, w);
+                    case RIDGED_MULTI:
+                        return singlePerlinFractalRidgedMulti(x, y, z, w);
+                    default:
+                        return singlePerlinFractalFBM(x, y, z, w);
+                }
+            case SIMPLEX_FRACTAL:
+                switch (fractalType) {
+                    case BILLOW:
+                        return singleSimplexFractalBillow(x, y, z, w);
+                    case RIDGED_MULTI:
+                        return singleSimplexFractalRidgedMulti(x, y, z, w);
+                    default:
+                        return singleSimplexFractalFBM(x, y, z, w);
+                }
+            case CELLULAR:
+                switch (cellularReturnType) {
+                    case CELL_VALUE:
+                    case NOISE_LOOKUP:
+                    case DISTANCE:
+                        return singleCellular(x, y, z);
+                    default:
+                        return singleCellular2Edge(x, y, z);
+                }
+            case WHITE_NOISE:
+                return getWhiteNoise(x, y, z, w);
+            default:
+                return singleSimplex(seed, x, y, z, w);
+        }
+    }
+
+
     // White Noise
 
     private int FloatCast2Int(final float f) {
         final int i = NumberTools.floatToIntBits(f);
-        return i ^ (i >> 16);
+        return i ^ i >>> 16;
     }
 
     public float getWhiteNoise(float x, float y, float z, float w) {
@@ -1238,6 +1330,116 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         float yf1 = lerp(xf01, xf11, ys);
 
         return lerp(yf0, yf1, zs);
+    }
+
+
+    public float getValue(float x, float y, float z, float w) {
+        return singleValue(seed, x * frequency, y * frequency, z * frequency, w * frequency);
+    }
+
+    private float singleValue(int seed, float x, float y, float z, float w) {
+        int x0 = fastFloor(x);
+        int y0 = fastFloor(y);
+        int z0 = fastFloor(z);
+        int w0 = fastFloor(w);
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+        int z1 = z0 + 1;
+        int w1 = w0 + 1;
+
+        float xs, ys, zs, ws;
+        switch (interpolation) {
+            default:
+            case LINEAR:
+                xs = x - x0;
+                ys = y - y0;
+                zs = z - z0;
+                ws = w - w0;
+                break;
+            case HERMITE:
+                xs = hermiteInterpolator(x - x0);
+                ys = hermiteInterpolator(y - y0);
+                zs = hermiteInterpolator(z - z0);
+                ws = hermiteInterpolator(w - w0);
+                break;
+            case QUINTIC:
+                xs = quinticInterpolator(x - x0);
+                ys = quinticInterpolator(y - y0);
+                zs = quinticInterpolator(z - z0);
+                ws = quinticInterpolator(w - w0);
+                break;
+        }
+        
+        final float xf000 = lerp(valCoord4D(seed, x0, y0, z0, w0), valCoord4D(seed, x1, y0, z0, w0), xs);
+        final float xf100 = lerp(valCoord4D(seed, x0, y1, z0, w0), valCoord4D(seed, x1, y1, z0, w0), xs);
+        final float xf010 = lerp(valCoord4D(seed, x0, y0, z1, w0), valCoord4D(seed, x1, y0, z1, w0), xs);
+        final float xf110 = lerp(valCoord4D(seed, x0, y1, z1, w0), valCoord4D(seed, x1, y1, z1, w0), xs);
+        final float xf001 = lerp(valCoord4D(seed, x0, y0, z0, w1), valCoord4D(seed, x1, y0, z0, w1), xs);
+        final float xf101 = lerp(valCoord4D(seed, x0, y1, z0, w1), valCoord4D(seed, x1, y1, z0, w1), xs);
+        final float xf011 = lerp(valCoord4D(seed, x0, y0, z1, w1), valCoord4D(seed, x1, y0, z1, w1), xs);
+        final float xf111 = lerp(valCoord4D(seed, x0, y1, z1, w1), valCoord4D(seed, x1, y1, z1, w1), xs);
+
+        final float yf00 = lerp(xf000, xf100, ys);
+        final float yf10 = lerp(xf010, xf110, ys);
+        final float yf01 = lerp(xf001, xf101, ys);
+        final float yf11 = lerp(xf011, xf111, ys);
+
+        final float zf0 = lerp(yf00, yf10, zs);
+        final float zf1 = lerp(yf01, yf11, zs);
+        return lerp(zf0, zf1, ws);
+    }
+    private float singleValueFractalFBM(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = singleValue(seed, x, y, z, w);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += singleValue(++seed, x, y, z, w) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleValueFractalBillow(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = Math.abs(singleValue(seed, x, y, z, w)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singleValue(++seed, x, y, z, w)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singleValueFractalRidgedMulti(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = 1 - Math.abs(singleValue(seed, x, y, z, w));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singleValue(++seed, x, y, z, w))) * amp;
+        }
+
+        return sum;
     }
 
     public float getValueFractal(float x, float y) {
@@ -1453,6 +1655,123 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         final float yf1 = lerp(xf01, xf11, ys);
 
         return lerp(yf0, yf1, zs);
+    }
+    public float getPerlin(float x, float y, float z, float w) {
+        return singlePerlin(seed, x * frequency, y * frequency, z * frequency, w * frequency);
+    }
+
+    private float singlePerlin(int seed, float x, float y, float z, float w) {
+        int x0 = fastFloor(x);
+        int y0 = fastFloor(y);
+        int z0 = fastFloor(z);
+        int w0 = fastFloor(w);
+        int x1 = x0 + 1;
+        int y1 = y0 + 1;
+        int z1 = z0 + 1;
+        int w1 = w0 + 1;
+
+        float xs, ys, zs, ws;
+        switch (interpolation) {
+            default:
+            case LINEAR:
+                xs = x - x0;
+                ys = y - y0;
+                zs = z - z0;
+                ws = w - w0;
+                break;
+            case HERMITE:
+                xs = hermiteInterpolator(x - x0);
+                ys = hermiteInterpolator(y - y0);
+                zs = hermiteInterpolator(z - z0);
+                ws = hermiteInterpolator(w - w0);
+                break;
+            case QUINTIC:
+                xs = quinticInterpolator(x - x0);
+                ys = quinticInterpolator(y - y0);
+                zs = quinticInterpolator(z - z0);
+                ws = quinticInterpolator(w - w0);
+                break;
+        }
+
+        final float xd0 = x - x0;
+        final float yd0 = y - y0;
+        final float zd0 = z - z0;
+        final float wd0 = w - w0;
+        final float xd1 = xd0 - 1;
+        final float yd1 = yd0 - 1;
+        final float zd1 = zd0 - 1;
+        final float wd1 = wd0 - 1;
+
+        final float xf000 = lerp(gradCoord4D(seed, x0, y0, z0, w0, xd0, yd0, zd0, wd0), gradCoord4D(seed, x1, y0, z0, w0, xd1, yd0, zd0, wd0), xs);
+        final float xf100 = lerp(gradCoord4D(seed, x0, y1, z0, w0, xd0, yd1, zd0, wd0), gradCoord4D(seed, x1, y1, z0, w0, xd1, yd1, zd0, wd0), xs);
+        final float xf010 = lerp(gradCoord4D(seed, x0, y0, z1, w0, xd0, yd0, zd1, wd0), gradCoord4D(seed, x1, y0, z1, w0, xd1, yd0, zd1, wd0), xs);
+        final float xf110 = lerp(gradCoord4D(seed, x0, y1, z1, w0, xd0, yd1, zd1, wd0), gradCoord4D(seed, x1, y1, z1, w0, xd1, yd1, zd1, wd0), xs);
+        final float xf001 = lerp(gradCoord4D(seed, x0, y0, z0, w1, xd0, yd0, zd0, wd1), gradCoord4D(seed, x1, y0, z0, w1, xd1, yd0, zd0, wd1), xs);
+        final float xf101 = lerp(gradCoord4D(seed, x0, y1, z0, w1, xd0, yd1, zd0, wd1), gradCoord4D(seed, x1, y1, z0, w1, xd1, yd1, zd0, wd1), xs);
+        final float xf011 = lerp(gradCoord4D(seed, x0, y0, z1, w1, xd0, yd0, zd1, wd1), gradCoord4D(seed, x1, y0, z1, w1, xd1, yd0, zd1, wd1), xs);
+        final float xf111 = lerp(gradCoord4D(seed, x0, y1, z1, w1, xd0, yd1, zd1, wd1), gradCoord4D(seed, x1, y1, z1, w1, xd1, yd1, zd1, wd1), xs);
+
+        final float yf00 = lerp(xf000, xf100, ys);
+        final float yf10 = lerp(xf010, xf110, ys);
+        final float yf01 = lerp(xf001, xf101, ys);
+        final float yf11 = lerp(xf011, xf111, ys);
+
+        final float zf0 = lerp(yf00, yf10, zs);
+        final float zf1 = lerp(yf01, yf11, zs);
+        return lerp(zf0, zf1, ws);
+    }
+    private float singlePerlinFractalFBM(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = singlePerlin(seed, x, y, z, w);
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += singlePerlin(++seed, x, y, z, w) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singlePerlinFractalBillow(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = Math.abs(singlePerlin(seed, x, y, z, w)) * 2 - 1;
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum += (Math.abs(singlePerlin(++seed, x, y, z, w)) * 2 - 1) * amp;
+        }
+
+        return sum * fractalBounding;
+    }
+
+    private float singlePerlinFractalRidgedMulti(float x, float y, float z, float w) {
+        int seed = this.seed;
+        float sum = 1 - Math.abs(singlePerlin(seed, x, y, z, w));
+        float amp = 1;
+
+        for (int i = 1; i < octaves; i++) {
+            x *= lacunarity;
+            y *= lacunarity;
+            z *= lacunarity;
+            w *= lacunarity;
+
+            amp *= gain;
+            sum -= (1 - Math.abs(singlePerlin(++seed, x, y, z, w))) * amp;
+        }
+
+        return sum;
     }
 
     public float getPerlinFractal(float x, float y) {

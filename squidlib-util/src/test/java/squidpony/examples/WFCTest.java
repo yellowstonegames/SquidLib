@@ -1,9 +1,7 @@
 package squidpony.examples;
 
 import squidpony.squidgrid.MimicWFC;
-import squidpony.squidgrid.mapping.DungeonGenerator;
-import squidpony.squidgrid.mapping.DungeonUtility;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.GWTRNG;
 
 /**
  * Created by Tommy Ettinger on 3/28/2018.
@@ -11,34 +9,72 @@ import squidpony.squidmath.StatefulRNG;
 public class WFCTest {
     public static void main(String[] args)
     {
-        StatefulRNG srng = new StatefulRNG(1234567L);
+        GWTRNG random = new GWTRNG(12345678);
         int[][] grid = new int[32][32];
-        DungeonGenerator dg = new DungeonGenerator(32, 32, srng);
-        char[][] dungeon = DungeonUtility.hashesToLines(dg.addGrass(10).addWater(7).generate());
-        for (int x = 0; x < 32; x++) {
-            for (int y = 0; y < 32; y++) {
-                grid[x][y] = dungeon[x][y];
+//        DungeonGenerator dg = new DungeonGenerator(32, 32, srng);
+//        char[][] dungeon = DungeonUtility.hashesToLines(dg.generate());
+        char[][] dungeon = new char[][]{
+                "  ┌───────┐ ┌─────┐ ┌────────┐  ".toCharArray(),
+                "┌─┤.......│ │.....└─┤........│  ".toCharArray(),
+                "│.└┐......│┌┴───....│........│  ".toCharArray(),
+                "│..├───┐..││.................│  ".toCharArray(),
+                "│..│   │..││.................├─┐".toCharArray(),
+                "│..└┐┌─┘..││....┌┐.....──────┘.│".toCharArray(),
+                "│...└┘....││..──┤│.............│".toCharArray(),
+                "│.........││....└┼─┐..........┌┘".toCharArray(),
+                "└┐.....┌──┘│.....└┐└┬────────┬┘ ".toCharArray(),
+                " │.....│   │......│ │........│  ".toCharArray(),
+                " ├─...┌┘  ┌┴─..┌──┴─┘........│  ".toCharArray(),
+                " │....│   │....│.............└─┐".toCharArray(),
+                "┌┘...┌┘   │....│...............│".toCharArray(),
+                "│....└─┐  │..┌─┴────...........│".toCharArray(),
+                "│......└┐ │..│...............─.│".toCharArray(),
+                "│.......└─┘..│.................│".toCharArray(),
+                "│..┌┐...........┌───...........│".toCharArray(),
+                "└──┘└─┐.........│............┌─┘".toCharArray(),
+                "      └───┐..│..│............│  ".toCharArray(),
+                "    ┌────┐└┬─┘..└┬───┐......┌┘  ".toCharArray(),
+                " ┌──┘....│┌┘.....└─┐┌┘..─┬──┘   ".toCharArray(),
+                "┌┘.......││........├┘....└┐     ".toCharArray(),
+                "│........├┘........│......└┐    ".toCharArray(),
+                "│........│...─┐....│.......└┐   ".toCharArray(),
+                "└┐....│..│....│....│........│   ".toCharArray(),
+                " └─┬──┘.......│..──┘..┌┐....│   ".toCharArray(),
+                "   │..........│.......││....│   ".toCharArray(),
+                "  ┌┘.....│....│......┌┘│...┌┘   ".toCharArray(),
+                "  │......├────┤..──┬─┘ │...│    ".toCharArray(),
+                "  │.....┌┘    │....│ ┌─┘..─┤    ".toCharArray(),
+                "  └──┐..│     │....│ │.....│    ".toCharArray(),
+                "     └──┘     └────┘ └─────┘    ".toCharArray(),
+        };
+//        System.out.println("new char[][]{");
+        for (int y = 0; y < 32; y++) {
+//            System.out.print('"');
+            for (int x = 0; x < 32; x++) {
+                grid[y][x] = dungeon[x][y];
+//                System.out.print(dungeon[x][y]);
             }
+//            System.out.println("\".toCharArray(),");
         }
-        MimicWFC wfc = new MimicWFC(grid, 3, 64, 64, true, true, 1, 0);
-        while (!wfc.run(srng.nextLong(), 0));
+//        System.out.println("};");
+        MimicWFC wfc = new MimicWFC(grid, 2, 64, 64, false, true, 1, 0);
+        while (!wfc.run(random.nextLong(), 0));
         int[][] grid2 = wfc.result();
-        dungeon = new char[128][128];
-        for (int x = 0; x < 64; x++) {
-            for (int y = 0; y < 64; y++) {
-                dungeon[x+64][y] = dungeon[x][y+64] = dungeon[x+64][y+64] = dungeon[x][y] = (char) grid2[x][y];
+        for (int y = 0; y < 128; y++) { 
+            for (int x = 0; x < 128; x++) {
+                System.out.print((char) grid2[x & 63][y & 63]);
             }
+            System.out.println();
         }
-        DungeonUtility.debugPrint(dungeon);
         System.out.println();
-        while (!wfc.run(srng.nextLong(), 0));
+        while (!wfc.run(random.nextLong(), 0));
         grid2 = wfc.result();
-        for (int x = 0; x < 64; x++) {
-            for (int y = 0; y < 64; y++) {
-                dungeon[x+64][y] = dungeon[x][y+64] = dungeon[x+64][y+64] = dungeon[x][y] = (char) grid2[x][y];
+        for (int y = 0; y < 128; y++) {
+            for (int x = 0; x < 128; x++) {
+                System.out.print((char) grid2[x & 63][y & 63]);
             }
+            System.out.println();
         }
-        DungeonUtility.debugPrint(dungeon);
         
     }
 }
