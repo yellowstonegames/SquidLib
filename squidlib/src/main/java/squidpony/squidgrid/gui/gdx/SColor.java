@@ -14213,7 +14213,7 @@ B = t - Co;
 
     @Override
     public boolean equals(Object other) {
-        return (other instanceof SColor || other instanceof Color) && toIntBits() == ((Color) other).toIntBits();
+        return (other instanceof Color) && toIntBits() == ((Color) other).toIntBits();
     }
 
     @Override
