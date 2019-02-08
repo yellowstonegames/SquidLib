@@ -112,21 +112,59 @@ public final class FloatFilters {
          */
         @Override
         public float alter(float color) {
-            final int bits = NumberTools.floatToIntBits(color),
-                    r = bits & 0xFF, g = bits >>> 8 & 0xFF, b = bits >>> 16 & 0xFF, a = bits >>> 24,
-                    diff = g - r;
-            if (diff > 101)
-                return floatGet(Math.min(1f, 0x1.010102p-16f * r * (203 + (diff >> 1))),
-                        Math.min(1f, 0x1.010102p-16f * g * (228 + (diff >> 1))),
-                        Math.min(1f, 0x1.010102p-16f * b * (203 + (diff >> 1))),
-                        0x1.010102p-8f * a);
-            else if (diff < -75)
-                return floatGet(Math.min(1f, 0x1.010102p-16f * r * (152 - diff)),
-                        Math.min(1f, 0x1.010102p-16f * g * (177 - diff)),
-                        Math.min(1f, 0x1.010102p-16f * b * (177 - diff)),
-                        0x1.010102p-8f * a);
-            else
-                return color;
+//            final int bits = NumberTools.floatToIntBits(color),
+//                    r = bits & 0xFF, g = bits >>> 8 & 0xFF, b = bits >>> 16 & 0xFF, a = bits >>> 24,
+//                    diff = g - r;
+//            if (diff > 101)
+//                return floatGet(Math.min(1f, 0x1.010102p-16f * r * (203 + (diff >> 1))),
+//                        Math.min(1f, 0x1.010102p-16f * g * (228 + (diff >> 1))),
+//                        Math.min(1f, 0x1.010102p-16f * b * (203 + (diff >> 1))),
+//                        0x1.010102p-8f * a);
+//            else if (diff < -75)
+//                return floatGet(Math.min(1f, 0x1.010102p-16f * r * (152 - diff)),
+//                        Math.min(1f, 0x1.010102p-16f * g * (177 - diff)),
+//                        Math.min(1f, 0x1.010102p-16f * b * (177 - diff)),
+//                        0x1.010102p-8f * a);
+//            else
+//                return color;
+            final int bits = NumberTools.floatToIntBits(color);
+            final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
+            float luma = (
+                    (bits & 0x000000ff) * (0x1.010102p-8f * 0.299f) +
+                            (bits & 0x0000ff00) * (0x1.010102p-16f * 0.587f) +
+                            (bits & 0x00ff0000) * (0x1.010102p-24f * 0.114f));
+            float chromaB = (
+                    (bits & 0x000000ff) * (0x1.010102p-8f * -0.168736f) +
+                            (bits & 0x0000ff00) * (0x1.010102p-16f * -0.331264f) +
+                            (bits & 0x00ff0000) * (0x1.010102p-24f * 0.5f));
+            float chromaR = (
+                    (bits & 0x000000ff) * (0x1.010102p-8f * 0.5f) +
+                            (bits & 0x0000ff00) * (0x1.010102p-16f * -0.418688f) +
+                            (bits & 0x00ff0000) * (0x1.010102p-24f * -0.081312f));
+            if(chromaB < -0.05f)
+            {
+                float theta = NumberTools.atan2(chromaR, chromaB);
+                float dist = (float) Math.sqrt(chromaB * chromaB + chromaR * chromaR);
+                if(theta >= 0f)
+                {
+                    theta *= 0.5f;
+                    luma += theta * 0.15f;
+                    theta += 0.7853981633974483f;
+                }
+                else
+                {
+                    theta *= 0.4f;
+                    luma += theta * 0.225f;
+                    theta -= 0.9424778335276408f;
+                }
+                chromaR = MathUtils.sin(theta) * dist;
+                chromaB = MathUtils.cos(theta) * dist;
+            }
+            return floatGet(MathUtils.clamp(luma + chromaR * 1.402f, 0f, 1f),
+                    MathUtils.clamp(luma - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 1f),
+                    MathUtils.clamp(luma + chromaB * 1.772f, 0f, 1f),
+                    opacity);
+
         }
     }
 
@@ -222,10 +260,6 @@ public final class FloatFilters {
                     (bits & 0x000000ff) * (0x1.010102p-8f * 0.5f) +
                             (bits & 0x0000ff00) * (0x1.010102p-16f * -0.418688f) +
                             (bits & 0x00ff0000) * (0x1.010102p-24f * -0.081312f));
-
-//            if (chromaR >= -0.0039f && chromaR <= 0.0039f && chromaB >= -0.0039f && chromaB <= 0.0039f) {
-//                return floatGet(luma, luma, luma, opacity);
-//            }
             return floatGet(MathUtils.clamp(luma + chromaR * 1.402f, 0f, 1f),
                     MathUtils.clamp(luma - chromaB * 0.344136f - chromaR * 0.714136f, 0f, 1f),
                     MathUtils.clamp(luma + chromaB * 1.772f, 0f, 1f),
