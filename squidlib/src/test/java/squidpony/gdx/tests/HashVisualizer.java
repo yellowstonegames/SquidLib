@@ -71,7 +71,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 130;
     private int hashMode = 0, rngMode = 21, noiseMode = 3, otherMode = 0;//74;//118;//82;
 
@@ -287,8 +287,14 @@ public class HashVisualizer extends ApplicationAdapter {
 //        return s ^ s << 8 ^ s >>> 15 ^ s >>> 9;
 //        int state = 0x9E3779B9 ^ x * 0x1827F5 ^ y * 0x123C21;
 //        return ((state = ((state = (state ^ (state << 19 | state >>> 13) ^ (state << 7 | state >>> 25) ^ 0xD1B54A33) * 0x15DE2D) ^ (state << 20 | state >>> 12) ^ (state << 8 | state >>> 24)) * 0x1B69E5) ^ state >>> 14);
-        int s = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
-        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ s >>> 15;
+
+        int s = 0x1827F5 * x ^ y * 0x123C21;
+        return (s = ((s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17)) ^ s >>> 15;
+
+        //// known to work
+        //int s = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
+        //return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ s >>> 15;
+
 //        return ((s = (s ^ (s << 20 | s >>> 12) ^ (s << 8 | s >>> 24)) * 0xDB4F) ^ s >>> 14);
 //        return ((s = ((s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ (s << 20 | s >>> 12) ^ (s << 8 | s >>> 24)) * 0xDB4F) ^ s >>> 14);
 
