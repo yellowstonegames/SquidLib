@@ -422,9 +422,9 @@ public class ColorTest extends ApplicationAdapter {
         });
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
         SColor col = new SColor(0, 0, 0, 0);
-        int[] PALETTE = FLESURRECT;
-        final int COUNT = PALETTE.length;
-        final double threshold = 0.011;//0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
+        int[] palette = FLESURRECT;
+        final int COUNT = palette.length;
+        final double THRESHOLD = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
         byte[] paletteMapping = new byte[1 << 16];
         int[] reverse = new int[COUNT];
         byte[][] ramps = new byte[COUNT][4];
@@ -448,14 +448,14 @@ public class ColorTest extends ApplicationAdapter {
         for (int i = 1; i < COUNT; i++) {
             //col.set(flesurrectSet.getAt(i));
             //FLESURRECT[i] = Color.rgba8888(col);
-            col.set(PALETTE[i]);
+            col.set(palette[i]);
             //names[i] = col.name;
             reverse[i] =
                     (int) ((lumas[i] = lumaYOG(col)) * yLim)
                             | (int) (((cos[i] = coYOG(col)) + 0.5f) * coLim) << shift1
                             | (int) (((cgs[i] = cgYOG(col)) + 0.5f) * cgLim) << shift2;
             if(paletteMapping[reverse[i]] != 0)
-                System.out.println("color #" + i + ", " + col.name + ", overlaps an existing color, " + (int)paletteMapping[reverse[i]] + "!!!");
+                System.out.println("color #" + i + ", " + col.name + ", overlaps an existing color, " + (int)paletteMapping[reverse[i]] + "!");
             paletteMapping[reverse[i]] = (byte) i;
         }
 //        //this gives the possibility of storing 32KB of paletteMapping as a 9046-char String.
@@ -492,8 +492,8 @@ public class ColorTest extends ApplicationAdapter {
                             if (Math.abs(lumas[i] - yf) < 0.2f && dist > (dist = Math.min(dist, difference(lumas[i], cos[i], cgs[i], yf, cof, cgf))))
                                 paletteMapping[c2] = (byte) i;
                         }
-                        if(paletteMapping[c2] == 0)
-                            System.out.println("what gives? y=" + y + ", co=" + cb + ", cg=" + cr);
+//                        if(paletteMapping[c2] == 0)
+//                            System.out.println("what gives? y=" + y + ", co=" + cb + ", cg=" + cr);
                     }
                 }
             }
@@ -520,7 +520,7 @@ public class ColorTest extends ApplicationAdapter {
             ramps[i][2] = 1;//0x010101FF, black
             ramps[i][3] = 1;//0x010101FF, black
             for (int yy = y + 2, rr = rev + 2; yy <= yLim; yy++, rr++) {
-                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > threshold) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
                     ramps[i][0] = paletteMapping[rr];
                     break;
                 }
@@ -537,7 +537,7 @@ public class ColorTest extends ApplicationAdapter {
             cof = cos[i];
             cgf = cgs[i];
             for (int yy = y - 2, rr = rev - 2; yy > 0; rr--) {
-                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > threshold) {
+                if ((idx2 = paletteMapping[rr] & 255) != i && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
                     ramps[i][2] = paletteMapping[rr];
                     rev = rr;
                     y = yy;
@@ -565,7 +565,7 @@ public class ColorTest extends ApplicationAdapter {
             }
             if (match >= 0) {
                 for (int yy = y - 3, rr = rev - 3; yy > 0; yy--, rr--) {
-                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > threshold) {
+                    if ((idx2 = paletteMapping[rr] & 255) != match && difference(lumas[idx2], cos[idx2], cgs[idx2], yf, cof, cgf) > THRESHOLD) {
                         ramps[i][3] = paletteMapping[rr];
                         break;
                     }
@@ -965,7 +965,7 @@ public class ColorTest extends ApplicationAdapter {
 //        Gdx.files.local("ColorOutput.txt").writeString(sb.toString(), false);
     }
 
-    private double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
+    private static double difference(float y1, float cb1, float cr1, float y2, float cb2, float cr2) {
 //        float angle1 = NumberTools.atan2_(cb1, cr1);
 //        float angle2 = NumberTools.atan2_(cb2, cr2);
         return (y1 - y2) * (y1 - y2) + ((cb1 - cb2) * (cb1 - cb2) + (cr1 - cr2) * (cr1 - cr2)) * 0.325;

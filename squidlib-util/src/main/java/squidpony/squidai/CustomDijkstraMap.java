@@ -246,7 +246,7 @@ public class CustomDijkstraMap implements Serializable {
         for (int i = 0; i < len; i++) {
             costMap[i] = (gradientMap[i] > FLOOR) ? '#' : '.';
         }
-        adjacency.costRules.putAndMoveToFirst('#', WALL);
+        adjacency.costRules.putAt('#', WALL, 0);
 
         neighbors = adjacency.neighborMaps();
         heuristics = new double[adjacency.directions.length];
@@ -287,7 +287,7 @@ public class CustomDijkstraMap implements Serializable {
         physicalMap = new double[len];
         costMap = new int[len];
         IntDoubleOrderedMap cst = adjacency.costRules;
-        cst.putAndMoveToFirst(alternateWall, WALL);
+        cst.putAt(alternateWall, WALL, 0);
         int c;
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -443,7 +443,7 @@ public class CustomDijkstraMap implements Serializable {
     public void setCost(int pt, int tile) {
         if (!initialized || !adjacency.validate(pt)) return;
         if (physicalMap[pt] > FLOOR) {
-            costMap[pt] = adjacency.costRules.firstIntKey();
+            costMap[pt] = adjacency.costRules.keyAt(0);
             return;
         }
         costMap[pt] = tile;

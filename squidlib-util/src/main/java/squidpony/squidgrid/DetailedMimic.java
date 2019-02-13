@@ -497,9 +497,23 @@ public class DetailedMimic {
     }
 
     static int weightedRandom(IntDoubleOrderedMap dic, double r) {
-        int[] ints = dic.keySet().toIntArray();
-        double[] doubles =  dic.values().toDoubleArray();
-        return ints[weightedRandom(doubles, r)];
+//        int[] ints = dic.keySet().toIntArray();
+//        double[] doubles =  dic.values().toDoubleArray();
+        double sum = 0;
+        final int sz = dic.size();
+        for (int j = 0; j < sz; j++)
+            sum += Math.max(1.0, dic.getAt(j));
+
+        int i = 0;
+        double x = 0;
+
+        while (i < sz)
+        {
+            x += dic.getAt(i) / sz;
+            if (r <= x) return dic.keyAt(i);
+            i++;
+        }
+        return dic.firstKey();
     }
 
     /**
