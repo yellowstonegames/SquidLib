@@ -200,14 +200,14 @@ public class JsonConverter extends Json {
                 }
                 json.writeObjectStart();
                 json.writeArrayStart("k");
-                IntDoubleOrderedMap.KeyIterator ki = object.keySet().iterator();
-                while (ki.hasNext())
-                    json.writeValue(ki.nextInt());
+                for (int i = 0; i < object.size(); i++) {
+                    json.writeValue(object.keyAt(i));
+                }
                 json.writeArrayEnd();
                 json.writeArrayStart("v");
-                IntDoubleOrderedMap.DoubleIterator vi = object.values().iterator();
-                while (vi.hasNext())
-                    json.writeValue(vi.nextDouble());
+                for (int i = 0; i < object.size(); i++) {
+                    json.writeValue(object.getAt(i));
+                }
                 json.writeArrayEnd();
                 json.writeValue("f", object.f);
                 json.writeObjectEnd();
