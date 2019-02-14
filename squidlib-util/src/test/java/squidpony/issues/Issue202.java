@@ -5,6 +5,8 @@ import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidmath.StatefulRNG;
 
+import static squidpony.examples.LanguageGenTest.PRINTING;
+
 /**
  * Check for <a href="https://github.com/SquidPony/SquidLib/issues/202">SquidLib Issue 202</a>.
  * <br>
@@ -16,7 +18,9 @@ public class Issue202 {
     public void testIssue()
     {
         for (int i = 0; i < 100; i++) {
-            DungeonUtility.debugPrint(reproduce());
+            char[][] rep = reproduce();
+            if(PRINTING) 
+                DungeonUtility.debugPrint(rep);
         }
     }
     

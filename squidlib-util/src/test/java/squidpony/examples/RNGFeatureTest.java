@@ -1,6 +1,7 @@
 package squidpony.examples;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.StringKit;
 import squidpony.squidmath.*;
@@ -35,6 +36,7 @@ public class RNGFeatureTest {
         assertTrue(set.size() == width * height / 4);
     }
     @Test
+    @Ignore
     public void testCriticalHits()
     {
         double total;
@@ -53,6 +55,7 @@ public class RNGFeatureTest {
         }
     }
     @Test
+    @Ignore
     public void testHasty() {
         for (int i = 0; i < 100; i++) {
             System.out.println(StringKit.hex(rng.nextIntHasty(0x80000000)));

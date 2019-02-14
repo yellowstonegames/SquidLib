@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.squidmath.LinnormRNG;
 
@@ -8,6 +9,7 @@ import java.math.BigInteger;
 /**
  * Created by Tommy Ettinger on 7/28/2018.
  */
+@Ignore
 public class RangedRandomTest {
     public static final long BOUND = 0x7890ABCDEF123456L;
 //    public LinnormRNG r0 = new LinnormRNG(1234567890L),

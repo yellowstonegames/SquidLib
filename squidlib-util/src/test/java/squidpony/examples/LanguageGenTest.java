@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.*;
 import squidpony.squidmath.CrossHash;
@@ -12,8 +13,9 @@ import java.util.List;
 /**
  * Created by Tommy Ettinger on 11/29/2015.
  */
+@Ignore
 public class LanguageGenTest {
-    public static boolean PRINTING = true;
+    public static boolean PRINTING = false;
     @Test
     public void testOutput() {
         if(!PRINTING) return;

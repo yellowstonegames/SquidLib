@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.ProbabilityTable;
@@ -10,6 +11,7 @@ import static squidpony.examples.LanguageGenTest.PRINTING;
 /**
  * Created by Tommy Ettinger on 2/21/2017.
  */
+@Ignore
 public class ProbabilityTableTest {
     @Test
     public void testTable() {
