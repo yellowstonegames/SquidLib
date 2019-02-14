@@ -1,5 +1,6 @@
 package squidpony.squidmath;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.squidgrid.FOVCache;
 import squidpony.squidgrid.Radius;
@@ -14,6 +15,7 @@ import static squidpony.examples.LanguageGenTest.PRINTING;
  * Created by Tommy Ettinger on 10/8/2015.
  */
 public class FOVCacheTest {
+    @Ignore
     @Test
     public void testCache()
     {

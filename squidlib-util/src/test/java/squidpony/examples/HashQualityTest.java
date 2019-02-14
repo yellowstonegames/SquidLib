@@ -1,5 +1,6 @@
 package squidpony.examples;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
@@ -36,6 +37,7 @@ Sip collisions, 32-bit: 141
 Lit collisions, 32-bit: 124
 
  */
+@Ignore
 public class HashQualityTest {
     public static int jdkHash(char[] data, int start, int end)
     {
