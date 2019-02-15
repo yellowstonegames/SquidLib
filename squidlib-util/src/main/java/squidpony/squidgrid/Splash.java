@@ -158,7 +158,8 @@ public class Splash {
 		if (nb == 0)
 			return;
 
-		assert !border.isEmpty();
+		if(border.isEmpty())
+			return;
 		for (int j = 0; j < nb && !zone.isEmpty(); j++) {
 			inebriate0(rng, zone, border, drunks);
 			if (border.isEmpty() || zone.isEmpty())
@@ -187,7 +188,7 @@ public class Splash {
 		final Coord center = rng.getRandomElement(border);
 		zone.remove(center);
 		for (int dx = -radius; dx <= radius; ++dx) {
-			final int high = (int) Math.floor(Math.sqrt(radius * radius - dx * dx));
+			final int high = (int) (Math.sqrt(radius * radius - dx * dx));
 			for (int dy = -high; dy <= high; ++dy) {
 				final Coord c = center.translate(dx, dy);
 				zone.remove(c);

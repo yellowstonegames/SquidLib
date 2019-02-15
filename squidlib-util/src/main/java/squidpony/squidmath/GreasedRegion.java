@@ -3907,8 +3907,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 t.tally();
                 if(t.ct <= 0) break;
             }
-            else
-                break;
         }
         tallied = false;
         return this;

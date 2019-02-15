@@ -67,9 +67,9 @@ public class MultiSpill {
     public int filled = 0;
     private ArrayList<OrderedSet<Coord>> fresh;
     /**
-     * The IStatefulRNG used to decide how to randomly fill a space; can have its state set and read.
+     * The IRNG used to decide how to randomly fill a space; can have its state set and read.
      */
-    public IStatefulRNG rng;
+    public IRNG rng;
 
     private boolean initialized = false;
     /**
