@@ -166,10 +166,10 @@ public class SpillWorldMap {
         }
         OrderedMap<Coord, Double> entries = new OrderedMap<>();
         for (int i = 0; i < aLen; i++) {
-            int volume = 10 + (height * width) / (aLen * 2);
+            int volume = 10 + (height * width) / (aLen);
             area.empty().insert(pts[i]).spill(bounds, volume, rng).expand(3);
             tmpInner.remake(area).retract(4).expand8way().and(area);
-            tmpEdge.remake(area).surface8way();
+            tmpEdge.remake(area).surface();
             Coord[] edges = tmpEdge.mixedRandomSeparated(0.35);
             int eLen = edges.length;
             Double[] powers = new Double[eLen];
