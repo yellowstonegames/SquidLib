@@ -443,7 +443,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
                 return removeEntry(pos);
         }
     }
-    private double setValue(final int pos, final int v) {
+    private double setValue(final int pos, final double v) {
         final double oldValue = value[pos];
         value[pos] = v;
         return oldValue;
@@ -687,7 +687,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
 
     /**
      * The entry class for a OrderedMap does not record key and value, but rather the position in the hash table of the corresponding entry. This is necessary so that calls to
-     * {@link MapEntry#setValue(int)} are reflected in the map
+     * {@link MapEntry#setValue(double)} are reflected in the map
      */
     public final class MapEntry {
         // The table index this entry refers to, or -1 if this entry has been
@@ -704,7 +704,7 @@ public class IntDoubleOrderedMap implements Serializable, Cloneable {
         public double getValue() {
             return value[index];
         }
-        public double setValue(final int v) {
+        public double setValue(final double v) {
             final double oldValue = value[index];
             value[index] = v;
             return oldValue;
