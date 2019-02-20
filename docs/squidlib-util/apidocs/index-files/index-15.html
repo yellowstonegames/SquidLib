@@ -329,17 +329,11 @@
 <div class="block">Get up to 32 bits (inclusive) of random output; the int this produces
  will not require more than <code>bits</code> bits to represent.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleIterator</a></dt>
-<dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span>
-<div class="block"><span class="deprecationComment">Please use the corresponding type-specific method instead.</span></div>
-</div>
-</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.EntryIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.FastEntryIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.KeyIterator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.ValueIterator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.FastEntryIterator.html#next--">next()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">IntIntOrderedMap.FastEntryIterator</a></dt>
 <dd>&nbsp;</dd>
@@ -671,8 +665,6 @@
 <dd>
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html#nextDouble--">nextDouble()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.DoubleIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleIterator</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IRNG.html#nextDouble--">nextDouble()</a></span> - Method in interface squidpony.squidmath.<a href="../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a></dt>
 <dd>
 <div class="block">Gets a random double between 0.0 inclusive and 1.0 exclusive.</div>
@@ -1570,7 +1562,10 @@
  a long for state; like <a href="../squidpony/squidmath/Noise.PointHash.html" title="class in squidpony.squidmath"><code>Noise.PointHash</code></a> but optimized for speed rather than quality.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/Noise.IntPointHash.html" title="class in squidpony.squidmath"><span class="typeNameLink">Noise.IntPointHash</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">A group of similar methods for getting hashes of points based on int coordinates in 2, 3, 4, or 6 dimensions and
+ an int for state; the code is similar to <a href="../squidpony/squidmath/Noise.HastyPointHash.html" title="class in squidpony.squidmath"><code>Noise.HastyPointHash</code></a> but will be much faster on GWT.</div>
+</dd>
 <dt><a href="../squidpony/squidmath/Noise.InverseLayered1D.html" title="class in squidpony.squidmath"><span class="typeNameLink">Noise.InverseLayered1D</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/Noise.InverseLayered2D.html" title="class in squidpony.squidmath"><span class="typeNameLink">Noise.InverseLayered2D</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>

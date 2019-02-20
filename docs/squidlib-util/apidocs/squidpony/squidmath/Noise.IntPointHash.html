@@ -113,8 +113,26 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static final class <a href="../../src-html/squidpony/squidmath/Noise.html#line.1342">Noise.IntPointHash</a>
+<pre>public static final class <a href="../../src-html/squidpony/squidmath/Noise.html#line.1362">Noise.IntPointHash</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+<div class="block">A group of similar methods for getting hashes of points based on int coordinates in 2, 3, 4, or 6 dimensions and
+ an int for state; the code is similar to <a href="../../squidpony/squidmath/Noise.HastyPointHash.html" title="class in squidpony.squidmath"><code>Noise.HastyPointHash</code></a> but will be much faster on GWT. This
+ implementation has high enough quality to be useful as a source of random numbers based on positions, but would
+ likely not be a good option in a hash table (or at least not as good as the tailored implementation of
+ <a href="../../squidpony/squidmath/Coord.html#hashCode--"><code>Coord.hashCode()</code></a>; it is still better than <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Objects.html?is-external=true#hash-java.lang.Object...-" title="class or interface in java.util"><code>Objects.hash(Object...)</code></a>). Even on a desktop
+ JVM, this class is faster than <a href="../../squidpony/squidmath/Noise.PointHash.html" title="class in squidpony.squidmath"><code>Noise.PointHash</code></a> or <a href="../../squidpony/squidmath/Noise.HastyPointHash.html" title="class in squidpony.squidmath"><code>Noise.HastyPointHash</code></a>. The technique used here owes credit
+ to Pelle Evensen for finding the significant quality increase from using multiple bitwise rotations XORed
+ together, and Martin Roberts for discovering the connection between higher dimensional ranks and the appropriate
+ numbers to gain similar qualities to adding the golden ratio mod 1 in 1D, using what had already been named
+ "harmonious numbers." The only case where this can return different results on GWT than on a desktop or mobile
+ JVM is when the inputs are GWT-specific out-of-range JS Numbers appearing to be ints, and that's a problem with
+ the input rather than the algorithm.
+ <br>
+ Getting the bottom 24 bits of <a href="../../squidpony/squidmath/Noise.IntPointHash.html#hashAll-int-int-int-"><code>hashAll(int, int, int)</code></a>, dividing to get a float from 0 to 1, and graphing
+ it produces <a href="https://i.imgur.com/vYWzVAR.png">this white-noise-like image</a>. The frequency magnitude of
+ that image is <a href="https://i.imgur.com/6N39FPQ.png">this diagram</a>, which looks almost exactly like
+ <a href="https://i.imgur.com/RSdUnSY.png">a diagram of the frequency magnitude of white noise</a>. This shows
+ there are effectively no significant structural artifacts in the noise when interpreted as a float.</div>
 </li>
 </ul>
 </div>
@@ -350,7 +368,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IntPointHash</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1342">IntPointHash</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1362">IntPointHash</a>()</pre>
 </li>
 </ul>
 </li>
@@ -367,7 +385,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1355">hashAll</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1375">hashAll</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;s)</pre>
 <div class="block">A 32-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
@@ -392,7 +410,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1372">hashAll</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1392">hashAll</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z,
                           int&nbsp;s)</pre>
@@ -419,7 +437,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1391">hashAll</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1411">hashAll</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z,
                           int&nbsp;w,
@@ -448,7 +466,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1413">hashAll</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1433">hashAll</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z,
                           int&nbsp;w,
@@ -482,7 +500,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1430">hash256</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1450">hash256</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;s)</pre>
 <div class="block">A 8-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
@@ -507,7 +525,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1447">hash256</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1467">hash256</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z,
                           int&nbsp;s)</pre>
@@ -534,7 +552,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1466">hash256</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1486">hash256</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z,
                           int&nbsp;w,
@@ -563,7 +581,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1488">hash256</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1508">hash256</a>(int&nbsp;x,
                           int&nbsp;y,
                           int&nbsp;z,
                           int&nbsp;w,
@@ -597,7 +615,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1505">hash64</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1525">hash64</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;s)</pre>
 <div class="block">A 6-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
@@ -622,7 +640,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1522">hash64</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1542">hash64</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;z,
                          int&nbsp;s)</pre>
@@ -649,7 +667,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1541">hash64</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1561">hash64</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;z,
                          int&nbsp;w,
@@ -678,7 +696,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1563">hash64</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1583">hash64</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;z,
                          int&nbsp;w,
@@ -712,7 +730,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1579">hash32</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1599">hash32</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;s)</pre>
 <div class="block">A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
@@ -737,7 +755,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1596">hash32</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1616">hash32</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;z,
                          int&nbsp;s)</pre>
@@ -764,7 +782,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1615">hash32</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1635">hash32</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;z,
                          int&nbsp;w,
@@ -793,7 +811,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1637">hash32</a>(int&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.IntPointHash.html#line.1657">hash32</a>(int&nbsp;x,
                          int&nbsp;y,
                          int&nbsp;z,
                          int&nbsp;w,

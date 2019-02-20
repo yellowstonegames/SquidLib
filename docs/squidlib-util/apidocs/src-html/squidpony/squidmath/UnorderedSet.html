@@ -749,7 +749,7 @@
 <span class="sourceLineNo">741</span>                last = n;<a name="line.741"></a>
 <span class="sourceLineNo">742</span>                return key[ n ];<a name="line.742"></a>
 <span class="sourceLineNo">743</span>            }<a name="line.743"></a>
-<span class="sourceLineNo">744</span>            final K key[] = UnorderedSet.this.key;<a name="line.744"></a>
+<span class="sourceLineNo">744</span>            final K[] key = UnorderedSet.this.key;<a name="line.744"></a>
 <span class="sourceLineNo">745</span>            for(;;) {<a name="line.745"></a>
 <span class="sourceLineNo">746</span>                if ( --pos &lt; 0 ) {<a name="line.746"></a>
 <span class="sourceLineNo">747</span>                    // We are just enumerating elements from the wrapped list.<a name="line.747"></a>
@@ -895,9 +895,9 @@
 <span class="sourceLineNo">887</span>     */<a name="line.887"></a>
 <span class="sourceLineNo">888</span>    @SuppressWarnings("unchecked")<a name="line.888"></a>
 <span class="sourceLineNo">889</span>    protected void rehash(final int newN) {<a name="line.889"></a>
-<span class="sourceLineNo">890</span>        final K key[] = this.key;<a name="line.890"></a>
+<span class="sourceLineNo">890</span>        final K[] key = this.key;<a name="line.890"></a>
 <span class="sourceLineNo">891</span>        final int mask = newN - 1;<a name="line.891"></a>
-<span class="sourceLineNo">892</span>        final K newKey[] = (K[]) new Object[newN + 1];<a name="line.892"></a>
+<span class="sourceLineNo">892</span>        final K[] newKey = (K[]) new Object[newN + 1];<a name="line.892"></a>
 <span class="sourceLineNo">893</span>        K k;<a name="line.893"></a>
 <span class="sourceLineNo">894</span>        int i = -1, pos, sz = size;<a name="line.894"></a>
 <span class="sourceLineNo">895</span>        for (int q = 0; q &lt; sz; q++) {<a name="line.895"></a>
@@ -1042,7 +1042,7 @@
 <span class="sourceLineNo">1034</span>     * @param max    the maximum number of elements to unwrap.<a name="line.1034"></a>
 <span class="sourceLineNo">1035</span>     * @return the number of elements unwrapped.<a name="line.1035"></a>
 <span class="sourceLineNo">1036</span>     */<a name="line.1036"></a>
-<span class="sourceLineNo">1037</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max) {<a name="line.1037"></a>
+<span class="sourceLineNo">1037</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max) {<a name="line.1037"></a>
 <span class="sourceLineNo">1038</span>        if (max &lt; 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");<a name="line.1038"></a>
 <span class="sourceLineNo">1039</span>        if (offset &lt; 0 || offset + max &gt; array.length) throw new IllegalArgumentException();<a name="line.1039"></a>
 <span class="sourceLineNo">1040</span>        int j = max;<a name="line.1040"></a>
@@ -1061,7 +1061,7 @@
 <span class="sourceLineNo">1053</span>     * @param array an array to contain the output of the iterator.<a name="line.1053"></a>
 <span class="sourceLineNo">1054</span>     * @return the number of elements unwrapped.<a name="line.1054"></a>
 <span class="sourceLineNo">1055</span>     */<a name="line.1055"></a>
-<span class="sourceLineNo">1056</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[]) {<a name="line.1056"></a>
+<span class="sourceLineNo">1056</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {<a name="line.1056"></a>
 <span class="sourceLineNo">1057</span>        return objectUnwrap(i, array, 0, array.length);<a name="line.1057"></a>
 <span class="sourceLineNo">1058</span>    }<a name="line.1058"></a>
 <span class="sourceLineNo">1059</span><a name="line.1059"></a>
@@ -1112,7 +1112,7 @@
 <span class="sourceLineNo">1104</span>        n = arraySize(size, f);<a name="line.1104"></a>
 <span class="sourceLineNo">1105</span>        maxFill = maxFill(n, f);<a name="line.1105"></a>
 <span class="sourceLineNo">1106</span>        mask = n - 1;<a name="line.1106"></a>
-<span class="sourceLineNo">1107</span>        final K key[] = this.key = (K[]) new Object[n + 1];<a name="line.1107"></a>
+<span class="sourceLineNo">1107</span>        final K[] key = this.key = (K[]) new Object[n + 1];<a name="line.1107"></a>
 <span class="sourceLineNo">1108</span>        K k;<a name="line.1108"></a>
 <span class="sourceLineNo">1109</span>        for (int i = size, pos; i-- != 0; ) {<a name="line.1109"></a>
 <span class="sourceLineNo">1110</span>            k = (K) s.readObject();<a name="line.1110"></a>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</dd>
+<dd><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -117,13 +117,17 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public final class <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1525">IntDoubleOrderedMap.KeyIterator</a>
+<pre>public final class <a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1262">IntDoubleOrderedMap.KeyIterator</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</pre>
+implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;, <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">An iterator on keys.
  <p>
  <P>We simply override the <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ListIterator.html?is-external=true#next--" title="class or interface in java.util"><code>ListIterator.next()</code></a>/<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ListIterator.html?is-external=true#previous--" title="class or interface in java.util"><code>ListIterator.previous()</code></a> methods (and possibly their type-specific counterparts) so that they return keys
  instead of entries.</div>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../serialized-form.html#squidpony.squidmath.IntDoubleOrderedMap.KeyIterator">Serialized Form</a></dd>
+</dl>
 </li>
 </ul>
 </div>
@@ -144,9 +148,6 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 <tr class="altColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#KeyIterator--">KeyIterator</a></span>()</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#KeyIterator-int-">KeyIterator</a></span>(int&nbsp;k)</code>&nbsp;</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -164,35 +165,31 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#add-int-">add</a></span>(int&nbsp;k)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#add-java.lang.Integer-">add</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;k)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#add-java.lang.Integer-">add</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#nextInt--">nextInt</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#previous--">previous</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#previousInt--">previousInt</a></span>()</code>&nbsp;</td>
 </tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#remove--">remove</a></span>()</code>&nbsp;</td>
+</tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#set-int-">set</a></span>(int&nbsp;k)</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#set-java.lang.Integer-">set</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#set-java.lang.Integer-">set</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;k)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -207,7 +204,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;java.util.<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a></h3>
-<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#forEachRemaining-java.util.function.Consumer-" title="class or interface in java.util">forEachRemaining</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code></li>
+<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#forEachRemaining-java.util.function.Consumer-" title="class or interface in java.util">forEachRemaining</a>, <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code></li>
 </ul>
 </li>
 </ul>
@@ -223,22 +220,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="KeyIterator-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>KeyIterator</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1526">KeyIterator</a>(int&nbsp;k)</pre>
-</li>
-</ul>
 <a name="KeyIterator--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>KeyIterator</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1554">KeyIterator</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1276">KeyIterator</a>()</pre>
 </li>
 </ul>
 </li>
@@ -249,40 +237,22 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="previousInt--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>previousInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1530">previousInt</a>()</pre>
-</li>
-</ul>
-<a name="set-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>set</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1534">set</a>(int&nbsp;k)</pre>
-</li>
-</ul>
-<a name="add-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>add</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1538">add</a>(int&nbsp;k)</pre>
-</li>
-</ul>
 <a name="previous--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>previous</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1542">previous</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1264">previous</a>()</pre>
+</li>
+</ul>
+<a name="previousInt--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>previousInt</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1267">previousInt</a>()</pre>
 </li>
 </ul>
 <a name="set-java.lang.Integer-">
@@ -291,7 +261,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 <ul class="blockList">
 <li class="blockList">
 <h4>set</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1546">set</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1270">set</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;k)</pre>
 </li>
 </ul>
 <a name="add-java.lang.Integer-">
@@ -300,7 +270,20 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 <ul class="blockList">
 <li class="blockList">
 <h4>add</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1550">add</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;ok)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1273">add</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;k)</pre>
+</li>
+</ul>
+<a name="next--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>next</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1277">next</a>()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
+</dl>
 </li>
 </ul>
 <a name="nextInt--">
@@ -309,19 +292,19 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator
 <ul class="blockList">
 <li class="blockList">
 <h4>nextInt</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1558">nextInt</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1280">nextInt</a>()</pre>
 </li>
 </ul>
-<a name="next--">
+<a name="remove--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>next</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1562">next</a>()</pre>
+<h4>remove</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html#line.1283">remove</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

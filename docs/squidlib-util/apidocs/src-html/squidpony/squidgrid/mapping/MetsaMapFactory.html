@@ -180,7 +180,7 @@
 <span class="sourceLineNo">172</span><a name="line.172"></a>
 <span class="sourceLineNo">173</span>        public int[][] makeBiomeMap() {<a name="line.173"></a>
 <span class="sourceLineNo">174</span>        //biomes 0 normal 1 snow<a name="line.174"></a>
-<span class="sourceLineNo">175</span>        int biomeMap[][] = new int[width][height];<a name="line.175"></a>
+<span class="sourceLineNo">175</span>        int[][] biomeMap = new int[width][height];<a name="line.175"></a>
 <span class="sourceLineNo">176</span>        for (int x = 0; x &lt; width; x++) {<a name="line.176"></a>
 <span class="sourceLineNo">177</span>            for (int y = 0; y &lt; height; y++) {<a name="line.177"></a>
 <span class="sourceLineNo">178</span>                biomeMap[x][y] = 0;<a name="line.178"></a>
@@ -202,7 +202,7 @@
 <span class="sourceLineNo">194</span><a name="line.194"></a>
 <span class="sourceLineNo">195</span>        public int[][] makeNationMap() {<a name="line.195"></a>
 <span class="sourceLineNo">196</span>        // nationmap, 4 times less accurate map used for nations -1 no nation<a name="line.196"></a>
-<span class="sourceLineNo">197</span>        int nationMap[][] = new int[width][height];<a name="line.197"></a>
+<span class="sourceLineNo">197</span>        int[][] nationMap = new int[width][height];<a name="line.197"></a>
 <span class="sourceLineNo">198</span>        for (int i = 0; i &lt; width / 4; i++) {<a name="line.198"></a>
 <span class="sourceLineNo">199</span>            for (int j = 0; j &lt; height / 4; j++) {<a name="line.199"></a>
 <span class="sourceLineNo">200</span>                if (map[i * 4][j * 4] &lt; 0) {<a name="line.200"></a>
@@ -217,7 +217,7 @@
 <span class="sourceLineNo">209</span><a name="line.209"></a>
 <span class="sourceLineNo">210</span>        public double[][] makeWeightedMap() {<a name="line.210"></a>
 <span class="sourceLineNo">211</span>        //Weighted map for road<a name="line.211"></a>
-<span class="sourceLineNo">212</span>        double weightedMap[][] = new double[width][height];<a name="line.212"></a>
+<span class="sourceLineNo">212</span>        double[][] weightedMap = new double[width][height];<a name="line.212"></a>
 <span class="sourceLineNo">213</span>        double SEALEVEL = 0;<a name="line.213"></a>
 <span class="sourceLineNo">214</span>        double BEACHLEVEL = 0.05;<a name="line.214"></a>
 <span class="sourceLineNo">215</span>        double PLAINSLEVEL = 0.3;<a name="line.215"></a>

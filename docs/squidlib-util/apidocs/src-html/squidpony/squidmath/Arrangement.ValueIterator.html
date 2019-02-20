@@ -1982,10 +1982,10 @@
 <span class="sourceLineNo">1974</span><a name="line.1974"></a>
 <span class="sourceLineNo">1975</span>    @SuppressWarnings("unchecked")<a name="line.1975"></a>
 <span class="sourceLineNo">1976</span>    protected void rehash(final int newN) {<a name="line.1976"></a>
-<span class="sourceLineNo">1977</span>        final K key[] = this.key;<a name="line.1977"></a>
+<span class="sourceLineNo">1977</span>        final K[] key = this.key;<a name="line.1977"></a>
 <span class="sourceLineNo">1978</span>        final int[] value = this.value;<a name="line.1978"></a>
 <span class="sourceLineNo">1979</span>        final int mask = newN - 1; // Note that this is used by the hashing macro<a name="line.1979"></a>
-<span class="sourceLineNo">1980</span>        final K newKey[] = (K[]) new Object[newN + 1];<a name="line.1980"></a>
+<span class="sourceLineNo">1980</span>        final K[] newKey = (K[]) new Object[newN + 1];<a name="line.1980"></a>
 <span class="sourceLineNo">1981</span>        final int[] newValue = new int[newN + 1];<a name="line.1981"></a>
 <span class="sourceLineNo">1982</span>        final int sz = order.size;<a name="line.1982"></a>
 <span class="sourceLineNo">1983</span>        K k;<a name="line.1983"></a>
@@ -2157,7 +2157,7 @@
 <span class="sourceLineNo">2149</span>     * @param offset the first element of the array to be returned.<a name="line.2149"></a>
 <span class="sourceLineNo">2150</span>     * @param max the maximum number of elements to unwrap.<a name="line.2150"></a>
 <span class="sourceLineNo">2151</span>     * @return the number of elements unwrapped. */<a name="line.2151"></a>
-<span class="sourceLineNo">2152</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max ) {<a name="line.2152"></a>
+<span class="sourceLineNo">2152</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max ) {<a name="line.2152"></a>
 <span class="sourceLineNo">2153</span>        if ( max &lt; 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );<a name="line.2153"></a>
 <span class="sourceLineNo">2154</span>        if ( offset &lt; 0 || offset + max &gt; array.length ) throw new IllegalArgumentException();<a name="line.2154"></a>
 <span class="sourceLineNo">2155</span>        int j = max;<a name="line.2155"></a>
@@ -2174,7 +2174,7 @@
 <span class="sourceLineNo">2166</span>     * @param i a type-specific iterator.<a name="line.2166"></a>
 <span class="sourceLineNo">2167</span>     * @param array an array to contain the output of the iterator.<a name="line.2167"></a>
 <span class="sourceLineNo">2168</span>     * @return the number of elements unwrapped. */<a name="line.2168"></a>
-<span class="sourceLineNo">2169</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[] ) {<a name="line.2169"></a>
+<span class="sourceLineNo">2169</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {<a name="line.2169"></a>
 <span class="sourceLineNo">2170</span>        return objectUnwrap(i, array, 0, array.length );<a name="line.2170"></a>
 <span class="sourceLineNo">2171</span>    }<a name="line.2171"></a>
 <span class="sourceLineNo">2172</span><a name="line.2172"></a>
@@ -2210,7 +2210,7 @@
 <span class="sourceLineNo">2202</span>    @GwtIncompatible<a name="line.2202"></a>
 <span class="sourceLineNo">2203</span>    private void writeObject(java.io.ObjectOutputStream s)<a name="line.2203"></a>
 <span class="sourceLineNo">2204</span>            throws java.io.IOException {<a name="line.2204"></a>
-<span class="sourceLineNo">2205</span>        final K key[] = this.key;<a name="line.2205"></a>
+<span class="sourceLineNo">2205</span>        final K[] key = this.key;<a name="line.2205"></a>
 <span class="sourceLineNo">2206</span>        final int[] value = this.value;<a name="line.2206"></a>
 <span class="sourceLineNo">2207</span>        final MapIterator i = new MapIterator();<a name="line.2207"></a>
 <span class="sourceLineNo">2208</span>        s.defaultWriteObject();<a name="line.2208"></a>
@@ -2230,7 +2230,7 @@
 <span class="sourceLineNo">2222</span>        n = arraySize(size, f);<a name="line.2222"></a>
 <span class="sourceLineNo">2223</span>        maxFill = maxFill(n, f);<a name="line.2223"></a>
 <span class="sourceLineNo">2224</span>        mask = n - 1;<a name="line.2224"></a>
-<span class="sourceLineNo">2225</span>        final K key[] = this.key = (K[]) new Object[n + 1];<a name="line.2225"></a>
+<span class="sourceLineNo">2225</span>        final K[] key = this.key = (K[]) new Object[n + 1];<a name="line.2225"></a>
 <span class="sourceLineNo">2226</span>        final int[] value = this.value = new int[n + 1];<a name="line.2226"></a>
 <span class="sourceLineNo">2227</span>        final IntVLA order = this.order = new IntVLA(n + 1);<a name="line.2227"></a>
 <span class="sourceLineNo">2228</span>        K k;<a name="line.2228"></a>

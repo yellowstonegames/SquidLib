@@ -99,15 +99,10 @@ var activeTableTab = "activeTableTab";
 <li><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>squidpony.squidmath.PerlinNoise</li>
-<li>
-<ul class="inheritance">
-<li>squidpony.squidmath.WhirlingNoise</li>
+<li>squidpony.squidmath.FastNoise</li>
 <li>
 <ul class="inheritance">
 <li>squidpony.squidgrid.gui.gdx.ColorNoise</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -118,12 +113,12 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, squidpony.squidmath.Noise.Noise2D, squidpony.squidmath.Noise.Noise3D, squidpony.squidmath.Noise.Noise4D</dd>
+<dd><a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, squidpony.squidmath.Noise.Noise2D, squidpony.squidmath.Noise.Noise3D, squidpony.squidmath.Noise.Noise4D, squidpony.squidmath.Noise.Noise6D</dd>
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.12">ColorNoise</a>
-extends squidpony.squidmath.WhirlingNoise</pre>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.13">ColorNoise</a>
+extends squidpony.squidmath.FastNoise</pre>
 <div class="block">Created by Tommy Ettinger on 6/12/2017.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -153,18 +148,11 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.squidpony.squidmath.WhirlingNoise">
+<li class="blockList"><a name="fields.inherited.from.class.squidpony.squidmath.FastNoise">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;squidpony.squidmath.WhirlingNoise</h3>
-<code>F2f, F3f, G2f, G3f, grad3d, grad3f, grad4, grad4f, H2f, phiGrad2f, root3, seed, SIMPLEX_4D</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.squidpony.squidmath.PerlinNoise">
-<!--   -->
-</a>
-<h3>Fields inherited from class&nbsp;squidpony.squidmath.PerlinNoise</h3>
-<code>epi, F2, F3, F4, G2, G3, G4, grad3, perm, phi, phiGrad2, simplex, unit1_4, unit1_8, unit3_8</code></li>
+<h3>Fields inherited from class&nbsp;squidpony.squidmath.FastNoise</h3>
+<code>BILLOW, CELL_VALUE, CELLULAR, CUBIC, CUBIC_FRACTAL, DISTANCE, DISTANCE_2, DISTANCE_2_ADD, DISTANCE_2_DIV, DISTANCE_2_MUL, DISTANCE_2_SUB, EUCLIDEAN, F2f, F3f, FBM, G2f, G3f, grad4f, gradient6DLUT, H2f, HERMITE, LINEAR, MANHATTAN, NATURAL, NOISE_LOOKUP, PERLIN, PERLIN_FRACTAL, phiGrad2f, QUINTIC, RIDGED_MULTI, SIMPLEX, SIMPLEX_FRACTAL, VALUE, VALUE_FRACTAL, WHITE_NOISE</code></li>
 </ul>
 </li>
 </ul>
@@ -227,18 +215,11 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidmath.WhirlingNoise">
+<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidmath.FastNoise">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;squidpony.squidmath.WhirlingNoise</h3>
-<code>dotf, dotf, getNoise, getNoise, getNoise, getNoiseWithSeed, getNoiseWithSeed, getNoiseWithSeed, gradCoord3D, noise, noise, noise, noise, noise, noise, noiseAlt, noiseAlt</code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.squidpony.squidmath.PerlinNoise">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;squidpony.squidmath.PerlinNoise</h3>
-<code>dot, dot, dot</code></li>
+<h3>Methods inherited from class&nbsp;squidpony.squidmath.FastNoise</h3>
+<code>dotf, getCellular, getCellular, getConfiguredNoise, getConfiguredNoise, getConfiguredNoise, getCubic, getCubic, getCubicFractal, getCubicFractal, getFractalOctaves, getFractalType, getFrequency, getNoise, getNoise, getNoise, getNoise, getNoiseType, getNoiseWithSeed, getNoiseWithSeed, getNoiseWithSeed, getNoiseWithSeed, getNoiseWithSeed, getNoiseWithSeed, getNoiseWithSeed, getNoiseWithSeed, getPerlin, getPerlin, getPerlin, getPerlinFractal, getPerlinFractal, getSeed, getSimplex, getSimplex, getSimplex, getSimplex, getSimplexFractal, getSimplexFractal, getSimplexFractal, getValue, getValue, getValue, getValueFractal, getValueFractal, getWhiteNoise, getWhiteNoise, getWhiteNoise, getWhiteNoiseInt, getWhiteNoiseInt, getWhiteNoiseInt, gradCoord2D, gradCoord3D, gradCoord4D, GradientPerturb2, GradientPerturb3, GradientPerturbFractal2, GradientPerturbFractal3, layered2D, layered2D, layered2D, layered2D, layered3D, layered3D, layered3D, layered3D, ridged2D, ridged2D, ridged2D, ridged2D, ridged3D, ridged3D, ridged3D, ridged3D, setCellularDistanceFunction, setCellularNoiseLookup, setCellularReturnType, setFractalGain, setFractalLacunarity, setFractalOctaves, setFractalType, setFrequency, setGradientPerturbAmp, setInterpolation, setNoiseType, setSeed, singleSimplex, singleSimplex, singleSimplex, singleSimplex</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -267,7 +248,7 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>instance</h4>
-<pre>public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorNoise.html" title="class in squidpony.squidgrid.gui.gdx">ColorNoise</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.13">instance</a></pre>
+<pre>public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/ColorNoise.html" title="class in squidpony.squidgrid.gui.gdx">ColorNoise</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.14">instance</a></pre>
 </li>
 </ul>
 </li>
@@ -284,7 +265,7 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>ColorNoise</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.14">ColorNoise</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.15">ColorNoise</a>()</pre>
 </li>
 </ul>
 <a name="ColorNoise-int-">
@@ -293,7 +274,7 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ColorNoise</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.17">ColorNoise</a>(int&nbsp;seed)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.18">ColorNoise</a>(int&nbsp;seed)</pre>
 </li>
 </ul>
 </li>
@@ -310,7 +291,7 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>bounce256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.21">bounce256</a>(int&nbsp;s)</pre>
+<pre>public static&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.22">bounce256</a>(int&nbsp;s)</pre>
 </li>
 </ul>
 <a name="colorNoise-double-">
@@ -319,7 +300,7 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>colorNoise</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.23">colorNoise</a>(double&nbsp;noise)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.24">colorNoise</a>(double&nbsp;noise)</pre>
 </li>
 </ul>
 <a name="colorNoise-float-float-int-">
@@ -328,7 +309,7 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>colorNoise</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.40">colorNoise</a>(float&nbsp;xin,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.41">colorNoise</a>(float&nbsp;xin,
                                float&nbsp;yin,
                                int&nbsp;seed)</pre>
 <div class="block">2D simplex noise that produces a color, as a packed float.</div>
@@ -348,7 +329,7 @@ extends squidpony.squidmath.WhirlingNoise</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>colorNoise</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.178">colorNoise</a>(float&nbsp;xin,
+<pre>public static&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/ColorNoise.html#line.179">colorNoise</a>(float&nbsp;xin,
                                float&nbsp;yin,
                                float&nbsp;zin,
                                int&nbsp;seed)</pre>

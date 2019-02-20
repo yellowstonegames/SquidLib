@@ -3858,6 +3858,31 @@
 </dl>
 <ul class="blockList">
 <li class="blockList">
+<h3>Serialization Methods</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>readObject</h4>
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1884">readObject</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;s)
+                 throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                        <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
+</dl>
+</li>
+<li class="blockListLast">
+<h4>writeObject</h4>
+<pre>private&nbsp;void&nbsp;<a href="src-html/squidpony/squidmath/IntDoubleOrderedMap.html#line.1870">writeObject</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;s)
+                  throws <a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+<li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
 <li class="blockList">
@@ -3881,20 +3906,10 @@
 <div class="block">Whether this set contains the key zero.</div>
 </li>
 <li class="blockList">
-<h4>first</h4>
-<pre>int first</pre>
-<div class="block">The index of the first entry in iteration order. It is valid iff <a href="squidpony/squidmath/IntDoubleOrderedMap.html#size"><code>IntDoubleOrderedMap.size</code></a> is nonzero; otherwise, it contains -1.</div>
-</li>
-<li class="blockList">
-<h4>last</h4>
-<pre>int last</pre>
-<div class="block">The index of the last entry in iteration order. It is valid iff <a href="squidpony/squidmath/IntDoubleOrderedMap.html#size"><code>IntDoubleOrderedMap.size</code></a> is nonzero; otherwise, it contains -1.</div>
-</li>
-<li class="blockList">
-<h4>link</h4>
-<pre>long[] link</pre>
-<div class="block">For each entry, the next and the previous entry in iteration order, stored as <code>((prev & 0xFFFFFFFFL) << 32) | (next & 0xFFFFFFFFL)</code>. The first entry contains predecessor -1, and the
- last entry contains successor -1.</div>
+<h4>order</h4>
+<pre><a href="squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a> order</pre>
+<div class="block">An IntVLA (variable-length int sequence) that stores the positions in the key array of specific keys, with the
+ positions in insertion order. The order can be changed with <a href="squidpony/squidmath/IntDoubleOrderedMap.html#reorder-int...-"><code>IntDoubleOrderedMap.reorder(int...)</code></a> and other methods.</div>
 </li>
 <li class="blockList">
 <h4>n</h4>
@@ -3928,7 +3943,7 @@
 </li>
 <li class="blockList">
 <h4>values</h4>
-<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.DoubleCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a> values</pre>
+<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.ValueCollection.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.ValueCollection</a> values</pre>
 <div class="block">Cached collection of values.</div>
 </li>
 <li class="blockListLast">
@@ -3939,6 +3954,71 @@
 </ul>
 </li>
 </ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.FastEntryIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.FastEntryIterator</a> extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>entry</h4>
+<pre><a href="squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a> entry</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.KeyIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.KeyIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.KeyIterator</a> extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.KeySet">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.KeySet.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.KeySet</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.MapEntrySet">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.MapEntrySet</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.ValueCollection">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.ValueCollection.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.ValueCollection</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/AbstractCollection.html?is-external=true" title="class or interface in java.util">AbstractCollection</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Double.html?is-external=true" title="class or interface in java.lang">Double</a>&gt; implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.IntDoubleOrderedMap.ValueIterator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/IntDoubleOrderedMap.ValueIterator.html" title="class in squidpony.squidmath">squidpony.squidmath.IntDoubleOrderedMap.ValueIterator</a> extends squidpony.squidmath.IntDoubleOrderedMap.MapIterator implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>0L</dd>
+</dl>
 </li>
 <li class="blockList"><a name="squidpony.squidmath.IntIntOrderedMap">
 <!--   -->
@@ -5777,22 +5857,11 @@
 <li class="blockList"><a name="squidpony.squidmath.WhirlingNoise">
 <!--   -->
 </a>
-<h3>Class <a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">squidpony.squidmath.WhirlingNoise</a> extends <a href="squidpony/squidmath/PerlinNoise.html" title="class in squidpony.squidmath">PerlinNoise</a> implements Serializable</h3>
+<h3>Class <a href="squidpony/squidmath/WhirlingNoise.html" title="class in squidpony.squidmath">squidpony.squidmath.WhirlingNoise</a> extends <a href="squidpony/squidmath/SeededNoise.html" title="class in squidpony.squidmath">SeededNoise</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>5L</dd>
+<dd>6L</dd>
 </dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>seed</h4>
-<pre>long seed</pre>
-</li>
-</ul>
-</li>
-</ul>
 </li>
 <li class="blockList"><a name="squidpony.squidmath.XoRoRNG">
 <!--   -->

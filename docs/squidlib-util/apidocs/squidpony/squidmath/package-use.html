@@ -285,7 +285,9 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony.squidai">IntDoubleOrderedMap</a>
-<div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
+<div class="block">An int-key and int-value insertion-ordered hash map with with a fast implementation, originally from fastutil as
+ Object2ObjectLinkedOpenHashMap but modified (in <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>) to support constant-time indexed access of keys,
+ values, and entries, and reordering.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -353,7 +355,9 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony.squidgrid">IntDoubleOrderedMap</a>
-<div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
+<div class="block">An int-key and int-value insertion-ordered hash map with with a fast implementation, originally from fastutil as
+ Object2ObjectLinkedOpenHashMap but modified (in <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>) to support constant-time indexed access of keys,
+ values, and entries, and reordering.</div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -702,19 +706,13 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.html#squidpony.squidmath">IntDoubleOrderedMap</a>
-<div class="block">A type-specific linked hash map with with a fast, primitive-based implementation, originally from fastutil as Int2DoubleLinkedOpenHashMap.</div>
+<div class="block">An int-key and int-value insertion-ordered hash map with with a fast implementation, originally from fastutil as
+ Object2ObjectLinkedOpenHashMap but modified (in <a href="../../squidpony/squidmath/OrderedMap.html" title="class in squidpony.squidmath"><code>OrderedMap</code></a>) to support constant-time indexed access of keys,
+ values, and entries, and reordering.</div>
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.DoubleCollection.html#squidpony.squidmath">IntDoubleOrderedMap.DoubleCollection</a>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.DoubleIterator.html#squidpony.squidmath">IntDoubleOrderedMap.DoubleIterator</a>
-<div class="block">An iterator on values.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.EntryIterator.html#squidpony.squidmath">IntDoubleOrderedMap.EntryIterator</a>&nbsp;</td>
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.FastEntryIterator.html#squidpony.squidmath">IntDoubleOrderedMap.FastEntryIterator</a>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.KeyIterator.html#squidpony.squidmath">IntDoubleOrderedMap.KeyIterator</a>
@@ -726,12 +724,19 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.MapEntry.html#squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>
-<div class="block">The entry class for a hash map does not record key and value, but rather the position in the hash table of the
- corresponding entry.</div>
+<div class="block">The entry class for a OrderedMap does not record key and value, but rather the position in the hash table of the corresponding entry.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.MapEntrySet.html#squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.ValueCollection.html#squidpony.squidmath">IntDoubleOrderedMap.ValueCollection</a>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../squidpony/squidmath/class-use/IntDoubleOrderedMap.ValueIterator.html#squidpony.squidmath">IntDoubleOrderedMap.ValueIterator</a>
+<div class="block">An iterator on values.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/IntIntOrderedMap.html#squidpony.squidmath">IntIntOrderedMap</a>
@@ -989,181 +994,176 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="../../squidpony/squidmath/class-use/PerlinNoise.html#squidpony.squidmath">PerlinNoise</a>
-<div class="block">This is Ken Perlin's third revision of his noise function.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/PermutedRNG.html#squidpony.squidmath">PermutedRNG</a>
 <div class="block">This is a RandomnessSource in the PCG-Random family.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/PintRNG.html#squidpony.squidmath">PintRNG</a>
 <div class="block">A RandomnessSource based on PCG-Random that has a single int of state.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ProbabilityTable.html#squidpony.squidmath">ProbabilityTable</a>
 <div class="block">A generic method of holding a probability table to determine weighted random
  outcomes.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RandomBias.html#squidpony.squidmath">RandomBias</a>
 <div class="block">A class that wraps an RNG and allows different String keys to be associated with biases toward low or high results
  when a method is called that gets a number from the wrapped RNG.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RandomnessSource.html#squidpony.squidmath">RandomnessSource</a>
 <div class="block">This interface defines the interactions required of a random number
  generator.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Region.html#squidpony.squidmath">Region</a>
 <div class="block"><b>NOTE</b>: You should consider <a href="../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath"><code>GreasedRegion</code></a> before using this class, unless you know Region does exactly
  what you want.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/RNG.html#squidpony.squidmath">RNG</a>
 <div class="block">A wrapper class for working with random number generators in a more friendly way.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/SaltyQRNG.html#squidpony.squidmath">SaltyQRNG</a>
 <div class="block">A different kind of quasi-random number generator (also called a sub-random sequence) that can be "salted" like some
  hashing functions can, to produce many distinct sub-random sequences without changing its performance qualities.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/SeededNoise.html#squidpony.squidmath">SeededNoise</a>
 <div class="block">More advanced noise functions, in 2D, 3D, 4D, and 6D, with the last two as options for generating seamlessly-tiling
  noise using <a href="../../squidpony/squidmath/Noise.html#seamless2D-double:A:A-long-int-squidpony.squidmath.Noise.Noise4D-"><code>Noise.seamless2D(double[][], long, int, Noise.Noise4D)</code></a> and/or
  <a href="../../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-long-int-squidpony.squidmath.Noise.Noise6D-"><code>Noise.seamless3D(double[][][], long, int, Noise.Noise6D)</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ShortSet.html#squidpony.squidmath">ShortSet</a>
 <div class="block">An unordered set that uses short keys.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ShortSet.ShortSetIterator.html#squidpony.squidmath">ShortSet.ShortSetIterator</a>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ShortVLA.html#squidpony.squidmath">ShortVLA</a>
 <div class="block">A resizable, ordered or unordered short variable-length array.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/SkippingRandomness.html#squidpony.squidmath">SkippingRandomness</a>
 <div class="block">A simple interface for RandomnessSources that have the additional capability to skip forward or backward in their
  generated number stream.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/SobolQRNG.html#squidpony.squidmath">SobolQRNG</a>
 <div class="block">Implementation of a Sobol sequence as a Quasi-Random Number Generator.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/SquidID.html#squidpony.squidmath">SquidID</a>
 <div class="block">A UUID-like identifier; not compatible with Java's standard UUID but will work on GWT.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Starfish32RNG.html#squidpony.squidmath">Starfish32RNG</a>
 <div class="block">A modification of Blackman and Vigna's xoroshiro64** generator; uses two 32-bit ints of state like <a href="../../squidpony/squidmath/Lathe32RNG.html" title="class in squidpony.squidmath"><code>Lathe32RNG</code></a>
  but has better equidistribution.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRandomness.html#squidpony.squidmath">StatefulRandomness</a>
 <div class="block">A simple interface for RandomnessSources that have the additional property of a state that can be re-set.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/StatefulRNG.html#squidpony.squidmath">StatefulRNG</a>
 <div class="block">A slight variant on RNG that always uses a stateful RandomessSource and so can have its state
  set or retrieved using setState() or getState().</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/SwapOrNotShuffler.html#squidpony.squidmath">SwapOrNotShuffler</a>
 <div class="block">Gets a sequence of distinct pseudo-random ints (typically used as indices) from 0 to some bound, without storing all
  of the sequence in memory.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/TangleRNG.html#squidpony.squidmath">TangleRNG</a>
 <div class="block">A variant on <a href="../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that gives up some speed, but allows choosing any of 2 to the 63 odd-number streams
  that change the set of possible outputs this can produce (amending the main flaw of ThrustAltRNG).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ThrustAlt32RNG.html#squidpony.squidmath">ThrustAlt32RNG</a>
 <div class="block">A variant on <a href="../../squidpony/squidmath/ThrustAltRNG.html" title="class in squidpony.squidmath"><code>ThrustAltRNG</code></a> that uses only 32-bit math when producing 32-bit numbers.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ThrustAltRNG.html#squidpony.squidmath">ThrustAltRNG</a>
 <div class="block">A random number generator that is extremely fast but can't return all possible results.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ThunderRNG.html#squidpony.squidmath">ThunderRNG</a>
 <div class="block">Like LightRNG, but shares a lot in common with one of CrossHash's hashing algorithms.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/UnorderedMap.html#squidpony.squidmath">UnorderedMap</a>
 <div class="block">A generic unordered hash map with with a fast implementation, originally from fastutil as
  Object2ObjectOpenCustomHashMap but modified to support SquidLib's <a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath"><code>CrossHash.IHasher</code></a>
  interface for custom hashing instead of fastutil's Strategy interface.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/ValueNoise.html#squidpony.squidmath">ValueNoise</a>
 <div class="block">Performance-oriented "white noise" generator for 1D, 2D, 3D, 4D, and 6D.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/VanDerCorputQRNG.html#squidpony.squidmath">VanDerCorputQRNG</a>
 <div class="block">A quasi-random number generator that goes through one of many sub-random sequences found by J.G.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/WeightedTable.html#squidpony.squidmath">WeightedTable</a>
 <div class="block">A different approach to the same task <a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath"><code>ProbabilityTable</code></a> solves, though this only looks up an appropriate index
  instead of also storing items it can choose; allows positive doubles for weights but does not allow nested tables for
  simplicity.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/WhirlingNoise.html#squidpony.squidmath">WhirlingNoise</a>
 <div class="block">Another experimental noise class.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/XoRoRNG.html#squidpony.squidmath">XoRoRNG</a>
 <div class="block">A port of Blackman and Vigna's xoroshiro128+ generator; should be very fast and produce medium-quality output.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/XorRNG.html#squidpony.squidmath">XorRNG</a>
 <div class="block">A port of Sebastiano Vigna's XorShift 128+ generator.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/XoshiroStarPhi32RNG.html#squidpony.squidmath">XoshiroStarPhi32RNG</a>
 <div class="block">A modification of Blackman and Vigna's xoshiro128 generator with a different "scrambler" than the default; this
  generator has four 32-bit states and passes at least 32TB of PractRand (with one "unusual" anomaly at 4TB).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../squidpony/squidmath/class-use/Zag32RNG.html#squidpony.squidmath">Zag32RNG</a>
 <div class="block">A 32-bit generator that needs no math on 64-bit values to calculate high-quality pseudo-random numbers, and has been
  adapted to meet the needs of GWT while maintaining compatibility with other JDK platforms.</div>

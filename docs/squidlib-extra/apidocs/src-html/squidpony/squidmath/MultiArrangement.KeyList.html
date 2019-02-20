@@ -1459,10 +1459,10 @@
 <span class="sourceLineNo">1451</span><a name="line.1451"></a>
 <span class="sourceLineNo">1452</span>    @SuppressWarnings("unchecked")<a name="line.1452"></a>
 <span class="sourceLineNo">1453</span>    protected void rehash(final int newN) {<a name="line.1453"></a>
-<span class="sourceLineNo">1454</span>        final K key[] = this.key;<a name="line.1454"></a>
+<span class="sourceLineNo">1454</span>        final K[] key = this.key;<a name="line.1454"></a>
 <span class="sourceLineNo">1455</span>        final IntVLA[] value = this.value;<a name="line.1455"></a>
 <span class="sourceLineNo">1456</span>        final int mask = newN - 1; // Note that this is used by the hashing macro<a name="line.1456"></a>
-<span class="sourceLineNo">1457</span>        final K newKey[] = (K[]) new Object[newN + 1];<a name="line.1457"></a>
+<span class="sourceLineNo">1457</span>        final K[] newKey = (K[]) new Object[newN + 1];<a name="line.1457"></a>
 <span class="sourceLineNo">1458</span>        K k;<a name="line.1458"></a>
 <span class="sourceLineNo">1459</span>        final IntVLA[] newValue = new IntVLA[newN + 1];<a name="line.1459"></a>
 <span class="sourceLineNo">1460</span>        int i, pos, sz = order.size, originalFirst = first, originalLast = last;<a name="line.1460"></a>
@@ -1630,7 +1630,7 @@
 <span class="sourceLineNo">1622</span>     * @param offset the first element of the array to be returned.<a name="line.1622"></a>
 <span class="sourceLineNo">1623</span>     * @param max the maximum number of elements to unwrap.<a name="line.1623"></a>
 <span class="sourceLineNo">1624</span>     * @return the number of elements unwrapped. */<a name="line.1624"></a>
-<span class="sourceLineNo">1625</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max ) {<a name="line.1625"></a>
+<span class="sourceLineNo">1625</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max ) {<a name="line.1625"></a>
 <span class="sourceLineNo">1626</span>        if ( max &lt; 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );<a name="line.1626"></a>
 <span class="sourceLineNo">1627</span>        if ( offset &lt; 0 || offset + max &gt; array.length ) throw new IllegalArgumentException();<a name="line.1627"></a>
 <span class="sourceLineNo">1628</span>        int j = max;<a name="line.1628"></a>
@@ -1647,7 +1647,7 @@
 <span class="sourceLineNo">1639</span>     * @param i a type-specific iterator.<a name="line.1639"></a>
 <span class="sourceLineNo">1640</span>     * @param array an array to contain the output of the iterator.<a name="line.1640"></a>
 <span class="sourceLineNo">1641</span>     * @return the number of elements unwrapped. */<a name="line.1641"></a>
-<span class="sourceLineNo">1642</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[] ) {<a name="line.1642"></a>
+<span class="sourceLineNo">1642</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {<a name="line.1642"></a>
 <span class="sourceLineNo">1643</span>        return objectUnwrap(i, array, 0, array.length );<a name="line.1643"></a>
 <span class="sourceLineNo">1644</span>    }<a name="line.1644"></a>
 <span class="sourceLineNo">1645</span><a name="line.1645"></a>

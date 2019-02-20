@@ -254,7 +254,7 @@
 <span class="sourceLineNo">246</span>        for (int i = 0; i &lt; len; i++) {<a name="line.246"></a>
 <span class="sourceLineNo">247</span>            costMap[i] = (gradientMap[i] &gt; FLOOR) ? '#' : '.';<a name="line.247"></a>
 <span class="sourceLineNo">248</span>        }<a name="line.248"></a>
-<span class="sourceLineNo">249</span>        adjacency.costRules.putAndMoveToFirst('#', WALL);<a name="line.249"></a>
+<span class="sourceLineNo">249</span>        adjacency.costRules.putAt('#', WALL, 0);<a name="line.249"></a>
 <span class="sourceLineNo">250</span><a name="line.250"></a>
 <span class="sourceLineNo">251</span>        neighbors = adjacency.neighborMaps();<a name="line.251"></a>
 <span class="sourceLineNo">252</span>        heuristics = new double[adjacency.directions.length];<a name="line.252"></a>
@@ -295,7 +295,7 @@
 <span class="sourceLineNo">287</span>        physicalMap = new double[len];<a name="line.287"></a>
 <span class="sourceLineNo">288</span>        costMap = new int[len];<a name="line.288"></a>
 <span class="sourceLineNo">289</span>        IntDoubleOrderedMap cst = adjacency.costRules;<a name="line.289"></a>
-<span class="sourceLineNo">290</span>        cst.putAndMoveToFirst(alternateWall, WALL);<a name="line.290"></a>
+<span class="sourceLineNo">290</span>        cst.putAt(alternateWall, WALL, 0);<a name="line.290"></a>
 <span class="sourceLineNo">291</span>        int c;<a name="line.291"></a>
 <span class="sourceLineNo">292</span>        for (int x = 0; x &lt; width; x++) {<a name="line.292"></a>
 <span class="sourceLineNo">293</span>            for (int y = 0; y &lt; height; y++) {<a name="line.293"></a>
@@ -451,7 +451,7 @@
 <span class="sourceLineNo">443</span>    public void setCost(int pt, int tile) {<a name="line.443"></a>
 <span class="sourceLineNo">444</span>        if (!initialized || !adjacency.validate(pt)) return;<a name="line.444"></a>
 <span class="sourceLineNo">445</span>        if (physicalMap[pt] &gt; FLOOR) {<a name="line.445"></a>
-<span class="sourceLineNo">446</span>            costMap[pt] = adjacency.costRules.firstIntKey();<a name="line.446"></a>
+<span class="sourceLineNo">446</span>            costMap[pt] = adjacency.costRules.keyAt(0);<a name="line.446"></a>
 <span class="sourceLineNo">447</span>            return;<a name="line.447"></a>
 <span class="sourceLineNo">448</span>        }<a name="line.448"></a>
 <span class="sourceLineNo">449</span>        costMap[pt] = tile;<a name="line.449"></a>

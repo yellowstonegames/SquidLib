@@ -607,8 +607,8 @@
 <span class="sourceLineNo">599</span>        }<a name="line.599"></a>
 <span class="sourceLineNo">600</span>    }<a name="line.600"></a>
 <span class="sourceLineNo">601</span>    public boolean containsValue(final Object v) {<a name="line.601"></a>
-<span class="sourceLineNo">602</span>        final V value[] = this.value;<a name="line.602"></a>
-<span class="sourceLineNo">603</span>        final K key[] = this.key;<a name="line.603"></a>
+<span class="sourceLineNo">602</span>        final V[] value = this.value;<a name="line.602"></a>
+<span class="sourceLineNo">603</span>        final K[] key = this.key;<a name="line.603"></a>
 <span class="sourceLineNo">604</span>        if (containsNullKey<a name="line.604"></a>
 <span class="sourceLineNo">605</span>                &amp;&amp; (value[n] == null ? v == null : value[n].equals(v)))<a name="line.605"></a>
 <span class="sourceLineNo">606</span>            return true;<a name="line.606"></a>
@@ -729,7 +729,7 @@
 <span class="sourceLineNo">721</span>                mustReturnNullKey = false;<a name="line.721"></a>
 <span class="sourceLineNo">722</span>                return last = n;<a name="line.722"></a>
 <span class="sourceLineNo">723</span>            }<a name="line.723"></a>
-<span class="sourceLineNo">724</span>            final K key[] = UnorderedMap.this.key;<a name="line.724"></a>
+<span class="sourceLineNo">724</span>            final K[] key = UnorderedMap.this.key;<a name="line.724"></a>
 <span class="sourceLineNo">725</span>            for (; ; ) {<a name="line.725"></a>
 <span class="sourceLineNo">726</span>                if (--pos &lt; 0) {<a name="line.726"></a>
 <span class="sourceLineNo">727</span>                    // We are just enumerating elements from the wrapped list.<a name="line.727"></a>
@@ -1051,11 +1051,11 @@
 <span class="sourceLineNo">1043</span><a name="line.1043"></a>
 <span class="sourceLineNo">1044</span>    @SuppressWarnings("unchecked")<a name="line.1044"></a>
 <span class="sourceLineNo">1045</span>    protected void rehash(final int newN) {<a name="line.1045"></a>
-<span class="sourceLineNo">1046</span>        final K key[] = this.key;<a name="line.1046"></a>
-<span class="sourceLineNo">1047</span>        final V value[] = this.value;<a name="line.1047"></a>
+<span class="sourceLineNo">1046</span>        final K[] key = this.key;<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>        final V[] value = this.value;<a name="line.1047"></a>
 <span class="sourceLineNo">1048</span>        final int mask = newN - 1; // Note that this is used by the hashing macro<a name="line.1048"></a>
-<span class="sourceLineNo">1049</span>        final K newKey[] = (K[]) new Object[newN + 1];<a name="line.1049"></a>
-<span class="sourceLineNo">1050</span>        final V newValue[] = (V[]) new Object[newN + 1];<a name="line.1050"></a>
+<span class="sourceLineNo">1049</span>        final K[] newKey = (K[]) new Object[newN + 1];<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>        final V[] newValue = (V[]) new Object[newN + 1];<a name="line.1050"></a>
 <span class="sourceLineNo">1051</span><a name="line.1051"></a>
 <span class="sourceLineNo">1052</span>        int i = n, pos;<a name="line.1052"></a>
 <span class="sourceLineNo">1053</span>        for (int j = realSize(); j-- != 0; ) {<a name="line.1053"></a>
@@ -1253,7 +1253,7 @@
 <span class="sourceLineNo">1245</span>     * @param offset the first element of the array to be returned.<a name="line.1245"></a>
 <span class="sourceLineNo">1246</span>     * @param max the maximum number of elements to unwrap.<a name="line.1246"></a>
 <span class="sourceLineNo">1247</span>     * @return the number of elements unwrapped. */<a name="line.1247"></a>
-<span class="sourceLineNo">1248</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[], int offset, final int max ) {<a name="line.1248"></a>
+<span class="sourceLineNo">1248</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array, int offset, final int max ) {<a name="line.1248"></a>
 <span class="sourceLineNo">1249</span>        if ( max &lt; 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );<a name="line.1249"></a>
 <span class="sourceLineNo">1250</span>        if ( offset &lt; 0 || offset + max &gt; array.length ) throw new IllegalArgumentException();<a name="line.1250"></a>
 <span class="sourceLineNo">1251</span>        int j = max;<a name="line.1251"></a>
@@ -1270,7 +1270,7 @@
 <span class="sourceLineNo">1262</span>     * @param i a type-specific iterator.<a name="line.1262"></a>
 <span class="sourceLineNo">1263</span>     * @param array an array to contain the output of the iterator.<a name="line.1263"></a>
 <span class="sourceLineNo">1264</span>     * @return the number of elements unwrapped. */<a name="line.1264"></a>
-<span class="sourceLineNo">1265</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K array[] ) {<a name="line.1265"></a>
+<span class="sourceLineNo">1265</span>    private static &lt;K&gt; int objectUnwrap(final Iterator&lt;? extends K&gt; i, final K[] array) {<a name="line.1265"></a>
 <span class="sourceLineNo">1266</span>        return objectUnwrap(i, array, 0, array.length );<a name="line.1266"></a>
 <span class="sourceLineNo">1267</span>    }<a name="line.1267"></a>
 <span class="sourceLineNo">1268</span><a name="line.1268"></a>
@@ -1310,8 +1310,8 @@
 <span class="sourceLineNo">1302</span>    @GwtIncompatible<a name="line.1302"></a>
 <span class="sourceLineNo">1303</span>    private void writeObject(java.io.ObjectOutputStream s)<a name="line.1303"></a>
 <span class="sourceLineNo">1304</span>            throws java.io.IOException {<a name="line.1304"></a>
-<span class="sourceLineNo">1305</span>        final K key[] = this.key;<a name="line.1305"></a>
-<span class="sourceLineNo">1306</span>        final V value[] = this.value;<a name="line.1306"></a>
+<span class="sourceLineNo">1305</span>        final K[] key = this.key;<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>        final V[] value = this.value;<a name="line.1306"></a>
 <span class="sourceLineNo">1307</span>        final MapIterator i = new MapIterator();<a name="line.1307"></a>
 <span class="sourceLineNo">1308</span>        s.defaultWriteObject();<a name="line.1308"></a>
 <span class="sourceLineNo">1309</span>        s.writeObject(hasher);<a name="line.1309"></a>
@@ -1330,8 +1330,8 @@
 <span class="sourceLineNo">1322</span>        n = arraySize(size, f);<a name="line.1322"></a>
 <span class="sourceLineNo">1323</span>        maxFill = maxFill(n, f);<a name="line.1323"></a>
 <span class="sourceLineNo">1324</span>        mask = n - 1;<a name="line.1324"></a>
-<span class="sourceLineNo">1325</span>        final K key[] = this.key = (K[]) new Object[n + 1];<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span>        final V value[] = this.value = (V[]) new Object[n + 1];<a name="line.1326"></a>
+<span class="sourceLineNo">1325</span>        final K[] key = this.key = (K[]) new Object[n + 1];<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>        final V[] value = this.value = (V[]) new Object[n + 1];<a name="line.1326"></a>
 <span class="sourceLineNo">1327</span>        K k;<a name="line.1327"></a>
 <span class="sourceLineNo">1328</span>        V v;<a name="line.1328"></a>
 <span class="sourceLineNo">1329</span>        for (int i = size, pos; i-- != 0;) {<a name="line.1329"></a>

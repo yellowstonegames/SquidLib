@@ -268,29 +268,17 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#headMap-int-">headMap</a></span>(int&nbsp;to)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#reorder-int...-">reorder</a></span>(int...&nbsp;ordering)</code>
+<div class="block">Given an array or varargs of replacement indices for this OrderedMap's iteration order, reorders this so the
+ first item in the returned version is the same as <code>getAt(ordering[0])</code> (with some care taken for negative
+ or too-large indices), the second item in the returned version is the same as <code>getAt(ordering[1])</code>, etc.</div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#headMap-java.lang.Integer-">headMap</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;to)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#subMap-java.lang.Integer-java.lang.Integer-">subMap</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;from,
-      <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;to)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#subMap-int-int-">subMap</a></span>(int&nbsp;from,
-      int&nbsp;to)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#tailMap-int-">tailMap</a></span>(int&nbsp;from)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#tailMap-java.lang.Integer-">tailMap</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;from)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#shuffle-squidpony.squidmath.IRNG-">shuffle</a></span>(<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
+<div class="block">Randomly alters the iteration order for this OrderedMap using the given IRNG to shuffle.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -303,7 +291,9 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#putAll-squidpony.squidmath.IntDoubleOrderedMap-">putAll</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#putAll-squidpony.squidmath.IntDoubleOrderedMap-">putAll</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m)</code>
+<div class="block">Puts all key-value pairs in the Map m into this OrderedMap.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -315,13 +305,13 @@
 <tbody>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#IntDoubleOrderedMap-squidpony.squidmath.IntDoubleOrderedMap-">IntDoubleOrderedMap</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m)</code>
-<div class="block">Creates a new hash map with 0.75f as load factor copying a given type-specific one.</div>
+<div class="block">Creates a new OrderedMap with 0.75f as load factor copying a given one.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#IntDoubleOrderedMap-squidpony.squidmath.IntDoubleOrderedMap-float-">IntDoubleOrderedMap</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a>&nbsp;m,
                    float&nbsp;f)</code>
-<div class="block">Creates a new hash map copying a given type-specific one.</div>
+<div class="block">Creates a new OrderedMap copying a given one.</div>
 </td>
 </tr>
 </tbody>

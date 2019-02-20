@@ -106,15 +106,17 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#first--">first</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#entryAt-int-">entryAt</a></span>(int&nbsp;idx)</code>
+<div class="block">Gets the key-value Map.Entry at the given index in the iteration order in constant time (random-access).</div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#last--">last</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#first--">first</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.EntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html#next--">next</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#last--">last</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></code></td>
@@ -122,11 +124,13 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.EntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html#previous--">previous</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.FastEntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html#previous--">previous</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.FastEntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html#previous--">previous</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#randomEntry-squidpony.squidmath.IRNG-">randomEntry</a></span>(<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</code>
+<div class="block">Gets a random entry from this OrderedMap in constant time, using the given IRNG to generate a random number.</div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -141,6 +145,23 @@
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;? super <a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#comparator--">comparator</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.html#entrySet--">entrySet</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#headSet-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">headSet</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;toElement)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#subSet-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">subSet</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;fromElement,
+      <a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;toElement)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#tailSet-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">tailSet</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;fromElement)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -152,45 +173,29 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.EntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html#add-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">add</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;ok)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.FastEntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html#add-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">add</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;ok)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#add-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">add</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;k)</code>
 <div class="block">Unsupported.</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.EntryIterator</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#fastIterator-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">fastIterator</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;from)</code>&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#headSet-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">headSet</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;toElement)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.EntryIterator</a></code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#iterator-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">iterator</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;from)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.EntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.EntryIterator.html#set-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">set</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;ok)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.FastEntryIterator.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.FastEntryIterator.html#set-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">set</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;ok)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#subSet-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">subSet</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;fromElement,
       <a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;toElement)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntrySet</a></code></td>
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">IntDoubleOrderedMap.MapEntrySet.</span><code><span class="memberNameLink"><a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntrySet.html#tailSet-squidpony.squidmath.IntDoubleOrderedMap.MapEntry-">tailSet</a></span>(<a href="../../../squidpony/squidmath/IntDoubleOrderedMap.MapEntry.html" title="class in squidpony.squidmath">IntDoubleOrderedMap.MapEntry</a>&nbsp;fromElement)</code>&nbsp;</td>
 </tr>
 </tbody>
