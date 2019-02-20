@@ -254,20 +254,20 @@ public class HashBenchmark {
 
         @Setup(Level.Trial)
         public void setup() {
+            MiniMover64RNG random = new MiniMover64RNG(1000L);
             FakeLanguageGen[] languages = new FakeLanguageGen[16];
             for (int i = 0; i < 16; i++) {
-                languages[i] = FakeLanguageGen.randomLanguage(DiverRNG.determine(i)).addAccents(0.8, 0.6);
+                languages[i] = FakeLanguageGen.randomLanguage(random.nextLong()).addAccents(0.8, 0.6);
             }
-            RNG random = new RNG(1000L);
             words = new String[4096];
             chars = new char[4096][];
             longs = new long[4096][];
             for (int i = 0; i < 65536; i++) {
-                intInputs[i] = (int)(longInputs[i] = DiverRNG.determine(i));
+                intInputs[i] = (int)(longInputs[i] = random.nextLong());
             }
             for (int i = 0; i < 4096; i++) {
-                chars[i] = (words[i] = languages[i & 15].word(random, random.nextBoolean(), random.next(3)+1)).toCharArray();
-                final int len = (random.next(6)+9);
+                chars[i] = (words[i] = languages[i & 15].word(random.nextLong(), random.nextLong() < 0, random.next(3)+1)).toCharArray();
+                final int len = (random.next(8)+9);
                 long[] lon = new long[len];
                 for (int j = 0; j < len; j++) {
                     lon[j] = random.nextLong();
@@ -290,6 +290,30 @@ public class HashBenchmark {
     {
         return CrossHash.Wisp.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
+    
+    @Benchmark
+    public long doCharWisp64(BenchmarkState state)
+    {
+        return CrossHash.Wisp.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharWisp32(BenchmarkState state)
+    {
+        return CrossHash.Wisp.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doLongWisp64(BenchmarkState state)
+    {
+        return CrossHash.Wisp.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doLongWisp32(BenchmarkState state)
+    {
+        return CrossHash.Wisp.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
 
     @Benchmark
     public long doLightning64(BenchmarkState state)
@@ -301,83 +325,6 @@ public class HashBenchmark {
     public int doLightning32(BenchmarkState state)
     {
         return CrossHash.Lightning.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doFalcon64(BenchmarkState state)
-    {
-        return CrossHash.Falcon.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doFalcon32(BenchmarkState state)
-    {
-        return CrossHash.Falcon.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doMist64(BenchmarkState state)
-    {
-        return CrossHash.Mist.mu.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doMist32(BenchmarkState state)
-    {
-        return CrossHash.Mist.mu.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doJDK32(BenchmarkState state)
-    {
-        return state.words[state.idx = state.idx + 1 & 4095].hashCode();
-    }
-
-    @Benchmark
-    public int doJDK32Mixed(BenchmarkState state)
-    {
-        return HashCommon.mix(state.words[state.idx = state.idx + 1 & 4095].hashCode());
-    }
-
-    @Benchmark
-    public long doJolt64(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doJolt32(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doHive64(BenchmarkState state)
-    {
-        return CrossHash.Hive.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doHive32(BenchmarkState state)
-    {
-        return CrossHash.Hive.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-
-
-
-
-
-    @Benchmark
-    public long doCharWisp64(BenchmarkState state)
-    {
-        return CrossHash.Wisp.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharWisp32(BenchmarkState state)
-    {
-        return CrossHash.Wisp.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
@@ -393,83 +340,6 @@ public class HashBenchmark {
     }
 
     @Benchmark
-    public long doCharFalcon64(BenchmarkState state)
-    {
-        return CrossHash.Falcon.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharFalcon32(BenchmarkState state)
-    {
-        return CrossHash.Falcon.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doCharMist64(BenchmarkState state)
-    {
-        return CrossHash.Mist.mu.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharMist32(BenchmarkState state)
-    {
-        return CrossHash.Mist.mu.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharJDK32(BenchmarkState state)
-    {
-        return Arrays.hashCode(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharJDK32Mixed(BenchmarkState state)
-    {
-        return HashCommon.mix(Arrays.hashCode(state.chars[state.idx = state.idx + 1 & 4095]));
-    }
-
-    @Benchmark
-    public long doCharJolt64(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharJolt32(BenchmarkState state)
-    {
-        return CrossHash.Jolt.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-
-    @Benchmark
-    public long doCharHive64(BenchmarkState state)
-    {
-        return CrossHash.Hive.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharHive32(BenchmarkState state)
-    {
-        return CrossHash.Hive.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-
-
-
-
-    @Benchmark
-    public long doLongWisp64(BenchmarkState state)
-    {
-        return CrossHash.Wisp.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doLongWisp32(BenchmarkState state)
-    {
-        return CrossHash.Wisp.hash(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
     public long doLongLightning64(BenchmarkState state)
     {
         return CrossHash.Lightning.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
@@ -479,6 +349,29 @@ public class HashBenchmark {
     public int doLongLightning32(BenchmarkState state)
     {
         return CrossHash.Lightning.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+    @Benchmark
+    public long doFalcon64(BenchmarkState state)
+    {
+        return CrossHash.Falcon.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doFalcon32(BenchmarkState state)
+    {
+        return CrossHash.Falcon.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doCharFalcon64(BenchmarkState state)
+    {
+        return CrossHash.Falcon.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharFalcon32(BenchmarkState state)
+    {
+        return CrossHash.Falcon.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
@@ -494,27 +387,27 @@ public class HashBenchmark {
     }
 
     @Benchmark
-    public long doLongMist64(BenchmarkState state)
+    public long doJolt64(BenchmarkState state)
     {
-        return CrossHash.Mist.mu.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Jolt.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doLongMist32(BenchmarkState state)
+    public int doJolt32(BenchmarkState state)
     {
-        return CrossHash.Mist.mu.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Jolt.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doLongJDK32(BenchmarkState state)
+    public long doCharJolt64(BenchmarkState state)
     {
-        return Arrays.hashCode(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Jolt.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doLongJDK32Mixed(BenchmarkState state)
+    public int doCharJolt32(BenchmarkState state)
     {
-        return HashCommon.mix(Arrays.hashCode(state.longs[state.idx = state.idx + 1 & 4095]));
+        return CrossHash.Jolt.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
@@ -528,6 +421,67 @@ public class HashBenchmark {
     {
         return CrossHash.Jolt.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
+    
+    @Benchmark
+    public long doMist64(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doMist32(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doCharMist64(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharMist32(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doLongMist64(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doLongMist32(BenchmarkState state)
+    {
+        return CrossHash.Mist.mu.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+
+    @Benchmark
+    public long doHive64(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doHive32(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doCharHive64(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharHive32(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
 
     @Benchmark
     public long doLongHive64(BenchmarkState state)
@@ -540,6 +494,78 @@ public class HashBenchmark {
     {
         return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
+    @Benchmark
+    public long doSpark64(BenchmarkState state)
+    {
+        return CrossHash.Spark.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doSpark32(BenchmarkState state)
+    {
+        return CrossHash.Spark.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doCharSpark64(BenchmarkState state)
+    {
+        return CrossHash.Spark.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharSpark32(BenchmarkState state)
+    {
+        return CrossHash.Spark.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doLongSpark64(BenchmarkState state)
+    {
+        return CrossHash.Spark.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doLongSpark32(BenchmarkState state)
+    {
+        return CrossHash.Spark.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doJDK32(BenchmarkState state)
+    {
+        return state.words[state.idx = state.idx + 1 & 4095].hashCode();
+    }
+
+    @Benchmark
+    public int doJDK32Mixed(BenchmarkState state)
+    {
+        return HashCommon.mix(state.words[state.idx = state.idx + 1 & 4095].hashCode());
+    }
+
+    @Benchmark
+    public int doCharJDK32(BenchmarkState state)
+    {
+        return Arrays.hashCode(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doCharJDK32Mixed(BenchmarkState state)
+    {
+        return HashCommon.mix(Arrays.hashCode(state.chars[state.idx = state.idx + 1 & 4095]));
+    }
+    
+    @Benchmark
+    public int doLongJDK32(BenchmarkState state)
+    {
+        return Arrays.hashCode(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doLongJDK32Mixed(BenchmarkState state)
+    {
+        return HashCommon.mix(Arrays.hashCode(state.longs[state.idx = state.idx + 1 & 4095]));
+    }
+
 
 
 
