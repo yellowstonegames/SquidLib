@@ -495,39 +495,39 @@ public class HashBenchmark {
         return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
     @Benchmark
-    public long doSpark64(BenchmarkState state)
+    public long doZT64(BenchmarkState state)
     {
-        return CrossHash.Spark.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.ZT.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doSpark32(BenchmarkState state)
+    public int doZT32(BenchmarkState state)
     {
-        return CrossHash.Spark.hash(state.words[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.ZT.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public long doCharSpark64(BenchmarkState state)
+    public long doCharZT64(BenchmarkState state)
     {
-        return CrossHash.Spark.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.ZT.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doCharSpark32(BenchmarkState state)
+    public int doCharZT32(BenchmarkState state)
     {
-        return CrossHash.Spark.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.ZT.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public long doLongSpark64(BenchmarkState state)
+    public long doLongZT64(BenchmarkState state)
     {
-        return CrossHash.Spark.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.ZT.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doLongSpark32(BenchmarkState state)
+    public int doLongZT32(BenchmarkState state)
     {
-        return CrossHash.Spark.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.ZT.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
