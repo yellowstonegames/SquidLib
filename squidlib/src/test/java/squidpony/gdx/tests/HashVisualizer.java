@@ -71,9 +71,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 3, otherMode = 0;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 67, otherMode = 1;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -162,27 +162,33 @@ public class HashVisualizer extends ApplicationAdapter {
     private final Noise.Ridged2D classic2_2D = new Noise.Ridged2D(ClassicNoise.instance, 2, 2f);
     private final Noise.Ridged2D classic3_2D = new Noise.Ridged2D(ClassicNoise.instance, 3, 2f);
 
-    private final Noise.Ridged2D whirling2_2D = new Noise.Ridged2D(JitterNoise.instance, 2, 2f);
-    private final Noise.Ridged2D whirling3_2D = new Noise.Ridged2D(JitterNoise.instance, 3, 2f);
+    private final FastNoise fast2_2D = new FastNoise(1337, 2f, FastNoise.SIMPLEX_FRACTAL, 2);
+    private final FastNoise fast3_2D = new FastNoise(1337, 2f, FastNoise.SIMPLEX_FRACTAL, 3);
 
     private final Noise.Ridged2D classic2_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 2, 1.3f);
     private final Noise.Ridged2D classic3_lf_2D = new Noise.Ridged2D(ClassicNoise.instance, 3, 1.3f);
 
-    private final Noise.Ridged2D whirling2_lf_2D = new Noise.Ridged2D(JitterNoise.instance, 2, 1.3f);
-    private final Noise.Ridged2D whirling3_lf_2D = new Noise.Ridged2D(JitterNoise.instance, 3, 1.3f);
+    private final FastNoise fast2_lf_2D = new FastNoise(1337, 1.3f, FastNoise.SIMPLEX_FRACTAL, 2);
+    private final FastNoise fast3_lf_2D = new FastNoise(1337, 1.3f, FastNoise.SIMPLEX_FRACTAL, 3);
+
+    {
+        fast2_2D.setFractalType(FastNoise.RIDGED_MULTI);
+        fast3_2D.setFractalType(FastNoise.RIDGED_MULTI);
+        fast2_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
+        fast3_lf_2D.setFractalType(FastNoise.RIDGED_MULTI);
+    }
 
     private final Noise.Ridged3D classic2_3D = new Noise.Ridged3D(ClassicNoise.instance, 2, 2);
     private final Noise.Ridged3D classic3_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 2);
 
-    private final Noise.Ridged3D whirling2_3D = new Noise.Ridged3D(JitterNoise.instance, 2, 2f);
-    private final Noise.Ridged3D whirling3_3D = new Noise.Ridged3D(JitterNoise.instance, 3, 2f);
+    private final FastNoise fast2_3D = fast2_2D;
+    private final FastNoise fast3_3D = fast3_2D;
 
     private final Noise.Ridged3D classic2_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 2, 1.3);
     private final Noise.Ridged3D classic3_lf_3D = new Noise.Ridged3D(ClassicNoise.instance, 3, 1.3);
 
-    private final Noise.Ridged3D whirling2_lf_3D = new Noise.Ridged3D(JitterNoise.instance, 2, 1.3f);
-    private final Noise.Ridged3D whirling3_lf_3D = new Noise.Ridged3D(JitterNoise.instance, 3, 1.3f);
-
+    private final FastNoise fast2_lf_3D = fast2_lf_2D;
+    private final FastNoise fast3_lf_3D = fast3_lf_2D;
 
     private final long
             seedX0 = linnorm.nextLong(), seedX1 = linnorm.nextLong(), seedX2 = linnorm.nextLong(), seedX3 = linnorm.nextLong(),
@@ -5464,12 +5470,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                     case 5:
                     {
-                        Gdx.graphics.setTitle("Whirling 2D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 2D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(whirling2_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(fast2_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5477,12 +5483,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 6:
                     {
-                        Gdx.graphics.setTitle("Whirling 2D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 2D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(whirling2_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(fast2_lf_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5490,12 +5496,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 7:
                     {
-                        Gdx.graphics.setTitle("Whirling 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 2D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(whirling3_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(fast3_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5503,12 +5509,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 8:
                     {
-                        Gdx.graphics.setTitle("Whirling 2D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 2D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(whirling3_lf_2D.getNoise(xx * 0.025, yy * 0.025));
+                                bright = basicPrepare(fast3_lf_2D.getConfiguredNoise(xx * 0.025f, yy * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5565,12 +5571,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
                     case 13:
                     {
-                        Gdx.graphics.setTitle("Whirling 3D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 3D Noise, 2 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(whirling2_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(fast2_3D.getConfiguredNoise(x * 0.025f, y * 0.025f, ctr * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5578,12 +5584,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 14:
                     {
-                        Gdx.graphics.setTitle("Whirling 3D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 3D Noise, 2 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(whirling2_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(fast2_lf_3D.getConfiguredNoise(x * 0.025f, y * 0.025f, ctr * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5591,12 +5597,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 15:
                     {
-                        Gdx.graphics.setTitle("Whirling 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 3D Noise, 3 normal octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             xx = x + ctr;
                             for (int y = 0; y < height; y++) {
                                 yy = y + ctr;
-                                bright = basicPrepare(whirling3_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(fast3_3D.getConfiguredNoise(x * 0.025f, y * 0.025f, ctr * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
@@ -5604,10 +5610,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     break;
                     case 16:
                     {
-                        Gdx.graphics.setTitle("Whirling 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Fast 3D Noise, 3 low-frequency octaves at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(whirling3_lf_3D.getNoise(x * 0.025, y * 0.025, ctr * 0.025));
+                                bright = basicPrepare(fast3_lf_3D.getConfiguredNoise(x * 0.025f, y * 0.025f, ctr * 0.025f));
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
