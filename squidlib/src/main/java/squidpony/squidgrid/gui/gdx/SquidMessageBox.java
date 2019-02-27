@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import squidpony.ArrayTools;
 import squidpony.IColorCenter;
 import squidpony.panel.IColoredString;
 
@@ -24,7 +23,7 @@ import java.util.List;
  *      in a scrolling pane though), but which is backed up by {@link com.badlogic.gdx.scenes.scene2d.Actor}
  *      instead of {@link SquidPanel} (hence better supports tight variable-width fonts)
  */
-public class SquidMessageBox extends SquidPanel {
+public class SquidMessageBox extends SparseLayers {
     protected ArrayList<IColoredString<Color>> messages = new ArrayList<>(256);
     protected int messageIndex = 0;
     /**
@@ -38,7 +37,7 @@ public class SquidMessageBox extends SquidPanel {
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         appendMessage("");
-        putBorders();
+        putBorders(SColor.FLOAT_WHITE, null);
     }
 
     /**
@@ -54,7 +53,7 @@ public class SquidMessageBox extends SquidPanel {
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         appendMessage("");
-        putBorders();
+        putBorders(SColor.FLOAT_WHITE, null);
     }
 
     /**
@@ -69,12 +68,12 @@ public class SquidMessageBox extends SquidPanel {
      * @param factory    the factory to use for cell rendering
      */
     public SquidMessageBox(int gridWidth, int gridHeight, TextCellFactory factory) {
-        super(gridWidth, gridHeight, factory);
+        super(gridWidth, gridHeight, factory.initialized() ? factory.width() : 12,
+                factory.initialized() ? factory.height() : 12,factory);
         if(gridHeight < 3)
             throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
         appendMessage("");
-        putBorders();
-
+        putBorders(SColor.FLOAT_WHITE, null);
     }
 
     /**
@@ -87,17 +86,10 @@ public class SquidMessageBox extends SquidPanel {
      * @param gridWidth  the number of cells horizontally
      * @param gridHeight the number of cells vertically
      * @param factory    the factory to use for cell rendering
-     * @param center     The color center to use. Can be {@code null}, but then must be set later on with
-     *                   {@link #setColorCenter(IColorCenter)}.
+     * @param center     ignored.
      */
     public SquidMessageBox(int gridWidth, int gridHeight, final TextCellFactory factory, IColorCenter<Color> center) {
-        super(gridWidth, gridHeight, factory, center);
-        if(gridHeight < 3)
-            throw new IllegalArgumentException("gridHeight must be at least 3, was given: " + gridHeight);
-        appendMessage("");
-        putBorders();
-
-
+        this(gridWidth, gridHeight, factory);
     }
     private void makeBordersClickable()
     {
@@ -205,7 +197,11 @@ public class SquidMessageBox extends SquidPanel {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        ArrayTools.fill(contents, ' ', 1, 1, gridWidth - 2, gridHeight - 2);
+        for (int x = 1; x < gridWidth - 1; x++) {
+            for (int y = 1; y < gridHeight - 1; y++) {
+                clear(x, y, 0);
+            }
+        }
         for (int i = 1; i < gridHeight - 1 && i <= messageIndex; i++) {
             put(1, gridHeight - 1 - i, messages.get(messageIndex + 1 - i));
         }

@@ -291,7 +291,6 @@ public class EverythingDemo extends ApplicationAdapter {
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
-        messages.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f); //cellWidth * 1f, cellHeight  * 1.034f
         display.setTextSize(cellWidth * 1.1f,cellHeight * 1.1f); //cellWidth * 1f, cellHeight  * 1.034f
         //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
         //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
@@ -1068,9 +1067,9 @@ public class EverythingDemo extends ApplicationAdapter {
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
         currentZoomX = (float)width / this.width;
         // total new screen height in pixels divided by total number of rows on the screen
-        currentZoomY = (float)height / (this.height + messages.getGridHeight());
+        currentZoomY = (float)height / (this.height + messages.gridHeight());
         // message box should be given updated bounds since I don't think it will do this automatically
-        messages.setBounds(0, 0, width, currentZoomY * messages.getGridHeight());
+        messages.setBounds(0, 0, width, currentZoomY * messages.gridHeight());
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
         input.getMouse().reinitialize(currentZoomX, currentZoomY, this.width, this.height, 0, 0);
         currentZoomX = cellWidth / currentZoomX;
