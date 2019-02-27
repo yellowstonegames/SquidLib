@@ -184,7 +184,57 @@ public class PaletteReducer {
 //        return (((512 + rmean) * r * r) >> 8) + g * g + (((767 - rmean) * b * b) >> 8);
         return (((1024 + rmean) * r * r) >> 9) + g * g + (((767 - rmean) * b * b) >> 8);
     }
+    private static int luma(final int r, final int g, final int b) {
+        return r * 0x9C + g * 0xF6 + b * 0x65 + 0x18 - (Math.max(r, Math.max(g, b)) - Math.min(r, Math.min(g, b))) * 0x19 >> 8;
+    }
 
+//    private static int diff(final int color1, final int color2) {
+//        final int r1 = color1 >>> 24, g1 = color1 >>> 16 & 0xFF, b1 = color1 >>> 8 & 0xFF;
+//        final int r2 = color2 >>> 24, g2 = color2 >>> 16 & 0xFF, b2 = color2 >>> 8 & 0xFF;
+//        final int y = (((r2 - r1) * 0x9C + (g2 - g1) * 0xF6 + (b2 - b1) * 0x65
+//                - (Math.max(r2, Math.max(g2, b2)) - Math.min(r2, Math.min(g2, b2))) * 0x19)
+//                + (Math.max(r1, Math.max(g1, b1)) - Math.min(r1, Math.min(g1, b1))) * 0x19)
+//                >> 5;
+//        final int co1 = r1 - b1, cg1 = g1 - b1 - (co1 >> 1);
+//        int co = r2 - b2, cg = g2 - b2 - (co >> 1);
+//        co -= co1;
+//        cg -= cg1;
+//        return (y * y) + ((co * co + cg * cg) * 3);
+//    }
+//
+//    private static int diff(final int color1, final int r2, final int g2, final int b2) {
+//        if((color1 & 0x80) == 0) return 0x70000000; // if a transparent color is being compared, it is always different
+//        final int rmean = ((color1 >>> 24) + r2),
+//                gmean = (color1 >>> 18 & 0x3F) + (g2 >> 2),
+//                r = (color1 >>> 24) - r2,
+//                g = (color1 >>> 16 & 0xFF) - g2 << 1,
+//                b = (color1 >>> 8 & 0xFF) - b2;
+//        return (((1024 + rmean + gmean) * r * r) >> 9) + g * g + (((1534 - rmean + gmean) * b * b) >> 9);
+//
+////        final int r1 = color1 >>> 24, g1 = color1 >>> 16 & 0xFF, b1 = color1 >>> 8 & 0xFF;
+////        final int y = (((r2 - r1) * 0x9C + (g2 - g1) * 0xF6 + (b2 - b1) * 0x65
+////                + (Math.max(r2, Math.max(g2, b2)) - Math.min(r2, Math.min(g2, b2))) * 0x18)
+////                - (Math.max(r1, Math.max(g1, b1)) - Math.min(r1, Math.min(g1, b1))) * 0x18)
+////                >> 5;
+////        final int co1 = r1 - b1, cg1 = g1 - b1 - (co1 >> 1);
+////        int co = r2 - b2, cg = g2 - b2 - (co >> 1);
+////        co -= co1;
+////        cg -= cg1;
+////        return (y * y) + (co * co * 3 + cg * cg * 5);
+//    }
+//
+//    private static int diff(final int r1, final int r2, final int g1, final int g2, final int b1, final int b2) {
+//        final int y = (((r2 - r1) * 0x9C + (g2 - g1) * 0xF6 + (b2 - b1) * 0x65
+//                - (Math.max(r2, Math.max(g2, b2)) - Math.min(r2, Math.min(g2, b2))) * 0x19)
+//                + (Math.max(r1, Math.max(g1, b1)) - Math.min(r1, Math.min(g1, b1))) * 0x19)
+//                >> 5;
+//        final int co1 = r1 - b1, cg1 = g1 - b1 - (co1 >> 1);
+//        int co = r2 - b2, cg = g2 - b2 - (co >> 1);
+//        co -= co1;
+//        cg -= cg1;
+//        return (y * y) + ((co * co + cg * cg) * 3);
+//    }
+    
     /**
      * Gets a pseudo-random float between -0.65625f and 0.65625f, determined by the upper 23 bits of seed.
      * This currently uses a uniform distribution for its output, but earlier versions intentionally used a non-uniform
@@ -433,17 +483,52 @@ public class PaletteReducer {
 
     /**
      * Modifies the given Pixmap so it only uses colors present in this PaletteReducer, dithering when it can.
+     * The dithering algorithm here is based on
+     * <a href="http://extremelearning.com.au/unreasonable-effectiveness-of-quasirandom-sequences">one suggested by
+     * Martin Roberts</a> using a generalization of the golden ratio, using the quasi-random value per pixel to get a
+     * multiplier for all channels (instead of a threshold for choosing just black or white). This adds noise but tends
+     * to look better than most other approaches, and is an ordered dither with all the various advantages that offers.
      * If you want to reduce the colors in a Pixmap based on what it currently contains, call
      * {@link #analyze(Pixmap)} with {@code pixmap} as its argument, then call this method with the same
      * Pixmap. You may instead want to use a known palette instead of one computed from a Pixmap;
-     * {@link #exact(int[])} is the tool for that job.
-     * <br>
-     * This method is not incredibly fast because of the extra calculations it has to do for dithering, but if you can
-     * compute the PaletteReducer once and reuse it, that will save some time.
+     * {@link #exact(int[])} is the tool for that job. If you can compute the PaletteReducer once and reuse it, that
+     * will save some time on repeated calls to reduce(). <a href="https://imgur.com/a/wfdYtJn">A gallery of different
+     * dithering techniques is here</a>; this method is last.
      * @param pixmap a Pixmap that will be modified in place
      * @return the given Pixmap, for chaining
      */
     public Pixmap reduce (Pixmap pixmap) {
+        boolean hasTransparent = (paletteArray[0] == 0);
+        final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
+        Pixmap.Blending blending = pixmap.getBlending();
+        pixmap.setBlending(Pixmap.Blending.None);
+        int color, used;
+        float adj;
+        byte paletteIndex;
+        for (int y = 0; y < h; y++) {
+            for (int px = 0; px < lineLen; px++) {
+                color = pixmap.getPixel(px, y) & 0xF8F8F880;
+                if ((color & 0x80) == 0 && hasTransparent)
+                    pixmap.drawPixel(px, y, 0);
+                else {
+                    adj = (((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >>> 40) * 0x1p-26f - 0x1p-3f) * ditherStrength);
+                    color |= (color >>> 5 & 0x07070700) | 0xFE;
+                    int rr = MathUtils.clamp((int) (((color >>> 24)       ) * (1f - adj)), 0, 0xFF);
+                    int gg = MathUtils.clamp((int) (((color >>> 16) & 0xFF) * (1f + adj)), 0, 0xFF);
+                    int bb = MathUtils.clamp((int) (((color >>> 8)  & 0xFF) * (1f + adj)), 0, 0xFF);
+                    paletteIndex =
+                            paletteMapping[((rr << 7) & 0x7C00)
+                                    | ((gg << 2) & 0x3E0)
+                                    | ((bb >>> 3))];
+                    used = paletteArray[paletteIndex & 0xFF];
+                    pixmap.drawPixel(px, y, used);
+                }
+            }
+        }
+        pixmap.setBlending(blending);
+        return pixmap;
+    }
+    public Pixmap reduceSierraLite (Pixmap pixmap) {
         boolean hasTransparent = (paletteArray[0] == 0);
         final int lineLen = pixmap.getWidth(), h = pixmap.getHeight();
         byte[] curErrorRed, nextErrorRed, curErrorGreen, nextErrorGreen, curErrorBlue, nextErrorBlue;
