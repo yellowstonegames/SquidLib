@@ -593,6 +593,22 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
 
     /**
+     * The same as {@link #gridWidth()}; here for compatibility with SquidPanel.
+     * @return The number of cells that this panel spans, horizontally.
+     */
+    public int getGridWidth() {
+        return gridWidth;
+    }
+
+    /**
+     * The same as {@link #gridHeight()}; here for compatibility with SquidPanel.
+     * @return The number of cells that this panel spans, vertically.
+     */
+    public int getGridHeight() {
+        return gridHeight;
+    }
+
+    /**
      * @return The width of a cell, in number of pixels.
      */
     @Override
@@ -608,6 +624,20 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
         return Math.round(font.actualCellHeight);
     }
 
+    /**
+     * Changes the width and height of chars the font renders, inside the same cell size.
+     * Primarily useful if the font has issues and doesn't line up visually; some older versions of .fnt files
+     * distributed with SquidLib had this type of problem (and some may still).
+     * Provides compatibility with SquidPanel code.
+     * @param wide width in approximate pixels
+     * @param high height in approximate pixels
+     * @return this for chaining.
+     */
+    public SparseLayers setTextSize(float wide, float high)
+    {
+        font.tweakWidth(wide).tweakHeight(high).initBySize();
+        return this;
+    }
     /**
      * Sets the default foreground color.
      * Unlike most ISquidPanel implementations, color can be null, which will
@@ -1516,6 +1546,60 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
             put(x, y, c, foreground,
                 SColor.lerpFloatColors(background, lightColor,(0xAAp-9f + (0xC8p-9f * lightAmount *
                         (1f + 0.35f * (float) flicker.getNoise(x * 0.3, y * 0.3, (System.currentTimeMillis() & 0xffffffL) * 0.00125))))));
+    }
+    public void putBorders(float color, String caption)
+    {
+        put(0, 0,'┌', color);
+        put(gridWidth - 1, 0,'┐', color);
+        put(0, gridHeight - 1,'└', color);
+        put(gridWidth - 1, gridHeight - 1,'┘', color);
+        for (int i = 1; i < gridWidth - 1; i++) {
+            put(i, 0, '─', color);
+            put(i, gridHeight - 1, '─', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            put(0, y, '│', color);
+            put(gridWidth - 1, y, '│', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            for (int x = 1; x < gridWidth - 1; x++) {
+                clear(x, y, 0);
+            }
+        }
+
+        if (caption != null) {
+            put(1, 0, caption, color, 0f);
+        }
+    }
+
+    /**
+     *
+     * @param color the color to draw the borders with; does not affect caption's color(s)
+     * @param caption an IColoredString
+     */
+    public void putBordersCaptioned(float color, IColoredString<Color> caption)
+    {
+        put(0, 0,'┌', color);
+        put(gridWidth - 1, 0,'┐', color);
+        put(0, gridHeight - 1,'└', color);
+        put(gridWidth - 1, gridHeight - 1,'┘', color);
+        for (int i = 1; i < gridWidth - 1; i++) {
+            put(i, 0, '─', color);
+            put(i, gridHeight - 1, '─', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            put(0, y, '│', color);
+            put(gridWidth - 1, y, '│', color);
+        }
+        for (int y = 1; y < gridHeight - 1; y++) {
+            for (int x = 1; x < gridWidth - 1; x++) {
+                clear(x, y, 0);
+            }
+        }
+
+        if (caption != null) {
+            put(1, 0, caption);
+        }
     }
 
     /**

@@ -22,10 +22,9 @@ public class TinyTest extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        font = DefaultResources.getSlabFamily().width(10).height(21).initBySize();
+        font = DefaultResources.getCrispSlabFamily().width(10).height(21).initBySize();
         layers = new SquidLayers(40, 25);
         smb = new SquidMessageBox(40, 25, font);
-        smb.setTextSize(smb.cellWidth() * 1.1f, smb.cellHeight() * 1.1f);
         smb.appendWrappingMessage("ABCDEFGHIJ0123456789abcdefghij01234567");
         smb.appendWrappingMessage("ABCDEFGHIJ0123456789abcdefghij012345678");
         smb.appendWrappingMessage("ABCDEFGHIJ0123456789 abcdefghij01234567");
