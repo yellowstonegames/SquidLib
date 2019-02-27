@@ -19,8 +19,6 @@ import java.util.zip.CheckedOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
-import static squidpony.squidgrid.gui.gdx.PaletteReducer.randomXi;
-
 /** PNG-8 encoder with compression. An instance can be reused to encode multiple PNGs with minimal allocation.
  * You can configure the target palette and how this can dither colors via the {@link #palette} field, which is a
  * {@link PaletteReducer} object that is allowed to be null and can be reused. The methods
@@ -560,8 +558,7 @@ public class PNG8 implements Disposable {
         DeflaterOutputStream deflaterOutput = new DeflaterOutputStream(buffer, deflater);
         final int[] paletteArray = palette.paletteArray;
         final byte[] paletteMapping = palette.paletteMapping;
-
-
+        
         DataOutputStream dataOutput = new DataOutputStream(output);
         dataOutput.write(SIGNATURE);
 
@@ -596,7 +593,6 @@ public class PNG8 implements Disposable {
 
         final int w = pixmap.getWidth(), h = pixmap.getHeight();
         byte[] lineOut, curLine, prevLine;
-        byte[] curErrorRed, nextErrorRed, curErrorGreen, nextErrorGreen, curErrorBlue, nextErrorBlue;
         if (lineOutBytes == null) {
             lineOut = (lineOutBytes = new ByteArray(w)).items;
             curLine = (curLineBytes = new ByteArray(w)).items;
@@ -610,95 +606,26 @@ public class PNG8 implements Disposable {
                 prevLine[i] = 0;
             }
         }
-        if(palette.curErrorRedBytes == null)
-        {
-            curErrorRed = (palette.curErrorRedBytes = new ByteArray(w)).items;
-            nextErrorRed = (palette.nextErrorRedBytes = new ByteArray(w)).items;
-            curErrorGreen = (palette.curErrorGreenBytes = new ByteArray(w)).items;
-            nextErrorGreen = (palette.nextErrorGreenBytes = new ByteArray(w)).items;
-            curErrorBlue = (palette.curErrorBlueBytes = new ByteArray(w)).items;
-            nextErrorBlue = (palette.nextErrorBlueBytes = new ByteArray(w)).items;
-        } else {
-            curErrorRed = palette.curErrorRedBytes.ensureCapacity(w);
-            nextErrorRed = palette.nextErrorRedBytes.ensureCapacity(w);
-            curErrorGreen = palette.curErrorGreenBytes.ensureCapacity(w);
-            nextErrorGreen = palette.nextErrorGreenBytes.ensureCapacity(w);
-            curErrorBlue = palette.curErrorBlueBytes.ensureCapacity(w);
-            nextErrorBlue = palette.nextErrorBlueBytes.ensureCapacity(w);
-            for (int i = 0; i < w; i++) {
-                nextErrorRed[i] = 0;
-                nextErrorGreen[i] = 0;
-                nextErrorBlue[i] = 0;
-            }
-
-        }
-
 
         lastLineLen = w;
 
-        int color, used, rdiff, gdiff, bdiff, state = 0xFEEDBEEF;
-        byte er, eg, eb, paletteIndex;
-        float xi1, xi2, w1 = palette.ditherStrength * 0.125f, w3 = w1 * 3f, w5 = w1 * 5f, w7 = w1 * 7f;
+        int color;
+        float adj, str = palette.ditherStrength;
         for (int y = 0; y < h; y++) {
             int py = flipY ? (h - y - 1) : y;
-            int ny = flipY ? (h - y - 2) : y + 1;
-            for (int i = 0; i < w; i++) {
-                curErrorRed[i] = nextErrorRed[i];
-                curErrorGreen[i] = nextErrorGreen[i];
-                curErrorBlue[i] = nextErrorBlue[i];
-                nextErrorRed[i] = 0;
-                nextErrorGreen[i] = 0;
-                nextErrorBlue[i] = 0;
-            }
             for (int px = 0; px < w; px++) {
                 color = pixmap.getPixel(px, py) & 0xF8F8F880;
                 if ((color & 0x80) == 0 && hasTransparent)
                     curLine[px] = 0;
                 else {
-                    er = curErrorRed[px];
-                    eg = curErrorGreen[px];
-                    eb = curErrorBlue[px];
+                    adj = (((px * 0xC13FA9A902A6328FL + py * 0x91E10DA5C79E7B1DL >>> 40) * 0x1p-26f - 0x1p-3f) * str);
                     color |= (color >>> 5 & 0x07070700) | 0xFE;
-                    int rr = MathUtils.clamp(((color >>> 24)       ) + (er), 0, 0xFF);
-                    int gg = MathUtils.clamp(((color >>> 16) & 0xFF) + (eg), 0, 0xFF);
-                    int bb = MathUtils.clamp(((color >>> 8)  & 0xFF) + (eb), 0, 0xFF);
-                    curLine[px] = paletteIndex =
-                            paletteMapping[((rr << 7) & 0x7C00)
+                    int rr = MathUtils.clamp((int) (((color >>> 24)       ) * (1f - adj)), 0, 0xFF);
+                    int gg = MathUtils.clamp((int) (((color >>> 16) & 0xFF) * (1f + adj)), 0, 0xFF);
+                    int bb = MathUtils.clamp((int) (((color >>> 8)  & 0xFF) * (1f + adj)), 0, 0xFF);
+                    curLine[px] = paletteMapping[((rr << 7) & 0x7C00)
                                     | ((gg << 2) & 0x3E0)
                                     | ((bb >>> 3))];
-                    used = paletteArray[paletteIndex & 0xFF];
-                    rdiff = (color>>>24)-    (used>>>24);
-                    gdiff = (color>>>16&255)-(used>>>16&255);
-                    bdiff = (color>>>8&255)- (used>>>8&255);
-                    state += (color + 0x41C64E6D) ^ color >>> 7;
-                    state = (state << 21 | state >>> 11);
-                    xi1 = randomXi(state);
-                    state ^= (state << 15 | state >>> 17) + 0x9E3779B9;
-                    xi2 = randomXi(state);
-                    if(px < w - 1)
-                    {
-                        curErrorRed[px+1]   += rdiff * w7 * (1f + xi1);
-                        curErrorGreen[px+1] += gdiff * w7 * (1f + xi1);
-                        curErrorBlue[px+1]  += bdiff * w7 * (1f + xi1);
-                    }
-                    if(ny < h)
-                    {
-                        if(px > 0)
-                        {
-                            nextErrorRed[px-1]   += rdiff * w3 * (1f + xi2);
-                            nextErrorGreen[px-1] += gdiff * w3 * (1f + xi2);
-                            nextErrorBlue[px-1]  += bdiff * w3 * (1f + xi2);
-                        }
-                        if(px < w - 1)
-                        {
-                            nextErrorRed[px+1]   += rdiff * w1 * (1f - xi2);
-                            nextErrorGreen[px+1] += gdiff * w1 * (1f - xi2);
-                            nextErrorBlue[px+1]  += bdiff * w1 * (1f - xi2);
-                        }
-                        nextErrorRed[px]   += rdiff * w5 * (1f - xi1);
-                        nextErrorGreen[px] += gdiff * w5 * (1f - xi1);
-                        nextErrorBlue[px]  += bdiff * w5 * (1f - xi1);
-                    }
                 }
             }
 
