@@ -495,39 +495,39 @@ public class HashBenchmark {
         return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
     @Benchmark
-    public long doZT64(BenchmarkState state)
+    public long doSquish64(BenchmarkState state)
     {
-        return CrossHash.ZT.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Squish.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doZT32(BenchmarkState state)
+    public int doSquish32(BenchmarkState state)
     {
-        return CrossHash.ZT.hash(state.words[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Squish.hash(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public long doCharZT64(BenchmarkState state)
+    public long doCharSquish64(BenchmarkState state)
     {
-        return CrossHash.ZT.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Squish.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doCharZT32(BenchmarkState state)
+    public int doCharSquish32(BenchmarkState state)
     {
-        return CrossHash.ZT.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Squish.hash(state.chars[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public long doLongZT64(BenchmarkState state)
+    public long doLongSquish64(BenchmarkState state)
     {
-        return CrossHash.ZT.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Squish.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
-    public int doLongZT32(BenchmarkState state)
+    public int doLongSquish32(BenchmarkState state)
     {
-        return CrossHash.ZT.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Squish.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
