@@ -513,7 +513,7 @@ public class PaletteReducer {
                 else {
                     adj = (((px * 0xC13FA9A902A6328FL + y * 0x91E10DA5C79E7B1DL >>> 40) * 0x1p-26f - 0x1p-3f) * ditherStrength);
                     color |= (color >>> 5 & 0x07070700) | 0xFE;
-                    int rr = MathUtils.clamp((int) (((color >>> 24)       ) * (1f - adj)), 0, 0xFF);
+                    int rr = MathUtils.clamp((int) (((color >>> 24)       ) * (1f + adj)), 0, 0xFF);
                     int gg = MathUtils.clamp((int) (((color >>> 16) & 0xFF) * (1f + adj)), 0, 0xFF);
                     int bb = MathUtils.clamp((int) (((color >>> 8)  & 0xFF) * (1f + adj)), 0, 0xFF);
                     paletteIndex =
