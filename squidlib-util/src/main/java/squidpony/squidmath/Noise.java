@@ -1374,7 +1374,7 @@ public class Noise {
          */
         public static int hashAll(int x, int y, int s) {
             s ^= x * 0x1827F5 ^ y * 0x123C21;
-            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
         }
         /**
          * A 32-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
@@ -1391,7 +1391,7 @@ public class Noise {
          */
         public static int hashAll(int x, int y, int z, int s) {
             s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
-            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
         }
 
         /**
@@ -1410,7 +1410,7 @@ public class Noise {
          */
         public static int hashAll(int x, int y, int z, int w, int s) {
             s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
-            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
         }
 
         /**
@@ -1432,7 +1432,7 @@ public class Noise {
          */
         public static int hashAll(int x, int y, int z, int w, int u, int v, int s) {
             s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
-            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
         }
 
         /**
@@ -1449,7 +1449,7 @@ public class Noise {
          */
         public static int hash256(int x, int y, int s) {
             s ^= x * 0x1827F5 ^ y * 0x123C21;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 24;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
         }
         /**
          * A 8-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
@@ -1466,7 +1466,7 @@ public class Noise {
          */
         public static int hash256(int x, int y, int z, int s) {
             s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 24;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
         }
 
         /**
@@ -1485,7 +1485,7 @@ public class Noise {
          */
         public static int hash256(int x, int y, int z, int w, int s) {
             s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 24;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
         }
 
         /**
@@ -1507,7 +1507,7 @@ public class Noise {
          */
         public static int hash256(int x, int y, int z, int w, int u, int v, int s) {
             s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 24;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
         }
 
         /**
@@ -1524,7 +1524,7 @@ public class Noise {
          */
         public static int hash64(int x, int y, int s) {
             s ^= x * 0x1827F5 ^ y * 0x123C21;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 26;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
         }
         /**
          * A 6-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
@@ -1541,7 +1541,7 @@ public class Noise {
          */
         public static int hash64(int x, int y, int z, int s) {
             s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 26;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
         }
 
         /**
@@ -1560,7 +1560,7 @@ public class Noise {
          */
         public static int hash64(int x, int y, int z, int w, int s) {
             s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 26;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
         }
 
         /**
@@ -1582,7 +1582,7 @@ public class Noise {
          */
         public static int hash64(int x, int y, int z, int w, int u, int v, int s) {
             s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 26;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
         }
         /**
          * A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
@@ -1598,7 +1598,7 @@ public class Noise {
          */
         public static int hash32(int x, int y, int s) {
             s ^= x * 0x1827F5 ^ y * 0x123C21;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 27;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
         }
         /**
          * A 5-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
@@ -1615,7 +1615,7 @@ public class Noise {
          */
         public static int hash32(int x, int y, int z, int s) {
             s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 27;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
         }
 
         /**
@@ -1634,7 +1634,7 @@ public class Noise {
          */
         public static int hash32(int x, int y, int z, int w, int s) {
             s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 27;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
         }
 
         /**
@@ -1656,7 +1656,7 @@ public class Noise {
          */
         public static int hash32(int x, int y, int z, int w, int u, int v, int s) {
             s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
-            return (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493 >>> 27;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
         }
 
 

@@ -43,6 +43,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.IntIntOrderedMap;
 import squidpony.squidmath.OrderedMap;
 import squidpony.squidmath.OrderedSet;
 
@@ -297,7 +298,7 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@OutputTimeUnit(TimeUnit.MILLISECONDS)
 @Fork(1)
 @Warmup(iterations = 6)
 @Measurement(iterations = 4)
@@ -517,63 +518,93 @@ public class DataStructureBenchmark {
         blackhole.consume(squidOS);
     }
 
-//    @Benchmark
-//    public void insertSquidCustomOM(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>( state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOM.put(i, i);
-//        }
-//        blackhole.consume(squidOM);
-//    }
-//
-//    @Benchmark
-//    public void insertSquidCustomOM2(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOM.put(i, i);
-//        }
-//        blackhole.consume(squidOM);
-//    }
-//
-//    @Benchmark
-//    public void insertSquidCustomOM3(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOM.put(i, i);
-//        }
-//        blackhole.consume(squidOM);
-//    }
-//
-//    @Benchmark
-//    public void insertSquidCustomOS(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOS.add(i);
-//        }
-//        blackhole.consume(squidOS);
-//    }
-//    @Benchmark
-//    public void insertSquidCustomOS2(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOS.add(i);
-//        }
-//        blackhole.consume(squidOS);
-//    }
-//    @Benchmark
-//    public void insertSquidCustomOS3(BenchmarkState state, Blackhole blackhole)
-//    {
-//        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f, integerHasher);
-//        for (int i = 0; i < state.SIZE; i++) {
-//            squidOS.add(i);
-//        }
-//        blackhole.consume(squidOS);
-//    }
+    @Benchmark
+    public void insertSquidDefaultOM(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>( state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertSquidDefaultOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertSquidDefaultOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedMap<Integer, Integer> squidOM = new OrderedMap<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertSquidDefaultOS(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertSquidDefaultOS2(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertSquidDefaultOS3(BenchmarkState state, Blackhole blackhole)
+    {
+        OrderedSet<Integer> squidOS = new OrderedSet<>(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOS.add(i);
+        }
+        blackhole.consume(squidOS);
+    }
+    @Benchmark
+    public void insertSquidPrimitiveOM(BenchmarkState state, Blackhole blackhole)
+    {
+        IntIntOrderedMap squidOM = new IntIntOrderedMap( state.SIZE >> state.NEED_TO_ENLARGE, 0.75f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertSquidPrimitiveOM2(BenchmarkState state, Blackhole blackhole)
+    {
+        IntIntOrderedMap squidOM = new IntIntOrderedMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.5f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
+    @Benchmark
+    public void insertSquidPrimitiveOM3(BenchmarkState state, Blackhole blackhole)
+    {
+        IntIntOrderedMap squidOM = new IntIntOrderedMap(state.SIZE >> state.NEED_TO_ENLARGE, 0.25f);
+        for (int i = 0; i < state.SIZE; i++) {
+            squidOM.put(i, i);
+        }
+        blackhole.consume(squidOM);
+    }
+
 
 //    @Benchmark
 //    public void insertFastUtilOM(BenchmarkState state, Blackhole blackhole)
