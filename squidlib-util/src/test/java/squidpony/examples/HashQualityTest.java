@@ -683,6 +683,9 @@ public class HashQualityTest {
     {
 //        x = x << 1 ^ x >> 31;
 //        y = y << 1 ^ y >> 31;
+//        s = 42 ^ s * 0x1827F5 ^ y * 0x123C21;
+//        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+
         return (x >= y ? x * x + x + y : x + y * y);// * 0xA5CB3;
     }
     public static int szudzik2Coord(int x, int y)
@@ -770,8 +773,8 @@ public class HashQualityTest {
         //s ^= s << 8 ^ s >>> 15 ^ s >>> 9;
 //        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
 
-        int s = 0x9E3779B9 ^ 0x1A36A9 * (x ^ 0x157931 * (y ^ z * 0x119725));
-        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ s >>> 15;
+        int s = 0x9E3779B9 ^ x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
+        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 6 | s >>> 26) ^ 0xD1B54A35) * 0x125493) ^ s >>> 15;
 
 
 //        int s = 0x9E3779B9 ^ 0x1A36A9 * (x ^ 0x157931 * (y ^ z * 0x119725));
@@ -941,7 +944,7 @@ public class HashQualityTest {
                                     points.add(c);
                                     colliderBase.put((int) Noise.PointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
                                     colliderPelo.put(Noise.IntPointHash.hashAll(x, y, z, 0x9E3779B9) & restrict, 0.0);
-                                    colliderSzud.put(szudzikCoord(z, szudzikCoord(x, y)) & restrict, 0.0);
+                                    colliderSzud.put(peloton3D(x, y, z) & restrict, 0.0);
                                     colliderCant.put(cantorCoord(z, cantorCoord(x, y)) & restrict, 0.0);
                                     colliderHast.put((int) Noise.HastyPointHash.hashAll(x, y, z, 0x9E3779B9L) & restrict, 0.0);
                                     colliderObje.put(Objects.hash(x, y, z) & restrict, 0.0);

@@ -27,8 +27,8 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-//    private static int gridWidth = 160;
-    private static int gridWidth = 64;
+    private static int gridWidth = 160;
+//    private static int gridWidth = 64;
 //    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
@@ -90,17 +90,17 @@ public class ColorTest extends ApplicationAdapter {
             0x414859FF, 0x68717AFF, 0x90A1A8FF, 0xB6CBCFFF,
             0xD3E5EDFF, 0xFFFFFFFF, 0x5C3A41FF, 0x826481FF,
             0x966C6CFF, 0xAB947AFF, 0xF68181FF, 0xF53333FF,
-            0xFF5A4AFF, 0xAE4539FF, 0x8A503EFF, 0xCD683DFF,
-            0xFBA458FF, 0xFB6B1DFF, 0x9F8562FF, 0xFCBF8AFF,
-            0xFF9E17FF, 0xF0B628FF, 0xE3C896FF, 0xFBE626FF,
-            0xEDD500FF, 0xFBFF86FF, 0xB4D645FF, 0x729446FF,
-            0x91DB69FF, 0x358510FF, 0x51C43FFF, 0x4BA14AFF,
-            0x1EBC73FF, 0x30E1B9FF, 0x7FE0C2FF, 0xB8FDFFFF,
-            0x039F78FF, 0x63C2C9FF, 0x4F83BFFF, 0x216981FF,
+            0x5A0A07FF, 0xAE4539FF, 0x8A503EFF, 0xCD683DFF,
+            0xFBA458FF, 0xFB6B1DFF, 0x9F8562FF, 0xF9C79FFF,
+            0xFFA514FF, 0xE8B710FF, 0xE3C896FF, 0xFBE626FF,
+            0xC0B510FF, 0xFBFF86FF, 0xB4D645FF, 0x729446FF,
+            0x91DB69FF, 0x358510FF, 0x51C43FFF, 0x0E4904FF, 
+            0x4BA14AFF, 0x1EBC73FF, 0x30E1B9FF, 0x7FE0C2FF,
+            0xB8FDFFFF, 0x039F78FF, 0x63C2C9FF, 0x216981FF,
             0x7FE8F2FF, 0x3B509FFF, 0x4D9BE6FF, 0x28306FFF,
-            0x4870CFFF, 0x4D50D4FF, 0x180FCFFF, 0x53207DFF,
+            0x5C76BFFF, 0x4D50D4FF, 0x180FCFFF, 0x53207DFF,
             0x8657CCFF, 0xA884F3FF, 0x630867FF, 0xA03EB2FF,
-            0x8032BCFF, 0xE4A8FAFF, 0xB53D86FF, 0xF34FE9FF,
+            0x881AC4FF, 0xE4A8FAFF, 0xB53D86FF, 0xF34FE9FF,
             0x7A3045FF, 0xF04F78FF, 0xC27182FF, 0xC93038FF,
     };
 
@@ -591,20 +591,20 @@ public class ColorTest extends ApplicationAdapter {
         System.out.println("byte[][] RAMPS = new byte[][]{");
         for (int i = 0; i < COUNT; i++) {
             System.out.println(
-                      "{ " + ramps[i][0]
-                    + ", " + ramps[i][1]
+                      "{ " + ramps[i][3]
                     + ", " + ramps[i][2]
-                    + ", " + ramps[i][3] + " },"
+                    + ", " + ramps[i][1]
+                    + ", " + ramps[i][0] + " },"
             );
         }
         System.out.println("};");
 
         System.out.println("int[][] RAMP_VALUES = new int[][]{");
         for (int i = 0; i < COUNT; i++) {
-            System.out.println("{ 0x" + StringKit.hex(FLESURRECT[ramps[i][0] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][1] & 255])
+            System.out.println("{ 0x" + StringKit.hex(FLESURRECT[ramps[i][3] & 255])
                     + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][2] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][3] & 255]) + " },"
+                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][1] & 255])
+                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][0] & 255]) + " },"
             );
         }
 //        for (int i = 0; i < COUNT; i++) {
@@ -616,11 +616,14 @@ public class ColorTest extends ApplicationAdapter {
 //        }
         System.out.println("};");
         for (int i = 0; i < COUNT; i++) {
-            for (int j = 0; j < 4; j++) {
-                float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();
-                display.put((i >>> 3) << 3 | j << 1, i & 7, '\0', cf);
-                display.put((i >>> 3) << 3 | j << 1 | 1, i & 7, '\0', cf);
-            }
+//            for (int j = 0; j < 4; j++) {
+                //float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();
+//                display.put((i >>> 3) << 3 | j << 1, i & 7, '\0', cf);
+//                display.put((i >>> 3) << 3 | j << 1 | 1, i & 7, '\0', cf);
+//                display.putString((i >>> 5) * 20, i & 31, "  " + StringKit.padRightStrict(col.name.substring(7), ' ', 18), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+//            }
+            col.set(FLESURRECT[i & 255]).clamp();
+            display.putString(i >>> 1 & 0xF0, i & 31, String.format("   %08X   ", FLESURRECT[i]), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
 //            for (int j = 0; j < 4; j++) {
 //                display.put((i >>> 5) << 3 | j << 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
 //                display.put((i >>> 5) << 3 | j << 1 | 1, i & 31, '\0', DAWNBRINGER_AURORA[ramps[i][j] & 255]);
