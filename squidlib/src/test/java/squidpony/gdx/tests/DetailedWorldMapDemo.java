@@ -399,7 +399,7 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.7, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
         world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.6);
-        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), FastNoise.instance, 0.9);
+//        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), FastNoise.instance, 0.9);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
