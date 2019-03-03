@@ -131,8 +131,8 @@ public class WeightedTable implements Serializable {
     public int random(long state)
     {
         // This is DiverRNG's algorithm to generate a random long given sequential states
-        state = (state = ((state = ((state << ((state & 31) + 5)) ^ state ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L)
-                ^ (state >>> ((state >>> 60) + 16))) * 0x369DEA0F31A53F85L) ^ state >>> 27;
+        state = (state = ((state = (((state * 0x632BE59BD9B4E019L) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L)) ^ 
+                state >>> 27) * 0xAEF17502108EF2D9L) ^ state >>> 25;
         // get a random int (using half the bits of our previously-calculated state) that is less than size
         int column = (int)((size * (state & 0xFFFFFFFFL)) >> 32);
         // use the other half of the bits of state to get a 31-bit int, compare to probability and choose either the
