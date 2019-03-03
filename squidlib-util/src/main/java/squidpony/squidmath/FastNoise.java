@@ -393,7 +393,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             {0.462509014279733f, 0.8866145790082576f},
     };
     private static final long serialVersionUID = 1L;
-    public static final FastNoise instance = new FastNoise();
     public static final int VALUE = 0, VALUE_FRACTAL = 1, PERLIN = 2, PERLIN_FRACTAL = 3,
             SIMPLEX = 4, SIMPLEX_FRACTAL = 5, CELLULAR = 6, WHITE_NOISE = 7, CUBIC = 8, CUBIC_FRACTAL = 9;
 
@@ -424,6 +423,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
 
     private float gradientPerturbAmp = 1f / 0.45f;
 
+    public static final FastNoise instance = new FastNoise(1337, 1f, SIMPLEX_FRACTAL);
+    
     public FastNoise() {
         this(1337);
     }

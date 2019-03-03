@@ -89,9 +89,9 @@ public static final char[]  terrainChars = {
 
 };
     //private static final int bigWidth = 314 * 3, bigHeight = 300;
-    private static final int bigWidth = 256, bigHeight = 256;
+//    private static final int bigWidth = 256, bigHeight = 256;
 //    private static final int bigWidth = 1024, bigHeight = 512;
-    //private static final int bigWidth = 512, bigHeight = 256;
+    private static final int bigWidth = 512, bigHeight = 256;
 //    private static final int bigWidth = 2048, bigHeight = 1024;
     //private static final int bigWidth = 400, bigHeight = 400;
     private static final int cellWidth = 16, cellHeight = 16;
@@ -104,7 +104,7 @@ public static final char[]  terrainChars = {
     private StatefulRNG rng;
     private long seed;
     private Vector3 position, previousPosition, nextPosition;
-    private WorldMapGenerator.LocalMimicMap world;
+    private WorldMapGenerator.MimicMap world;
     private PoliticalMapper pm;
     private OrderedMap<Character, FakeLanguageGen> atlas;
     private OrderedMap<Coord, String> cities;
@@ -233,7 +233,7 @@ public static final char[]  terrainChars = {
 //        world = new WorldMapGenerator.LocalMimicMap(seed, basis, FastNoise.instance, 0.8);
 //        pix.dispose();
 
-        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.8); // uses a map of Australia for land
+        world = new WorldMapGenerator.MimicMap(seed, FastNoise.instance, 0.8); // uses a map of Australia for land
         //world = new WorldMapGenerator.TilingMap(seed, bigWidth, bigHeight, WhirlingNoise.instance, 0.9);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
         pm = new PoliticalMapper(FakeLanguageGen.SIMPLISH.word(rng, true));
