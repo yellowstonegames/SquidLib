@@ -47,10 +47,10 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 314 * 3, height = 300;
 //    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
-    private static final int width = 256, height = 256;
+//    private static final int width = 256, height = 256;
 //    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
-//    private static final int width = 1600, height = 800;
+    private static final int width = 1600, height = 800;
 //    private static final int width = 900, height = 900;
 //    private static final int width = 700, height = 700;
 //    private static final int width = 512, height = 512;
@@ -396,9 +396,9 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
         //world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, FastNoise.instance, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.7, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, CosmicNumbering.instance, 0.6, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
-        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.6);
+//        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.6);
 //        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), FastNoise.instance, 0.9);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
