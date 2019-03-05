@@ -92,11 +92,11 @@ public class Splash {
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public List<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {
+	public ArrayList<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {
 		if (!DungeonUtility.inLevel(level, start) || !passable(level[start.x][start.y]))
-			return Collections.emptyList();
+			return new ArrayList<>(0);
 
-		final List<Coord> result = new ArrayList<>(volume);
+		final ArrayList<Coord> result = new ArrayList<>(volume);
 
 		Direction[] dirs = new Direction[Direction.OUTWARDS.length];
 
@@ -231,7 +231,7 @@ public class Splash {
 	 *         passable. If non-empty, this is guaranteed to be an
 	 *         {@link ArrayList}.
 	 */
-	public static List<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, Set<Character> impassable, int drunks)
+	public static ArrayList<Coord> spill(IRNG rng, char[][] level, Coord start, int volume, Set<Character> impassable, int drunks)
 	{
 		Set<Character> blocked;
 		if(impassable == null)

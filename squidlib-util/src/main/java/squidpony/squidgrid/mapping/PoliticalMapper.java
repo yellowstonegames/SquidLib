@@ -2,6 +2,7 @@ package squidpony.squidgrid.mapping;
 
 import squidpony.ArrayTools;
 import squidpony.FakeLanguageGen;
+import squidpony.Maker;
 import squidpony.Thesaurus;
 import squidpony.annotation.Beta;
 import squidpony.squidgrid.MultiSpill;
@@ -9,7 +10,6 @@ import squidpony.squidgrid.Spill;
 import squidpony.squidmath.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -139,10 +139,10 @@ public class PoliticalMapper {
         spokenLanguages.clear();
         atlas.put('~', "Ocean");
         briefAtlas.put('~', "Ocean");
-        spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
+        spokenLanguages.put('~', Maker.makeList(FakeLanguageGen.ELF));
         atlas.put('%', "Wilderness");
         briefAtlas.put('%', "Wilderness");
-        spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
+        spokenLanguages.put('%', Maker.makeList(FakeLanguageGen.DEMONIC));
 
         if (factionCount > 0) {
             Thesaurus th = new Thesaurus(rng.nextLong());
@@ -151,7 +151,7 @@ public class PoliticalMapper {
                 atlas.put(letters[i], th.makeNationName());
                 briefAtlas.put(letters[i], th.latestGenerated);
                 if(th.randomLanguages == null || th.randomLanguages.isEmpty())
-                    spokenLanguages.put(letters[i], Collections.singletonList(FakeLanguageGen.randomLanguage(rng)));
+                    spokenLanguages.put(letters[i], Maker.makeList(FakeLanguageGen.randomLanguage(rng)));
                 else
                     spokenLanguages.put(letters[i], new ArrayList<>(th.randomLanguages));
             }
@@ -288,22 +288,22 @@ public class PoliticalMapper {
         if((flg = atlasLanguages.get('~')) == null) {
             atlas.put('~', "Ocean");
             briefAtlas.put('~', "Ocean");
-            spokenLanguages.put('~', Collections.singletonList(FakeLanguageGen.ELF));
+            spokenLanguages.put('~', Maker.makeList(FakeLanguageGen.ELF));
         }
         else {
             atlas.put('~', th.makeNationName(flg));
             briefAtlas.put('~', th.latestGenerated);
-            spokenLanguages.put('~', Collections.singletonList(flg));
+            spokenLanguages.put('~', Maker.makeList(flg));
         }
         if((flg = atlasLanguages.get('%')) == null) {
             atlas.put('%', "Wilderness");
             briefAtlas.put('%', "Wilderness");
-            spokenLanguages.put('%', Collections.singletonList(FakeLanguageGen.DEMONIC));
+            spokenLanguages.put('%', Maker.makeList(FakeLanguageGen.DEMONIC));
         }
         else {
             atlas.put('%', th.makeNationName(flg));
             briefAtlas.put('%', th.latestGenerated);
-            spokenLanguages.put('%', Collections.singletonList(flg));
+            spokenLanguages.put('%', Maker.makeList(flg));
         }
 
         for (int i = 0; i < atlasLanguages.size() && i < 256; i++) {
@@ -311,7 +311,7 @@ public class PoliticalMapper {
             flg = atlasLanguages.getAt(i);
             atlas.put(c, th.makeNationName(flg));
             briefAtlas.put(c, th.latestGenerated);
-            spokenLanguages.put(c, Collections.singletonList(flg));
+            spokenLanguages.put(c, Maker.makeList(flg));
         }
         int factionCount = atlas.size() - 2;
         width = land.width;

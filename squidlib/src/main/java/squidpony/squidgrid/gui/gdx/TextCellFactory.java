@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import regexodus.ds.CharCharMap;
 import squidpony.IColorCenter;
+import squidpony.Maker;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.NumberTools;
@@ -25,7 +26,6 @@ import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Class for creating text blocks.
@@ -1770,7 +1770,7 @@ public class TextCellFactory implements Disposable {
         }
 
         ColorChangeImage im = new ColorChangeImage(tr, 1, doubleWidth,
-                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Collections.singletonList(scc.filter(color)));
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Maker.makeList(scc.filter(color)));
         im.setAlign(2);
         im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         return im;
