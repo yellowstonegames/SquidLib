@@ -164,6 +164,29 @@ public class Noise {
     }
 
     /**
+     * Given a double {@code a} from 0.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer to
+     * the end points of that range (if less than 0.5, it gets closer to 0.0, otherwise it gets closer to 1.0).
+     * @param a a double between 0.0 and 1.0 inclusive
+     * @return a double between 0.0 and 1.0 inclusive that is more likely to be near the extremes
+     */
+    public static double extreme(final double a)
+    {
+        return a * a * a * (a * (a * 6 - 15) + 10);
+    }
+
+    /**
+     * Given a double {@code a} from -1.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer
+     * to the end points of that range (if less than 0, it gets closer to -1.0, otherwise it gets closer to 1.0).
+     * @param a a double between -1.0 and 1.0 inclusive
+     * @return a double between -1.0 and 1.0 inclusive that is more likely to be near the extremes
+     */
+    public static double extremeSigned(double a)
+    {
+        a = a * 0.5 + 0.5;
+        return a * a * a * (a * (a * 12 - 30) + 20) - 1.0;
+    }
+
+    /**
      * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
      * a long for state. This is organized how it is so it can be statically imported without also importing the rest
      * of Noise. Internally, all of the methods here are based on a simplified version of Hive from {@link CrossHash}
