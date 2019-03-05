@@ -1382,7 +1382,7 @@
 <span class="sourceLineNo">1374</span>         */<a name="line.1374"></a>
 <span class="sourceLineNo">1375</span>        public static int hashAll(int x, int y, int s) {<a name="line.1375"></a>
 <span class="sourceLineNo">1376</span>            s ^= x * 0x1827F5 ^ y * 0x123C21;<a name="line.1376"></a>
-<span class="sourceLineNo">1377</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 15;<a name="line.1377"></a>
+<span class="sourceLineNo">1377</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 11;<a name="line.1377"></a>
 <span class="sourceLineNo">1378</span>        }<a name="line.1378"></a>
 <span class="sourceLineNo">1379</span>        /**<a name="line.1379"></a>
 <span class="sourceLineNo">1380</span>         * A 32-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,<a name="line.1380"></a>
@@ -1399,7 +1399,7 @@
 <span class="sourceLineNo">1391</span>         */<a name="line.1391"></a>
 <span class="sourceLineNo">1392</span>        public static int hashAll(int x, int y, int z, int s) {<a name="line.1392"></a>
 <span class="sourceLineNo">1393</span>            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;<a name="line.1393"></a>
-<span class="sourceLineNo">1394</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 15;<a name="line.1394"></a>
+<span class="sourceLineNo">1394</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 11;<a name="line.1394"></a>
 <span class="sourceLineNo">1395</span>        }<a name="line.1395"></a>
 <span class="sourceLineNo">1396</span><a name="line.1396"></a>
 <span class="sourceLineNo">1397</span>        /**<a name="line.1397"></a>
@@ -1418,7 +1418,7 @@
 <span class="sourceLineNo">1410</span>         */<a name="line.1410"></a>
 <span class="sourceLineNo">1411</span>        public static int hashAll(int x, int y, int z, int w, int s) {<a name="line.1411"></a>
 <span class="sourceLineNo">1412</span>            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;<a name="line.1412"></a>
-<span class="sourceLineNo">1413</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 15;<a name="line.1413"></a>
+<span class="sourceLineNo">1413</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 11;<a name="line.1413"></a>
 <span class="sourceLineNo">1414</span>        }<a name="line.1414"></a>
 <span class="sourceLineNo">1415</span><a name="line.1415"></a>
 <span class="sourceLineNo">1416</span>        /**<a name="line.1416"></a>
@@ -1440,7 +1440,7 @@
 <span class="sourceLineNo">1432</span>         */<a name="line.1432"></a>
 <span class="sourceLineNo">1433</span>        public static int hashAll(int x, int y, int z, int w, int u, int v, int s) {<a name="line.1433"></a>
 <span class="sourceLineNo">1434</span>            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;<a name="line.1434"></a>
-<span class="sourceLineNo">1435</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 15;<a name="line.1435"></a>
+<span class="sourceLineNo">1435</span>            return (s = (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493) ^ s &gt;&gt;&gt; 11;<a name="line.1435"></a>
 <span class="sourceLineNo">1436</span>        }<a name="line.1436"></a>
 <span class="sourceLineNo">1437</span><a name="line.1437"></a>
 <span class="sourceLineNo">1438</span>        /**<a name="line.1438"></a>
@@ -1457,7 +1457,7 @@
 <span class="sourceLineNo">1449</span>         */<a name="line.1449"></a>
 <span class="sourceLineNo">1450</span>        public static int hash256(int x, int y, int s) {<a name="line.1450"></a>
 <span class="sourceLineNo">1451</span>            s ^= x * 0x1827F5 ^ y * 0x123C21;<a name="line.1451"></a>
-<span class="sourceLineNo">1452</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1452"></a>
+<span class="sourceLineNo">1452</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1452"></a>
 <span class="sourceLineNo">1453</span>        }<a name="line.1453"></a>
 <span class="sourceLineNo">1454</span>        /**<a name="line.1454"></a>
 <span class="sourceLineNo">1455</span>         * A 8-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,<a name="line.1455"></a>
@@ -1474,7 +1474,7 @@
 <span class="sourceLineNo">1466</span>         */<a name="line.1466"></a>
 <span class="sourceLineNo">1467</span>        public static int hash256(int x, int y, int z, int s) {<a name="line.1467"></a>
 <span class="sourceLineNo">1468</span>            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;<a name="line.1468"></a>
-<span class="sourceLineNo">1469</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1469"></a>
+<span class="sourceLineNo">1469</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1469"></a>
 <span class="sourceLineNo">1470</span>        }<a name="line.1470"></a>
 <span class="sourceLineNo">1471</span><a name="line.1471"></a>
 <span class="sourceLineNo">1472</span>        /**<a name="line.1472"></a>
@@ -1493,7 +1493,7 @@
 <span class="sourceLineNo">1485</span>         */<a name="line.1485"></a>
 <span class="sourceLineNo">1486</span>        public static int hash256(int x, int y, int z, int w, int s) {<a name="line.1486"></a>
 <span class="sourceLineNo">1487</span>            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;<a name="line.1487"></a>
-<span class="sourceLineNo">1488</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1488"></a>
+<span class="sourceLineNo">1488</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1488"></a>
 <span class="sourceLineNo">1489</span>        }<a name="line.1489"></a>
 <span class="sourceLineNo">1490</span><a name="line.1490"></a>
 <span class="sourceLineNo">1491</span>        /**<a name="line.1491"></a>
@@ -1515,7 +1515,7 @@
 <span class="sourceLineNo">1507</span>         */<a name="line.1507"></a>
 <span class="sourceLineNo">1508</span>        public static int hash256(int x, int y, int z, int w, int u, int v, int s) {<a name="line.1508"></a>
 <span class="sourceLineNo">1509</span>            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;<a name="line.1509"></a>
-<span class="sourceLineNo">1510</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1510"></a>
+<span class="sourceLineNo">1510</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 24;<a name="line.1510"></a>
 <span class="sourceLineNo">1511</span>        }<a name="line.1511"></a>
 <span class="sourceLineNo">1512</span><a name="line.1512"></a>
 <span class="sourceLineNo">1513</span>        /**<a name="line.1513"></a>
@@ -1532,7 +1532,7 @@
 <span class="sourceLineNo">1524</span>         */<a name="line.1524"></a>
 <span class="sourceLineNo">1525</span>        public static int hash64(int x, int y, int s) {<a name="line.1525"></a>
 <span class="sourceLineNo">1526</span>            s ^= x * 0x1827F5 ^ y * 0x123C21;<a name="line.1526"></a>
-<span class="sourceLineNo">1527</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1527"></a>
+<span class="sourceLineNo">1527</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1527"></a>
 <span class="sourceLineNo">1528</span>        }<a name="line.1528"></a>
 <span class="sourceLineNo">1529</span>        /**<a name="line.1529"></a>
 <span class="sourceLineNo">1530</span>         * A 6-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,<a name="line.1530"></a>
@@ -1549,7 +1549,7 @@
 <span class="sourceLineNo">1541</span>         */<a name="line.1541"></a>
 <span class="sourceLineNo">1542</span>        public static int hash64(int x, int y, int z, int s) {<a name="line.1542"></a>
 <span class="sourceLineNo">1543</span>            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;<a name="line.1543"></a>
-<span class="sourceLineNo">1544</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1544"></a>
+<span class="sourceLineNo">1544</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1544"></a>
 <span class="sourceLineNo">1545</span>        }<a name="line.1545"></a>
 <span class="sourceLineNo">1546</span><a name="line.1546"></a>
 <span class="sourceLineNo">1547</span>        /**<a name="line.1547"></a>
@@ -1568,7 +1568,7 @@
 <span class="sourceLineNo">1560</span>         */<a name="line.1560"></a>
 <span class="sourceLineNo">1561</span>        public static int hash64(int x, int y, int z, int w, int s) {<a name="line.1561"></a>
 <span class="sourceLineNo">1562</span>            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;<a name="line.1562"></a>
-<span class="sourceLineNo">1563</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1563"></a>
+<span class="sourceLineNo">1563</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1563"></a>
 <span class="sourceLineNo">1564</span>        }<a name="line.1564"></a>
 <span class="sourceLineNo">1565</span><a name="line.1565"></a>
 <span class="sourceLineNo">1566</span>        /**<a name="line.1566"></a>
@@ -1590,7 +1590,7 @@
 <span class="sourceLineNo">1582</span>         */<a name="line.1582"></a>
 <span class="sourceLineNo">1583</span>        public static int hash64(int x, int y, int z, int w, int u, int v, int s) {<a name="line.1583"></a>
 <span class="sourceLineNo">1584</span>            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;<a name="line.1584"></a>
-<span class="sourceLineNo">1585</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1585"></a>
+<span class="sourceLineNo">1585</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 26;<a name="line.1585"></a>
 <span class="sourceLineNo">1586</span>        }<a name="line.1586"></a>
 <span class="sourceLineNo">1587</span>        /**<a name="line.1587"></a>
 <span class="sourceLineNo">1588</span>         * A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,<a name="line.1588"></a>
@@ -1606,7 +1606,7 @@
 <span class="sourceLineNo">1598</span>         */<a name="line.1598"></a>
 <span class="sourceLineNo">1599</span>        public static int hash32(int x, int y, int s) {<a name="line.1599"></a>
 <span class="sourceLineNo">1600</span>            s ^= x * 0x1827F5 ^ y * 0x123C21;<a name="line.1600"></a>
-<span class="sourceLineNo">1601</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1601"></a>
+<span class="sourceLineNo">1601</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1601"></a>
 <span class="sourceLineNo">1602</span>        }<a name="line.1602"></a>
 <span class="sourceLineNo">1603</span>        /**<a name="line.1603"></a>
 <span class="sourceLineNo">1604</span>         * A 5-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,<a name="line.1604"></a>
@@ -1623,7 +1623,7 @@
 <span class="sourceLineNo">1615</span>         */<a name="line.1615"></a>
 <span class="sourceLineNo">1616</span>        public static int hash32(int x, int y, int z, int s) {<a name="line.1616"></a>
 <span class="sourceLineNo">1617</span>            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;<a name="line.1617"></a>
-<span class="sourceLineNo">1618</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1618"></a>
+<span class="sourceLineNo">1618</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1618"></a>
 <span class="sourceLineNo">1619</span>        }<a name="line.1619"></a>
 <span class="sourceLineNo">1620</span><a name="line.1620"></a>
 <span class="sourceLineNo">1621</span>        /**<a name="line.1621"></a>
@@ -1642,7 +1642,7 @@
 <span class="sourceLineNo">1634</span>         */<a name="line.1634"></a>
 <span class="sourceLineNo">1635</span>        public static int hash32(int x, int y, int z, int w, int s) {<a name="line.1635"></a>
 <span class="sourceLineNo">1636</span>            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;<a name="line.1636"></a>
-<span class="sourceLineNo">1637</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1637"></a>
+<span class="sourceLineNo">1637</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1637"></a>
 <span class="sourceLineNo">1638</span>        }<a name="line.1638"></a>
 <span class="sourceLineNo">1639</span><a name="line.1639"></a>
 <span class="sourceLineNo">1640</span>        /**<a name="line.1640"></a>
@@ -1664,7 +1664,7 @@
 <span class="sourceLineNo">1656</span>         */<a name="line.1656"></a>
 <span class="sourceLineNo">1657</span>        public static int hash32(int x, int y, int z, int w, int u, int v, int s) {<a name="line.1657"></a>
 <span class="sourceLineNo">1658</span>            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;<a name="line.1658"></a>
-<span class="sourceLineNo">1659</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 6 | s &gt;&gt;&gt; 26) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1659"></a>
+<span class="sourceLineNo">1659</span>            return (s ^ (s &lt;&lt; 19 | s &gt;&gt;&gt; 13) ^ (s &lt;&lt; 5 | s &gt;&gt;&gt; 27) ^ 0xD1B54A35) * 0x125493 &gt;&gt;&gt; 27;<a name="line.1659"></a>
 <span class="sourceLineNo">1660</span>        }<a name="line.1660"></a>
 <span class="sourceLineNo">1661</span><a name="line.1661"></a>
 <span class="sourceLineNo">1662</span><a name="line.1662"></a>

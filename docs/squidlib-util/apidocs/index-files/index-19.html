@@ -332,6 +332,11 @@
 <dd>
 <div class="block">Makes a new Mist with all of the salt values altered based on the previous salt values.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomize-long-">randomize(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">High-quality static randomizing method that takes its state as a parameter; state is expected to change between
+ calls to this.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/JabRNG.html#randomize-long-">randomize(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/JabRNG.html" title="class in squidpony.squidmath">JabRNG</a></dt>
 <dd>
 <div class="block">Call with <code>nextLong(z += 0x3C6EF372FE94F82AL)</code>.</div>
@@ -354,6 +359,21 @@
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#randomizeAppearance-squidpony.MonsterGen.Chimera-java.lang.String-int-">randomizeAppearance(MonsterGen.Chimera, String, int)</a></span> - Method in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>
 <div class="block">Randomly add appearance descriptors to a copy of the Chimera creature.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomizeBounded-long-int-">randomizeBounded(long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">High-quality static randomizing method that takes its state as a parameter and limits output to an int between 0
+ (inclusive) and bound (exclusive); state is expected to change between calls to this.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomizeDouble-long-">randomizeDouble(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DiverRNG.html#randomizeFloat-long-">randomizeFloat(long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/DiverRNG.html" title="class in squidpony.squidmath">DiverRNG</a></dt>
+<dd>
+<div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+ return the same float.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#randomizePowers-squidpony.squidmath.RNG-squidpony.MonsterGen.Chimera-java.lang.String-int-">randomizePowers(RNG, MonsterGen.Chimera, String, int)</a></span> - Method in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>

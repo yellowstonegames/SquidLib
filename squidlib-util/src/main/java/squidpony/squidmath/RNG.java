@@ -444,7 +444,7 @@ public class RNG implements Serializable, IRNG {
     public <T> List<T> randomRotation(final List<T> l) {
         final int sz = l.size();
         if (sz == 0)
-            return Collections.<T>emptyList();
+            return new ArrayList<>(0);
 
 		/*
 		 * Collections.rotate should prefer the best-performing way to rotate l,
@@ -472,7 +472,7 @@ public class RNG implements Serializable, IRNG {
     public <T> Iterable<T> getRandomStartIterable(final List<T> list) {
         final int sz = list.size();
         if (sz == 0)
-            return Collections.<T>emptyList();
+            return new ArrayList<>(0);
 
 		/*
 		 * Here's a tricky bit: Defining 'start' here means that every Iterator

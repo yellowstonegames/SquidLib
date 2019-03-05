@@ -100,11 +100,11 @@
 <span class="sourceLineNo">092</span>         *         passable. If non-empty, this is guaranteed to be an<a name="line.92"></a>
 <span class="sourceLineNo">093</span>         *         {@link ArrayList}.<a name="line.93"></a>
 <span class="sourceLineNo">094</span>         */<a name="line.94"></a>
-<span class="sourceLineNo">095</span>        public List&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {<a name="line.95"></a>
+<span class="sourceLineNo">095</span>        public ArrayList&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, int drunks) {<a name="line.95"></a>
 <span class="sourceLineNo">096</span>                if (!DungeonUtility.inLevel(level, start) || !passable(level[start.x][start.y]))<a name="line.96"></a>
-<span class="sourceLineNo">097</span>                        return Collections.emptyList();<a name="line.97"></a>
+<span class="sourceLineNo">097</span>                        return new ArrayList&lt;&gt;(0);<a name="line.97"></a>
 <span class="sourceLineNo">098</span><a name="line.98"></a>
-<span class="sourceLineNo">099</span>                final List&lt;Coord&gt; result = new ArrayList&lt;&gt;(volume);<a name="line.99"></a>
+<span class="sourceLineNo">099</span>                final ArrayList&lt;Coord&gt; result = new ArrayList&lt;&gt;(volume);<a name="line.99"></a>
 <span class="sourceLineNo">100</span><a name="line.100"></a>
 <span class="sourceLineNo">101</span>                Direction[] dirs = new Direction[Direction.OUTWARDS.length];<a name="line.101"></a>
 <span class="sourceLineNo">102</span><a name="line.102"></a>
@@ -239,7 +239,7 @@
 <span class="sourceLineNo">231</span>         *         passable. If non-empty, this is guaranteed to be an<a name="line.231"></a>
 <span class="sourceLineNo">232</span>         *         {@link ArrayList}.<a name="line.232"></a>
 <span class="sourceLineNo">233</span>         */<a name="line.233"></a>
-<span class="sourceLineNo">234</span>        public static List&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, Set&lt;Character&gt; impassable, int drunks)<a name="line.234"></a>
+<span class="sourceLineNo">234</span>        public static ArrayList&lt;Coord&gt; spill(IRNG rng, char[][] level, Coord start, int volume, Set&lt;Character&gt; impassable, int drunks)<a name="line.234"></a>
 <span class="sourceLineNo">235</span>        {<a name="line.235"></a>
 <span class="sourceLineNo">236</span>                Set&lt;Character&gt; blocked;<a name="line.236"></a>
 <span class="sourceLineNo">237</span>                if(impassable == null)<a name="line.237"></a>

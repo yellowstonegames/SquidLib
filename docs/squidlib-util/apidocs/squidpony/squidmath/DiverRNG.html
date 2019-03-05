@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
+var methods = {"i0":10,"i1":9,"i2":9,"i3":9,"i4":9,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":9,"i21":9,"i22":9,"i23":9,"i24":10,"i25":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -215,15 +215,16 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#determine-long-">determine</a></span>(long&nbsp;state)</code>
-<div class="block">Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.</div>
+<div class="block">Fast static randomizing method that takes its state as a parameter; state is expected to change between calls to
+ this.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#determineBounded-long-int-">determineBounded</a></span>(long&nbsp;state,
                 int&nbsp;bound)</code>
-<div class="block">Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)
- and bound (exclusive); state is expected to change between calls to this.</div>
+<div class="block">Fast static randomizing method that takes its state as a parameter and limits output to an int between 0
+ (inclusive) and bound (exclusive); state is expected to change between calls to this.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
@@ -332,12 +333,41 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 </td>
 </tr>
 <tr id="i20" class="altColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#randomize-long-">randomize</a></span>(long&nbsp;state)</code>
+<div class="block">High-quality static randomizing method that takes its state as a parameter; state is expected to change between
+ calls to this.</div>
+</td>
+</tr>
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#randomizeBounded-long-int-">randomizeBounded</a></span>(long&nbsp;state,
+                int&nbsp;bound)</code>
+<div class="block">High-quality static randomizing method that takes its state as a parameter and limits output to an int between 0
+ (inclusive) and bound (exclusive); state is expected to change between calls to this.</div>
+</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#randomizeDouble-long-">randomizeDouble</a></span>(long&nbsp;state)</code>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float.</div>
+</td>
+</tr>
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>static float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#randomizeFloat-long-">randomizeFloat</a></span>(long&nbsp;state)</code>
+<div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+ return the same float.</div>
+</td>
+</tr>
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#setState-long-">setState</a></span>(long&nbsp;seed)</code>
 <div class="block">Sets the seed (also the current state) of this generator.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/DiverRNG.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
@@ -698,26 +728,49 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determine</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.295">determine</a>(long&nbsp;state)</pre>
-<div class="block">Static randomizing method that takes its state as a parameter; state is expected to change between calls to this.
- It is recommended that you use <code>DiverRNG.determine(++state)</code> or <code>DiverRNG.determine(--state)</code> to
- produce a sequence of different numbers, but you can also use <code>DiverRNG.determine(state += 12345L)</code> or
- any odd-number increment. All longs are accepted by this method, and all longs can be produced; unlike several
- other classes' determine() methods, passing 0 here does not return 0.
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.289">determine</a>(long&nbsp;state)</pre>
+<div class="block">Fast static randomizing method that takes its state as a parameter; state is expected to change between calls to
+ this. It is recommended that you use <code>DiverRNG.determine(++state)</code> or <code>DiverRNG.determine(--state)</code>
+ to produce a sequence of different numbers, and you may have slightly worse quality with increments or decrements
+ other than 1. All longs are accepted by this method, and all longs can be produced; unlike several other classes'
+ determine() methods, passing 0 here does not return 0.
  <br>
- This was the same as <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a>, but was changed to a slightly-faster method that also
- has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's version,
- some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
- increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
- modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
- first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
- incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
- in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
- PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
- multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
- method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
- and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
- have passed to 16TB and 32TB with no anomalies as well).</div>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - any long; subsequent calls should change by an odd number, such as with <code>++state</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>any long</dd>
+</dl>
+</li>
+</ul>
+<a name="randomize-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomize</h4>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.312">randomize</a>(long&nbsp;state)</pre>
+<div class="block">High-quality static randomizing method that takes its state as a parameter; state is expected to change between
+ calls to this. It is suggested that you use <code>DiverRNG.randomize(++state)</code> or
+ <code>DiverRNG.randomize(--state)</code> to produce a sequence of different numbers, but any increments are allowed
+ (even-number increments won't be able to produce all outputs, but their quality will be fine for the numbers they
+ can produce). All longs are accepted by this method, and all longs can be produced; unlike several other classes'
+ determine() methods, passing 0 here does not return 0.
+ <br>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any long; subsequent calls should change by an odd number, such as with <code>++state</code></dd>
@@ -732,29 +785,54 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determineBounded</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.327">determineBounded</a>(long&nbsp;state,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.336">determineBounded</a>(long&nbsp;state,
                                    int&nbsp;bound)</pre>
-<div class="block">Static randomizing method that takes its state as a parameter and limits output to an int between 0 (inclusive)
- and bound (exclusive); state is expected to change between calls to this. It is recommended that you use
- <code>DiverRNG.determineBounded(++state, bound)</code> or <code>DiverRNG.determineBounded(--state, bound)</code> to
- produce a sequence of different numbers, but you can also use
- <code>DiverRNG.determineBounded(state += 12345L, bound)</code> or any odd-number increment. All longs are accepted
+<div class="block">Fast static randomizing method that takes its state as a parameter and limits output to an int between 0
+ (inclusive) and bound (exclusive); state is expected to change between calls to this. It is recommended that you
+ use <code>DiverRNG.determineBounded(++state, bound)</code> or <code>DiverRNG.determineBounded(--state, bound)</code> to
+ produce a sequence of different numbers. All longs are accepted
  by this method, but not all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any
  odd-number values for bound, this isn't possible for most generators). The bound can be negative.
  <br>
- This was the same as <a href="../../squidpony/squidmath/LinnormRNG.html#determineBounded-long-int-"><code>LinnormRNG.determineBounded(long, int)</code></a>, but was changed to a slightly-faster method
- that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
- version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
- increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
- modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
- first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
- incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
- in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
- PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
- multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
- method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
- and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
- have passed to 16TB and 32TB with no anomalies as well).</div>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - any long; subsequent calls should change by an odd number, such as with <code>++state</code></dd>
+<dd><code>bound</code> - the outer exclusive bound, as an int</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an int between 0 (inclusive) and bound (exclusive)</dd>
+</dl>
+</li>
+</ul>
+<a name="randomizeBounded-long-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomizeBounded</h4>
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.361">randomizeBounded</a>(long&nbsp;state,
+                                   int&nbsp;bound)</pre>
+<div class="block">High-quality static randomizing method that takes its state as a parameter and limits output to an int between 0
+ (inclusive) and bound (exclusive); state is expected to change between calls to this. It is suggested that you
+ use <code>DiverRNG.randomizeBounded(++state)</code> or <code>DiverRNG.randomize(--state)</code> to produce a sequence of
+ different numbers, but any increments are allowed (even-number increments won't be able to produce all outputs,
+ but their quality will be fine for the numbers they can produce). All longs are accepted by this method, but not
+ all ints between 0 and bound are guaranteed to be produced with equal likelihood (for any odd-number values for
+ bound, this isn't possible for most generators). The bound can be negative.
+ <br>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - any long; subsequent calls should change by an odd number, such as with <code>++state</code></dd>
@@ -770,31 +848,54 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <ul class="blockList">
 <li class="blockList">
 <h4>determineFloat</h4>
-<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.358">determineFloat</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.384">determineFloat</a>(long&nbsp;state)</pre>
 <div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
- return the same float. This is expected to be called with a changing variable, e.g. <code>determine(++state)</code>,
- where the increment for state should be odd but otherwise doesn't really matter. This should tolerate just about
- any increment as long as it is odd. The period is 2 to the 64 if you increment or decrement by 1, but there are
- only 2 to the 30 possible floats between 0 and 1.
+ return the same float. This is expected to be called with a changing variable, e.g.
+ <code>determineFloat(++state)</code>, where the increment for state should generally be 1. The period is 2 to the 64
+ if you increment or decrement by 1, but there are only 2 to the 30 possible floats between 0 and 1.
  <br>
- This was the same as <a href="../../squidpony/squidmath/LinnormRNG.html#determineFloat-long-"><code>LinnormRNG.determineFloat(long)</code></a> , but was changed to a slightly-faster method
- that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
- version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
- increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
- modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
- first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
- incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
- in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
- PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
- multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
- method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
- and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
- have passed to 16TB and 32TB with no anomalies as well).</div>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - a variable that should be different every time you want a different random result;
-              using <code>determine(++state)</code> is recommended to go forwards or <code>determine(--state)</code> to
-              generate numbers in reverse order</dd>
+              using <code>determineFloat(++state)</code> is recommended to go forwards or
+              <code>determineFloat(--state)</code> to generate numbers in reverse order</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by <code>state</code></dd>
+</dl>
+</li>
+</ul>
+<a name="randomizeFloat-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>randomizeFloat</h4>
+<pre>public static&nbsp;float&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.407">randomizeFloat</a>(long&nbsp;state)</pre>
+<div class="block">Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
+ return the same float. This is expected to be called with a changing variable, e.g.
+ <code>randomizeFloat(++state)</code>, where the increment for state can be any value and should usually be odd
+ (even-number increments reduce the period). The period is 2 to the 64 if you increment or decrement by any odd
+ number, but there are only 2 to the 30 possible floats between 0 and 1.
+ <br>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - a variable that should be different every time you want a different random result;
+              using <code>randomizeFloat(++state)</code> is recommended to go forwards or
+              <code>randomizeFloat(--state)</code> to generate numbers in reverse order</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by <code>state</code></dd>
 </dl>
@@ -803,34 +904,57 @@ implements <a href="../../squidpony/squidmath/StatefulRandomness.html" title="in
 <a name="determineDouble-long-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>determineDouble</h4>
-<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.388">determineDouble</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.430">determineDouble</a>(long&nbsp;state)</pre>
 <div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
  will return the same float. This is expected to be called with a changing variable, e.g.
- <code>determine(++state)</code>, where the increment for state should be odd but otherwise doesn't matter. This should
- tolerate just about any increment, as long as it is odd. The period is 2 to the 64 if you increment or
- decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
+ <code>determineDouble(++state)</code>, where the increment for state should generally be 1. The period is 2 to the 64
+ if you increment or decrement by 1, but there are only 2 to the 62 possible doubles between 0 and 1.
  <br>
- This was the same as <a href="../../squidpony/squidmath/LinnormRNG.html#determineDouble-long-"><code>LinnormRNG.determineDouble(long)</code></a>, but was changed to a slightly-faster method
- that also has the advantage of being much harder to accidentally disrupt the input sequence. With LinnormRNG's
- version, some odd-number increments will affect the sequence badly, such as 0xCB2C135370DC7C29, and using such an
- increment there would ruin the quality of the determine() calls. That's because 0xCB2C135370DC7C29 is the
- modular multiplicative inverse of 0x632BE59BD9B4E019, which LinnormRNG.determine() multiplies the input by as its
- first step. Incrementing by 0xCB2C135370DC7C29 and then multiplying by 0x632BE59BD9B4E019 is the same as
- incrementing by 1 every time, which LinnormRNG can handle only up to about 16GB in PractRand tests before failing
- in a hurry. The algorithm used by DiverRNG is much more robust to unusual inputs (as long as they are odd), using
- PCG-Random's style of random xorshift both to the left (to adjust the input) and to the right (after a large
- multiplication, to bring more-random bits down to the less-significant end). Like LinnormRNG, this determine()
- method is reversible, though it isn't easy to do. The algorithm used here is unrelated to DiverRNG, LinnormRNG,
- and LinnormRNG.determine(), and passes PractRand to at least 2TB with no anomalies (extremely similar versions
- have passed to 16TB and 32TB with no anomalies as well).</div>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>state</code> - a variable that should be different every time you want a different random result;
-              using <code>determine(++state)</code> is recommended to go forwards or <code>determine(--state)</code> to
-              generate numbers in reverse order</dd>
+              using <code>determineDouble(++state)</code> is recommended to go forwards or
+              <code>determineDouble(--state)</code> to generate numbers in reverse order</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by <code>state</code></dd>
+</dl>
+</li>
+</ul>
+<a name="randomizeDouble-long-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>randomizeDouble</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/DiverRNG.html#line.453">randomizeDouble</a>(long&nbsp;state)</pre>
+<div class="block">Returns a random double that is deterministic based on state; if state is the same on two calls to this, this
+ will return the same float. This is expected to be called with a changing variable, e.g.
+ <code>randomizeDouble(++state)</code>, where the increment for state can be any number but should usually be odd
+ (even-number increments reduce the period). The period is 2 to the 64 if you increment or decrement by 1, but 
+ there are only 2 to the 62 possible doubles between 0 and 1.
+ <br>
+ You have a choice between determine() and randomize() in this class. <code>determine()</code> is the same as
+ <a href="../../squidpony/squidmath/LinnormRNG.html#determine-long-"><code>LinnormRNG.determine(long)</code></a> and will behave well when the inputs are sequential, while <code>randomize()</code>
+ is a completely different algorithm based on Pelle Evensen's rrxmrrxmsx_0 and evaluated with
+ <a href="http://mostlymangling.blogspot.com/2019/01/better-stronger-mixer-and-test-procedure.html">the same
+ testing requirements Evensen used for rrxmrrxmsx_0</a>; it will have excellent quality regardless of patterns in
+ input but will be about 30% slower than <code>determine()</code>. Each method will produce all long outputs if given
+ all possible longs as input.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>state</code> - a variable that should be different every time you want a different random result;
+              using <code>randomizeDouble(++state)</code> is recommended to go forwards or
+              <code>randomizeDouble(--state)</code> to generate numbers in reverse order</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by <code>state</code></dd>
 </dl>
