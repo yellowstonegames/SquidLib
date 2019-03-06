@@ -2627,9 +2627,6 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
         return singleSimplex(seed, x * frequency, y * frequency);
     }
 
-    private final static float F2 = 0.5f;
-    private final static float G2 = 0.25f;
-
     public float singleSimplex(int seed, float x, float y) {
         float t = (x + y) * F2f;
         int i = fastFloor(x + t);
