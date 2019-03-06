@@ -159,7 +159,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected final CrossHash.IHasher hasher;
 
     public void defaultReturnValue(final V rv) {
         defRetValue = rv;
@@ -191,7 +191,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         value = (V[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        hasher = CrossHash.defaultHasher;
+        hasher = CrossHash.mildHasher;
     }
 
     /**
@@ -217,7 +217,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param f the load factor.
      */
     public OrderedMap(final Map<? extends K, ? extends V> m, final float f) {
-        this(m.size(), f, (m instanceof OrderedMap) ? ((OrderedMap) m).hasher : CrossHash.defaultHasher);
+        this(m.size(), f, (m instanceof OrderedMap) ? ((OrderedMap) m).hasher : CrossHash.mildHasher);
         putAll(m);
     }
 
@@ -227,7 +227,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
      * @param m a {@link Map} to be copied into the new OrderedMap.
      */
     public OrderedMap(final Map<? extends K, ? extends V> m) {
-        this(m, (m instanceof OrderedMap) ? ((OrderedMap) m).f : DEFAULT_LOAD_FACTOR, (m instanceof OrderedMap) ? ((OrderedMap) m).hasher : CrossHash.defaultHasher);
+        this(m, (m instanceof OrderedMap) ? ((OrderedMap) m).f : DEFAULT_LOAD_FACTOR, (m instanceof OrderedMap) ? ((OrderedMap) m).hasher : CrossHash.mildHasher);
     }
 
     /**
@@ -309,7 +309,7 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         value = (V[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
+        this.hasher = (hasher == null) ? CrossHash.mildHasher : hasher;
     }
     /**
      * Creates a new OrderedMap with 0.75f as load factor.
@@ -2055,13 +2055,12 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     public OrderedMap<K, V> clone() {
         OrderedMap<K, V> c;
         try {
-            c = (OrderedMap<K, V>) super.clone();
+            c = new OrderedMap<>(hasher);
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.value = (V[]) new Object[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
             c.order = (IntVLA) order.clone();
-            c.hasher = hasher;
             return c;
         } catch (Exception cantHappen) {
             throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
@@ -2234,7 +2233,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
         final V[] value = this.value;
         final MapIterator i = new MapIterator();
         s.defaultWriteObject();
-        s.writeObject(hasher);
         for (int j = size, e; j-- != 0;) {
             e = i.nextEntry();
             s.writeObject(key[e]);
@@ -2246,7 +2244,6 @@ public class OrderedMap<K, V> implements SortedMap<K, V>, java.io.Serializable, 
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;

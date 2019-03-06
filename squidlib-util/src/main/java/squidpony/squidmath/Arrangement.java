@@ -132,7 +132,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected final CrossHash.IHasher hasher;
 
     /**
      * Creates a new Arrangement.
@@ -156,7 +156,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         value = new int[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        hasher = CrossHash.defaultHasher;
+        hasher = CrossHash.mildHasher;
     }
 
     /**
@@ -182,7 +182,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param f the load factor.
      */
     public Arrangement(final Map<? extends K, ? extends Integer> m, final float f) {
-        this(m.size(), f, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.defaultHasher);
+        this(m.size(), f, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.mildHasher);
         putAll(m);
     }
 
@@ -192,7 +192,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
      * @param m a {@link Map} to be copied into the new Arrangement.
      */
     public Arrangement(final Map<? extends K, ? extends Integer> m) {
-        this(m, (m instanceof Arrangement) ? ((Arrangement) m).f : DEFAULT_LOAD_FACTOR, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.defaultHasher);
+        this(m, (m instanceof Arrangement) ? ((Arrangement) m).f : DEFAULT_LOAD_FACTOR, (m instanceof Arrangement) ? ((Arrangement) m).hasher : CrossHash.mildHasher);
     }
 
     public Arrangement(final Arrangement<? extends K> a) {
@@ -275,7 +275,7 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         value = new int[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
+        this.hasher = (hasher == null) ? CrossHash.mildHasher : hasher;
     }
     /**
      * Creates a new Arrangement with 0.5f as load factor.
@@ -2018,13 +2018,12 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     public Arrangement<K> clone() {
         Arrangement<K> c;
         try {
-            c = (Arrangement<K>) super.clone();
+            c = new Arrangement<>(hasher);
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.value = new int[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
             c.order = (IntVLA) order.clone();
-            c.hasher = hasher;
             return c;
         } catch (Exception cantHappen) {
             throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
@@ -2206,7 +2205,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
         final int[] value = this.value;
         final MapIterator i = new MapIterator();
         s.defaultWriteObject();
-        s.writeObject(hasher);
         for (int j = size, e; j-- != 0;) {
             e = i.nextEntry();
             s.writeObject(key[e]);
@@ -2218,7 +2216,6 @@ public class Arrangement<K> implements SortedMap<K, Integer>, Iterable<K>, Seria
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;

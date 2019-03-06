@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static final class <a href="../../src-html/squidpony/squidmath/Noise.html#line.174">Noise.PointHash</a>
+<pre>public static final class <a href="../../src-html/squidpony/squidmath/Noise.html#line.197">Noise.PointHash</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
  a long for state. This is organized how it is so it can be statically imported without also importing the rest
@@ -316,7 +316,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PointHash</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.174">PointHash</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.197">PointHash</a>()</pre>
 </li>
 </ul>
 </li>
@@ -333,7 +333,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>avalanche</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.183">avalanche</a>(long&nbsp;state)</pre>
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.206">avalanche</a>(long&nbsp;state)</pre>
 <div class="block">If it's important for some usage that one bit of change in any parameters cause roughly 50% of all bits in
  the result to change, then you can call this on the output of any hashAll() overload to improve the bit
  avalanche qualities.</div>
@@ -351,7 +351,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.195">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.218">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
                            long&nbsp;state)</pre>
 <dl>
@@ -370,7 +370,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.239">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.262">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
                            long&nbsp;z,
                            long&nbsp;state)</pre>
@@ -391,7 +391,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.275">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.298">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
                            long&nbsp;z,
                            long&nbsp;w,
@@ -414,7 +414,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashAll</h4>
-<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.318">hashAll</a>(long&nbsp;x,
+<pre>public static&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.341">hashAll</a>(long&nbsp;x,
                            long&nbsp;y,
                            long&nbsp;z,
                            long&nbsp;w,
@@ -441,7 +441,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.366">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.389">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
                           long&nbsp;state)</pre>
 <dl>
@@ -460,7 +460,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.394">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.417">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
                           long&nbsp;z,
                           long&nbsp;state)</pre>
@@ -481,7 +481,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.430">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.453">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
                           long&nbsp;z,
                           long&nbsp;w,
@@ -504,7 +504,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash256</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.471">hash256</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.494">hash256</a>(long&nbsp;x,
                           long&nbsp;y,
                           long&nbsp;z,
                           long&nbsp;w,
@@ -531,7 +531,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.520">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.543">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;state)</pre>
 <dl>
@@ -550,7 +550,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.550">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.573">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;state)</pre>
@@ -571,7 +571,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.586">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.609">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,
@@ -594,7 +594,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash32</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.629">hash32</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.652">hash32</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,
@@ -621,7 +621,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.679">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.702">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;state)</pre>
 <dl>
@@ -640,7 +640,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.710">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.733">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;state)</pre>
@@ -661,7 +661,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.746">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.769">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,
@@ -684,7 +684,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.789">hash64</a>(long&nbsp;x,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.PointHash.html#line.812">hash64</a>(long&nbsp;x,
                          long&nbsp;y,
                          long&nbsp;z,
                          long&nbsp;w,

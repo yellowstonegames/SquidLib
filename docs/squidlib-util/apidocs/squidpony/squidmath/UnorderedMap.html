@@ -848,7 +848,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hasher</h4>
-<pre>protected&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.133">hasher</a></pre>
+<pre>protected final&nbsp;<a href="../../squidpony/squidmath/CrossHash.IHasher.html" title="interface in squidpony.squidmath">CrossHash.IHasher</a> <a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.133">hasher</a></pre>
 </li>
 </ul>
 </li>
@@ -1494,7 +1494,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1152">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1151">hashCode</a>()</pre>
 <div class="block">Returns a hash code for this map.
 
  This method overrides the generic method provided by the superclass.
@@ -1517,7 +1517,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1170">hash64</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1169">hash64</a>()</pre>
 </li>
 </ul>
 <a name="maxFill-int-float-">
@@ -1526,7 +1526,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <ul class="blockList">
 <li class="blockList">
 <h4>maxFill</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1181">maxFill</a>(int&nbsp;n,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1180">maxFill</a>(int&nbsp;n,
                           float&nbsp;f)</pre>
 <div class="block">Returns the maximum number of entries that can be filled before rehashing.</div>
 <dl>
@@ -1544,7 +1544,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html
 <ul class="blockList">
 <li class="blockList">
 <h4>arraySize</h4>
-<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1195">arraySize</a>(int&nbsp;expected,
+<pre>public static&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1194">arraySize</a>(int&nbsp;expected,
                             float&nbsp;f)</pre>
 <div class="block">Returns the least power of two smaller than or equal to 2<sup>30</sup> and larger than or equal to <code>Math.ceil( expected / f )</code>.
 re</div>
@@ -1565,7 +1565,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1270">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1269">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1578,7 +1578,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1291">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1290">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.util">equals</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>,<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&gt;</code></dd>
@@ -1593,7 +1593,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMany</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1347">getMany</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&gt;&nbsp;keys)</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1344">getMany</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&gt;&nbsp;keys)</pre>
 </li>
 </ul>
 <a name="putIfAbsent-java.lang.Object-java.lang.Object-">
@@ -1604,7 +1604,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>putIfAbsent</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1371">putIfAbsent</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;key,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1368">putIfAbsent</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;key,
                      <a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;value)</pre>
 <div class="block">If the specified key is not already associated with a value (or is mapped
  to <code>null</code>) associates it with the given value and returns
@@ -1629,7 +1629,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1386">remove</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1383">remove</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;key,
                       <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value)</pre>
 <div class="block">Removes the entry for the specified key only if it is currently
  mapped to the specified value.</div>
@@ -1652,7 +1652,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>replace</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1404">replace</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;key,
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1401">replace</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;key,
                        <a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;oldValue,
                        <a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;newValue)</pre>
 <div class="block">Replaces the entry for the specified key only if currently
@@ -1678,7 +1678,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>replace</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1424">replace</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;key,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1421">replace</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;key,
                  <a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;value)</pre>
 <div class="block">Replaces the entry for the specified key only if it is
  currently mapped to some value. Preserves the existing key's
@@ -1705,7 +1705,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>putPairs</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>,<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1441">putPairs</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;k0,
+<pre>public&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>,<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1438">putPairs</a>(<a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">K</a>&nbsp;k0,
                                   <a href="../../squidpony/squidmath/UnorderedMap.html" title="type parameter in UnorderedMap">V</a>&nbsp;v0,
                                   <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Given alternating key and value arguments in pairs, puts each key-value pair into this OrderedMap as if by
@@ -1730,7 +1730,7 @@ re</div>
 <ul class="blockList">
 <li class="blockList">
 <h4>makeMap</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;K,V&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1478">makeMap</a>(K&nbsp;k0,
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;K,V&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1475">makeMap</a>(K&nbsp;k0,
                                               V&nbsp;v0,
                                               <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>...&nbsp;rest)</pre>
 <div class="block">Makes an OrderedMap (OM) with the given load factor (which should be between 0.1 and 0.9), key and value types
@@ -1762,7 +1762,7 @@ re</div>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>makeMap</h4>
-<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;K,V&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1507">makeMap</a>()</pre>
+<pre>public static&nbsp;&lt;K,V&gt;&nbsp;<a href="../../squidpony/squidmath/UnorderedMap.html" title="class in squidpony.squidmath">UnorderedMap</a>&lt;K,V&gt;&nbsp;<a href="../../src-html/squidpony/squidmath/UnorderedMap.html#line.1504">makeMap</a>()</pre>
 <div class="block">Makes an empty OrderedMap (OM); needs key and value types to be specified in order to work. For an empty
  OrderedMap with String keys and Coord values, you could use <code>Maker.&lt;String, Coord&gt;makeOM()</code>. Using
  the new keyword is probably just as easy in this case; this method is provided for completeness relative to

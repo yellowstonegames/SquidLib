@@ -130,7 +130,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected final CrossHash.IHasher hasher;
 
     public void defaultReturnValue(final V rv) {
         defRetValue = rv;
@@ -160,7 +160,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
         value = (V[]) new Object[n + 1];
-        hasher = CrossHash.defaultHasher;
+        hasher = CrossHash.mildHasher;
     }
 
     /**
@@ -186,7 +186,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @param f the load factor.
      */
     public UnorderedMap(final Map<? extends K, ? extends V> m, final float f) {
-        this(m.size(), f, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.defaultHasher);
+        this(m.size(), f, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.mildHasher);
         putAll(m);
     }
 
@@ -196,7 +196,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @param m a {@link Map} to be copied into the new OrderedMap.
      */
     public UnorderedMap(final Map<? extends K, ? extends V> m) {
-        this(m, (m instanceof UnorderedMap) ? ((UnorderedMap) m).f : DEFAULT_LOAD_FACTOR, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.defaultHasher);
+        this(m, (m instanceof UnorderedMap) ? ((UnorderedMap) m).f : DEFAULT_LOAD_FACTOR, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.mildHasher);
     }
 
     /**
@@ -276,7 +276,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
         value = (V[]) new Object[n + 1];
-        this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
+        this.hasher = (hasher == null) ? CrossHash.mildHasher : hasher;
     }
     /**
      * Creates a new OrderedMap with 0.75f as load factor.
@@ -1127,12 +1127,11 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
     public UnorderedMap<K, V> clone() {
         UnorderedMap<K, V> c;
         try {
-            c = (UnorderedMap<K, V>) super.clone();
+            c = new UnorderedMap<>(hasher);
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.value = (V[]) new Object[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
-            c.hasher = hasher;
             return c;
         } catch (Exception cantHappen) {
             throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
@@ -1306,7 +1305,6 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
         final V[] value = this.value;
         final MapIterator i = new MapIterator();
         s.defaultWriteObject();
-        s.writeObject(hasher);
         for (int j = size, e; j-- != 0;) {
             e = i.nextEntry();
             s.writeObject(key[e]);
@@ -1318,7 +1316,6 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;

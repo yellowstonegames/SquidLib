@@ -139,7 +139,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected final CrossHash.IHasher hasher;
 
     /**
      * Creates a new hash map.
@@ -162,7 +162,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         key = (K[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        hasher = CrossHash.defaultHasher;
+        hasher = CrossHash.mildHasher;
     }
 
     /**
@@ -192,7 +192,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      */
     public OrderedSet(final Collection<? extends K> c,
                       final float f) {
-        this(c.size(), f, (c instanceof OrderedSet) ? ((OrderedSet) c).hasher : CrossHash.defaultHasher);
+        this(c.size(), f, (c instanceof OrderedSet) ? ((OrderedSet) c).hasher : CrossHash.mildHasher);
         addAll(c);
     }
 
@@ -203,7 +203,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
      * @param c a {@link Collection} to be copied into the new hash set.
      */
     public OrderedSet(final Collection<? extends K> c) {
-        this(c, (c instanceof OrderedSet) ? ((OrderedSet) c).f : DEFAULT_LOAD_FACTOR, (c instanceof OrderedSet) ? ((OrderedSet) c).hasher : CrossHash.defaultHasher);
+        this(c, (c instanceof OrderedSet) ? ((OrderedSet) c).f : DEFAULT_LOAD_FACTOR, (c instanceof OrderedSet) ? ((OrderedSet) c).hasher : CrossHash.mildHasher);
     }
 
     /**
@@ -305,7 +305,7 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
         key = (K[]) new Object[n + 1];
         //link = new long[n + 1];
         order = new IntVLA(expected);
-        this.hasher = hasher == null ? CrossHash.defaultHasher : hasher;
+        this.hasher = hasher == null ? CrossHash.mildHasher : hasher;
     }
 
     /**
@@ -1391,11 +1391,10 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     public Object clone() {
         OrderedSet<K> c;
         try {
-            c = (OrderedSet<K>) super.clone();
+            c = new OrderedSet<>(hasher);
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.order = (IntVLA) order.clone();
-            c.hasher = hasher;
             return c;
         } catch (Exception cantHappen) {
             throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
@@ -1558,7 +1557,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
             throws java.io.IOException {
         final ListIterator<K> i = iterator();
         s.defaultWriteObject();
-        s.writeObject(hasher);
         for (int j = size; j-- != 0; )
             s.writeObject(i.next());
     }
@@ -1568,7 +1566,6 @@ public class OrderedSet<K> implements SortedSet<K>, java.io.Serializable, Clonea
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;

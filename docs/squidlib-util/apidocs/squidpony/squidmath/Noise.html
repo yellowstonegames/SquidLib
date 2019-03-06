@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":9,"i18":9,"i19":9,"i20":9,"i21":9,"i22":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -399,30 +399,44 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#extreme-double-">extreme</a></span>(double&nbsp;a)</code>
+<div class="block">Given a double <code>a</code> from 0.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer to
+ the end points of that range (if less than 0.5, it gets closer to 0.0, otherwise it gets closer to 1.0).</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>static double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#extremeSigned-double-">extremeSigned</a></span>(double&nbsp;a)</code>
+<div class="block">Given a double <code>a</code> from -1.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer
+ to the end points of that range (if less than 0, it gets closer to -1.0, otherwise it gets closer to 1.0).</div>
+</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#fastCeil-double-">fastCeil</a></span>(double&nbsp;t)</code>
 <div class="block">Like <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#ceil-double-" title="class or interface in java.lang"><code>Math.ceil(double)</code></a>, but returns an int.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#fastCeil-float-">fastCeil</a></span>(float&nbsp;t)</code>
 <div class="block">Like <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#ceil-double-" title="class or interface in java.lang"><code>Math.ceil(double)</code></a>, but takes a float and returns an int.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#fastFloor-double-">fastFloor</a></span>(double&nbsp;t)</code>
 <div class="block">Like <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a> , but returns an int.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#fastFloor-float-">fastFloor</a></span>(float&nbsp;t)</code>
 <div class="block">Like <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but takes a float and returns an int.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#lerp-double-double-double-">lerp</a></span>(double&nbsp;start,
     double&nbsp;end,
@@ -430,7 +444,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="block">Linear-interpolates between start and end (valid doubles), with a between 0 (yields start) and 1 (yields end).</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#lerp-float-float-float-">lerp</a></span>(float&nbsp;start,
     float&nbsp;end,
@@ -438,31 +452,31 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="block">Linear-interpolates between start and end (valid floats), with a between 0 (yields start) and 1 (yields end).</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#longFloor-double-">longFloor</a></span>(double&nbsp;t)</code>
 <div class="block">Like <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but returns a long.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#longFloor-float-">longFloor</a></span>(float&nbsp;t)</code>
 <div class="block">Like <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#floor-double-" title="class or interface in java.lang"><code>Math.floor(double)</code></a>, but takes a float and returns a long.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#querp-double-double-double-">querp</a></span>(double&nbsp;start,
      double&nbsp;end,
      double&nbsp;a)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static float</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#querp-float-float-float-">querp</a></span>(float&nbsp;start,
      float&nbsp;end,
      float&nbsp;a)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless2D-double:A:A-int-int-">seamless2D</a></span>(double[][]&nbsp;fill,
           int&nbsp;seed,
@@ -471,7 +485,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  boundaries.</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless2D-double:A:A-long-int-squidpony.squidmath.Noise.Noise4D-">seamless2D</a></span>(double[][]&nbsp;fill,
           long&nbsp;seed,
@@ -481,7 +495,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  boundaries.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless2D-int-int-int-int-">seamless2D</a></span>(int&nbsp;width,
           int&nbsp;height,
@@ -490,7 +504,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <div class="block">Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>static double[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-int-int-">seamless3D</a></span>(double[][][]&nbsp;fill,
           int&nbsp;seed,
@@ -499,7 +513,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  boundaries.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>static double[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-long-int-squidpony.squidmath.Noise.Noise6D-">seamless3D</a></span>(double[][][]&nbsp;fill,
           long&nbsp;seed,
@@ -509,7 +523,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  boundaries.</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>static float[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless3D-float:A:A:A-long-int-">seamless3D</a></span>(float[][][]&nbsp;fill,
           long&nbsp;seed,
@@ -518,7 +532,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  boundaries.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>static double[][][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/Noise.html#seamless3D-int-int-int-int-int-">seamless3D</a></span>(int&nbsp;depth,
           int&nbsp;width,
@@ -565,7 +579,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>total</h4>
-<pre>public static&nbsp;double <a href="../../src-html/squidpony/squidmath/Noise.html#line.3366">total</a></pre>
+<pre>public static&nbsp;double <a href="../../src-html/squidpony/squidmath/Noise.html#line.3389">total</a></pre>
 </li>
 </ul>
 </li>
@@ -840,13 +854,47 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 </dl>
 </li>
 </ul>
+<a name="extreme-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>extreme</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.172">extreme</a>(double&nbsp;a)</pre>
+<div class="block">Given a double <code>a</code> from 0.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer to
+ the end points of that range (if less than 0.5, it gets closer to 0.0, otherwise it gets closer to 1.0).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>a</code> - a double between 0.0 and 1.0 inclusive</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a double between 0.0 and 1.0 inclusive that is more likely to be near the extremes</dd>
+</dl>
+</li>
+</ul>
+<a name="extremeSigned-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>extremeSigned</h4>
+<pre>public static&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.183">extremeSigned</a>(double&nbsp;a)</pre>
+<div class="block">Given a double <code>a</code> from -1.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer
+ to the end points of that range (if less than 0, it gets closer to -1.0, otherwise it gets closer to 1.0).</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>a</code> - a double between -1.0 and 1.0 inclusive</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a double between -1.0 and 1.0 inclusive that is more likely to be near the extremes</dd>
+</dl>
+</li>
+</ul>
 <a name="seamless2D-int-int-int-int-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3349">seamless2D</a>(int&nbsp;width,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3372">seamless2D</a>(int&nbsp;width,
                                     int&nbsp;height,
                                     int&nbsp;seed,
                                     int&nbsp;octaves)</pre>
@@ -870,7 +918,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3362">seamless2D</a>(double[][]&nbsp;fill,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3385">seamless2D</a>(double[][]&nbsp;fill,
                                     int&nbsp;seed,
                                     int&nbsp;octaves)</pre>
 <div class="block">Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
@@ -892,7 +940,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless2D</h4>
-<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3379">seamless2D</a>(double[][]&nbsp;fill,
+<pre>public static&nbsp;double[][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3402">seamless2D</a>(double[][]&nbsp;fill,
                                     long&nbsp;seed,
                                     int&nbsp;octaves,
                                     <a href="../../squidpony/squidmath/Noise.Noise4D.html" title="interface in squidpony.squidmath">Noise.Noise4D</a>&nbsp;generator)</pre>
@@ -918,7 +966,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless3D</h4>
-<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3429">seamless3D</a>(int&nbsp;depth,
+<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3452">seamless3D</a>(int&nbsp;depth,
                                       int&nbsp;width,
                                       int&nbsp;height,
                                       int&nbsp;seed,
@@ -947,7 +995,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless3D</h4>
-<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3442">seamless3D</a>(double[][][]&nbsp;fill,
+<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3465">seamless3D</a>(double[][][]&nbsp;fill,
                                       int&nbsp;seed,
                                       int&nbsp;octaves)</pre>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
@@ -969,7 +1017,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>seamless3D</h4>
-<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3455">seamless3D</a>(double[][][]&nbsp;fill,
+<pre>public static&nbsp;double[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3478">seamless3D</a>(double[][][]&nbsp;fill,
                                       long&nbsp;seed,
                                       int&nbsp;octaves,
                                       <a href="../../squidpony/squidmath/Noise.Noise6D.html" title="interface in squidpony.squidmath">Noise.Noise6D</a>&nbsp;generator)</pre>
@@ -992,7 +1040,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>seamless3D</h4>
-<pre>public static&nbsp;float[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3507">seamless3D</a>(float[][][]&nbsp;fill,
+<pre>public static&nbsp;float[][][]&nbsp;<a href="../../src-html/squidpony/squidmath/Noise.html#line.3530">seamless3D</a>(float[][][]&nbsp;fill,
                                      long&nbsp;seed,
                                      int&nbsp;octaves)</pre>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
