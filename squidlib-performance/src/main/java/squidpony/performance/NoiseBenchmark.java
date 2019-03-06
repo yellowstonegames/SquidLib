@@ -37,6 +37,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.openjdk.jmh.runner.options.TimeValue;
+import squidpony.performance.alternate.EasySimplexNoise;
 import squidpony.squidmath.*;
 
 import java.util.concurrent.TimeUnit;
@@ -299,20 +300,20 @@ public class NoiseBenchmark {
 //        return zigzagBit(f[x++ & 1023]);
 //    }
 
-    @Benchmark
-    public double measurePerlin2D() {
-        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125);
-    }
-
-    @Benchmark
-    public double measurePerlin3D() {
-        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
-    }
-
-    @Benchmark
-    public double measurePerlin4D() {
-        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
-    }
+//    @Benchmark
+//    public double measurePerlin2D() {
+//        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125);
+//    }
+//
+//    @Benchmark
+//    public double measurePerlin3D() {
+//        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
+//    }
+//
+//    @Benchmark
+//    public double measurePerlin4D() {
+//        return PerlinNoise.noise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
+//    }
 
 //    @Benchmark
 //    public double measureWhirling2D() {
@@ -431,6 +432,22 @@ public class NoiseBenchmark {
     @Benchmark
     public double measureOpenSimplex4D() {
         return OpenSimplexNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
+    }
+
+
+    @Benchmark
+    public double measureEasySimplex2D() {
+        return EasySimplexNoise.instance.getNoise(++x * 0.03125, --y * 0.03125);
+    }
+
+    @Benchmark
+    public double measureEasySimplex3D() {
+        return EasySimplexNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125);
+    }
+
+    @Benchmark
+    public double measureEasySimplex4D() {
+        return EasySimplexNoise.instance.getNoise(++x * 0.03125, --y * 0.03125, z++ * 0.03125, w-- * 0.03125);
     }
 
 
