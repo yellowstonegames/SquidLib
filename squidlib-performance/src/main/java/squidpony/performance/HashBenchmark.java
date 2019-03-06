@@ -494,41 +494,41 @@ public class HashBenchmark {
     {
         return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
-    @Benchmark
-    public long doSquish64(BenchmarkState state)
-    {
-        return CrossHash.Squish.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doSquish32(BenchmarkState state)
-    {
-        return CrossHash.Squish.hash(state.words[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doCharSquish64(BenchmarkState state)
-    {
-        return CrossHash.Squish.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doCharSquish32(BenchmarkState state)
-    {
-        return CrossHash.Squish.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public long doLongSquish64(BenchmarkState state)
-    {
-        return CrossHash.Squish.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doLongSquish32(BenchmarkState state)
-    {
-        return CrossHash.Squish.hash(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
+//    @Benchmark
+//    public long doSquish64(BenchmarkState state)
+//    {
+//        return CrossHash.Squish.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+//    }
+//
+//    @Benchmark
+//    public int doSquish32(BenchmarkState state)
+//    {
+//        return CrossHash.Squish.hash(state.words[state.idx = state.idx + 1 & 4095]);
+//    }
+//
+//    @Benchmark
+//    public long doCharSquish64(BenchmarkState state)
+//    {
+//        return CrossHash.Squish.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+//    }
+//
+//    @Benchmark
+//    public int doCharSquish32(BenchmarkState state)
+//    {
+//        return CrossHash.Squish.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+//    }
+//
+//    @Benchmark
+//    public long doLongSquish64(BenchmarkState state)
+//    {
+//        return CrossHash.Squish.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+//    }
+//
+//    @Benchmark
+//    public int doLongSquish32(BenchmarkState state)
+//    {
+//        return CrossHash.Squish.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+//    }
 
     @Benchmark
     public int doJDK32(BenchmarkState state)
