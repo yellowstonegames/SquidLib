@@ -2017,7 +2017,11 @@ public class DijkstraMap implements Serializable {
      * The maximum length of the returned list is given by moveLength; if moving the full length of
      * the list would place the mover in a position shared by one of the positions in onlyPassable
      * (which is typically filled with friendly units that can be passed through in multi-tile-
-     * movement scenarios), it will recalculate a move so that it does not pass into that cell.
+     * movement scenarios), it will recalculate a move so that it does not pass into that cell. In most roguelikes where
+     * movement happens one cell at a time, moveLength should be 1; if it is higher then the path will prefer getting
+     * further away from the target (using up most or all of moveLength) while minPreferredRange and maxPreferredRange
+     * can be satisfied. This does ensure a pathfinder with a ranged weapon stays far from melee range, but it may not
+     * be the expected behavior because it will try to find the best path rather than the shortest it can attack from.
      * The keys in impassable should be the positions of enemies and obstacles that cannot be moved
      * through, and will be ignored if there is a goal overlapping one.
      * <br>
@@ -2027,7 +2031,7 @@ public class DijkstraMap implements Serializable {
      * contents of buffer will not affect the path field of this DijkstraMap.
      *
      * @param buffer            an existing ArrayList of Coord that will have the result appended to it (in-place); if null, this will make a new ArrayList
-     * @param moveLength        the length of the path to calculate
+     * @param moveLength        the length of the path to calculate; almost always, the pathfinder will try to use this length in full to obtain the best range
      * @param minPreferredRange the (inclusive) lower bound of the distance this unit will try to keep from a target
      * @param maxPreferredRange the (inclusive) upper bound of the distance this unit will try to keep from a target
      * @param los               a squidgrid.LOS object if the preferredRange should try to stay in line of sight, or null if LoS
@@ -2128,7 +2132,20 @@ public class DijkstraMap implements Serializable {
                 }
             }
         }
+        if(gradientMap[start.x][start.y] <= 0.0)
+        {
+            cutShort = false;
+            frustration = 0;
+            goals.clear();
+            if(buffer == null)
+                return new ArrayList<>(path);
+            else
+            {
+                buffer.addAll(path);
+                return buffer;
+            }
 
+        }
         Coord currentPos = start;
         double paidLength = 0.0;
         while (true) {
