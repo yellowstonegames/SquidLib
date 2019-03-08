@@ -7,8 +7,10 @@ import java.io.Serializable;
 /**
  * A RandomnessSource based on PCG-Random that has a single int of state. Its period is extremely short at 2 to the 32,
  * but its quality over that period is high even though its speed is not especially noteworthy. This generator is not
- * suitable for GWT; for that you should use {@link Zag32RNG} if you need a StatefulRandomness or {@link Oriole32RNG} if
- * you need higher period and speed but don't need StatefulRandomness' state adjustment methods.
+ * suitable for GWT; for that you should use {@link Starfish32RNG} or its wrapper {@link GWTRNG} if you need a
+ * StatefulRandomness, {@link Lathe32RNG} if you want optimal speed and don't mind distribution flaws when producing
+ * longs, or {@link Oriole32RNG} or {@link XoshiroStarPhi32RNG} if you need a higher period but don't need
+ * StatefulRandomness' state adjustment methods.
  * <br>
  * Quality should be excellent in this version (at least for a generator with so little state) since it's based directly
  * on PCG-Random's choices of numerical constants. Visual tests, at least, appear indistinguishable from other PRNGs.

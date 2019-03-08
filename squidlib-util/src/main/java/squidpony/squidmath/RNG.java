@@ -97,8 +97,8 @@ import static squidpony.squidmath.NumberTools.intBitsToFloat;
  * slightly slower. While Lathe32RNG can produce all ints over the course of its period,
  * it will produce some pairs of ints, or longs, more often than others and will never
  * produce some longs. Starfish32RNG will produce all longs but one. {@link ThrustAlt32RNG},
- * {@link Zag32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators that
- * were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,
+ * {@link XoshiroStarPhi32RNG}, and {@link Oriole32RNG} are also GWT-safe, but other generators
+ * that were thought to be GWT-friendly are not. These GWT-unsafe generators have other uses,
  * but should not be used on GWT: {@link PintRNG} and {@link FlapRNG}. All other generators
  * use longs, and so will be slower than the recommended Starfish32RNG or Lathe32RNG on GWT,
  * but much faster on 64-bit JREs.
