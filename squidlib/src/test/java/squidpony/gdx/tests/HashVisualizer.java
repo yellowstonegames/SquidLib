@@ -5070,7 +5070,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGet(iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("Zag32RNG using higher bits at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Starfish32RNG using higher bits at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
                     case 49:
                         starfish.setState(System.nanoTime());
@@ -5080,7 +5080,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
-                        Gdx.graphics.setTitle("Zag32RNG using next(8) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Starfish32RNG using next(8) at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         break;
 
                 }

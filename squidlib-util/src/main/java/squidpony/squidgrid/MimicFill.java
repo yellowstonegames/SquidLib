@@ -3,7 +3,6 @@ package squidpony.squidgrid;
 import squidpony.ArrayTools;
 import squidpony.squidmath.Coord;
 import squidpony.squidmath.IRNG;
-import squidpony.squidmath.LightRNG;
 
 /**
  * A class that imitates patterns in an existing 2D boolean array and uses it to generate a new boolean array with a
@@ -233,9 +232,10 @@ public class MimicFill {
      * for certain kinds of output. The iterations parameter should usually be between 3 and 5, with higher values
      * taking longer but fitting more closely; values over 5 are barely different from 5 here. This also takes an RNG,
      * and because it queries it very frequently, a fast RNG is ideal; the default RandomnessSource used by RNG
-     * ({@link LightRNG}) is fine, and in most cases {@link squidpony.squidmath.ThrustAltRNG} will be reasonably good
-     * for quality while probably being slightly faster. On GWT, {@link squidpony.squidmath.Zag32RNG} is a good choice
-     * due to how few operations on {@code long} values it needs to do, and GWT has a hard time with longs.
+     * ({@link squidpony.squidmath.DiverRNG}) is fine, and in most cases {@link squidpony.squidmath.MiniMover64RNG} will
+     * be reasonably good for quality while probably being slightly faster. On GWT, {@link squidpony.squidmath.GWTRNG}
+     * is a good choice due to how few operations on {@code long} values it needs to do, and GWT has a hard time with
+     * longs; the algorithm used by GWTRNG can also produce all but one possible long value.
      * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
      * @param size the side length of the square boolean array to generate
      * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
@@ -342,9 +342,10 @@ public class MimicFill {
      * for certain kinds of output. The iterations parameter should usually be between 3 and 5, with higher values
      * taking longer but fitting more closely; values over 5 are barely different from 5 here. This also takes an RNG,
      * and because it queries it very frequently, a fast RNG is ideal; the default RandomnessSource used by RNG
-     * ({@link LightRNG}) is fine, and in most cases {@link squidpony.squidmath.ThrustAltRNG} will be reasonably good
-     * for quality while probably being slightly faster. On GWT, {@link squidpony.squidmath.Zag32RNG} is a good choice
-     * due to how few operations on {@code long} values it needs to do, and GWT has a hard time with longs.
+     * ({@link squidpony.squidmath.DiverRNG}) is fine, and in most cases {@link squidpony.squidmath.MiniMover64RNG} will
+     * be reasonably good for quality while probably being slightly faster. On GWT, {@link squidpony.squidmath.GWTRNG}
+     * is a good choice due to how few operations on {@code long} values it needs to do, and GWT has a hard time with
+     * longs; the algorithm used by GWTRNG can also produce all but one possible long value.
      * @param sample a 2D boolean array to mimic visually; you can use mapToSample() if you have a 2D char array
      * @param size the side length of the square boolean array to generate
      * @param temperature typically 0.2 works well for this, but other numbers between 0 and 1 may work
