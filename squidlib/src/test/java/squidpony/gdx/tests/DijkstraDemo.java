@@ -386,7 +386,16 @@ public class DijkstraDemo extends ApplicationAdapter {
                 // moves, we only need to do a fraction of the work to find the best path with that info.
 
                 toCursor.clear();
-                playerToCursor.findAttackPath(toCursor, 10, 3, 7, null, null, null, player, cursor);
+                playerToCursor.findAttackPath(toCursor, 1, 3, 7, null, null, null, player, cursor);
+
+                for (int x = 0; x < bigWidth; x++) {
+                    for (int y = 0; y < bigHeight; y++) {
+                        bgColors[x][y] = playerToCursor.gradientMap[x][y] >= DijkstraMap.FLOOR ? SColor.CW_GRAY_BLACK.toFloatBits()
+                                : SColor.floatGetHSV((float) (playerToCursor.gradientMap[x][y]) * 0.0816f, 0.4f, 1f, 1f);
+                    }
+                }
+
+
                 //findPathPreScanned includes the current cell (goal) by default, which is helpful when
                 // you're finding a path to a monster or loot, and want to bump into it, but here can be
                 // confusing because you would "move into yourself" as your first move without this.
@@ -485,8 +494,8 @@ public class DijkstraDemo extends ApplicationAdapter {
         // (gridWidth & 1) is 1 if gridWidth is odd or 0 if it is even; it's good to know and faster than using % , plus
         // in some other cases it has useful traits (x % 2 can be 0, 1, or -1 depending on whether x is negative, while
         // x & 1 will always be 0 or 1).
-        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight,
-                (gridWidth & 1) * (int)(currentZoomX * -0.5f), (gridHeight & 1) * (int) (currentZoomY * -0.5f));
+        input.getMouse().reinitialize(currentZoomX, currentZoomY, gridWidth, gridHeight, 0, 0);
+                //(gridWidth & 1) * (int)(currentZoomX * -0.5f), (gridHeight & 1) * (int) (currentZoomY * -0.5f));
         stage.getViewport().update(width, height, false);
         stage.getViewport().setScreenBounds(0, 0, width, height);
 	}
