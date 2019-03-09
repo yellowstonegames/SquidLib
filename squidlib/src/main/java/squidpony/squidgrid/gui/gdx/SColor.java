@@ -12827,7 +12827,23 @@ public class SColor extends Color implements Serializable {
         final int bits = NumberTools.floatToIntBits(encoded);
         return ((bits & 0x000000ff) + ((bits & 0x0000ff00) >>> 7) + ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
     }
-
+    /**
+     * The "luma" of the given packed float, which is like its lightness, in YCwCm format; ranges from 0.0f to
+     * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCwCm(float, float, float, float)}.
+     * YCwCm is useful for modifications to colors because you can get a grayscale version of a color by setting Cw and
+     * Cm to 0, you can desaturate by multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by
+     * multiplying Cw and Cm by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth. Unlike YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some
+     * effect; multiplying Cw by a number greater than 1 will make warm colors warmer and cool colors cooler, for
+     * instance. This might not be as perceptually accurate at determining lightness as {@link #lumaOfFloat(float)}.
+     * @param encoded a packed float
+     * @return the luma as a float from 0.0f to 1.0f
+     */
+    public static float lumaYCwCm(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return (bits & 0xFF) * 0x3p-11f + (bits >>> 8 & 0xFF) * 0x1p-9f + (bits >>> 16 & 0xFF) * 0x1p-11f;
+    }
     /**
      * The "luminance" of the given libGDX Color, which is like its lightness, in YCoCg format; ranges from 0.0f to
      * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCoCg(float, float, float, float)}.
@@ -12847,6 +12863,23 @@ public class SColor extends Color implements Serializable {
                 (color.g * 0.5f) +
                 (color.b * 0.25f);
     }
+    /**
+     * The "luma" of the given libGDX Color, which is like its lightness, in YCwCm format; ranges from 0.0f to
+     * 1.0f . You can go back to an RGB color as a packed float with {@link #floatGetYCwCm(float, float, float, float)}.
+     * YCwCm is useful for modifications to colors because you can get a grayscale version of a color by setting Cw and
+     * Cm to 0, you can desaturate by multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by
+     * multiplying Cw and Cm by a number greater than 1, you can lighten or darken by increasing or decreasing luma, and
+     * so on and so forth. Unlike YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some
+     * effect; multiplying Cw by a number greater than 1 will make warm colors warmer and cool colors cooler, for
+     * instance. This might not be as perceptually accurate at determining lightness as {@link #lumaOfFloat(float)}.
+     * @param color a libGDX Color or SColor
+     * @return the luma as a float from 0.0f to 1.0f
+     */
+    public static float lumaYCwCm(final Color color)
+    {
+        return color.r * 0.375f + color.g * 0.5f + color.b * 0.125f;
+    }
+
     /**
      * The "chrominance orange" of the given libGDX Color, which when combined with chrominance green describes the
      * shade and saturation of a color, in YCoCg format; ranges from -0.5f to 0.5f . You can go back to an RGB color as
@@ -12920,6 +12953,75 @@ public class SColor extends Color implements Serializable {
         final int bits = NumberTools.floatToIntBits(encoded);
         return (((bits & 0x0000ff00) >>> 7) - (bits & 0x000000ff) - ((bits & 0x00ff0000) >>> 16)) * 0x1.010102p-10f;
     }
+    /**
+     * The "chroma warm" of the given packed float, which when combined with chroma mild describes the shade and
+     * saturation of a color, in YCwCm format; ranges from -1f to 1f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCwCm(float, float, float, float)}. YCwCm is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Cw and Cm to 0, you can desaturate by
+     * multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by multiplying Cw and Cm by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luma, and so on and so forth. Unlike
+     * YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some effect; multiplying Cw by
+     * a number greater than 1 will make warm colors warmer and cool colors cooler, for instance.
+     * @param encoded a packed float
+     * @return the chroma warm as a float from -1f to 1f
+     */
+    public static float chromaWarm(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return ((bits & 0xff) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f;
+    }
+
+    /**
+     * The "chroma warm" of the given libGDX Color, which when combined with chroma mild describes the shade and
+     * saturation of a color, in YCwCm format; ranges from -1f to 1f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCwCm(float, float, float, float)}. YCwCm is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Cw and Cm to 0, you can desaturate by
+     * multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by multiplying Cw and Cm by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luma, and so on and so forth. Unlike
+     * YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some effect; multiplying Cw by
+     * a number greater than 1 will make warm colors warmer and cool colors cooler, for instance.
+     * @param color a libGDX Color or SColor
+     * @return the chroma warm as a float from -1f to 1f
+     */
+    public static float chromaWarm(final Color color)
+    {
+        return color.r - color.b;
+    }
+
+    /**
+     * The "chroma mild" of the given packed float, which when combined with chroma warm describes the shade and
+     * saturation of a color, in YCwCm format; ranges from -1f to 1f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCwCm(float, float, float, float)}. YCwCm is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Cw and Cm to 0, you can desaturate by
+     * multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by multiplying Cw and Cm by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luma, and so on and so forth. Unlike
+     * YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some effect; multiplying Cw by
+     * a number greater than 1 will make warm colors warmer and cool colors cooler, for instance.
+     * @param encoded a packed float
+     * @return the chroma mild as a float from -1f to 1f
+     */
+    public static float chromaMild(final float encoded)
+    {
+        final int bits = NumberTools.floatToIntBits(encoded);
+        return ((bits >>> 8 & 0xff) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f;
+    }
+    /**
+     * The "chroma mild" of the given libGDX Color, which when combined with chroma warm describes the shade and
+     * saturation of a color, in YCwCm format; ranges from -1f to 1f . You can go back to an RGB color as
+     * a packed float with {@link #floatGetYCwCm(float, float, float, float)}. YCwCm is useful for modifications to
+     * colors because you can get a grayscale version of a color by setting Cw and Cm to 0, you can desaturate by
+     * multiplying Cw and Cm by a number between 0 and 1, you can oversaturate by multiplying Cw and Cm by a number
+     * greater than 1, you can lighten or darken by increasing or decreasing luma, and so on and so forth. Unlike
+     * YCoCg and YCbCr, there are aesthetic reasons to adjust just one of Cw or Cm for some effect; multiplying Cw by
+     * a number greater than 1 will make warm colors warmer and cool colors cooler, for instance.
+     * @param color a libGDX Color or SColor
+     * @return the chroma warm as a float from -1f to 1f
+     */
+    public static float chromaMild(final Color color)
+    {
+        return color.g - color.b;
+    }
+
 
     /**
      * A color distance metric between two colors as packed floats, without performing a square root on the result.
@@ -13422,7 +13524,7 @@ public class SColor extends Color implements Serializable {
     public static Color ycbcr(float luma, float chromaB, float chromaR, float opacity){
         return new Color(luma + chromaR * 1.402f, luma - chromaB * 0.344136f - chromaR * 0.714136f, luma + chromaB * 1.772f, opacity);
     }
-    
+
     /**
      * Gets a color as a packed float given floats representing luminance (Y, akin to lightness), orange chrominance
      * (Co, one of two kinds of chroma used here), green chrominance (Cg, the other kind of chroma), and opacity.
@@ -13433,7 +13535,7 @@ public class SColor extends Color implements Serializable {
      * more yellow depending on Co, but mostly when Y isn't low). When Co and Cg are both near 0.0f, the color is closer
      * to gray. Because chrominance values are centered on 0.0f, you can multiply them by a value like 0.5f to halve the
      * colorfulness of the color.
-     * 
+     * <br>
      * This method clamps the resulting color's RGB values, so any values can technically be given to this as y, co, and
      * cg, but they will only be reversible from the returned float color to the original Y, Cb, and Cr values if the
      * original values were in the range that {@link #chrominanceOrange(float)}, {@link #chrominanceGreen(float)}, and
@@ -13466,6 +13568,125 @@ B = t - Co;
                 MathUtils.clamp(t - co, 0f, 1f),
                 opacity);
     }
+    /**
+     * Gets a color as a packed float given floats representing luminance (Y, akin to lightness), orange chrominance
+     * (Co, one of two kinds of chroma used here), green chrominance (Cg, the other kind of chroma), and opacity.
+     * Luminance should be between 0 and 1, inclusive, with 0 used for very dark colors including but not limited to
+     * black, and 1 used for very light colors including but not limited to white. The two chrominance values range from
+     * -0.5 to 0.5, and only make sense when used together. When Co is high and Cg is low, the color is more reddish;
+     * when both are low it is more bluish, and when Cg is high the color tends to be greenish (it can be more cyan or
+     * more yellow depending on Co, but mostly when Y isn't low). When Co and Cg are both near 0.0f, the color is closer
+     * to gray. Because chrominance values are centered on 0.0f, you can multiply them by a value like 0.5f to halve the
+     * colorfulness of the color.
+     * <br>
+     * This method clamps the resulting color's RGB values, so any values can technically be given to this as y, co, and
+     * cg, but they will only be reversible from the returned float color to the original Y, Cb, and Cr values if the
+     * original values were in the range that {@link #chrominanceOrange(float)}, {@link #chrominanceGreen(float)}, and
+     * {@link #luminanceYCoCg(float)} return.
+     *
+     * @param y          0f to 1f, luminance or Y component of YCoCg
+     * @param co         -0.5f to 0.5f, "chrominance orange" or Co component of YCoCg, with 0.5f more orange
+     * @param cg         -0.5f to 0.5f, "chrominance green" or Cg component of YCoCg, with 0.5f more green
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a libGDX Color with the given properties
+     */
+    public static Color ycocg(float y, float co, float cg, float opacity) {
+//        if (luma <= 0.0039f) {
+//            return floatGet(0f, 0f, 0f, opacity);
+//        } else if (luma >= 0.9961f) {
+//            return floatGet(1f, 1f, 1f, opacity);
+//        }
+//        if (co >= -0.0039f && co <= 0.0039f && cg >= -0.0039f && cg <= 0.0039f) {
+//            return floatGet(y, y, y, opacity);
+//        }
+        /*
+t = Y - Cg;
+R = t + Co;
+G = Y + Cg;
+B = t - Co;
+         */
+        final float t = y - cg;
+        return new Color(MathUtils.clamp(t + co, 0f, 1f),
+                MathUtils.clamp(y + cg, 0f, 1f),
+                MathUtils.clamp(t - co, 0f, 1f),
+                opacity);
+    }
+    /**
+     * Gets a color as a packed float given floats representing luma (Y, akin to lightness), chroma warm (Cw, one of two
+     * kinds of chroma used here), chroma mild (Cm, the other kind of chroma), and opacity. Luma should be between 0 and
+     * 1, inclusive, with 0 used for very dark colors including but not limited to black, and 1 used for very light
+     * colors including but not limited to white. The two chroma values range from -1.0 to 1.0, unlike YCbCr and YCoCg,
+     * and also unlike those color spaces, there's some aesthetic value in changing just one chroma value. When warm is
+     * high and mild is low, the color is more reddish; when both are low it is more bluish, and when mild is high and
+     * warm is low, the color tends to be greenish, and when both are high it tends to be brown or yellow. When warm and
+     * mild are both near 0.0f, the color is closer to gray. Because chroma values are centered on 0.0f, you can multiply
+     * them by a value like 0.5f to halve the colorfulness of the color.
+     * <br>
+     * This method clamps the resulting color's RGB values, so any values can technically be given to this as luma,
+     * warm, and mild, but they will only be reversible from the returned float color to the original Y, Cw, and Cm
+     * values if the original values were in the range that {@link #chromaWarm(float)}, {@link #chromaMild(float)}, and
+     * {@link #lumaYCwCm(float)} return.
+     *
+     * @param luma       0f to 1f, luma or Y component of YCwCm
+     * @param warm       -1f to 1f, "chroma warm" or Cw component of YCwCm, with 1f more red or yellow
+     * @param mild       -1f to 1f, "chroma mild" or Cm component of YCwCm, with 1f more green or yellow
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a float encoding a color with the given properties
+     */
+    public static float floatGetYCwCm(float luma, float warm, float mild, float opacity) {
+        // the color solid should be:
+
+        //                   > warm >
+        // blue    violet     red
+        // cyan     gray      orange
+        // green    neon      yellow
+        //  \/ mild \/
+
+        // so, warm is effectively defined as the presence of red.
+        // and mild is, effectively, presence of green.
+        // negative warm or negative mild will each contribute to blue.
+        // luma is defined as (r * 3 + g * 4 + b) / 8
+        // or r * 0.375f + g * 0.5f + b * 0.125f
+        // warm is the warm-cool axis, with positive warm between red and yellow and negative warm between blue and green
+        // warm is defined as (r - b), with range from -1 to 1
+        // mild is the green-purple axis, with positive mild between green and yellow, negative mild between blue and red
+        // mild is defined as (g - b), with range from -1 to 1
+
+        //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
+        //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
+        //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
+        return floatGet(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+    }
+    /**
+     * Gets a color as a packed float given floats representing luma (Y, akin to lightness), chroma warm (Cw, one of two
+     * kinds of chroma used here), chroma mild (Cm, the other kind of chroma), and opacity. Luma should be between 0 and
+     * 1, inclusive, with 0 used for very dark colors including but not limited to black, and 1 used for very light
+     * colors including but not limited to white. The two chroma values range from -1.0 to 1.0, unlike YCbCr and YCoCg,
+     * and also unlike those color spaces, there's some aesthetic value in changing just one chroma value. When warm is
+     * high and mild is low, the color is more reddish; when both are low it is more bluish, and when mild is high and
+     * warm is low, the color tends to be greenish, and when both are high it tends to be brown or yellow. When warm and
+     * mild are both near 0.0f, the color is closer to gray. Because chroma values are centered on 0.0f, you can multiply
+     * them by a value like 0.5f to halve the colorfulness of the color.
+     * <br>
+     * This method clamps the resulting color's RGB values, so any values can technically be given to this as luma,
+     * warm, and mild, but they will only be reversible from the returned float color to the original Y, Cw, and Cm
+     * values if the original values were in the range that {@link #chromaWarm(float)}, {@link #chromaMild(float)}, and
+     * {@link #lumaYCwCm(float)} return.
+     *
+     * @param luma       0f to 1f, luma or Y component of YCwCm
+     * @param warm       -1f to 1f, "chroma warm" or Cw component of YCwCm, with 1f more red or yellow
+     * @param mild       -1f to 1f, "chroma mild" or Cm component of YCwCm, with 1f more green or yellow
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a libGDX Color with the given properties
+     */
+    public static Color ycwcm(float luma, float warm, float mild, float opacity) {
+        return new Color(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+    }
+
 
     /**
      * A lookup table from 32 possible levels in the red channel to 6 possible values in the red channel; only change
