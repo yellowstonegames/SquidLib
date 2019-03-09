@@ -29,14 +29,14 @@ public class ColorTest extends ApplicationAdapter {
      * In number of cells
      */
 //    private static int gridWidth = 160;
-    private static int gridWidth = 128;
+    private static int gridWidth = 256;
 //    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
      * In number of cells
      */
 //    private static int gridHeight = 32;
-    private static int gridHeight = 128;
+    private static int gridHeight = 256;
 //    private static int gridHeight = 27;
 
     /**
@@ -232,13 +232,11 @@ public class ColorTest extends ApplicationAdapter {
     public static float floatGetYCwCm(float luma, float warm, float mild, float opacity) {
         // the color solid should be:
         
-        //                             > warm >
+        //                   > warm >
         // blue    violet     red
-        //         
         // cyan     gray      orange
-        //           
         // green    neon      yellow
-        // \/ mild \/
+        //  \/ mild \/
 
         // so, warm is effectively defined as the presence of red.
         // and mild is, effectively, presence of green.
@@ -257,35 +255,11 @@ public class ColorTest extends ApplicationAdapter {
         g = MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
         b = MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f);
         return floatGet(r, g, b, opacity);
-//        final float t = (luma * 4 + warm) * 0x8p-5f;
-//        float r = t + mild * 0x1Bp-5f;//t - cool;//luma * 4 - cool * 0x0.8p0f + full * 0x0.3p0f;
-//        if(r < 0f || r > 1f) 
-//            r = MathExtras.clamp(r,0,1);
-//        //return -0x1.fefefep125F;//SColor.CW_GRAY
-//        float g = t - mild * 0x25p-5f;//0.5f - full;
-//        if(g < 0f || g > 1f) 
-//            g = MathExtras.clamp(g,0,1);
-//        //return -0x1.fefefep125F;//SColor.CW_GRAY
-//        float b = luma * 4 - r * 0x5p-2f - g * 0x9p-2f;//t + cool;
-//        if(b < 0f || b > 1f) 
-//            b = MathExtras.clamp(b,0,1);
-//        //return -0x1.fefefep125F;//SColor.CW_GRAY
-
-//        final float t = (luma * 4 + warm) * 0x8p-5f;
-//        float r = t + mild * 0x1Bp-5f;//t - cool;//luma * 4 - cool * 0x0.8p0f + full * 0x0.3p0f;
-//        if(r < 0f || r > 1f) r = MathExtras.clamp(r,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
-//        float g = t - mild * 0x25p-5f;//0.5f - full;
-//        if(g < 0f || g > 1f) g = MathExtras.clamp(g,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
-//        float b = luma * 4 - r * 0x5p-2f - g * 0x9p-2f;//t + cool;
-//        if(b < 0f || b > 1f) b = MathExtras.clamp(b,0,1);//return -0x1.fefefep125F;//SColor.CW_GRAY
-//
-//        return floatGet(r, g, b,
-//                opacity);
     }
 
     private void ycc(float y, float cb, float cr)
     {
-        final int b = (int) ((cb + 1f) * 64), r = (int) ((1f - cr) * 64);
+        final int b = (int) ((cb + 1f) * (gridWidth>>1)), r = (int) ((1f - cr) * (gridHeight>>1));
 //        SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(y, cb, cr, 1f));
 //        display.putString(b, r, StringKit.hex(b) + "x" + StringKit.hex(r), y < 0.65f ? SColor.WHITE : SColor.BLACK,
 //                tmp);
@@ -981,13 +955,14 @@ public class ColorTest extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xfff) * 0x1p-7f) * 0.5f + 0.5f;
         Gdx.graphics.setTitle("Current luma: " + luma);
+//        Gdx.graphics.setTitle("YCwCm demo at 66% luma");
 //        for (float cb = -0.625f; cb <= 0.625f; cb += 0x1p-6f) {
 //            for (float cr = -0.626f; cr <= 0.625f; cr += 0x1p-6f) {
 //                ycc(luma, cb, cr);
 //            }
 //        }
-        for (float cb = -1f; cb <= 1f; cb += 0x1p-6f) {
-            for (float cr = -1f; cr <= 1f; cr += 0x1p-6f) {
+        for (float cb = -1f; cb <= 1f; cb += 0x1p-7f) {
+            for (float cr = -1f; cr <= 1f; cr += 0x1p-7f) {
                 ycc(luma, cb, cr);
             }
         }
