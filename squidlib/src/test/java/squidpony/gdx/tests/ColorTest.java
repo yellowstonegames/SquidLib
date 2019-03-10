@@ -15,11 +15,11 @@ import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.gui.gdx.TextCellFactory;
-import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 
 import static squidpony.StringKit.safeSubstring;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
+import static squidpony.squidgrid.gui.gdx.SColor.floatGetYCwCm;
 
 /**
  * Created by Tommy Ettinger on 12/27/2016.
@@ -229,41 +229,41 @@ public class ColorTest extends ApplicationAdapter {
         return floatGet(r, g, b,
                 opacity);
     }
-    public static float floatGetYCwCm(float luma, float warm, float mild, float opacity) {
-        // the color solid should be:
-        
-        //                   > warm >
-        // blue    violet     red
-        // cyan     gray      orange
-        // green    neon      yellow
-        //  \/ mild \/
-
-        // so, warm is effectively defined as the presence of red.
-        // and mild is, effectively, presence of green.
-        // negative warm or negative mild will each contribute to blue.
-        // luma is defined as (r * 3 + g * 4 + b) / 8
-        // or r * 0.375f + g * 0.5f + b * 0.125f
-        // warm is the warm-cool axis, with positive warm between red and yellow and negative warm between blue and green
-        // warm is defined as (r - b), with range from -1 to 1
-        // mild is the green-purple axis, with positive mild between green and yellow, negative mild between blue and red
-        // mild is defined as (g - b), with range from -1 to 1
-        
-        //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
-        //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
-        //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
-        final float r = MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
-        g = MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
-        b = MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f);
-        return floatGet(r, g, b, opacity);
-    }
+//    public static float floatGetYCwCm(float luma, float warm, float mild, float opacity) {
+//        // the color solid should be:
+//        
+//        //                   > warm >
+//        // blue    violet     red
+//        // cyan     gray      orange
+//        // green    neon      yellow
+//        //  \/ mild \/
+//
+//        // so, warm is effectively defined as the presence of red.
+//        // and mild is, effectively, presence of green.
+//        // negative warm or negative mild will each contribute to blue.
+//        // luma is defined as (r * 3 + g * 4 + b) / 8
+//        // or r * 0.375f + g * 0.5f + b * 0.125f
+//        // warm is the warm-cool axis, with positive warm between red and yellow and negative warm between blue and green
+//        // warm is defined as (r - b), with range from -1 to 1
+//        // mild is the green-purple axis, with positive mild between green and yellow, negative mild between blue and red
+//        // mild is defined as (g - b), with range from -1 to 1
+//        
+//        //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
+//        //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
+//        //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
+//        final float r = MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+//        g = MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+//        b = MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f);
+//        return floatGet(r, g, b, opacity);
+//    }
 
     private void ycc(float y, float cb, float cr)
     {
-        final int b = (int) ((cb + 1f) * (gridWidth>>1)), r = (int) ((1f - cr) * (gridHeight>>1));
+        final int b = (int) ((cb + 1f) * (gridWidth * 0.5f - 0.5f)), r = (int) ((1f - cr) * (gridHeight * 0.5f - 0.5f));
 //        SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(y, cb, cr, 1f));
 //        display.putString(b, r, StringKit.hex(b) + "x" + StringKit.hex(r), y < 0.65f ? SColor.WHITE : SColor.BLACK,
 //                tmp);
-        display.put(b, r, '\0', floatGetYCwCm(y, cb, cr, 1f));
+        display.getBackgroundLayer().colors[b][r] = floatGetYCwCm(y, cb, cr, 1f);
 //        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
 //        if((vv = ((vv + 1) & 7)) == 0)
 //        {
@@ -953,7 +953,7 @@ public class ColorTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xfff) * 0x1p-7f) * 0.5f + 0.5f;
+        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xFFFL) * 0x1.4p-7f) * 0.5f + 0.5f;
         Gdx.graphics.setTitle("Current luma: " + luma);
 //        Gdx.graphics.setTitle("YCwCm demo at 66% luma");
 //        for (float cb = -0.625f; cb <= 0.625f; cb += 0x1p-6f) {
@@ -968,7 +968,9 @@ public class ColorTest extends ApplicationAdapter {
         }
         stage.getViewport().update(totalWidth, totalHeight, true);
         stage.getViewport().apply(true);
-        stage.draw();
+        stage.getBatch().begin();
+        display.getTextFactory().draw(stage.getBatch(), display.getBackgroundLayer().colors, 0, 0);
+        stage.getBatch().end();
     }
 
     @Override
