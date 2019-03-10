@@ -268,9 +268,9 @@ public final class FloatFilters {
     }
 
     /**
-     * Like {@link HSVFilter} or {@link YCbCrFilter}, but edits its input colors in YCoCg color space, and multiplies
-     * rather than adds. Most of the time you should prefer {@link YCbCrFilter} as long as it isn't a performance
-     * bottleneck; if it is, this method is faster but less accurate. Y is luminance, ranging from 0 (dark) to 1
+     * Like {@link YCbCrFilter}, but edits its input colors in YCoCg color space, or like {@link HSVFilter} except it
+     * doesn't add, it multiplies. Most of the time you should prefer {@link YCbCrFilter} as long as it isn't a
+     * performance bottleneck; this method is faster but less accurate. Y is luminance, ranging from 0 (dark) to 1
      * (light), and affects how bright the color is, but isn't very accurate perceptually. Co is Chrominance(orange) and
      * Cg is Chrominance(green) (both range from -0.5 to 0.5), two inter-related channels that determine the hue and
      * vividness of a specific color. When Co and Cg are both 0, the color is grayscale. When Co is 0.5 and Cg is -0.5,
@@ -312,6 +312,67 @@ public final class FloatFilters {
             return floatGet(MathUtils.clamp(t + co, 0f, 1f),
                     MathUtils.clamp(y + cg, 0f, 1f),
                     MathUtils.clamp(t - co, 0f, 1f),
+                    opacity);
+        }
+    }
+
+    /**
+     * Like {@link YCbCrFilter} or  {@link YCoCgFilter}, but edits its input colors in YCwCm color space, which is very
+     * similar to YCoCg but has chroma/chrominance components that are useful aesthetically on their own. You may often
+     * prefer {@link YCbCrFilter} because it calculates lightness (luma) more precisely, but the Cb (blue-ness) and Cr
+     * (red-ness) components are less useful for some purposes individually. Y is luminance, ranging from 0 (dark) to 1
+     * (light), and affects how bright the color is, but isn't very accurate perceptually. Cw is Chroma(warm) and
+     * Cm is Chroma(mild) (both range from -1.0 to 1.0), two inter-related channels that determine the hue and vividness
+     * of a specific color. When Cw and Cm are both 0, the color is grayscale. When Cw is 1 and Cm is -1, the color
+     * is red or like red. When Cw is -1 and Cm is 1, the color is green or like green. When Cw and Cm are both -1, the
+     * color is blue or like blue, and when both are 1, the color is roughly yellow or brown (depending on Y).
+     * <br>
+     * Valid values for Cw and Cm are from -1.0 to 1.0, but there aren't really invalid values here because this filter
+     * will clamp results with higher or lower channel values than a color can have. Each of yMul, cwMul, and cmMul can
+     * have any float value, but yMul should be positive (unless you want this to only produce solid black). Similarly,
+     * cwMul and cmMul will not produce meaningful results if they are very large (either positive or negative); it's
+     * recommended to use values between 0.0 and 1.0 for both if you want to desaturate colors or values somewhat
+     * greater than 1.0 to oversaturate them. Unlike {@link YCbCrFilter} and {@link YCoCgFilter}, you can benefit from
+     * setting cwMul independently of the other chroma component, which can be used to emphasize warm vs. cool colors if
+     * cwMul is greater than 1.0, or to de-emphasize that comparison if it is between 0.0 and 1.0. A similar option is
+     * possible for cmMul, but it isn't as clear of an artistic convention; a high cmMul will separate green-and-yellow
+     * colors further from red-purple-and-blue colors. Also unlike the other YCC filters, this allows an additive change
+     * to Y, Cw, and Cm applied after the multiplicative change but before converting to RGB and clamping. This can be
+     * used to make all colors warmer or cooler (such as for volcano or frozen scenes) by adding or subtracting from Cw,
+     * for instance. It can also lighten or darken all colors by changing luma.
+     */
+    public static class YCwCmFilter extends FloatFilter {
+        public float yMul, cwMul, cmMul, yAdd, cwAdd, cmAdd;
+
+        public YCwCmFilter(float yMul, float cwMul, float cmMul) {
+            this(yMul, cwMul, cmMul, 0f, 0f, 0f);
+        }
+        public YCwCmFilter(float yMul, float cwMul, float cmMul, float yAdd, float cwAdd, float cmAdd) {
+            this.yMul = yMul;
+            this.cwMul = cwMul;
+            this.cmMul = cmMul;
+            this.yAdd = yAdd;
+            this.cwAdd = cwAdd;
+            this.cmAdd = cmAdd;
+        }
+
+        /**
+         * Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.
+         *
+         * @param color a packed float color, as produced by {@link Color#toFloatBits()}
+         * @return a packed float color, as produced by {@link Color#toFloatBits()}
+         */
+        @Override
+        public float alter(float color) {
+            final int bits = NumberTools.floatToIntBits(color);
+            final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
+            final float luma = yAdd + yMul * ((bits & 0xFF) * 0x3p-11f + (bits >>> 8 & 0xFF) * 0x1p-9f + (bits >>> 16 & 0xFF) * 0x1p-11f);
+            final float warm = cmAdd + cwMul * (((bits & 0xFF) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f);
+            final float mild = 0.5f * (cmAdd + cmMul * (((bits >>> 8 & 0xff) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f));
+
+            return floatGet(MathUtils.clamp(luma + warm * 0.625f - mild, 0f, 1f),
+                    MathUtils.clamp(luma + mild - warm * 0.375f, 0f, 1f),
+                    MathUtils.clamp(luma - warm * 0.375f - mild, 0f, 1f),
                     opacity);
         }
     }
