@@ -76,7 +76,7 @@ public class DefaultResources implements LifecycleListener {
             distanceSlab = null, distanceSlabLight = null,
             distanceLean = null, distanceLeanLight = null,
             msdfSlab = null, msdfSlabItalic = null, msdfLean = null, msdfLeanItalic = null,
-            msdfDejaVu = null, msdfCurvySquare = null,
+            msdfDejaVu = null, msdfCurvySquare = null, msdfCarved = null,
             msdfIcons = null;
     private TextFamily familyLean = null, familySlab = null, familyGo = null,
             familyLeanMSDF = null, familySlabMSDF = null, familyPrintMSDF = null;
@@ -133,6 +133,8 @@ public class DefaultResources implements LifecycleListener {
             crispDejaVuTexture = "DejaVuSansMono-msdf.png",
             crispNotoSerif = "NotoSerif-Family-msdf.fnt",
             crispNotoSerifTexture = "NotoSerif-Family-msdf.png",
+            crispCarved = "bloccus-msdf.fnt",
+            crispCarvedTexture = "bloccus-msdf.png",
             crispCurvySquare = "square-msdf.fnt",
             crispCurvySquareTexture = "square-msdf.png",
             crispIcons = "awesome-solid-msdf.fnt",
@@ -1699,6 +1701,47 @@ public class DefaultResources implements LifecycleListener {
         return null;
     }
     /**
+     * Returns a TextCellFactory already configured to use a partially-angular variable-width font with good Unicode
+     * support and an appearance as if it were carved into solid rock, that should scale cleanly to even very large
+     * sizes (using an MSDF technique). Caches the result for later calls. The font used is
+     * <a href="https://fontstruct.com/fontstructions/show/507930/bloccus">Bloccus by Christian Munk</a>. It supports a
+     * lot of glyphs, including most of extended Latin, Greek, Cyrillic, and the International Phonetic Alphabet (IPA),
+     * but not box drawing characters because this is variable-width. This uses the Multi-channel Signed Distance
+     * Field (MSDF) technique as opposed to the normal Signed Distance Field technique, which gives the rendered font
+     * sharper edges and precise corners instead of rounded tips on strokes.
+     * <br>
+     * Preview: <a href="https://i.imgur.com/zaqgHTW.png">Image link</a>
+     * <br>
+     * This creates a TextCellFactory instead of a BitmapFont because it needs to set some extra information so the
+     * multi-channel distance field font technique this uses can work.
+     * <br>
+     * Needs files:
+     * <ul>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-msdf.fnt</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-msdf.png</li>
+     *     <li>https://github.com/SquidPony/SquidLib/blob/master/assets/bloccus-license.txt</li>
+     * </ul>
+     * @return the TextCellFactory object that can represent many sizes of the font bloccus.ttf
+     */
+    public static TextCellFactory getCrispCarvedFont()
+    {
+        initialize();
+        if(instance.msdfCarved == null)
+        {
+            try {
+                instance.msdfCarved = new TextCellFactory()
+                        .fontMultiDistanceField(crispCarved, crispCarvedTexture)
+                        .width(16f).height(32f).setSmoothingMultiplier(1.5f);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        if(instance.msdfCarved != null)
+            return instance.msdfCarved.copy();
+        return null;
+    }
+
+    /**
      * Returns a TextCellFactory already configured to use a fixed-width icon font (no letters are supported) using the
      * Font-Awesome icon set, that should scale cleanly to even very large sizes. Caches the result for later calls.
      * The icon font used is the popular Font-Awesome free set (solid style), an open-source (SIL Open Font License)
@@ -1988,6 +2031,10 @@ public class DefaultResources implements LifecycleListener {
         if(msdfDejaVu != null) {
             msdfDejaVu.dispose();
             msdfDejaVu = null;
+        }
+        if(msdfCarved != null) {
+            msdfCarved.dispose();
+            msdfCarved = null;
         }
         if(msdfCurvySquare != null) {
             msdfCurvySquare.dispose();
