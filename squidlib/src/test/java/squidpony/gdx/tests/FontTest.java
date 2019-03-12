@@ -90,7 +90,7 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getGoFamily().width(ZOOM * 14).height(25).initBySize(),
                 DefaultResources.getCrispPrintFamily().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
-                new TextCellFactory().fontMultiDistanceField("bloccus-msdf.fnt", "bloccus-msdf.png").width(16f).height(32f).setSmoothingMultiplier(1.5f).initBySize()
+                DefaultResources.getCrispCarvedFont().initBySize()
                 //DefaultResources.getStretchableCleanFont().initBySize(),
         };
         viewports = new Viewport[]{
