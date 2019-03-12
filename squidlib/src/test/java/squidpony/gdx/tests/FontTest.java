@@ -61,7 +61,7 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105,  70, 200, 220};
+        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105,  70, 200, 70};
         heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
@@ -90,7 +90,8 @@ public class FontTest extends ApplicationAdapter {
                 DefaultResources.getGoFamily().width(ZOOM * 14).height(25).initBySize(),
                 DefaultResources.getCrispPrintFamily().initBySize(),
                 DefaultResources.getStretchablePrintFont().initBySize(),
-                DefaultResources.getStretchableCleanFont().initBySize(),
+                new TextCellFactory().fontMultiDistanceField("bloccus-msdf.fnt", "bloccus-msdf.png").width(16f).height(32f).setSmoothingMultiplier(1.5f).initBySize()
+                //DefaultResources.getStretchableCleanFont().initBySize(),
         };
         viewports = new Viewport[]{
                 new StretchViewport(factories[0].width() * widths[0], factories[0].height() * heights[0]),
