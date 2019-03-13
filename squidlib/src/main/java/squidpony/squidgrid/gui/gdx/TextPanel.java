@@ -3,7 +3,6 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -204,16 +203,11 @@ public class TextPanel<T extends Color> {
 					"The font should be set before calling TextPanel.init()");
 
 		typesetText();
-		float totalTextHeight = tcf.height();
-		GlyphLayout layout = font.getCache().addText(builder, 0, 0, 0, builder.length(), width, Align.left, true);
-		totalTextHeight += layout.height;
-		if(totalTextHeight < 0)
-			totalTextHeight = 0;
-		textActor.setHeight(/* Entire height */ totalTextHeight);
-		final boolean yscroll = maxHeight < totalTextHeight;
-		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(totalTextHeight, maxHeight));
-		scrollPane.setActor(new TextActor());
+		final boolean yscroll = maxHeight < textActor.getHeight();
+		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(textActor.getHeight(), maxHeight));
+		scrollPane.setActor(textActor);
 		yScrollingCallback(yscroll);
+		scrollPane.layout();
 	}
 
 	/**
@@ -238,18 +232,12 @@ public class TextPanel<T extends Color> {
 			throw new NullPointerException(
 					"The font should be set before calling TextPanel.init()");
 
-		final BitmapFontCache cache = font.getCache();
 		typesetText();
-		float totalTextHeight = tcf.height();
-		GlyphLayout layout = cache.addText(builder, 0, 0, 0, builder.length(), width, Align.left, true);
-		totalTextHeight += layout.height;
-		if(totalTextHeight < 0)
-			totalTextHeight = 0;
-		textActor.setHeight(/* Entire height */ totalTextHeight);
-		final boolean yscroll = maxHeight < totalTextHeight;
-		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(totalTextHeight, maxHeight));
-		scrollPane.setActor(new TextActor());
+		final boolean yscroll = maxHeight < textActor.getHeight();
+		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(textActor.getHeight(), maxHeight));
+		scrollPane.setActor(textActor);
 		yScrollingCallback(yscroll);
+		scrollPane.layout();
 	}
 
 	public void init(float width, float maxHeight, T color, String... text)
@@ -324,6 +312,14 @@ public class TextPanel<T extends Color> {
 		}
 		if(builder.length() > 0)
 			builder.deleteCharAt(builder.length() - 1);
+		float totalTextHeight = tcf.height();
+		GlyphLayout layout = font.getCache().addText(builder, 0, 0, 0, builder.length(),
+				textActor.getWidth(), Align.left, true);
+		totalTextHeight += layout.height;
+		if(totalTextHeight < 0)
+			totalTextHeight = 0;
+		textActor.setHeight(/* Entire height */ totalTextHeight);
+
 	}
 
 	/**
