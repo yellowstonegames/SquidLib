@@ -15,7 +15,6 @@ import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.gui.gdx.TextCellFactory;
-import squidpony.squidmath.NumberTools;
 
 import static squidpony.StringKit.safeSubstring;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
@@ -28,27 +27,27 @@ public class ColorTest extends ApplicationAdapter {
     /**
      * In number of cells
      */
-//    private static int gridWidth = 160;
-    private static int gridWidth = 256;
+    private static int gridWidth = 160;
+//    private static int gridWidth = 256;
 //    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
-     * In number of cells
+     * In number of cells e3c896 f9c79f
      */
-//    private static int gridHeight = 32;
-    private static int gridHeight = 256;
+    private static int gridHeight = 32;
+//    private static int gridHeight = 256;
 //    private static int gridHeight = 27;
 
     /**
      * The pixel width of a cell
      */
-    private static int cellWidth = 2;
-//    private static int cellWidth = 10;
+//    private static int cellWidth = 2;
+    private static int cellWidth = 10;
     /**
      * The pixel height of a cell
      */
-    private static int cellHeight = 2;
-//    private static int cellHeight = 25;
+//    private static int cellHeight = 2;
+    private static int cellHeight = 21;
 
     private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
 
@@ -91,19 +90,19 @@ public class ColorTest extends ApplicationAdapter {
             0x00000000, 0x1F1833FF, 0x2B2E42FF, 0x3E3546FF,
             0x414859FF, 0x68717AFF, 0x90A1A8FF, 0xB6CBCFFF,
             0xD3E5EDFF, 0xFFFFFFFF, 0x5C3A41FF, 0x826481FF,
-            0x966C6CFF, 0xAB947AFF, 0xF68181FF, 0xF53333FF,
-            0x5A0A07FF, 0xAE4539FF, 0x8A503EFF, 0xCD683DFF,
-            0xFBA458FF, 0xFB6B1DFF, 0x9F8562FF, 0xF9C79FFF,
-            0xFFA514FF, 0xE8B710FF, 0xE3C896FF, 0xFBE626FF,
-            0xC0B510FF, 0xFBFF86FF, 0xB4D645FF, 0x729446FF,
-            0x91DB69FF, 0x358510FF, 0x51C43FFF, 0x0E4904FF, 
-            0x4BA14AFF, 0x1EBC73FF, 0x30E1B9FF, 0x7FE0C2FF,
-            0xB8FDFFFF, 0x039F78FF, 0x63C2C9FF, 0x216981FF,
-            0x7FE8F2FF, 0x3B509FFF, 0x4D9BE6FF, 0x28306FFF,
-            0x5C76BFFF, 0x4D50D4FF, 0x180FCFFF, 0x53207DFF,
-            0x8657CCFF, 0xA884F3FF, 0x630867FF, 0xA03EB2FF,
-            0x881AC4FF, 0xE4A8FAFF, 0xB53D86FF, 0xF34FE9FF,
-            0x7A3045FF, 0xF04F78FF, 0xC27182FF, 0xC93038FF,
+            0x966C6CFF, 0x715A56FF, 0xAB947AFF, 0xF68181FF, //0xE3C896FF -> 0x715A56FF
+            0xF53333FF, 0x5A0A07FF, 0xAE4539FF, 0x8A503EFF,
+            0xCD683DFF, 0xFBA458FF, 0xFB6B1DFF, 0xDDBBA4FF, //0x9F8562FF -> 0xDDBBA4FF
+            0xFDD7AAFF, 0xFFA514FF, 0xC29162FF, 0xE8B710FF, //0xF9C79FFF -> 0xFDD7AAFF
+            0xFBE626FF, 0xC0B510FF, 0xFBFF86FF, 0xB4D645FF,
+            0x729446FF, 0xC8E4BEFF, 0x45F520FF, 0x51C43FFF,
+            0x0E4904FF, 0x55F084FF, 0x1EBC73FF, 0x30E1B9FF,
+            0x7FE0C2FF, 0xB8FDFFFF, 0x039F78FF, 0x63C2C9FF,
+            0x216981FF, 0x7FE8F2FF, 0x5369EFFF, 0x4D9BE6FF,
+            0x28306FFF, 0x5C76BFFF, 0x4D44C0FF, 0x180FCFFF,
+            0x53207DFF, 0x8657CCFF, 0xA884F3FF, 0x630867FF,
+            0xA03EB2FF, 0x881AC4FF, 0xE4A8FAFF, 0xB53D86FF,
+            0xF34FE9FF, 0x7A3045FF, 0xF04F78FF, 0xC93038FF, //0xC27182FF -> 0xC29162FF
     };
 
     private Stage stage;
@@ -574,7 +573,7 @@ public class ColorTest extends ApplicationAdapter {
         System.out.println("};");
         for (int i = 0; i < COUNT; i++) {
             col.set(FLESURRECT[i & 255]).clamp();
-//            display.putString(i >>> 1 & 0xF0, i & 31, String.format("   %08X   ", FLESURRECT[i]), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+            display.putString(i >>> 1 & 0xF0, i & 31, String.format("   %08X   ", FLESURRECT[i]), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
         }
             //            for (int j = 0; j < 4; j++) {
                 //float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();
@@ -953,24 +952,27 @@ public class ColorTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xFFFL) * 0x1.4p-7f) * 0.5f + 0.5f;
-        Gdx.graphics.setTitle("Current luma: " + luma);
+//        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xFFFL) * 0x1.4p-7f) * 0.5f + 0.5f;
+//        Gdx.graphics.setTitle("Current luma: " + luma);
+
 //        Gdx.graphics.setTitle("YCwCm demo at 66% luma");
 //        for (float cb = -0.625f; cb <= 0.625f; cb += 0x1p-6f) {
 //            for (float cr = -0.626f; cr <= 0.625f; cr += 0x1p-6f) {
 //                ycc(luma, cb, cr);
 //            }
 //        }
-        for (float cb = -1f; cb <= 1f; cb += 0x1p-7f) {
-            for (float cr = -1f; cr <= 1f; cr += 0x1p-7f) {
-                ycc(luma, cb, cr);
-            }
-        }
-        stage.getViewport().update(totalWidth, totalHeight, true);
-        stage.getViewport().apply(true);
-        stage.getBatch().begin();
-        display.getTextFactory().draw(stage.getBatch(), display.getBackgroundLayer().colors, 0, 0);
-        stage.getBatch().end();
+        
+//        for (float cb = -1f; cb <= 1f; cb += 0x1p-7f) {
+//            for (float cr = -1f; cr <= 1f; cr += 0x1p-7f) {
+//                ycc(luma, cb, cr);
+//            }
+//        }
+        stage.draw();
+//        stage.getViewport().update(totalWidth, totalHeight, true);
+//        stage.getViewport().apply(true);
+//        stage.getBatch().begin();
+//        display.getTextFactory().draw(stage.getBatch(), display.getBackgroundLayer().colors, 0, 0);
+//        stage.getBatch().end();
     }
 
     @Override

@@ -3668,7 +3668,7 @@ public class Noise {
         public long seed;
         public Sway2D()
         {
-            seed = 0L;
+            seed = 12345L;
         }
         public Sway2D(long seed)
         {
@@ -3692,15 +3692,50 @@ public class Noise {
 //                    + NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 0.5 - y * 1.5)
 //                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 1.5 - y * 0.5)) * 4.0);
 
-            double adjust0 = NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.75 + y * -0.25) + 1.,
-                    adjust1 = NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x * 0.25 + y * -1.75) + 1.,
-                    adjust2 = NumberTools.swayRandomized(seed - 0x8CB92BA72F3D8DD7L, x + y) + 1.;
-            return NumberTools.sway(
-                    (NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.5 + y * 0.5) * adjust0
-                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 0.5 + y * 1.5) * adjust1
-                    + NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x - y) * adjust2 
-                    ) * 0.75 + 0.5);
-
+//            double adjust0 = NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.75 + y * -0.25) + 1.,
+//                    adjust1 = NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x * 0.25 + y * -1.75) + 1.,
+//                    adjust2 = NumberTools.swayRandomized(seed - 0x8CB92BA72F3D8DD7L, x + y) + 1.;
+//            return NumberTools.sway(
+//                    (NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.5 + y * 0.5) * adjust0
+//                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 0.5 + y * 1.5) * adjust1
+//                    + NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x - y) * adjust2 
+//                    ) * 0.75 + 0.5);
+            final long floorX = x >= 0.0 ? (long) x : (long) x - 1L,
+                    floorY = y >= 0.0 ? (long) y : (long) y - 1L;
+//            long seedX = seed * 0xC13FA9A902A6328FL + floorX * 0x91E10DA5C79E7B1DL,
+//                    seedY = seed * 0x91E10DA5C79E7B1DL + floorY * 0xC13FA9A902A6328FL;
+//            final long startX = ((seedX ^ (seedX >>> 25)) * (seedX | 0xA529L)),
+//                    endX = (((seedX += 0x91E10DA5C79E7B1DL) ^ (seedX >>> 25)) * (seedX | 0xA529L));
+//            final long startY = ((seedY ^ (seedY >>> 25)) * (seedY | 0xA529L)),
+//                    endY = (((seedY += 0xC13FA9A902A6328FL) ^ (seedY >>> 25)) * (seedY | 0xA529L));
+//            final int x0y0 = (int) (startX + startY >>> 56),
+//                    x1y0 = (int) (endX + startY >>> 56),
+//                    x0y1 = (int) (startX + endY >>> 56),
+//                    x1y1 = (int) (endX + endY >>> 56);
+            final int x0y0 = HastyPointHash.hash256(floorX, floorY, seed),
+                    x1y0 = HastyPointHash.hash256(floorX+1, floorY, seed),
+                    x0y1 = HastyPointHash.hash256(floorX, floorY+1, seed),
+                    x1y1 = HastyPointHash.hash256(floorX+1, floorY+1, seed);
+            x -= floorX;
+            y -= floorY;
+//            x *= x * (3.0 - 2.0 * x);
+//            y *= y * (3.0 - 2.0 * y);
+//            x *= x;
+//            y *= y;
+            final double ix = 1 - x, iy = 1 - y;
+//            final double ix = x, iy = y;
+//            x = 1.0 - x;
+//            y = 1.0 - y;
+            final double ret = ((x * SeededNoise.phiGrad2[x0y0][0] + y * SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)
+                    + (ix * SeededNoise.phiGrad2[x1y0][0] + y * SeededNoise.phiGrad2[x1y0][1]) * (x * iy)
+                    + (x * SeededNoise.phiGrad2[x0y1][0] + iy * SeededNoise.phiGrad2[x0y1][1]) * (ix * y)
+                    + (ix * SeededNoise.phiGrad2[x1y1][0] + iy * SeededNoise.phiGrad2[x1y1][1]) * (x * y)
+            );
+            if(ret < -1.0)
+                System.out.printf("LOW! ret: %f, x: %f, y: %f\n", ret, x, y);
+            if(ret > 1.0)
+                System.out.printf("HIGH! ret: %f, x: %f, y: %f\n", ret, x, y);
+            return ret;
 //            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
 //            long yf = y >= 0.0 ? (long) y : (long) y - 1L;
 //            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;

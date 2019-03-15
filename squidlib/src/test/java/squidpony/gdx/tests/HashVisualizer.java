@@ -71,9 +71,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 3;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 67, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 102, otherMode = 1;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -4210,7 +4210,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             back[509][257 + iBright] =  bright;
 
                             bright = SColor.floatGetHSV(ctr * 0x1.44cbc89p-8f, 1, 0.6f, 1);
-                            iBright = (int) (NumberTools.swayRandomized(0, ctr * 0x1p-7f) * 240f);
+                            iBright = (int) (basic1D.getNoise(ctr * 0x1p-7f) * 240f);
                             back[511][255 + iBright] =  bright;
                             back[511][256 + iBright] =  bright;
                             back[511][257 + iBright] =  bright;

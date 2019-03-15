@@ -736,8 +736,9 @@ public class HashQualityTest {
 
 //        int state = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
 //        return ((state = ((state = (state ^ (state << 19 | state >>> 13) ^ (state << 7 | state >>> 25) ^ 0xD1B54A33) * 0x15DE2D) ^ (state << 20 | state >>> 12) ^ (state << 8 | state >>> 24)) * 0x1B69E5) ^ state >>> 14);
-        int s = 0x9E3779B9 ^ 0x1827F5 * (x ^ y * 0x123C21);
-        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 7 | s >>> 25) ^ 0xD1B54A35) * 0xAEF17) ^ s >>> 15;
+        //int s = 42 ^ x * 0x1827F5 ^ y * 0x123C21;
+        int s = 42 ^ x * 0x1827F5 ^ y * 0x123C21;
+        return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
 
 
 //        int s = (x + y ^ 0xD192ED03) * 0x1A36A9;
@@ -841,7 +842,7 @@ public class HashQualityTest {
                             }
                             points.add(c);
                             colliderBase.put(c.hashCode() & restrict, 0.0);
-                            colliderPelo.put(Noise.IntPointHash.hashAll(x, y, 42) & restrict, 0.0);
+                            colliderPelo.put(pelotonCoord(x, y) & restrict, 0.0);
                             colliderSzud.put(szudzikCoord(x, y) & restrict, 0.0);
                             colliderCant.put(cantorCoord(x, y) & restrict, 0.0);
                             colliderGold.put(goldCoord(x, y) & restrict, 0.0);
