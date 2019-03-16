@@ -47,7 +47,6 @@ import java.util.List;
  * final ScrollPane sp = tp.getScrollPane();
  * sp.setScrollPaneStyle(new ScrollPaneStyle(...)); <- set textures
  * stage.addActor(sp);
- * stage.setKeyboardFocus(sp);
  * stage.setScrollFocus(sp);
  * stage.draw();
  * </pre>

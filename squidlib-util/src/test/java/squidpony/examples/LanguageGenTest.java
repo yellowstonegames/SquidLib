@@ -15,7 +15,7 @@ import java.util.List;
  */
 @Ignore
 public class LanguageGenTest {
-    public static boolean PRINTING = false;
+    public static boolean PRINTING = true;
     @Test
     public void testOutput() {
         if(!PRINTING) return;

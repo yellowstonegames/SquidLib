@@ -1,16 +1,15 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.Maker;
 import squidpony.squidgrid.Direction;
 import squidpony.squidmath.GWTRNG;
 import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IntVLA;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 
 /**
  * Recursively divided maze. Creates only walls and passages.
- *
+ * <p>
  * This dungeon generator is based on a port of the rot.js version.
  *
  * @author Eben Howard - http://squidpony.com - howard@squidpony.com
@@ -50,9 +49,9 @@ public class DividedMazeGenerator {
      * Sets up the generator to make mazes the given width and height. The mazes
      * have a solid wall border.
      *
-     * @param width in cells
+     * @param width  in cells
      * @param height in cells
-     * @param rng the random number generator to use
+     * @param rng    the random number generator to use
      */
     public DividedMazeGenerator(int width, int height, IRNG rng) {
         this.width = width;
@@ -84,13 +83,12 @@ public class DividedMazeGenerator {
         stack.offer(new DividedMazeRoom(1, 1, width - 2, height - 2));
         while (!stack.isEmpty()) {
             DividedMazeRoom room = stack.removeFirst();
-            ArrayList<Integer> availX = new ArrayList<>(),
-                               availY = new ArrayList<>();
+            IntVLA availX = new IntVLA(), availY = new IntVLA();
 
             for (int x = room.left + 1; x < room.right; x++) {
                 boolean top = map[x][room.top - 1];
                 boolean bottom = map[x][room.bottom + 1];
-                if (top && bottom && x % 2 == 0) {
+                if (top && bottom && (x & 1) == 0) {
                     availX.add(x);
                 }
             }
@@ -98,7 +96,7 @@ public class DividedMazeGenerator {
             for (int y = room.top + 1; y < room.bottom; y++) {
                 boolean left = map[room.left - 1][y];
                 boolean right = map[room.right + 1][y];
-                if (left && right && y % 2 == 0) {
+                if (left && right && (y & 1) == 0) {
                     availY.add(y);
                 }
             }
@@ -107,8 +105,8 @@ public class DividedMazeGenerator {
                 continue;
             }
 
-            int x2 = rng.getRandomElement(availX);
-            int y2 = rng.getRandomElement(availY);
+            int x2 = availX.getRandomElement(rng);
+            int y2 = availY.getRandomElement(rng);
 
             map[x2][y2] = true;
 
@@ -135,17 +133,21 @@ public class DividedMazeGenerator {
                         }
                         break;
                     case NONE:
-                    	break;
-				case DOWN_LEFT:
-				case DOWN_RIGHT:
-				case UP_LEFT:
-				case UP_RIGHT:
-					throw new IllegalStateException("There should only be cardinal directions here");
+                        break;
+                    case DOWN_LEFT:
+                    case DOWN_RIGHT:
+                    case UP_LEFT:
+                    case UP_RIGHT:
+                        throw new IllegalStateException("There should only be cardinal directions here");
                 }
             }
 
-            ArrayList<Direction> dirs = Maker.makeList(Direction.CARDINALS);
-            dirs.remove(rng.getRandomElement(dirs));
+            //// the commented code below actually works fine, but it's a little wasteful on RAM
+//            ArrayList<Direction> dirs = Maker.makeList(Direction.CARDINALS);
+//            dirs.remove(rng.getRandomElement(dirs));
+
+            //// not sure if the order being random matters, but this will remove a random item
+            Direction[] dirs = rng.randomPortion(Direction.CARDINALS, new Direction[3]);
 
             for (Direction dir : dirs) {
                 switch (dir) {
@@ -162,12 +164,12 @@ public class DividedMazeGenerator {
                         map[x2][rng.between(y2 + 1, room.bottom + 1)] = false;
                         break;
                     case NONE:
-                    	break;
-				case DOWN_LEFT:
-				case DOWN_RIGHT:
-				case UP_LEFT:
-				case UP_RIGHT:
-					throw new IllegalStateException("There should only be cardinal directions here");
+                        break;
+                    case DOWN_LEFT:
+                    case DOWN_RIGHT:
+                    case UP_LEFT:
+                    case UP_RIGHT:
+                        throw new IllegalStateException("There should only be cardinal directions here");
                 }
             }
 
