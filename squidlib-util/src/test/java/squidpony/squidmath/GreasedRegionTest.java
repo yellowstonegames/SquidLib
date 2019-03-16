@@ -3,6 +3,7 @@ package squidpony.squidmath;
 import org.junit.Test;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.Radius;
+import squidpony.squidgrid.mapping.DividedMazeGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.DungeonBoneGen;
 import squidpony.squidgrid.mapping.styled.TilesetType;
@@ -189,6 +190,9 @@ public class GreasedRegionTest {
 //        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
 //        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
 //        assertEquals(gr.singleRandom(srng), gr2.singleRandomAlt(srng2));
+
+        DividedMazeGenerator mazeGen = new DividedMazeGenerator(120, 120);
+        System.out.println(gr2.refill(mazeGen.create()).not().toString());
     }
 
     public static int FOV_RANGE = 12;
