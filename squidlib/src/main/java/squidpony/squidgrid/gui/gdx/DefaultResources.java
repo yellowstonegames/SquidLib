@@ -1123,7 +1123,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        /* .setSmoothingMultiplier(0.4f) */.height(30).width(8);
+                        /* .setSmoothingMultiplier(0.4f) */.height(37).tweakHeight(34).width(8);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1690,7 +1690,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.familyPrintMSDF = new TextFamily();
                 instance.familyPrintMSDF.fontMultiDistanceField(crispNotoSerif, crispNotoSerifTexture)
-                        .width(12).height(30).setSmoothingMultiplier(1.5f);
+                        .width(20).height(36).tweakHeight(28).setSmoothingMultiplier(1.5f);
                 instance.familyPrintMSDF.font().setUseIntegerPositions(false);
             } catch (Exception e) {
                 e.printStackTrace();
