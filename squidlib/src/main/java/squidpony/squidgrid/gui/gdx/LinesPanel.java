@@ -168,7 +168,7 @@ public class LinesPanel<T extends Color> extends Actor {
 			this.font.getData().markupEnabled = true;
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
-					+ getClass().getSimpleName() + " must be greater or equal than zero");
+					+ "LinesPanel must be greater or equal than zero");
 		this.maxLines = maxLines;
 		this.content = new ArrayDeque<>(maxLines);
 	}
@@ -278,7 +278,8 @@ public class LinesPanel<T extends Color> extends Actor {
 		final float height = lineHeight * maxLines;
 
 		final float x = getX() + xOffset;
-		float y = getY() + (drawBottomUp ? lineHeight : height - lineHeight) - data.descent + yOffset;
+		//TODO: check if drawBottomUp is correct or if lineHeight should be changed to 0
+		float y = getY() + (drawBottomUp ? lineHeight : height) - data.descent + yOffset;
 
 		final Iterator<IColoredString<T>> it = content.iterator();
 		int ydx = 0;

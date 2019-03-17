@@ -854,7 +854,7 @@ public class EverythingDemo extends ApplicationAdapter {
         text.add(helping5);
 
         final float w = width * cellWidth, aw = helping3.length() * cellWidth * 0.8f * INTERNAL_ZOOM;
-        final float h = height * cellHeight, ah = cellHeight * 9f * INTERNAL_ZOOM;
+        final float h = height * cellHeight, ah = tp.getFont().actualCellHeight * 9f * INTERNAL_ZOOM;
         tp.init(aw, ah, text);
         a = tp.getScrollPane();
         final float x = (w - aw) / 2f;

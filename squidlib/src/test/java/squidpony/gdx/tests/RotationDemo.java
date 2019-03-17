@@ -148,7 +148,7 @@ public class RotationDemo extends ApplicationAdapter {
 
         display.setAnimationDuration(0.1f);
         messages = new LinesPanel<Color>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont().initBySize()
-                .tweakWidth(cellWidth * 1.1f).tweakHeight(cellHeight * 1.125f), bonusHeight);
+                , bonusHeight);
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
         // if you use '#' for walls instead of box drawing chars, you don't need this.
@@ -163,8 +163,9 @@ public class RotationDemo extends ApplicationAdapter {
         messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
         display.setPosition(0, messages.getHeight());
         messages.addLast(GDXMarkup.instance.colorString("You are the orange '[Cape Jasmine]@[]', and enemies are red '[Scarlet]Я[]'. Click a cell to turn and move. " +
-                "Use ? for help, f to change colors, q to quit. " +
-                "Click the top or bottom border of this box to scroll."));
+                "The colorful [Aurora Heliotrope]^[] shows your facing direction; you rotate automatically to reach a goal. " +
+                "Rotation takes as much time as moving forward one square, but you can only move in the direction you face. " +
+                "Use ? for help, or q to quit. "));
 
         dungeonGen = new SectionDungeonGenerator(width, height, rng);
         dungeonGen.addWater(0, 25, 6);
