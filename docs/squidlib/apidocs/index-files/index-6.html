@@ -474,8 +474,13 @@
 </dd>
 <dt><a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">FloatFilters.YCoCgFilter</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
 <dd>
-<div class="block">Like <a href="../squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.HSVFilter</code></a> or <a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a>, but edits its input colors in YCoCg color space, and multiplies
- rather than adds.</div>
+<div class="block">Like <a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a>, but edits its input colors in YCoCg color space, or like <a href="../squidpony/squidgrid/gui/gdx/FloatFilters.HSVFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.HSVFilter</code></a> except it
+ doesn't add, it multiplies.</div>
+</dd>
+<dt><a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html" title="class in squidpony.squidgrid.gui.gdx"><span class="typeNameLink">FloatFilters.YCwCmFilter</span></a> - Class in <a href="../squidpony/squidgrid/gui/gdx/package-summary.html">squidpony.squidgrid.gui.gdx</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a> or  <a href="../squidpony/squidgrid/gui/gdx/FloatFilters.YCoCgFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCoCgFilter</code></a>, but edits its input colors in YCwCm color space, which is very
+ similar to YCoCg but has chroma/chrominance components that are useful aesthetically on their own.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#floatGet-float-float-float-float-">floatGet(float, float, float, float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>
@@ -506,6 +511,11 @@
 <dd>
 <div class="block">Gets a color as a packed float given floats representing luminance (Y, akin to lightness), orange chrominance
  (Co, one of two kinds of chroma used here), green chrominance (Cg, the other kind of chroma), and opacity.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#floatGetYCwCm-float-float-float-float-">floatGetYCwCm(float, float, float, float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
+<dd>
+<div class="block">Gets a color as a packed float given floats representing luma (Y, akin to lightness), chroma warm (Cw, one of two
+ kinds of chroma used here), chroma mild (Cm, the other kind of chroma), and opacity.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-">floatToChars(char[], float)</a></span> - Static method in class squidpony.squidgrid.gui.gdx.<a href="../squidpony/squidgrid/gui/gdx/SColor.html" title="class in squidpony.squidgrid.gui.gdx">SColor</a></dt>
 <dd>

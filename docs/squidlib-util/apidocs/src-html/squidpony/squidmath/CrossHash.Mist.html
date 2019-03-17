@@ -4894,7 +4894,729 @@
 <span class="sourceLineNo">4886</span>            return h ^ (h &gt;&gt;&gt; 16);<a name="line.4886"></a>
 <span class="sourceLineNo">4887</span>        }<a name="line.4887"></a>
 <span class="sourceLineNo">4888</span>    }<a name="line.4888"></a>
-<span class="sourceLineNo">4889</span>}<a name="line.4889"></a>
+<span class="sourceLineNo">4889</span><a name="line.4889"></a>
+<span class="sourceLineNo">4890</span>    /**<a name="line.4890"></a>
+<span class="sourceLineNo">4891</span>     */<a name="line.4891"></a>
+<span class="sourceLineNo">4892</span>    @Beta<a name="line.4892"></a>
+<span class="sourceLineNo">4893</span>    public static final class Sirocco {<a name="line.4893"></a>
+<span class="sourceLineNo">4894</span>        public static long hash64(final CharSequence data) {<a name="line.4894"></a>
+<span class="sourceLineNo">4895</span>            if (data == null)<a name="line.4895"></a>
+<span class="sourceLineNo">4896</span>                return 0L;<a name="line.4896"></a>
+<span class="sourceLineNo">4897</span>            final int len = data.length();<a name="line.4897"></a>
+<span class="sourceLineNo">4898</span>            long a = len;<a name="line.4898"></a>
+<span class="sourceLineNo">4899</span>            for (int i = 0; i &lt; len; i++) {<a name="line.4899"></a>
+<span class="sourceLineNo">4900</span>                a *= 0xAC564B05L;<a name="line.4900"></a>
+<span class="sourceLineNo">4901</span>                a += data.charAt(i) * 0x517CC1B727220A95L;<a name="line.4901"></a>
+<span class="sourceLineNo">4902</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.4902"></a>
+<span class="sourceLineNo">4903</span>            }<a name="line.4903"></a>
+<span class="sourceLineNo">4904</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.4904"></a>
+<span class="sourceLineNo">4905</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.4905"></a>
+<span class="sourceLineNo">4906</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.4906"></a>
+<span class="sourceLineNo">4907</span>        }<a name="line.4907"></a>
+<span class="sourceLineNo">4908</span><a name="line.4908"></a>
+<span class="sourceLineNo">4909</span>        public static long hash64(final boolean[] data) {<a name="line.4909"></a>
+<span class="sourceLineNo">4910</span>            if (data == null)<a name="line.4910"></a>
+<span class="sourceLineNo">4911</span>                return 0L;<a name="line.4911"></a>
+<span class="sourceLineNo">4912</span>            final int len = data.length;<a name="line.4912"></a>
+<span class="sourceLineNo">4913</span>            long a = len;<a name="line.4913"></a>
+<span class="sourceLineNo">4914</span>            for (int i = 0; i &lt; len; i++) {<a name="line.4914"></a>
+<span class="sourceLineNo">4915</span>                a *= 0xAC564B05L;<a name="line.4915"></a>
+<span class="sourceLineNo">4916</span>                a += (data[i] ? 0x517CC1B727220A95L : 0x9308E0BEACFD0A39L);<a name="line.4916"></a>
+<span class="sourceLineNo">4917</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.4917"></a>
+<span class="sourceLineNo">4918</span>            }<a name="line.4918"></a>
+<span class="sourceLineNo">4919</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.4919"></a>
+<span class="sourceLineNo">4920</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.4920"></a>
+<span class="sourceLineNo">4921</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.4921"></a>
+<span class="sourceLineNo">4922</span>        }<a name="line.4922"></a>
+<span class="sourceLineNo">4923</span><a name="line.4923"></a>
+<span class="sourceLineNo">4924</span>        public static long hash64(final byte[] data) {<a name="line.4924"></a>
+<span class="sourceLineNo">4925</span>            if (data == null)<a name="line.4925"></a>
+<span class="sourceLineNo">4926</span>                return 0L;<a name="line.4926"></a>
+<span class="sourceLineNo">4927</span>            final int len = data.length;<a name="line.4927"></a>
+<span class="sourceLineNo">4928</span>            long a = len;<a name="line.4928"></a>
+<span class="sourceLineNo">4929</span>            for (int i = 0; i &lt; len; i++) {<a name="line.4929"></a>
+<span class="sourceLineNo">4930</span>                a *= 0xAC564B05L;<a name="line.4930"></a>
+<span class="sourceLineNo">4931</span>                a += data[i] * 0x517CC1B727220A95L;<a name="line.4931"></a>
+<span class="sourceLineNo">4932</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.4932"></a>
+<span class="sourceLineNo">4933</span>            }<a name="line.4933"></a>
+<span class="sourceLineNo">4934</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.4934"></a>
+<span class="sourceLineNo">4935</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.4935"></a>
+<span class="sourceLineNo">4936</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.4936"></a>
+<span class="sourceLineNo">4937</span>        }<a name="line.4937"></a>
+<span class="sourceLineNo">4938</span><a name="line.4938"></a>
+<span class="sourceLineNo">4939</span>        public static long hash64(final short[] data) {<a name="line.4939"></a>
+<span class="sourceLineNo">4940</span>            if (data == null)<a name="line.4940"></a>
+<span class="sourceLineNo">4941</span>                return 0L;<a name="line.4941"></a>
+<span class="sourceLineNo">4942</span>            final int len = data.length;<a name="line.4942"></a>
+<span class="sourceLineNo">4943</span>            long a = len;<a name="line.4943"></a>
+<span class="sourceLineNo">4944</span>            for (int i = 0; i &lt; len; i++) {<a name="line.4944"></a>
+<span class="sourceLineNo">4945</span>                a *= 0xAC564B05L;<a name="line.4945"></a>
+<span class="sourceLineNo">4946</span>                a += data[i] * 0x517CC1B727220A95L;<a name="line.4946"></a>
+<span class="sourceLineNo">4947</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.4947"></a>
+<span class="sourceLineNo">4948</span>            }<a name="line.4948"></a>
+<span class="sourceLineNo">4949</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.4949"></a>
+<span class="sourceLineNo">4950</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.4950"></a>
+<span class="sourceLineNo">4951</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.4951"></a>
+<span class="sourceLineNo">4952</span>        }<a name="line.4952"></a>
+<span class="sourceLineNo">4953</span><a name="line.4953"></a>
+<span class="sourceLineNo">4954</span>        public static long hash64(final int[] data) {<a name="line.4954"></a>
+<span class="sourceLineNo">4955</span>            if (data == null)<a name="line.4955"></a>
+<span class="sourceLineNo">4956</span>                return 0L;<a name="line.4956"></a>
+<span class="sourceLineNo">4957</span>            final int len = data.length;<a name="line.4957"></a>
+<span class="sourceLineNo">4958</span>            long a = len;<a name="line.4958"></a>
+<span class="sourceLineNo">4959</span>            for (int i = 0; i &lt; len; i++) {<a name="line.4959"></a>
+<span class="sourceLineNo">4960</span>                a *= 0xAC564B05L;<a name="line.4960"></a>
+<span class="sourceLineNo">4961</span>                a += data[i] * 0x517CC1B727220A95L;<a name="line.4961"></a>
+<span class="sourceLineNo">4962</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.4962"></a>
+<span class="sourceLineNo">4963</span>            }<a name="line.4963"></a>
+<span class="sourceLineNo">4964</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.4964"></a>
+<span class="sourceLineNo">4965</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.4965"></a>
+<span class="sourceLineNo">4966</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.4966"></a>
+<span class="sourceLineNo">4967</span>        }<a name="line.4967"></a>
+<span class="sourceLineNo">4968</span><a name="line.4968"></a>
+<span class="sourceLineNo">4969</span>        public static long hash64(final long[] data) {<a name="line.4969"></a>
+<span class="sourceLineNo">4970</span>            if (data == null)<a name="line.4970"></a>
+<span class="sourceLineNo">4971</span>                return 0L;<a name="line.4971"></a>
+<span class="sourceLineNo">4972</span>            final int len = data.length;<a name="line.4972"></a>
+<span class="sourceLineNo">4973</span>            long a = len;<a name="line.4973"></a>
+<span class="sourceLineNo">4974</span>            for (int i = 0; i &lt; len; i++) {<a name="line.4974"></a>
+<span class="sourceLineNo">4975</span>                a *= 0xAC564B05L;<a name="line.4975"></a>
+<span class="sourceLineNo">4976</span>                a += data[i] * 0x517CC1B727220A95L;<a name="line.4976"></a>
+<span class="sourceLineNo">4977</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.4977"></a>
+<span class="sourceLineNo">4978</span>            }<a name="line.4978"></a>
+<span class="sourceLineNo">4979</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.4979"></a>
+<span class="sourceLineNo">4980</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.4980"></a>
+<span class="sourceLineNo">4981</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.4981"></a>
+<span class="sourceLineNo">4982</span>        }<a name="line.4982"></a>
+<span class="sourceLineNo">4983</span><a name="line.4983"></a>
+<span class="sourceLineNo">4984</span>        public static long hash64(final char[] data) {<a name="line.4984"></a>
+<span class="sourceLineNo">4985</span>            if (data == null)<a name="line.4985"></a>
+<span class="sourceLineNo">4986</span>                return 0L;<a name="line.4986"></a>
+<span class="sourceLineNo">4987</span>            final int len = data.length;<a name="line.4987"></a>
+<span class="sourceLineNo">4988</span>            long a = len;<a name="line.4988"></a>
+<span class="sourceLineNo">4989</span>            for (int i = 0; i &lt; len; i++) {<a name="line.4989"></a>
+<span class="sourceLineNo">4990</span>                a *= 0xAC564B05L;<a name="line.4990"></a>
+<span class="sourceLineNo">4991</span>                a += data[i] * 0x517CC1B727220A95L;<a name="line.4991"></a>
+<span class="sourceLineNo">4992</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.4992"></a>
+<span class="sourceLineNo">4993</span>            }<a name="line.4993"></a>
+<span class="sourceLineNo">4994</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.4994"></a>
+<span class="sourceLineNo">4995</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.4995"></a>
+<span class="sourceLineNo">4996</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.4996"></a>
+<span class="sourceLineNo">4997</span>        }<a name="line.4997"></a>
+<span class="sourceLineNo">4998</span><a name="line.4998"></a>
+<span class="sourceLineNo">4999</span>        public static long hash64(final float[] data) {<a name="line.4999"></a>
+<span class="sourceLineNo">5000</span>            if (data == null)<a name="line.5000"></a>
+<span class="sourceLineNo">5001</span>                return 0L;<a name="line.5001"></a>
+<span class="sourceLineNo">5002</span>            final int len = data.length;<a name="line.5002"></a>
+<span class="sourceLineNo">5003</span>            long a = len;<a name="line.5003"></a>
+<span class="sourceLineNo">5004</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5004"></a>
+<span class="sourceLineNo">5005</span>                a *= 0xAC564B05L;<a name="line.5005"></a>
+<span class="sourceLineNo">5006</span>                a += NumberTools.floatToIntBits(data[i]) * 0x517CC1B727220A95L;<a name="line.5006"></a>
+<span class="sourceLineNo">5007</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5007"></a>
+<span class="sourceLineNo">5008</span>            }<a name="line.5008"></a>
+<span class="sourceLineNo">5009</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5009"></a>
+<span class="sourceLineNo">5010</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5010"></a>
+<span class="sourceLineNo">5011</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5011"></a>
+<span class="sourceLineNo">5012</span>        }<a name="line.5012"></a>
+<span class="sourceLineNo">5013</span><a name="line.5013"></a>
+<span class="sourceLineNo">5014</span>        public static long hash64(final double[] data) {<a name="line.5014"></a>
+<span class="sourceLineNo">5015</span>            if (data == null)<a name="line.5015"></a>
+<span class="sourceLineNo">5016</span>                return 0L;<a name="line.5016"></a>
+<span class="sourceLineNo">5017</span>            final int len = data.length;<a name="line.5017"></a>
+<span class="sourceLineNo">5018</span>            long a = len;<a name="line.5018"></a>
+<span class="sourceLineNo">5019</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5019"></a>
+<span class="sourceLineNo">5020</span>                a *= 0xAC564B05L;<a name="line.5020"></a>
+<span class="sourceLineNo">5021</span>                a += NumberTools.doubleToLongBits(data[i]) * 0x517CC1B727220A95L;<a name="line.5021"></a>
+<span class="sourceLineNo">5022</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5022"></a>
+<span class="sourceLineNo">5023</span>            }<a name="line.5023"></a>
+<span class="sourceLineNo">5024</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5024"></a>
+<span class="sourceLineNo">5025</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5025"></a>
+<span class="sourceLineNo">5026</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5026"></a>
+<span class="sourceLineNo">5027</span>        }<a name="line.5027"></a>
+<span class="sourceLineNo">5028</span><a name="line.5028"></a>
+<span class="sourceLineNo">5029</span>        /**<a name="line.5029"></a>
+<span class="sourceLineNo">5030</span>         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).<a name="line.5030"></a>
+<span class="sourceLineNo">5031</span>         *<a name="line.5031"></a>
+<span class="sourceLineNo">5032</span>         * @param data  the char array to hash<a name="line.5032"></a>
+<span class="sourceLineNo">5033</span>         * @param start the start of the section to hash (inclusive)<a name="line.5033"></a>
+<span class="sourceLineNo">5034</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5034"></a>
+<span class="sourceLineNo">5035</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5035"></a>
+<span class="sourceLineNo">5036</span>         */<a name="line.5036"></a>
+<span class="sourceLineNo">5037</span>        public static long hash64(final char[] data, final int start, final int end) {<a name="line.5037"></a>
+<span class="sourceLineNo">5038</span>            if (data == null || start &gt;= end)<a name="line.5038"></a>
+<span class="sourceLineNo">5039</span>                return 0L;<a name="line.5039"></a>
+<span class="sourceLineNo">5040</span>            final int len = end &lt; data.length ? end : data.length;<a name="line.5040"></a>
+<span class="sourceLineNo">5041</span>            long a = len - start;<a name="line.5041"></a>
+<span class="sourceLineNo">5042</span>            for (int i = start; i &lt; len; i++) {<a name="line.5042"></a>
+<span class="sourceLineNo">5043</span>                a *= 0xAC564B05L;<a name="line.5043"></a>
+<span class="sourceLineNo">5044</span>                a += data[i] * 0x517CC1B727220A95L;<a name="line.5044"></a>
+<span class="sourceLineNo">5045</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5045"></a>
+<span class="sourceLineNo">5046</span>            }<a name="line.5046"></a>
+<span class="sourceLineNo">5047</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5047"></a>
+<span class="sourceLineNo">5048</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5048"></a>
+<span class="sourceLineNo">5049</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5049"></a>
+<span class="sourceLineNo">5050</span>        }<a name="line.5050"></a>
+<span class="sourceLineNo">5051</span><a name="line.5051"></a>
+<span class="sourceLineNo">5052</span>        /**<a name="line.5052"></a>
+<span class="sourceLineNo">5053</span>         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).<a name="line.5053"></a>
+<span class="sourceLineNo">5054</span>         *<a name="line.5054"></a>
+<span class="sourceLineNo">5055</span>         * @param data  the String or other CharSequence to hash<a name="line.5055"></a>
+<span class="sourceLineNo">5056</span>         * @param start the start of the section to hash (inclusive)<a name="line.5056"></a>
+<span class="sourceLineNo">5057</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5057"></a>
+<span class="sourceLineNo">5058</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5058"></a>
+<span class="sourceLineNo">5059</span>         */<a name="line.5059"></a>
+<span class="sourceLineNo">5060</span>        public static long hash64(final CharSequence data, final int start, final int end) {<a name="line.5060"></a>
+<span class="sourceLineNo">5061</span>            if (data == null || start &gt;= end)<a name="line.5061"></a>
+<span class="sourceLineNo">5062</span>                return 0L;<a name="line.5062"></a>
+<span class="sourceLineNo">5063</span>            final int len = end &lt; data.length() ? end : data.length();<a name="line.5063"></a>
+<span class="sourceLineNo">5064</span>            long a = len - start;<a name="line.5064"></a>
+<span class="sourceLineNo">5065</span>            for (int i = start; i &lt; len; i++) {<a name="line.5065"></a>
+<span class="sourceLineNo">5066</span>                a *= 0xAC564B05L;<a name="line.5066"></a>
+<span class="sourceLineNo">5067</span>                a += data.charAt(i) * 0x517CC1B727220A95L;<a name="line.5067"></a>
+<span class="sourceLineNo">5068</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5068"></a>
+<span class="sourceLineNo">5069</span>            }<a name="line.5069"></a>
+<span class="sourceLineNo">5070</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5070"></a>
+<span class="sourceLineNo">5071</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5071"></a>
+<span class="sourceLineNo">5072</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5072"></a>
+<span class="sourceLineNo">5073</span>        }<a name="line.5073"></a>
+<span class="sourceLineNo">5074</span><a name="line.5074"></a>
+<span class="sourceLineNo">5075</span>        /**<a name="line.5075"></a>
+<span class="sourceLineNo">5076</span>         * Hashes only a subsection of the given data, starting at start (inclusive), ending before end (exclusive), and<a name="line.5076"></a>
+<span class="sourceLineNo">5077</span>         * moving between chars in increments of step (which is always greater than 0).<a name="line.5077"></a>
+<span class="sourceLineNo">5078</span>         *<a name="line.5078"></a>
+<span class="sourceLineNo">5079</span>         * @param data  the char array to hash<a name="line.5079"></a>
+<span class="sourceLineNo">5080</span>         * @param start the start of the section to hash (inclusive)<a name="line.5080"></a>
+<span class="sourceLineNo">5081</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5081"></a>
+<span class="sourceLineNo">5082</span>         * @param step  how many elements to advance after using one element from data; must be greater than 0<a name="line.5082"></a>
+<span class="sourceLineNo">5083</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5083"></a>
+<span class="sourceLineNo">5084</span>         */<a name="line.5084"></a>
+<span class="sourceLineNo">5085</span>        public static long hash64(final char[] data, final int start, final int end, final int step) {<a name="line.5085"></a>
+<span class="sourceLineNo">5086</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.5086"></a>
+<span class="sourceLineNo">5087</span>                return 0L;<a name="line.5087"></a>
+<span class="sourceLineNo">5088</span>            final int len = end &lt; data.length ? end : data.length;<a name="line.5088"></a>
+<span class="sourceLineNo">5089</span>            long a = len - start;<a name="line.5089"></a>
+<span class="sourceLineNo">5090</span>            for (int i = start; i &lt; len; i += step) {<a name="line.5090"></a>
+<span class="sourceLineNo">5091</span>                a *= 0xAC564B05L;<a name="line.5091"></a>
+<span class="sourceLineNo">5092</span>                a += data[i] * 0x517CC1B727220A95L;<a name="line.5092"></a>
+<span class="sourceLineNo">5093</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5093"></a>
+<span class="sourceLineNo">5094</span>            }<a name="line.5094"></a>
+<span class="sourceLineNo">5095</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5095"></a>
+<span class="sourceLineNo">5096</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5096"></a>
+<span class="sourceLineNo">5097</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5097"></a>
+<span class="sourceLineNo">5098</span>        }<a name="line.5098"></a>
+<span class="sourceLineNo">5099</span><a name="line.5099"></a>
+<span class="sourceLineNo">5100</span>        /**<a name="line.5100"></a>
+<span class="sourceLineNo">5101</span>         * Hashes only a subsection of the given data, starting at start (inclusive), ending before end (exclusive), and<a name="line.5101"></a>
+<span class="sourceLineNo">5102</span>         * moving between chars in increments of step (which is always greater than 0).<a name="line.5102"></a>
+<span class="sourceLineNo">5103</span>         *<a name="line.5103"></a>
+<span class="sourceLineNo">5104</span>         * @param data  the String or other CharSequence to hash<a name="line.5104"></a>
+<span class="sourceLineNo">5105</span>         * @param start the start of the section to hash (inclusive)<a name="line.5105"></a>
+<span class="sourceLineNo">5106</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5106"></a>
+<span class="sourceLineNo">5107</span>         * @param step  how many elements to advance after using one element from data; must be greater than 0<a name="line.5107"></a>
+<span class="sourceLineNo">5108</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5108"></a>
+<span class="sourceLineNo">5109</span>         */<a name="line.5109"></a>
+<span class="sourceLineNo">5110</span>        public static long hash64(final CharSequence data, final int start, final int end, final int step) {<a name="line.5110"></a>
+<span class="sourceLineNo">5111</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.5111"></a>
+<span class="sourceLineNo">5112</span>                return 0L;<a name="line.5112"></a>
+<span class="sourceLineNo">5113</span>            final int len = end &lt; data.length() ? end : data.length();<a name="line.5113"></a>
+<span class="sourceLineNo">5114</span>            long a = len - start;<a name="line.5114"></a>
+<span class="sourceLineNo">5115</span>            for (int i = start; i &lt; len; i += step) {<a name="line.5115"></a>
+<span class="sourceLineNo">5116</span>                a *= 0xAC564B05L;<a name="line.5116"></a>
+<span class="sourceLineNo">5117</span>                a += data.charAt(i) * 0x517CC1B727220A95L;<a name="line.5117"></a>
+<span class="sourceLineNo">5118</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5118"></a>
+<span class="sourceLineNo">5119</span>            }<a name="line.5119"></a>
+<span class="sourceLineNo">5120</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5120"></a>
+<span class="sourceLineNo">5121</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5121"></a>
+<span class="sourceLineNo">5122</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5122"></a>
+<span class="sourceLineNo">5123</span>        }<a name="line.5123"></a>
+<span class="sourceLineNo">5124</span><a name="line.5124"></a>
+<span class="sourceLineNo">5125</span>        public static long hash64(final char[][] data) {<a name="line.5125"></a>
+<span class="sourceLineNo">5126</span>            if (data == null)<a name="line.5126"></a>
+<span class="sourceLineNo">5127</span>                return 0L;<a name="line.5127"></a>
+<span class="sourceLineNo">5128</span>            final int len = data.length;<a name="line.5128"></a>
+<span class="sourceLineNo">5129</span>            long a = len;<a name="line.5129"></a>
+<span class="sourceLineNo">5130</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5130"></a>
+<span class="sourceLineNo">5131</span>                a *= 0xAC564B05L;<a name="line.5131"></a>
+<span class="sourceLineNo">5132</span>                a += hash64(data[i]) * 0x517CC1B727220A95L;<a name="line.5132"></a>
+<span class="sourceLineNo">5133</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5133"></a>
+<span class="sourceLineNo">5134</span>            }<a name="line.5134"></a>
+<span class="sourceLineNo">5135</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5135"></a>
+<span class="sourceLineNo">5136</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5136"></a>
+<span class="sourceLineNo">5137</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5137"></a>
+<span class="sourceLineNo">5138</span>        }<a name="line.5138"></a>
+<span class="sourceLineNo">5139</span><a name="line.5139"></a>
+<span class="sourceLineNo">5140</span>        public static long hash64(final int[][] data) {<a name="line.5140"></a>
+<span class="sourceLineNo">5141</span>            if (data == null)<a name="line.5141"></a>
+<span class="sourceLineNo">5142</span>                return 0L;<a name="line.5142"></a>
+<span class="sourceLineNo">5143</span>            final int len = data.length;<a name="line.5143"></a>
+<span class="sourceLineNo">5144</span>            long a = len;<a name="line.5144"></a>
+<span class="sourceLineNo">5145</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5145"></a>
+<span class="sourceLineNo">5146</span>                a *= 0xAC564B05L;<a name="line.5146"></a>
+<span class="sourceLineNo">5147</span>                a += hash64(data[i]) * 0x517CC1B727220A95L;<a name="line.5147"></a>
+<span class="sourceLineNo">5148</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5148"></a>
+<span class="sourceLineNo">5149</span>            }<a name="line.5149"></a>
+<span class="sourceLineNo">5150</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5150"></a>
+<span class="sourceLineNo">5151</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5151"></a>
+<span class="sourceLineNo">5152</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5152"></a>
+<span class="sourceLineNo">5153</span>        }<a name="line.5153"></a>
+<span class="sourceLineNo">5154</span><a name="line.5154"></a>
+<span class="sourceLineNo">5155</span>        public static long hash64(final long[][] data) {<a name="line.5155"></a>
+<span class="sourceLineNo">5156</span>            if (data == null)<a name="line.5156"></a>
+<span class="sourceLineNo">5157</span>                return 0L;<a name="line.5157"></a>
+<span class="sourceLineNo">5158</span>            final int len = data.length;<a name="line.5158"></a>
+<span class="sourceLineNo">5159</span>            long a = len;<a name="line.5159"></a>
+<span class="sourceLineNo">5160</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5160"></a>
+<span class="sourceLineNo">5161</span>                a *= 0xAC564B05L;<a name="line.5161"></a>
+<span class="sourceLineNo">5162</span>                a += hash64(data[i]) * 0x517CC1B727220A95L;<a name="line.5162"></a>
+<span class="sourceLineNo">5163</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5163"></a>
+<span class="sourceLineNo">5164</span>            }<a name="line.5164"></a>
+<span class="sourceLineNo">5165</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5165"></a>
+<span class="sourceLineNo">5166</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5166"></a>
+<span class="sourceLineNo">5167</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5167"></a>
+<span class="sourceLineNo">5168</span>        }<a name="line.5168"></a>
+<span class="sourceLineNo">5169</span><a name="line.5169"></a>
+<span class="sourceLineNo">5170</span>        public static long hash64(final CharSequence[] data) {<a name="line.5170"></a>
+<span class="sourceLineNo">5171</span>            if (data == null)<a name="line.5171"></a>
+<span class="sourceLineNo">5172</span>                return 0L;<a name="line.5172"></a>
+<span class="sourceLineNo">5173</span>            final int len = data.length;<a name="line.5173"></a>
+<span class="sourceLineNo">5174</span>            long a = len;<a name="line.5174"></a>
+<span class="sourceLineNo">5175</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5175"></a>
+<span class="sourceLineNo">5176</span>                a *= 0xAC564B05L;<a name="line.5176"></a>
+<span class="sourceLineNo">5177</span>                a += hash64(data[i]) * 0x517CC1B727220A95L;<a name="line.5177"></a>
+<span class="sourceLineNo">5178</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5178"></a>
+<span class="sourceLineNo">5179</span>            }<a name="line.5179"></a>
+<span class="sourceLineNo">5180</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5180"></a>
+<span class="sourceLineNo">5181</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5181"></a>
+<span class="sourceLineNo">5182</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5182"></a>
+<span class="sourceLineNo">5183</span>        }<a name="line.5183"></a>
+<span class="sourceLineNo">5184</span><a name="line.5184"></a>
+<span class="sourceLineNo">5185</span>        public static long hash64(final CharSequence[]... data) {<a name="line.5185"></a>
+<span class="sourceLineNo">5186</span>            if (data == null)<a name="line.5186"></a>
+<span class="sourceLineNo">5187</span>                return 0L;<a name="line.5187"></a>
+<span class="sourceLineNo">5188</span>            final int len = data.length;<a name="line.5188"></a>
+<span class="sourceLineNo">5189</span>            long a = len;<a name="line.5189"></a>
+<span class="sourceLineNo">5190</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5190"></a>
+<span class="sourceLineNo">5191</span>                a *= 0xAC564B05L;<a name="line.5191"></a>
+<span class="sourceLineNo">5192</span>                a += hash64(data[i]) * 0x517CC1B727220A95L;<a name="line.5192"></a>
+<span class="sourceLineNo">5193</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5193"></a>
+<span class="sourceLineNo">5194</span>            }<a name="line.5194"></a>
+<span class="sourceLineNo">5195</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5195"></a>
+<span class="sourceLineNo">5196</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5196"></a>
+<span class="sourceLineNo">5197</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5197"></a>
+<span class="sourceLineNo">5198</span>        }<a name="line.5198"></a>
+<span class="sourceLineNo">5199</span><a name="line.5199"></a>
+<span class="sourceLineNo">5200</span>        public static long hash64(final Iterable&lt;? extends CharSequence&gt; data) {<a name="line.5200"></a>
+<span class="sourceLineNo">5201</span>            if (data == null)<a name="line.5201"></a>
+<span class="sourceLineNo">5202</span>                return 0L;<a name="line.5202"></a>
+<span class="sourceLineNo">5203</span>            long a = 0xD1B54A32D192ED03L;<a name="line.5203"></a>
+<span class="sourceLineNo">5204</span>            for (CharSequence datum : data) {<a name="line.5204"></a>
+<span class="sourceLineNo">5205</span>                a *= 0xAC564B05L;<a name="line.5205"></a>
+<span class="sourceLineNo">5206</span>                a += hash64(datum) * 0x517CC1B727220A95L;<a name="line.5206"></a>
+<span class="sourceLineNo">5207</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5207"></a>
+<span class="sourceLineNo">5208</span>            }<a name="line.5208"></a>
+<span class="sourceLineNo">5209</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5209"></a>
+<span class="sourceLineNo">5210</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5210"></a>
+<span class="sourceLineNo">5211</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5211"></a>
+<span class="sourceLineNo">5212</span>        }<a name="line.5212"></a>
+<span class="sourceLineNo">5213</span><a name="line.5213"></a>
+<span class="sourceLineNo">5214</span>        public static long hash64(final List&lt;? extends CharSequence&gt; data) {<a name="line.5214"></a>
+<span class="sourceLineNo">5215</span>            if (data == null)<a name="line.5215"></a>
+<span class="sourceLineNo">5216</span>                return 0L;<a name="line.5216"></a>
+<span class="sourceLineNo">5217</span>            final int len = data.size();<a name="line.5217"></a>
+<span class="sourceLineNo">5218</span>            long a = len;<a name="line.5218"></a>
+<span class="sourceLineNo">5219</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5219"></a>
+<span class="sourceLineNo">5220</span>                a *= 0xAC564B05L;<a name="line.5220"></a>
+<span class="sourceLineNo">5221</span>                a += hash64(data.get(i)) * 0x517CC1B727220A95L;<a name="line.5221"></a>
+<span class="sourceLineNo">5222</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5222"></a>
+<span class="sourceLineNo">5223</span>            }<a name="line.5223"></a>
+<span class="sourceLineNo">5224</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5224"></a>
+<span class="sourceLineNo">5225</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5225"></a>
+<span class="sourceLineNo">5226</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5226"></a>
+<span class="sourceLineNo">5227</span>        }<a name="line.5227"></a>
+<span class="sourceLineNo">5228</span><a name="line.5228"></a>
+<span class="sourceLineNo">5229</span>        public static long hash64(final Object[] data) {<a name="line.5229"></a>
+<span class="sourceLineNo">5230</span>            if (data == null)<a name="line.5230"></a>
+<span class="sourceLineNo">5231</span>                return 0L;<a name="line.5231"></a>
+<span class="sourceLineNo">5232</span>            final int len = data.length;<a name="line.5232"></a>
+<span class="sourceLineNo">5233</span>            long a = len;<a name="line.5233"></a>
+<span class="sourceLineNo">5234</span>            Object o;<a name="line.5234"></a>
+<span class="sourceLineNo">5235</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5235"></a>
+<span class="sourceLineNo">5236</span>                a *= 0xAC564B05L;<a name="line.5236"></a>
+<span class="sourceLineNo">5237</span>                a += ((o = data[i]) == null ? -1L : o.hashCode()) * 0x517CC1B727220A95L;<a name="line.5237"></a>
+<span class="sourceLineNo">5238</span>                a = (a &lt;&lt; 29 | a &gt;&gt;&gt; 35);<a name="line.5238"></a>
+<span class="sourceLineNo">5239</span>            }<a name="line.5239"></a>
+<span class="sourceLineNo">5240</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5240"></a>
+<span class="sourceLineNo">5241</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5241"></a>
+<span class="sourceLineNo">5242</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5242"></a>
+<span class="sourceLineNo">5243</span>        }<a name="line.5243"></a>
+<span class="sourceLineNo">5244</span>        public static long hash64(final Object data) {<a name="line.5244"></a>
+<span class="sourceLineNo">5245</span>            if (data == null)<a name="line.5245"></a>
+<span class="sourceLineNo">5246</span>                return 0L;<a name="line.5246"></a>
+<span class="sourceLineNo">5247</span>            long a = data.hashCode();<a name="line.5247"></a>
+<span class="sourceLineNo">5248</span>            a = (a ^ (a &lt;&lt; 41 | a &gt;&gt;&gt; 23) ^ (a &lt;&lt; 17 | a &gt;&gt;&gt; 47)) * 0xAEF17502108EF2D9L;<a name="line.5248"></a>
+<span class="sourceLineNo">5249</span>            a = (a ^ a &gt;&gt;&gt; 43 ^ a &gt;&gt;&gt; 31 ^ a &gt;&gt;&gt; 23) * 0xDB4F0B9175AE2165L;<a name="line.5249"></a>
+<span class="sourceLineNo">5250</span>            return a ^ a &gt;&gt;&gt; 28;<a name="line.5250"></a>
+<span class="sourceLineNo">5251</span>        }<a name="line.5251"></a>
+<span class="sourceLineNo">5252</span><a name="line.5252"></a>
+<span class="sourceLineNo">5253</span><a name="line.5253"></a>
+<span class="sourceLineNo">5254</span>        public static int hash(final CharSequence data) {<a name="line.5254"></a>
+<span class="sourceLineNo">5255</span>            if (data == null)<a name="line.5255"></a>
+<span class="sourceLineNo">5256</span>                return 0;<a name="line.5256"></a>
+<span class="sourceLineNo">5257</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5257"></a>
+<span class="sourceLineNo">5258</span>            final int len = data.length();<a name="line.5258"></a>
+<span class="sourceLineNo">5259</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5259"></a>
+<span class="sourceLineNo">5260</span>                result ^= (run += (data.charAt(i) ^ 0xC3564E95) * 0x9E375);<a name="line.5260"></a>
+<span class="sourceLineNo">5261</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5261"></a>
+<span class="sourceLineNo">5262</span>            }<a name="line.5262"></a>
+<span class="sourceLineNo">5263</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5263"></a>
+<span class="sourceLineNo">5264</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5264"></a>
+<span class="sourceLineNo">5265</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5265"></a>
+<span class="sourceLineNo">5266</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5266"></a>
+<span class="sourceLineNo">5267</span>        }<a name="line.5267"></a>
+<span class="sourceLineNo">5268</span><a name="line.5268"></a>
+<span class="sourceLineNo">5269</span>        public static int hash(final boolean[] data) {<a name="line.5269"></a>
+<span class="sourceLineNo">5270</span>            if (data == null)<a name="line.5270"></a>
+<span class="sourceLineNo">5271</span>                return 0;<a name="line.5271"></a>
+<span class="sourceLineNo">5272</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5272"></a>
+<span class="sourceLineNo">5273</span>            final int len = data.length;<a name="line.5273"></a>
+<span class="sourceLineNo">5274</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5274"></a>
+<span class="sourceLineNo">5275</span>                result ^= (run += (data[i] ? 0x6F51AFDB : 0xC3564E95));<a name="line.5275"></a>
+<span class="sourceLineNo">5276</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5276"></a>
+<span class="sourceLineNo">5277</span>            }<a name="line.5277"></a>
+<span class="sourceLineNo">5278</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5278"></a>
+<span class="sourceLineNo">5279</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5279"></a>
+<span class="sourceLineNo">5280</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5280"></a>
+<span class="sourceLineNo">5281</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5281"></a>
+<span class="sourceLineNo">5282</span>        }<a name="line.5282"></a>
+<span class="sourceLineNo">5283</span><a name="line.5283"></a>
+<span class="sourceLineNo">5284</span>        public static int hash(final byte[] data) {<a name="line.5284"></a>
+<span class="sourceLineNo">5285</span>            if (data == null)<a name="line.5285"></a>
+<span class="sourceLineNo">5286</span>                return 0;<a name="line.5286"></a>
+<span class="sourceLineNo">5287</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5287"></a>
+<span class="sourceLineNo">5288</span>            final int len = data.length;<a name="line.5288"></a>
+<span class="sourceLineNo">5289</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5289"></a>
+<span class="sourceLineNo">5290</span>                result ^= (run += (data[i] ^ 0xC3564E95) * 0x9E375);<a name="line.5290"></a>
+<span class="sourceLineNo">5291</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5291"></a>
+<span class="sourceLineNo">5292</span>            }<a name="line.5292"></a>
+<span class="sourceLineNo">5293</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5293"></a>
+<span class="sourceLineNo">5294</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5294"></a>
+<span class="sourceLineNo">5295</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5295"></a>
+<span class="sourceLineNo">5296</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5296"></a>
+<span class="sourceLineNo">5297</span>        }<a name="line.5297"></a>
+<span class="sourceLineNo">5298</span><a name="line.5298"></a>
+<span class="sourceLineNo">5299</span>        public static int hash(final short[] data) {<a name="line.5299"></a>
+<span class="sourceLineNo">5300</span>            if (data == null)<a name="line.5300"></a>
+<span class="sourceLineNo">5301</span>                return 0;<a name="line.5301"></a>
+<span class="sourceLineNo">5302</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5302"></a>
+<span class="sourceLineNo">5303</span>            final int len = data.length;<a name="line.5303"></a>
+<span class="sourceLineNo">5304</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5304"></a>
+<span class="sourceLineNo">5305</span>                result ^= (run += (data[i] ^ 0xC3564E95) * 0x9E375);<a name="line.5305"></a>
+<span class="sourceLineNo">5306</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5306"></a>
+<span class="sourceLineNo">5307</span>            }<a name="line.5307"></a>
+<span class="sourceLineNo">5308</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5308"></a>
+<span class="sourceLineNo">5309</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5309"></a>
+<span class="sourceLineNo">5310</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5310"></a>
+<span class="sourceLineNo">5311</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5311"></a>
+<span class="sourceLineNo">5312</span>        }<a name="line.5312"></a>
+<span class="sourceLineNo">5313</span><a name="line.5313"></a>
+<span class="sourceLineNo">5314</span>        public static int hash(final int[] data) {<a name="line.5314"></a>
+<span class="sourceLineNo">5315</span>            if (data == null)<a name="line.5315"></a>
+<span class="sourceLineNo">5316</span>                return 0;<a name="line.5316"></a>
+<span class="sourceLineNo">5317</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5317"></a>
+<span class="sourceLineNo">5318</span>            final int len = data.length;<a name="line.5318"></a>
+<span class="sourceLineNo">5319</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5319"></a>
+<span class="sourceLineNo">5320</span>                result ^= (run += (data[i] ^ 0xC3564E95) * 0x9E375);<a name="line.5320"></a>
+<span class="sourceLineNo">5321</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5321"></a>
+<span class="sourceLineNo">5322</span>            }<a name="line.5322"></a>
+<span class="sourceLineNo">5323</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5323"></a>
+<span class="sourceLineNo">5324</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5324"></a>
+<span class="sourceLineNo">5325</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5325"></a>
+<span class="sourceLineNo">5326</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5326"></a>
+<span class="sourceLineNo">5327</span>        }<a name="line.5327"></a>
+<span class="sourceLineNo">5328</span><a name="line.5328"></a>
+<span class="sourceLineNo">5329</span>        public static int hash(final long[] data) {<a name="line.5329"></a>
+<span class="sourceLineNo">5330</span>            if (data == null)<a name="line.5330"></a>
+<span class="sourceLineNo">5331</span>                return 0;<a name="line.5331"></a>
+<span class="sourceLineNo">5332</span>            long result = 0x1A976FDF6BF60B8EL, run = 0x60642E2A34326F15L;<a name="line.5332"></a>
+<span class="sourceLineNo">5333</span>            final int len = data.length;<a name="line.5333"></a>
+<span class="sourceLineNo">5334</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5334"></a>
+<span class="sourceLineNo">5335</span>                result = (run += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL) ^ (result &lt;&lt; 54 | result &gt;&gt;&gt; 10);<a name="line.5335"></a>
+<span class="sourceLineNo">5336</span>            }<a name="line.5336"></a>
+<span class="sourceLineNo">5337</span>            result += (run ^ run &gt;&gt;&gt; 26) * 0x632BE59BD9B4E019L;<a name="line.5337"></a>
+<span class="sourceLineNo">5338</span>            result = (result ^ result &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;<a name="line.5338"></a>
+<span class="sourceLineNo">5339</span>            return (int)((result ^ result &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L);<a name="line.5339"></a>
+<span class="sourceLineNo">5340</span>        }<a name="line.5340"></a>
+<span class="sourceLineNo">5341</span><a name="line.5341"></a>
+<span class="sourceLineNo">5342</span>        public static int hash(final char[] data) {<a name="line.5342"></a>
+<span class="sourceLineNo">5343</span>            if (data == null)<a name="line.5343"></a>
+<span class="sourceLineNo">5344</span>                return 0;<a name="line.5344"></a>
+<span class="sourceLineNo">5345</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5345"></a>
+<span class="sourceLineNo">5346</span>            final int len = data.length;<a name="line.5346"></a>
+<span class="sourceLineNo">5347</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5347"></a>
+<span class="sourceLineNo">5348</span>                result ^= (run += (data[i] ^ 0xC3564E95) * 0x9E375);<a name="line.5348"></a>
+<span class="sourceLineNo">5349</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5349"></a>
+<span class="sourceLineNo">5350</span>            }<a name="line.5350"></a>
+<span class="sourceLineNo">5351</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5351"></a>
+<span class="sourceLineNo">5352</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5352"></a>
+<span class="sourceLineNo">5353</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5353"></a>
+<span class="sourceLineNo">5354</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5354"></a>
+<span class="sourceLineNo">5355</span>        }<a name="line.5355"></a>
+<span class="sourceLineNo">5356</span><a name="line.5356"></a>
+<span class="sourceLineNo">5357</span>        public static int hash(final float[] data) {<a name="line.5357"></a>
+<span class="sourceLineNo">5358</span>            if (data == null)<a name="line.5358"></a>
+<span class="sourceLineNo">5359</span>                return 0;<a name="line.5359"></a>
+<span class="sourceLineNo">5360</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5360"></a>
+<span class="sourceLineNo">5361</span>            final int len = data.length;<a name="line.5361"></a>
+<span class="sourceLineNo">5362</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5362"></a>
+<span class="sourceLineNo">5363</span>                result ^= (run += (NumberTools.floatToIntBits(data[i]) ^ 0xC3564E95) * 0x9E375);<a name="line.5363"></a>
+<span class="sourceLineNo">5364</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5364"></a>
+<span class="sourceLineNo">5365</span>            }<a name="line.5365"></a>
+<span class="sourceLineNo">5366</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5366"></a>
+<span class="sourceLineNo">5367</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5367"></a>
+<span class="sourceLineNo">5368</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5368"></a>
+<span class="sourceLineNo">5369</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5369"></a>
+<span class="sourceLineNo">5370</span><a name="line.5370"></a>
+<span class="sourceLineNo">5371</span>        }<a name="line.5371"></a>
+<span class="sourceLineNo">5372</span><a name="line.5372"></a>
+<span class="sourceLineNo">5373</span>        public static int hash(final double[] data) {<a name="line.5373"></a>
+<span class="sourceLineNo">5374</span>            if (data == null)<a name="line.5374"></a>
+<span class="sourceLineNo">5375</span>                return 0;<a name="line.5375"></a>
+<span class="sourceLineNo">5376</span>            long result = 0x1A976FDF6BF60B8EL, run = 0x60642E2A34326F15L;<a name="line.5376"></a>
+<span class="sourceLineNo">5377</span>            final int len = data.length;<a name="line.5377"></a>
+<span class="sourceLineNo">5378</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5378"></a>
+<span class="sourceLineNo">5379</span>                result ^= (run += (NumberTools.doubleToLongBits(data[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);<a name="line.5379"></a>
+<span class="sourceLineNo">5380</span>                result = (result &lt;&lt; 54 | result &gt;&gt;&gt; 10);<a name="line.5380"></a>
+<span class="sourceLineNo">5381</span>            }<a name="line.5381"></a>
+<span class="sourceLineNo">5382</span>            result += (run ^ run &gt;&gt;&gt; 26) * 0x632BE59BD9B4E019L;<a name="line.5382"></a>
+<span class="sourceLineNo">5383</span>            result = (result ^ result &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;<a name="line.5383"></a>
+<span class="sourceLineNo">5384</span>            return (int)((result ^ result &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L);<a name="line.5384"></a>
+<span class="sourceLineNo">5385</span>        }<a name="line.5385"></a>
+<span class="sourceLineNo">5386</span><a name="line.5386"></a>
+<span class="sourceLineNo">5387</span>        /**<a name="line.5387"></a>
+<span class="sourceLineNo">5388</span>         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).<a name="line.5388"></a>
+<span class="sourceLineNo">5389</span>         *<a name="line.5389"></a>
+<span class="sourceLineNo">5390</span>         * @param data  the char array to hash<a name="line.5390"></a>
+<span class="sourceLineNo">5391</span>         * @param start the start of the section to hash (inclusive)<a name="line.5391"></a>
+<span class="sourceLineNo">5392</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5392"></a>
+<span class="sourceLineNo">5393</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5393"></a>
+<span class="sourceLineNo">5394</span>         */<a name="line.5394"></a>
+<span class="sourceLineNo">5395</span>        public static int hash(final char[] data, final int start, final int end) {<a name="line.5395"></a>
+<span class="sourceLineNo">5396</span>            if (data == null || start &gt;= end)<a name="line.5396"></a>
+<span class="sourceLineNo">5397</span>                return 0;<a name="line.5397"></a>
+<span class="sourceLineNo">5398</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5398"></a>
+<span class="sourceLineNo">5399</span>            final int len = end &lt; data.length ? end : data.length;<a name="line.5399"></a>
+<span class="sourceLineNo">5400</span>            for (int i = start; i &lt; len; i++) {<a name="line.5400"></a>
+<span class="sourceLineNo">5401</span>                result ^= (run += (data[i] ^ 0xC3564E95) * 0x9E375);<a name="line.5401"></a>
+<span class="sourceLineNo">5402</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5402"></a>
+<span class="sourceLineNo">5403</span>            }<a name="line.5403"></a>
+<span class="sourceLineNo">5404</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5404"></a>
+<span class="sourceLineNo">5405</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5405"></a>
+<span class="sourceLineNo">5406</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5406"></a>
+<span class="sourceLineNo">5407</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5407"></a>
+<span class="sourceLineNo">5408</span>        }<a name="line.5408"></a>
+<span class="sourceLineNo">5409</span><a name="line.5409"></a>
+<span class="sourceLineNo">5410</span>        /**<a name="line.5410"></a>
+<span class="sourceLineNo">5411</span>         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).<a name="line.5411"></a>
+<span class="sourceLineNo">5412</span>         *<a name="line.5412"></a>
+<span class="sourceLineNo">5413</span>         * @param data  the String or other CharSequence to hash<a name="line.5413"></a>
+<span class="sourceLineNo">5414</span>         * @param start the start of the section to hash (inclusive)<a name="line.5414"></a>
+<span class="sourceLineNo">5415</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5415"></a>
+<span class="sourceLineNo">5416</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5416"></a>
+<span class="sourceLineNo">5417</span>         */<a name="line.5417"></a>
+<span class="sourceLineNo">5418</span>        public static int hash(final CharSequence data, final int start, final int end) {<a name="line.5418"></a>
+<span class="sourceLineNo">5419</span>            if (data == null || start &gt;= end)<a name="line.5419"></a>
+<span class="sourceLineNo">5420</span>                return 0;<a name="line.5420"></a>
+<span class="sourceLineNo">5421</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5421"></a>
+<span class="sourceLineNo">5422</span>            final int len = end &lt; data.length() ? end : data.length();<a name="line.5422"></a>
+<span class="sourceLineNo">5423</span>            for (int i = start; i &lt; len; i++) {<a name="line.5423"></a>
+<span class="sourceLineNo">5424</span>                result ^= (run += (data.charAt(i) ^ 0xC3564E95) * 0x9E375);<a name="line.5424"></a>
+<span class="sourceLineNo">5425</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5425"></a>
+<span class="sourceLineNo">5426</span>            }<a name="line.5426"></a>
+<span class="sourceLineNo">5427</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5427"></a>
+<span class="sourceLineNo">5428</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5428"></a>
+<span class="sourceLineNo">5429</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5429"></a>
+<span class="sourceLineNo">5430</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5430"></a>
+<span class="sourceLineNo">5431</span>        }<a name="line.5431"></a>
+<span class="sourceLineNo">5432</span><a name="line.5432"></a>
+<span class="sourceLineNo">5433</span>        /**<a name="line.5433"></a>
+<span class="sourceLineNo">5434</span>         * Hashes only a subsection of the given data, starting at start (inclusive), ending before end (exclusive), and<a name="line.5434"></a>
+<span class="sourceLineNo">5435</span>         * moving between chars in increments of step (which is always greater than 0).<a name="line.5435"></a>
+<span class="sourceLineNo">5436</span>         *<a name="line.5436"></a>
+<span class="sourceLineNo">5437</span>         * @param data  the char array to hash<a name="line.5437"></a>
+<span class="sourceLineNo">5438</span>         * @param start the start of the section to hash (inclusive)<a name="line.5438"></a>
+<span class="sourceLineNo">5439</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5439"></a>
+<span class="sourceLineNo">5440</span>         * @param step  how many elements to advance after using one element from data; must be greater than 0<a name="line.5440"></a>
+<span class="sourceLineNo">5441</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5441"></a>
+<span class="sourceLineNo">5442</span>         */<a name="line.5442"></a>
+<span class="sourceLineNo">5443</span>        public static int hash(final char[] data, final int start, final int end, final int step) {<a name="line.5443"></a>
+<span class="sourceLineNo">5444</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.5444"></a>
+<span class="sourceLineNo">5445</span>                return 0;<a name="line.5445"></a>
+<span class="sourceLineNo">5446</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5446"></a>
+<span class="sourceLineNo">5447</span>            final int len = end &lt; data.length ? end : data.length;<a name="line.5447"></a>
+<span class="sourceLineNo">5448</span>            for (int i = start; i &lt; len; i += step) {<a name="line.5448"></a>
+<span class="sourceLineNo">5449</span>                result ^= (run += (data[i] ^ 0xC3564E95) * 0x9E375);<a name="line.5449"></a>
+<span class="sourceLineNo">5450</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5450"></a>
+<span class="sourceLineNo">5451</span>            }<a name="line.5451"></a>
+<span class="sourceLineNo">5452</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5452"></a>
+<span class="sourceLineNo">5453</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5453"></a>
+<span class="sourceLineNo">5454</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5454"></a>
+<span class="sourceLineNo">5455</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5455"></a>
+<span class="sourceLineNo">5456</span>        }<a name="line.5456"></a>
+<span class="sourceLineNo">5457</span><a name="line.5457"></a>
+<span class="sourceLineNo">5458</span>        /**<a name="line.5458"></a>
+<span class="sourceLineNo">5459</span>         * Hashes only a subsection of the given data, starting at start (inclusive), ending before end (exclusive), and<a name="line.5459"></a>
+<span class="sourceLineNo">5460</span>         * moving between chars in increments of step (which is always greater than 0).<a name="line.5460"></a>
+<span class="sourceLineNo">5461</span>         *<a name="line.5461"></a>
+<span class="sourceLineNo">5462</span>         * @param data  the String or other CharSequence to hash<a name="line.5462"></a>
+<span class="sourceLineNo">5463</span>         * @param start the start of the section to hash (inclusive)<a name="line.5463"></a>
+<span class="sourceLineNo">5464</span>         * @param end   the end of the section to hash (exclusive)<a name="line.5464"></a>
+<span class="sourceLineNo">5465</span>         * @param step  how many elements to advance after using one element from data; must be greater than 0<a name="line.5465"></a>
+<span class="sourceLineNo">5466</span>         * @return a 32-bit hash code for the requested section of data<a name="line.5466"></a>
+<span class="sourceLineNo">5467</span>         */<a name="line.5467"></a>
+<span class="sourceLineNo">5468</span>        public static int hash(final CharSequence data, final int start, final int end, final int step) {<a name="line.5468"></a>
+<span class="sourceLineNo">5469</span>            if (data == null || start &gt;= end || step &lt;= 0)<a name="line.5469"></a>
+<span class="sourceLineNo">5470</span>                return 0;<a name="line.5470"></a>
+<span class="sourceLineNo">5471</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5471"></a>
+<span class="sourceLineNo">5472</span>            final int len = end &lt; data.length() ? end : data.length();<a name="line.5472"></a>
+<span class="sourceLineNo">5473</span>            for (int i = start; i &lt; len; i += step) {<a name="line.5473"></a>
+<span class="sourceLineNo">5474</span>                result ^= (run += (data.charAt(i) ^ 0xC3564E95) * 0x9E375);<a name="line.5474"></a>
+<span class="sourceLineNo">5475</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5475"></a>
+<span class="sourceLineNo">5476</span>            }<a name="line.5476"></a>
+<span class="sourceLineNo">5477</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5477"></a>
+<span class="sourceLineNo">5478</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5478"></a>
+<span class="sourceLineNo">5479</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5479"></a>
+<span class="sourceLineNo">5480</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5480"></a>
+<span class="sourceLineNo">5481</span>        }<a name="line.5481"></a>
+<span class="sourceLineNo">5482</span><a name="line.5482"></a>
+<span class="sourceLineNo">5483</span>        public static int hash(final char[][] data) {<a name="line.5483"></a>
+<span class="sourceLineNo">5484</span>            if (data == null)<a name="line.5484"></a>
+<span class="sourceLineNo">5485</span>                return 0;<a name="line.5485"></a>
+<span class="sourceLineNo">5486</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5486"></a>
+<span class="sourceLineNo">5487</span>            final int len = data.length;<a name="line.5487"></a>
+<span class="sourceLineNo">5488</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5488"></a>
+<span class="sourceLineNo">5489</span>                result ^= (run += (hash(data[i]) ^ 0xC3564E95) * 0x9E375);<a name="line.5489"></a>
+<span class="sourceLineNo">5490</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5490"></a>
+<span class="sourceLineNo">5491</span>            }<a name="line.5491"></a>
+<span class="sourceLineNo">5492</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5492"></a>
+<span class="sourceLineNo">5493</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5493"></a>
+<span class="sourceLineNo">5494</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5494"></a>
+<span class="sourceLineNo">5495</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5495"></a>
+<span class="sourceLineNo">5496</span>        }<a name="line.5496"></a>
+<span class="sourceLineNo">5497</span><a name="line.5497"></a>
+<span class="sourceLineNo">5498</span>        public static int hash(final int[][] data) {<a name="line.5498"></a>
+<span class="sourceLineNo">5499</span>            if (data == null)<a name="line.5499"></a>
+<span class="sourceLineNo">5500</span>                return 0;<a name="line.5500"></a>
+<span class="sourceLineNo">5501</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5501"></a>
+<span class="sourceLineNo">5502</span>            final int len = data.length;<a name="line.5502"></a>
+<span class="sourceLineNo">5503</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5503"></a>
+<span class="sourceLineNo">5504</span>                result ^= (run += (hash(data[i]) ^ 0xC3564E95) * 0x9E375);<a name="line.5504"></a>
+<span class="sourceLineNo">5505</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5505"></a>
+<span class="sourceLineNo">5506</span>            }<a name="line.5506"></a>
+<span class="sourceLineNo">5507</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5507"></a>
+<span class="sourceLineNo">5508</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5508"></a>
+<span class="sourceLineNo">5509</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5509"></a>
+<span class="sourceLineNo">5510</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5510"></a>
+<span class="sourceLineNo">5511</span>        }<a name="line.5511"></a>
+<span class="sourceLineNo">5512</span><a name="line.5512"></a>
+<span class="sourceLineNo">5513</span>        public static int hash(final long[][] data) {<a name="line.5513"></a>
+<span class="sourceLineNo">5514</span>            if (data == null)<a name="line.5514"></a>
+<span class="sourceLineNo">5515</span>                return 0;<a name="line.5515"></a>
+<span class="sourceLineNo">5516</span>            long result = 0x1A976FDF6BF60B8EL, run = 0x60642E2A34326F15L;<a name="line.5516"></a>
+<span class="sourceLineNo">5517</span>            final int len = data.length;<a name="line.5517"></a>
+<span class="sourceLineNo">5518</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5518"></a>
+<span class="sourceLineNo">5519</span>                result ^= (run += (hash64(data[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);<a name="line.5519"></a>
+<span class="sourceLineNo">5520</span>                result = (result &lt;&lt; 54 | result &gt;&gt;&gt; 10);<a name="line.5520"></a>
+<span class="sourceLineNo">5521</span>            }<a name="line.5521"></a>
+<span class="sourceLineNo">5522</span>            result += (run ^ run &gt;&gt;&gt; 26) * 0x632BE59BD9B4E019L;<a name="line.5522"></a>
+<span class="sourceLineNo">5523</span>            result = (result ^ result &gt;&gt;&gt; 33) * 0xFF51AFD7ED558CCDL;<a name="line.5523"></a>
+<span class="sourceLineNo">5524</span>            return (int)((result ^ result &gt;&gt;&gt; 33) * 0xC4CEB9FE1A85EC53L);<a name="line.5524"></a>
+<span class="sourceLineNo">5525</span>        }<a name="line.5525"></a>
+<span class="sourceLineNo">5526</span><a name="line.5526"></a>
+<span class="sourceLineNo">5527</span>        public static int hash(final CharSequence[] data) {<a name="line.5527"></a>
+<span class="sourceLineNo">5528</span>            if (data == null)<a name="line.5528"></a>
+<span class="sourceLineNo">5529</span>                return 0;<a name="line.5529"></a>
+<span class="sourceLineNo">5530</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5530"></a>
+<span class="sourceLineNo">5531</span>            final int len = data.length;<a name="line.5531"></a>
+<span class="sourceLineNo">5532</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5532"></a>
+<span class="sourceLineNo">5533</span>                result ^= (run += (hash(data[i]) ^ 0xC3564E95) * 0x9E375);<a name="line.5533"></a>
+<span class="sourceLineNo">5534</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5534"></a>
+<span class="sourceLineNo">5535</span>            }<a name="line.5535"></a>
+<span class="sourceLineNo">5536</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5536"></a>
+<span class="sourceLineNo">5537</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5537"></a>
+<span class="sourceLineNo">5538</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5538"></a>
+<span class="sourceLineNo">5539</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5539"></a>
+<span class="sourceLineNo">5540</span>        }<a name="line.5540"></a>
+<span class="sourceLineNo">5541</span><a name="line.5541"></a>
+<span class="sourceLineNo">5542</span>        public static int hash(final CharSequence[]... data) {<a name="line.5542"></a>
+<span class="sourceLineNo">5543</span>            if (data == null)<a name="line.5543"></a>
+<span class="sourceLineNo">5544</span>                return 0;<a name="line.5544"></a>
+<span class="sourceLineNo">5545</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5545"></a>
+<span class="sourceLineNo">5546</span>            final int len = data.length;<a name="line.5546"></a>
+<span class="sourceLineNo">5547</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5547"></a>
+<span class="sourceLineNo">5548</span>                result ^= (run += (hash(data[i]) ^ 0xC3564E95) * 0x9E375);<a name="line.5548"></a>
+<span class="sourceLineNo">5549</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5549"></a>
+<span class="sourceLineNo">5550</span>            }<a name="line.5550"></a>
+<span class="sourceLineNo">5551</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5551"></a>
+<span class="sourceLineNo">5552</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5552"></a>
+<span class="sourceLineNo">5553</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5553"></a>
+<span class="sourceLineNo">5554</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5554"></a>
+<span class="sourceLineNo">5555</span>        }<a name="line.5555"></a>
+<span class="sourceLineNo">5556</span><a name="line.5556"></a>
+<span class="sourceLineNo">5557</span>        public static int hash(final Iterable&lt;? extends CharSequence&gt; data) {<a name="line.5557"></a>
+<span class="sourceLineNo">5558</span>            if (data == null)<a name="line.5558"></a>
+<span class="sourceLineNo">5559</span>                return 0;<a name="line.5559"></a>
+<span class="sourceLineNo">5560</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5560"></a>
+<span class="sourceLineNo">5561</span>            for (CharSequence datum : data) {<a name="line.5561"></a>
+<span class="sourceLineNo">5562</span>                result ^= (run += (hash(datum) ^ 0xC3564E95) * 0x9E375);<a name="line.5562"></a>
+<span class="sourceLineNo">5563</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5563"></a>
+<span class="sourceLineNo">5564</span>            }<a name="line.5564"></a>
+<span class="sourceLineNo">5565</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5565"></a>
+<span class="sourceLineNo">5566</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5566"></a>
+<span class="sourceLineNo">5567</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5567"></a>
+<span class="sourceLineNo">5568</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5568"></a>
+<span class="sourceLineNo">5569</span><a name="line.5569"></a>
+<span class="sourceLineNo">5570</span>        }<a name="line.5570"></a>
+<span class="sourceLineNo">5571</span><a name="line.5571"></a>
+<span class="sourceLineNo">5572</span>        public static int hash(final List&lt;? extends CharSequence&gt; data) {<a name="line.5572"></a>
+<span class="sourceLineNo">5573</span>            if (data == null)<a name="line.5573"></a>
+<span class="sourceLineNo">5574</span>                return 0;<a name="line.5574"></a>
+<span class="sourceLineNo">5575</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5575"></a>
+<span class="sourceLineNo">5576</span>            final int len = data.size();<a name="line.5576"></a>
+<span class="sourceLineNo">5577</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5577"></a>
+<span class="sourceLineNo">5578</span>                result ^= (run += (hash(data.get(i)) ^ 0xC3564E95) * 0x9E375);<a name="line.5578"></a>
+<span class="sourceLineNo">5579</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5579"></a>
+<span class="sourceLineNo">5580</span>            }<a name="line.5580"></a>
+<span class="sourceLineNo">5581</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5581"></a>
+<span class="sourceLineNo">5582</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5582"></a>
+<span class="sourceLineNo">5583</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5583"></a>
+<span class="sourceLineNo">5584</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5584"></a>
+<span class="sourceLineNo">5585</span><a name="line.5585"></a>
+<span class="sourceLineNo">5586</span>        }<a name="line.5586"></a>
+<span class="sourceLineNo">5587</span><a name="line.5587"></a>
+<span class="sourceLineNo">5588</span>        public static int hash(final Object[] data) {<a name="line.5588"></a>
+<span class="sourceLineNo">5589</span>            if (data == null)<a name="line.5589"></a>
+<span class="sourceLineNo">5590</span>                return 0;<a name="line.5590"></a>
+<span class="sourceLineNo">5591</span>            int result = 0x1A976FDF, run = 0x60642E25;<a name="line.5591"></a>
+<span class="sourceLineNo">5592</span>            final int len = data.length;<a name="line.5592"></a>
+<span class="sourceLineNo">5593</span>            Object o;<a name="line.5593"></a>
+<span class="sourceLineNo">5594</span>            for (int i = 0; i &lt; len; i++) {<a name="line.5594"></a>
+<span class="sourceLineNo">5595</span>                result ^= (run += (((o = data[i]) == null ? -1L : o.hashCode()) ^ 0xC3564E95) * 0x9E375);<a name="line.5595"></a>
+<span class="sourceLineNo">5596</span>                run ^= (result = (result &lt;&lt; 20 | result &gt;&gt;&gt; 12));<a name="line.5596"></a>
+<span class="sourceLineNo">5597</span>            }<a name="line.5597"></a>
+<span class="sourceLineNo">5598</span>            result += (run ^ run &gt;&gt;&gt; 15 ^ 0xAE932BD5) * 0x632B9;<a name="line.5598"></a>
+<span class="sourceLineNo">5599</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xFF51D;<a name="line.5599"></a>
+<span class="sourceLineNo">5600</span>            result = (result ^ result &gt;&gt;&gt; 15) * 0xC4CEB;<a name="line.5600"></a>
+<span class="sourceLineNo">5601</span>            return result ^ result &gt;&gt;&gt; 15;<a name="line.5601"></a>
+<span class="sourceLineNo">5602</span>        }<a name="line.5602"></a>
+<span class="sourceLineNo">5603</span><a name="line.5603"></a>
+<span class="sourceLineNo">5604</span>        public static int hash(final Object data) {<a name="line.5604"></a>
+<span class="sourceLineNo">5605</span>            if (data == null)<a name="line.5605"></a>
+<span class="sourceLineNo">5606</span>                return 0;<a name="line.5606"></a>
+<span class="sourceLineNo">5607</span>            final int h = data.hashCode() * 0x9E375;<a name="line.5607"></a>
+<span class="sourceLineNo">5608</span>            return h ^ (h &gt;&gt;&gt; 16);<a name="line.5608"></a>
+<span class="sourceLineNo">5609</span>        }<a name="line.5609"></a>
+<span class="sourceLineNo">5610</span>    }<a name="line.5610"></a>
+<span class="sourceLineNo">5611</span>}<a name="line.5611"></a>
 
 
 

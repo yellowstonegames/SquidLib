@@ -176,7 +176,7 @@
 <span class="sourceLineNo">168</span>                        this.font.getData().markupEnabled = true;<a name="line.168"></a>
 <span class="sourceLineNo">169</span>                if (maxLines &lt; 0)<a name="line.169"></a>
 <span class="sourceLineNo">170</span>                        throw new IllegalStateException("The maximum number of lines in an instance of "<a name="line.170"></a>
-<span class="sourceLineNo">171</span>                                        + getClass().getSimpleName() + " must be greater or equal than zero");<a name="line.171"></a>
+<span class="sourceLineNo">171</span>                                        + "LinesPanel must be greater or equal than zero");<a name="line.171"></a>
 <span class="sourceLineNo">172</span>                this.maxLines = maxLines;<a name="line.172"></a>
 <span class="sourceLineNo">173</span>                this.content = new ArrayDeque&lt;&gt;(maxLines);<a name="line.173"></a>
 <span class="sourceLineNo">174</span>        }<a name="line.174"></a>
@@ -286,97 +286,98 @@
 <span class="sourceLineNo">278</span>                final float height = lineHeight * maxLines;<a name="line.278"></a>
 <span class="sourceLineNo">279</span><a name="line.279"></a>
 <span class="sourceLineNo">280</span>                final float x = getX() + xOffset;<a name="line.280"></a>
-<span class="sourceLineNo">281</span>                float y = getY() + (drawBottomUp ? lineHeight : height - lineHeight) - data.descent + yOffset;<a name="line.281"></a>
-<span class="sourceLineNo">282</span><a name="line.282"></a>
-<span class="sourceLineNo">283</span>                final Iterator&lt;IColoredString&lt;T&gt;&gt; it = content.iterator();<a name="line.283"></a>
-<span class="sourceLineNo">284</span>                int ydx = 0;<a name="line.284"></a>
-<span class="sourceLineNo">285</span>                float consumed = 0;<a name="line.285"></a>
-<span class="sourceLineNo">286</span>                while (it.hasNext()) {<a name="line.286"></a>
-<span class="sourceLineNo">287</span>                        final IColoredString&lt;T&gt; ics = it.next();<a name="line.287"></a>
-<span class="sourceLineNo">288</span>                        final String str = toDraw(ics, ydx);<a name="line.288"></a>
-<span class="sourceLineNo">289</span>                        /* Let's see if the drawing would go outside this Actor */<a name="line.289"></a>
-<span class="sourceLineNo">290</span>                        final BitmapFontCache cache = font.getCache();<a name="line.290"></a>
-<span class="sourceLineNo">291</span>                        cache.clear();<a name="line.291"></a>
-<span class="sourceLineNo">292</span>                        final GlyphLayout glyph = cache.addText(str, 0, y, width, align, wrap);<a name="line.292"></a>
-<span class="sourceLineNo">293</span>                        if (height &lt; consumed + glyph.height)<a name="line.293"></a>
-<span class="sourceLineNo">294</span>                                /* We would draw outside this Actor's bounds */<a name="line.294"></a>
-<span class="sourceLineNo">295</span>                                break;<a name="line.295"></a>
-<span class="sourceLineNo">296</span>                        final int increaseAlready, nbLines = MathUtils.ceil(glyph.height / lineHeight);<a name="line.296"></a>
-<span class="sourceLineNo">297</span>                        if (drawBottomUp) {<a name="line.297"></a>
-<span class="sourceLineNo">298</span>                                /*<a name="line.298"></a>
-<span class="sourceLineNo">299</span>                                 * If the text span multiple lines and we draw bottom-up, we<a name="line.299"></a>
-<span class="sourceLineNo">300</span>                                 * must go up *before* drawing.<a name="line.300"></a>
-<span class="sourceLineNo">301</span>                                 */<a name="line.301"></a>
-<span class="sourceLineNo">302</span>                                if (1 &lt; nbLines) {<a name="line.302"></a>
-<span class="sourceLineNo">303</span>                                        increaseAlready = nbLines - 1;<a name="line.303"></a>
-<span class="sourceLineNo">304</span>                                        y += increaseAlready * lineHeight;<a name="line.304"></a>
-<span class="sourceLineNo">305</span>                                } else<a name="line.305"></a>
-<span class="sourceLineNo">306</span>                                        increaseAlready = 0;<a name="line.306"></a>
-<span class="sourceLineNo">307</span>                        } else<a name="line.307"></a>
-<span class="sourceLineNo">308</span>                        {<a name="line.308"></a>
-<span class="sourceLineNo">309</span>                                if (1 &lt; nbLines) {<a name="line.309"></a>
-<span class="sourceLineNo">310</span>                                        increaseAlready = nbLines - 1;<a name="line.310"></a>
-<span class="sourceLineNo">311</span>                                        y -= increaseAlready * lineHeight;<a name="line.311"></a>
-<span class="sourceLineNo">312</span>                                } else<a name="line.312"></a>
-<span class="sourceLineNo">313</span>                                        increaseAlready = 0;<a name="line.313"></a>
-<span class="sourceLineNo">314</span>                        }<a name="line.314"></a>
-<span class="sourceLineNo">315</span>                        /* Actually draw */<a name="line.315"></a>
-<span class="sourceLineNo">316</span>                        font.draw(batch, str, x, y, width, align, wrap);<a name="line.316"></a>
-<span class="sourceLineNo">317</span>                        y += (drawBottomUp ? /* Go up */ lineHeight : /* Go down */ -lineHeight);<a name="line.317"></a>
-<span class="sourceLineNo">318</span>                        y -= increaseAlready * lineHeight;<a name="line.318"></a>
-<span class="sourceLineNo">319</span>                        consumed += lineHeight;<a name="line.319"></a>
-<span class="sourceLineNo">320</span>                        ydx++;<a name="line.320"></a>
-<span class="sourceLineNo">321</span>                }<a name="line.321"></a>
-<span class="sourceLineNo">322</span>        }<a name="line.322"></a>
-<span class="sourceLineNo">323</span><a name="line.323"></a>
-<span class="sourceLineNo">324</span>        /**<a name="line.324"></a>
-<span class="sourceLineNo">325</span>         * Paints this panel with {@link #clearingColor}<a name="line.325"></a>
-<span class="sourceLineNo">326</span>         */<a name="line.326"></a>
-<span class="sourceLineNo">327</span>        protected void clearArea(Batch batch) {<a name="line.327"></a>
-<span class="sourceLineNo">328</span>                if (clearingColor != null) {<a name="line.328"></a>
-<span class="sourceLineNo">329</span>                        batch.end();<a name="line.329"></a>
-<span class="sourceLineNo">330</span>                        UIUtil.drawRectangle(getRenderer(), getX(), getY(), getWidth(), getHeight(), ShapeType.Filled,<a name="line.330"></a>
-<span class="sourceLineNo">331</span>                                        clearingColor);<a name="line.331"></a>
-<span class="sourceLineNo">332</span>                        batch.begin();<a name="line.332"></a>
-<span class="sourceLineNo">333</span>                }<a name="line.333"></a>
-<span class="sourceLineNo">334</span>        }<a name="line.334"></a>
-<span class="sourceLineNo">335</span><a name="line.335"></a>
-<span class="sourceLineNo">336</span>        protected boolean atMax() {<a name="line.336"></a>
-<span class="sourceLineNo">337</span>                return content.size() == maxLines;<a name="line.337"></a>
-<span class="sourceLineNo">338</span><a name="line.338"></a>
-<span class="sourceLineNo">339</span>        }<a name="line.339"></a>
-<span class="sourceLineNo">340</span><a name="line.340"></a>
-<span class="sourceLineNo">341</span>        protected String toDraw(IColoredString&lt;T&gt; ics, int ydx) {<a name="line.341"></a>
-<span class="sourceLineNo">342</span>                return applyMarkup(transform(ics, ydx));<a name="line.342"></a>
-<span class="sourceLineNo">343</span>        }<a name="line.343"></a>
-<span class="sourceLineNo">344</span><a name="line.344"></a>
-<span class="sourceLineNo">345</span>        protected String applyMarkup(IColoredString&lt;T&gt; ics) {<a name="line.345"></a>
-<span class="sourceLineNo">346</span>                if (ics == null)<a name="line.346"></a>
-<span class="sourceLineNo">347</span>                        return null;<a name="line.347"></a>
-<span class="sourceLineNo">348</span>                else<a name="line.348"></a>
-<span class="sourceLineNo">349</span>                        return markup == null ? ics.toString() : ics.presentWithMarkup(markup);<a name="line.349"></a>
-<span class="sourceLineNo">350</span>        }<a name="line.350"></a>
-<span class="sourceLineNo">351</span><a name="line.351"></a>
-<span class="sourceLineNo">352</span>        /**<a name="line.352"></a>
-<span class="sourceLineNo">353</span>         * If you want to grey out "older" messages, you would do it in this method,<a name="line.353"></a>
-<span class="sourceLineNo">354</span>         * when {@code ydx &gt; 0} (using an {@link squidpony.IColorCenter} maybe ?).<a name="line.354"></a>
-<span class="sourceLineNo">355</span>         * <a name="line.355"></a>
-<span class="sourceLineNo">356</span>         * @param ics an IColoredString with the same generic color type as this LinesPanel<a name="line.356"></a>
-<span class="sourceLineNo">357</span>         * @param ydx<a name="line.357"></a>
-<span class="sourceLineNo">358</span>         *            The index of {@code ics} within {@link #content}.<a name="line.358"></a>
-<span class="sourceLineNo">359</span>         * @return A variation of {@code ics}, or {@code ics} itself.<a name="line.359"></a>
-<span class="sourceLineNo">360</span>         */<a name="line.360"></a>
-<span class="sourceLineNo">361</span>        protected IColoredString&lt;T&gt; transform(IColoredString&lt;T&gt; ics, int ydx) {<a name="line.361"></a>
-<span class="sourceLineNo">362</span>                return ics;<a name="line.362"></a>
-<span class="sourceLineNo">363</span>        }<a name="line.363"></a>
-<span class="sourceLineNo">364</span><a name="line.364"></a>
-<span class="sourceLineNo">365</span>        protected ShapeRenderer getRenderer() {<a name="line.365"></a>
-<span class="sourceLineNo">366</span>                if (renderer == null)<a name="line.366"></a>
-<span class="sourceLineNo">367</span>                        renderer = new ShapeRenderer();<a name="line.367"></a>
-<span class="sourceLineNo">368</span>                return renderer;<a name="line.368"></a>
-<span class="sourceLineNo">369</span>        }<a name="line.369"></a>
-<span class="sourceLineNo">370</span><a name="line.370"></a>
-<span class="sourceLineNo">371</span>}<a name="line.371"></a>
+<span class="sourceLineNo">281</span>                //TODO: check if drawBottomUp is correct or if lineHeight should be changed to 0<a name="line.281"></a>
+<span class="sourceLineNo">282</span>                float y = getY() + (drawBottomUp ? lineHeight : height) - data.descent + yOffset;<a name="line.282"></a>
+<span class="sourceLineNo">283</span><a name="line.283"></a>
+<span class="sourceLineNo">284</span>                final Iterator&lt;IColoredString&lt;T&gt;&gt; it = content.iterator();<a name="line.284"></a>
+<span class="sourceLineNo">285</span>                int ydx = 0;<a name="line.285"></a>
+<span class="sourceLineNo">286</span>                float consumed = 0;<a name="line.286"></a>
+<span class="sourceLineNo">287</span>                while (it.hasNext()) {<a name="line.287"></a>
+<span class="sourceLineNo">288</span>                        final IColoredString&lt;T&gt; ics = it.next();<a name="line.288"></a>
+<span class="sourceLineNo">289</span>                        final String str = toDraw(ics, ydx);<a name="line.289"></a>
+<span class="sourceLineNo">290</span>                        /* Let's see if the drawing would go outside this Actor */<a name="line.290"></a>
+<span class="sourceLineNo">291</span>                        final BitmapFontCache cache = font.getCache();<a name="line.291"></a>
+<span class="sourceLineNo">292</span>                        cache.clear();<a name="line.292"></a>
+<span class="sourceLineNo">293</span>                        final GlyphLayout glyph = cache.addText(str, 0, y, width, align, wrap);<a name="line.293"></a>
+<span class="sourceLineNo">294</span>                        if (height &lt; consumed + glyph.height)<a name="line.294"></a>
+<span class="sourceLineNo">295</span>                                /* We would draw outside this Actor's bounds */<a name="line.295"></a>
+<span class="sourceLineNo">296</span>                                break;<a name="line.296"></a>
+<span class="sourceLineNo">297</span>                        final int increaseAlready, nbLines = MathUtils.ceil(glyph.height / lineHeight);<a name="line.297"></a>
+<span class="sourceLineNo">298</span>                        if (drawBottomUp) {<a name="line.298"></a>
+<span class="sourceLineNo">299</span>                                /*<a name="line.299"></a>
+<span class="sourceLineNo">300</span>                                 * If the text span multiple lines and we draw bottom-up, we<a name="line.300"></a>
+<span class="sourceLineNo">301</span>                                 * must go up *before* drawing.<a name="line.301"></a>
+<span class="sourceLineNo">302</span>                                 */<a name="line.302"></a>
+<span class="sourceLineNo">303</span>                                if (1 &lt; nbLines) {<a name="line.303"></a>
+<span class="sourceLineNo">304</span>                                        increaseAlready = nbLines - 1;<a name="line.304"></a>
+<span class="sourceLineNo">305</span>                                        y += increaseAlready * lineHeight;<a name="line.305"></a>
+<span class="sourceLineNo">306</span>                                } else<a name="line.306"></a>
+<span class="sourceLineNo">307</span>                                        increaseAlready = 0;<a name="line.307"></a>
+<span class="sourceLineNo">308</span>                        } else<a name="line.308"></a>
+<span class="sourceLineNo">309</span>                        {<a name="line.309"></a>
+<span class="sourceLineNo">310</span>                                if (1 &lt; nbLines) {<a name="line.310"></a>
+<span class="sourceLineNo">311</span>                                        increaseAlready = nbLines - 1;<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                                        y -= increaseAlready * lineHeight;<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                                } else<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                                        increaseAlready = 0;<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                        }<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                        /* Actually draw */<a name="line.316"></a>
+<span class="sourceLineNo">317</span>                        font.draw(batch, str, x, y, width, align, wrap);<a name="line.317"></a>
+<span class="sourceLineNo">318</span>                        y += (drawBottomUp ? /* Go up */ lineHeight : /* Go down */ -lineHeight);<a name="line.318"></a>
+<span class="sourceLineNo">319</span>                        y -= increaseAlready * lineHeight;<a name="line.319"></a>
+<span class="sourceLineNo">320</span>                        consumed += lineHeight;<a name="line.320"></a>
+<span class="sourceLineNo">321</span>                        ydx++;<a name="line.321"></a>
+<span class="sourceLineNo">322</span>                }<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        }<a name="line.323"></a>
+<span class="sourceLineNo">324</span><a name="line.324"></a>
+<span class="sourceLineNo">325</span>        /**<a name="line.325"></a>
+<span class="sourceLineNo">326</span>         * Paints this panel with {@link #clearingColor}<a name="line.326"></a>
+<span class="sourceLineNo">327</span>         */<a name="line.327"></a>
+<span class="sourceLineNo">328</span>        protected void clearArea(Batch batch) {<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                if (clearingColor != null) {<a name="line.329"></a>
+<span class="sourceLineNo">330</span>                        batch.end();<a name="line.330"></a>
+<span class="sourceLineNo">331</span>                        UIUtil.drawRectangle(getRenderer(), getX(), getY(), getWidth(), getHeight(), ShapeType.Filled,<a name="line.331"></a>
+<span class="sourceLineNo">332</span>                                        clearingColor);<a name="line.332"></a>
+<span class="sourceLineNo">333</span>                        batch.begin();<a name="line.333"></a>
+<span class="sourceLineNo">334</span>                }<a name="line.334"></a>
+<span class="sourceLineNo">335</span>        }<a name="line.335"></a>
+<span class="sourceLineNo">336</span><a name="line.336"></a>
+<span class="sourceLineNo">337</span>        protected boolean atMax() {<a name="line.337"></a>
+<span class="sourceLineNo">338</span>                return content.size() == maxLines;<a name="line.338"></a>
+<span class="sourceLineNo">339</span><a name="line.339"></a>
+<span class="sourceLineNo">340</span>        }<a name="line.340"></a>
+<span class="sourceLineNo">341</span><a name="line.341"></a>
+<span class="sourceLineNo">342</span>        protected String toDraw(IColoredString&lt;T&gt; ics, int ydx) {<a name="line.342"></a>
+<span class="sourceLineNo">343</span>                return applyMarkup(transform(ics, ydx));<a name="line.343"></a>
+<span class="sourceLineNo">344</span>        }<a name="line.344"></a>
+<span class="sourceLineNo">345</span><a name="line.345"></a>
+<span class="sourceLineNo">346</span>        protected String applyMarkup(IColoredString&lt;T&gt; ics) {<a name="line.346"></a>
+<span class="sourceLineNo">347</span>                if (ics == null)<a name="line.347"></a>
+<span class="sourceLineNo">348</span>                        return null;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>                else<a name="line.349"></a>
+<span class="sourceLineNo">350</span>                        return markup == null ? ics.toString() : ics.presentWithMarkup(markup);<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        }<a name="line.351"></a>
+<span class="sourceLineNo">352</span><a name="line.352"></a>
+<span class="sourceLineNo">353</span>        /**<a name="line.353"></a>
+<span class="sourceLineNo">354</span>         * If you want to grey out "older" messages, you would do it in this method,<a name="line.354"></a>
+<span class="sourceLineNo">355</span>         * when {@code ydx &gt; 0} (using an {@link squidpony.IColorCenter} maybe ?).<a name="line.355"></a>
+<span class="sourceLineNo">356</span>         * <a name="line.356"></a>
+<span class="sourceLineNo">357</span>         * @param ics an IColoredString with the same generic color type as this LinesPanel<a name="line.357"></a>
+<span class="sourceLineNo">358</span>         * @param ydx<a name="line.358"></a>
+<span class="sourceLineNo">359</span>         *            The index of {@code ics} within {@link #content}.<a name="line.359"></a>
+<span class="sourceLineNo">360</span>         * @return A variation of {@code ics}, or {@code ics} itself.<a name="line.360"></a>
+<span class="sourceLineNo">361</span>         */<a name="line.361"></a>
+<span class="sourceLineNo">362</span>        protected IColoredString&lt;T&gt; transform(IColoredString&lt;T&gt; ics, int ydx) {<a name="line.362"></a>
+<span class="sourceLineNo">363</span>                return ics;<a name="line.363"></a>
+<span class="sourceLineNo">364</span>        }<a name="line.364"></a>
+<span class="sourceLineNo">365</span><a name="line.365"></a>
+<span class="sourceLineNo">366</span>        protected ShapeRenderer getRenderer() {<a name="line.366"></a>
+<span class="sourceLineNo">367</span>                if (renderer == null)<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                        renderer = new ShapeRenderer();<a name="line.368"></a>
+<span class="sourceLineNo">369</span>                return renderer;<a name="line.369"></a>
+<span class="sourceLineNo">370</span>        }<a name="line.370"></a>
+<span class="sourceLineNo">371</span><a name="line.371"></a>
+<span class="sourceLineNo">372</span>}<a name="line.372"></a>
 
 
 
