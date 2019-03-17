@@ -494,40 +494,40 @@ public class HashBenchmark {
     {
         return CrossHash.Hive.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
-//    @Benchmark
-//    public long doSquish64(BenchmarkState state)
-//    {
-//        return CrossHash.Squish.hash64(state.words[state.idx = state.idx + 1 & 4095]);
-//    }
+    @Benchmark
+    public long doSirocco64(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash64(state.words[state.idx = state.idx + 1 & 4095]);
+    }
 //
 //    @Benchmark
-//    public int doSquish32(BenchmarkState state)
+//    public int doSirocco32(BenchmarkState state)
 //    {
-//        return CrossHash.Squish.hash(state.words[state.idx = state.idx + 1 & 4095]);
+//        return CrossHash.Sirocco.hash(state.words[state.idx = state.idx + 1 & 4095]);
 //    }
 //
-//    @Benchmark
-//    public long doCharSquish64(BenchmarkState state)
-//    {
-//        return CrossHash.Squish.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
-//    }
+    @Benchmark
+    public long doCharSirocco64(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
 //
 //    @Benchmark
-//    public int doCharSquish32(BenchmarkState state)
+//    public int doCharSirocco32(BenchmarkState state)
 //    {
-//        return CrossHash.Squish.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+//        return CrossHash.Sirocco.hash(state.chars[state.idx = state.idx + 1 & 4095]);
 //    }
 //
-//    @Benchmark
-//    public long doLongSquish64(BenchmarkState state)
-//    {
-//        return CrossHash.Squish.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
-//    }
+    @Benchmark
+    public long doLongSirocco64(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
 //
 //    @Benchmark
-//    public int doLongSquish32(BenchmarkState state)
+//    public int doLongSirocco32(BenchmarkState state)
 //    {
-//        return CrossHash.Squish.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+//        return CrossHash.Sirocco.hash(state.longs[state.idx = state.idx + 1 & 4095]);
 //    }
 
     @Benchmark
