@@ -342,11 +342,16 @@ public final class NumberTools {
      */
     public static double swayRandomized(long seed, double value)
     {
-        final long floor = value >= 0.0 ? (long) value : (long) value - 1L;
+        final long floor = value >= 0.0 ? (long) value : (long) value - 1L; // the closest long that is less than value
+        // gets a random start and endpoint. there's a sequence of start and end values for each seed, and changing the
+        // seed changes the start and end values unpredictably (so use the same seed for one curving line).
         final double start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63,
                 end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L)) * 0x0.fffffffffffffbp-63;
+        // gets the fractional part of value
         value -= floor;
+        // cubic interpolation to smooth the curve
         value *= value * (3.0 - 2.0 * value);
+        // interpolate between start and end based on how far we are between the start and end points of this section
         return (1.0 - value) * start + value * end;
     }
 

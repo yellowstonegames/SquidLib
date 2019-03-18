@@ -4897,9 +4897,7 @@ public class CrossHash {
             final int len = data.length();
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data.charAt(i) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data.charAt(i) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -4912,9 +4910,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += (data[i] ? 0x517CC1B727220A95L : 0x9308E0BEACFD0A39L);
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ? 0x517CC1B727220A95L : 0x9308E0BEACFD0A39L) ^ (a << 17 | a >>> 47) ^ 0xD1B54A32D192ED03L;
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -4927,9 +4923,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data[i] * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -4942,9 +4936,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data[i] * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -4957,9 +4949,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data[i] * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -4972,9 +4962,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data[i] * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -4987,9 +4975,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data[i] * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5002,9 +4988,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += NumberTools.floatToIntBits(data[i]) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (NumberTools.floatToIntBits(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5017,9 +5001,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += NumberTools.doubleToLongBits(data[i]) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (NumberTools.doubleToLongBits(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5040,9 +5022,7 @@ public class CrossHash {
             final int len = end < data.length ? end : data.length;
             long a = len - start;
             for (int i = start; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data[i] * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5063,9 +5043,7 @@ public class CrossHash {
             final int len = end < data.length() ? end : data.length();
             long a = len - start;
             for (int i = start; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += data.charAt(i) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data.charAt(i) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5088,9 +5066,7 @@ public class CrossHash {
             final int len = end < data.length ? end : data.length;
             long a = len - start;
             for (int i = start; i < len; i += step) {
-                a *= 0xAC564B05L;
-                a += data[i] * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data[i] ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5113,9 +5089,7 @@ public class CrossHash {
             final int len = end < data.length() ? end : data.length();
             long a = len - start;
             for (int i = start; i < len; i += step) {
-                a *= 0xAC564B05L;
-                a += data.charAt(i) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (data.charAt(i) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5128,9 +5102,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += hash64(data[i]) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (hash64(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5143,9 +5115,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += hash64(data[i]) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (hash64(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5158,9 +5128,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += hash64(data[i]) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (hash64(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5173,9 +5141,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += hash64(data[i]) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (hash64(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5188,9 +5154,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += hash64(data[i]) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (hash64(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5202,9 +5166,7 @@ public class CrossHash {
                 return 0L;
             long a = 0xD1B54A32D192ED03L;
             for (CharSequence datum : data) {
-                a *= 0xAC564B05L;
-                a += hash64(datum) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (hash64(datum) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5217,9 +5179,7 @@ public class CrossHash {
             final int len = data.size();
             long a = len;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += hash64(data.get(i)) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (hash64(data.get(i)) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
@@ -5233,9 +5193,7 @@ public class CrossHash {
             long a = len;
             Object o;
             for (int i = 0; i < len; i++) {
-                a *= 0xAC564B05L;
-                a += ((o = data[i]) == null ? -1L : o.hashCode()) * 0x517CC1B727220A95L;
-                a = (a << 29 | a >>> 35);
+                a += (((o = data[i]) == null ? -1L : o.hashCode()) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L; a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
             a = (a ^ a >>> 43 ^ a >>> 31 ^ a >>> 23) * 0xDB4F0B9175AE2165L;
