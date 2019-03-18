@@ -3722,15 +3722,22 @@ public class Noise {
 //            y *= y * (3.0 - 2.0 * y);
 //            x *= x;
 //            y *= y;
-            final double ix = 1 - x, iy = 1 - y;
+            final double ix = 1.0 - x, iy = 1.0 - y;
+//            final double ix = (1 - x) * (1 - x), iy = (1 - y) * (1 - y);
 //            final double ix = x, iy = y;
 //            x = 1.0 - x;
 //            y = 1.0 - y;
-            final double ret = ((x * SeededNoise.phiGrad2[x0y0][0] + y * SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)
-                    + (ix * SeededNoise.phiGrad2[x1y0][0] + y * SeededNoise.phiGrad2[x1y0][1]) * (x * iy)
-                    + (x * SeededNoise.phiGrad2[x0y1][0] + iy * SeededNoise.phiGrad2[x0y1][1]) * (ix * y)
-                    + (ix * SeededNoise.phiGrad2[x1y1][0] + iy * SeededNoise.phiGrad2[x1y1][1]) * (x * y)
+            double ret = ((SeededNoise.phiGrad2[x0y0][0] + SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)
+                    + (SeededNoise.phiGrad2[x1y0][0] + SeededNoise.phiGrad2[x1y0][1]) * (x * iy)
+                    + (SeededNoise.phiGrad2[x0y1][0] + SeededNoise.phiGrad2[x0y1][1]) * (ix * y)
+                    + (SeededNoise.phiGrad2[x1y1][0] + SeededNoise.phiGrad2[x1y1][1]) * (x * y)
             );
+//            double ret = ((ix * SeededNoise.phiGrad2[x0y0][0] + iy * SeededNoise.phiGrad2[x0y0][1])
+//                    + (x * SeededNoise.phiGrad2[x1y0][0] + iy * SeededNoise.phiGrad2[x1y0][1])
+//                    + (ix * SeededNoise.phiGrad2[x0y1][0] + y * SeededNoise.phiGrad2[x0y1][1])
+//                    + (x * SeededNoise.phiGrad2[x1y1][0] + y * SeededNoise.phiGrad2[x1y1][1])
+//            );
+            ret *= 0.7071067811865475;//Math.copySign(ret, 1.0) * 0.25;
             if(ret < -1.0)
                 System.out.printf("LOW! ret: %f, x: %f, y: %f\n", ret, x, y);
             if(ret > 1.0)
