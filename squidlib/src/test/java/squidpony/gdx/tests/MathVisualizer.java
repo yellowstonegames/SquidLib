@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.ArrayTools;
 import squidpony.squidgrid.gui.gdx.SColor;
@@ -22,7 +23,7 @@ import java.util.Arrays;
  */
 public class MathVisualizer extends ApplicationAdapter {
     private int mode = 19;
-    private int modes = 25;
+    private int modes = 26;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -34,6 +35,7 @@ public class MathVisualizer extends ApplicationAdapter {
     private XSP xsp;
     private EditRNG edit;
     private long seed = 1L;
+    private long startTime = 0L;
 
     private double twist(double input) {
         return (input = input * 0.5 + 1.0) - (int)input;
@@ -155,6 +157,7 @@ public class MathVisualizer extends ApplicationAdapter {
 
     @Override
     public void create() {
+        startTime = TimeUtils.millis();
         Coord.expandPoolTo(512, 512);
         diver = new DiverRNG();
         seed = DiverRNG.determine(12345L);
@@ -836,11 +839,13 @@ public class MathVisualizer extends ApplicationAdapter {
 //                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
 //                    }
 //                }
-                double[] angle;
+                double[] angle = new double[2];
                 int x, y;
                 float color;
                 for (int t = 0; t < 256; t++) {
-                    angle = SeededNoise.phiGrad2[t];
+//                    angle = SeededNoise.phiGrad2[t];
+                    angle[0] = MathUtils.cosDeg(t * 1.40625f);
+                    angle[1] = MathUtils.sinDeg(t * 1.40625f);
                     color = (t & 4) == 4
                             ? -0x1.c98066p126F
                             : -0x1.d08864p126F;
@@ -868,7 +873,44 @@ public class MathVisualizer extends ApplicationAdapter {
                     }
                 }
             }
-                break;
+            break;
+            case 25: {
+                Arrays.fill(amounts, 0);
+
+                Gdx.graphics.setTitle("swayAngleRandomized() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                float theta = NumberTools.swayAngleRandomized(9999L, TimeUtils.timeSinceMillis(startTime) * 0x3p-11f);
+                float c = MathUtils.cos(theta), s = MathUtils.sin(theta);
+                int x, y;
+                float color;
+                color = SColor.FLOAT_BLACK;
+                for (int j = 150; j >= 1; j -= 4) {
+                    x = Noise.fastFloor(c * j + 260);
+                    y = Noise.fastFloor(s * j + 260);
+                    layers.backgrounds[x][y] = color;
+                    layers.backgrounds[x + 1][y] = color;
+                    layers.backgrounds[x - 1][y] = color;
+                    layers.backgrounds[x][y + 1] = color;
+                    layers.backgrounds[x][y - 1] = color;
+                    layers.backgrounds[x + 1][y+1] = color;
+                    layers.backgrounds[x - 1][y-1] = color;
+                    layers.backgrounds[x-1][y + 1] = color;
+                    layers.backgrounds[x+1][y - 1] = color;
+//                        layers.backgrounds[x+1][y+1] = color;
+//                        layers.backgrounds[x-1][y-1] = color;
+//                        layers.backgrounds[x-1][y+1] = color;
+//                        layers.backgrounds[x+1][y-1] = color;
+                }
+//                for (int j = 128; j >= 32; j -= 4) {
+//                    x = Noise.fastFloor(c * j + 260);
+//                    y = Noise.fastFloor(s * j + 260);
+//                    layers.backgrounds[x][y] = color;
+////                        layers.backgrounds[x+1][y] = color;
+////                        layers.backgrounds[x-1][y] = color;
+////                        layers.backgrounds[x][y+1] = color;
+////                        layers.backgrounds[x][y-1] = color;
+//                }
+            }
+            break;
 //            case 24: {
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " DiverRNG, hyperCurve(0x1FF)");
@@ -928,8 +970,8 @@ public class MathVisualizer extends ApplicationAdapter {
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "SquidLib Visualizer for Math Testing/Checking";
-        config.width = 512 << 1;
-        config.height = 520 << 1;
+        config.width = 512;
+        config.height = 520;
         config.foregroundFPS = 0;
         config.vSyncEnabled = false;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);

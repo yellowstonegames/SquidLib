@@ -172,6 +172,18 @@ public class NumberTools {
         value *= value * (3 - 2 * value);
         return (1 - value) * start + value * end;
     }
+    public static float swayAngleRandomized(long seed, float value)
+    {
+        final long floor = value >= 0f ? (long) value : (long) value - 1L;
+        float start = (((seed += floor * 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f,
+                end = (((seed += 0x6C8E9CF570932BD5L) ^ (seed >>> 25)) * (seed | 0xA529L) >>> 1) * 0x0.ffffffp-62f;
+        value -= floor;
+        value *= value * (3f - 2f * value);
+        end = end - start + 1.5f;
+        end -= (long)end + 0.5f;
+        start += end * value + 1;
+        return (start - (long)start) * 6.283185307179586f;
+    }
     public static int floatToIntBits(final float value) {
         wfa.set(0, value);
         return wia.get(0);
