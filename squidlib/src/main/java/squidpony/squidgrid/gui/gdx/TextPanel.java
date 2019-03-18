@@ -216,10 +216,10 @@ public class TextPanel<T extends Color> {
 					"The font should be set before calling TextPanel.init()");
 
 		prepareText();
-		final boolean yscroll = maxHeight < textActor.getHeight();
+//		final boolean yscroll = maxHeight < textActor.getHeight();
 		scrollPane.setHeight(maxHeight);
 		scrollPane.setActor(textActor);
-		yScrollingCallback(yscroll);
+		//yScrollingCallback(yscroll);
 		scrollPane.layout();
 	}
 
@@ -247,10 +247,10 @@ public class TextPanel<T extends Color> {
 					"The font should be set before calling TextPanel.init()");
 
 		prepareText();
-		final boolean yscroll = maxHeight < textActor.getHeight();
-		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(textActor.getHeight(), maxHeight));
+//		final boolean yscroll = maxHeight < textActor.getHeight();
+		scrollPane.setHeight(maxHeight);
 		scrollPane.setActor(textActor);
-		yScrollingCallback(yscroll);
+		//yScrollingCallback(yscroll);
 		scrollPane.layout();
 	}
 
@@ -282,6 +282,7 @@ public class TextPanel<T extends Color> {
 			sr.setTransformMatrix(m);
 			sr.begin(ShapeType.Filled);
 			sr.setColor(borderColor);
+//			prepareText();
 			UIUtil.drawMarginsAround(sr, scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(),
 					scrollPane.getHeight() - 1, borderSize, borderColor, borderStyle, 1f, 1f);
 			sr.end();
@@ -448,15 +449,15 @@ public class TextPanel<T extends Color> {
 		@Override
 		public void draw(Batch batch, float parentAlpha) {
 			prepareText();
-			final float tx = 0;//getX();
-			final float ty = 0;//getY();
+			final float tx = 0f;//scrollPane.getX();
+			final float ty = 0f;//scrollPane.getY();
 			final float twidth = getWidth();
 			final float theight = getHeight();
 
 			if (backgroundColor != null) {
 				batch.setColor(backgroundColor);
 				batch.draw(tcf.getSolid(), tx, ty, twidth, theight);
-				batch.setColor(Color.WHITE);
+				batch.setColor(SColor.WHITE);
                 /*
                 batch.end();
 
