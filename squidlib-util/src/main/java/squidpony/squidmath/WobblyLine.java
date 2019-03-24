@@ -3,7 +3,6 @@ package squidpony.squidmath;
 import squidpony.squidgrid.Direction;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A drunkard's-walk-like algorithm for line drawing "wobbly" paths.
@@ -31,7 +30,7 @@ public class WobblyLine {
      * @param height maximum map height
      * @return List of Coord, including (startX, startY) and (endX, endY) and all points walked between
      */
-    public static List<Coord> line(int startX, int startY, int endX, int endY, int width, int height) {
+    public static ArrayList<Coord> line(int startX, int startY, int endX, int endY, int width, int height) {
         return line(startX, startY, endX, endY, width, height, 0.75, new GWTRNG());
     }
     /**
@@ -47,9 +46,9 @@ public class WobblyLine {
      * @param rng the random number generator to use
      * @return List of Coord, including (startX, startY) and (endX, endY) and all points walked between
      */
-    public static List<Coord> line(int startX, int startY, int endX, int endY,
+    public static ArrayList<Coord> line(int startX, int startY, int endX, int endY,
                                    int width, int height, double weight, IRNG rng) {
-        List<Coord> pts = new ArrayList<>();
+        ArrayList<Coord> pts = new ArrayList<>();
         Coord start = Coord.get(startX, startY);
         Direction dir;
         do {
@@ -158,7 +157,7 @@ public class WobblyLine {
      * @param height maximum map height
      * @return List of Coord, including start and end and all points walked between
      */
-    public static List<Coord> line(Coord start, Coord end, int width, int height)
+    public static ArrayList<Coord> line(Coord start, Coord end, int width, int height)
     {
         return line(start.x, start.y, end.x, end.y, width, height);
     }
