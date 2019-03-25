@@ -71,9 +71,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 102, otherMode = 1;//74;//118;//82;
+    private int hashMode = 37, rngMode = 21, noiseMode = 102, otherMode = 1;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -256,6 +256,27 @@ public class HashVisualizer extends ApplicationAdapter {
         //return counter ^ counter >>> 22;
     }
 
+    public static int fnv1a_32_bad(final int x, final int y)
+    {
+        return ((((0x811C9DC5 ^ x) * 0x01000193) ^ y) * 0x01000193);
+    }
+    public static long fnv1a_64_bad(final long x, final long y)
+    {
+        return ((((0xCBF29CE484222325L ^ x) * 0x00000100000001B3L) ^ y) * 0x00000100000001B3L);
+    }
+
+    public static int fnv1a_32(final int x, final int y)
+    {
+        return ((((((((((((0x811C9DC5 ^ 
+                (x & 0xFF)) * 0x01000193) ^ (x >>> 8 & 0xFF)) * 0x01000193) ^ (x >>> 16 & 0xFF)) * 0x01000193)
+                ^ (y & 0xFF)) * 0x01000193)^ (y >>> 8 & 0xFF)) * 0x01000193)^ (y >>> 16 & 0xFF)) * 0x01000193);
+    }
+    public static long fnv1a_64(final long x, final long y)
+    {
+        return ((((((((((((0xCBF29CE484222325L ^
+                (x & 0xFFL)) * 0x00000100000001B3L) ^ (x >>> 8 & 0xFFL)) * 0x00000100000001B3L) ^ (x >>> 16 & 0xFFL)) * 0x00000100000001B3L)
+                ^ (y & 0xFFL)) * 0x00000100000001B3L)^ (y >>> 8 & 0xFFL)) * 0x00000100000001B3L)^ (y >>> 16 & 0xFFL)) * 0x00000100000001B3L);
+    }
     public static int ion32(long a, long b) {
         long counter = 0x2545F4914F6CDD1DL + 0x6C8E9CF570932BD5L * a, result = 0x9E3779B97F4A7C15L ^ counter;
         result ^= (counter += 0x6C8E9CF570932BD5L * b);
@@ -1840,12 +1861,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         
                         
                     case 38:
-                        Gdx.graphics.setTitle("Arrays.hashCode on length 2, low bits");
+                        Gdx.graphics.setTitle("FNV-1a 64-bit, low bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Arrays.hashCode(coordinates) << 8 | 255L;
+                                code = fnv1a_64(x, y) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -1884,11 +1903,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 42:
-                        Gdx.graphics.setTitle("Arrays.hashCode on length 1, low bits");
+                        Gdx.graphics.setTitle("FNV-1a 32-bit, low bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Arrays.hashCode(coordinate) << 8 | 255L;
+                                code = fnv1a_32(x, y) << 8 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -1987,12 +2005,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 52:
-                        Gdx.graphics.setTitle("Arrays.hashCode on length 2, high bits");
+                        Gdx.graphics.setTitle("FNV-1a 64-bit, high bits");
                         for (int x = 0; x < width; x++) {
-                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                coordinates[1] = y;
-                                code = Arrays.hashCode(coordinates) & 0xFFFFFF00L | 255L;
+                                code = fnv1a_64(x, y) >>> 32 | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
@@ -2031,11 +2047,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 56:
-                        Gdx.graphics.setTitle("Arrays.hashCode on length 1, high bits");
+                        Gdx.graphics.setTitle("FNV-1a 32-bit, high bits");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                coordinate[0] = (x << 9) | y;
-                                code = Arrays.hashCode(coordinate) & 0xFFFFFF00L | 255L;
+                                code = fnv1a_32(x, y) & 0xFFFFFF00L | 255L;
                                 back[x][y] = floatGet(code);
                             }
                         }
