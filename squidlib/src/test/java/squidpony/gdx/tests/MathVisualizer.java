@@ -22,8 +22,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 19;
-    private int modes = 26;
+    private int mode = 24;
+    private int modes = 29;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -36,6 +36,7 @@ public class MathVisualizer extends ApplicationAdapter {
     private EditRNG edit;
     private long seed = 1L;
     private long startTime = 0L;
+    private double[] circleCoord = new double[2];
 
     private double twist(double input) {
         return (input = input * 0.5 + 1.0) - (int)input;
@@ -52,6 +53,66 @@ public class MathVisualizer extends ApplicationAdapter {
         return NumberTools.setExponent(Math.pow((mixed + index), mixed * 2.6180339887498948482), 0x3ff) - 1.0;
 //        return ((Long.rotateLeft((base *= index), 31) ^ Long.rotateLeft(base, 17) ^ Long.rotateLeft(base, 42)) >>> 11) * 0x1p-53;
     }
+
+    public void insideCircleRejection(final double[] vector)
+    {
+        double v1, v2;
+        do {
+            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+        } while (v1 * v1 + v2 * v2 > 1);
+        vector[0] = v1;
+        vector[1] = v2;
+    }
+    public final double fastGaussian()
+    {
+        long a = diver.nextLong();
+        a = (a & 0x00FF00FF00FF00FFL) + ((a & 0xFF00FF00FF00FF00L) >>> 8);
+        a = (a & 0x000001FF000001FFL) + ((a & 0x01FF000001FF0000L) >>> 16);
+        return ((a & 0x00000000000003FFL) + ((a & 0x000003FF00000000L) >>> 32) - 1020L) * 0x1.010101010101p-8;
+    }
+    public void insideCircleBoxMuller(final double[] vector)
+    {
+        double mag = 0.0;
+        double v1, v2, s;
+        do {
+            v1 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            v2 = 2 * diver.nextDouble() - 1; // between -1 and 1
+            s = v1 * v1 + v2 * v2;
+        } while (s > 1 || s == 0);
+        double multiplier = Math.sqrt(-2 * Math.log(s) / s);
+        mag += (vector[0] = (v1 *= multiplier)) * (v1);
+        mag += (vector[1] = (v2 *= multiplier)) * (v2);
+        //mag += -2.0 * Math.log(diver.nextDouble());
+        if(mag == 0)
+        {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        }
+        else
+            mag = Math.sqrt(diver.nextDouble()) / Math.sqrt(mag);
+        vector[0] *= mag;
+        vector[1] *= mag;
+    }
+    public void insideCircleBoxMullerFast(final double[] vector)
+    {
+        double mag = 0.0;
+        double v1 = fastGaussian(), v2 = fastGaussian();
+        mag += (vector[0] = v1) * v1;
+        mag += (vector[1] = v2) * v2;
+        if(mag == 0)
+        {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        }
+        else
+            mag = Math.sqrt(diver.nextDouble()) / Math.sqrt(mag);
+        vector[0] *= mag;
+        vector[1] *= mag;
+    }
+
     private static class XSP {
         private long state0;
         public XSP()
@@ -875,8 +936,6 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 25: {
-                Arrays.fill(amounts, 0);
-
                 Gdx.graphics.setTitle("swayAngleRandomized() at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 float theta = NumberTools.swayAngleRandomized(9999L, TimeUtils.timeSinceMillis(startTime) * 0x3p-11f);
                 float c = MathUtils.cos(theta), s = MathUtils.sin(theta);
@@ -895,10 +954,6 @@ public class MathVisualizer extends ApplicationAdapter {
                     layers.backgrounds[x - 1][y-1] = color;
                     layers.backgrounds[x-1][y + 1] = color;
                     layers.backgrounds[x+1][y - 1] = color;
-//                        layers.backgrounds[x+1][y+1] = color;
-//                        layers.backgrounds[x-1][y-1] = color;
-//                        layers.backgrounds[x-1][y+1] = color;
-//                        layers.backgrounds[x+1][y-1] = color;
                 }
 //                for (int j = 128; j >= 32; j -= 4) {
 //                    x = Noise.fastFloor(c * j + 260);
@@ -911,6 +966,65 @@ public class MathVisualizer extends ApplicationAdapter {
 //                }
             }
             break;
+            case 26:{
+                Gdx.graphics.setTitle("insideCircleRejection at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 10000; j++) {
+                    insideCircleRejection(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+//                    layers.backgrounds[x + 1][y] = color;
+//                    layers.backgrounds[x - 1][y] = color;
+//                    layers.backgrounds[x][y + 1] = color;
+//                    layers.backgrounds[x][y - 1] = color;
+//                    layers.backgrounds[x + 1][y+1] = color;
+//                    layers.backgrounds[x - 1][y-1] = color;
+//                    layers.backgrounds[x-1][y + 1] = color;
+//                    layers.backgrounds[x+1][y - 1] = color;
+                }
+            }
+            break;
+            case 27:{
+                Gdx.graphics.setTitle("insideCircleBoxMuller at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 10000; j++) {
+                    insideCircleBoxMuller(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+//                    layers.backgrounds[x + 1][y] = color;
+//                    layers.backgrounds[x - 1][y] = color;
+//                    layers.backgrounds[x][y + 1] = color;
+//                    layers.backgrounds[x][y - 1] = color;
+//                    layers.backgrounds[x + 1][y+1] = color;
+//                    layers.backgrounds[x - 1][y-1] = color;
+//                    layers.backgrounds[x-1][y + 1] = color;
+//                    layers.backgrounds[x+1][y - 1] = color;
+                }
+            }
+            break;
+            case 28:{
+                Gdx.graphics.setTitle("insideCircleBoxMullerFast at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 10000; j++) {
+                    insideCircleBoxMullerFast(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+//                    layers.backgrounds[x + 1][y] = color;
+//                    layers.backgrounds[x - 1][y] = color;
+//                    layers.backgrounds[x][y + 1] = color;
+//                    layers.backgrounds[x][y - 1] = color;
+//                    layers.backgrounds[x + 1][y+1] = color;
+//                    layers.backgrounds[x - 1][y-1] = color;
+//                    layers.backgrounds[x-1][y + 1] = color;
+//                    layers.backgrounds[x+1][y - 1] = color;
+                }
+            }
 //            case 24: {
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " DiverRNG, hyperCurve(0x1FF)");
