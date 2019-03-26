@@ -380,7 +380,7 @@ public class IntVLA implements Serializable, Cloneable {
 
     public int getRandomElement(IRNG random)
     {
-        return items[random.nextInt(items.length)];
+        return items[random.nextInt(size)];
     }
 
     /**
@@ -416,7 +416,7 @@ public class IntVLA implements Serializable, Cloneable {
         try {
             IntVLA nx = (IntVLA) super.clone();
             nx.items = new int[items.length];
-            System.arraycopy(items, 0, nx.items, 0, items.length);
+            System.arraycopy(items, 0, nx.items, 0, size);
             return nx;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e + (e.getMessage() != null ? "; " + e.getMessage() : ""));
