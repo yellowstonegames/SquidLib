@@ -1690,7 +1690,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.familyPrintMSDF = new TextFamily();
                 instance.familyPrintMSDF.fontMultiDistanceField(crispNotoSerif, crispNotoSerifTexture)
-                        .width(25).height(30).setSmoothingMultiplier(1.5f);
+                        .width(12).height(30).setSmoothingMultiplier(1.5f);
                 instance.familyPrintMSDF.font().setUseIntegerPositions(false);
             } catch (Exception e) {
                 e.printStackTrace();
