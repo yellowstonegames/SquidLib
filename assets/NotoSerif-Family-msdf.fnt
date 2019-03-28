@@ -1,4 +1,4 @@
-info face="NotoSerif-Family" size=-40 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=0 aa=1 padding=0,27,0,0 spacing=0,0 outline=0
+info face="NotoSerif-Family" size=-40 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,20,0,2 spacing=0,0 outline=0
 common lineHeight=30 base=54 scaleW=4096 scaleH=4096 pages=1 packed=0 alphaChnl=0 redChnl=1 greenChnl=2 blueChnl=4
 page id=0 file="NotoSerif-Family-msdf.png"
 chars count=8000
@@ -76,7 +76,7 @@ char id=101 x=3082 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=13 page=
 char id=102 x=3126 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=12 page=0 chnl=15
 char id=103 x=3170 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=15 page=0 chnl=15
 char id=104 x=3214 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=16 page=0 chnl=15
-char id=105 x=3258 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=9 page=0 chnl=15
+char id=105 x=3258 y=2 width=36 height=40 xoffset=0 yOffset=-1 xadvance=9 page=0 chnl=15
 char id=106 x=3302 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=8 page=0 chnl=15
 char id=107 x=3346 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=16 page=0 chnl=15
 char id=108 x=3390 y=2 width=42 height=40 xoffset=0 yOffset=-1 xadvance=9 page=0 chnl=15

@@ -10,10 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SquidPanel;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
-import squidpony.squidgrid.gui.gdx.TextPanel;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.LineKit;
 import squidpony.squidmath.GreasedRegion;
 import squidpony.squidmath.DiverRNG;
@@ -61,7 +58,7 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105,  70, 200, 70};
+        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105,  60, 200, 70};
         heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
@@ -146,10 +143,14 @@ public class FontTest extends ApplicationAdapter {
         final String[] samples = {"The quick brown fox jumps over the lazy dog.",
                 "HAMBURGEVONS",
                 "Black Sphinx Of Quartz: Judge Ye My Vow!",
+                "Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!",
                 "Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.",
                 "So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.",
                 "Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting."
 };
+        for (int i = factories.length - 3; i < factories.length; i++) {
+            factories[i].bmpFont.getData().markupEnabled = true;
+        }
         texts = new ArrayList<>(3);
         text = new TextPanel<Color>(null, factories[factories.length - 3]);
         text.init(totalWidth, totalHeight, Color.WHITE, samples);
