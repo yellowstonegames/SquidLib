@@ -850,10 +850,10 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     }
     public static float beachNoise(final long seed, float xin, float yin)
     {
-        xin = (float) Math.sqrt(xin);
-        yin = (float) Math.sqrt(yin);
-        final float angle = NumberTools.swayAngleRandomized(seed, xin) - NumberTools.swayAngleRandomized(~seed, yin);
-        return (NumberTools.swayRandomized(0x9E3779B97F4A7C15L - seed, (xin * NumberTools.cos(angle) + yin * NumberTools.sin(angle)) * 0.25f));
+//        xin = (float) Math.sqrt(xin);
+//        yin = (float) Math.sqrt(yin);
+        final float angle = NumberTools.swayAngleRandomized(seed, xin + 0.2f) - NumberTools.swayAngleRandomized(~seed, yin - 0.2f);
+        return (NumberTools.swayRandomized(0x9E3779B97F4A7C15L - seed, (xin * NumberTools.cos(angle) + yin * NumberTools.sin(angle)) * 0.125f));
                 //+ NumberTools.swayRandomized(seed + 0xD0E89D2D311E289FL, yin * NumberTools.sin(angle))) * 0.5f;
 //        return NumberTools.swayRandomized(seed, (NumberTools.swayRandomized(seed + 0x9E3779B97F4A7C15L, xin + NumberTools.swayRandomized(0xD0E89D2D311E289FL + seed, yin + xin * 0.375f)) + NumberTools.swayRandomized(seed - 0x9E3779B97F4A7C15L, yin + NumberTools.swayRandomized(seed - 0xD0E89D2D311E289FL, xin + yin * 0.375f))) * 2.25f);
 
@@ -4339,7 +4339,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Experimental Noise 2D, 1 octave at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = beachNoise(-999999L, (x + ctr + 512) * 0.3125f, (y + ctr + 512) * 0.3125f) * 0.5f + 0.5f; //0.61803398875
+                                bright = beachNoise(-999999L, (x + ctr + 512) * 0.003125f, (y + ctr + 512) * 0.003125f) * 0.5f + 0.5f; //0.61803398875
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
                             }
                         }
