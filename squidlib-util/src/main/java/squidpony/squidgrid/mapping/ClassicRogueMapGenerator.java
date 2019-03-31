@@ -384,13 +384,13 @@ public class ClassicRogueMapGenerator implements IDungeonGenerator{
                 dungeon[x][y] = '+';
                 p = Coord.get(x + 1, y);
                 break;
-            case UP:
+            case DOWN:
                 x = rng.between(room.x + 1, room.x + room.width);
                 y = room.y - 1;
                 dungeon[x][y] = '+';
                 p = Coord.get(x, y - 1);
                 break;
-            case DOWN:
+            case UP:
                 x = rng.between(room.x + 1, room.x + room.width);
                 y = room.y + room.height;
                 dungeon[x][y] = '+';

@@ -36,9 +36,8 @@ import static squidpony.squidmath.Noise.IntPointHash.*;
 /**
  * A wide range of noise functions that can all be called from one configurable object. Originally from Jordan Peck's
  * FastNoise library, hence the name (these functions are sometimes, but not always, very fast). This implements
- * Noise2D, Noise3D, and Noise4D, and while 2D and 3D noise are very fast, the 4D noise is unusually slow, and normally
- * you should use WhirlingNoise for 4D noise (for whatever reason, it's the fastest despite also taking steps to ensure
- * higher quality). Though it doesn't implement an interface for them, you can also use this to get ridged-multi simplex
+ * Noise2D, Noise3D, Noise4D, and Noise6D, and this is the fastest continuous noise algorithm in the library. Though it
+ * doesn't implement an interface for them, you can also use this to get ridged-multi simplex
  * noise (the same type as {@link Noise.Ridged2D}) with {@link #ridged2D(float, float, int, int)},
  * {@link #ridged3D(float, float, float, int, int)}, or any of the overloads that allow specifying alternate lacunarity
  * and gain.
@@ -932,44 +931,18 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     }
 
     protected static float gradCoord2D(int seed, int x, int y, float xd, float yd) {
-        //Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) & 7];
         final float[] g = phiGrad2f[hash256(x, y, seed)];
-        //Float2 g = GRAD_2D[((seed ^= X_PRIME * x ^ Y_PRIME * y) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) >>> 29];
         return xd * g[0] + yd * g[1];
     }
 
     protected static float gradCoord3D(int seed, int x, int y, int z, float xd, float yd, float zd) {
-//        seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z;
-//        seed = seed * seed * seed * 60493;
-//        Float3 g = GRAD_3D[(seed ^ (seed >>> 13)) & 31];
         final Float3 g = GRAD_3D[hash32(x, y, z, seed)];
-        //Float3 g = GRAD_3D[((seed ^= X_PRIME * x ^ Y_PRIME * y ^ Z_PRIME * z) ^ seed >>> 13) * ((seed & 0xFFFF8) ^ 0x277B5) >>> 27];
         return xd * g.x + yd * g.y + zd * g.z;
     }
 
     protected static float gradCoord4D(int seed, int x, int y, int z, int w, float xd, float yd, float zd, float wd) {
         final int hash = hash256(x, y, z, w, seed) & 0xFC;
         return xd * grad4f[hash] + yd * grad4f[hash + 1] + zd * grad4f[hash + 2] + wd * grad4f[hash + 3];
-//        final int hash = hash32(x, y, z, w, seed); 
-//        float a = yd, b = zd, c = wd;            // X,Y,Z
-//        switch (hash >> 3) {          // OR, DEPENDING ON HIGH ORDER 2 BITS:
-//            case 1:
-//                a = wd;
-//                b = xd;
-//                c = yd;
-//                break;     // W,X,Y
-//            case 2:
-//                a = zd;
-//                b = wd;
-//                c = xd;
-//                break;     // Z,W,X
-//            case 3:
-//                a = yd;
-//                b = zd;
-//                c = wd;
-//                break;     // Y,Z,W
-//        }
-//        return ((hash & 4) == 0 ? -a : a) + ((hash & 2) == 0 ? -b : b) + ((hash & 1) == 0 ? -c : c);
     }
     /**
      * After being configured with the setters in this class, such as {@link #setNoiseType(int)},
