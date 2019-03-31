@@ -354,7 +354,7 @@ public class DungeonGeneratorTest {
 
         System.out.println("FlowingCaveGenerator\n");
         rng.setState(2252637788195L);
-        ClassicRogueMapGenerator classic = new ClassicRogueMapGenerator(6, 6, width, height, 4, 12, 4, 8,rng);
+        ClassicRogueMapGenerator classic = new ClassicRogueMapGenerator(6, 6, width, height, 6, 15, 4, 8,rng);
         dungeonGenerator.clearEffects();
         dungeon = dungeonGenerator.generate(classic.generate());
         //dungeonGenerator.generate(TilesetType.DEFAULT_DUNGEON);
