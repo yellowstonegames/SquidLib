@@ -147,7 +147,7 @@ public class RotationDemo extends ApplicationAdapter {
         //display.getBackgroundLayer().setOnlyRenderEven(true);
 
         display.setAnimationDuration(0.1f);
-        messages = new LinesPanel<Color>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont().initBySize()
+        messages = new LinesPanel<>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont().height(cellHeight).width(7f).initBySize()
                 , bonusHeight);
         // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
         // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
