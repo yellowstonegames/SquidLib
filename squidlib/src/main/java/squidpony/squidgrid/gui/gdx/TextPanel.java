@@ -3,6 +3,7 @@ package squidpony.squidgrid.gui.gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -92,8 +93,6 @@ public class TextPanel<T extends Color> {
 	/** The text to display */
 	public ArrayList<IColoredString<T>> text;
 
-	protected StringBuilder builder;
-
 	protected final ScrollPane scrollPane;
 
 	/**
@@ -109,19 +108,15 @@ public class TextPanel<T extends Color> {
 	 * The text to display MUST be set later on with
 	 * {@link #init(float, float, Collection)}.
 	 *
-	 * @param markup
-	 *            An optional way to compute markup.
+	 * @param markup ignored.
 	 * @param font
 	 *            The font to use. It can be set later using
 	 *            {@link #setFont(BitmapFont)}, but it MUST be set before
 	 *            drawing this panel.
 	 */
 	public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ BitmapFont font) {
-		if (markup != null)
-			setMarkup(markup);
 		if (font != null)
 			setFont(font);
-		builder = new StringBuilder(512);
 		textActor = new TextActor();
 
 		this.scrollPane = new ScrollPane(textActor);
@@ -138,8 +133,6 @@ public class TextPanel<T extends Color> {
 	 *            DefaultResources). This won't force glyphs into same-size cells, despite the name.
 	 */
 	public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ TextCellFactory font) {
-		if (markup != null)
-			setMarkup(markup);
 		if (font != null)
 		{
 			tcf = font;
@@ -148,21 +141,10 @@ public class TextPanel<T extends Color> {
 			if (markup != null)
 				this.font.getData().markupEnabled = true;
 		}
-		builder = new StringBuilder(512);
 		textActor = new TextActor();
 		scrollPane = new ScrollPane(textActor);
 	}
-
-	/**
-	 * @param m
-	 *            The markup to use.
-	 */
-	public void setMarkup(IMarkup<T> m) {
-		if (font != null)
-			font.getData().markupEnabled = true;
-		this.markup = m;
-	}
-
+	
 	/**
 	 * Sets the font to use. This method should be called once before {@link #init(float, float, Collection)} if the
 	 * font wasn't given at creation-time.
@@ -173,8 +155,6 @@ public class TextPanel<T extends Color> {
 		this.font = font;
 		tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))
 				.width(MathUtils.round(font.getSpaceWidth()));
-		if (markup != null)
-			font.getData().markupEnabled = true;
 	}
 
 	/**
@@ -189,8 +169,6 @@ public class TextPanel<T extends Color> {
 			tcf = font;
 			tcf.initBySize();
 			this.font = tcf.font();
-			if (markup != null)
-				this.font.getData().markupEnabled = true;
 		}
 	}
 
@@ -215,7 +193,7 @@ public class TextPanel<T extends Color> {
 			throw new NullPointerException(
 					"The font should be set before calling TextPanel.init()");
 
-		prepareText();
+		//prepareText();
 //		final boolean yscroll = maxHeight < textActor.getHeight();
 		scrollPane.setHeight(maxHeight);
 		scrollPane.setActor(textActor);
@@ -246,7 +224,7 @@ public class TextPanel<T extends Color> {
 			throw new NullPointerException(
 					"The font should be set before calling TextPanel.init()");
 
-		prepareText();
+		//prepareText();
 //		final boolean yscroll = maxHeight < textActor.getHeight();
 		scrollPane.setHeight(maxHeight);
 		scrollPane.setActor(textActor);
@@ -283,8 +261,9 @@ public class TextPanel<T extends Color> {
 			sr.begin(ShapeType.Filled);
 			sr.setColor(borderColor);
 //			prepareText();
-			UIUtil.drawMarginsAround(sr, scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(),
-					scrollPane.getHeight() - 1, borderSize, borderColor, borderStyle, 1f, 1f);
+			final float down = font.getData().down;
+			UIUtil.drawMarginsAround(sr, scrollPane.getX(), scrollPane.getY() + down * -0.5f + 4f, scrollPane.getWidth(),
+					scrollPane.getHeight() + down * -1.5f - 4f, borderSize * 2f, borderColor, borderStyle, 1f, 1f);
 			sr.end();
 
 			if (reset)
@@ -293,24 +272,15 @@ public class TextPanel<T extends Color> {
 	}
 
 	/**
-	 * @return The text to draw, after applying {@link #present(IColoredString)}
-	 *         and {@link #applyMarkup(IColoredString)}.
+	 * @return The text to draw, without color information present in {@link #text}.
 	 */
 	public /* @Nullable */ ArrayList<String> getTypesetText() {
 		if (text == null)
 			return null;
-		builder.setLength(0);
 		final ArrayList<String> result = new ArrayList<>();
 		for (IColoredString<T> line : text) {
-			/* This code must be consistent with #draw in the custom Actor */
-			final IColoredString<T> tmp = present(line);
-			final String marked = applyMarkup(tmp);
-			result.add(marked);
-			builder.append(marked);
-			builder.append('\n');
+			result.add(line.present());
 		}
-		if(builder.length() > 0)
-			builder.deleteCharAt(builder.length() - 1);
 		return result;
 	}
 
@@ -322,20 +292,37 @@ public class TextPanel<T extends Color> {
 	protected void prepareText() {
 		if (text == null)
 			return;
-		builder.setLength(0);
-		for (IColoredString<T> line : text) {
-			/* This code must be consistent with #draw in the custom Actor */
-			final IColoredString<T> tmp = present(line);
-			final String marked = applyMarkup(tmp);
-			builder.append(marked);
-			builder.append('\n');
+		final BitmapFontCache cache = font.getCache();
+		cache.clear();
+		final float w = scrollPane.getWidth();
+		float totalTextHeight = -font.getData().down, pos;
+		int lines = 0;
+		for (int m = 0, textSize = text.size(); m  < textSize; m++) {
+			IColoredString<T> line = text.get(m);
+			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
+			pos = 0f;
+			for (int i = 0; i < frags.size(); i++) {
+				final IColoredString.Bucket<T> b = frags.get(i);
+				Color c = b.getColor();
+				if(c != null) 
+					cache.setColor(c);
+				else
+					cache.setColor(SColor.WHITE);
+				GlyphLayout layout = cache.addText(b.getText(), pos, (-lines) * totalTextHeight, w, Align.left, true);
+				pos += layout.width;
+				if(layout.height > totalTextHeight + 0.1f)
+				{
+					lines++;
+					pos = 0f;
+				}
+			}
+			if(m + 1 < textSize)
+			{
+				cache.addText("\n", pos, (-lines) * totalTextHeight, w, Align.left, true);
+				lines++;
+			}
 		}
-		if(builder.length() > 0)
-			builder.deleteCharAt(builder.length() - 1);
-		float totalTextHeight = tcf.actualCellHeight;
-		GlyphLayout layout = font.getCache().addText(builder, 0, 0, 0, builder.length(),
-				textActor.getWidth(), Align.left, true);
-		totalTextHeight += layout.height;
+		totalTextHeight *= lines;
 		if(totalTextHeight < 0)
 			totalTextHeight = 0;
 		textActor.setHeight(/* Entire height */ totalTextHeight);
@@ -417,14 +404,6 @@ public class TextPanel<T extends Color> {
 	}
 
 	/**
-	 * @param ics
-	 * @return The text obtained after applying {@link #markup}.
-	 */
-	protected String applyMarkup(IColoredString<T> ics) {
-		return markup == null ? ics.toString() : ics.presentWithMarkup(markup);
-	}
-
-	/**
 	 * @return A fresh renderer.
 	 */
 	protected ShapeRenderer buildRenderer() {
@@ -451,8 +430,8 @@ public class TextPanel<T extends Color> {
 			prepareText();
 			final float tx = 0f;//scrollPane.getX();
 			final float ty = 0f;//scrollPane.getY();
-			final float twidth = getWidth();
-			final float theight = getHeight();
+			final float twidth = scrollPane.getWidth();
+			final float theight = scrollPane.getHeight();
 
 			if (backgroundColor != null) {
 				batch.setColor(backgroundColor);
@@ -483,10 +462,10 @@ public class TextPanel<T extends Color> {
 			if (tcf != null) {
 				tcf.configureShader(batch);
 			}
-			final float offY = (tcf != null) ? tcf.actualCellHeight * 0.5f : 0;
-			font.draw(batch, builder, tx, scrollPane.getHeight() + scrollPane.getScrollY() - offY,
-					0, builder.length(), twidth, Align.left, true);
-
+//			final float offY = 0;//(tcf != null) ? tcf.actualCellHeight * 0.5f : 0;
+			final BitmapFontCache cache = font.getCache();
+			cache.setPosition(tx, scrollPane.getHeight() + scrollPane.getScrollY());
+			cache.draw(batch);
 		}
 	}
 
