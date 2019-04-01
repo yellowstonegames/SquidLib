@@ -191,6 +191,12 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	String presentWithMarkup(IMarkup<T> markup);
 
 	/**
+	 * Gets the Buckets as an ArrayList, allowing access by index instead of by {@link #iterator()}.
+	 * @return the Buckets that would be returned by {@link #iterator()}, but in an ArrayList.
+	 */
+	ArrayList<Bucket<T>> getFragments();
+	
+	/**
 	 * A basic implementation of {@link IColoredString}.
 	 * 
 	 * @author smelC
@@ -201,7 +207,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 	class Impl<T> implements IColoredString<T> {
 
 		protected final ArrayList<Bucket<T>> fragments;
-
+		
 		/**
 		 * An empty instance.
 		 */
@@ -771,8 +777,8 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 		}
 
 		@Override
-		public Iterator<Bucket<T>> iterator() {
-			return fragments.iterator();
+		public ListIterator<Bucket<T>> iterator() {
+			return fragments.listIterator();
 		}
 
 		@Override
@@ -796,6 +802,15 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 					result++;
 			}
 			return result;
+		}
+		/**
+		 * Gets the Buckets as an ArrayList, allowing access by index instead of by {@link #iterator()}.
+		 *
+		 * @return the Buckets that would be returned by {@link #iterator()}, but in an ArrayList.
+		 */
+		@Override
+		public ArrayList<Bucket<T>> getFragments() {
+			return fragments;
 		}
 
 		/* Some tests */
@@ -845,6 +860,11 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 				return new Bucket<>(this.text + text, color);
 		}
 
+		public int length()
+		{
+			return text.length();
+		}
+		
 		public Bucket<T> setLength(int l) {
 			final int here = text.length();
 			if (here <= l)
@@ -876,7 +896,7 @@ public interface IColoredString<T> extends Iterable<IColoredString.Bucket<T>> {
 			if (color == null)
 				return text;
 			else
-				return text + "(" + color + ")";
+				return text + '(' + color + ')';
 		}
 
 	}

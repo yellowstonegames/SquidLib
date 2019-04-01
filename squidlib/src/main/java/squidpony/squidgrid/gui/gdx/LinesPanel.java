@@ -15,6 +15,7 @@ import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
@@ -279,46 +280,34 @@ public class LinesPanel<T extends Color> extends Actor {
 
 		final float x = getX() + xOffset;
 		//TODO: check if drawBottomUp is correct or if lineHeight should be changed to 0
-		float y = getY() + (drawBottomUp ? lineHeight : height) - data.descent + yOffset;
+		float y = getY() + (drawBottomUp ? lineHeight : height - lineHeight) - data.descent + yOffset;
 
 		final Iterator<IColoredString<T>> it = content.iterator();
-		int ydx = 0;
+//		int ydx = 0;
 		float consumed = 0;
 		while (it.hasNext()) {
 			final IColoredString<T> ics = it.next();
-			final String str = toDraw(ics, ydx);
+			//final String str = toDraw(ics, ydx);
 			/* Let's see if the drawing would go outside this Actor */
 			final BitmapFontCache cache = font.getCache();
 			cache.clear();
-			final GlyphLayout glyph = cache.addText(str, 0, y, width, align, wrap);
+			final GlyphLayout glyph = cache.setText(ics.present(), 0, 0, width, align, wrap);
 			if (height < consumed + glyph.height)
 				/* We would draw outside this Actor's bounds */
 				break;
-			final int increaseAlready, nbLines = MathUtils.ceil(glyph.height / lineHeight);
-			if (drawBottomUp) {
-				/*
-				 * If the text span multiple lines and we draw bottom-up, we
-				 * must go up *before* drawing.
-				 */
-				if (1 < nbLines) {
-					increaseAlready = nbLines - 1;
-					y += increaseAlready * lineHeight;
-				} else
-					increaseAlready = 0;
-			} else
-			{
-				if (1 < nbLines) {
-					increaseAlready = nbLines - 1;
-					y -= increaseAlready * lineHeight;
-				} else
-					increaseAlready = 0;
-			}
+			final int nbLines = MathUtils.ceil(glyph.height / lineHeight);
 			/* Actually draw */
-			font.draw(batch, str, x, y, width, align, wrap);
-			y += (drawBottomUp ? /* Go up */ lineHeight : /* Go down */ -lineHeight);
-			y -= increaseAlready * lineHeight;
-			consumed += lineHeight;
-			ydx++;
+			int ci = 0;
+			ArrayList<IColoredString.Bucket<T>> frags = ics.getFragments();
+			for (int i = 0; i < frags.size(); i++) {
+				final IColoredString.Bucket<T> b = frags.get(i);
+				cache.setColors(b.getColor(), ci, ci += b.length());
+			}
+			cache.setPosition(x, y);
+			cache.draw(batch);
+			y -= nbLines * lineHeight;
+			consumed += nbLines * lineHeight;
+			//ydx++;
 		}
 	}
 
@@ -338,18 +327,7 @@ public class LinesPanel<T extends Color> extends Actor {
 		return content.size() == maxLines;
 
 	}
-
-	protected String toDraw(IColoredString<T> ics, int ydx) {
-		return applyMarkup(transform(ics, ydx));
-	}
-
-	protected String applyMarkup(IColoredString<T> ics) {
-		if (ics == null)
-			return null;
-		else
-			return markup == null ? ics.toString() : ics.presentWithMarkup(markup);
-	}
-
+	
 	/**
 	 * If you want to grey out "older" messages, you would do it in this method,
 	 * when {@code ydx > 0} (using an {@link squidpony.IColorCenter} maybe ?).
