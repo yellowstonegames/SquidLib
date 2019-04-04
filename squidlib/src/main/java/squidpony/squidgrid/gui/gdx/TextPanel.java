@@ -295,9 +295,9 @@ public class TextPanel<T extends Color> {
 		final BitmapFontCache cache = font.getCache();
 		cache.clear();
 		final float w = scrollPane.getWidth();
-		float totalTextHeight = -font.getData().down, pos;
+		float lineHeight = -font.getData().down, capHeight = font.getCapHeight(), pos;
 		int lines = 0;
-		for (int m = 0, textSize = text.size(); m  < textSize; m++) {
+		for (int m = 0, textSize = text.size(); m < textSize; m++) {
 			IColoredString<T> line = text.get(m);
 			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
 			pos = 0f;
@@ -308,24 +308,24 @@ public class TextPanel<T extends Color> {
 					cache.setColor(c);
 				else
 					cache.setColor(SColor.WHITE);
-				GlyphLayout layout = cache.addText(b.getText(), pos, (-lines) * totalTextHeight, w, Align.left, true);
+				GlyphLayout layout = cache.addText(b.getText(), pos, (-lines) * lineHeight, w, Align.left, true);
 				pos += layout.width;
-				if(layout.height > totalTextHeight + 0.1f)
+				if(layout.height > capHeight)
 				{
-					lines++;
+					lines += layout.height / capHeight;
 					pos = 0f;
 				}
 			}
 			if(m + 1 < textSize)
 			{
-				cache.addText("\n", pos, (-lines) * totalTextHeight, w, Align.left, true);
+				//cache.addText("\n", pos, (-lines) * totalTextHeight, w, Align.left, true);
 				lines++;
 			}
 		}
-		totalTextHeight *= lines;
-		if(totalTextHeight < 0)
-			totalTextHeight = 0;
-		textActor.setHeight(/* Entire height */ totalTextHeight);
+		lineHeight *= lines;
+		if(lineHeight < 0)
+			lineHeight = 0;
+		textActor.setHeight(/* Entire height */ lineHeight);
 		scrollPane.layout();
 
 	}
