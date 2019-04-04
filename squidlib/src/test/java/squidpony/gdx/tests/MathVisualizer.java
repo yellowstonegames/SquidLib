@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 26;
+    private int mode = 20;
     private int modes = 30;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -30,7 +30,6 @@ public class MathVisualizer extends ApplicationAdapter {
     private Stage stage;
     private int[] amounts = new int[512];
     private DiverRNG diver;
-    private MiniMover64RNG rng;
     private boolean hasGauss = false;
     private double followingGauss = 0.0;
     private RandomBias bias;
@@ -303,7 +302,6 @@ public class MathVisualizer extends ApplicationAdapter {
         startTime = TimeUtils.millis();
         Coord.expandPoolTo(512, 512);
         diver = new DiverRNG();
-        rng = new MiniMover64RNG();
         seed = DiverRNG.determine(12345L);
         bias = new RandomBias();
         edit = new EditRNG();
@@ -887,7 +885,7 @@ public class MathVisualizer extends ApplicationAdapter {
             // correctly, and this caused a pattern in the output because there was a pattern in the input.
             // Notably, with very large indices this still doesn't get collisions, but Halton does.
             case 21: {
-                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
+                long size = 0x1000L;//(System.nanoTime() >>> 28 & 0xfff) + 1L;
                 Gdx.graphics.setTitle("Roberts sequence, first " + size + " points");
                 int x, y, a = 1;
 //                double p, q;
@@ -916,18 +914,25 @@ public class MathVisualizer extends ApplicationAdapter {
                     } else
                         layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
-                x = (a * 0xC13FA9A9) >>> 23;
-                y = (a * 0x91E10DA5) >>> 23;
-                layers.backgrounds[x+1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y+1] = -0x1.794bfep125F;
-                layers.backgrounds[x-1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y-1] = -0x1.794bfep125F;
+//                x = (a * 0xC13FA9A9) >>> 23;
+//                y = (a * 0x91E10DA5) >>> 23;
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[i][y] = -0x1.794bfep125F;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[x][i] = -0x1.794bfep125F;
+//                }
+
+//                layers.backgrounds[x+1][y] = -0x1.794bfep125F;
+//                layers.backgrounds[x][y+1] = -0x1.794bfep125F;
+//                layers.backgrounds[x-1][y] = -0x1.794bfep125F;
+//                layers.backgrounds[x][y-1] = -0x1.794bfep125F;
             }
             break;
             case 22: {
-                long size = (System.nanoTime() >>> 28 & 0xfff) + 1L;
-                Gdx.graphics.setTitle("Roberts sequence (later start), first " + size + " points");
-                int x, y, a = 100000;
+                long size = 0x1000L;//(System.nanoTime() >>> 28 & 0xfff) + 1L;
+                Gdx.graphics.setTitle("Jittered Roberts sequence, first " + size + " points");
+                int x, y, a = 1, z;
                 for (int i = 0; i < size; i++) {
                     //1.32471795724474602596 0.7548776662466927 0.5698402909980532
                     //0x5320B74F 0xC13FA9A9 0x91E10DA5
@@ -937,8 +942,11 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    x = (int) (0x8000000000000000L + a * 0xC13FA9A902A6328FL >>> 55);
 //                    y = (int) (0x8000000000000000L + a * 0x91E10DA5C79E7B1DL >>> 55);
                     a++;
-                    x = (a * 0xC13FA9A9) >>> 23;
-                    y = (a * 0x91E10DA5) >>> 23;
+                    x = (a * 0xC13FA9A9);
+                    y = (a * 0x91E10DA5);
+                    z = (a * 0x9E3779B9);
+                    x = (x >>> 23) + (z >>> 29 & 6) - (z >>> 25 & 6) & 511;
+                    y = (y >>> 23) + (z >>> 27 & 6) - (z >>> 23 & 6) & 511;
 
 //                    a = GreasedRegion.disperseBits((int) (VanDerCorputQRNG.altDetermine(7L, i) * 0x40000));
 //                    x = a & 0x1ff;
@@ -949,16 +957,29 @@ public class MathVisualizer extends ApplicationAdapter {
 //                    y = a >>> 16 & 0x7f;
                     if (layers.backgrounds[x][y] != 0f) {
                         layers.backgrounds[x][y] = -0x1.7677e8p125F;
-                        System.out.println("Overlap on index " + i);
+                        System.out.println("Overlap on index " + a);
                     } else
                         layers.backgrounds[x][y] = SColor.FLOAT_BLACK;
                 }
-                x = (a * 0xC13FA9A9) >>> 23;
-                y = (a * 0x91E10DA5) >>> 23;
-                layers.backgrounds[x+1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y+1] = -0x1.794bfep125F;
-                layers.backgrounds[x-1][y] = -0x1.794bfep125F;
-                layers.backgrounds[x][y-1] = -0x1.794bfep125F;
+                //0xD1B54A32D192ED03L, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+
+//                x = (a * 0xC13FA9A9);
+//                y = (a * 0x91E10DA5);
+//                z = (a * 0x9E3779B9);
+//                x = (x >>> 23) + (z >>> 29 & 6) - (z >>> 25 & 6) & 511;
+//                y = (y >>> 23) + (z >>> 27 & 6) - (z >>> 23 & 6) & 511;
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[i][y] = -0x1.794bfep125F;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    layers.backgrounds[x][i] = -0x1.794bfep125F;
+//                }
+
+
+//                if(x < 511) layers.backgrounds[x+1][y] = -0x1.794bfep125F;
+//                if(y < 511) layers.backgrounds[x][y+1] = -0x1.794bfep125F;
+//                if(x > 0) layers.backgrounds[x-1][y] = -0x1.794bfep125F;
+//                if(y > 0) layers.backgrounds[x][y-1] = -0x1.794bfep125F;
 
             }
             break;

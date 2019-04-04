@@ -1123,7 +1123,9 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        /* .setSmoothingMultiplier(0.4f) */.height(37).tweakHeight(34).width(8);
+                        .height(32).width(9);
+                instance.distancePrint.bmpFont.setUseIntegerPositions(false);
+                
             } catch (Exception e) {
                 e.printStackTrace();
             }
