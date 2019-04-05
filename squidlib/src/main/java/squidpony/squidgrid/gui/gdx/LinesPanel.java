@@ -139,8 +139,6 @@ public class LinesPanel<T extends Color> extends Actor {
 		this.markup = markup;
 		this.font = font;
 		this.tcf = null;
-		if (markup != null)
-			this.font.getData().markupEnabled = true;
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
 					+ getClass().getSimpleName() + " must be greater or equal than zero");
@@ -165,8 +163,6 @@ public class LinesPanel<T extends Color> extends Actor {
 		this.markup = markup;
 		this.tcf = font;
 		this.font = font.bmpFont;
-		if (markup != null)
-			this.font.getData().markupEnabled = true;
 		if (maxLines < 0)
 			throw new IllegalStateException("The maximum number of lines in an instance of "
 					+ "LinesPanel must be greater or equal than zero");

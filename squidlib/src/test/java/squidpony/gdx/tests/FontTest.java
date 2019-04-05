@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.Maker;
+import squidpony.panel.IColoredString;
 import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.LineKit;
 import squidpony.squidmath.GreasedRegion;
@@ -146,26 +148,24 @@ public class FontTest extends ApplicationAdapter {
                 new SquidPanel(widths[21], heights[21], factories[21]).setTextSize(factories[21].width() + 1f * ZOOM, factories[21].height() + 2f * ZOOM),
                 new SquidPanel(widths[22], heights[22], factories[22]).setTextSize(factories[22].width() + 1f * ZOOM, factories[22].height() + 2f * ZOOM),
         };
-        final String[] samples = {"The quick brown fox jumps over the lazy dog.",
-                "HAMBURGEVONS",
-                "Black Sphinx Of Quartz: Judge Ye My Vow!",
-                "Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!",
-                "Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.",
-                "So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them.",
-                "Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting."
-};
-        for (int i = factories.length - 3; i < factories.length; i++) {
-            factories[i].bmpFont.getData().markupEnabled = true;
-        }
+        final GDXMarkup markup = GDXMarkup.instance;
+        final ArrayList<? extends IColoredString<Color>> samples = Maker.makeList(markup.colorString("The quick brown fox jumps over the lazy dog."),
+                markup.colorString("HAMBURGEVONS"),
+                markup.colorString("Black Sphinx Of Quartz: Judge Ye My Vow!"),
+                markup.colorString("Non-rainbow; [CW Red]r[CW Apricot]a[CW Bright Yellow]i[CW Green]n[CW Cyan]b[CW Blue]o[CW Purple]w[White]!"),
+                markup.colorString("Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good."),
+                markup.colorString("So, too, it is better to recapture an army entire than to destroy it, to capture a regiment, a detachment or a company entire than to destroy them."),
+                markup.colorString("Hence to fight and conquer in all your battles is not supreme excellence; supreme excellence consists in breaking the enemy's resistance without fighting.")
+        );
         texts = new ArrayList<>(3);
         text = new TextPanel<Color>(null, factories[factories.length - 3]);
-        text.init(totalWidth, totalHeight, Color.WHITE, samples);
+        text.init(totalWidth, totalHeight, samples);
         texts.add(text);
         text = new TextPanel<Color>(null, factories[factories.length - 2]);
-        text.init(totalWidth, totalHeight, Color.WHITE, samples);
+        text.init(totalWidth, totalHeight, samples);
         texts.add(text);
         text = new TextPanel<Color>(null, factories[factories.length - 1]);
-        text.init(totalWidth, totalHeight, Color.WHITE, samples);
+        text.init(totalWidth, totalHeight, samples);
         texts.add(text);
         for (int i = 0; i < factories.length; i++) {
             tcf = factories[i];
