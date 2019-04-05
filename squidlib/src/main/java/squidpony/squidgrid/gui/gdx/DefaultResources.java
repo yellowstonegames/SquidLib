@@ -1123,7 +1123,7 @@ public class DefaultResources implements LifecycleListener {
         if (instance.distancePrint == null) {
             try {
                 instance.distancePrint = new TextCellFactory().fontDistanceField(distanceFieldPrint, distanceFieldPrintTexture)
-                        .height(32).width(9);
+                        .height(30).width(7);
                 instance.distancePrint.bmpFont.setUseIntegerPositions(false);
                 
             } catch (Exception e) {
@@ -1692,7 +1692,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.familyPrintMSDF = new TextFamily();
                 instance.familyPrintMSDF.fontMultiDistanceField(crispNotoSerif, crispNotoSerifTexture)
-                        .width(12).height(30).setSmoothingMultiplier(1.5f);
+                        .width(24).height(30).setSmoothingMultiplier(1.5f);
                 instance.familyPrintMSDF.font().setUseIntegerPositions(false);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1733,7 +1733,7 @@ public class DefaultResources implements LifecycleListener {
             try {
                 instance.msdfCarved = new TextCellFactory()
                         .fontMultiDistanceField(crispCarved, crispCarvedTexture)
-                        .width(16f).height(32f).setSmoothingMultiplier(1.5f);
+                        .width(32f).height(32f).setSmoothingMultiplier(1.5f);
             } catch (Exception e) {
                 e.printStackTrace();
             }
