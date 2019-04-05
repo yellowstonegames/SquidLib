@@ -138,8 +138,6 @@ public class TextPanel<T extends Color> {
 			tcf = font;
 			tcf.initBySize();
 			this.font = tcf.font();
-			if (markup != null)
-				this.font.getData().markupEnabled = true;
 		}
 		textActor = new TextActor();
 		scrollPane = new ScrollPane(textActor);
@@ -293,34 +291,39 @@ public class TextPanel<T extends Color> {
 		if (text == null)
 			return;
 		final BitmapFontCache cache = font.getCache();
-		cache.clear();
+		//cache.clear();
 		final float w = scrollPane.getWidth();
-		float lineHeight = -font.getData().down, capHeight = font.getCapHeight(), pos;
-		int lines = 0;
+		float lineHeight = -font.getData().down, capHeight = font.getCapHeight();
+		int lines = 1, ci = 0;
+		StringBuilder sb = new StringBuilder(256);
 		for (int m = 0, textSize = text.size(); m < textSize; m++) {
 			IColoredString<T> line = text.get(m);
 			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
-			pos = 0f;
+			for (int i = 0; i < frags.size(); i++) {
+				sb.append(frags.get(i).getText());
+			}
+			sb.append('\n');
+		}
+		GlyphLayout layout = cache.setText(sb, 0, 0, w, Align.left, true);			
+		lines += layout.height / capHeight;
+		
+		for (int m = 0, textSize = text.size(); m < textSize; m++) {
+			IColoredString<T> line = text.get(m);
+			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
 			for (int i = 0; i < frags.size(); i++) {
 				final IColoredString.Bucket<T> b = frags.get(i);
 				Color c = b.getColor();
 				if(c != null) 
-					cache.setColor(c);
+					cache.setColors(c, ci, ci += b.length());
 				else
-					cache.setColor(SColor.WHITE);
-				GlyphLayout layout = cache.addText(b.getText(), pos, (-lines) * lineHeight, w, Align.left, true);
-				pos += layout.width;
-				if(layout.height > capHeight)
-				{
-					lines += layout.height / capHeight;
-					pos = 0f;
-				}
+					ci += b.length();
 			}
-			if(m + 1 < textSize)
-			{
+
+//			if(m + 1 < textSize)
+//			{
 				//cache.addText("\n", pos, (-lines) * totalTextHeight, w, Align.left, true);
-				lines++;
-			}
+				//lines++;
+//			}
 		}
 		lineHeight *= lines;
 		if(lineHeight < 0)
