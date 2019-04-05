@@ -1,5 +1,5 @@
 info face="bloccus" size=-64 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,32,0,12 spacing=0,0 outline=0
-common lineHeight=66 base=54 scaleW=2048 scaleH=2048 pages=1 packed=0 alphaChnl=0 redChnl=1 greenChnl=2 blueChnl=4
+common lineHeight=72 base=54 scaleW=2048 scaleH=2048 pages=1 packed=0 alphaChnl=0 redChnl=1 greenChnl=2 blueChnl=4
 page id=0 file="bloccus-msdf.png"
 chars count=577
 char id=0 x=2 y=2 width=66 height=88 xoffset=0 yOffset=-1 xadvance=66 page=0 chnl=15

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.squidgrid.gui.gdx.*;
@@ -58,7 +59,7 @@ public class FontTest extends ApplicationAdapter {
         batch = new SpriteBatch();
         //widths = new int[]{100, 95, 90, 110, 95, 50, 125, 170, 200, 90};
         //heights = new int[]{20, 21, 20, 28, 18, 20, 22, 25, 25, 25};
-        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105,  60, 200, 70};
+        widths =  new int[]{120, 160, 120, 160, 120,  50,  50,  100, 95,  90,  110, 120, 120, 120, 120, 130, 70,  70,  70, 105, 100, 100, 100};
         heights = new int[]{22,  29,  22,  29,  24,   25,  25,  20,  21,  20,  28,  22,  22,  22,  22,  45,  25,  25,  25,  27,  27,  25,  25};
         factories = new TextCellFactory[]{
                 DefaultResources.getCrispSlabFont().width(ZOOM * 14).height(28).initBySize(),
@@ -111,9 +112,14 @@ public class FontTest extends ApplicationAdapter {
                 new StretchViewport(factories[17].width() * widths[17], factories[17].height() * heights[17]),
                 new StretchViewport(factories[18].width() * widths[18], factories[18].height() * heights[18]),
                 new StretchViewport(factories[19].width() * widths[19], factories[19].height() * heights[19]),
-                new StretchViewport(factories[20].width() * widths[20], factories[20].height() * heights[20]),
-                new StretchViewport(factories[21].width() * widths[21], factories[21].height() * heights[21]),
-                new StretchViewport(factories[22].width() * widths[22], factories[22].height() * heights[22]),
+
+                new ScreenViewport(),
+                new ScreenViewport(),
+                new ScreenViewport(),
+
+//                new StretchViewport(factories[20].width() * widths[20], factories[20].height() * heights[20]),
+//                new StretchViewport(factories[21].width() * widths[21], factories[21].height() * heights[21]),
+//                new StretchViewport(factories[22].width() * widths[22], factories[22].height() * heights[22]),
         };
         displays = new SquidPanel[]{
                 new SquidPanel(widths[0 ], heights[0 ], factories[0 ]).setTextSize(factories[0 ].width() + 0f * ZOOM, factories[0].height() + 0f * ZOOM),
