@@ -340,6 +340,7 @@ public class TextPanel<T extends Color> {
 	 */
 	public void scroll(final float downDistance)
 	{
+		prepareText();
 		scrollPane.setScrollY(scrollPane.getScrollY() + downDistance * tcf.actualCellHeight);
 	}
 
@@ -350,6 +351,7 @@ public class TextPanel<T extends Color> {
 	 */
 	public void scrollToEdge(final boolean goToTop)
 	{
+		prepareText();
 		scrollPane.setScrollPercentY(goToTop ? 0f : 1f);
 	}
 
