@@ -22,8 +22,8 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 20;
-    private int modes = 30;
+    private int mode = 26;
+    private int modes = 31;
     private SpriteBatch batch;
     private SparseLayers layers;
     private InputAdapter input;
@@ -69,18 +69,24 @@ public class MathVisualizer extends ApplicationAdapter {
     }
     public final float fastGaussian()
     {
-//        long a = diver.nextLong();
-//        a = (a & 0x00FF00FF00FF00FFL) +     ((a & 0xFF00FF00FF00FF00L) >>> 8);
-//        a = (a & 0x000001FF000001FFL) +     ((a & 0x01FF000001FF0000L) >>> 16);
-//        return ((a & 0x00000000000003FFL) - ((a & 0x000003FF00000000L) >>> 32)) / 255.0;
         long a = diver.nextLong(), b = diver.nextLong();
         a = (a & 0x0003FF003FF003FFL) +     ((a & 0x0FFC00FFC00FFC00L) >>> 10);
         b = (b & 0x0003FF003FF003FFL) +     ((b & 0x0FFC00FFC00FFC00L) >>> 10);
         a = (a & 0x000000007FF007FFL) +     ((a & 0x0007FF0000000000L) >>> 40);
         b = (b & 0x000000007FF007FFL) +     ((b & 0x0007FF0000000000L) >>> 40);
         return (((a & 0x0000000000000FFFL) + ((a & 0x000000007FF00000L) >>> 20))
-                - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * 0x1p-10f;
-
+                - ((b & 0x0000000000000FFFL) + ((b & 0x000000007FF00000L) >>> 20))) * (0x1p-10f);
+    }
+    
+    public final float fakeGaussian()
+    {
+        final long r = diver.nextLong(), s = diver.nextLong(), t = diver.nextLong();
+        return ((r & 0xFFFFFFL) + (s >>> 13 & 0xFFFFFFL) + (r >>> 26 & 0xFFFFFFL) + (s >>> 40) + (t & 0xFFFFFFL) + (t >>> 26 & 0xFFFFFFL)
+                - (s & 0xFFFFFFL) - (r >>> 13 & 0xFFFFFFL) - (s >>> 26 & 0xFFFFFFL) - (r >>> 40) - (t >>> 40) - (t >>> 13 & 0xFFFFFFL)
+//        return  ((r & 0xFFFFFFL) + (r >>> 20 & 0xFFFFFFL) + (s >>> 40)
+//                - (s & 0xFFFFFFL) - (s >>> 20 & 0xFFFFFFL) - (r >>> 40)
+        ) * 0x1p-24f;
+//        return ((r & 0xFFFFFFL) * 0x1p-23f - ((s & 0xFFFFFFL) * 0x1p-23f)) * ((r >> 40) * 0x1p-23f) * ((s >> 40) * 0x1p-23f);
     }
     public final double nextGaussian() {
         if (hasGauss = !hasGauss) {
@@ -110,8 +116,7 @@ public class MathVisualizer extends ApplicationAdapter {
         mag += (vector[0] = (v1 *= multiplier)) * (v1);
         mag += (vector[1] = (v2 *= multiplier)) * (v2);
         mag += (v3 *= multiplier) * (v3);
-        //mag += -2.0 * Math.log(diver.nextDouble());
-        if(mag == 0)
+        if(mag == 0.0)
         {
             vector[0] = 0.0;
             vector[1] = 0.0;
@@ -126,7 +131,7 @@ public class MathVisualizer extends ApplicationAdapter {
     {
         double v1 = fastGaussian(), v2 = fastGaussian(), v3 = fastGaussian();
         double mag = (vector[0] = v1) * v1 + (vector[1] = v2) * v2 + v3 * v3;
-        if(mag == 0)
+        if(mag == 0.0)
         {
             vector[0] = 0.0;
             vector[1] = 0.0;
@@ -137,11 +142,11 @@ public class MathVisualizer extends ApplicationAdapter {
         vector[0] *= mag;
         vector[1] *= mag;
     }
-    public void insideBallExponentialFast(final double[] vector)
+    public void insideBallExponential(final double[] vector)
     {
-        double v1 = fastGaussian(), v2 = fastGaussian(), v3 = fastGaussian();
-        double mag = (vector[0] = v1) * v1 + (vector[1] = v2) * v2 + v3 * v3 - 2.0 * Math.log(diver.nextDouble());
-        if(mag == 0)
+        double v1 = nextGaussian(), v2 = nextGaussian(), v3 = nextGaussian();
+        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(diver.nextDouble());
+        if(mag == 0.0)
         {
             vector[0] = 0.0;
             vector[1] = 0.0;
@@ -149,8 +154,24 @@ public class MathVisualizer extends ApplicationAdapter {
         }
         else
             mag = 1.0 / Math.sqrt(mag);
-        vector[0] *= mag;
-        vector[1] *= mag;
+        vector[0] = v1 * mag;
+        vector[1] = v2 * mag;
+    }
+    public void insideBallExponentialFast(final double[] vector) {
+        double v1 = fastGaussian(), v2 = fastGaussian(), v3 = fastGaussian();//, sq = diver.nextDouble() * diver.nextDouble();
+//        double mag = v1 * v1 + v2 * v2 + v3 * v3 + 1.0 / (1.0 - diver.nextDouble() * diver.nextDouble()) - 0.25;
+        double mag = v1 * v1 + v2 * v2 + v3 * v3 - 2.0 * Math.log(diver.nextDouble());
+        if (mag == 0.0) {
+            vector[0] = 0.0;
+            vector[1] = 0.0;
+            return;
+        } else
+            mag = 1.0 / Math.sqrt(mag);
+        //if (Math.abs(v3 * mag) < 0.1) 
+        {
+            vector[0] = v1 * mag;
+            vector[1] = v2 * mag;
+        }
     }
     public void insideCircleBoxMuller(final double[] vector)
     {
@@ -752,15 +773,15 @@ public class MathVisualizer extends ApplicationAdapter {
             break;
             case 16: {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
-                        " XSP, traditional & 0x1FFL");
+                        " fakeGaussian, clamped [-4,4]");
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[(int) ((xsp.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
+                    amounts[MathUtils.round(MathUtils.clamp(fakeGaussian(), -0x3.Fp0f, 0x3.Fp0f) * 64f + 256)]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
@@ -769,6 +790,26 @@ public class MathVisualizer extends ApplicationAdapter {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
                     }
                 }
+
+//                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
+//                        " XSP, traditional & 0x1FFL");
+//                for (int i = 0; i < 0x1000000; i++) {
+//                    amounts[(int) ((xsp.nextLong(0x1800000000000000L)) & 0x1FFL)]++;
+//                }
+//                for (int i = 0; i < 512; i++) {
+//                    float color = (i & 63) == 0
+//                            ? -0x1.c98066p126F // CW Azure
+//                            : -0x1.d08864p126F; // CW Sapphire
+//                    for (int j = 519 - (amounts[i] >> 8); j < 520; j++) {
+//                        layers.backgrounds[i][j] = color;
+//                    }
+//                }
+//                for (int i = 0; i < 10; i++) {
+//                    for (int j = 8; j < 520; j += 32) {
+//                        layers.backgrounds[i][j] = -0x1.7677e8p125F;
+//                    }
+//                }
+                
 //                Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
 //                        " DiverRNG, random.nextLong(0x1000000000000000L) & 0x1FFL");
 //                //DiverRNG diver = new DiverRNG();
@@ -1147,6 +1188,18 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 29:{
+                Gdx.graphics.setTitle("insideBallExponential at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 100000; j++) {
+                    insideBallExponential(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+                }
+            }
+            break;
+            case 30:{
                 Gdx.graphics.setTitle("insideBallExponentialFast at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 int x, y;
                 float color = SColor.FLOAT_BLACK;
@@ -1157,6 +1210,7 @@ public class MathVisualizer extends ApplicationAdapter {
                     layers.backgrounds[x][y] = color;
                 }
             }
+            break;
         }
     }
 
