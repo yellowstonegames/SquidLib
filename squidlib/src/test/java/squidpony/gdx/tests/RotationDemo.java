@@ -758,9 +758,9 @@ public class RotationDemo extends ApplicationAdapter {
         super.resize(width, height);
 
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
-        currentZoomX = width * 1f / RotationDemo.width;
+        currentZoomX = (float)width / RotationDemo.width;
         // total new screen height in pixels divided by total number of rows on the screen
-        currentZoomY = height * 1f / (RotationDemo.height + RotationDemo.bonusHeight);
+        currentZoomY = (float) height / (RotationDemo.height + RotationDemo.bonusHeight);
         // message box should be given updated bounds since I don't think it will do this automatically
         messagePanel.getScrollPane().setBounds(0, 0, width, currentZoomY * RotationDemo.bonusHeight);
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
