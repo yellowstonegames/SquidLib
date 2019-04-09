@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by Tommy Ettinger on 8/12/2015.
  */
 public class CoordDouble implements Serializable {
-    private static final long serialVersionUID = 300L;
+    private static final long serialVersionUID = 400L;
     public double x;
     public double y;
 
@@ -38,29 +38,121 @@ public class CoordDouble implements Serializable {
     {
         return new CoordDouble(x, y);
     }
-    public CoordDouble getLocation()
+
+    /**
+     * Constructs an identical copy to this CoordDouble, making a new object that may be mutated independently.
+     * @return a copy of this CoordDouble
+     */
+    public CoordDouble copy()
     {
         return new CoordDouble(x, y);
     }
-    public void translate(double x, double y)
+
+    public void add(double x, double y)
     {
         this.x += x;
         this.y += y;
     }
-    public void setLocation(double x, double y)
+
+    public void add(CoordDouble other)
+    {
+        this.x += other.x;
+        this.y += other.y;
+    }
+
+    public void subtract(double x, double y)
+    {
+        this.x -= x;
+        this.y -= y;
+    }
+
+    public void subtract(CoordDouble other)
+    {
+        this.x -= other.x;
+        this.y -= other.y;
+    }
+
+    public void multiply(double x, double y)
+    {
+        this.x *= x;
+        this.y *= y;
+    }
+
+    public void multiply(CoordDouble other)
+    {
+        this.x *= other.x;
+        this.y *= other.y;
+    }
+
+    /**
+     * Divides the x component of this CoordDouble by {@code x} and the y component by {@code y}. Be careful about when
+     * either of the parameters can be 0.0, since that can put NaN or infinite components in this.
+     * @param x divisor for x
+     * @param y divisor for y
+     */
+    public void divide(double x, double y)
+    {
+        this.x /= x;
+        this.y /= y;
+    }
+
+    /**
+     * Divides the x component of this CoordDouble by {@code other.x} and the y component by {@code other.y}. Be careful
+     * about when either of other's components can be 0.0, since that can put NaN or infinite components in this.
+     * @param other a non-null CoordDouble to get divisors from
+     */
+    public void divide(CoordDouble other)
+    {
+        this.x /= other.x;
+        this.y /= other.y;
+    }
+
+    /**
+     * Gets the dot product of this CoordDouble and {@code other}.
+     * @param other another CoordDouble; must not be null.
+     * @return the dot product of this and {@code other}.
+     */
+    public double dot(CoordDouble other)
+    {
+        return x * other.x + y * other.y;
+    }
+
+    /**
+     * Gets the cross product of this CoordDouble and {@code other}.
+     * @param other another CoordDouble; must not be null.
+     * @return the cross product of this and {@code other}.
+     */
+    public double cross(CoordDouble other)
+    {
+        return y * other.x - x * other.y;
+    }
+    
+    public void set(double x, double y)
     {
         this.x = x;
         this.y = y;
     }
-    public void setLocation(CoordDouble co)
+    public void set(CoordDouble co)
     {
         x = co.x;
         y = co.y;
     }
-    public void move(int x, int y)
+    /**
+     * Distance from the origin to this CoordDouble.
+     * @return the distance from the origin to this CoordDouble.
+     */
+    public double length()
     {
-        this.x = x;
-        this.y = y;
+        return Math.sqrt(x * x + y * y);
+    }
+
+    /**
+     * Distance from the origin to this CoordDouble, squared.
+     * @return the distance from the origin to this CoordDouble, squared.
+     */
+    public double lengthSq()
+    {
+        return (x * x + y * y);
     }
     public double distance(double x2, double y2)
     {
@@ -83,7 +175,7 @@ public class CoordDouble implements Serializable {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
 
@@ -91,7 +183,7 @@ public class CoordDouble implements Serializable {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
 
