@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 /**
  * Coord using double values for x and y instead of int. Not pooled.
+ * When possible and you are using libGDX, use the {@code com.badlogic.gdx.math.Vector2} class in preference to this
+ * one if you are OK with using floats instead of doubles.
+ * <br>
  * Created by Tommy Ettinger on 8/12/2015.
  */
 public class CoordDouble implements Serializable {
@@ -95,23 +98,12 @@ public class CoordDouble implements Serializable {
     @Override
 	public String toString()
     {
-        return "Coord (x " + x + ", y " + y + ")";
+        return "CoordDouble (x " + x + ", y " + y + ")";
     }
 
 	@Override
-	/*
-	 * smelC: This is Eclipse-generated code. The previous version was
-	 * Gwt-incompatible (because of Double.doubleToRawLongBits).
-	 */
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		long temp;
-		temp = NumberTools.doubleToLongBits(x);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		temp = NumberTools.doubleToLongBits(y);
-		result = prime * result + (int) (temp ^ (temp >>> 32));
-		return result;
+		return 31 * (31 + NumberTools.doubleToMixedIntBits(x)) + NumberTools.doubleToMixedIntBits(y);
 	}
 
     @Override
