@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by Tommy Ettinger on 8/12/2015.
  */
 public class CoordDouble implements Serializable {
-    private static final long serialVersionUID = 400L;
+    private static final long serialVersionUID = 500L;
     public double x;
     public double y;
 
@@ -48,40 +48,46 @@ public class CoordDouble implements Serializable {
         return new CoordDouble(x, y);
     }
 
-    public void add(double x, double y)
+    public CoordDouble add(double x, double y)
     {
         this.x += x;
         this.y += y;
+        return this;
     }
 
-    public void add(CoordDouble other)
+    public CoordDouble add(CoordDouble other)
     {
         this.x += other.x;
         this.y += other.y;
+        return this;
     }
 
-    public void subtract(double x, double y)
+    public CoordDouble subtract(double x, double y)
     {
         this.x -= x;
         this.y -= y;
+        return this;
     }
 
-    public void subtract(CoordDouble other)
+    public CoordDouble subtract(CoordDouble other)
     {
         this.x -= other.x;
         this.y -= other.y;
+        return this;
     }
 
-    public void multiply(double x, double y)
+    public CoordDouble multiply(double x, double y)
     {
         this.x *= x;
         this.y *= y;
+        return this;
     }
 
-    public void multiply(CoordDouble other)
+    public CoordDouble multiply(CoordDouble other)
     {
         this.x *= other.x;
         this.y *= other.y;
+        return this;
     }
 
     /**
@@ -90,10 +96,11 @@ public class CoordDouble implements Serializable {
      * @param x divisor for x
      * @param y divisor for y
      */
-    public void divide(double x, double y)
+    public CoordDouble divide(double x, double y)
     {
         this.x /= x;
         this.y /= y;
+        return this;
     }
 
     /**
@@ -101,10 +108,11 @@ public class CoordDouble implements Serializable {
      * about when either of other's components can be 0.0, since that can put NaN or infinite components in this.
      * @param other a non-null CoordDouble to get divisors from
      */
-    public void divide(CoordDouble other)
+    public CoordDouble divide(CoordDouble other)
     {
         this.x /= other.x;
         this.y /= other.y;
+        return this;
     }
 
     /**
@@ -127,15 +135,17 @@ public class CoordDouble implements Serializable {
         return y * other.x - x * other.y;
     }
     
-    public void set(double x, double y)
+    public CoordDouble set(double x, double y)
     {
         this.x = x;
         this.y = y;
+        return this;
     }
-    public void set(CoordDouble co)
+    public CoordDouble set(CoordDouble co)
     {
         x = co.x;
         y = co.y;
+        return this;
     }
     /**
      * Distance from the origin to this CoordDouble.
@@ -195,7 +205,7 @@ public class CoordDouble implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return 31 * (31 + NumberTools.doubleToMixedIntBits(x)) + NumberTools.doubleToMixedIntBits(y);
+		return 31 * (31 + NumberTools.doubleToMixedIntBits(x)) + NumberTools.doubleToMixedIntBits(y) | 0;
 	}
 
     @Override

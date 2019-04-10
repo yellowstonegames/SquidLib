@@ -1190,18 +1190,29 @@ public class MathVisualizer extends ApplicationAdapter {
             case 29:{
                 Gdx.graphics.setTitle("Weird color thing at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                 int x, y;
-                float warm, mild;
+                float co, cg, color;
                 final float luma = NumberTools.swayTight(TimeUtils.timeSinceMillis(startTime) * 0x1.2p-11f);
                 for (int j = 0; j < 100000; j++) {
 //                    final long t = diver.nextLong();
 //                    final float mag = ((t & 0xFFFFFFL) * 0x1.0p-25f) + ((t >>> 40) * 0x1.0p-25f),
-                    final float mag = (float) Math.sqrt(1.0f - diver.nextFloat()), angle = diver.nextFloat() * MathUtils.PI2;
+                    //final float mag = (float) Math.sqrt(1.0f - diver.nextFloat()), angle = diver.nextFloat() * MathUtils.PI2;
                     // + (0x1.0p0f - ((s & 0xFFFFFFL) * 0x1.0p-24f) * ((s >>> 40) * 0x1.0p-24f))) * 0.5f;
-                    warm = NumberTools.cos(angle) * mag;
-                    mild = NumberTools.sin(angle) * mag;
-                    x = Noise.fastFloor(warm * 250 + 260);
-                    y = Noise.fastFloor(mild * 250 + 260);
-                    layers.backgrounds[x][y] = SColor.floatGetYCwCm(luma, warm, mild, 1f);
+                    //warm = NumberTools.cos(angle) * mag;
+                    //mild = NumberTools.sin(angle) * mag;
+                    cg = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+                            - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
+                    co = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+                                    - diver.nextFloat() - diver.nextFloat()- diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
+//                    mild = Math.signum(mild) * (float) Math.pow(Math.abs(mild), 1.05);
+//                    warm = Math.signum(warm) * (float) Math.pow(Math.abs(warm), 0.8);
+//                    if (mild > 0 && warm < 0) warm += mild * 1.666f;
+//                    else if (mild < -0.6) warm *= 0.4f - mild;
+                    color = SColor.floatGetYCoCg(luma, co, cg, 1f);
+                    co = SColor.chrominanceOrange(color);
+                    cg = SColor.chrominanceGreen(color);
+                    x = Noise.fastFloor(co * 250 + 260);
+                    y = Noise.fastFloor(cg * 250 + 260);
+                    layers.backgrounds[x][y] = color;
                 }
 //                Gdx.graphics.setTitle("insideBallExponential at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                int x, y;
