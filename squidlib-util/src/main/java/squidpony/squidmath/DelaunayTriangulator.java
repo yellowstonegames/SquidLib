@@ -37,15 +37,24 @@ import java.util.ListIterator;
  * @author Tommy Ettinger
  */
 @Beta
-public class DelaunayTriangulator {
+public class DelaunayTriangulator implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     private OrderedSet<CoordDouble> pointSet;
     private TriangleSoup triangleSoup;
 
     /**
-     * Constructor of the SimpleDelaunayTriangulator class used to create a new
-     * triangulator instance.
-     * 
+     * Constructs a triangulator instance but does not insert any points; you should add points to
+     * {@link #getPointSet()} before running {@link #triangulate()}.
+     */
+    public DelaunayTriangulator() {
+        this.pointSet = new OrderedSet<>(256);
+        this.triangleSoup = new TriangleSoup();
+    }
+
+    /**
+     * Constructs a new triangulator instance using the specified point set.
+     *
      * @param pointSet The point set to be triangulated
      */
     public DelaunayTriangulator(OrderedSet<CoordDouble> pointSet) {
@@ -57,7 +66,7 @@ public class DelaunayTriangulator {
      * This method generates a Delaunay triangulation from the specified point
      * set.
      */
-    public void triangulate() {
+    public ArrayList<Triangle> triangulate() {
         int numPoints;
         if (pointSet == null || (numPoints = pointSet.size()) < 3) {
             throw new IllegalArgumentException("Less than three points in point set.");
@@ -156,6 +165,7 @@ public class DelaunayTriangulator {
         triangleSoup.removeTrianglesUsing(superTriangle.a);
         triangleSoup.removeTrianglesUsing(superTriangle.b);
         triangleSoup.removeTrianglesUsing(superTriangle.c);
+        return triangleSoup.getTriangles();
     }
 
     /**
