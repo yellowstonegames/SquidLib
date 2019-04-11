@@ -36,8 +36,9 @@ public class DelaunayGDXTest extends ApplicationAdapter {
         points = new float[510];
         for (int i = 0; i < 255; i++) {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
-            points[i << 1] = 386.4973651183067f * (i + 1) % 500f + mini.nextFloat() * 12f;
-            points[i << 1 | 1] = 291.75822899100325f * (i + 1) % 500f + mini.nextFloat() * 12f;
+            //0.7548776662466927, 0.5698402909980532
+            points[i << 1] = (0.7548776662466927f * (i + 1) % 1f) * 480f + mini.nextFloat() * 16f + 8f;
+            points[i << 1 | 1] = (0.5698402909980532f * (i + 1) % 1f) * 480f + mini.nextFloat() * 16f + 8f;
         }
         tri = new DelaunayTriangulator();
         tris = tri.computeTriangles(points, false);
@@ -63,14 +64,25 @@ public class DelaunayGDXTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shaper.begin(ShapeRenderer.ShapeType.Filled);
-        final int len = tris.size;
-        int c = (int) TimeUtils.timeSinceMillis(startTime) >>> 2;
+        final int len = tris.size, m = (int) (TimeUtils.timeSinceNanos(startTime) >>> 16);
+        final float time = m * 0x1p-13f;
+        int color = 0, a, b, c;
+        float af, bf, cf;
         for (int i = 0; i < len - 2;) {
-            //shaper.setColor(SColor.DAWNBRINGER_AURORA[(c++ % 255) + 1]);
-            shaper.setColor(palette.getAt(c++ % palette.size()));
-            shaper.triangle(points[tris.get(i) << 1], points[tris.get(i++) << 1 | 1],
-                    points[tris.get(i) << 1], points[tris.get(i++) << 1 | 1],
-                    points[tris.get(i) << 1], points[tris.get(i++) << 1 | 1]);
+            //shaper.setColor(SColor.DAWNBRINGER_AURORA[(color++ % 255) + 1]);
+            shaper.setColor(palette.getAt(color++ % palette.size()));
+            a = tris.get(i++);
+            af = a * 0.125f;
+            b = tris.get(i++);
+            bf = b * 0.125f;
+            c = tris.get(i++);
+            cf = c * 0.125f;
+            shaper.triangle(points[a << 1] + NumberTools.swayRandomized(a, time + af) * 8f,
+                    points[a << 1 | 1] + NumberTools.swayRandomized(~a, time - af) * 8f,
+                    points[b << 1] + NumberTools.swayRandomized(b, time + bf) * 8f,
+                    points[b << 1 | 1] + NumberTools.swayRandomized(~b, time - bf) * 8f,
+                    points[c << 1] + NumberTools.swayRandomized(c, time + cf) * 8f,
+                    points[c << 1 | 1] + NumberTools.swayRandomized(~c, time - cf) * 8f);
         }
         shaper.end();
     }
