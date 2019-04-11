@@ -77,7 +77,7 @@ public class DelaunayGDXTest extends ApplicationAdapter {
 
     public static void main (String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "SquidLib Demo: Delaunay Test";
+        config.title = "SquidLib/libGDX Demo: Delaunay Test";
         config.width = 512;
         config.height = 512;
         config.vSyncEnabled = false;
