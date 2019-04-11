@@ -25,7 +25,7 @@ public class DelaunayTest extends ApplicationAdapter {
     @Override
     public void create() {
         shaper = new ShapeRenderer();
-        mini = new MiniMover64RNG(12345);
+        mini = new MiniMover64RNG(123);
         rng = new RNG(mini);
         points = new OrderedSet<>(255);
         for (int i = 0; i < 255; i++) {
