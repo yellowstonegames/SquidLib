@@ -779,7 +779,7 @@ public final class NumberTools {
 
     public static double sin(double radians)
     {
-        radians = radians * 0.6366197723675814;
+        radians *= 0.6366197723675814;
         final long floor = (radians >= 0.0 ? (long) radians : (long) radians - 1L) & -2L;
         radians -= floor;
         radians *= 2.0 - radians;
@@ -852,7 +852,7 @@ public final class NumberTools {
      */
     public static float sin(float radians)
     {
-        radians = radians * 0.6366197723675814f;
+        radians *= 0.6366197723675814f;
         final int floor = (radians >= 0.0 ? (int) radians : (int) radians - 1) & -2;
         radians -= floor;
         radians *= 2f - radians;
