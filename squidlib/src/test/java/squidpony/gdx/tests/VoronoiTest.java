@@ -74,7 +74,7 @@ public class VoronoiTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shaper.begin(ShapeRenderer.ShapeType.Line);
+        shaper.begin(ShapeRenderer.ShapeType.Filled);
         final int len = tris.size();
         Voronoi.Polygon t;
         float[] vs = new float[64];
@@ -83,13 +83,21 @@ public class VoronoiTest extends ApplicationAdapter {
             //shaper.setColor(SColor.DAWNBRINGER_AURORA[(i % 255) + 1]);
             shaper.setColor(palette.getAt(c++ % palette.size()));
             t = tris.get(i);
-            int vi = 0;
-            for(CoordDouble cd : t.vertices)
-            {
-                vs[vi++] = (float) cd.x;
-                vs[vi++] = (float) cd.y; 
+            for (int j = 1; j < t.vertices.length; j++) {
+                shaper.triangle((float)t.centroid.x, (float)t.centroid.y,
+                        (float)t.vertices[j-1].x, (float)t.vertices[j-1].y,
+                        (float)t.vertices[j].x, (float)t.vertices[j].y);
             }
-            shaper.polygon(vs, 0, vi);
+            shaper.triangle((float)t.centroid.x, (float)t.centroid.y,
+                    (float)t.vertices[t.vertices.length-1].x, (float)t.vertices[t.vertices.length-1].y,
+                    (float)t.vertices[0].x, (float)t.vertices[0].y);
+//            int vi = 0;
+//            for(CoordDouble cd : t.vertices)
+//            {
+//                vs[vi++] = (float) cd.x;
+//                vs[vi++] = (float) cd.y; 
+//            }
+//            shaper.polygon(vs, 0, vi);
         }
         shaper.end();
     }

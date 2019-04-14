@@ -191,7 +191,7 @@ public class Voronoi implements Serializable {
                     n = next.getNonEdgeVertex(tri.a, n);
                 }
                 if (vs.size() >= 3)
-                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
+                    polygonSoup.add(new Polygon(tri.a, vs.toArray(new CoordDouble[0])));
             }
             vs.clear();
             vs.add(tri.centroid);
@@ -206,7 +206,7 @@ public class Voronoi implements Serializable {
                     n = next.getNonEdgeVertex(tri.b, n);
                 }
                 if (vs.size() >= 3)
-                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
+                    polygonSoup.add(new Polygon(tri.b, vs.toArray(new CoordDouble[0])));
             }
             vs.clear();
             vs.add(tri.centroid);
@@ -221,7 +221,7 @@ public class Voronoi implements Serializable {
                     n = next.getNonEdgeVertex(tri.c, n);
                 }
                 if (vs.size() >= 3)
-                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
+                    polygonSoup.add(new Polygon(tri.c, vs.toArray(new CoordDouble[0])));
             }
         }
         return polygonSoup;
@@ -554,10 +554,12 @@ public class Voronoi implements Serializable {
     }
     public static class Polygon implements Serializable {
         private static final long serialVersionUID = 1L;
+        public CoordDouble centroid;
         public final CoordDouble[] vertices;
 
-        public Polygon(CoordDouble... vertices) {
-            this.vertices = vertices == null
+        public Polygon(CoordDouble centroid, CoordDouble... vertices) {
+            this.centroid = centroid;
+            this.vertices = vertices == null || vertices.length < 3
                     ? new CoordDouble[] {new CoordDouble(), new CoordDouble(), new CoordDouble()}
                     : vertices;
         }
