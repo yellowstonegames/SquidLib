@@ -30,25 +30,26 @@ import java.util.Comparator;
 import java.util.ListIterator;
 
 /**
- * A Java implementation of an incremental 2D Delaunay triangulation algorithm.
+ * A Java implementation of both a 2D Delaunay triangulation algorithm and a Voronoi polygon data structure.
  * This is a port of <a href="https://github.com/jdiemke/delaunay-triangulator">Johannes Diemke's code</a>, with
- * some substantial non-algorithmic changes to better work in SquidLib and to reduce allocations. You should consider
- * using the {@code com.badlogic.gdx.math.DelaunayTriangulator} class if you use libGDX, which allocates fewer objects.
+ * <a href="http://www-cs-students.stanford.edu/~amitp/game-programming/polygon-map-generation/#graphs">modifications
+ * suggested by Amit Patel to consolidate the triangles with a barycentric dual mesh</a>.
  * @author Johannes Diemke
  * @author Tommy Ettinger
  */
 @Beta
-public class DelaunayTriangulator implements Serializable {
+public class Voronoi implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private OrderedSet<CoordDouble> pointSet;
     private TriangleSoup triangleSoup;
+    private ArrayList<Polygon> polygonSoup;
 
     /**
      * Constructs a triangulator instance but does not insert any points; you should add points to
      * {@link #getPointSet()} before running {@link #triangulate()}.
      */
-    public DelaunayTriangulator() {
+    public Voronoi() {
         this.pointSet = new OrderedSet<>(256);
         this.triangleSoup = new TriangleSoup();
     }
@@ -58,7 +59,7 @@ public class DelaunayTriangulator implements Serializable {
      *
      * @param pointSet The point set to be triangulated
      */
-    public DelaunayTriangulator(OrderedSet<CoordDouble> pointSet) {
+    public Voronoi(OrderedSet<CoordDouble> pointSet) {
         this.pointSet = pointSet;
         this.triangleSoup = new TriangleSoup();
     }
@@ -101,7 +102,7 @@ public class DelaunayTriangulator implements Serializable {
             Triangle triangle = triangleSoup.findContainingTriangle(pointSet.getAt(i));
 
             if (triangle == null) {
-                /**
+                /*
                  * If no containing triangle exists, then the vertex is not
                  * inside a triangle (this can also happen due to numerical
                  * errors) and lies on an edge. In order to find this edge we
@@ -169,6 +170,63 @@ public class DelaunayTriangulator implements Serializable {
         return triangleSoup.getTriangles();
     }
 
+    public ArrayList<Polygon> polygonize()
+    {
+        triangulate();
+        polygonSoup = new ArrayList<>(triangleSoup.triangleSoup.size());
+        ArrayList<CoordDouble> vs = new ArrayList<>(16);
+        Triangle next;
+        CoordDouble n;
+        for(Triangle tri : triangleSoup.triangleSoup) {
+            vs.clear();
+            vs.add(tri.centroid);
+            next = triangleSoup.findNeighbor(tri, tri.a, tri.b);
+            if (next != null) {
+                n = next.getNonEdgeVertex(tri.a, tri.b);
+                while (next != tri) {
+                    vs.add(next.centroid);
+                    next = triangleSoup.findNeighbor(next, tri.a, n);
+                    if (next == null)
+                        break;
+                    n = next.getNonEdgeVertex(tri.a, n);
+                }
+                if (vs.size() >= 3)
+                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
+            }
+            vs.clear();
+            vs.add(tri.centroid);
+            next = triangleSoup.findNeighbor(tri, tri.b, tri.c);
+            if (next != null) {
+                n = next.getNonEdgeVertex(tri.b, tri.c);
+                while (next != tri) {
+                    vs.add(next.centroid);
+                    next = triangleSoup.findNeighbor(next, tri.b, n);
+                    if (next == null)
+                        break;
+                    n = next.getNonEdgeVertex(tri.b, n);
+                }
+                if (vs.size() >= 3)
+                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
+            }
+            vs.clear();
+            vs.add(tri.centroid);
+            next = triangleSoup.findNeighbor(tri, tri.c, tri.a);
+            if (next != null) {
+                n = next.getNonEdgeVertex(tri.c, tri.a);
+                while (next != tri) {
+                    vs.add(next.centroid);
+                    next = triangleSoup.findNeighbor(next, tri.c, n);
+                    if (next == null)
+                        break;
+                    n = next.getNonEdgeVertex(tri.c, n);
+                }
+                if (vs.size() >= 3)
+                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
+            }
+        }
+        return polygonSoup;
+    }
+    
     /**
      * This method legalizes edges by recursively flipping all illegal edges.
      * 
@@ -267,7 +325,7 @@ public class DelaunayTriangulator implements Serializable {
             b = new CoordDouble(bx, by);
         }
     }
-    
+
     public static class Triangle implements Serializable
     {
         private static final long serialVersionUID = 1L;
@@ -275,6 +333,7 @@ public class DelaunayTriangulator implements Serializable {
         public CoordDouble a;
         public CoordDouble b;
         public CoordDouble c;
+        public CoordDouble centroid;
 
         /**
          * Constructor of the 2D triangle class used to create a new triangle
@@ -291,6 +350,7 @@ public class DelaunayTriangulator implements Serializable {
             this.a = a;
             this.b = b;
             this.c = c;
+            centroid = new CoordDouble((a.x + b.x + c.x) / 3.0, (a.y + b.y + c.y) / 3.0);
         }
 
         /**
@@ -492,7 +552,18 @@ public class DelaunayTriangulator implements Serializable {
             return "Triangle[" + a + ", " + b + ", " + c + "]";
         }
     }
-    private static final Comparator<Double> doubleComparator = new Comparator<Double>() {
+    public static class Polygon implements Serializable {
+        private static final long serialVersionUID = 1L;
+        public final CoordDouble[] vertices;
+
+        public Polygon(CoordDouble... vertices) {
+            this.vertices = vertices == null
+                    ? new CoordDouble[] {new CoordDouble(), new CoordDouble(), new CoordDouble()}
+                    : vertices;
+        }
+
+    }
+        private static final Comparator<Double> doubleComparator = new Comparator<Double>() {
         @Override
         public int compare(Double o1, Double o2) {
             return o1.compareTo(o2);
@@ -506,7 +577,7 @@ public class DelaunayTriangulator implements Serializable {
      */
     static class TriangleSoup {
 
-        private ArrayList<Triangle> triangleSoup;
+        ArrayList<Triangle> triangleSoup;
 
         /**
          * Constructor of the triangle soup class used to create a new triangle soup
@@ -572,7 +643,7 @@ public class DelaunayTriangulator implements Serializable {
          *            The triangle
          * @param edge
          *            The edge
-         * @return The triangles neighbor triangle sharing the same edge or null if
+         * @return The triangle's neighbor triangle sharing the same edge or null if
          *         no triangle exists
          */
         public Triangle findNeighbor(Triangle triangle, Edge edge) {
