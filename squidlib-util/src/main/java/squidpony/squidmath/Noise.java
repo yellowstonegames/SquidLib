@@ -3727,22 +3727,16 @@ public class Noise {
 //            final double ix = x, iy = y;
 //            x = 1.0 - x;
 //            y = 1.0 - y;
-            double ret = ((SeededNoise.phiGrad2[x0y0][0] + SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)
-                    + (SeededNoise.phiGrad2[x1y0][0] + SeededNoise.phiGrad2[x1y0][1]) * (x * iy)
-                    + (SeededNoise.phiGrad2[x0y1][0] + SeededNoise.phiGrad2[x0y1][1]) * (ix * y)
-                    + (SeededNoise.phiGrad2[x1y1][0] + SeededNoise.phiGrad2[x1y1][1]) * (x * y)
-            );
-//            double ret = ((ix * SeededNoise.phiGrad2[x0y0][0] + iy * SeededNoise.phiGrad2[x0y0][1])
+            //            double ret = ((ix * SeededNoise.phiGrad2[x0y0][0] + iy * SeededNoise.phiGrad2[x0y0][1])
 //                    + (x * SeededNoise.phiGrad2[x1y0][0] + iy * SeededNoise.phiGrad2[x1y0][1])
 //                    + (ix * SeededNoise.phiGrad2[x0y1][0] + y * SeededNoise.phiGrad2[x0y1][1])
 //                    + (x * SeededNoise.phiGrad2[x1y1][0] + y * SeededNoise.phiGrad2[x1y1][1])
 //            );
-            ret *= 0.7071067811865475;//Math.copySign(ret, 1.0) * 0.25;
-            if(ret < -1.0)
-                System.out.printf("LOW! ret: %f, x: %f, y: %f\n", ret, x, y);
-            if(ret > 1.0)
-                System.out.printf("HIGH! ret: %f, x: %f, y: %f\n", ret, x, y);
-            return ret;
+            return ((SeededNoise.phiGrad2[x0y0][0] + SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)
+                    + (SeededNoise.phiGrad2[x1y0][0] + SeededNoise.phiGrad2[x1y0][1]) * (x * iy)
+                    + (SeededNoise.phiGrad2[x0y1][0] + SeededNoise.phiGrad2[x0y1][1]) * (ix * y)
+                    + (SeededNoise.phiGrad2[x1y1][0] + SeededNoise.phiGrad2[x1y1][1]) * (x * y)
+            ) * 0.7071067811865475;
 //            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
 //            long yf = y >= 0.0 ? (long) y : (long) y - 1L;
 //            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;
