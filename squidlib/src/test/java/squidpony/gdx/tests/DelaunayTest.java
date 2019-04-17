@@ -35,10 +35,18 @@ public class DelaunayTest extends ApplicationAdapter {
         mini = new MiniMover64RNG(123);
         rng = new RNG(mini);
         points = new OrderedSet<>(255);
-        for (int i = 0; i < 255; i++) {
+        for (int i = 1; points.size() < 255; i++) {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
-            points.add(new CoordDouble(386.4973651183067 * (i + 1) % 500.0 + rng.nextDouble(12.0),
-                    291.75822899100325 * (i + 1) % 500.0 + rng.nextDouble(12.0)));
+//            points.add(new CoordDouble(386.4973651183067 * (i + 1) % 500.0 + rng.nextDouble(12.0),
+//                    291.75822899100325 * (i + 1) % 500.0 + rng.nextDouble(12.0)));
+            double x = VanDerCorputQRNG.determine(2, i) * 512.0;
+            double y = VanDerCorputQRNG.determine(3, i) * 512.0;
+            //// pure R3, does badly
+//            double x = ((i * 0xD1B54A32D192ED03L) >>> 3) * 0x1p-52;
+//            double y = ((i * 0xABC98388FB8FAC03L) >>> 3) * 0x1p-52;
+            //// compares z of R3 to SeededNoise, both -1 to 1 range
+            if(SeededNoise.noise(x, y, 1L) < ((i * 0x8CB92BA72F3D8DD7L) >> 11) * 0x1p-52)
+                points.add(new CoordDouble(x, y));
         }
         tri = new DelaunayTriangulator(points);
         tris = tri.triangulate();
@@ -52,6 +60,7 @@ public class DelaunayTest extends ApplicationAdapter {
 //                return Double.compare(t1.a.x + t1.b.x + t1.c.x, t2.a.x + t2.b.x + t2.c.x); 
             }
         });
+//        palette = new OrderedSet<>(SColor.DAWNBRINGER_AURORA);
         palette = new OrderedSet<>(SColor.FULL_PALETTE);
         for (int i = palette.size() - 1; i >= 0; i--) {
             Color c = palette.getAt(i);
@@ -74,16 +83,26 @@ public class DelaunayTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        shaper.begin(ShapeRenderer.ShapeType.Filled);
-        final int len = tris.size();
-        DelaunayTriangulator.Triangle t;
-        int c = (int) TimeUtils.timeSinceMillis(startTime) >>> 2;
-        for (int i = 0; i < len; i++) {
-            //shaper.setColor(SColor.DAWNBRINGER_AURORA[(i % 255) + 1]);
-            shaper.setColor(palette.getAt(c++ % palette.size()));
-            t = tris.get(i);
-            shaper.triangle((float)t.a.x, (float)t.a.y, (float)t.b.x, (float)t.b.y, (float)t.c.x, (float)t.c.y);
+        //// will just show points in white, like stars at night
+        shaper.begin(ShapeRenderer.ShapeType.Point);
+        shaper.setColor(SColor.WHITE);
+        CoordDouble c;
+        for (int i = 0; i < points.size(); i++) {
+            c = points.getAt(i);
+            shaper.point((float) c.x, (float)c.y, 0f);
         }
+        
+        //// uses the Delaunay triangulation of points
+//        shaper.begin(ShapeRenderer.ShapeType.Filled);
+//        final int len = tris.size();
+//        DelaunayTriangulator.Triangle t;
+//        int c = (int) TimeUtils.timeSinceMillis(startTime) >>> 6;
+//        for (int i = 0; i < len; i++) {
+////            shaper.setColor(SColor.DAWNBRINGER_AURORA[(c++ % 255) + 1]);
+//            shaper.setColor(palette.getAt(c++ % palette.size()));
+//            t = tris.get(i);
+//            shaper.triangle((float)t.a.x, (float)t.a.y, (float)t.b.x, (float)t.b.y, (float)t.c.x, (float)t.c.y);
+//        }
         shaper.end();
     }
 
