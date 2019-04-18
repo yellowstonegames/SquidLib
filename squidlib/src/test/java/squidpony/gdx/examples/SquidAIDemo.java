@@ -260,7 +260,7 @@ public class SquidAIDemo extends ApplicationAdapter {
         }*/
         ArrayList<Coord> path = whichDijkstra.findTechniquePath(moveLength, whichTech, bareDungeon, null, whichFoes, whichAllies, user, whichFoes);
         if(path.isEmpty())
-            path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[whichFoes.size()]));
+            path = whichDijkstra.findPath(moveLength, whichFoes, whichAllies, user, whichFoes.toArray(new Coord[0]));
         /*
         System.out.println("User at (" + user.x + "," + user.y + ") using " +
                 whichTech.name);
@@ -279,28 +279,14 @@ public class SquidAIDemo extends ApplicationAdapter {
     }
 
     public void move(AnimatedEntity ae, int newX, int newY) {
-        display.slide(ae, newX, newY, 2, 0.075f);
+        Coord n = Coord.get(newX, newY);
+        if(!bluePlaces.contains(n) && !redPlaces.contains(n)) {
+            display.slide(ae, newX, newY, 2, 0.075f);
+        }
         phase = Phase.MOVE_ANIM;
 
     }
-
-    // check if a monster's movement would overlap with another monster.
-    @SuppressWarnings("unused")
-	private boolean checkOverlap(AnimatedEntity ae, int x, int y)
-    {
-        for(AnimatedEntity mon : teamRed)
-        {
-            if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
-                return true;
-        }
-        for(AnimatedEntity mon : teamBlue)
-        {
-            if(mon.gridX == x && mon.gridY == y && !mon.equals(ae))
-                return true;
-        }
-        return false;
-    }
-
+    
     private void postMove(int idx) {
 
         int i = 0;
