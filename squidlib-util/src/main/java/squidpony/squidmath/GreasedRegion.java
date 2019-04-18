@@ -1842,7 +1842,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         {
             long startMask = ~(-1L << (startY & 63)),
                     endMask = ~(-1L >>> (~endY & 63));
-            for (int a = startX * ySections + startSection; a <= endX * ySections; a += ySections) {
+            for (int a = startX * ySections + startSection; a <= endX * ySections + startSection; a += ySections) {
                 data[a] &= startMask;
             }
             if(endSection - startSection > 1)
@@ -1853,7 +1853,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     }
                 }
             }
-            for (int a = startX * ySections + endSection; a <= endX * ySections + ySections; a += ySections) {
+            for (int a = startX * ySections + endSection; a <= endX * ySections + endSection; a += ySections) {
                 data[a] &= endMask;
             }
         }
@@ -5013,7 +5013,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(limit == 0)
             return empty();
         else if(limit < 0)
-            limit = 0x7fffffff;
+            limit = width * height;
         long t, w;
         long[] data2 = new long[data.length];
         MAIN_LOOP:
