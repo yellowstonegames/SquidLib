@@ -15,6 +15,7 @@
  ******************************************************************************/
 package squidpony.squidmath;
 
+import squidpony.StringKit;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;

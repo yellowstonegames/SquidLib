@@ -1,7 +1,17 @@
 package squidpony;
 
-import regexodus.*;
-import squidpony.squidmath.*;
+import regexodus.MatchResult;
+import regexodus.Matcher;
+import regexodus.Pattern;
+import regexodus.REFlags;
+import regexodus.Replacer;
+import squidpony.squidmath.CrossHash;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.IStatefulRNG;
+import squidpony.squidmath.NumberTools;
+import squidpony.squidmath.OrderedMap;
+import squidpony.squidmath.OrderedSet;
 
 import java.io.Serializable;
 import java.util.*;
@@ -26,7 +36,7 @@ public class FakeLanguageGen implements Serializable {
     public final double vowelStartFrequency, vowelEndFrequency, vowelSplitFrequency, syllableEndFrequency;
     public final Pattern[] sanityChecks;
     public ArrayList<Modifier> modifiers;
-    public static final IStatefulRNG srng = new GWTRNG();
+    public static final GWTRNG srng = new GWTRNG();
     private static final OrderedMap<String, FakeLanguageGen> registry = new OrderedMap<>(64);
     protected String summary = null;
     private String name = "Nameless Language";
@@ -2448,6 +2458,59 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen NORSE_SIMPLIFIED = norse().addModifiers(Modifier.SIMPLIFY_NORSE)
             .register("Norse Simplified");
+
+
+    private static FakeLanguageGen hletkip(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "e", "e", "e", "e", "e", "i", "i", "i", "i",
+                        "o", "o", "u", "u", "u", "u",},
+                new String[]{},
+                new String[]{
+                              "hf", "hl", "hm", "hn",                      "hr", "hs", "hv", "hw",  "hy", "hz",
+                          "br", "kr", "fr", "mr", "nr", "pr", "khr", "shr", "zhr", "sr",       "vr", "thr", "zv", "zr",
+                          "by", "ky", "fy", "my", "ny", "py", "khy", "shy", "zhy", "ry", "sy", "vy", "thy", "zy",
+                          "bl", "kl", "fl", "ml", "nl", "pl", "khl", "shl", "zhl",       "sl", "vl", "thl", "lw", "zl",
+                          "bf", "kf",       "mf", "nf", "pf",        "fsh", "shf", "fr", "sf", "fl", "fr",  "fw", "fz",
+                          "bs", "ks", "fs", "ms", "ns", "ps", "skh", "shs", "khs",            "shv","shw",
+                          "pkh", "psh", "pth", "pw", "tkh", "tsh", "tth", "tw", "sht", "bkh", "bsh", "bth", "bw",
+                          "dkh", "dth", "dw", "dzh", "khg", "shg", "thg", "gw", "zhg", "khk", "thk", "kw",
+                },
+                new String[]{
+                        "hf", "hl", "hm", "hn",                    "hr", "hs", "hv", "hw",  "hy", "hz",
+                        "br", "kr", "fr", "mr", "nr", "pr", "khr", "shr", "zhr", "sr",       "vr", "thr", "zv", "zr",
+                        "by", "ky", "fy", "my", "ny", "py", "khy", "shy", "zhy", "ry", "sy", "vy", "thy", "zy",
+                        "bl", "kl", "fl", "ml", "nl", "pl", "khl", "shl", "zhl",       "sl", "vl", "thl", "lw", "zl",
+                        "bf", "kf",       "mf", "nf", "pf",        "fsh", "shf", "fr", "sf", "fl", "fr",  "fw", "fz",
+                        "bs", "ks", "fs", "ms", "ns", "ps", "skh", "shs", "khs",            "shv","shw",
+                        "pkh", "psh", "pth", "pw", "tkh", "tsh", "tth", "tw", "bkh", "bsh", "bth", "bw",
+                        "dkh", "dsh", "dth", "dw", "khg", "shg", "thg", "gw", "khk", "thk", "kw",
+                        "rb", "rk", "rf", "rm", "rn", "rp", "rkh", "rsh", "rzh", "rh", "rv", "rw", "rz", "rl",
+                        "lb", "lk", "lf", "lm", "ln", "lp", "lkh", "lsh", "lzh", "lh", "lv", "lw", "lz", "lr",
+                        "sb", "sk", "sf", "sm", "sn", "sp", "skh", "gsh", "dzh", "sh", "sv", "sw", "sz", "ts", "st",
+                        "mb", "md", "mk", "mf", "tm", "nm", "mp", "mkh", "msh", "mzh", "mh", "mv", "mw", "mt", "mz",
+                        "nb", "nd", "nk", "nf", "tn", "mn", "np", "nkh", "nsh", "nzh", "nh", "nv", "nw", "nt", "nz",
+                        "zb", "zd", "zk", "zf", "zt", "nz", "zp", "zkh", "zhz", "dz",  "hz", "zv", "zw", "tz",
+                },
+                new String[]{
+                },
+                new String[]{"ip", "ik", "id", "iz", "ir", "ikh", "ish", "is", "ith", "iv", "in", "im", "ib", "if",
+                        "ep", "ek", "ed", "ez", "er", "ekh", "esh", "es", "eth", "ev", "en", "em", "eb", "ef",
+                        "up", "ud", "uz", "ur", "ush", "us", "uth", "uv", "un", "um", "ub", "uf", 
+                },
+                new String[]{}, new int[]{1, 2, 3}, new double[]{1, 1, 1}, 0.0, 0.4, 0.0, 1.0, null, true);
+    }
+
+    /**
+     * A fictional language that could ostensibly be spoken by some group of humans, but that isn't closely based on any
+     * one real-world language. It is meant to have a mix of hard and flowing sounds, roughly like Hebrew or Turkish,
+     * but with a very different set of consonants and consonant blends. Importantly, consonant sounds are always paired
+     * here except for the final consonant of a word, which is always one consonant sound if it is used at all. The
+     * choices of consonant sounds are designed to be unusual, like "hl", "pkh", and "zhg" (which can all start a word).
+     * <br>
+     * Nyep khruv kwolbik psesh klulzhanbik psahzahwuth bluryup; hnish zhrim?
+     */
+    public static final FakeLanguageGen HLETKIP = hletkip().register("Hletkip");
+
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
