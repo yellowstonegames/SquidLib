@@ -386,10 +386,14 @@ public class ProbabilityTable<T> implements Serializable {
 
         if (!table.equals(that.table)) return false;
         if (!extraTable.equals(that.extraTable)) return false;
-        if (!weights.equals(that.weights)) return false;
-        return rng != null ? rng.equals(that.rng) : that.rng == null;
+        return weights.equals(that.weights);
     }
 
+    /**
+     * Can avoid some checks that {@link #equals(Object)} needs because this always takes a ProbabilityTable.
+     * @param o another ProbabilityTable
+     * @return true if both ProbabilityTables are equivalent in contents and likelihoods, not necessarily random state
+     */
     public boolean contentEquals(ProbabilityTable<T> o) {
         if (this == o) return true;
         if (o == null) return false;
@@ -403,8 +407,7 @@ public class ProbabilityTable<T> implements Serializable {
     public int hashCode() {
         int result = table.hashCode();
         result = 31 * result + extraTable.hashCode() | 0;
-        result = 31 * result + weights.hashWisp() | 0;
-        result = 31 * result + (rng != null ? rng.hashCode() : 0) | 0;
+        result = 31 * result + weights.hashHive() | 0;
         return result;
     }
 }
