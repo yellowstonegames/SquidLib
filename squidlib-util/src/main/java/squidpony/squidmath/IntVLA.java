@@ -15,7 +15,6 @@
  ******************************************************************************/
 package squidpony.squidmath;
 
-import squidpony.StringKit;
 import squidpony.annotation.GwtIncompatible;
 
 import java.io.Serializable;
@@ -430,6 +429,12 @@ public class IntVLA implements Serializable, Cloneable {
             h = h * 31 + items[i];
         return h;
     }
+
+    /**
+     * Gets a slightly-higher quality hash code using the Wisp algorithm; you should prefer {@link #hashHive()} in newer
+     * code or code that needs to run on GWT, since that method avoids the long math that is expensive on GWT.
+     * @return a 32-bit hash code that shows less bias toward less-significant bits than {@link #hashCode()}
+     */
     public int hashWisp () {
         int[] data = this.items;
         long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
@@ -440,15 +445,37 @@ public class IntVLA implements Serializable, Cloneable {
         return (int)(result * (a | 1L) ^ (result >>> 27 | result << 37));
     }
 
-    public long hash64 () {
-        int[] data = this.items;
-        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+    /**
+     * Gets a high-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an
+     * excellent option on GWT.
+     * @return a 32-bit hash code that should show very little bias toward any bits
+     */
+    public int hashHive () {
+        final int[] data = this.items;
+        int result = 0x1A976FDF, z = 0x60642E25;
         final int len = size;
         for (int i = 0; i < len; i++) {
-            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
+            result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);
+            z ^= (result = (result << 20 | result >>> 12));
         }
-        return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+        result = (result ^ result >>> 15) * 0xFF51D;
+        result = (result ^ result >>> 15) * 0xC4CEB;
+        return result ^ result >>> 15;
+    }
 
+    public long hash64 () {
+        final int[] data = this.items;
+        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
+        final int len = size;
+        for (int i = 0; i < len; i++) {
+            result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+            result = (result << 54 | result >>> 10);
+        }
+
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+        return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
     }
 
     @Override

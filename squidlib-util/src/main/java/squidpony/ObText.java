@@ -159,14 +159,18 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
         }
 
         public long hash64() {
-            long result = CrossHash.hash64(primary), a = 0x632BE59BD9B4E019L;
+            long result = CrossHash.hash64(primary), z = 0x60642E2A34326F15L;
             if(associated == null)
-                return result ^ a;
+                return result ^ z;
             final int len = associated.size();
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * associated.get(i).hash64());
+                result ^= (z += (associated.get(i).hash64() ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+                result = (result << 54 | result >>> 10);
             }
-            return result * (a | 1L) ^ (result >>> 27 | result << 37);
+            result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+            result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+            return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
+
         }
 
         @Override
@@ -233,7 +237,7 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
         List<ObTextEntry> ls = this;
         IntVLA nesting = new IntVLA(4);
         nesting.add(-1);
-        int t = -1, depth = 0;
+        int depth = 0;
         while (m.find()) {
             if (m.isCaptured(stringId)) {
                 ls.add(current = new ObTextEntry(m.group(stringId)));
@@ -283,13 +287,15 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
     
     public long hash64()
     {
-        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
         final int len = size();
         for (int i = 0; i < len; i++) {
-            result += (a ^= 0x8329C6EB9E6AD3E3L * get(i).hash64());
+            result ^= (z += (get(i).hash64() ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+            result = (result << 54 | result >>> 10);
         }
-        return result * (a | 1L) ^ (result >>> 27 | result << 37);
-
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+        return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
     }
     
     @Override

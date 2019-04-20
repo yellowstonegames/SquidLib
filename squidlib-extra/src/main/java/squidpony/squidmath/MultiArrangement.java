@@ -1526,13 +1526,13 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                 i++;
             if (this != key[i])
                 t = hasher.hash(key[i]);
-            t ^= value[i].hashWisp();
+            t ^= value[i].hashHive();
             h += t;
             i++;
         }
         // Zero / null keys have hash zero.
         if (containsNullKey)
-            h += value[n].hashWisp();
+            h += value[n].hashHive();
         return h;
     }
     /**
