@@ -22,7 +22,7 @@ import java.util.Arrays;
  * Created by Tommy Ettinger on 1/13/2018.
  */
 public class MathVisualizer extends ApplicationAdapter {
-    private int mode = 28;
+    private int mode = 14;
     private int modes = 31;
     private SpriteBatch batch;
     private SparseLayers layers;
@@ -714,16 +714,45 @@ public class MathVisualizer extends ApplicationAdapter {
                 Gdx.graphics.setTitle(Gdx.graphics.getFramesPerSecond() +
                         " fastGaussian, clamped [-4,4]");
                 for (int i = 0; i < 0x1000000; i++) {
-                    amounts[MathUtils.round(MathUtils.clamp(fastGaussian(), -0x3.Fp0f, 0x3.Fp0f) * 64f + 256)]++;
+//                    long a = diver.nextLong();
+//                    a = (a & 0x007C1F07C1F07C1FL) +     ((a & 0x0F8370F8370F8370L) >>>  5);
+//                    a = (a & 0x00003F0003F0003FL) +     ((a & 0x00FC000FC000FC00L) >>>  10);
+//                    a = (a & 0x00007F000000007FL) +     ((a & 0x0000000007F00000L) >>>  20);
+//                    amounts[(int) (((((a & 0x00000000000000FFL) + ((a & 0x00007F0000000000L) >>> 40))) / (12f * 31f)) * 511)]++;
+//                    long a = diver.nextLong(), b = diver.nextLong();
+//                    a = (a & 0x00FF00FF00FF00FFL) +     ((a & 0xFF00FF00FF00FF00L) >>>  8);
+//                    b = (b & 0x00FF00FF00FF00FFL) +     ((b & 0xFF00FF00FF00FF00L) >>>  8);
+//                    a = (a & 0x000001FF000001FFL) +     ((a & 0x01FF000001FF0000L) >>> 16);
+////                    b = (b & 0x00000000000001FFL) +     ((b & 0x0000000001FF0000L) >>> 16);
+//                    amounts[(int) (((
+//                            ((a & 0x00000000000003FFL) + ((a & 0x000003FF00000000L) >>> 32))
+//                                    + (b & 0x00000000000001FFL) + ((b & 0x0000000001FF0000L) >>> 16))
+//                            / (12f * 255.5f)) * 511)]++;
+//                    amounts[256 + (int) (((a & 0x00000000000003FFL) + ((a & 0x000003FF00000000L) >>> 32))
+//                            - ((b & 0x00000000000003FFL) + ((b & 0x000003FF00000000L) >>> 32)) >> 3)]++;
+                    amounts[MathUtils.round(MathUtils.clamp(fastGaussian() * 64f + 256f, 0f, 511f))]++;
                 }
                 for (int i = 0; i < 512; i++) {
                     float color = (i & 63) == 0
                             ? -0x1.c98066p126F // CW Azure
                             : -0x1.d08864p126F; // CW Sapphire
-                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+                    for (int j = Math.max(0, 519 - (amounts[i] >> 9)); j < 520; j++) {
                         layers.backgrounds[i][j] = color;
                     }
                 }
+                Arrays.fill(amounts, 0);
+                for (int i = 0; i < 0x1000000; i++) {
+                    amounts[Noise.fastFloor(MathUtils.clamp(nextGaussian(), -0x3.FCp0f, 0x3.FCp0f) * 64 + 256)]++;
+                }
+                for (int i = 0; i < 512; i++) {
+                    for (int j = 519 - (amounts[i] >> 9); j < 520; j++) {
+                        layers.backgrounds[i][j] = SColor.lerpFloatColors(layers.backgrounds[i][j],
+                                -0x1.64b5eap125F, //SColor.AURORA_EMBERS
+                                0.3f);
+                    }
+                }
+
+
                 for (int i = 0; i < 10; i++) {
                     for (int j = 8; j < 520; j += 32) {
                         layers.backgrounds[i][j] = -0x1.7677e8p125F;
@@ -1188,41 +1217,41 @@ public class MathVisualizer extends ApplicationAdapter {
             }
             break;
             case 29:{
-                Gdx.graphics.setTitle("Weird color thing at " + Gdx.graphics.getFramesPerSecond() + " FPS");
-                int x, y;
-                float co, cg, color;
-                final float luma = NumberTools.swayTight(TimeUtils.timeSinceMillis(startTime) * 0x1.2p-11f);
-                for (int j = 0; j < 100000; j++) {
-//                    final long t = diver.nextLong();
-//                    final float mag = ((t & 0xFFFFFFL) * 0x1.0p-25f) + ((t >>> 40) * 0x1.0p-25f),
-                    //final float mag = (float) Math.sqrt(1.0f - diver.nextFloat()), angle = diver.nextFloat() * MathUtils.PI2;
-                    // + (0x1.0p0f - ((s & 0xFFFFFFL) * 0x1.0p-24f) * ((s >>> 40) * 0x1.0p-24f))) * 0.5f;
-                    //warm = NumberTools.cos(angle) * mag;
-                    //mild = NumberTools.sin(angle) * mag;
-                    cg = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
-                            - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
-                    co = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
-                                    - diver.nextFloat() - diver.nextFloat()- diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
-//                    mild = Math.signum(mild) * (float) Math.pow(Math.abs(mild), 1.05);
-//                    warm = Math.signum(warm) * (float) Math.pow(Math.abs(warm), 0.8);
-//                    if (mild > 0 && warm < 0) warm += mild * 1.666f;
-//                    else if (mild < -0.6) warm *= 0.4f - mild;
-                    color = SColor.floatGetYCoCg(luma, co, cg, 1f);
-                    co = SColor.chrominanceOrange(color);
-                    cg = SColor.chrominanceGreen(color);
-                    x = Noise.fastFloor(co * 250 + 260);
-                    y = Noise.fastFloor(cg * 250 + 260);
-                    layers.backgrounds[x][y] = color;
-                }
-//                Gdx.graphics.setTitle("insideBallExponential at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+//                Gdx.graphics.setTitle("Weird color thing at " + Gdx.graphics.getFramesPerSecond() + " FPS");
 //                int x, y;
-//                float color = SColor.FLOAT_BLACK;
+//                float co, cg, color;
+//                final float luma = NumberTools.swayTight(TimeUtils.timeSinceMillis(startTime) * 0x1.2p-11f);
 //                for (int j = 0; j < 100000; j++) {
-//                    insideBallExponential(circleCoord);
-//                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
-//                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+////                    final long t = diver.nextLong();
+////                    final float mag = ((t & 0xFFFFFFL) * 0x1.0p-25f) + ((t >>> 40) * 0x1.0p-25f),
+//                    //final float mag = (float) Math.sqrt(1.0f - diver.nextFloat()), angle = diver.nextFloat() * MathUtils.PI2;
+//                    // + (0x1.0p0f - ((s & 0xFFFFFFL) * 0x1.0p-24f) * ((s >>> 40) * 0x1.0p-24f))) * 0.5f;
+//                    //warm = NumberTools.cos(angle) * mag;
+//                    //mild = NumberTools.sin(angle) * mag;
+//                    cg = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+//                            - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
+//                    co = (diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+//                                    - diver.nextFloat() - diver.nextFloat()- diver.nextFloat() - diver.nextFloat() - diver.nextFloat() - diver.nextFloat()) * 0.17f % 1f; // -1 to 1, curved random
+////                    mild = Math.signum(mild) * (float) Math.pow(Math.abs(mild), 1.05);
+////                    warm = Math.signum(warm) * (float) Math.pow(Math.abs(warm), 0.8);
+////                    if (mild > 0 && warm < 0) warm += mild * 1.666f;
+////                    else if (mild < -0.6) warm *= 0.4f - mild;
+//                    color = SColor.floatGetYCoCg(luma, co, cg, 1f);
+//                    co = SColor.chrominanceOrange(color);
+//                    cg = SColor.chrominanceGreen(color);
+//                    x = Noise.fastFloor(co * 250 + 260);
+//                    y = Noise.fastFloor(cg * 250 + 260);
 //                    layers.backgrounds[x][y] = color;
 //                }
+                Gdx.graphics.setTitle("insideBallExponential at " + Gdx.graphics.getFramesPerSecond() + " FPS");
+                int x, y;
+                float color = SColor.FLOAT_BLACK;
+                for (int j = 0; j < 100000; j++) {
+                    insideBallExponential(circleCoord);
+                    x = Noise.fastFloor(circleCoord[0] * 250 + 260);
+                    y = Noise.fastFloor(circleCoord[1] * 250 + 260);
+                    layers.backgrounds[x][y] = color;
+                }
             }
             break;
             case 30:{
