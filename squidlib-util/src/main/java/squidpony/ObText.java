@@ -44,6 +44,7 @@ import static squidpony.ArrayTools.letters;
  * complexity?
  * [it is possible [yes this is a good example]
  * 'escapes like \[\'\] all work'
+ * "you can use double or single quotes to allow spaces and brackets in one string"
  * ]
  *
  * comments are allowed // like this
@@ -256,10 +257,9 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
                 nesting.pop();
                 depth--;
                 ls = this;
-                for (int i = 1; i < nesting.size; i++) {
+                for (int i = 0; i < depth; i++) {
                     ls = ls.get(nesting.get(i)).associated;
                 }
-                nesting.incr(depth, 1);
             }
         }
         return this;
