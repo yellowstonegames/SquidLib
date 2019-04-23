@@ -21,7 +21,7 @@ public class ObTextTest {
                 "\n" +
                 "comments are allowed // like this\n" +
                 "comments can have different forms # like this\n" +
-                "// comments like in c are allowed\n" +
+                "// comments like in Java are allowed\n" +
                 "/* like so */\n" +
                 "/[delimit/block comments with delimiters work too/delimit]/\n" +
                 "\n" +

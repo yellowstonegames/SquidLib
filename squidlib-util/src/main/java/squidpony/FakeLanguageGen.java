@@ -2458,8 +2458,7 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen NORSE_SIMPLIFIED = norse().addModifiers(Modifier.SIMPLIFY_NORSE)
             .register("Norse Simplified");
-
-
+    
     private static FakeLanguageGen hletkip(){
         return new FakeLanguageGen(
                 new String[]{"a", "a", "a", "e", "e", "e", "e", "e", "i", "i", "i", "i",
@@ -2510,6 +2509,73 @@ public class FakeLanguageGen implements Serializable {
      * Nyep khruv kwolbik psesh klulzhanbik psahzahwuth bluryup; hnish zhrim?
      */
     public static final FakeLanguageGen HLETKIP = hletkip().register("Hletkip");
+
+
+
+    private static FakeLanguageGen ancientEgyptian(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "aa", "e", "e", "e", "e", "e", "e", "e", "i", "i", "i",
+                        "u", "u", "u",},
+                new String[]{},
+                new String[]{
+                        "b",
+                        "p", "p", "p",
+                        "f", "f", "f", "f", "f",
+                        "m", "m", "m", "m", "m", "m",
+                        "n", "n", "n", "n", "n",
+                        "r", "r", "r", "r", "r", "r",
+                        "h", "h", "h", "h", "h", "h", "h", "h",
+                        "kh", "kh", "kh", "kh", "kh", "kh",
+                        "z",
+                        "s", "s", "s", "s", "s", "s", "s", "s",
+                        "sh", "sh", "sh", "sh",
+                        "k", "k", "k", "k", "k",
+                        "g", "g", "g", 
+                        "t", "t", "t", "t", "t", "t",
+                        "th", "th", "th",
+                        "d", "d", "d",
+                        "dj",
+                        "w", "w", "w",
+                        "pt"
+                },
+                new String[]{
+                        "b",
+                        "p", "p", "p", "pw", "pkh", "ps", "ps", "pt",
+                        "f", "f", "f", "f", "f", "ft",
+                        "m", "m", "m", "m", "m", "m", "mk", "nm",
+                        "n", "n", "n", "n", "n", "nkh", "nkh", "nk", "nt", "ns",
+                        "r", "r", "r", "r", "r", "r", "rs", "rt",
+                        "h", "h", "h", "h", "h", "h", "h", "h",
+                        "kh", "kh", "kh", "kh", "kh", "kh", "khm", "khm", "khw",
+                        "z",
+                        "s", "s", "s", "s", "s", "s", "s", "s", "st", "sk", "skh",
+                        "sh", "sh", "sh", "sh", "shw",
+                        "k", "k", "k", "k", "k", "kw",
+                        "g", "g", "g",
+                        "t", "t", "t", "t", "t", "t", "ts",
+                        "th", "th", "th",
+                        "d", "d", "d", "ds",
+                        "dj",
+                        "w", "w", "w",
+                },
+                new String[]{
+                        "m", "n", "t", "s", "p", "sh", "m", "n", "t", "s", "p", "sh", "m", "n", "t", "s", "p", "sh",
+                        "kh", "f"
+                },
+                new String[]{"amon", "amun", "ut", "epsut", "is", "is", "ipsis", "akhti", "eftu", "atsut", "amses"
+                },
+                new String[]{"-"}, new int[]{1, 2, 3, 4}, new double[]{4, 7, 3, 2}, 0.5, 0.4, 0.06, 0.09, null, true);
+    }
+
+    /**
+     * A (necessarily) very rough anglicization of Old Egyptian, a language that has no precisely known pronunciation
+     * rules and was written with hieroglyphics. This is meant to serve as an analogue for any ancient language with few
+     * contemporary speakers.
+     * <br>
+     * Thenamses upekha efe emesh nabasu ahakhepsut!
+     */
+    // for future reference, consult https://en.wiktionary.org/wiki/Module:egy-pron-Egyptological
+    public static final FakeLanguageGen ANCIENT_EGYPTIAN = ancientEgyptian().register("Ancient Egyptian");
 
 
     /**
