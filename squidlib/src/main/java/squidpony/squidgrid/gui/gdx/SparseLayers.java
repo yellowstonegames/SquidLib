@@ -28,6 +28,27 @@ import squidpony.squidmath.WhirlingNoise;
 import java.util.ArrayList;
 
 /**
+ * A general-purpose char display grid that supports one layer of backgrounds and arbitrarily many layers of foreground,
+ * only rendering foreground chars when something is present at a char's location. This also stores an ArrayList of
+ * {@link TextCellFactory.Glyph} items that can be added to using {@link #glyph(char, Color, int, int)} or one of
+ * several other methods; these Glyphs can have effects performed on them that are analogous to the effects on
+ * {@link SquidPanel}'s {@link AnimatedEntity} effects, such as
+ * {@link #slide(TextCellFactory.Glyph, int, int, int, int, float, Runnable)}. Unlike SquidPanel and SquidLayers, this
+ * class does not typically provide many overloads for each method, and usually limits the overloads to one that takes
+ * a packed float color and one that takes a libGDX {@link Color}, and all the other parameters are expected to be
+ * specified explicitly rather than relying on default behavior. SparseLayers tends to perform better than SquidLayers,
+ * especially when a lot of the map is unassigned/blank. It will cause less GC pressure when packed floats are used, and
+ * because {@link SColor} constants pre-calculate their packed float values, using the overloads that take a Color will
+ * perform a little better when given an SColor than a plain libGDX Color. This class makes heavy use of
+ * {@link SColor#lerpFloatColors(float, float, float)} because it should cause no GC pressure (it doesn't create
+ * temporary Color objects), and if you don't want to mutate Colors in-place (which is a bad idea for constants), then
+ * using lerpFloatColors with the packed float color API here should be very effective.
+ * <br>
+ * The names are a little different for some member fields here; there's a {@link TextCellFactory} called {@link #font},
+ * a {@code float[][]} called {@link #backgrounds} that stores packed float colors, an ArrayList of
+ * {@link SparseTextMap} that implements the sparse drawing behavior of foreground chars called {@link #layers}, and so
+ * on.
+ * <br>
  * Created by Tommy Ettinger on 7/28/2017.
  */
 public class SparseLayers extends Actor implements IPackedColorPanel {
@@ -640,7 +661,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
     /**
      * Sets the default foreground color.
-     * Unlike most ISquidPanel implementations, color can be null, which will
+     * This Color can be null, which will
      * usually not be rendered unless a different color is specified.
      * @param color a libGDX Color object or an extension of Color, such as SColor
      */
@@ -654,10 +675,9 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
     }
     /**
      * @return The default foreground color (if none was set with
-     * {@link #setDefaultForeground(Object)}), or the last color set
-     * with {@link #setDefaultForeground(Object)}. Unlike most
-     * ISquidPanel implementations, this can be null, which will
-     * usually not be rendered unless a different color is specified.
+     * {@link #setDefaultForeground(Color)}), or the last color set with
+     * {@link #setDefaultForeground(Color)}. This Color can be null which
+     * will usually not be rendered unless a different color is specified.
      */
     @Override
     public Color getDefaultForegroundColor() {
@@ -666,7 +686,7 @@ public class SparseLayers extends Actor implements IPackedColorPanel {
 
     /**
      * Sets the default background color.
-     * Unlike most ISquidPanel implementations, color can be null, which will
+     * This Color can be null, which will
      * usually not be rendered unless a different color is specified.
      * @param color a libGDX Color object or an extension of Color, such as SColor
      */

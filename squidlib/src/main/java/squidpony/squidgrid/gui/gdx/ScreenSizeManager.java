@@ -129,6 +129,6 @@ public class ScreenSizeManager {
 	}
 
 	private static boolean isEven(int i) {
-		return i % 2 == 0;
+		return (i & 1) == 0;
 	}
 }

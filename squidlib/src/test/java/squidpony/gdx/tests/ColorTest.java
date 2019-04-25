@@ -10,15 +10,18 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import squidpony.ArrayTools;
 import squidpony.StringKit;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidLayers;
 import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidmath.MathExtras;
+import squidpony.squidmath.NumberTools;
 
 import static squidpony.StringKit.safeSubstring;
 import static squidpony.squidgrid.gui.gdx.SColor.floatGet;
-import static squidpony.squidgrid.gui.gdx.SColor.floatGetYCwCm;
+//import static squidpony.squidgrid.gui.gdx.SColor.floatGetYCwCm;
 
 /**
  * Created by Tommy Ettinger on 12/27/2016.
@@ -110,6 +113,7 @@ public class ColorTest extends ApplicationAdapter {
     private Viewport viewport;
     private TextCellFactory tcf;
     private SquidLayers display;
+    private float[][] colors;
     private int hh = 0;
     private int vv = 0;
     private float luma = 0.5f;
@@ -256,13 +260,77 @@ public class ColorTest extends ApplicationAdapter {
 //        return floatGet(r, g, b, opacity);
 //    }
 
+    /**
+     * Gets a color as a packed float given floats representing luma (Y, akin to lightness), chroma warm (Cw, one of two
+     * kinds of chroma used here), chroma mild (Cm, the other kind of chroma), and opacity. Luma should be between 0 and
+     * 1, inclusive, with 0 used for very dark colors including but not limited to black, and 1 used for very light
+     * colors including but not limited to white. The two chroma values range from -1.0 to 1.0, unlike YCbCr and YCoCg,
+     * and also unlike those color spaces, there's some aesthetic value in changing just one chroma value. When warm is
+     * high and mild is low, the color is more reddish; when both are low it is more bluish, and when mild is high and
+     * warm is low, the color tends to be greenish, and when both are high it tends to be brown or yellow. When warm and
+     * mild are both near 0.0f, the color is closer to gray. Because chroma values are centered on 0.0f, you can multiply
+     * them by a value like 0.5f to halve the colorfulness of the color.
+     * <br>
+     * This method clamps the resulting color's RGB values, so any values can technically be given to this as luma,
+     * warm, and mild, but they will only be reversible from the returned float color to the original Y, Cw, and Cm
+     * values if the original values were in the range that {@link SColor#chromaWarm(float)},
+     * {@link SColor#chromaMild(float)}, and {@link SColor#lumaYCwCm(float)} return.
+     *
+     * @param luma       0f to 1f, luma or Y component of YCwCm
+     * @param warm       -1f to 1f, "chroma warm" or Cw component of YCwCm, with 1f more red or yellow
+     * @param mild       -1f to 1f, "chroma mild" or Cm component of YCwCm, with 1f more green or yellow
+     * @param opacity    0f to 1f, 0f is fully transparent and 1f is opaque
+     * @return a float encoding a color with the given properties
+     */
+    public static float floatGetYCwCm(float luma, float warm, float mild, float opacity) {
+        // the color solid should be:
+
+        //                   > warm >
+        // blue    violet     red
+        // cyan     gray      orange
+        // green    neon      yellow
+        //  \/ mild \/
+
+        // so, warm is effectively defined as the presence of red.
+        // and mild is, effectively, presence of green.
+        // negative warm with negative mild will each contribute to blue.
+        // luma is defined as (r * 3 + g * 4 + b) / 8
+        // or r * 0.375f + g * 0.5f + b * 0.125f
+        // warm is the warm-cool axis, with positive warm between red and yellow and negative warm between blue and green
+        // warm is defined as (r - b), with range from -1 to 1
+        // mild is the green-purple axis, with positive mild between green and yellow, negative mild between blue and red
+        // mild is defined as (g - b), with range from -1 to 1
+
+        //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
+        //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
+        //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
+        //// used in WarpWriter, not sure if optimal
+//        return floatGet(MathExtras.clamp(luma + warm * 0.625f, 0f, 1f),
+//                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+
+        /// possible alternative candidate?
+        return floatGet(
+                MathExtras.clamp(luma + warm * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma - warm * 0.25f - mild * 0.25f, 0f, 1f), opacity);
+
+        //// original
+//        return floatGet(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+//                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+
+    }
+
+
     private void ycc(float y, float cb, float cr)
     {
-        final int b = (int) ((cb + 1f) * (gridWidth * 0.5f - 0.5f)), r = (int) ((1f - cr) * (gridHeight * 0.5f - 0.5f));
+        final int b = (int) ((cb + 1f) * 255.5f), r = (int) ((1f - cr) * 255.f);
 //        SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(y, cb, cr, 1f));
 //        display.putString(b, r, StringKit.hex(b) + "x" + StringKit.hex(r), y < 0.65f ? SColor.WHITE : SColor.BLACK,
 //                tmp);
-        display.getBackgroundLayer().colors[b][r] = floatGetYCwCm(y, cb, cr, 1f);
+        
+        colors[b][r] = floatGetYCwCm(y, cb, cr, 1f);
 //        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
 //        if((vv = ((vv + 1) & 7)) == 0)
 //        {
@@ -362,10 +430,11 @@ public class ColorTest extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        tcf = DefaultResources.getCrispSlabFont();//.width(cellWidth).height(cellHeight).initBySize();
+        tcf = DefaultResources.getCrispSlabFont().width(1).height(1).initBySize();
         viewport = new StretchViewport(totalWidth, totalHeight);
-        display = new SquidLayers(gridWidth, gridHeight, cellWidth, cellHeight, tcf);//.setTextSize(cellWidth + 1f, cellHeight + 1f);
+        display = new SquidLayers(gridWidth, gridHeight, 1, 1, tcf);//.setTextSize(cellWidth + 1f, cellHeight + 1f);
         stage = new Stage(viewport, batch);
+        colors = ArrayTools.fill(SColor.FLOAT_BLACK, 512, 512);
         //SquidColorCenter scc = DefaultResources.getSCC();
 
         Gdx.input.setInputProcessor(new InputAdapter() {
@@ -777,7 +846,7 @@ public class ColorTest extends ApplicationAdapter {
 //                show(hue2, 0.8f, 0.425f);
 //            }
 //        }
-        stage.addActor(display);
+        //stage.addActor(display);
 
         //This block, when uncommented, will generate the color wheel palette code for SColor and print it to stdout.
 //        String template = "NAME\tFEDCBA\tName";
@@ -952,8 +1021,8 @@ public class ColorTest extends ApplicationAdapter {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xFFFL) * 0x1.4p-7f) * 0.5f + 0.5f;
-//        Gdx.graphics.setTitle("Current luma: " + luma);
+        luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xFFFL) * 0x1.4p-7f) * 0.5f + 0.5f;
+        Gdx.graphics.setTitle("Current luma: " + luma);
 
 //        Gdx.graphics.setTitle("YCwCm demo at 66% luma");
 //        for (float cb = -0.625f; cb <= 0.625f; cb += 0x1p-6f) {
@@ -962,17 +1031,18 @@ public class ColorTest extends ApplicationAdapter {
 //            }
 //        }
         
-//        for (float cb = -1f; cb <= 1f; cb += 0x1p-7f) {
-//            for (float cr = -1f; cr <= 1f; cr += 0x1p-7f) {
-//                ycc(luma, cb, cr);
-//            }
-//        }
-        stage.draw();
-//        stage.getViewport().update(totalWidth, totalHeight, true);
-//        stage.getViewport().apply(true);
-//        stage.getBatch().begin();
-//        display.getTextFactory().draw(stage.getBatch(), display.getBackgroundLayer().colors, 0, 0);
-//        stage.getBatch().end();
+        for (float cb = -1f; cb <= 1f; cb += 0x1p-8f) {
+            for (float cr = -1f; cr <= 1f; cr += 0x1p-8f) {
+                ycc(luma, cb, cr);
+            }
+        }
+//        stage.draw();
+        
+        viewport.update(totalWidth, totalHeight, true);
+        viewport.apply(true);
+        batch.begin();
+        tcf.draw(batch, colors, 0, 0);
+        batch.end();
     }
 
     @Override
