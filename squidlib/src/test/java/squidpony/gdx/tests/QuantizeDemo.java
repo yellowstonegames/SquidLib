@@ -14,9 +14,7 @@ import squidpony.squidgrid.gui.gdx.PNG8;
 import squidpony.squidgrid.gui.gdx.PaletteReducer;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidmath.CoordPacker;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.OrderedSet;
+import squidpony.squidmath.*;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -181,7 +179,7 @@ public class QuantizeDemo extends ApplicationAdapter {
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8.png", ex);
         }
-        png8.palette = monaPalette;
+        png8.palette = new PaletteReducer(monaOriginal, 400);
         try {
             png8.write(Gdx.files.local("out/Mona_Lisa_PNG8.png"), monaOriginal, false);
         } catch (IOException ex) {
@@ -191,6 +189,28 @@ public class QuantizeDemo extends ApplicationAdapter {
             png8.write(Gdx.files.local("out/Painting_by_Henri_Biva_PNG8_Mona.png"), bivaOriginal, false);
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: out/Painting_by_Henri_Biva_PNG8_Mona.png", ex);
+        }
+        try {
+            final String text = "We hold these truths to be self-evident, that all men are created equal, that they are endowed by their Creator with certain unalienable Rights, that among these are Life, Liberty and the pursuit of Happiness.";
+            final int alter = CrossHash.hash(text) << 8;
+            for (int i = png8.palette.paletteArray[0] == 0 ? 1 : 0; i < png8.palette.paletteArray.length; i++) {
+                png8.palette.paletteArray[i] ^= alter;
+            }
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Declaration.png"), monaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Declaration.png", ex);
+        }
+        png8.palette = new PaletteReducer(monaOriginal, 400);
+        try {
+            final String text = "Sun Tzu said: In the practical art of war, the best thing of all is to take the enemy's country whole and intact; to shatter and destroy it is not so good.";
+            final int alter = CrossHash.hash(text) << 8;
+            for (int i = png8.palette.paletteArray[0] == 0 ? 1 : 0; i < png8.palette.paletteArray.length; i++) {
+                png8.palette.paletteArray[i] ^= alter;
+//                png8.palette.paletteArray[i] ^= new CrossHash.Mist(DiverRNG.determine(i), DiverRNG.randomize(i)).hash(text) & 0x1F1F1F00;
+            }
+            png8.write(Gdx.files.local("out/Mona_Lisa_PNG8_Art_Of_War.png"), monaOriginal, false);
+        } catch (IOException ex) {
+            throw new GdxRuntimeException("Error writing PNG: out/Mona_Lisa_PNG8_Art_Of_War.png", ex);
         }
         png8.palette = bivaPalette;
         try {
