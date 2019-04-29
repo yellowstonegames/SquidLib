@@ -191,7 +191,7 @@ public class Voronoi implements Serializable {
                     n = next.getNonEdgeVertex(tri.a, n);
                 }
                 if (vs.size() >= 3)
-                    polygonSoup.add(new Polygon(tri.a, vs.toArray(new CoordDouble[0])));
+                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
             }
             vs.clear();
             vs.add(tri.centroid);
@@ -206,7 +206,7 @@ public class Voronoi implements Serializable {
                     n = next.getNonEdgeVertex(tri.b, n);
                 }
                 if (vs.size() >= 3)
-                    polygonSoup.add(new Polygon(tri.b, vs.toArray(new CoordDouble[0])));
+                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
             }
             vs.clear();
             vs.add(tri.centroid);
@@ -221,7 +221,7 @@ public class Voronoi implements Serializable {
                     n = next.getNonEdgeVertex(tri.c, n);
                 }
                 if (vs.size() >= 3)
-                    polygonSoup.add(new Polygon(tri.c, vs.toArray(new CoordDouble[0])));
+                    polygonSoup.add(new Polygon(vs.toArray(new CoordDouble[0])));
             }
         }
         return polygonSoup;
@@ -557,15 +557,19 @@ public class Voronoi implements Serializable {
         public CoordDouble centroid;
         public final CoordDouble[] vertices;
 
-        public Polygon(CoordDouble centroid, CoordDouble... vertices) {
-            this.centroid = centroid;
+        public Polygon(CoordDouble... vertices) {
             this.vertices = vertices == null || vertices.length < 3
                     ? new CoordDouble[] {new CoordDouble(), new CoordDouble(), new CoordDouble()}
                     : vertices;
+            this.centroid = new CoordDouble(this.vertices[0]);
+            for (int i = 1; i < this.vertices.length; i++) {
+                this.centroid.add(this.vertices[i]);
+            }
+            this.centroid.divide(this.vertices.length, this.vertices.length);
         }
 
     }
-        private static final Comparator<Double> doubleComparator = new Comparator<Double>() {
+    private static final Comparator<Double> doubleComparator = new Comparator<Double>() {
         @Override
         public int compare(Double o1, Double o2) {
             return o1.compareTo(o2);

@@ -23,9 +23,10 @@ public class VoronoiTest extends ApplicationAdapter {
     private ShapeRenderer shaper;
     private MiniMover64RNG mini;
     private RNG rng;
-    private Voronoi tri;
+    private Voronoi voronoid;
     private OrderedSet<CoordDouble> points;
-    private ArrayList<Voronoi.Polygon> tris;
+    private ArrayList<Voronoi.Polygon> polygons;
+    private ArrayList<Voronoi.Triangle> triangles;
     private OrderedSet<? extends Color> palette;
     private long startTime;
 
@@ -34,15 +35,17 @@ public class VoronoiTest extends ApplicationAdapter {
         shaper = new ShapeRenderer();
         mini = new MiniMover64RNG(123);
         rng = new RNG(mini);
-        points = new OrderedSet<>(255);
-        for (int i = 0; i < 255; i++) {
+        final int COUNT = 20;
+        points = new OrderedSet<>(COUNT);
+        for (int i = 0; i < COUNT; i++) {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
             points.add(new CoordDouble(386.4973651183067 * (i + 1) % 500.0 + rng.nextDouble(12.0),
                     291.75822899100325 * (i + 1) % 500.0 + rng.nextDouble(12.0)));
         }
-        tri = new Voronoi(points);
-        tris = tri.polygonize();
-        Collections.sort(tris, new Comparator<Voronoi.Polygon>() {
+        voronoid = new Voronoi(points);
+        polygons = voronoid.polygonize();
+        triangles = voronoid.getTriangles();
+        Collections.sort(polygons, new Comparator<Voronoi.Polygon>() {
             @Override
             public int compare(Voronoi.Polygon p1, Voronoi.Polygon p2) {
                 return Double.compare(
@@ -75,29 +78,40 @@ public class VoronoiTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shaper.begin(ShapeRenderer.ShapeType.Filled);
-        final int len = tris.size();
-        Voronoi.Polygon t;
-        float[] vs = new float[64];
-        int c = (int) TimeUtils.timeSinceMillis(startTime) >>> 2;
+        final int len = polygons.size();
+        Voronoi.Polygon p;
+        int c = (int) TimeUtils.timeSinceMillis(startTime) >>> 5;
         for (int i = 0; i < len; i++) {
             //shaper.setColor(SColor.DAWNBRINGER_AURORA[(i % 255) + 1]);
-            shaper.setColor(palette.getAt(c++ % palette.size()));
-            t = tris.get(i);
-            for (int j = 1; j < t.vertices.length; j++) {
-                shaper.triangle((float)t.centroid.x, (float)t.centroid.y,
-                        (float)t.vertices[j-1].x, (float)t.vertices[j-1].y,
-                        (float)t.vertices[j].x, (float)t.vertices[j].y);
+//            shaper.setColor(palette.getAt(c++ % palette.size()));
+            float color = rng.nextFloat() * 0.7f + 0.15f;
+            shaper.setColor(color, color, color, 1f);
+            p = polygons.get(i);
+            for (int j = 1; j < p.vertices.length; j++) {
+                shaper.triangle((float)p.centroid.x, (float)p.centroid.y,
+                        (float)p.vertices[j-1].x, (float)p.vertices[j-1].y,
+                        (float)p.vertices[j].x, (float)p.vertices[j].y);
             }
-            shaper.triangle((float)t.centroid.x, (float)t.centroid.y,
-                    (float)t.vertices[t.vertices.length-1].x, (float)t.vertices[t.vertices.length-1].y,
-                    (float)t.vertices[0].x, (float)t.vertices[0].y);
-//            int vi = 0;
-//            for(CoordDouble cd : t.vertices)
-//            {
-//                vs[vi++] = (float) cd.x;
-//                vs[vi++] = (float) cd.y; 
-//            }
-//            shaper.polygon(vs, 0, vi);
+            shaper.triangle((float)p.centroid.x, (float)p.centroid.y,
+                    (float)p.vertices[p.vertices.length-1].x, (float)p.vertices[p.vertices.length-1].y,
+                    (float)p.vertices[0].x, (float)p.vertices[0].y);
+        }
+        shaper.end();
+        shaper.begin(ShapeRenderer.ShapeType.Line);
+        shaper.setColor(SColor.RED);
+        Voronoi.Triangle t;
+        for (int i = 0; i < triangles.size(); i++) {
+            t = triangles.get(i);
+            shaper.triangle((float)t.a.x, (float)t.a.y,
+                    (float)t.b.x, (float)t.b.y,
+                    (float)t.c.x, (float)t.c.y);
+        }
+        shaper.end();
+        shaper.begin(ShapeRenderer.ShapeType.Point);
+        shaper.setColor(SColor.WHITE);
+        for (int i = 0; i < points.size(); i++) {
+            CoordDouble cd = points.getAt(i);
+            shaper.point((float) cd.x, (float)cd.y, 0f);
         }
         shaper.end();
     }
@@ -107,8 +121,8 @@ public class VoronoiTest extends ApplicationAdapter {
         config.title = "SquidLib Demo: Delaunay Test";
         config.width = 512;
         config.height = 512;
-        config.vSyncEnabled = false;
-        config.foregroundFPS = 0;
+        config.vSyncEnabled = true;
+        config.foregroundFPS = 5;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-64.png", Files.FileType.Internal);
