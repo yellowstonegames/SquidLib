@@ -84,25 +84,25 @@ public class DelaunayTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //// will just show points in white, like stars at night
-        shaper.begin(ShapeRenderer.ShapeType.Point);
-        shaper.setColor(SColor.WHITE);
-        CoordDouble c;
-        for (int i = 0; i < points.size(); i++) {
-            c = points.getAt(i);
-            shaper.point((float) c.x, (float)c.y, 0f);
-        }
+//        shaper.begin(ShapeRenderer.ShapeType.Point);
+//        shaper.setColor(SColor.WHITE);
+//        CoordDouble c;
+//        for (int i = 0; i < points.size(); i++) {
+//            c = points.getAt(i);
+//            shaper.point((float) c.x, (float)c.y, 0f);
+//        }
         
         //// uses the Delaunay triangulation of points
-//        shaper.begin(ShapeRenderer.ShapeType.Filled);
-//        final int len = tris.size();
-//        DelaunayTriangulator.Triangle t;
-//        int c = (int) TimeUtils.timeSinceMillis(startTime) >>> 6;
-//        for (int i = 0; i < len; i++) {
-////            shaper.setColor(SColor.DAWNBRINGER_AURORA[(c++ % 255) + 1]);
-//            shaper.setColor(palette.getAt(c++ % palette.size()));
-//            t = tris.get(i);
-//            shaper.triangle((float)t.a.x, (float)t.a.y, (float)t.b.x, (float)t.b.y, (float)t.c.x, (float)t.c.y);
-//        }
+        shaper.begin(ShapeRenderer.ShapeType.Filled);
+        final int len = tris.size();
+        DelaunayTriangulator.Triangle t;
+        int c = (int) TimeUtils.timeSinceMillis(startTime) >>> 6;
+        for (int i = 0; i < len; i++) {
+//            shaper.setColor(SColor.DAWNBRINGER_AURORA[(c++ % 255) + 1]);
+            shaper.setColor(palette.getAt(c++ % palette.size()));
+            t = tris.get(i);
+            shaper.triangle((float)t.a.x, (float)t.a.y, (float)t.b.x, (float)t.b.y, (float)t.c.x, (float)t.c.y);
+        }
         shaper.end();
     }
 
