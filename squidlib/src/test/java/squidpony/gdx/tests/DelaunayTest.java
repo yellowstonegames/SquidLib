@@ -39,7 +39,7 @@ public class DelaunayTest extends ApplicationAdapter {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
 //            points.add(new CoordDouble(386.4973651183067 * (i + 1) % 500.0 + rng.nextDouble(12.0),
 //                    291.75822899100325 * (i + 1) % 500.0 + rng.nextDouble(12.0)));
-            double x = VanDerCorputQRNG.determine(2, i) * 512.0;
+            double x = VanDerCorputQRNG.determine2(i) * 512.0;
             double y = VanDerCorputQRNG.determine(3, i) * 512.0;
             //// pure R3, does badly
 //            double x = ((i * 0xD1B54A32D192ED03L) >>> 3) * 0x1p-52;

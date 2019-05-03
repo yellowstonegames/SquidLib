@@ -26,6 +26,7 @@ import squidpony.annotation.Beta;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.ListIterator;
 
@@ -41,26 +42,137 @@ import java.util.ListIterator;
 public class DelaunayTriangulator implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private OrderedSet<CoordDouble> pointSet;
-    private TriangleSoup triangleSoup;
+    private CoordDouble[] points;
+    private ArrayList<Triangle> triangleSoup;
 
     /**
      * Constructs a triangulator instance but does not insert any points; you should add points to
-     * {@link #getPointSet()} before running {@link #triangulate()}.
+     * {@link #getPoints()}, which is an array that can hold 256 points, before running {@link #triangulate()}.
      */
     public DelaunayTriangulator() {
-        this.pointSet = new OrderedSet<>(256);
-        this.triangleSoup = new TriangleSoup();
+        this.points = new CoordDouble[256];
+        this.triangleSoup = new ArrayList<>(256);
     }
 
     /**
      * Constructs a new triangulator instance using the specified point set.
      *
-     * @param pointSet The point set to be triangulated
+     * @param points The point set to be triangulated
      */
-    public DelaunayTriangulator(OrderedSet<CoordDouble> pointSet) {
-        this.pointSet = pointSet;
-        this.triangleSoup = new TriangleSoup();
+    public DelaunayTriangulator(Collection<CoordDouble> points) {
+        this.points = points.toArray(new CoordDouble[points.size()]);
+        this.triangleSoup = new ArrayList<>(points.size());
+    }
+    /**
+     * Returns the triangle from this triangle soup that contains the specified
+     * point or null if no triangle from the triangle soup contains the point.
+     *
+     * @param point
+     *            The point
+     * @return Returns the triangle from this triangle soup that contains the
+     *         specified point or null
+     */
+    public Triangle findContainingTriangle(CoordDouble point) {
+        for (Triangle triangle : triangleSoup) {
+            if (triangle.contains(point)) {
+                return triangle;
+            }
+        }
+        return null;
+    }
+    /**
+     * Returns the neighbor triangle of the specified triangle sharing the same
+     * edge as specified. If no neighbor sharing the same edge exists null is
+     * returned.
+     *
+     * @param triangle
+     *            The triangle
+     * @param edge
+     *            The edge
+     * @return The triangles neighbor triangle sharing the same edge or null if
+     *         no triangle exists
+     */
+    public Triangle findNeighbor(Triangle triangle, Edge edge) {
+        for (Triangle triangleFromSoup : triangleSoup) {
+            if (triangleFromSoup.isNeighbor(edge) && triangleFromSoup != triangle) {
+                return triangleFromSoup;
+            }
+        }
+        return null;
+    }
+    public Triangle findNeighbor(Triangle triangle, CoordDouble ea, CoordDouble eb) {
+        for (Triangle triangleFromSoup : triangleSoup) {
+            if (triangleFromSoup.isNeighbor(ea, eb) && triangleFromSoup != triangle) {
+                return triangleFromSoup;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns one of the possible triangles sharing the specified edge. Based
+     * on the ordering of the triangles in this triangle soup the returned
+     * triangle may differ. To find the other triangle that shares this edge use
+     * the {@link #findNeighbor(Triangle, Edge)} method.
+     *
+     * @param edge
+     *            The edge
+     * @return Returns one triangle that shares the specified edge
+     */
+    public Triangle findOneTriangleSharing(Edge edge) {
+        for (Triangle triangle : triangleSoup) {
+            if (triangle.isNeighbor(edge)) {
+                return triangle;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the edge from the triangle soup nearest to the specified point.
+     *
+     * @param point
+     *            The point
+     * @return The edge from the triangle soup nearest to the specified point
+     */
+    public Edge findNearestEdge(CoordDouble point) {
+//            List<EdgeDistancePack> edgeList = new ArrayList<EdgeDistancePack>();
+
+        OrderedMap<Edge, Double> edges = new OrderedMap<>(triangleSoup.size());
+        for (Triangle triangle : triangleSoup) {
+            Edge ab = new Edge(triangle.a, triangle.b);
+            Edge bc = new Edge(triangle.b, triangle.c);
+            Edge ca = new Edge(triangle.c, triangle.a);
+            double abd = triangle.computeClosestPoint(ab, point).subtract(point).lengthSq();
+            double bcd = triangle.computeClosestPoint(bc, point).subtract(point).lengthSq();
+            double cad = triangle.computeClosestPoint(ca, point).subtract(point).lengthSq();
+
+            if(abd <= bcd && abd <= cad)
+                edges.put(ab, abd);
+            else if(bcd <= abd && bcd <= cad)
+                edges.put(bc, bcd);
+            else
+                edges.put(ca, cad);
+        }
+        edges.sortByValue(doubleComparator);
+        return edges.keyAt(0);
+    }
+
+    /**
+     * Removes all triangles from this triangle soup that contain the specified
+     * vertex.
+     *
+     * @param vertex
+     *            The vertex
+     */
+    public void removeTrianglesUsing(CoordDouble vertex) {
+        ListIterator<Triangle> li = triangleSoup.listIterator();
+        while (li.hasNext())
+        {
+            Triangle triangle = li.next();
+            if(triangle.hasVertex(vertex))
+                li.remove();
+        }
     }
 
     /**
@@ -69,10 +181,10 @@ public class DelaunayTriangulator implements Serializable {
      */
     public ArrayList<Triangle> triangulate() {
         int numPoints;
-        if (pointSet == null || (numPoints = pointSet.size()) < 3) {
+        if (points == null || (numPoints = points.length) < 3) {
             throw new IllegalArgumentException("Less than three points in point set.");
         }
-        triangleSoup = new TriangleSoup();
+        triangleSoup.clear();
 
         /*
          * In order for the in circumcircle test to not consider the vertices of
@@ -83,7 +195,7 @@ public class DelaunayTriangulator implements Serializable {
         double maxOfAnyCoordinate = 0.0;
 
         for (int i = 0; i < numPoints; i++) {
-            final CoordDouble pt = pointSet.getAt(i);
+            final CoordDouble pt = points[i];
             maxOfAnyCoordinate = Math.max(Math.max(pt.x, pt.y), maxOfAnyCoordinate);
         }
 
@@ -97,26 +209,26 @@ public class DelaunayTriangulator implements Serializable {
 
         triangleSoup.add(superTriangle);
 
-        for (int i = 0; i < pointSet.size(); i++) {
-            Triangle triangle = triangleSoup.findContainingTriangle(pointSet.getAt(i));
+        for (int i = 0; i < points.length; i++) {
+            Triangle triangle = findContainingTriangle(points[i]);
 
             if (triangle == null) {
-                /**
-                 * If no containing triangle exists, then the vertex is not
-                 * inside a triangle (this can also happen due to numerical
-                 * errors) and lies on an edge. In order to find this edge we
-                 * search all edges of the triangle soup and select the one
-                 * which is nearest to the point we try to add. This edge is
-                 * removed and four new edges are added.
+                /*
+                  If no containing triangle exists, then the vertex is not
+                  inside a triangle (this can also happen due to numerical
+                  errors) and lies on an edge. In order to find this edge we
+                  search all edges of the triangle soup and select the one
+                  which is nearest to the point we try to add. This edge is
+                  removed and four new edges are added.
                  */
-                Edge edge = triangleSoup.findNearestEdge(pointSet.getAt(i));
+                Edge edge = findNearestEdge(points[i]);
 
-                Triangle first = triangleSoup.findOneTriangleSharing(edge);
-                Triangle second = triangleSoup.findNeighbor(first, edge);
+                Triangle first = findOneTriangleSharing(edge);
+                Triangle second = findNeighbor(first, edge);
 
                 CoordDouble firstNonEdgeVertex = first.getNonEdgeVertex(edge);
                 CoordDouble secondNonEdgeVertex = second.getNonEdgeVertex(edge);
-                CoordDouble p = pointSet.getAt(i);
+                CoordDouble p = points[i];
                 
                 triangleSoup.remove(first);
                 triangleSoup.remove(second);
@@ -142,7 +254,7 @@ public class DelaunayTriangulator implements Serializable {
                 CoordDouble a = triangle.a;
                 CoordDouble b = triangle.b;
                 CoordDouble c = triangle.c;
-                CoordDouble p = pointSet.getAt(i);
+                CoordDouble p = points[i];
                 
                 triangleSoup.remove(triangle);
 
@@ -163,10 +275,10 @@ public class DelaunayTriangulator implements Serializable {
         /*
          * Remove all triangles that contain vertices of the super triangle.
          */
-        triangleSoup.removeTrianglesUsing(superTriangle.a);
-        triangleSoup.removeTrianglesUsing(superTriangle.b);
-        triangleSoup.removeTrianglesUsing(superTriangle.c);
-        return triangleSoup.getTriangles();
+        removeTrianglesUsing(superTriangle.a);
+        removeTrianglesUsing(superTriangle.b);
+        removeTrianglesUsing(superTriangle.c);
+        return triangleSoup;
     }
 
     /**
@@ -182,10 +294,10 @@ public class DelaunayTriangulator implements Serializable {
      *            The new vertex
      */
     private void legalizeEdge(Triangle triangle, CoordDouble ea, CoordDouble eb, CoordDouble newVertex) {
-        Triangle neighborTriangle = triangleSoup.findNeighbor(triangle, ea, eb);
+        Triangle neighborTriangle = findNeighbor(triangle, ea, eb);
 
-        /**
-         * If the triangle has a neighbor, then legalize the edge
+        /*
+          If the triangle has a neighbor, then legalize the edge
          */
         if (neighborTriangle != null) {
             if (neighborTriangle.isPointInCircumcircle(newVertex)) {
@@ -212,26 +324,16 @@ public class DelaunayTriangulator implements Serializable {
      * computation.
      */
     public void shuffle(IRNG rng) {
-        pointSet.shuffle(rng);
+        rng.shuffleInPlace(points);
     }
-
-    /**
-     * Shuffles the point set using a custom permutation sequence.
-     * 
-     * @param permutation
-     *            The permutation used to shuffle the point set
-     */
-    public void reorder(int[] permutation) {
-        pointSet.reorder(permutation);
-    }
-
+    
     /**
      * Returns the point set in form of a vector of 2D vectors.
      * 
      * @return Returns the points set.
      */
-    public OrderedSet<CoordDouble> getPointSet() {
-        return pointSet;
+    public CoordDouble[] getPoints() {
+        return points;
     }
 
     /**
@@ -241,7 +343,7 @@ public class DelaunayTriangulator implements Serializable {
      * @return Returns the triangles of the triangulation.
      */
     public ArrayList<Triangle> getTriangles() {
-        return triangleSoup.getTriangles();
+        return triangleSoup;
     }
     
     public static class Edge implements Serializable
@@ -544,119 +646,7 @@ public class DelaunayTriangulator implements Serializable {
         public ArrayList<Triangle> getTriangles() {
             return this.triangleSoup;
         }
-
-        /**
-         * Returns the triangle from this triangle soup that contains the specified
-         * point or null if no triangle from the triangle soup contains the point.
-         *
-         * @param point
-         *            The point
-         * @return Returns the triangle from this triangle soup that contains the
-         *         specified point or null
-         */
-        public Triangle findContainingTriangle(CoordDouble point) {
-            for (Triangle triangle : triangleSoup) {
-                if (triangle.contains(point)) {
-                    return triangle;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Returns the neighbor triangle of the specified triangle sharing the same
-         * edge as specified. If no neighbor sharing the same edge exists null is
-         * returned.
-         *
-         * @param triangle
-         *            The triangle
-         * @param edge
-         *            The edge
-         * @return The triangles neighbor triangle sharing the same edge or null if
-         *         no triangle exists
-         */
-        public Triangle findNeighbor(Triangle triangle, Edge edge) {
-            for (Triangle triangleFromSoup : triangleSoup) {
-                if (triangleFromSoup.isNeighbor(edge) && triangleFromSoup != triangle) {
-                    return triangleFromSoup;
-                }
-            }
-            return null;
-        }
-        public Triangle findNeighbor(Triangle triangle, CoordDouble ea, CoordDouble eb) {
-            for (Triangle triangleFromSoup : triangleSoup) {
-                if (triangleFromSoup.isNeighbor(ea, eb) && triangleFromSoup != triangle) {
-                    return triangleFromSoup;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Returns one of the possible triangles sharing the specified edge. Based
-         * on the ordering of the triangles in this triangle soup the returned
-         * triangle may differ. To find the other triangle that shares this edge use
-         * the {@link #findNeighbor(Triangle, Edge)} method.
-         *
-         * @param edge
-         *            The edge
-         * @return Returns one triangle that shares the specified edge
-         */
-        public Triangle findOneTriangleSharing(Edge edge) {
-            for (Triangle triangle : triangleSoup) {
-                if (triangle.isNeighbor(edge)) {
-                    return triangle;
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Returns the edge from the triangle soup nearest to the specified point.
-         *
-         * @param point
-         *            The point
-         * @return The edge from the triangle soup nearest to the specified point
-         */
-        public Edge findNearestEdge(CoordDouble point) {
-//            List<EdgeDistancePack> edgeList = new ArrayList<EdgeDistancePack>();
-
-            OrderedMap<Edge, Double> edges = new OrderedMap<>(triangleSoup.size());
-            for (Triangle triangle : triangleSoup) {
-                Edge ab = new Edge(triangle.a, triangle.b);
-                Edge bc = new Edge(triangle.b, triangle.c);
-                Edge ca = new Edge(triangle.c, triangle.a);
-                double abd = triangle.computeClosestPoint(ab, point).subtract(point).lengthSq();
-                double bcd = triangle.computeClosestPoint(bc, point).subtract(point).lengthSq();
-                double cad = triangle.computeClosestPoint(ca, point).subtract(point).lengthSq();
-                
-                if(abd <= bcd && abd <= cad)
-                    edges.put(ab, abd);
-                else if(bcd <= abd && bcd <= cad)
-                    edges.put(bc, bcd);
-                else 
-                    edges.put(ca, cad);
-            }
-            edges.sortByValue(doubleComparator);
-            return edges.keyAt(0);
-        }
-
-        /**
-         * Removes all triangles from this triangle soup that contain the specified
-         * vertex.
-         *
-         * @param vertex
-         *            The vertex
-         */
-        public void removeTrianglesUsing(CoordDouble vertex) {
-            ListIterator<Triangle> li = triangleSoup.listIterator();
-            while (li.hasNext())
-            {
-                Triangle triangle = li.next();
-                if(triangle.hasVertex(vertex))
-                    li.remove();
-            }
-        }
+        
 
     }
 }
