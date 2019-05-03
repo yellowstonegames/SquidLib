@@ -39,18 +39,40 @@ import java.util.ListIterator;
  * @author Tommy Ettinger
  */
 @Beta
-public class DelaunayTriangulator implements Serializable {
+public class Delaunay3D implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private CoordDouble[] points;
+    public static final class MultiCoord
+    {
+        public double x, y, z;
+        public CoordDouble flat;
+        public MultiCoord()
+        {
+            x = y = z = 0.0;
+            flat = new CoordDouble();
+        }
+        public MultiCoord(CoordDouble flatCoord)
+        {
+            x = y = z = Double.NaN;
+            flat = flatCoord;
+        }
+        public MultiCoord(final double x, final double y, final double z)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            flat = new CoordDouble(x / (1.0 - z), y / (1.0 - z));
+        }
+    }
+    private MultiCoord[] points;
     private ArrayList<Triangle> triangleSoup;
 
     /**
      * Constructs a triangulator instance but does not insert any points; you should add points to
      * {@link #getPoints()}, which is an array that can hold 256 points, before running {@link #triangulate()}.
      */
-    public DelaunayTriangulator() {
-        this.points = new CoordDouble[256];
+    public Delaunay3D() {
+        this.points = new MultiCoord[256];
         this.triangleSoup = new ArrayList<>(256);
     }
 
@@ -59,9 +81,22 @@ public class DelaunayTriangulator implements Serializable {
      *
      * @param points The point set to be triangulated
      */
-    public DelaunayTriangulator(Collection<CoordDouble> points) {
-        this.points = points.toArray(new CoordDouble[points.size()]);
+    public Delaunay3D(Collection<MultiCoord> points) {
+        this.points = points.toArray(new MultiCoord[points.size()]);
         this.triangleSoup = new ArrayList<>(points.size());
+    }
+
+    /**
+     * Constructs a new triangulator instance using the specified point set.
+     *
+     * @param triples The point set to be triangulated, as groups of 3 doubles for x,y,z
+     */
+    public Delaunay3D(double[] triples) {
+        this.points = new MultiCoord[triples.length / 3];
+        for (int i = 2, j = 0; i < triples.length; i += 3, j++) {
+            points[j] = new MultiCoord(triples[i-2], triples[i-1], triples[i]);
+        }
+        this.triangleSoup = new ArrayList<>(this.points.length);
     }
     /**
      * Returns the triangle from this triangle soup that contains the specified
@@ -100,7 +135,7 @@ public class DelaunayTriangulator implements Serializable {
         }
         return null;
     }
-    public Triangle findNeighbor(Triangle triangle, CoordDouble ea, CoordDouble eb) {
+    public Triangle findNeighbor(Triangle triangle, MultiCoord ea, MultiCoord eb) {
         for (Triangle triangleFromSoup : triangleSoup) {
             if (triangleFromSoup.isNeighbor(ea, eb) && triangleFromSoup != triangle) {
                 return triangleFromSoup;
@@ -165,7 +200,7 @@ public class DelaunayTriangulator implements Serializable {
      * @param vertex
      *            The vertex
      */
-    public void removeTrianglesUsing(CoordDouble vertex) {
+    public void removeTrianglesUsing(MultiCoord vertex) {
         ListIterator<Triangle> li = triangleSoup.listIterator();
         while (li.hasNext())
         {
@@ -195,7 +230,7 @@ public class DelaunayTriangulator implements Serializable {
         double maxOfAnyCoordinate = 0.0;
 
         for (int i = 0; i < numPoints; i++) {
-            final CoordDouble pt = points[i];
+            final CoordDouble pt = points[i].flat;
             maxOfAnyCoordinate = Math.max(Math.max(pt.x, pt.y), maxOfAnyCoordinate);
         }
 
@@ -210,7 +245,7 @@ public class DelaunayTriangulator implements Serializable {
         triangleSoup.add(superTriangle);
 
         for (int i = 0; i < points.length; i++) {
-            Triangle triangle = findContainingTriangle(points[i]);
+            Triangle triangle = findContainingTriangle(points[i].flat);
 
             if (triangle == null) {
                 /*
@@ -221,14 +256,14 @@ public class DelaunayTriangulator implements Serializable {
                   which is nearest to the point we try to add. This edge is
                   removed and four new edges are added.
                  */
-                Edge edge = findNearestEdge(points[i]);
+                Edge edge = findNearestEdge(points[i].flat);
 
                 Triangle first = findOneTriangleSharing(edge);
                 Triangle second = findNeighbor(first, edge);
 
-                CoordDouble firstNonEdgeVertex = first.getNonEdgeVertex(edge);
-                CoordDouble secondNonEdgeVertex = second.getNonEdgeVertex(edge);
-                CoordDouble p = points[i];
+                MultiCoord firstNonEdgeVertex = first.getNonEdgeVertex(edge);
+                MultiCoord secondNonEdgeVertex = second.getNonEdgeVertex(edge);
+                MultiCoord p = points[i];
                 
                 triangleSoup.remove(first);
                 triangleSoup.remove(second);
@@ -251,10 +286,10 @@ public class DelaunayTriangulator implements Serializable {
                 /*
                  * The vertex is inside a triangle.
                  */
-                CoordDouble a = triangle.a;
-                CoordDouble b = triangle.b;
-                CoordDouble c = triangle.c;
-                CoordDouble p = points[i];
+                MultiCoord a = triangle.a;
+                MultiCoord b = triangle.b;
+                MultiCoord c = triangle.c;
+                MultiCoord p = points[i];
                 
                 triangleSoup.remove(triangle);
 
@@ -293,18 +328,18 @@ public class DelaunayTriangulator implements Serializable {
      * @param newVertex
      *            The new vertex
      */
-    private void legalizeEdge(Triangle triangle, CoordDouble ea, CoordDouble eb, CoordDouble newVertex) {
+    private void legalizeEdge(Triangle triangle, MultiCoord ea, MultiCoord eb, MultiCoord newVertex) {
         Triangle neighborTriangle = findNeighbor(triangle, ea, eb);
 
         /*
           If the triangle has a neighbor, then legalize the edge
          */
         if (neighborTriangle != null) {
-            if (neighborTriangle.isPointInCircumcircle(newVertex)) {
+            if (neighborTriangle.isPointInCircumcircle(newVertex.flat)) {
                 triangleSoup.remove(triangle);
                 triangleSoup.remove(neighborTriangle);
 
-                CoordDouble noneEdgeVertex = neighborTriangle.getNonEdgeVertex(ea, eb);
+                MultiCoord noneEdgeVertex = neighborTriangle.getNonEdgeVertex(ea, eb);
 
                 Triangle firstTriangle = new Triangle(noneEdgeVertex, ea, newVertex);
                 Triangle secondTriangle = new Triangle(noneEdgeVertex, eb, newVertex);
@@ -332,7 +367,7 @@ public class DelaunayTriangulator implements Serializable {
      * 
      * @return Returns the points set.
      */
-    public CoordDouble[] getPoints() {
+    public MultiCoord[] getPoints() {
         return points;
     }
 
@@ -350,23 +385,23 @@ public class DelaunayTriangulator implements Serializable {
     {
         private static final long serialVersionUID = 1L;
         
-        public CoordDouble a;
-        public CoordDouble b;
+        public MultiCoord a;
+        public MultiCoord b;
         
         public Edge()
         {
-            a = new CoordDouble(0.0, 0.0);
-            b = new CoordDouble(0.0, 1.0);
+            a = new MultiCoord();
+            b = new MultiCoord();
         }
-        public Edge(CoordDouble a, CoordDouble b)
+        public Edge(MultiCoord a, MultiCoord b)
         {
             this.a = a;
             this.b = b;
         }
         public Edge(double ax, double ay, double bx, double by)
         {
-            a = new CoordDouble(ax, ay);
-            b = new CoordDouble(bx, by);
+            a = new MultiCoord(new CoordDouble(ax, ay));
+            b = new MultiCoord(new CoordDouble(bx, by));
         }
     }
     
@@ -374,9 +409,26 @@ public class DelaunayTriangulator implements Serializable {
     {
         private static final long serialVersionUID = 1L;
 
-        public CoordDouble a;
-        public CoordDouble b;
-        public CoordDouble c;
+        public MultiCoord a;
+        public MultiCoord b;
+        public MultiCoord c;
+
+        /**
+         * Constructor of the 2D triangle class used to create a new triangle
+         * instance from three 2D vectors describing the triangle's vertices.
+         *
+         * @param a
+         *            The first vertex of the triangle
+         * @param b
+         *            The second vertex of the triangle
+         * @param c
+         *            The third vertex of the triangle
+         */
+        public Triangle(MultiCoord a, MultiCoord b, MultiCoord c) {
+            this.a = a;
+            this.b = b;
+            this.c = c;
+        }
 
         /**
          * Constructor of the 2D triangle class used to create a new triangle
@@ -390,9 +442,9 @@ public class DelaunayTriangulator implements Serializable {
          *            The third vertex of the triangle
          */
         public Triangle(CoordDouble a, CoordDouble b, CoordDouble c) {
-            this.a = a;
-            this.b = b;
-            this.c = c;
+            this.a = new MultiCoord(a);
+            this.b = new MultiCoord(b);
+            this.c = new MultiCoord(c);
         }
 
         /**
@@ -499,8 +551,11 @@ public class DelaunayTriangulator implements Serializable {
         public boolean isNeighbor(Edge edge) {
             return (a == edge.a || b == edge.a || c == edge.a) && (a == edge.b || b == edge.b || c == edge.b);
         }
-        public boolean isNeighbor(CoordDouble ea, CoordDouble eb) {
+        public boolean isNeighbor(MultiCoord ea, MultiCoord eb) {
             return (a == ea || b == ea || c == ea) && (a == eb || b == eb || c == eb);
+        }
+        public boolean isNeighbor(CoordDouble ea, CoordDouble eb) {
+            return (a.flat == ea || b.flat == ea || c.flat == ea) && (a.flat == eb || b.flat == eb || c.flat == eb);
         }
 
         /**
@@ -510,7 +565,7 @@ public class DelaunayTriangulator implements Serializable {
          *            The edge
          * @return The vertex of this triangle that is not part of the edge
          */
-        public CoordDouble getNonEdgeVertex(Edge edge) {
+        public MultiCoord getNonEdgeVertex(Edge edge) {
             if (a != edge.a && a != edge.b) {
                 return a;
             } else if (b != edge.a && b != edge.b) {
@@ -521,7 +576,7 @@ public class DelaunayTriangulator implements Serializable {
 
             return null;
         }
-        public CoordDouble getNonEdgeVertex(CoordDouble ea, CoordDouble eb) {
+        public MultiCoord getNonEdgeVertex(MultiCoord ea, MultiCoord eb) {
             if (a != ea && a != eb) {
                 return a;
             } else if (b != ea && b != eb) {
@@ -542,11 +597,26 @@ public class DelaunayTriangulator implements Serializable {
          * @return Returns true if the Vertex is one of the vertices describing this
          *         triangle
          */
-        public boolean hasVertex(CoordDouble vertex) {
+        public boolean hasVertex(MultiCoord vertex) {
             if (a == vertex || b == vertex || c == vertex) {
                 return true;
             }
+            return false;
+        }
 
+        /**
+         * Returns true if the given vertex is one of the vertices describing this
+         * triangle.
+         *
+         * @param vertex
+         *            The vertex to be tested
+         * @return Returns true if the Vertex is one of the vertices describing this
+         *         triangle
+         */
+        public boolean hasVertex(CoordDouble vertex) {
+            if (a.flat == vertex || b.flat == vertex || c.flat == vertex) {
+                return true;
+            }
             return false;
         }
 
@@ -561,11 +631,9 @@ public class DelaunayTriangulator implements Serializable {
          * @return The closest point on the given edge to the specified point
          */
         CoordDouble computeClosestPoint(Edge edge, CoordDouble point) {
-            //CoordDouble ab = edge.b.sub(edge.a);
             double abx = edge.b.x = edge.a.x;
             double aby = edge.b.y = edge.a.y;
             double t = ((point.x - edge.a.x) * abx + (point.y - edge.a.y) * aby) / (abx * abx + aby * aby);
-            //double t = point.sub(edge.a).dot(ab) / ab.dot(ab);
 
             if (t < 0.0d) {
                 t = 0.0d;
@@ -573,16 +641,15 @@ public class DelaunayTriangulator implements Serializable {
                 t = 1.0d;
             }
             return new CoordDouble(edge.a.x + abx * t, edge.a.y + aby * t);
-//            return edge.a.add(ab.mult(t));
         }
 
         /**
          * Tests if the two arguments have the same sign.
          *
          * @param a
-         *            The first floating point argument
+         *            The first double argument
          * @param b
-         *            The second floating point argument
+         *            The second double argument
          * @return Returns true iff both arguments have the same sign
          */
         private boolean hasSameSign(double a, double b) {
@@ -600,5 +667,4 @@ public class DelaunayTriangulator implements Serializable {
             return o1.compareTo(o2);
         }
     };
-
 }
