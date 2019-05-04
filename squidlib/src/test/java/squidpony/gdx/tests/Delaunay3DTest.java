@@ -6,7 +6,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidmath.Delaunay3D;
 import squidpony.squidmath.NumberTools;
@@ -25,11 +26,17 @@ public class Delaunay3DTest extends ApplicationAdapter {
     private Delaunay3D tri;
     private ArrayList<Delaunay3D.Triangle> tris;
     private OrderedSet<? extends Color> palette;
-    private SpriteBatch batch;
+    private ImmediateModeRenderer20 imr;
+    private ShaderProgram shader;
     private OrthographicCamera camera;
+//    private Texture whiteSquare;
 
     @Override
     public void create() {
+//        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+//        pixmap.setColor(-1);
+//        pixmap.fill();
+//        whiteSquare = new Texture(pixmap);
         double[] points = new double[256 * 3];
         for (int i = 0; i < 256; i++) {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
@@ -67,23 +74,37 @@ public class Delaunay3DTest extends ApplicationAdapter {
                 return (diff >> 31) | ((-diff) >>> 31); // project nayuki signum
             }
         });
-        batch = new SpriteBatch();
+        shader = new ShaderProgram("attribute vec3 a_position;\n" +
+                "attribute vec4 a_color;\n" +
+//                "uniform mat4 u_projTrans;\n" +
+                "varying vec4 v_color;\n" +
+                "void main() {\n" +
+                "  v_color = a_color;\n" +
+                "  gl_Position = a_position;\n" +
+                "}\n",
+                "varying vec4 v_color;\n" +
+                        "void main(){\n" +
+                        "  gl_FragColor = v_color;\n" +
+                        "}");
+        imr = new ImmediateModeRenderer20(25000, false, true, 0, shader);
+        camera = new OrthographicCamera(512, 512);
         mesh = new Mesh(true, tris.size() * 3, 256, VertexAttribute.Position(), VertexAttribute.ColorPacked());
         float[] fp = new float[tris.size() * 12];
         //short[] sp = new short[256];
         for (int i = 0; i < tris.size(); i++) {
+            float c = palette.getAt(i % palette.size()).toFloatBits();
             fp[i * 12 + 0] = (float) tris.get(i).a.x * 256f + 256f;
             fp[i * 12 + 1] = (float) tris.get(i).a.y * 256f + 256f;
             fp[i * 12 + 2] = (float) tris.get(i).a.z * 256f + 256f;
-            fp[i * 12 + 3] = palette.getAt(i % palette.size()).toFloatBits();
+            fp[i * 12 + 3] = c;
             fp[i * 12 + 4] = (float) tris.get(i).b.x * 256f + 256f;
             fp[i * 12 + 5] = (float) tris.get(i).b.y * 256f + 256f;
             fp[i * 12 + 6] = (float) tris.get(i).b.z * 256f + 256f;
-            fp[i * 12 + 7] = palette.getAt(i % palette.size()).toFloatBits();
+            fp[i * 12 + 7] = c;
             fp[i * 12 + 8] = (float) tris.get(i).c.x * 256f + 256f;
             fp[i * 12 + 9] = (float) tris.get(i).c.y * 256f + 256f;
             fp[i * 12 + 10] = (float) tris.get(i).c.z * 256f + 256f;
-            fp[i * 12 + 11] = palette.getAt(i % palette.size()).toFloatBits();
+            fp[i * 12 + 11] = c;
             //sp[i] = (short)i;
         }
         mesh.setVertices(fp);
@@ -96,9 +117,22 @@ public class Delaunay3DTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        batch.begin();
-        mesh.render(batch.getShader(), GL20.GL_TRIANGLES);
-        batch.end();
+        Gdx.gl.glEnable(GL20.GL_CULL_FACE);
+        Gdx.gl.glCullFace(GL20.GL_BACK);
+        
+        //set the depth test function to LESS
+        Gdx.gl.glDepthFunc(GL20.GL_LESS);
+
+        //5. enable depth writing
+        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+        Gdx.gl.glDepthMask(true);
+        
+        shader.begin();
+        //whiteSquare.bind(0);
+//        shader.setUniformMatrix("u_projTrans", camera.combined);
+        camera.update();
+        mesh.render(shader, GL20.GL_TRIANGLES, 0, mesh.getNumVertices());
+        shader.end();
     }
 
     public static void main (String[] arg) {
@@ -108,6 +142,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
         config.height = 512;
         config.vSyncEnabled = false;
         config.foregroundFPS = 0;
+        config.depth = 16;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
         config.addIcon("Tentacle-64.png", Files.FileType.Internal);
