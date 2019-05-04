@@ -76,11 +76,11 @@ public class Delaunay3DTest extends ApplicationAdapter {
         });
         shader = new ShaderProgram("attribute vec3 a_position;\n" +
                 "attribute vec4 a_color;\n" +
-//                "uniform mat4 u_projTrans;\n" +
+                "uniform mat4 u_projTrans;\n" +
                 "varying vec4 v_color;\n" +
                 "void main() {\n" +
                 "  v_color = a_color;\n" +
-                "  gl_Position = a_position;\n" +
+                "  gl_Position = u_projTrans * vec4(a_position, 0.0);\n" +
                 "}\n",
                 "varying vec4 v_color;\n" +
                         "void main(){\n" +
@@ -115,8 +115,9 @@ public class Delaunay3DTest extends ApplicationAdapter {
     public void render() {
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
+        Gdx.gl.glClearDepthf(1f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        
         Gdx.gl.glEnable(GL20.GL_CULL_FACE);
         Gdx.gl.glCullFace(GL20.GL_BACK);
         
@@ -129,8 +130,8 @@ public class Delaunay3DTest extends ApplicationAdapter {
         
         shader.begin();
         //whiteSquare.bind(0);
-//        shader.setUniformMatrix("u_projTrans", camera.combined);
         camera.update();
+        shader.setUniformMatrix("u_projTrans", camera.combined);
         mesh.render(shader, GL20.GL_TRIANGLES, 0, mesh.getNumVertices());
         shader.end();
     }
