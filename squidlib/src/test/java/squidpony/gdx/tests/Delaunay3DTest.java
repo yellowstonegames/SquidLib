@@ -5,10 +5,10 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import squidpony.Maker;
+import com.badlogic.gdx.math.Matrix4;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidmath.Delaunay3D;
 import squidpony.squidmath.NumberTools;
@@ -22,13 +22,12 @@ import java.util.Comparator;
  * Created by Tommy Ettinger on 7/24/2017.
  */
 public class Delaunay3DTest extends ApplicationAdapter {
-    private Mesh mesh;
     private Delaunay3D tri;
     private ArrayList<Delaunay3D.Triangle> tris;
     private OrderedSet<? extends Color> palette;
     private ImmediateModeRenderer20 imr;
-    private ShaderProgram shader;
-    private OrthographicCamera camera;
+    private Matrix4 proj;
+    private float[] vertices;
 //    private Texture whiteSquare;
 
     @Override
@@ -37,6 +36,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //        pixmap.setColor(-1);
 //        pixmap.fill();
 //        whiteSquare = new Texture(pixmap);
+
         double[] points = new double[256 * 3];
         for (int i = 0; i < 256; i++) {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
@@ -49,8 +49,9 @@ public class Delaunay3DTest extends ApplicationAdapter {
             points[i * 3 + 1] = NumberTools.sin(lon) * clat;
             points[i * 3 + 2] = NumberTools.sin(lat);
         }
-//        tri = new Delaunay3D(points);
-//        tris = tri.triangulate();
+
+        tri = new Delaunay3D(points);
+        tris = tri.triangulate();
 //        Collections.sort(tris, new Comparator<Delaunay3D.Triangle>() {
 //            @Override
 //            public int compare(Delaunay3D.Triangle t1, Delaunay3D.Triangle t2) {
@@ -63,7 +64,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
         palette = new OrderedSet<>(SColor.FULL_PALETTE);
         for (int i = palette.size() - 1; i >= 0; i--) {
             Color c = palette.getAt(i);
-            if(c.a < 1f || SColor.saturation(c) < 0.3f || SColor.value(c) < 0.35f)
+            if(c.a < 1f || SColor.saturation(c) < 0.5f || SColor.value(c) < 0.35f)
                 palette.removeAt(i);
         }
         palette.sort(new Comparator<Color>() {
@@ -74,72 +75,56 @@ public class Delaunay3DTest extends ApplicationAdapter {
                 return (diff >> 31) | ((-diff) >>> 31); // project nayuki signum
             }
         });
-        shader = new ShaderProgram("attribute vec3 a_position;\n" +
-                "attribute vec4 a_color;\n" +
-                "uniform mat4 u_projTrans;\n" +
-                "varying vec4 v_color;\n" +
-                "void main() {\n" +
-                "  v_color = a_color;\n" +
-                "  gl_Position = u_projTrans * vec4(a_position, 0.0);\n" +
-                "}\n",
-                "varying vec4 v_color;\n" +
-                        "void main(){\n" +
-                        "  gl_FragColor = v_color;\n" +
-                        "}");
-        imr = new ImmediateModeRenderer20(25000, false, true, 0, shader);
-        camera = new OrthographicCamera(512, 512);
+        imr = new ImmediateModeRenderer20(false, true, 0);
+        proj = new Matrix4();
         
-        tris = Maker.makeList(new Delaunay3D.Triangle(new Delaunay3D.MultiCoord(2.0, -1.0, -1.0),
-                new Delaunay3D.MultiCoord(-2.0, 0.0, 0.0),
-                new Delaunay3D.MultiCoord(1.0, 2.0, 1.0)));
+//        tris = Maker.makeList(new Delaunay3D.Triangle(new Delaunay3D.MultiCoord(2.0, -1.0, 1.0),
+//                new Delaunay3D.MultiCoord(-2.0, 0.0, 0.0),
+//                new Delaunay3D.MultiCoord(1.0, 2.0, 0.0)));
         
-        mesh = new Mesh(true, tris.size() * 3, 0, VertexAttribute.Position(), VertexAttribute.ColorPacked());
-        float[] fp = new float[tris.size() * 12];
-        //short[] sp = new short[256];
+        vertices = new float[tris.size() * 12];
         for (int i = 0; i < tris.size(); i++) {
-//            float c = palette.getAt(i % palette.size()).toFloatBits();
-            float c = SColor.RED.toFloatBits();
-            fp[i * 12 + 0] = (float) tris.get(i).a.x * 256f;
-            fp[i * 12 + 1] = (float) tris.get(i).a.y * 256f;
-            fp[i * 12 + 2] = (float) tris.get(i).a.z * 256f;
-            fp[i * 12 + 3] = c;
-            fp[i * 12 + 4] = (float) tris.get(i).b.x * 256f;
-            fp[i * 12 + 5] = (float) tris.get(i).b.y * 256f;
-            fp[i * 12 + 6] = (float) tris.get(i).b.z * 256f;
-            fp[i * 12 + 7] = c;
-            fp[i * 12 + 8] = (float) tris.get(i).c.x * 256f;
-            fp[i * 12 + 9] = (float) tris.get(i).c.y * 256f;
-            fp[i * 12 + 10] = (float) tris.get(i).c.z * 256f;
-            fp[i * 12 + 11] = c;
-            //sp[i] = (short)i;
+            float c = palette.getAt(i % palette.size()).toFloatBits();
+//            float c = SColor.RED.toFloatBits();
+            vertices[i * 12 + 0] = (float) tris.get(i).a.x * 256f;
+            vertices[i * 12 + 1] = (float) tris.get(i).a.y * 256f;
+            vertices[i * 12 + 2] = (float) tris.get(i).a.z * 256f;
+            vertices[i * 12 + 3] = c;
+            vertices[i * 12 + 4] = (float) tris.get(i).b.x * 256f;
+            vertices[i * 12 + 5] = (float) tris.get(i).b.y * 256f;
+            vertices[i * 12 + 6] = (float) tris.get(i).b.z * 256f;
+            vertices[i * 12 + 7] = c;
+            vertices[i * 12 + 8] = (float) tris.get(i).c.x * 256f;
+            vertices[i * 12 + 9] = (float) tris.get(i).c.y * 256f;
+            vertices[i * 12 + 10] = (float) tris.get(i).c.z * 256f;
+            vertices[i * 12 + 11] = c;
         }
-        mesh.setVertices(fp);
-        //mesh.setIndices(sp);
     }
 
     @Override
     public void render() {
+        proj.setToOrtho2D(-300, -300, 600, 600, -300, 300);
+
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
-        Gdx.gl.glClearDepthf(1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         
-        Gdx.gl.glEnable(GL20.GL_CULL_FACE);
-        Gdx.gl.glCullFace(GL20.GL_BACK);
-        
+//        Gdx.gl.glEnable(GL20.GL_CULL_FACE);
+//        Gdx.gl.glCullFace(GL20.GL_BACK);
+//        
         //set the depth test function to LESS
-        Gdx.gl.glDepthFunc(GL20.GL_LESS);
+//        Gdx.gl.glDepthFunc(GL20.GL_LESS);
 
         //5. enable depth writing
-        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
-        Gdx.gl.glDepthMask(true);
+//        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+//        Gdx.gl.glDepthMask(true);
         
-        shader.begin();
-        //whiteSquare.bind(0);
-        camera.update();
-        shader.setUniformMatrix("u_projTrans", camera.combined);
-        mesh.render(shader, GL20.GL_TRIANGLES, 0, mesh.getNumVertices());
-        shader.end();
+        imr.begin(proj, GL20.GL_TRIANGLES);
+        for (int i = 3; i < vertices.length; i += 4) {
+            imr.color(vertices[i]);
+            imr.vertex(vertices[i - 3], vertices[i - 2], vertices[i - 1]);
+        }
+        imr.end();
     }
 
     public static void main (String[] arg) {
