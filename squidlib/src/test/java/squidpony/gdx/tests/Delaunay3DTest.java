@@ -8,6 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import squidpony.Maker;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidmath.Delaunay3D;
 import squidpony.squidmath.NumberTools;
@@ -15,7 +16,6 @@ import squidpony.squidmath.OrderedSet;
 import squidpony.squidmath.VanDerCorputQRNG;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -49,17 +49,17 @@ public class Delaunay3DTest extends ApplicationAdapter {
             points[i * 3 + 1] = NumberTools.sin(lon) * clat;
             points[i * 3 + 2] = NumberTools.sin(lat);
         }
-        tri = new Delaunay3D(points);
-        tris = tri.triangulate();
-        Collections.sort(tris, new Comparator<Delaunay3D.Triangle>() {
-            @Override
-            public int compare(Delaunay3D.Triangle t1, Delaunay3D.Triangle t2) {
-                return Double.compare(
-                        t1.a.flat.distanceSq(0.0, 0.0) + t1.b.flat.distanceSq(0.0, 0.0) + t1.c.flat.distanceSq(0.0, 0.0),
-                        t2.a.flat.distanceSq(0.0, 0.0) + t2.b.flat.distanceSq(0.0, 0.0) + t2.c.flat.distanceSq(0.0, 0.0)
-                );
-            }
-        });
+//        tri = new Delaunay3D(points);
+//        tris = tri.triangulate();
+//        Collections.sort(tris, new Comparator<Delaunay3D.Triangle>() {
+//            @Override
+//            public int compare(Delaunay3D.Triangle t1, Delaunay3D.Triangle t2) {
+//                return Double.compare(
+//                        t1.a.flat.distanceSq(0.0, 0.0) + t1.b.flat.distanceSq(0.0, 0.0) + t1.c.flat.distanceSq(0.0, 0.0),
+//                        t2.a.flat.distanceSq(0.0, 0.0) + t2.b.flat.distanceSq(0.0, 0.0) + t2.c.flat.distanceSq(0.0, 0.0)
+//                );
+//            }
+//        });
         palette = new OrderedSet<>(SColor.FULL_PALETTE);
         for (int i = palette.size() - 1; i >= 0; i--) {
             Color c = palette.getAt(i);
@@ -88,22 +88,28 @@ public class Delaunay3DTest extends ApplicationAdapter {
                         "}");
         imr = new ImmediateModeRenderer20(25000, false, true, 0, shader);
         camera = new OrthographicCamera(512, 512);
-        mesh = new Mesh(true, tris.size() * 3, 256, VertexAttribute.Position(), VertexAttribute.ColorPacked());
+        
+        tris = Maker.makeList(new Delaunay3D.Triangle(new Delaunay3D.MultiCoord(2.0, -1.0, -1.0),
+                new Delaunay3D.MultiCoord(-2.0, 0.0, 0.0),
+                new Delaunay3D.MultiCoord(1.0, 2.0, 1.0)));
+        
+        mesh = new Mesh(true, tris.size() * 3, 0, VertexAttribute.Position(), VertexAttribute.ColorPacked());
         float[] fp = new float[tris.size() * 12];
         //short[] sp = new short[256];
         for (int i = 0; i < tris.size(); i++) {
-            float c = palette.getAt(i % palette.size()).toFloatBits();
-            fp[i * 12 + 0] = (float) tris.get(i).a.x * 256f + 256f;
-            fp[i * 12 + 1] = (float) tris.get(i).a.y * 256f + 256f;
-            fp[i * 12 + 2] = (float) tris.get(i).a.z * 256f + 256f;
+//            float c = palette.getAt(i % palette.size()).toFloatBits();
+            float c = SColor.RED.toFloatBits();
+            fp[i * 12 + 0] = (float) tris.get(i).a.x * 256f;
+            fp[i * 12 + 1] = (float) tris.get(i).a.y * 256f;
+            fp[i * 12 + 2] = (float) tris.get(i).a.z * 256f;
             fp[i * 12 + 3] = c;
-            fp[i * 12 + 4] = (float) tris.get(i).b.x * 256f + 256f;
-            fp[i * 12 + 5] = (float) tris.get(i).b.y * 256f + 256f;
-            fp[i * 12 + 6] = (float) tris.get(i).b.z * 256f + 256f;
+            fp[i * 12 + 4] = (float) tris.get(i).b.x * 256f;
+            fp[i * 12 + 5] = (float) tris.get(i).b.y * 256f;
+            fp[i * 12 + 6] = (float) tris.get(i).b.z * 256f;
             fp[i * 12 + 7] = c;
-            fp[i * 12 + 8] = (float) tris.get(i).c.x * 256f + 256f;
-            fp[i * 12 + 9] = (float) tris.get(i).c.y * 256f + 256f;
-            fp[i * 12 + 10] = (float) tris.get(i).c.z * 256f + 256f;
+            fp[i * 12 + 8] = (float) tris.get(i).c.x * 256f;
+            fp[i * 12 + 9] = (float) tris.get(i).c.y * 256f;
+            fp[i * 12 + 10] = (float) tris.get(i).c.z * 256f;
             fp[i * 12 + 11] = c;
             //sp[i] = (short)i;
         }
