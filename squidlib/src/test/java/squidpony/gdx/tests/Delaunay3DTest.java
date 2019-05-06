@@ -131,21 +131,22 @@ public class Delaunay3DTest extends ApplicationAdapter {
 
     @Override
     public void render() {
+        Gdx.graphics.setTitle("Delaunay Triangulation at " + Gdx.graphics.getFramesPerSecond() + "FPS");
         proj.setToOrtho2D(-300, -300, 600, 600, -300, 300);
 
         // standard clear the background routine for libGDX
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         
-//        Gdx.gl.glEnable(GL20.GL_CULL_FACE);
-//        Gdx.gl.glCullFace(GL20.GL_BACK);
+        Gdx.gl.glEnable(GL20.GL_CULL_FACE);
+        Gdx.gl.glCullFace(GL20.GL_BACK);
 //        
 //        //set the depth test function to LESS
-//        Gdx.gl.glDepthFunc(GL20.GL_LESS);
+        Gdx.gl.glDepthFunc(GL20.GL_LESS);
 
 //        //5. enable depth writing
-//        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
-//        Gdx.gl.glDepthMask(true);
+        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
+        Gdx.gl.glDepthMask(true);
         
         imr.begin(proj, GL20.GL_TRIANGLES);
         float lonA, clatA, xA, yA, zA,
@@ -197,7 +198,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
             yCr *= norm;
             zCr *= norm;
 
-            if (xCen * xCr + yCen * yCr + zCen * zCr < 0f) {
+            if (xCen * xCr + yCen * yCr + zCen * zCr > 0f) {
                 imr.color(vertices[i - 9]);
                 imr.vertex(xA, yA, zA);
                 imr.color(vertices[i - 9]);
