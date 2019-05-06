@@ -110,13 +110,22 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //            vertices[i * 12 + 10] = (float) tris.get(i).c.z * 256f;
 //            vertices[i * 12 + 11] = c;
 //        }
-        vertices = new float[triangles.size * 4];
-        for (int i = 0; i < triangles.size; i++) {
-            int idx = triangles.get(i);
-            vertices[i * 4 + 0] = lon_clat[idx*2];//points[idx] * 256f;
-            vertices[i * 4 + 1] = lon_clat[idx*2+1];//points[idx+1] * 256f;
-            vertices[i * 4 + 2] = points[idx*3+2] * 256f;
-            vertices[i * 4 + 3] = palette.getAt(i % palette.size()).toFloatBits();
+        vertices = new float[(triangles.size / 3) * 10];
+        int idx;
+        for (int t = 2, i = 0; t < triangles.size; t+=3) {
+            vertices[i++] = palette.getAt(t % palette.size()).toFloatBits();
+            idx = triangles.get(t-2);
+            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
+            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+            vertices[i++] = points[idx*3+2] * 256f;
+            idx = triangles.get(t-1);
+            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
+            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+            vertices[i++] = points[idx*3+2] * 256f;
+            idx = triangles.get(t);
+            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
+            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+            vertices[i++] = points[idx*3+2] * 256f;
         }
     }
 
@@ -139,12 +148,72 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //        Gdx.gl.glDepthMask(true);
         
         imr.begin(proj, GL20.GL_TRIANGLES);
-        float lon, clat, time = TimeUtils.timeSinceMillis(startTime) * 0.0006f;
-        for (int i = 3; i < vertices.length; i += 4) {
-            imr.color(vertices[i]);
-            lon = vertices[i - 3] + time;
-            clat = vertices[i - 2];
-            imr.vertex(MathUtils.cos(lon) * clat * 256f, vertices[i - 1], MathUtils.sin(lon) * clat * 256f);
+        float lonA, clatA, xA, yA, zA,
+                lonB, clatB, xB, yB, zB,
+                lonC, clatC, xC, yC, zC,
+                xCen, yCen, zCen, norm,
+                xM, yM, zM,
+                xN, yN, zN,
+                xCr, yCr, zCr,
+                time = TimeUtils.timeSinceMillis(startTime) * 0.0006f;
+        for (int i = 9; i < vertices.length; i += 10) {
+            lonA = vertices[i - 8] + time;
+            clatA = vertices[i - 7];
+            zA = MathUtils.sin(lonA) * clatA;
+            xA = MathUtils.cos(lonA) * clatA;
+            yA = vertices[i - 6];
+            lonB = vertices[i - 5] + time;
+            clatB = vertices[i - 4];
+            zB = MathUtils.sin(lonB) * clatB;
+            xB = MathUtils.cos(lonB) * clatB;
+            yB = vertices[i - 3];
+            lonC = vertices[i - 2] + time;
+            clatC = vertices[i - 1];
+            zC = MathUtils.sin(lonC) * clatC;
+            xC = MathUtils.cos(lonC) * clatC;
+            yC = vertices[i];
+
+            xCen = (xA + xB + xC) / 3f;
+            yCen = (yA + yB + yC) / 3f;
+            zCen = (zA + zB + zC) / 3f;
+            norm = 1f / (float) Math.sqrt(xCen * xCen + yCen * yCen + zCen * zCen);
+            xCen *= norm;
+            yCen *= norm;
+            zCen *= norm;
+
+            xM = xA - xB;
+            yM = yA - yB;
+            zM = zA - zB;
+
+            xN = xB - xC;
+            yN = yB - yC;
+            zN = zB - zC;
+
+            xCr = yM * zN - zM * yN;
+            yCr = zM * xN - xM * zN;
+            zCr = xM * yN - yM * xN;
+            norm = 1f / (float) Math.sqrt(xCr * xCr + yCr * yCr + zCr * zCr);
+            xCr *= norm;
+            yCr *= norm;
+            zCr *= norm;
+
+            if (xCen * xCr + yCen * yCr + zCen * zCr < 0f) {
+                imr.color(vertices[i - 9]);
+                imr.vertex(xA, yA, zA);
+                imr.color(vertices[i - 9]);
+                imr.vertex(xB, yB, zB);
+                imr.color(vertices[i - 9]);
+                imr.vertex(xC, yC, zC);
+            }
+            else 
+            {
+                imr.color(vertices[i - 9]);
+                imr.vertex(xA, yA, zA);
+                imr.color(vertices[i - 9]);
+                imr.vertex(xC, yC, zC);
+                imr.color(vertices[i - 9]);
+                imr.vertex(xB, yB, zB);
+            }
         }
         imr.end();
     }
