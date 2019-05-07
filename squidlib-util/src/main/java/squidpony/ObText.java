@@ -82,10 +82,10 @@ import static squidpony.ArrayTools.letters;
  */
 @Beta
 public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializable{
-    private static final long serialVersionUID = 6L;
+    private static final long serialVersionUID = 7L;
     public static class ObTextEntry implements Serializable
     {
-        private static final long serialVersionUID = 5L;
+        private static final long serialVersionUID = 7L;
         public String primary;
         public ArrayList<ObTextEntry> associated;
         public ObTextEntry()
@@ -131,14 +131,22 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
         }
         public ArrayList<String> allAssociatedStrings()
         {
-            ObTextEntry got;
-            if(associated == null || associated.isEmpty() || (got = associated.get(0)) == null)
+            if(associated == null || associated.isEmpty())
                 return new ArrayList<>(1);
-            int sz = got.associated.size();
+            int sz = associated.size();
             ArrayList<String> strings = new ArrayList<>(sz);
             for (int i = 0; i < sz; i++) {
-                strings.add(got.associated.get(i).primary);
+                strings.add(associated.get(i).primary);
             }
+            return strings;
+        }
+        public ArrayList<String> shallowContents()
+        {
+            if(associated == null || associated.isEmpty())
+                return new ArrayList<>(1);
+            int sz = associated.size();
+            ArrayList<String> strings = new ArrayList<>(sz);
+            iterate(strings, associated);
             return strings;
         }
         public ObTextEntry firstAssociatedEntry()
@@ -423,18 +431,31 @@ public class ObText extends ArrayList<ObText.ObTextEntry> implements Serializabl
         return new ObText(data);
     }
 
-    private static void iterate(StringBuilder sb, List<ObTextEntry> it)
+    private static void iterate(StringBuilder sb, ArrayList<ObTextEntry> obt)
     {
-        int len = it.size();
+        int len = obt.size();
         ObTextEntry entry;
         for (int i = 0; i < len; i++) {
-            appendQuotedObText(sb, (entry = it.get(i)).primary);
+            appendQuotedObText(sb, (entry = obt.get(i)).primary);
             sb.append('\n');
             if(entry.hasAssociated())
             {
                 sb.append("[\n");
                 iterate(sb, entry.associated);
                 sb.append("]\n");
+            }
+        }
+    }
+
+    private static void iterate(ArrayList<String> buffer, ArrayList<ObTextEntry> obt)
+    {
+        int len = obt.size();
+        ObTextEntry entry;
+        for (int i = 0; i < len; i++) {
+            buffer.add((entry = obt.get(i)).primary);
+            if(entry.hasAssociated())
+            {
+                iterate(buffer, entry.associated);
             }
         }
     }
