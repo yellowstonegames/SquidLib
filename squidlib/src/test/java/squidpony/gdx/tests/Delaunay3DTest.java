@@ -24,6 +24,7 @@ import java.util.Comparator;
  * Created by Tommy Ettinger on 7/24/2017.
  */
 public class Delaunay3DTest extends ApplicationAdapter {
+    private static final int SIZE = 512;
 //    private Delaunay3D tri;
 //    private ArrayList<Delaunay3D.Triangle> tris;
     private OrderedSet<? extends Color> palette;
@@ -41,24 +42,28 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //        pixmap.fill();
 //        whiteSquare = new Texture(pixmap);
 
-        float[] points = new float[256 * 3];
-        float[] pairs = new float[256 * 2];
-        float[] lon_clat = new float[256 * 2];
-        for (int i = 0; i < 256; i++) {
+        float[] points = new float[SIZE * 3];
+        float[] pairs = new float[SIZE * 2];
+        float[] lon_clat = new float[SIZE * 2];
+//        float[] lon_lat = new float[SIZE * 2];
+//        short[] links = new short[SIZE * 3];
+        for (int i = 0; i < SIZE; i++) {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
 //            points.add(new CoordDouble(386.4973651183067 * (i + 1) % 500.0 + rng.nextDouble(12.0),
 //                    291.75822899100325 * (i + 1) % 500.0 + rng.nextDouble(12.0)));
             float lon = (float) (VanDerCorputQRNG.determine2(i) * Math.PI * 2.0);
             float lat = (float) ((VanDerCorputQRNG.determine(3, i) - 0.5) * Math.PI);
-            float clat = NumberTools.cos(lat);
+//            lon_lat[i * 2] = lon;
+//            lon_lat[i * 2 + 1] = lat;
+            float clat = MathUtils.cos(lat);
             lon_clat[i * 2] = lon;
             lon_clat[i * 2 + 1] = clat;
             float x, y, z;
-            points[i * 3] = x = NumberTools.cos(lon) * clat;
-            points[i * 3 + 1] = y = NumberTools.sin(lon) * clat;
-            points[i * 3 + 2] = z = NumberTools.sin(lat);
-            pairs[i * 2] = (float) (x / (1.0 - z));
-            pairs[i * 2 + 1] = (float) (y / (1.0 - z));
+            points[i * 3] = x = MathUtils.cos(lon) * clat;
+            points[i * 3 + 1] = y = MathUtils.sin(lon) * clat;
+            points[i * 3 + 2] = z = MathUtils.sin(lat);
+            pairs[i * 2] = x / (1f - z);
+            pairs[i * 2 + 1] = y / (1f - z);
         }
 
 //        tri = new Delaunay3D(points);
@@ -87,7 +92,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
                 return (diff >> 31) | ((-diff) >>> 31); // project nayuki signum
             }
         });
-        imr = new ImmediateModeRenderer20(false, true, 0);
+        imr = new ImmediateModeRenderer20(30000, false, true, 0);
         proj = new Matrix4();
         
 //        tris = Maker.makeList(new Delaunay3D.Triangle(new Delaunay3D.MultiCoord(2.0, -1.0, 1.0),
@@ -177,10 +182,10 @@ public class Delaunay3DTest extends ApplicationAdapter {
             xCen = (xA + xB + xC) / 3f;
             yCen = (yA + yB + yC) / 3f;
             zCen = (zA + zB + zC) / 3f;
-            norm = 1f / (float) Math.sqrt(xCen * xCen + yCen * yCen + zCen * zCen);
-            xCen *= norm;
-            yCen *= norm;
-            zCen *= norm;
+//            norm = 1f / (float) Math.sqrt(xCen * xCen + yCen * yCen + zCen * zCen);
+//            xCen *= norm;
+//            yCen *= norm;
+//            zCen *= norm;
 
             xM = xA - xB;
             yM = yA - yB;
@@ -193,12 +198,12 @@ public class Delaunay3DTest extends ApplicationAdapter {
             xCr = yM * zN - zM * yN;
             yCr = zM * xN - xM * zN;
             zCr = xM * yN - yM * xN;
-            norm = 1f / (float) Math.sqrt(xCr * xCr + yCr * yCr + zCr * zCr);
-            xCr *= norm;
-            yCr *= norm;
-            zCr *= norm;
+//            norm = 1f / (float) Math.sqrt(xCr * xCr + yCr * yCr + zCr * zCr);
+//            xCr *= norm;
+//            yCr *= norm;
+//            zCr *= norm;
 
-            if (xCen * xCr + yCen * yCr + zCen * zCr > 0f) {
+            if (xCen * xCr + yCen * yCr + zCen * zCr >= 0f) {
                 imr.color(vertices[i - 9]);
                 imr.vertex(xA, yA, zA);
                 imr.color(vertices[i - 9]);
