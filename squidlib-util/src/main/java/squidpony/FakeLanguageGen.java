@@ -2577,6 +2577,51 @@ public class FakeLanguageGen implements Serializable {
     // for future reference, consult https://en.wiktionary.org/wiki/Module:egy-pron-Egyptological
     public static final FakeLanguageGen ANCIENT_EGYPTIAN = ancientEgyptian().register("Ancient Egyptian");
 
+    private static FakeLanguageGen crow(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a","a", "a", "a","a", "a", "a", "á", "á", "aa", "aa", "áá", "áa",
+                        "e", "e", "e", "e", "e", "e", "ee", "ée", "é", "éé",
+                        "i", "i", "i", "i", "i", "i", "i", "i", "i", "i", "ii", "íí", "íi", "í",
+                        "o", "o", "o", "o", "o", "o", "o", "oo", "óó", "óo", "ó",
+                        "u", "u","u", "u","u", "u","u", "u", "u", "u", "uu", "úú", "úu", "ú",
+                        "ia", "ua", "ia", "ua", "ia", "ua", "ia", "ua", "ía", "úa"
+                },
+                new String[]{
+                },
+                new String[]{
+                        "b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s"},
+                new String[]{
+                        "bb", "pp", "ss", "kk", "ll", "mm", "nn", "dd", "tt",
+                        "kk", "kk", "mm", "kk", "kk", "mm", "dd", "ss",
+                        "b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s",
+                        "b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s",
+                        "b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s",
+                        "b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s",
+                        "b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s",
+                        "b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s"
+                },
+                new String[]{"b", "p", "s", "x", "k", "l", "m", "n", "d", "t", "h", "w", "ch", "sh",
+                        "k", "k", "m", "k", "k", "m", "d", "s"
+                },
+                new String[]{
+                },
+                new String[]{"-"}, new int[]{1, 2, 3, 4, 5}, new double[]{5, 7, 6, 4, 2}, 0.4, 1.0, 0.12, 0.0, null, true);
+    }
+    /**
+     * A rough imitation of the Crow language of the American Midwest, using some tone marks. Some of the orthography
+     * rules aren't clear across Internet information about the language, so this really is a "fake" language it will be
+     * generating, not the real thing at all.
+     * <br>
+     * Pashu-umíkiki; chinébúlu ak kóokutú shu-eníí-a ipíimúu heekokáakoku?
+     */
+    public static final FakeLanguageGen CROW = crow().register("Crow");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
@@ -2635,7 +2680,7 @@ public class FakeLanguageGen implements Serializable {
      */
     public static final FakeLanguageGen[] romanizedHumanLanguages = {
             ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH, MAORI,
-            GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI
+            GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI, CROW
     };
 
     /**
