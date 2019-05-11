@@ -13655,9 +13655,14 @@ B = t - Co;
         //r = (warm * 5 - mild * 4 + luma * 8) / 8; r5 - b5 - g4 + b4 + r3 + g4 + b1
         //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
         //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
-        return floatGet(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
-                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
-                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+//        return floatGet(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+//                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+        return floatGet(
+                MathUtils.clamp(luma + warm * 0.5f, 0f, 1f),
+                MathUtils.clamp(luma + mild * 0.5f, 0f, 1f),
+                MathUtils.clamp(luma - (warm + mild) * 0.25f, 0f, 1f), opacity);
+
     }
     /**
      * Gets a color as a packed float given floats representing luma (Y, akin to lightness), chroma warm (Cw, one of two
@@ -13682,9 +13687,12 @@ B = t - Co;
      * @return a libGDX Color with the given properties
      */
     public static Color ycwcm(float luma, float warm, float mild, float opacity) {
-        return new Color(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
-                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
-                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+        return new Color(MathExtras.clamp(luma + warm * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma - (warm + mild) * 0.25f, 0f, 1f), opacity);
+//        return new Color(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+//                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
     }
 
 

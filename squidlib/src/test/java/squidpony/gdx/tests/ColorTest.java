@@ -35,7 +35,7 @@ public class ColorTest extends ApplicationAdapter {
 //    private static int gridWidth = 103;
 //    private static int gridWidth = 140;
     /**
-     * In number of cells e3c896 f9c79f
+     * In number of cells
      */
     private static int gridHeight = 32;
 //    private static int gridHeight = 256;
@@ -52,7 +52,8 @@ public class ColorTest extends ApplicationAdapter {
 //    private static int cellHeight = 2;
     private static int cellHeight = 21;
 
-    private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
+    private static int totalWidth = 512, totalHeight = 512;
+//    private static int totalWidth = gridWidth * cellWidth, totalHeight = gridHeight * cellHeight;
 
 
 
@@ -305,7 +306,8 @@ public class ColorTest extends ApplicationAdapter {
         //g = (mild * 4 - warm * 3 + luma * 8) / 8; g4 - b4 - r3 + b3 + r3 + g4 + b1
         //b = (luma * 8 - warm * 3 - mild * 4) / 8; r3 + g4 + b1 - r3 + b3 - g4 + b4
         //// used in WarpWriter, not sure if optimal
-//        return floatGet(MathExtras.clamp(luma + warm * 0.625f, 0f, 1f),
+//        return floatGet(
+//                MathExtras.clamp(luma + warm * 0.625f, 0f, 1f),
 //                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
 //                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
 
@@ -316,21 +318,40 @@ public class ColorTest extends ApplicationAdapter {
                 MathExtras.clamp(luma - warm * 0.25f - mild * 0.25f, 0f, 1f), opacity);
 
         //// original
-//        return floatGet(MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+//        return floatGet(
+//                MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
 //                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
 //                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
 
     }
 
 
-    private void ycc(float y, float cb, float cr)
+    private void ycc(float y, float warm, float mild)
     {
-        final int b = (int) ((cb + 1f) * 255.5f), r = (int) ((1f - cr) * 255.f);
+        final int b = (int) ((warm + 1f) * 255.5f), r = (int) ((1f - mild) * 255.5f);
 //        SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(y, cb, cr, 1f));
 //        display.putString(b, r, StringKit.hex(b) + "x" + StringKit.hex(r), y < 0.65f ? SColor.WHITE : SColor.BLACK,
 //                tmp);
-        
-        colors[b][r] = floatGetYCwCm(y, cb, cr, 1f);
+//        float red = luma + warm * 0.625f - mild * 0.5f
+//          , green = luma + mild * 0.5f - warm * 0.375f
+//          ,  blue = luma - warm * 0.375f - mild * 0.5f
+//                ;
+//        float red = luma + warm * 0.625f    
+//          , green = luma + mild * 0.5f      
+//          ,  blue = luma - warm * 0.375f - mild * 0.5f
+//                ;
+        float red = luma + warm * 0.5f
+          , green = luma + mild * 0.5f
+          ,  blue = luma - warm * 0.25f - mild * 0.25f
+                ;
+//        colors[b][r] = floatGetYCwCm(y, cb, cr, 1f);
+        colors[b][r] =
+                (red >= 0f && red <= 1f && green >= 0f && green <= 1f && blue >= 0f && blue <= 1f)
+                ? floatGet(
+                MathExtras.clamp(red, 0f, 1f),
+                MathExtras.clamp(green, 0f, 1f),
+                MathExtras.clamp(blue, 0f, 1f), 1f)
+        : 0f;
 //        System.out.print("0x" + StringKit.hex(Color.rgba8888(tmp) | 1) + ", ");
 //        if((vv = ((vv + 1) & 7)) == 0)
 //        {
@@ -1019,9 +1040,9 @@ public class ColorTest extends ApplicationAdapter {
     @Override
     public void render() {
         // standard clear the background routine for libGDX
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         luma = NumberTools.zigzag((System.nanoTime() >>> 27 & 0xFFFL) * 0x1.4p-7f) * 0.5f + 0.5f;
+        Gdx.gl.glClearColor(1f - luma, 1f - luma, 1f - luma, 1.0f);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.graphics.setTitle("Current luma: " + luma);
 
 //        Gdx.graphics.setTitle("YCwCm demo at 66% luma");
