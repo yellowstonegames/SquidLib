@@ -367,13 +367,13 @@ public final class FloatFilters {
             final int bits = NumberTools.floatToIntBits(color);
             final float opacity = (bits >>> 24 & 0xFE) * 0.003937008f;
             final float luma = yAdd + yMul * ((bits & 0xFF) * 0x3p-11f + (bits >>> 8 & 0xFF) * 0x1p-9f + (bits >>> 16 & 0xFF) * 0x1p-11f);
-            final float warm = cwAdd + cwMul * (((bits & 0xFF) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f);
+            final float warm = 0.5f * (cwAdd + cwMul * (((bits & 0xFF) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f));
             final float mild = 0.5f * (cmAdd + cmMul * (((bits >>> 8 & 0xff) - (bits >>> 16 & 0xff)) * 0x1.010102p-8f));
 
-            return floatGet(MathUtils.clamp(luma + warm * 0.625f - mild, 0f, 1f),
-                    MathUtils.clamp(luma + mild - warm * 0.375f, 0f, 1f),
-                    MathUtils.clamp(luma - warm * 0.375f - mild, 0f, 1f),
-                    opacity);
+            return floatGet(
+                    MathUtils.clamp(luma + warm, 0f, 1f),
+                    MathUtils.clamp(luma + mild, 0f, 1f),
+                    MathUtils.clamp(luma - (warm + mild) * 0.5f, 0f, 1f), opacity);
         }
     }
 
