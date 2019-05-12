@@ -311,7 +311,7 @@ public class ColorTest extends ApplicationAdapter {
 //                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
 //                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
 
-        /// possible alternative candidate?
+        /// chosen as alternative
         return floatGet(
                 MathExtras.clamp(luma + warm * 0.5f, 0f, 1f),
                 MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
