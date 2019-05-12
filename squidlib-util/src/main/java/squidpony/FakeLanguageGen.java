@@ -2617,11 +2617,50 @@ public class FakeLanguageGen implements Serializable {
     /**
      * A rough imitation of the Crow language of the American Midwest, using some tone marks. Some of the orthography
      * rules aren't clear across Internet information about the language, so this really is a "fake" language it will be
-     * generating, not the real thing at all.
+     * generating, not the real thing at all. This considers 'x' to be the rough back-of-throat noise that isn't in
+     * English other than in loanwords, like the Scottish "loch," and in names like the German "Bach." Doubled (to use
+     * the linguistic term, geminated) consonants are pronounced for a longer time, and doubled vowels with the same
+     * accent mark or no accent mark are also lengthened. An un-accented vowel has a normal tone, an accented vowel has
+     * a high tone, and an accented vowel followed by an un-accented vowel has a falling tone. This last feature is the
+     * least common among languages here, and is a good way of distinguishing imitation Crow from other languages.
      * <br>
      * Pashu-umíkiki; chinébúlu ak kóokutú shu-eníí-a ipíimúu heekokáakoku?
      */
     public static final FakeLanguageGen CROW = crow().register("Crow");
+
+    private static FakeLanguageGen imp(){
+        return new FakeLanguageGen(
+                new String[]{"a", "a", "a", "a", "a", "á", "á", "á", "aa", "aa", "aa", "aaa", "aaa", "aaa", "áá", "áá", "ááá", "ááá",
+                        "e", "e", "e", "e", "e", "e",
+                        "i", "i", "i", "i", "i", "i", "i", "i", "i", "i", "í", "í", "í", "í",
+                        "ii", "ii", "ii", "iii", "iii", "iii", "íí", "íí", "ííí", "ííí",
+                        "u", "u", "u", "u", "u", "u", "u", "u", "ú", "ú", "ú", "uu", "uu", "uu", "úú", "úú", "úúú", "úúú",
+                        "ia", "ia", "ia", "ui", "ui"
+                },
+                new String[]{
+                },
+                new String[]{
+                        "s", "k", "d", "t", "h", "f", "g", "r", "r", "r", "r", "gh", "ch",
+                        "sk", "st", "skr", "str", "kr", "dr", "tr", "fr", "gr"
+                },
+                new String[]{
+                        "s", "k", "d", "t", "h", "f", "g", "r", "r", "r", "r", "gh", "ch",
+                        "sk", "st", "skr", "str", "kr", "dr", "tr", "fr", "gr"
+                },
+                new String[]{
+                        "s", "k", "d", "t", "g", "gh", "ch"
+                },
+                new String[]{
+                },
+                new String[]{"-"}, new int[]{1, 2, 3}, new double[]{7, 11, 4}, 0.2, 0.5, 0.4, 0.0, null, true);
+    }
+    /**
+     * A fantasy language meant for obnoxious screeching annoying enemies more-so than for intelligent friends or foes.
+     * Uses accented vowels to mean "louder or higher-pitched" and up to three repeats of any vowel to lengthen it.
+     * <br>
+     * Siii-aghak fítríííg dú-úgh ru-úúk, grííírá!
+     */
+    public static final FakeLanguageGen IMP = imp().register("Imp");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
@@ -2679,8 +2718,9 @@ public class FakeLanguageGen implements Serializable {
      * script (like English) with maybe some accents.
      */
     public static final FakeLanguageGen[] romanizedHumanLanguages = {
-            ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH, MAORI,
-            GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI, CROW
+            ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE_SIMPLIFIED, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH,
+            MAORI, GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI, CROW, 
+            ANCIENT_EGYPTIAN
     };
 
     /**
