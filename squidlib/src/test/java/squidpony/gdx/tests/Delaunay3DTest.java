@@ -8,15 +8,11 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.math.DelaunayTriangulator;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.utils.ShortArray;
 import com.badlogic.gdx.utils.TimeUtils;
 import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidmath.NumberTools;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.VanDerCorputQRNG;
+import squidpony.squidmath.*;
 
 import java.util.Comparator;
 
@@ -24,7 +20,7 @@ import java.util.Comparator;
  * Created by Tommy Ettinger on 7/24/2017.
  */
 public class Delaunay3DTest extends ApplicationAdapter {
-    private static final int SIZE = 512;
+    private static final int SIZE = 1024;
 //    private Delaunay3D tri;
 //    private ArrayList<Delaunay3D.Triangle> tris;
     private OrderedSet<? extends Color> palette;
@@ -43,7 +39,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //        whiteSquare = new Texture(pixmap);
 
         float[] points = new float[SIZE * 3];
-        float[] pairs = new float[SIZE * 2];
+        double[] pairs = new double[SIZE * 2];
         float[] lon_clat = new float[SIZE * 2];
 //        float[] lon_lat = new float[SIZE * 2];
 //        short[] links = new short[SIZE * 3];
@@ -51,24 +47,24 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
 //            points.add(new CoordDouble(386.4973651183067 * (i + 1) % 500.0 + rng.nextDouble(12.0),
 //                    291.75822899100325 * (i + 1) % 500.0 + rng.nextDouble(12.0)));
-            float lon = (float) (VanDerCorputQRNG.determine2(i) * Math.PI * 2.0);
-            float lat = (float) ((VanDerCorputQRNG.determine(3, i) - 0.5) * Math.PI);
+            double lon = (VanDerCorputQRNG.determine2(i) * Math.PI * 2.0);
+            double lat = ((VanDerCorputQRNG.determine(3, i) - 0.5) * Math.PI);
 //            lon_lat[i * 2] = lon;
 //            lon_lat[i * 2 + 1] = lat;
-            float clat = MathUtils.cos(lat);
-            lon_clat[i * 2] = lon;
-            lon_clat[i * 2 + 1] = clat;
-            float x, y, z;
-            points[i * 3] = x = MathUtils.cos(lon) * clat;
-            points[i * 3 + 1] = y = MathUtils.sin(lon) * clat;
-            points[i * 3 + 2] = z = MathUtils.sin(lat);
-            pairs[i * 2] = x / (1f - z);
-            pairs[i * 2 + 1] = y / (1f - z);
+            double clat = NumberTools.cos(lat);
+            lon_clat[i * 2] = (float) lon;
+            lon_clat[i * 2 + 1] = (float) clat;
+            double x, y, z;
+            points[i * 3] = (float) (x = NumberTools.cos(lon) * clat);
+            points[i * 3 + 1] = (float) (y = NumberTools.sin(lon) * clat);
+            points[i * 3 + 2] = (float) (z = NumberTools.sin(lat));
+            pairs[i * 2] = x / (1.0 - z);
+            pairs[i * 2 + 1] = y / (1.0 - z);
         }
 
 //        tri = new Delaunay3D(points);
 //        tris = tri.triangulate();
-        ShortArray triangles = new DelaunayTriangulator().computeTriangles(pairs, false);
+        IntVLA triangles = new IndexedDelaunayTriangulator().computeTriangles(pairs, false);
 //        Collections.sort(tris, new Comparator<Delaunay3D.Triangle>() {
 //            @Override
 //            public int compare(Delaunay3D.Triangle t1, Delaunay3D.Triangle t2) {
@@ -143,13 +139,12 @@ public class Delaunay3DTest extends ApplicationAdapter {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         
+        // to be clear, I have no idea how all this works.
         Gdx.gl.glEnable(GL20.GL_CULL_FACE);
         Gdx.gl.glCullFace(GL20.GL_BACK);
-//        
-//        //set the depth test function to LESS
+
         Gdx.gl.glDepthFunc(GL20.GL_LESS);
 
-//        //5. enable depth writing
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl.glDepthMask(true);
         
@@ -157,7 +152,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
         float lonA, clatA, xA, yA, zA,
                 lonB, clatB, xB, yB, zB,
                 lonC, clatC, xC, yC, zC,
-                xCen, yCen, zCen, norm,
+                xCen, yCen, zCen,
                 xM, yM, zM,
                 xN, yN, zN,
                 xCr, yCr, zCr,
@@ -178,15 +173,18 @@ public class Delaunay3DTest extends ApplicationAdapter {
             zC = MathUtils.sin(lonC) * clatC;
             xC = MathUtils.cos(lonC) * clatC;
             yC = vertices[i];
-
+            
+            // get centroid
             xCen = (xA + xB + xC) / 3f;
             yCen = (yA + yB + yC) / 3f;
             zCen = (zA + zB + zC) / 3f;
+            ////don't need to normalize I guess?
 //            norm = 1f / (float) Math.sqrt(xCen * xCen + yCen * yCen + zCen * zCen);
 //            xCen *= norm;
 //            yCen *= norm;
 //            zCen *= norm;
 
+            // manual cross product
             xM = xA - xB;
             yM = yA - yB;
             zM = zA - zB;
@@ -198,6 +196,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
             xCr = yM * zN - zM * yN;
             yCr = zM * xN - xM * zN;
             zCr = xM * yN - yM * xN;
+            ////don't need to normalize I guess?
 //            norm = 1f / (float) Math.sqrt(xCr * xCr + yCr * yCr + zCr * zCr);
 //            xCr *= norm;
 //            yCr *= norm;
