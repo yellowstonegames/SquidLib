@@ -28,7 +28,7 @@ public class IndexedDelaunayTriangulator {
     private final IntVLA triangles = new IntVLA(16);
     private final IntVLA originalIndices = new IntVLA(0);
     private final IntVLA edges = new IntVLA();
-    private final ShortVLA complete = new ShortVLA(false, 16);
+    private final ShortVLA complete = new ShortVLA(false, 16); // only a ShortVLA because we don't have BooleanArray
     private final double[] superTriangle = new double[6];
     
     /** @see #computeTriangles(double[], int, int, boolean) */
@@ -38,9 +38,9 @@ public class IndexedDelaunayTriangulator {
 
     /** Triangulates the given point cloud to a list of triangle indices that make up the Delaunay triangulation.
      * @param points x,y pairs describing points. Duplicate points will result in undefined behavior.
-     * @param sorted If false, the points will be sorted by the x coordinate, which is required by the triangulation algorithm. If
-     *           sorting is done the input array is not modified, the returned indices are for the input array, and count*2
-     *           additional working memory is needed.
+     * @param sorted If false, the points will be sorted by the x coordinate, which is required by the triangulation
+     *               algorithm. In that case, the input array is not modified, the returned indices are for the input
+     *               array, and count*2 additional working memory is needed.
      * @return triples of indices into the points that describe the triangles in clockwise order. Note the returned array is reused
      *         for later calls to the same method. */
     public IntVLA computeTriangles (double[] points, int offset, int count, boolean sorted) {
@@ -249,6 +249,23 @@ public class IndexedDelaunayTriangulator {
         return xp > xc && dx > rsqr ? COMPLETE : INCOMPLETE;
     }
 
+//    public void sortPairs(double[] points)
+//    {
+//        final int pointCount = points.length / 2;
+//        if (sortedPoints == null || sortedPoints.length < points.length) sortedPoints = new double[points.length];
+//        System.arraycopy(points, 0, sortedPoints, 0, points.length);
+////        points = sortedPoints;
+//        sort(sortedPoints, sortedPoints.length);
+//        int[] originalIndicesArray = originalIndices.items;
+//        int p;
+//        for (int i = 0; i < pointCount; i++) {
+//            p = originalIndicesArray[i];
+//            points[p<<1] = sortedPoints[i<<1];
+//            points[p<<1|1] = sortedPoints[i<<1|1];
+//        }
+//        System.out.println(sortedPoints.length);
+//    }
+    
     /** Sorts x,y pairs of values by the x value.
      * @param count Number of indices, must be even. */
     private void sort (double[] values, int count) {
