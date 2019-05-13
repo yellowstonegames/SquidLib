@@ -8,7 +8,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.TimeUtils;
 import squidpony.squidgrid.gui.gdx.SColor;
@@ -21,7 +20,7 @@ import java.util.Comparator;
  */
 public class Delaunay3DTest extends ApplicationAdapter {
     private static final int SIZE = 1024;
-//    private Delaunay3D tri;
+    private IndexedDelaunayTriangulator tri;
 //    private ArrayList<Delaunay3D.Triangle> tris;
     private OrderedSet<? extends Color> palette;
     private ImmediateModeRenderer20 imr;
@@ -40,8 +39,7 @@ public class Delaunay3DTest extends ApplicationAdapter {
 
         float[] points = new float[SIZE * 3];
         double[] pairs = new double[SIZE * 2];
-        float[] lon_clat = new float[SIZE * 2];
-//        float[] lon_lat = new float[SIZE * 2];
+//        float[] lon_clat = new float[SIZE * 2];
 //        short[] links = new short[SIZE * 3];
         for (int i = 0; i < SIZE; i++) {
 //            points.add(new CoordDouble(rng.nextDouble(512.0), rng.nextDouble(512.0)));
@@ -52,8 +50,8 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //            lon_lat[i * 2] = lon;
 //            lon_lat[i * 2 + 1] = lat;
             double clat = NumberTools.cos(lat);
-            lon_clat[i * 2] = (float) lon;
-            lon_clat[i * 2 + 1] = (float) clat;
+//            lon_clat[i * 2] = (float) lon;
+//            lon_clat[i * 2 + 1] = (float) clat;
             double x, y, z;
             points[i * 3] = (float) (x = NumberTools.cos(lon) * clat);
             points[i * 3 + 1] = (float) (y = NumberTools.sin(lon) * clat);
@@ -64,7 +62,19 @@ public class Delaunay3DTest extends ApplicationAdapter {
 
 //        tri = new Delaunay3D(points);
 //        tris = tri.triangulate();
-        IntVLA triangles = new IndexedDelaunayTriangulator().computeTriangles(pairs, false);
+        tri = new IndexedDelaunayTriangulator();
+        IntVLA triangles = tri.computeTriangles(pairs, false);
+        int[] triangleArray = triangles.items;
+        long[] edges = new long[triangles.size];
+        long a, b, c;
+        for (int i = 0; i < triangles.size; i+=3) {
+            a = triangleArray[i] & 0xFFFFFFFFL;
+            b = triangleArray[i+1] & 0xFFFFFFFFL;
+            c = triangleArray[i+2] & 0xFFFFFFFFL;
+            edges[i]   = (a > b) ? a << 32 | b : b << 32 | a;
+            edges[i+1] = (b > c) ? b << 32 | c : c << 32 | b;
+            edges[i+2] = (c > a) ? c << 32 | a : a << 32 | c;
+        }
 //        Collections.sort(tris, new Comparator<Delaunay3D.Triangle>() {
 //            @Override
 //            public int compare(Delaunay3D.Triangle t1, Delaunay3D.Triangle t2) {
@@ -76,8 +86,8 @@ public class Delaunay3DTest extends ApplicationAdapter {
 //        });
         palette = new OrderedSet<>(SColor.FULL_PALETTE);
         for (int i = palette.size() - 1; i >= 0; i--) {
-            Color c = palette.getAt(i);
-            if(c.a < 1f || SColor.saturation(c) < 0.5f || SColor.value(c) < 0.35f)
+            Color color = palette.getAt(i);
+            if(color.a < 1f || SColor.saturation(color) < 0.5f || SColor.value(color) < 0.4f)
                 palette.removeAt(i);
         }
         palette.sort(new Comparator<Color>() {
@@ -116,17 +126,28 @@ public class Delaunay3DTest extends ApplicationAdapter {
         for (int t = 2, i = 0; t < triangles.size; t+=3) {
             vertices[i++] = palette.getAt(t % palette.size()).toFloatBits();
             idx = triangles.get(t-2);
-            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
-            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+            vertices[i++] = points[idx*3] * 256f;
+            vertices[i++] = points[idx*3+1] * 256f;
             vertices[i++] = points[idx*3+2] * 256f;
+//            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
+//            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+//            vertices[i++] = points[idx*3+2] * 256f;
             idx = triangles.get(t-1);
-            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
-            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+            vertices[i++] = points[idx*3] * 256f;
+            vertices[i++] = points[idx*3+1] * 256f;
             vertices[i++] = points[idx*3+2] * 256f;
+
+//            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
+//            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+//            vertices[i++] = points[idx*3+2] * 256f;
             idx = triangles.get(t);
-            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
-            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+            vertices[i++] = points[idx*3] * 256f;
+            vertices[i++] = points[idx*3+1] * 256f;
             vertices[i++] = points[idx*3+2] * 256f;
+
+//            vertices[i++] = lon_clat[idx*2];//points[idx] * 256f;
+//            vertices[i++] = lon_clat[idx*2+1] * 256f;//points[idx+1] * 256f;
+//            vertices[i++] = points[idx*3+2] * 256f;
         }
     }
 
@@ -155,24 +176,33 @@ public class Delaunay3DTest extends ApplicationAdapter {
                 xCen, yCen, zCen,
                 xM, yM, zM,
                 xN, yN, zN,
-                xCr, yCr, zCr,
-                time = TimeUtils.timeSinceMillis(startTime) * 0.0006f;
+                xCr, yCr, zCr;
+//                time = TimeUtils.timeSinceMillis(startTime) * 0.0006f;
         for (int i = 9; i < vertices.length; i += 10) {
-            lonA = vertices[i - 8] + time;
-            clatA = vertices[i - 7];
-            zA = MathUtils.sin(lonA) * clatA;
-            xA = MathUtils.cos(lonA) * clatA;
+            zA = vertices[i - 8];
+            xA = vertices[i - 7];
             yA = vertices[i - 6];
-            lonB = vertices[i - 5] + time;
-            clatB = vertices[i - 4];
-            zB = MathUtils.sin(lonB) * clatB;
-            xB = MathUtils.cos(lonB) * clatB;
+            zB = vertices[i - 5];
+            xB = vertices[i - 4];
             yB = vertices[i - 3];
-            lonC = vertices[i - 2] + time;
-            clatC = vertices[i - 1];
-            zC = MathUtils.sin(lonC) * clatC;
-            xC = MathUtils.cos(lonC) * clatC;
+            zC = vertices[i - 2];
+            xC = vertices[i - 1];
             yC = vertices[i];
+//            lonA = vertices[i - 8] + time;
+//            clatA = vertices[i - 7];
+//            zA = MathUtils.sin(lonA) * clatA;
+//            xA = MathUtils.cos(lonA) * clatA;
+//            yA = vertices[i - 6];
+//            lonB = vertices[i - 5] + time;
+//            clatB = vertices[i - 4];
+//            zB = MathUtils.sin(lonB) * clatB;
+//            xB = MathUtils.cos(lonB) * clatB;
+//            yB = vertices[i - 3];
+//            lonC = vertices[i - 2] + time;
+//            clatC = vertices[i - 1];
+//            zC = MathUtils.sin(lonC) * clatC;
+//            xC = MathUtils.cos(lonC) * clatC;
+//            yC = vertices[i];
             
             // get centroid
             xCen = (xA + xB + xC) / 3f;
