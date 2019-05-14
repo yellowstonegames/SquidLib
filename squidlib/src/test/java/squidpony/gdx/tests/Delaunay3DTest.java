@@ -8,11 +8,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer20;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.TimeUtils;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidmath.*;
 
+import java.util.Arrays;
 import java.util.Comparator;
 
 /**
@@ -26,6 +28,9 @@ public class Delaunay3DTest extends ApplicationAdapter {
     private ImmediateModeRenderer20 imr;
     private Matrix4 proj;
     private float[] vertices;
+    private float[] centroids;
+    private int[] connections;
+    private int connector = 0;
     private long startTime;
 //    private Texture whiteSquare;
 
@@ -66,14 +71,32 @@ public class Delaunay3DTest extends ApplicationAdapter {
         IntVLA triangles = tri.computeTriangles(pairs, false);
         int[] triangleArray = triangles.items;
         long[] edges = new long[triangles.size];
+        connections = new int[triangles.size];
+        Arrays.fill(connections, -1);
+        centroids = new float[triangles.size];
         long a, b, c;
         for (int i = 0; i < triangles.size; i+=3) {
+            centroids[i] = (points[triangleArray[i]] + points[triangleArray[i+1]] + points[triangleArray[i+2]]) * 256f / 3f;
+            centroids[i+1] = (points[triangleArray[i]+1] + points[triangleArray[i+1]+1] + points[triangleArray[i+2]+1]) * 256f / 3f;
+            centroids[i+2] = (points[triangleArray[i]+2] + points[triangleArray[i+1]+2] + points[triangleArray[i+2]+2]) * 256f / 3f;
             a = triangleArray[i] & 0xFFFFFFFFL;
             b = triangleArray[i+1] & 0xFFFFFFFFL;
             c = triangleArray[i+2] & 0xFFFFFFFFL;
             edges[i]   = (a > b) ? a << 32 | b : b << 32 | a;
             edges[i+1] = (b > c) ? b << 32 | c : c << 32 | b;
             edges[i+2] = (c > a) ? c << 32 | a : a << 32 | c;
+        }
+        OUTER:
+        for (int i = 0; i < edges.length; i++) {
+            a = edges[i];
+            for (int j = i+1; j < edges.length; j++) {
+                if(edges[j] == a)
+                {
+                    connections[i] = (j / 3) * 3;
+                    connections[j] = (i / 3) * 3;
+                    continue OUTER;
+                }
+            }
         }
 //        Collections.sort(tris, new Comparator<Delaunay3D.Triangle>() {
 //            @Override
@@ -169,87 +192,111 @@ public class Delaunay3DTest extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
         Gdx.gl.glDepthMask(true);
         
-        imr.begin(proj, GL20.GL_TRIANGLES);
-        float lonA, clatA, xA, yA, zA,
-                lonB, clatB, xB, yB, zB,
-                lonC, clatC, xC, yC, zC,
-                xCen, yCen, zCen,
-                xM, yM, zM,
-                xN, yN, zN,
-                xCr, yCr, zCr;
-//                time = TimeUtils.timeSinceMillis(startTime) * 0.0006f;
-        for (int i = 9; i < vertices.length; i += 10) {
-            zA = vertices[i - 8];
-            xA = vertices[i - 7];
-            yA = vertices[i - 6];
-            zB = vertices[i - 5];
-            xB = vertices[i - 4];
-            yB = vertices[i - 3];
-            zC = vertices[i - 2];
-            xC = vertices[i - 1];
-            yC = vertices[i];
-//            lonA = vertices[i - 8] + time;
-//            clatA = vertices[i - 7];
-//            zA = MathUtils.sin(lonA) * clatA;
-//            xA = MathUtils.cos(lonA) * clatA;
+//        imr.begin(proj, GL20.GL_TRIANGLES);
+//        float lonA, clatA, xA, yA, zA,
+//                lonB, clatB, xB, yB, zB,
+//                lonC, clatC, xC, yC, zC,
+//                xCen, yCen, zCen,
+//                xM, yM, zM,
+//                xN, yN, zN,
+//                xCr, yCr, zCr,
+//                color = SColor.CW_RICH_GREEN.toFloatBits();
+////                time = TimeUtils.timeSinceMillis(startTime) * 0.0006f;
+//        for (int i = 9; i < vertices.length; i += 10) {
+//            zA = vertices[i - 8];
+//            xA = vertices[i - 7];
 //            yA = vertices[i - 6];
-//            lonB = vertices[i - 5] + time;
-//            clatB = vertices[i - 4];
-//            zB = MathUtils.sin(lonB) * clatB;
-//            xB = MathUtils.cos(lonB) * clatB;
+//            zB = vertices[i - 5];
+//            xB = vertices[i - 4];
 //            yB = vertices[i - 3];
-//            lonC = vertices[i - 2] + time;
-//            clatC = vertices[i - 1];
-//            zC = MathUtils.sin(lonC) * clatC;
-//            xC = MathUtils.cos(lonC) * clatC;
+//            zC = vertices[i - 2];
+//            xC = vertices[i - 1];
 //            yC = vertices[i];
-            
-            // get centroid
-            xCen = (xA + xB + xC) / 3f;
-            yCen = (yA + yB + yC) / 3f;
-            zCen = (zA + zB + zC) / 3f;
-            ////don't need to normalize I guess?
-//            norm = 1f / (float) Math.sqrt(xCen * xCen + yCen * yCen + zCen * zCen);
-//            xCen *= norm;
-//            yCen *= norm;
-//            zCen *= norm;
-
-            // manual cross product
-            xM = xA - xB;
-            yM = yA - yB;
-            zM = zA - zB;
-
-            xN = xB - xC;
-            yN = yB - yC;
-            zN = zB - zC;
-
-            xCr = yM * zN - zM * yN;
-            yCr = zM * xN - xM * zN;
-            zCr = xM * yN - yM * xN;
-            ////don't need to normalize I guess?
-//            norm = 1f / (float) Math.sqrt(xCr * xCr + yCr * yCr + zCr * zCr);
-//            xCr *= norm;
-//            yCr *= norm;
-//            zCr *= norm;
-
-            if (xCen * xCr + yCen * yCr + zCen * zCr >= 0f) {
-                imr.color(vertices[i - 9]);
-                imr.vertex(xA, yA, zA);
-                imr.color(vertices[i - 9]);
-                imr.vertex(xB, yB, zB);
-                imr.color(vertices[i - 9]);
-                imr.vertex(xC, yC, zC);
-            }
-            else 
-            {
-                imr.color(vertices[i - 9]);
-                imr.vertex(xA, yA, zA);
-                imr.color(vertices[i - 9]);
-                imr.vertex(xC, yC, zC);
-                imr.color(vertices[i - 9]);
-                imr.vertex(xB, yB, zB);
-            }
+////            lonA = vertices[i - 8] + time;
+////            clatA = vertices[i - 7];
+////            zA = MathUtils.sin(lonA) * clatA;
+////            xA = MathUtils.cos(lonA) * clatA;
+////            yA = vertices[i - 6];
+////            lonB = vertices[i - 5] + time;
+////            clatB = vertices[i - 4];
+////            zB = MathUtils.sin(lonB) * clatB;
+////            xB = MathUtils.cos(lonB) * clatB;
+////            yB = vertices[i - 3];
+////            lonC = vertices[i - 2] + time;
+////            clatC = vertices[i - 1];
+////            zC = MathUtils.sin(lonC) * clatC;
+////            xC = MathUtils.cos(lonC) * clatC;
+////            yC = vertices[i];
+//            
+//            // get centroid
+//            xCen = (xA + xB + xC) / 3f;
+//            yCen = (yA + yB + yC) / 3f;
+//            zCen = (zA + zB + zC) / 3f;
+//            ////don't need to normalize I guess?
+////            norm = 1f / (float) Math.sqrt(xCen * xCen + yCen * yCen + zCen * zCen);
+////            xCen *= norm;
+////            yCen *= norm;
+////            zCen *= norm;
+//
+//            // manual cross product
+//            xM = xA - xB;
+//            yM = yA - yB;
+//            zM = zA - zB;
+//
+//            xN = xB - xC;
+//            yN = yB - yC;
+//            zN = zB - zC;
+//
+//            xCr = yM * zN - zM * yN;
+//            yCr = zM * xN - xM * zN;
+//            zCr = xM * yN - yM * xN;
+//            ////don't need to normalize I guess?
+////            norm = 1f / (float) Math.sqrt(xCr * xCr + yCr * yCr + zCr * zCr);
+////            xCr *= norm;
+////            yCr *= norm;
+////            zCr *= norm;
+//
+//            if (xCen * xCr + yCen * yCr + zCen * zCr >= 0f) {
+////                imr.color(vertices[i - 9]);
+//                imr.color(color);
+//                imr.vertex(xA, yA, zA);
+////                imr.color(vertices[i - 9]);
+//                imr.color(color);
+//                imr.vertex(xB, yB, zB);
+////                imr.color(vertices[i - 9]);
+//                imr.color(color);
+//                imr.vertex(xC, yC, zC);
+//            }
+//            else 
+//            {
+////                imr.color(vertices[i - 9]);
+//                imr.color(color);
+//                imr.vertex(xA, yA, zA);
+////                imr.color(vertices[i - 9]);
+//                imr.color(color);
+//                imr.vertex(xC, yC, zC);
+////                imr.color(vertices[i - 9]);
+//                imr.color(color);
+//                imr.vertex(xB, yB, zB);
+//            }
+//        }
+//        imr.end();
+        imr.begin(proj, GL20.GL_LINES);
+        float startColor = SColor.AURORA_EMBERS.toFloatBits(), endColor = SColor.CW_BRIGHT_AZURE.toFloatBits();
+//        connector = ((int) (Math.random() * connections.length) / 3) * 3;
+        imr.color(startColor);
+        imr.vertex(centroids[connector], centroids[connector+1], centroids[connector+2]);
+        int conn = connections[connector] + MathUtils.random(2);
+        if(conn != -1)
+        {
+            connector = conn;
         }
+        else 
+        {
+            connector = ((int) (Math.random() * connections.length) / 3) * 3;
+        }
+        imr.color(endColor);
+        imr.vertex(centroids[connector], centroids[connector+1], centroids[connector+2]);
         imr.end();
     }
 
@@ -258,8 +305,8 @@ public class Delaunay3DTest extends ApplicationAdapter {
         config.title = "SquidLib Demo: Delaunay Test";
         config.width = 512;
         config.height = 512;
-        config.vSyncEnabled = false;
-        config.foregroundFPS = 0;
+        config.vSyncEnabled = true;
+        config.foregroundFPS = 5;
         config.depth = 16;
         config.addIcon("Tentacle-16.png", Files.FileType.Internal);
         config.addIcon("Tentacle-32.png", Files.FileType.Internal);
