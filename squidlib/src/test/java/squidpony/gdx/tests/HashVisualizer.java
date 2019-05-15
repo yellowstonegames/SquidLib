@@ -71,9 +71,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 37, rngMode = 21, noiseMode = 109, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 109, otherMode = 1;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -1461,15 +1461,31 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 1:
-                        extra = System.nanoTime() >>> 30 & 31;
-                        Gdx.graphics.setTitle("goldInt on length 2, bit " + extra);
-                        for (int x = 0; x < width; x++) {
-                            //coordinates[0] = x;
-                            for (int y = 0; y < height; y++) {
-                                //coordinates[1] = y;
-                                //code = -(Arrays.hashCode(coordinates) >>> extra & 1L) | 255L;
-                                //back[x][y] = (Arrays.hashCode(coordinates) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-                                back[x][y] = (goldInt(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
+//                        extra = System.nanoTime() >>> 30 & 31;
+//                        Gdx.graphics.setTitle("goldInt on length 2, bit " + extra);
+//                        for (int x = 0; x < width; x++) {
+//                            //coordinates[0] = x;
+//                            for (int y = 0; y < height; y++) {
+//                                //coordinates[1] = y;
+//                                //code = -(Arrays.hashCode(coordinates) >>> extra & 1L) | 255L;
+//                                //back[x][y] = (Arrays.hashCode(coordinates) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+//                                back[x][y] = (goldInt(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
+//                            }
+//                        }
+                        Gdx.graphics.setTitle("QuadHash on index");
+                        for (int x = 0, i = 0; x < width; x++) {
+                            for (int y = 0; y < height; y++, i++) {
+                                iBright = ((i ^ i >>> 2 ^ i >>> 5 ^ 0xD1B54A35) * 0x9E375 >>> (10 + (i & 7)) & 3);
+                                switch (iBright){
+                                    case 0: back[x][y] = -0x1.7677e8p125F;//CW_BRIGHT_RED
+                                        break;
+                                    case 1: back[x][y] = -0x1.97ae42p125F;//CW_FLUSH_JADE
+                                        break;
+                                    case 2: back[x][y] = FLOAT_BLACK;
+                                        break;
+                                    default: back[x][y] = FLOAT_WHITE;
+                                        break;
+                                }
                             }
                         }
                         break;
