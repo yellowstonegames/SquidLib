@@ -80,8 +80,13 @@ public class MathVisualizer extends ApplicationAdapter {
     
     public final float editedCurve()
     {
-        final long r = diver.nextLong(), s = diver.nextLong();
-        return (((r & 0xFFFFFFL) + (r >>> 40)) * 0x1p-25f + (1.0f - ((s & 0xFFFFFFL) * 0x1p-24f) * ((s >>> 40) * 0x1p-24f))) * 0.5f;
+//        final long r = diver.nextLong(), s = diver.nextLong();
+//        return (((r & 0xFFFFFFL) + (r >>> 40)) * 0x1p-25f + (1.0f - ((s & 0xFFFFFFL) * 0x1p-24f) * ((s >>> 40) * 0x1p-24f))) * 0.5f;
+
+        return 0.1f * (diver.nextFloat() + diver.nextFloat() + diver.nextFloat()
+                + diver.nextFloat() + diver.nextFloat() + diver.nextFloat())
+                + 0.2f * ((1f - diver.nextFloat() * diver.nextFloat()) + (1f - diver.nextFloat() * diver.nextFloat()));
+        
 //                - (s & 0xFFFFFFL) - (r >>> 20 & 0xFFFFFFL) - (s >>> 26 & 0xFFFFFFL) - (t >>> 40) - (t >>> 13 & 0xFFFFFFL)
 //        return  ((r & 0xFFFFFFL) + (r >>> 20 & 0xFFFFFFL) + (s >>> 40)
 //                - (s & 0xFFFFFFL) - (s >>> 20 & 0xFFFFFFL) - (r >>> 40)
