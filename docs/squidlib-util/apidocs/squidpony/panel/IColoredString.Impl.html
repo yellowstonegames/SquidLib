@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":9,"i11":10,"i12":9,"i13":9,"i14":9,"i15":9,"i16":9,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -121,7 +121,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../src-html/squidpony/panel/IColoredString.html#line.201">IColoredString.Impl</a>&lt;T&gt;
+<pre>public static class <a href="../../src-html/squidpony/panel/IColoredString.html#line.207">IColoredString.Impl</a>&lt;T&gt;
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;</pre>
 <div class="block">A basic implementation of <a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel"><code>IColoredString</code></a>.</div>
@@ -306,68 +306,74 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
       <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o2)</code>&nbsp;</td>
 </tr>
 <tr id="i17" class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#getFragments--">getFragments</a></span>()</code>
+<div class="block">Gets the Buckets as an ArrayList, allowing access by index instead of by <a href="../../squidpony/panel/IColoredString.Impl.html#iterator--"><code>iterator()</code></a>.</div>
+</td>
+</tr>
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
-<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;</code></td>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ListIterator.html?is-external=true" title="class or interface in java.util">ListIterator</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#iterator--">iterator</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#justify-int-">justify</a></span>(int&nbsp;width)</code>
 <div class="block">This method does NOT guarantee that the result's length is <code>width</code>.</div>
 </td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#lastColor--">lastColor</a></span>()</code>
 <div class="block">This method is typically more efficient than <a href="../../squidpony/panel/IColoredString.html#colorAt-int-"><code>IColoredString.colorAt(int)</code></a>.</div>
 </td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#length--">length</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#present--">present</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#presentWithMarkup-squidpony.panel.IMarkup-">presentWithMarkup</a></span>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;markup)</code>
 <div class="block">Given some way of converting from a T value to an in-line markup tag, returns a string representation of
  this IColoredString with in-line markup representing colors.</div>
 </td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#replaceColor-T-T-">replaceColor</a></span>(<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;old,
             <a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;new_)</code>
 <div class="block">Replace color <code>old</code> by <code>new_</code> in all buckets of <code>this</code>.</div>
 </td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#setColor-T-">setColor</a></span>(<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</code>
 <div class="block">Set <code>color</code> in all buckets.</div>
 </td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#setLength-int-">setLength</a></span>(int&nbsp;len)</code>
 <div class="block">Deletes all content after index <code>len</code> (if any).</div>
 </td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#toString--">toString</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#wrap-int-">wrap</a></span>(int&nbsp;width)</code>&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.Impl.html#wrap-int-java.util.List-">wrap</a></span>(int&nbsp;width,
     <a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;buf)</code>&nbsp;</td>
@@ -407,7 +413,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockListLast">
 <li class="blockList">
 <h4>fragments</h4>
-<pre>protected final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt; <a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.203">fragments</a></pre>
+<pre>protected final&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt; <a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.209">fragments</a></pre>
 </li>
 </ul>
 </li>
@@ -424,7 +430,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>Impl</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.208">Impl</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.214">Impl</a>()</pre>
 <div class="block">An empty instance.</div>
 </li>
 </ul>
@@ -436,7 +442,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockListLast">
 <li class="blockList">
 <h4>Impl</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.220">Impl</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.226">Impl</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
             <a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</pre>
 <div class="block">An instance initially containing <code>text</code> (with <code>color</code>).</div>
 <dl>
@@ -460,7 +466,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.232">create</a>()</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.238">create</a>()</pre>
 <div class="block">A static constructor, to avoid having to write <code>&lt;T&gt;</code> in the
  caller.</div>
 <dl>
@@ -475,7 +481,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.242">create</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.248">create</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s)</pre>
 <div class="block">A convenience method, equivalent to <code>create(s, null)</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -493,7 +499,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.252">create</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.258">create</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;s,
                                                 T&nbsp;t)</pre>
 <div class="block">A static constructor, to avoid having to write <code>&lt;T&gt;</code> in the
  caller.</div>
@@ -509,7 +515,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>clone</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.256">clone</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;&nbsp;toClone)</pre>
+<pre>public static&nbsp;&lt;T&gt;&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a>&lt;T&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.262">clone</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;&nbsp;toClone)</pre>
 </li>
 </ul>
 <a name="equals-squidpony.panel.IColoredString-squidpony.panel.IColoredString-">
@@ -518,7 +524,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public static&nbsp;&lt;T&gt;&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.273">equals</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;&nbsp;one,
+<pre>public static&nbsp;&lt;T&gt;&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.279">equals</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;&nbsp;one,
                                  <a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;T&gt;&nbsp;two)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -536,7 +542,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.306">append</a>(char&nbsp;c)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.312">append</a>(char&nbsp;c)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#append-char-">IColoredString</a></code></span></div>
 <div class="block">A convenience alias for <code>append(c, null)</code>.</div>
 <dl>
@@ -555,7 +561,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.311">append</a>(char&nbsp;c,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.317">append</a>(char&nbsp;c,
                    <a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#append-char-T-">IColoredString</a></code></span></div>
 <div class="block">Mutates <code>this</code> by appending <code>c</code> to it.</div>
@@ -574,7 +580,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.316">append</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.322">append</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#append-java.lang.String-">IColoredString</a></code></span></div>
 <div class="block">A convenience alias for <code>append(text, null)</code>.</div>
 <dl>
@@ -591,7 +597,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.321">append</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.327">append</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;text,
                    <a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#append-java.lang.String-T-">IColoredString</a></code></span></div>
 <div class="block">Mutates <code>this</code> by appending <code>text</code> to it. Does nothing if
@@ -613,7 +619,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>appendInt</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.340">appendInt</a>(int&nbsp;i,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.346">appendInt</a>(int&nbsp;i,
                       <a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#appendInt-int-T-">IColoredString</a></code></span></div>
 <div class="block">Mutates <code>this</code> by appending <code>i</code> to it.</div>
@@ -634,7 +640,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>appendFloat</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.345">appendFloat</a>(float&nbsp;f,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.351">appendFloat</a>(float&nbsp;f,
                         <a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#appendFloat-float-T-">IColoredString</a></code></span></div>
 <div class="block">Mutates <code>this</code> by appending <code>f</code> to it.</div>
@@ -653,7 +659,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.352">append</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;other)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.358">append</a>(<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;other)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#append-squidpony.panel.IColoredString-">IColoredString</a></code></span></div>
 <div class="block">Mutates <code>this</code> by appending <code>other</code> to it.</div>
 <dl>
@@ -670,7 +676,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>replaceColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.358">replaceColor</a>(<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;old,
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.364">replaceColor</a>(<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;old,
                          <a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;new_)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#replaceColor-T-T-">IColoredString</a></code></span></div>
 <div class="block">Replace color <code>old</code> by <code>new_</code> in all buckets of <code>this</code>.</div>
@@ -691,7 +697,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>setColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.376">setColor</a>(<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.382">setColor</a>(<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;color)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#setColor-T-">IColoredString</a></code></span></div>
 <div class="block">Set <code>color</code> in all buckets.</div>
 <dl>
@@ -706,7 +712,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>append</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.387">append</a>(<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;bucket)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.393">append</a>(<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;bucket)</pre>
 </li>
 </ul>
 <a name="setLength-int-">
@@ -715,7 +721,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>setLength</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.392">setLength</a>(int&nbsp;len)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.398">setLength</a>(int&nbsp;len)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#setLength-int-">IColoredString</a></code></span></div>
 <div class="block">Deletes all content after index <code>len</code> (if any).</div>
 <dl>
@@ -730,7 +736,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>wrap</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.429">wrap</a>(int&nbsp;width)</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.435">wrap</a>(int&nbsp;width)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/panel/IColoredString.html#wrap-int-">wrap</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></dd>
@@ -750,7 +756,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>wrap</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.444">wrap</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.450">wrap</a>(int&nbsp;width,
                                     <a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;buf)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -773,7 +779,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>justify</h4>
-<pre>public&nbsp;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.539">justify</a>(int&nbsp;width)</pre>
+<pre>public&nbsp;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.545">justify</a>(int&nbsp;width)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#justify-int-">IColoredString</a></code></span></div>
 <div class="block">This method does NOT guarantee that the result's length is <code>width</code>.
  It is impossible to do correct justifying if <code>this</code>'s length is
@@ -794,7 +800,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>clear</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.675">clear</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.681">clear</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#clear--">IColoredString</a></code></span></div>
 <div class="block">Empties <code>this</code>.</div>
 <dl>
@@ -809,7 +815,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>length</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.680">length</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.686">length</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/panel/IColoredString.html#length--">length</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></dd>
@@ -824,7 +830,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.689">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.695">isEmpty</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/panel/IColoredString.html#isEmpty--">isEmpty</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></dd>
@@ -839,7 +845,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>lastColor</h4>
-<pre>public&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.699">lastColor</a>()</pre>
+<pre>public&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.705">lastColor</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../squidpony/panel/IColoredString.html#lastColor--">IColoredString</a></code></span></div>
 <div class="block">This method is typically more efficient than <a href="../../squidpony/panel/IColoredString.html#colorAt-int-"><code>IColoredString.colorAt(int)</code></a>.</div>
 <dl>
@@ -856,7 +862,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>colorAt</h4>
-<pre>public&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.704">colorAt</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.710">colorAt</a>(int&nbsp;index)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/panel/IColoredString.html#colorAt-int-">colorAt</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></dd>
@@ -871,7 +877,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>charAt</h4>
-<pre>public&nbsp;char&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.720">charAt</a>(int&nbsp;index)</pre>
+<pre>public&nbsp;char&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.726">charAt</a>(int&nbsp;index)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/panel/IColoredString.html#charAt-int-">charAt</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></dd>
@@ -886,7 +892,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>present</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.736">present</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.742">present</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../squidpony/panel/IColoredString.html#present--">present</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></dd>
@@ -901,7 +907,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>presentWithMarkup</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.749">presentWithMarkup</a>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;markup)</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.755">presentWithMarkup</a>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&nbsp;markup)</pre>
 <div class="block">Given some way of converting from a T value to an in-line markup tag, returns a string representation of
  this IColoredString with in-line markup representing colors.</div>
 <dl>
@@ -920,7 +926,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>iterator</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.774">iterator</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ListIterator.html?is-external=true" title="class or interface in java.util">ListIterator</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.780">iterator</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang">iterator</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;</code></dd>
@@ -933,7 +939,7 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.779">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.785">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -943,11 +949,27 @@ implements <a href="../../squidpony/panel/IColoredString.html" title="interface 
 <a name="equals-java.lang.Object-java.lang.Object-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>protected static&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.783">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o1,
+<pre>protected static&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.789">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o1,
                                 <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o2)</pre>
+</li>
+</ul>
+<a name="getFragments--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getFragments</h4>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.Impl.html#line.812">getFragments</a>()</pre>
+<div class="block">Gets the Buckets as an ArrayList, allowing access by index instead of by <a href="../../squidpony/panel/IColoredString.Impl.html#iterator--"><code>iterator()</code></a>.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../squidpony/panel/IColoredString.html#getFragments--">getFragments</a></code>&nbsp;in interface&nbsp;<code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.Impl.html" title="type parameter in IColoredString.Impl">T</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the Buckets that would be returned by <a href="../../squidpony/panel/IColoredString.Impl.html#iterator--"><code>iterator()</code></a>, but in an ArrayList.</dd>
+</dl>
 </li>
 </ul>
 </li>

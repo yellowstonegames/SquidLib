@@ -546,7 +546,7 @@
 <h3>Class <a href="squidpony/ObText.html" title="class in squidpony">squidpony.ObText</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="squidpony/ObText.ObTextEntry.html" title="class in squidpony">ObText.ObTextEntry</a>&gt; implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>6L</dd>
+<dd>7L</dd>
 </dl>
 </li>
 <li class="blockList"><a name="squidpony.ObText.ContentMatcher">
@@ -560,7 +560,7 @@
 <h3>Class <a href="squidpony/ObText.ObTextEntry.html" title="class in squidpony">squidpony.ObText.ObTextEntry</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>5L</dd>
+<dd>7L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -3354,7 +3354,7 @@
 <h3>Class <a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">squidpony.squidmath.CoordDouble</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>300L</dd>
+<dd>500L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -3453,6 +3453,158 @@
 <li class="blockListLast">
 <h4>deck</h4>
 <pre>double[] deck</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath">squidpony.squidmath.Delaunay3D</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>points</h4>
+<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a>[] points</pre>
+</li>
+<li class="blockListLast">
+<h4>triangleSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; triangleSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D.Edge">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Delaunay3D.Edge.html" title="class in squidpony.squidmath">squidpony.squidmath.Delaunay3D.Edge</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D.Triangle">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Delaunay3D.Triangle.html" title="class in squidpony.squidmath">squidpony.squidmath.Delaunay3D.Triangle</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> b</pre>
+</li>
+<li class="blockListLast">
+<h4>c</h4>
+<pre><a href="squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a> c</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/DelaunayTriangulator.html" title="class in squidpony.squidmath">squidpony.squidmath.DelaunayTriangulator</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>points</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>[] points</pre>
+</li>
+<li class="blockListLast">
+<h4>triangleSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; triangleSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator.Edge">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/DelaunayTriangulator.Edge.html" title="class in squidpony.squidmath">squidpony.squidmath.DelaunayTriangulator.Edge</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator.Triangle">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">squidpony.squidmath.DelaunayTriangulator.Triangle</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> b</pre>
+</li>
+<li class="blockListLast">
+<h4>c</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> c</pre>
 </li>
 </ul>
 </li>
@@ -4528,7 +4680,7 @@
 <h3>Class <a href="squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">squidpony.squidmath.MiniMover64RNG</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>1L</dd>
+<dd>2L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -5825,6 +5977,114 @@
 <li class="blockListLast">
 <h4>scramble</h4>
 <pre>boolean scramble</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Voronoi.html" title="class in squidpony.squidmath">squidpony.squidmath.Voronoi</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>pointSet</h4>
+<pre><a href="squidpony/squidmath/OrderedSet.html" title="class in squidpony.squidmath">OrderedSet</a>&lt;<a href="squidpony/squidmath/OrderedSet.html" title="type parameter in OrderedSet">K</a>&gt; pointSet</pre>
+</li>
+<li class="blockList">
+<h4>triangleSoup</h4>
+<pre>squidpony.squidmath.Voronoi.TriangleSoup triangleSoup</pre>
+</li>
+<li class="blockListLast">
+<h4>polygonSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; polygonSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Edge">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Voronoi.Edge.html" title="class in squidpony.squidmath">squidpony.squidmath.Voronoi.Edge</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Polygon">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Voronoi.Polygon.html" title="class in squidpony.squidmath">squidpony.squidmath.Voronoi.Polygon</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>centroid</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> centroid</pre>
+</li>
+<li class="blockListLast">
+<h4>vertices</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>[] vertices</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Triangle">
+<!--   -->
+</a>
+<h3>Class <a href="squidpony/squidmath/Voronoi.Triangle.html" title="class in squidpony.squidmath">squidpony.squidmath.Voronoi.Triangle</a> extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> b</pre>
+</li>
+<li class="blockList">
+<h4>c</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> c</pre>
+</li>
+<li class="blockListLast">
+<h4>centroid</h4>
+<pre><a href="squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a> centroid</pre>
 </li>
 </ul>
 </li>

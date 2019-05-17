@@ -259,7 +259,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#contentEquals-squidpony.squidmath.ProbabilityTable-">contentEquals</a></span>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/ProbabilityTable.html#contentEquals-squidpony.squidmath.ProbabilityTable-">contentEquals</a></span>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</code>
+<div class="block">Can avoid some checks that <a href="../../squidpony/squidmath/ProbabilityTable.html#equals-java.lang.Object-"><code>equals(Object)</code></a> needs because this always takes a ProbabilityTable.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;</code></td>
@@ -839,7 +841,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>contentEquals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.393">contentEquals</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.397">contentEquals</a>(<a href="../../squidpony/squidmath/ProbabilityTable.html" title="class in squidpony.squidmath">ProbabilityTable</a>&lt;<a href="../../squidpony/squidmath/ProbabilityTable.html" title="type parameter in ProbabilityTable">T</a>&gt;&nbsp;o)</pre>
+<div class="block">Can avoid some checks that <a href="../../squidpony/squidmath/ProbabilityTable.html#equals-java.lang.Object-"><code>equals(Object)</code></a> needs because this always takes a ProbabilityTable.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>o</code> - another ProbabilityTable</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>true if both ProbabilityTables are equivalent in contents and likelihoods, not necessarily random state</dd>
+</dl>
 </li>
 </ul>
 <a name="hashCode--">
@@ -848,7 +857,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.403">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/ProbabilityTable.html#line.407">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

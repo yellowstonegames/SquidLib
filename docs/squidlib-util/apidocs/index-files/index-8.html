@@ -172,6 +172,10 @@
 <dd>
 <div class="block">Builds and returns a map in the Classic Rogue style, returned as a 2D char array.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#generate--">generate()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
+<dd>
+<div class="block">Generates a dungeon or other map as a 2D char array.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html#generate--">generate()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping">DenseRoomMapGenerator</a></dt>
 <dd>
 <div class="block">Generate a map as a 2D char array using the width and height specified in the constructor.</div>
@@ -869,6 +873,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html#getDungeon--">getDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ClassicRogueMapGenerator.html" title="class in squidpony.squidgrid.mapping">ClassicRogueMapGenerator</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#getDungeon--">getDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
+<dd>
+<div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#generate--"><code>ConnectingMapGenerator.generate()</code></a> or
+ some similar method present in a specific implementation.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html#getDungeon--">getDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping">DenseRoomMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#getDungeon--">getDungeon()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
@@ -914,6 +923,11 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidai/LineAOE.html#getEnd--">getEnd()</a></span> - Method in class squidpony.squidai.<a href="../squidpony/squidai/LineAOE.html" title="class in squidpony.squidai">LineAOE</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#getEnvironment--">getEnvironment()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
+<dd>
+<div class="block">Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
+ MixedGenerator.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html#getEnvironment--">getEnvironment()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping">DenseRoomMapGenerator</a></dt>
 <dd>
 <div class="block">Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
@@ -998,6 +1012,14 @@
 <div class="block">Gets the method for combining octaves in all fractal noise types, allowing an int argument corresponding to one
  of the following constants from this class: <a href="../squidpony/squidmath/FastNoise.html#FBM"><code>FastNoise.FBM</code></a> (0), <a href="../squidpony/squidmath/FastNoise.html#BILLOW"><code>FastNoise.BILLOW</code></a> (1), or <a href="../squidpony/squidmath/FastNoise.html#RIDGED_MULTI"><code>FastNoise.RIDGED_MULTI</code></a> (2).</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/panel/IColoredString.html#getFragments--">getFragments()</a></span> - Method in interface squidpony.panel.<a href="../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a></dt>
+<dd>
+<div class="block">Gets the Buckets as an ArrayList, allowing access by index instead of by <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang"><code>Iterable.iterator()</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/panel/IColoredString.Impl.html#getFragments--">getFragments()</a></span> - Method in class squidpony.panel.<a href="../squidpony/panel/IColoredString.Impl.html" title="class in squidpony.panel">IColoredString.Impl</a></dt>
+<dd>
+<div class="block">Gets the Buckets as an ArrayList, allowing access by index instead of by <a href="../squidpony/panel/IColoredString.Impl.html#iterator--"><code>IColoredString.Impl.iterator()</code></a>.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getFrequency--">getFrequency()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>
 <div class="block">Gets the frequency for all noise types.</div>
@@ -1024,6 +1046,8 @@
 <dd>
 <div class="block">Height of the map in cells.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getHeight--">getHeight()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.html#getHeight--">getHeight()</a></span> - Method in interface squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html#getHeight--">getHeight()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dt>
@@ -1146,8 +1170,6 @@
 <dd>
 <div class="block">Provided for compatibility with earlier code that used the AWT Point API.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#getLocation--">getLocation()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
-<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#getLOSEntry-int-int-">getLOSEntry(int, int)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#getMany-java.lang.Iterable-">getMany(Iterable&lt;? extends K&gt;)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
@@ -1459,6 +1481,10 @@
 <dd>
 <div class="block">4D simplex noise.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getNoiseMax--">getNoiseMax()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getNoiseMin--">getNoiseMin()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getNoiseType--">getNoiseType()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>
 <div class="block">Gets the default type of noise returned by <a href="../squidpony/squidmath/FastNoise.html#getConfiguredNoise-float-float-"><code>FastNoise.getConfiguredNoise(float, float)</code></a>, using one of the following constants
@@ -1653,6 +1679,24 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MummyNoise.html#getNoiseWithSeeds-double-double-double-double-double-double-long-long-long-long-long-long-">getNoiseWithSeeds(double, double, double, double, double, double, long, long, long, long, long, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/MummyNoise.html" title="class in squidpony.squidmath">MummyNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.Triangle.html#getNonEdgeVertex-squidpony.squidmath.Delaunay3D.Edge-">getNonEdgeVertex(Delaunay3D.Edge)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.Triangle.html" title="class in squidpony.squidmath">Delaunay3D.Triangle</a></dt>
+<dd>
+<div class="block">Returns the vertex of this triangle that is not part of the given edge.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.Triangle.html#getNonEdgeVertex-squidpony.squidmath.Delaunay3D.MultiCoord-squidpony.squidmath.Delaunay3D.MultiCoord-">getNonEdgeVertex(Delaunay3D.MultiCoord, Delaunay3D.MultiCoord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.Triangle.html" title="class in squidpony.squidmath">Delaunay3D.Triangle</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DelaunayTriangulator.Triangle.html#getNonEdgeVertex-squidpony.squidmath.DelaunayTriangulator.Edge-">getNonEdgeVertex(DelaunayTriangulator.Edge)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></dt>
+<dd>
+<div class="block">Returns the vertex of this triangle that is not part of the given edge.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DelaunayTriangulator.Triangle.html#getNonEdgeVertex-squidpony.squidmath.CoordDouble-squidpony.squidmath.CoordDouble-">getNonEdgeVertex(CoordDouble, CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Voronoi.Triangle.html#getNonEdgeVertex-squidpony.squidmath.Voronoi.Edge-">getNonEdgeVertex(Voronoi.Edge)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a></dt>
+<dd>
+<div class="block">Returns the vertex of this triangle that is not part of the given edge.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Voronoi.Triangle.html#getNonEdgeVertex-squidpony.squidmath.CoordDouble-squidpony.squidmath.CoordDouble-">getNonEdgeVertex(CoordDouble, CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntDoubleOrderedMap.html#getOrDefault-int-double-">getOrDefault(int, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntDoubleOrderedMap.html" title="class in squidpony.squidmath">IntDoubleOrderedMap</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntIntOrderedMap.html#getOrDefault-int-int-">getOrDefault(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntIntOrderedMap.html" title="class in squidpony.squidmath">IntIntOrderedMap</a></dt>
@@ -1708,6 +1752,18 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/FastNoise.html#getPerlinFractal-float-float-">getPerlinFractal(float, float)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.html#getPoints--">getPoints()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath">Delaunay3D</a></dt>
+<dd>
+<div class="block">Returns the point set in form of a vector of 2D vectors.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DelaunayTriangulator.html#getPoints--">getPoints()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DelaunayTriangulator.html" title="class in squidpony.squidmath">DelaunayTriangulator</a></dt>
+<dd>
+<div class="block">Returns the point set in form of a vector of 2D vectors.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Voronoi.html#getPointSet--">getPointSet()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Voronoi.html" title="class in squidpony.squidmath">Voronoi</a></dt>
+<dd>
+<div class="block">Returns the point set in form of a vector of 2D vectors.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/SpatialMap.html#getPosition-I-">getPosition(I)</a></span> - Method in class squidpony.squidgrid.<a href="../squidpony/squidgrid/SpatialMap.html" title="class in squidpony.squidgrid">SpatialMap</a></dt>
 <dd>
 <div class="block">Gets the position of the element with the given identity.</div>
@@ -2216,6 +2272,21 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#getTransparent--">getTransparent()</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.html#getTriangles--">getTriangles()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.html" title="class in squidpony.squidmath">Delaunay3D</a></dt>
+<dd>
+<div class="block">Returns the triangles of the triangulation in form of a list of 2D
+ triangles.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DelaunayTriangulator.html#getTriangles--">getTriangles()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DelaunayTriangulator.html" title="class in squidpony.squidmath">DelaunayTriangulator</a></dt>
+<dd>
+<div class="block">Returns the triangles of the triangulation in form of a list of 2D
+ triangles.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Voronoi.html#getTriangles--">getTriangles()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Voronoi.html" title="class in squidpony.squidmath">Voronoi</a></dt>
+<dd>
+<div class="block">Returns the triangles of the triangulation in form of a list of 2D
+ triangles.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#getUniqueIdentifier-int-int-int-int-">getUniqueIdentifier(int, int, int, int)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/IColorCenter.Skeleton.html#getUniqueIdentifier-T-">getUniqueIdentifier(T)</a></span> - Method in class squidpony.<a href="../squidpony/IColorCenter.Skeleton.html" title="class in squidpony">IColorCenter.Skeleton</a></dt>
@@ -2272,6 +2343,8 @@
 <dd>
 <div class="block">Width of the map in cells.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getWidth--">getWidth()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/OrganicMapGenerator.html" title="class in squidpony.squidgrid.mapping">OrganicMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.html#getWidth--">getWidth()</a></span> - Method in interface squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.html" title="interface in squidpony.squidgrid.mapping">Rectangle</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html#getWidth--">getWidth()</a></span> - Method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/Rectangle.Impl.html" title="class in squidpony.squidgrid.mapping">Rectangle.Impl</a></dt>

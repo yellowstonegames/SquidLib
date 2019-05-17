@@ -122,7 +122,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../src-html/squidpony/ObText.html#line.616">ObText.ContentMatcher</a>
+<pre>public static class <a href="../src-html/squidpony/ObText.html#line.643">ObText.ContentMatcher</a>
 extends regexodus.Matcher</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -262,7 +262,7 @@ extends regexodus.Matcher</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>ContentMatcher</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.623">ContentMatcher</a>()</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.650">ContentMatcher</a>()</pre>
 <div class="block">Constructs a ContentMatcher that will need to have its target set with <a href="../squidpony/ObText.ContentMatcher.html#setTarget-java.lang.CharSequence-"><code>setTarget(CharSequence)</code></a> or
  one of its overloads. The target should contain multiple substrings that may have quotation around them; this
  class is meant to skip the quotation in ObText's style.</div>
@@ -274,7 +274,7 @@ extends regexodus.Matcher</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>ContentMatcher</h4>
-<pre>public&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.632">ContentMatcher</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.659">ContentMatcher</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Constructs a ContentMatcher that already has its target set to <code>text</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -296,7 +296,7 @@ extends regexodus.Matcher</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTarget</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.656">setTarget</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.683">setTarget</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text)</pre>
 <div class="block">Supplies a text to search in/match with.
  Resets current search position to zero.</div>
 <dl>
@@ -318,7 +318,7 @@ extends regexodus.Matcher</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTarget</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.673">setTarget</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text,
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.700">setTarget</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/CharSequence.html?is-external=true" title="class or interface in java.lang">CharSequence</a>&nbsp;text,
                       int&nbsp;start,
                       int&nbsp;len)</pre>
 <div class="block">Supplies a text to search in/match with, as a part of String.
@@ -344,7 +344,7 @@ extends regexodus.Matcher</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTarget</h4>
-<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.690">setTarget</a>(char[]&nbsp;text,
+<pre>public&nbsp;void&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.717">setTarget</a>(char[]&nbsp;text,
                       int&nbsp;start,
                       int&nbsp;len)</pre>
 <div class="block">Supplies a text to search in/match with, as a part of char array.
@@ -370,7 +370,7 @@ extends regexodus.Matcher</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>hasMatch</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.699">hasMatch</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.726">hasMatch</a>()</pre>
 <div class="block">Returns true if <code>Matcher.find()</code> has returned true and the found text is a usable String (not some syntax).
  If this returns true, you can reasonably get a (possibly empty) String using <a href="../squidpony/ObText.ContentMatcher.html#getMatch--"><code>getMatch()</code></a>.</div>
 <dl>
@@ -385,7 +385,7 @@ extends regexodus.Matcher</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getMatch</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.711">getMatch</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../src-html/squidpony/ObText.ContentMatcher.html#line.738">getMatch</a>()</pre>
 <div class="block">Returns the contents of the latest String successfully found with <code>Matcher.find()</code>, without quotation.
  You should typically call <a href="../squidpony/ObText.ContentMatcher.html#hasMatch--"><code>hasMatch()</code></a> even if find() has returned true, to ensure there is a valid
  String that can be acquired (this will return an empty String if hasMatch() returns false, but an empty

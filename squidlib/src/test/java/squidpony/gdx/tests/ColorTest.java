@@ -311,17 +311,17 @@ public class ColorTest extends ApplicationAdapter {
 //                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
 //                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
 
-        /// chosen as alternative
-        return floatGet(
-                MathExtras.clamp(luma + warm * 0.5f, 0f, 1f),
-                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
-                MathExtras.clamp(luma - warm * 0.25f - mild * 0.25f, 0f, 1f), opacity);
+        /// was chosen as alternative, has issues because it has to change colors and has no identity state
+//        return floatGet(
+//                MathExtras.clamp(luma + warm * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma + mild * 0.5f, 0f, 1f),
+//                MathExtras.clamp(luma - warm * 0.25f - mild * 0.25f, 0f, 1f), opacity);
 
         //// original
-//        return floatGet(
-//                MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
-//                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
-//                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
+        return floatGet(
+                MathExtras.clamp(luma + warm * 0.625f - mild * 0.5f, 0f, 1f),
+                MathExtras.clamp(luma + mild * 0.5f - warm * 0.375f, 0f, 1f),
+                MathExtras.clamp(luma - warm * 0.375f - mild * 0.5f, 0f, 1f), opacity);
 
     }
 
@@ -332,18 +332,18 @@ public class ColorTest extends ApplicationAdapter {
 //        SColor.colorFromFloat(tmp, SColor.floatGetYCbCr(y, cb, cr, 1f));
 //        display.putString(b, r, StringKit.hex(b) + "x" + StringKit.hex(r), y < 0.65f ? SColor.WHITE : SColor.BLACK,
 //                tmp);
-//        float red = luma + warm * 0.625f - mild * 0.5f
-//          , green = luma + mild * 0.5f - warm * 0.375f
-//          ,  blue = luma - warm * 0.375f - mild * 0.5f
-//                ;
+        float red = luma + warm * 0.625f - mild * 0.5f
+          , green = luma + mild * 0.5f - warm * 0.375f
+          ,  blue = luma - warm * 0.375f - mild * 0.5f
+                ;
 //        float red = luma + warm * 0.625f    
 //          , green = luma + mild * 0.5f      
 //          ,  blue = luma - warm * 0.375f - mild * 0.5f
 //                ;
-        float red = luma + warm * 0.5f
-          , green = luma + mild * 0.5f
-          ,  blue = luma - warm * 0.25f - mild * 0.25f
-                ;
+//        float red = luma + warm * 0.5f
+//          , green = luma + mild * 0.5f
+//          ,  blue = luma - warm * 0.25f - mild * 0.25f
+//                ;
 //        colors[b][r] = floatGetYCwCm(y, cb, cr, 1f);
         colors[b][r] =
                 (red >= 0f && red <= 1f && green >= 0f && green <= 1f && blue >= 0f && blue <= 1f)
@@ -468,7 +468,16 @@ public class ColorTest extends ApplicationAdapter {
         });
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
         SColor col = new SColor(0, 0, 0, 0);
-        int[] palette = FLESURRECT;
+        int[] palette = {
+                0x00000000, 0xF1D5B0FF, 0xF9C969FF, 0xA4CE87FF, 0xAFF8EFFF, 0x1DAA9DFF, 0x10D6DBFF, 0x1C1C1CFF,
+                0x106AD4FF, 0x7FA8F8FF, 0x5229EEFF, 0x79A2F9FF, 0xA11BFDFF, 0xD486F3FF, 0xEC9E38FF, 0x3D3D3DFF,
+                0x9CFEE7FF, 0x81ECD7FF, 0x3AD6D9FF, 0x26E0D3FF, 0xB1EDEDFF, 0x7895CAFF, 0x879AFCFF, 0x5E5E5EFF,
+                0xC5A3EAFF, 0xBD15FFFF, 0xFB8DBBFF, 0xB91DB1FF, 0xCF48CCFF, 0xF16F9BFF, 0xC9D88DFF, 0x7F7F7FFF,
+                0xBCDD8EFF, 0x89E3CEFF, 0x51C7EEFF, 0x7AAAF2FF, 0x839FDAFF, 0xA3A0DEFF, 0xBF93F8FF, 0x9C9C9CFF,
+                0xBB44ACFF, 0xDF6AEEFF, 0xFD47F9FF, 0xB7E88FFF, 0x9FE0B2FF, 0x68F6E5FF, 0x6FE0C1FF, 0xBDBDBDFF,
+                0x70FCCEFF, 0x3DA1C7FF, 0x6DABEFFF, 0xC8ADF2FF, 0xBD63FFFF, 0xBA37D9FF, 0xAF68B1FF, 0xDEDEDEFF,
+                0xF345DEFF, 0xE1B29BFF, 0xFAC05AFF, 0xCFE996FF, 0xA0F18DFF, 0x76CA7CFF, 0xA9EFD9FF, 0xFFFFFFFF, 
+        };
         final int COUNT = palette.length;
         final double THRESHOLD = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
         byte[] paletteMapping = new byte[1 << 16];
@@ -647,10 +656,10 @@ public class ColorTest extends ApplicationAdapter {
 
         System.out.println("int[][] RAMP_VALUES = new int[][]{");
         for (int i = 0; i < COUNT; i++) {
-            System.out.println("{ 0x" + StringKit.hex(FLESURRECT[ramps[i][3] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][2] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][1] & 255])
-                    + ", 0x" + StringKit.hex(FLESURRECT[ramps[i][0] & 255]) + " },"
+            System.out.println("{ 0x" + StringKit.hex(palette[ramps[i][3] & 255])
+                    + ", 0x" + StringKit.hex(palette[ramps[i][2] & 255])
+                    + ", 0x" + StringKit.hex(palette[ramps[i][1] & 255])
+                    + ", 0x" + StringKit.hex(palette[ramps[i][0] & 255]) + " },"
             );
         }
 //        for (int i = 0; i < COUNT; i++) {
@@ -662,8 +671,8 @@ public class ColorTest extends ApplicationAdapter {
 //        }
         System.out.println("};");
         for (int i = 0; i < COUNT; i++) {
-            col.set(FLESURRECT[i & 255]).clamp();
-            display.putString(i >>> 1 & 0xF0, i & 31, String.format("   %08X   ", FLESURRECT[i]), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
+            col.set(palette[i & 255]).clamp();
+            display.putString(i >>> 1 & 0xF0, i & 31, String.format("   %08X   ", palette[i]), col.value() < 0.7f ? SColor.WHITE : SColor.BLACK, col);
         }
             //            for (int j = 0; j < 4; j++) {
                 //float cf = col.set(FLESURRECT[ramps[i][j] & 255]).clamp().toFloatBits();

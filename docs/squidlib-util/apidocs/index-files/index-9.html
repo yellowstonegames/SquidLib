@@ -1327,8 +1327,16 @@
  drawing characters to draw straight, continuous lines for walls, filling regions between walls (that were
  filled with more walls before) with space characters, ' '.</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#hashHive--">hashHive()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
+<dd>
+<div class="block">Gets a high-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an
+ excellent option on GWT.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/IntVLA.html#hashWisp--">hashWisp()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Gets a slightly-higher quality hash code using the Wisp algorithm; you should prefer <a href="../squidpony/squidmath/IntVLA.html#hashHive--"><code>IntVLA.hashHive()</code></a> in newer
+ code or code that needs to run on GWT, since that method avoids the long math that is expensive on GWT.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Direction.html#hasLeft--">hasLeft()</a></span> - Method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ObText.ContentMatcher.html#hasMatch--">hasMatch()</a></span> - Method in class squidpony.<a href="../squidpony/ObText.ContentMatcher.html" title="class in squidpony">ObText.ContentMatcher</a></dt>
@@ -1371,6 +1379,26 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/Direction.html#hasUp--">hasUp()</a></span> - Method in enum squidpony.squidgrid.<a href="../squidpony/squidgrid/Direction.html" title="enum in squidpony.squidgrid">Direction</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.Triangle.html#hasVertex-squidpony.squidmath.Delaunay3D.MultiCoord-">hasVertex(Delaunay3D.MultiCoord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.Triangle.html" title="class in squidpony.squidmath">Delaunay3D.Triangle</a></dt>
+<dd>
+<div class="block">Returns true if the given vertex is one of the vertices describing this
+ triangle.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.Triangle.html#hasVertex-squidpony.squidmath.CoordDouble-">hasVertex(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.Triangle.html" title="class in squidpony.squidmath">Delaunay3D.Triangle</a></dt>
+<dd>
+<div class="block">Returns true if the given vertex is one of the vertices describing this
+ triangle.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/DelaunayTriangulator.Triangle.html#hasVertex-squidpony.squidmath.CoordDouble-">hasVertex(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/DelaunayTriangulator.Triangle.html" title="class in squidpony.squidmath">DelaunayTriangulator.Triangle</a></dt>
+<dd>
+<div class="block">Returns true if the given vertex is one of the vertices describing this
+ triangle.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Voronoi.Triangle.html#hasVertex-squidpony.squidmath.CoordDouble-">hasVertex(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Voronoi.Triangle.html" title="class in squidpony.squidmath">Voronoi.Triangle</a></dt>
+<dd>
+<div class="block">Returns true if the given vertex is one of the vertices describing this
+ triangle.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/MonsterGen.html#HAWK">HAWK</a></span> - Static variable in class squidpony.<a href="../squidpony/MonsterGen.html" title="class in squidpony">MonsterGen</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Arrangement.html#headMap-K-">headMap(K)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Arrangement.html" title="class in squidpony.squidmath">Arrangement</a></dt>
@@ -1471,6 +1499,8 @@
 <dd>
 <div class="block">The grid's height</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html#height">height</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/ConnectingMapGenerator.html" title="class in squidpony.squidgrid.mapping">ConnectingMapGenerator</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html#height">height</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DenseRoomMapGenerator.html" title="class in squidpony.squidgrid.mapping">DenseRoomMapGenerator</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/DungeonGenerator.html#height">height</a></span> - Variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/DungeonGenerator.html" title="class in squidpony.squidgrid.mapping">DungeonGenerator</a></dt>
@@ -1618,6 +1648,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/CrossHash.Hive.html#Hive--">Hive()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/CrossHash.Hive.html" title="class in squidpony.squidmath">CrossHash.Hive</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#HLETKIP">HLETKIP</a></span> - Static variable in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
+<dd>
+<div class="block">A fictional language that could ostensibly be spoken by some group of humans, but that isn't closely based on any
+ one real-world language.</div>
+</dd>
 <dt><a href="../squidpony/tileset/HorizontalCorridorsV1.html" title="class in squidpony.tileset"><span class="typeNameLink">HorizontalCorridorsV1</span></a> - Class in <a href="../squidpony/tileset/package-summary.html">squidpony.tileset</a></dt>
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/tileset/HorizontalCorridorsV1.html#HorizontalCorridorsV1--">HorizontalCorridorsV1()</a></span> - Constructor for class squidpony.tileset.<a href="../squidpony/tileset/HorizontalCorridorsV1.html" title="class in squidpony.tileset">HorizontalCorridorsV1</a></dt>

@@ -3730,57 +3730,58 @@
 <span class="sourceLineNo">3722</span>//            y *= y * (3.0 - 2.0 * y);<a name="line.3722"></a>
 <span class="sourceLineNo">3723</span>//            x *= x;<a name="line.3723"></a>
 <span class="sourceLineNo">3724</span>//            y *= y;<a name="line.3724"></a>
-<span class="sourceLineNo">3725</span>            final double ix = 1 - x, iy = 1 - y;<a name="line.3725"></a>
-<span class="sourceLineNo">3726</span>//            final double ix = x, iy = y;<a name="line.3726"></a>
-<span class="sourceLineNo">3727</span>//            x = 1.0 - x;<a name="line.3727"></a>
-<span class="sourceLineNo">3728</span>//            y = 1.0 - y;<a name="line.3728"></a>
-<span class="sourceLineNo">3729</span>            final double ret = ((x * SeededNoise.phiGrad2[x0y0][0] + y * SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)<a name="line.3729"></a>
-<span class="sourceLineNo">3730</span>                    + (ix * SeededNoise.phiGrad2[x1y0][0] + y * SeededNoise.phiGrad2[x1y0][1]) * (x * iy)<a name="line.3730"></a>
-<span class="sourceLineNo">3731</span>                    + (x * SeededNoise.phiGrad2[x0y1][0] + iy * SeededNoise.phiGrad2[x0y1][1]) * (ix * y)<a name="line.3731"></a>
-<span class="sourceLineNo">3732</span>                    + (ix * SeededNoise.phiGrad2[x1y1][0] + iy * SeededNoise.phiGrad2[x1y1][1]) * (x * y)<a name="line.3732"></a>
-<span class="sourceLineNo">3733</span>            );<a name="line.3733"></a>
-<span class="sourceLineNo">3734</span>            if(ret &lt; -1.0)<a name="line.3734"></a>
-<span class="sourceLineNo">3735</span>                System.out.printf("LOW! ret: %f, x: %f, y: %f\n", ret, x, y);<a name="line.3735"></a>
-<span class="sourceLineNo">3736</span>            if(ret &gt; 1.0)<a name="line.3736"></a>
-<span class="sourceLineNo">3737</span>                System.out.printf("HIGH! ret: %f, x: %f, y: %f\n", ret, x, y);<a name="line.3737"></a>
-<span class="sourceLineNo">3738</span>            return ret;<a name="line.3738"></a>
-<span class="sourceLineNo">3739</span>//            long xf = x &gt;= 0.0 ? (long) x : (long) x - 1L;<a name="line.3739"></a>
-<span class="sourceLineNo">3740</span>//            long yf = y &gt;= 0.0 ? (long) y : (long) y - 1L;<a name="line.3740"></a>
-<span class="sourceLineNo">3741</span>//            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;<a name="line.3741"></a>
-<span class="sourceLineNo">3742</span>//            double xSmall = x - xf;<a name="line.3742"></a>
-<span class="sourceLineNo">3743</span>//            //, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L<a name="line.3743"></a>
-<span class="sourceLineNo">3744</span>//            double start = (((s += xf * 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,<a name="line.3744"></a>
-<span class="sourceLineNo">3745</span>//                    start2 = (((s2 += xf * 0x6C8E9CF570932BD5L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63,<a name="line.3745"></a>
-<span class="sourceLineNo">3746</span>//                    end = (((s += 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,<a name="line.3746"></a>
-<span class="sourceLineNo">3747</span>//                    end2 = (((s2 += 0x6C8E9CF570932BD5L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3747"></a>
-<span class="sourceLineNo">3748</span>////            double x0y0 = HastyPointHash.hashAll(xf, yf, seed) * 0x0.fffffffffffffbp-63,<a name="line.3748"></a>
-<span class="sourceLineNo">3749</span>////                    x1y0 = HastyPointHash.hashAll(xf+1L, yf, seed) * 0x0.fffffffffffffbp-63,<a name="line.3749"></a>
-<span class="sourceLineNo">3750</span>////                    x0y1 = HastyPointHash.hashAll(xf, yf+1L, seed) * 0x0.fffffffffffffbp-63,<a name="line.3750"></a>
-<span class="sourceLineNo">3751</span>////                    x1y1 = HastyPointHash.hashAll(xf+1L, yf+1L, seed) * 0x0.fffffffffffffbp-63, y0, y1;<a name="line.3751"></a>
-<span class="sourceLineNo">3752</span>//            xSmall = xSmall * xSmall * (3.0 - 2.0 * xSmall);<a name="line.3752"></a>
-<span class="sourceLineNo">3753</span>////            double a2 = xSmall * xSmall, a4 = a2 * a2, a6 = a4 * a2;<a name="line.3753"></a>
-<span class="sourceLineNo">3754</span>////            xSmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;<a name="line.3754"></a>
-<span class="sourceLineNo">3755</span>////            y0 = (1.0 - xSmall) * x0y0 + xSmall * x1y0;<a name="line.3755"></a>
-<span class="sourceLineNo">3756</span>////            y1 = (1.0 - xSmall) * x0y1 + xSmall * x1y1;<a name="line.3756"></a>
-<span class="sourceLineNo">3757</span>//            double ySmall = y - yf;<a name="line.3757"></a>
-<span class="sourceLineNo">3758</span>//            ySmall = ySmall * ySmall * (3.0 - 2.0 * ySmall);<a name="line.3758"></a>
-<span class="sourceLineNo">3759</span>////            a2 = ySmall * ySmall;<a name="line.3759"></a>
-<span class="sourceLineNo">3760</span>////            a4 = a2 * a2;<a name="line.3760"></a>
-<span class="sourceLineNo">3761</span>////            a6 = a4 * a2;<a name="line.3761"></a>
-<span class="sourceLineNo">3762</span>////            ySmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;<a name="line.3762"></a>
-<span class="sourceLineNo">3763</span>//            return (1.0 - ySmall) * ((1.0 - xSmall) * start + xSmall * end) + ySmall * ((1.0 - xSmall) * start2 + xSmall * end2);<a name="line.3763"></a>
-<span class="sourceLineNo">3764</span>////            x1 = (1.0 - xSmall) * start2 + xSmall * end2;<a name="line.3764"></a>
-<span class="sourceLineNo">3765</span>////            s = HastyPointHash.hashAll(xf, yf, seed);//((0xC13FA9A902A6328FL ^ seed)) * 0x91E10DA5C79E7B1DL;<a name="line.3765"></a>
-<span class="sourceLineNo">3766</span>////            start = (((s += yf * 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3766"></a>
-<span class="sourceLineNo">3767</span>//////            start2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3767"></a>
-<span class="sourceLineNo">3768</span>////            end = (((s += 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3768"></a>
-<span class="sourceLineNo">3769</span>//////            end2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3769"></a>
-<span class="sourceLineNo">3770</span>////            y0 = (1.0 - ySmall) * start + ySmall * end;<a name="line.3770"></a>
-<span class="sourceLineNo">3771</span>//////            y1 = (1.0 - ySmall) * start2 + ySmall * end2;<a name="line.3771"></a>
-<span class="sourceLineNo">3772</span>////            return NumberTools.sway(x0 + y0 + 0.5);<a name="line.3772"></a>
-<span class="sourceLineNo">3773</span>        }<a name="line.3773"></a>
-<span class="sourceLineNo">3774</span>    }<a name="line.3774"></a>
-<span class="sourceLineNo">3775</span>}<a name="line.3775"></a>
+<span class="sourceLineNo">3725</span>            final double ix = 1.0 - x, iy = 1.0 - y;<a name="line.3725"></a>
+<span class="sourceLineNo">3726</span>//            final double ix = (1 - x) * (1 - x), iy = (1 - y) * (1 - y);<a name="line.3726"></a>
+<span class="sourceLineNo">3727</span>//            final double ix = x, iy = y;<a name="line.3727"></a>
+<span class="sourceLineNo">3728</span>//            x = 1.0 - x;<a name="line.3728"></a>
+<span class="sourceLineNo">3729</span>//            y = 1.0 - y;<a name="line.3729"></a>
+<span class="sourceLineNo">3730</span>            //            double ret = ((ix * SeededNoise.phiGrad2[x0y0][0] + iy * SeededNoise.phiGrad2[x0y0][1])<a name="line.3730"></a>
+<span class="sourceLineNo">3731</span>//                    + (x * SeededNoise.phiGrad2[x1y0][0] + iy * SeededNoise.phiGrad2[x1y0][1])<a name="line.3731"></a>
+<span class="sourceLineNo">3732</span>//                    + (ix * SeededNoise.phiGrad2[x0y1][0] + y * SeededNoise.phiGrad2[x0y1][1])<a name="line.3732"></a>
+<span class="sourceLineNo">3733</span>//                    + (x * SeededNoise.phiGrad2[x1y1][0] + y * SeededNoise.phiGrad2[x1y1][1])<a name="line.3733"></a>
+<span class="sourceLineNo">3734</span>//            );<a name="line.3734"></a>
+<span class="sourceLineNo">3735</span>            return ((SeededNoise.phiGrad2[x0y0][0] + SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)<a name="line.3735"></a>
+<span class="sourceLineNo">3736</span>                    + (SeededNoise.phiGrad2[x1y0][0] + SeededNoise.phiGrad2[x1y0][1]) * (x * iy)<a name="line.3736"></a>
+<span class="sourceLineNo">3737</span>                    + (SeededNoise.phiGrad2[x0y1][0] + SeededNoise.phiGrad2[x0y1][1]) * (ix * y)<a name="line.3737"></a>
+<span class="sourceLineNo">3738</span>                    + (SeededNoise.phiGrad2[x1y1][0] + SeededNoise.phiGrad2[x1y1][1]) * (x * y)<a name="line.3738"></a>
+<span class="sourceLineNo">3739</span>            ) * 0.7071067811865475;<a name="line.3739"></a>
+<span class="sourceLineNo">3740</span>//            long xf = x &gt;= 0.0 ? (long) x : (long) x - 1L;<a name="line.3740"></a>
+<span class="sourceLineNo">3741</span>//            long yf = y &gt;= 0.0 ? (long) y : (long) y - 1L;<a name="line.3741"></a>
+<span class="sourceLineNo">3742</span>//            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;<a name="line.3742"></a>
+<span class="sourceLineNo">3743</span>//            double xSmall = x - xf;<a name="line.3743"></a>
+<span class="sourceLineNo">3744</span>//            //, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L<a name="line.3744"></a>
+<span class="sourceLineNo">3745</span>//            double start = (((s += xf * 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,<a name="line.3745"></a>
+<span class="sourceLineNo">3746</span>//                    start2 = (((s2 += xf * 0x6C8E9CF570932BD5L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63,<a name="line.3746"></a>
+<span class="sourceLineNo">3747</span>//                    end = (((s += 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,<a name="line.3747"></a>
+<span class="sourceLineNo">3748</span>//                    end2 = (((s2 += 0x6C8E9CF570932BD5L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3748"></a>
+<span class="sourceLineNo">3749</span>////            double x0y0 = HastyPointHash.hashAll(xf, yf, seed) * 0x0.fffffffffffffbp-63,<a name="line.3749"></a>
+<span class="sourceLineNo">3750</span>////                    x1y0 = HastyPointHash.hashAll(xf+1L, yf, seed) * 0x0.fffffffffffffbp-63,<a name="line.3750"></a>
+<span class="sourceLineNo">3751</span>////                    x0y1 = HastyPointHash.hashAll(xf, yf+1L, seed) * 0x0.fffffffffffffbp-63,<a name="line.3751"></a>
+<span class="sourceLineNo">3752</span>////                    x1y1 = HastyPointHash.hashAll(xf+1L, yf+1L, seed) * 0x0.fffffffffffffbp-63, y0, y1;<a name="line.3752"></a>
+<span class="sourceLineNo">3753</span>//            xSmall = xSmall * xSmall * (3.0 - 2.0 * xSmall);<a name="line.3753"></a>
+<span class="sourceLineNo">3754</span>////            double a2 = xSmall * xSmall, a4 = a2 * a2, a6 = a4 * a2;<a name="line.3754"></a>
+<span class="sourceLineNo">3755</span>////            xSmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;<a name="line.3755"></a>
+<span class="sourceLineNo">3756</span>////            y0 = (1.0 - xSmall) * x0y0 + xSmall * x1y0;<a name="line.3756"></a>
+<span class="sourceLineNo">3757</span>////            y1 = (1.0 - xSmall) * x0y1 + xSmall * x1y1;<a name="line.3757"></a>
+<span class="sourceLineNo">3758</span>//            double ySmall = y - yf;<a name="line.3758"></a>
+<span class="sourceLineNo">3759</span>//            ySmall = ySmall * ySmall * (3.0 - 2.0 * ySmall);<a name="line.3759"></a>
+<span class="sourceLineNo">3760</span>////            a2 = ySmall * ySmall;<a name="line.3760"></a>
+<span class="sourceLineNo">3761</span>////            a4 = a2 * a2;<a name="line.3761"></a>
+<span class="sourceLineNo">3762</span>////            a6 = a4 * a2;<a name="line.3762"></a>
+<span class="sourceLineNo">3763</span>////            ySmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;<a name="line.3763"></a>
+<span class="sourceLineNo">3764</span>//            return (1.0 - ySmall) * ((1.0 - xSmall) * start + xSmall * end) + ySmall * ((1.0 - xSmall) * start2 + xSmall * end2);<a name="line.3764"></a>
+<span class="sourceLineNo">3765</span>////            x1 = (1.0 - xSmall) * start2 + xSmall * end2;<a name="line.3765"></a>
+<span class="sourceLineNo">3766</span>////            s = HastyPointHash.hashAll(xf, yf, seed);//((0xC13FA9A902A6328FL ^ seed)) * 0x91E10DA5C79E7B1DL;<a name="line.3766"></a>
+<span class="sourceLineNo">3767</span>////            start = (((s += yf * 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3767"></a>
+<span class="sourceLineNo">3768</span>//////            start2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3768"></a>
+<span class="sourceLineNo">3769</span>////            end = (((s += 0x6C8E9CF570932BD5L) ^ (s &gt;&gt;&gt; 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3769"></a>
+<span class="sourceLineNo">3770</span>//////            end2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 &gt;&gt;&gt; 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;<a name="line.3770"></a>
+<span class="sourceLineNo">3771</span>////            y0 = (1.0 - ySmall) * start + ySmall * end;<a name="line.3771"></a>
+<span class="sourceLineNo">3772</span>//////            y1 = (1.0 - ySmall) * start2 + ySmall * end2;<a name="line.3772"></a>
+<span class="sourceLineNo">3773</span>////            return NumberTools.sway(x0 + y0 + 0.5);<a name="line.3773"></a>
+<span class="sourceLineNo">3774</span>        }<a name="line.3774"></a>
+<span class="sourceLineNo">3775</span>    }<a name="line.3775"></a>
+<span class="sourceLineNo">3776</span>}<a name="line.3776"></a>
 
 
 

@@ -931,9 +931,14 @@
  its result multiplied by a constant.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG--">MiniMover64RNG()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Calls <a href="../squidpony/squidmath/MiniMover64RNG.html#seed-int-"><code>MiniMover64RNG.seed(int)</code></a> with a random int value (obtained using <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#random--" title="class or interface in java.lang"><code>Math.random()</code></a>).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-int-">MiniMover64RNG(int)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">The recommended constructor, this guarantees the generator will have a period of at least 2 to the 20 (roughly
+ one million, but most if not all initial states will have much longer periods).</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-long-">MiniMover64RNG(long)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/MiniMover64RNG.html" title="class in squidpony.squidmath">MiniMover64RNG</a></dt>
 <dd>
 <div class="block">Not advised for external use; prefer <a href="../squidpony/squidmath/MiniMover64RNG.html#MiniMover64RNG-int-"><code>MiniMover64RNG.MiniMover64RNG(int)</code></a> because it guarantees a good subcycle.</div>
@@ -1330,8 +1335,6 @@
 <dd>
 <div class="block">Move an element, picked by its identity, to a new Coord position.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#move-int-int-">move(int, int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
-<dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidmath/Mover32RNG.html" title="class in squidpony.squidmath"><span class="typeNameLink">Mover32RNG</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">One of Mark Overton's subcycle generators from <a href="http://www.drdobbs.com/tools/229625477">this article</a>,
@@ -1375,6 +1378,12 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/ShortVLA.html#mul-int-short-">mul(int, short)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/ShortVLA.html" title="class in squidpony.squidmath">ShortVLA</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.MultiCoord.html#MultiCoord--">MultiCoord()</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.MultiCoord.html#MultiCoord-squidpony.squidmath.CoordDouble-">MultiCoord(CoordDouble)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Delaunay3D.MultiCoord.html#MultiCoord-double-double-double-">MultiCoord(double, double, double)</a></span> - Constructor for class squidpony.squidmath.<a href="../squidpony/squidmath/Delaunay3D.MultiCoord.html" title="class in squidpony.squidmath">Delaunay3D.MultiCoord</a></dt>
+<dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Coord.html#multiply-squidpony.squidmath.Coord-">multiply(Coord)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a></dt>
 <dd>
 <div class="block">Separately multiplies the x and y positions of other from this Coord, producing a different Coord as their
@@ -1390,6 +1399,10 @@
 <div class="block">Separately multiplies the x and y positions of this Coord by operand, rounding to the nearest int for each of x
  and y and producing a different Coord as their "product."</div>
 </dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#multiply-double-double-">multiply(double, double)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/CoordDouble.html#multiply-squidpony.squidmath.CoordDouble-">multiply(CoordDouble)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></dt>
+<dd>&nbsp;</dd>
 <dt><a href="../squidpony/squidgrid/MultiSpill.html" title="class in squidpony.squidgrid"><span class="typeNameLink">MultiSpill</span></a> - Class in <a href="../squidpony/squidgrid/package-summary.html">squidpony.squidgrid</a></dt>
 <dd>
 <div class="block">A randomized flood-fill implementation that can be used for level generation (e.g.</div>

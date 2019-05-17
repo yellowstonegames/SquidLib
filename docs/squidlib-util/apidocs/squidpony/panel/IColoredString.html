@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6,"i16":6,"i17":6,"i18":6,"i19":6,"i20":6,"i21":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -228,60 +228,66 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.ht
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#colorAt-int-">colorAt</a></span>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#getFragments--">getFragments</a></span>()</code>
+<div class="block">Gets the Buckets as an ArrayList, allowing access by index instead of by <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang"><code>Iterable.iterator()</code></a>.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#isEmpty--">isEmpty</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#justify-int-">justify</a></span>(int&nbsp;width)</code>
 <div class="block">This method does NOT guarantee that the result's length is <code>width</code>.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#lastColor--">lastColor</a></span>()</code>
 <div class="block">This method is typically more efficient than <a href="../../squidpony/panel/IColoredString.html#colorAt-int-"><code>colorAt(int)</code></a>.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#length--">length</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#present--">present</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#presentWithMarkup-squidpony.panel.IMarkup-">presentWithMarkup</a></span>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;markup)</code>
 <div class="block">Given some way of converting from a T value to an in-line markup tag, returns a string representation of
  this IColoredString with in-line markup representing colors.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#replaceColor-T-T-">replaceColor</a></span>(<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;old,
             <a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;new_)</code>
 <div class="block">Replace color <code>old</code> by <code>new_</code> in all buckets of <code>this</code>.</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#setColor-T-">setColor</a></span>(<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&nbsp;color)</code>
 <div class="block">Set <code>color</code> in all buckets.</div>
 </td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#setLength-int-">setLength</a></span>(int&nbsp;len)</code>
 <div class="block">Deletes all content after index <code>len</code> (if any).</div>
 </td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#wrap-int-">wrap</a></span>(int&nbsp;width)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/panel/IColoredString.html#wrap-int-java.util.List-">wrap</a></span>(int&nbsp;width,
     <a href="https://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="interface in squidpony.panel">IColoredString</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;&nbsp;buf)</code>&nbsp;</td>
@@ -630,7 +636,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.ht
 <a name="presentWithMarkup-squidpony.panel.IMarkup-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>presentWithMarkup</h4>
 <pre><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.191">presentWithMarkup</a>(<a href="../../squidpony/panel/IMarkup.html" title="interface in squidpony.panel">IMarkup</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&nbsp;markup)</pre>
@@ -641,6 +647,20 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.ht
 <dd><code>markup</code> - an IMarkup implementation</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a String with markup inserted inside.</dd>
+</dl>
+</li>
+</ul>
+<a name="getFragments--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getFragments</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="../../squidpony/panel/IColoredString.Bucket.html" title="class in squidpony.panel">IColoredString.Bucket</a>&lt;<a href="../../squidpony/panel/IColoredString.html" title="type parameter in IColoredString">T</a>&gt;&gt;&nbsp;<a href="../../src-html/squidpony/panel/IColoredString.html#line.197">getFragments</a>()</pre>
+<div class="block">Gets the Buckets as an ArrayList, allowing access by index instead of by <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang"><code>Iterable.iterator()</code></a>.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the Buckets that would be returned by <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true#iterator--" title="class or interface in java.lang"><code>Iterable.iterator()</code></a>, but in an ArrayList.</dd>
 </dl>
 </li>
 </ul>

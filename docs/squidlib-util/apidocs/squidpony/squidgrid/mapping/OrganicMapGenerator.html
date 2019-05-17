@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,10 +113,10 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.12">OrganicMapGenerator</a>
+<pre>public class <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.19">OrganicMapGenerator</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html" title="interface in squidpony.squidgrid.mapping">IDungeonGenerator</a></pre>
-<div class="block">Map generator using Perlin/Simplex noise for the formation of "rooms" and then WobblyLine to connect with corridors.
+<div class="block">Map generator using Simplex noise for the formation of "rooms" and then WobblyLine to connect with corridors.
  Created by Tommy Ettinger on 4/18/2016.</div>
 </li>
 </ul>
@@ -141,12 +141,20 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#environment">environment</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#floors">floors</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#height">height</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>char[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#map">map</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#noise">noise</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>double</code></td>
@@ -232,6 +240,38 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
  MixedGenerator.</div>
 </td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getHeight--">getHeight</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getNoiseMax--">getNoiseMax</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getNoiseMin--">getNoiseMin</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#getWidth--">getWidth</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setHeight-int-">setHeight</a></span>(int&nbsp;height)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setNoiseMax-double-">setNoiseMax</a></span>(double&nbsp;noiseMax)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setNoiseMin-double-">setNoiseMin</a></span>(double&nbsp;noiseMin)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../squidpony/squidgrid/mapping/OrganicMapGenerator.html#setWidth-int-">setWidth</a></span>(int&nbsp;width)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -260,7 +300,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>map</h4>
-<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.13">map</a></pre>
+<pre>public&nbsp;char[][] <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.20">map</a></pre>
 </li>
 </ul>
 <a name="environment">
@@ -269,7 +309,16 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>environment</h4>
-<pre>public&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.14">environment</a></pre>
+<pre>public&nbsp;int[][] <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.21">environment</a></pre>
+</li>
+</ul>
+<a name="floors">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>floors</h4>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a> <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.22">floors</a></pre>
 </li>
 </ul>
 <a name="rng">
@@ -278,7 +327,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.15">rng</a></pre>
+<pre>public&nbsp;<a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a> <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.23">rng</a></pre>
 </li>
 </ul>
 <a name="width">
@@ -287,7 +336,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>width</h4>
-<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.16">width</a></pre>
+<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.24">width</a></pre>
 </li>
 </ul>
 <a name="height">
@@ -296,7 +345,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>height</h4>
-<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.16">height</a></pre>
+<pre>protected&nbsp;int <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.24">height</a></pre>
 </li>
 </ul>
 <a name="noiseMin">
@@ -305,16 +354,25 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>noiseMin</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.17">noiseMin</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.25">noiseMin</a></pre>
 </li>
 </ul>
 <a name="noiseMax">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>noiseMax</h4>
-<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.17">noiseMax</a></pre>
+<pre>public&nbsp;double <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.25">noiseMax</a></pre>
+</li>
+</ul>
+<a name="noise">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>noise</h4>
+<pre>protected&nbsp;<a href="../../../squidpony/squidmath/FastNoise.html" title="class in squidpony.squidmath">FastNoise</a> <a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.26">noise</a></pre>
 </li>
 </ul>
 </li>
@@ -331,7 +389,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>OrganicMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.18">OrganicMapGenerator</a>()</pre>
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.34">OrganicMapGenerator</a>()</pre>
 </li>
 </ul>
 <a name="OrganicMapGenerator-int-int-">
@@ -340,7 +398,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>OrganicMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.22">OrganicMapGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.38">OrganicMapGenerator</a>(int&nbsp;width,
                            int&nbsp;height)</pre>
 </li>
 </ul>
@@ -350,7 +408,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>OrganicMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.26">OrganicMapGenerator</a>(int&nbsp;width,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.42">OrganicMapGenerator</a>(int&nbsp;width,
                            int&nbsp;height,
                            <a href="../../../squidpony/squidmath/IRNG.html" title="interface in squidpony.squidmath">IRNG</a>&nbsp;rng)</pre>
 </li>
@@ -361,7 +419,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockListLast">
 <li class="blockList">
 <h4>OrganicMapGenerator</h4>
-<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.30">OrganicMapGenerator</a>(double&nbsp;noiseMin,
+<pre>public&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.46">OrganicMapGenerator</a>(double&nbsp;noiseMin,
                            double&nbsp;noiseMax,
                            int&nbsp;width,
                            int&nbsp;height,
@@ -382,7 +440,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>generate</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.47">generate</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.64">generate</a>()</pre>
 <div class="block">Generate a map as a 2D char array using the width and height specified in the constructor.
  Should produce an organic, cave-like map.</div>
 <dl>
@@ -399,7 +457,7 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <ul class="blockList">
 <li class="blockList">
 <h4>getEnvironment</h4>
-<pre>public&nbsp;int[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.203">getEnvironment</a>()</pre>
+<pre>public&nbsp;int[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.180">getEnvironment</a>()</pre>
 <div class="block">Gets a 2D array of int constants, each representing a type of environment corresponding to a static field of
  MixedGenerator. This array will have the same size as the last char 2D array produced by generate(); the value
  of this method if called before generate() is undefined, but probably will be a 2D array of all 0 (UNTOUCHED).
@@ -421,10 +479,10 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <a name="getDungeon--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getDungeon</h4>
-<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.208">getDungeon</a>()</pre>
+<pre>public&nbsp;char[][]&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.185">getDungeon</a>()</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#getDungeon--">IDungeonGenerator</a></code></span></div>
 <div class="block">Gets the most recently-produced dungeon as a 2D char array, usually produced by calling <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html#generate--"><code>IDungeonGenerator.generate()</code></a> or
  some similar method present in a specific implementation. This normally passes a direct reference and not a copy,
@@ -435,6 +493,78 @@ implements <a href="../../../squidpony/squidgrid/mapping/IDungeonGenerator.html"
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the most recently-produced dungeon/map as a 2D char array</dd>
 </dl>
+</li>
+</ul>
+<a name="getWidth--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getWidth</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.188">getWidth</a>()</pre>
+</li>
+</ul>
+<a name="setWidth-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setWidth</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.192">setWidth</a>(int&nbsp;width)</pre>
+</li>
+</ul>
+<a name="getHeight--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHeight</h4>
+<pre>public&nbsp;int&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.196">getHeight</a>()</pre>
+</li>
+</ul>
+<a name="setHeight-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHeight</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.200">setHeight</a>(int&nbsp;height)</pre>
+</li>
+</ul>
+<a name="getNoiseMin--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoiseMin</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.204">getNoiseMin</a>()</pre>
+</li>
+</ul>
+<a name="setNoiseMin-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setNoiseMin</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.208">setNoiseMin</a>(double&nbsp;noiseMin)</pre>
+</li>
+</ul>
+<a name="getNoiseMax--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getNoiseMax</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.212">getNoiseMax</a>()</pre>
+</li>
+</ul>
+<a name="setNoiseMax-double-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setNoiseMax</h4>
+<pre>public&nbsp;void&nbsp;<a href="../../../src-html/squidpony/squidgrid/mapping/OrganicMapGenerator.html#line.216">setNoiseMax</a>(double&nbsp;noiseMax)</pre>
 </li>
 </ul>
 </li>

@@ -1534,13 +1534,13 @@
 <span class="sourceLineNo">1526</span>                i++;<a name="line.1526"></a>
 <span class="sourceLineNo">1527</span>            if (this != key[i])<a name="line.1527"></a>
 <span class="sourceLineNo">1528</span>                t = hasher.hash(key[i]);<a name="line.1528"></a>
-<span class="sourceLineNo">1529</span>            t ^= value[i].hashWisp();<a name="line.1529"></a>
+<span class="sourceLineNo">1529</span>            t ^= value[i].hashHive();<a name="line.1529"></a>
 <span class="sourceLineNo">1530</span>            h += t;<a name="line.1530"></a>
 <span class="sourceLineNo">1531</span>            i++;<a name="line.1531"></a>
 <span class="sourceLineNo">1532</span>        }<a name="line.1532"></a>
 <span class="sourceLineNo">1533</span>        // Zero / null keys have hash zero.<a name="line.1533"></a>
 <span class="sourceLineNo">1534</span>        if (containsNullKey)<a name="line.1534"></a>
-<span class="sourceLineNo">1535</span>            h += value[n].hashWisp();<a name="line.1535"></a>
+<span class="sourceLineNo">1535</span>            h += value[n].hashHive();<a name="line.1535"></a>
 <span class="sourceLineNo">1536</span>        return h;<a name="line.1536"></a>
 <span class="sourceLineNo">1537</span>    }<a name="line.1537"></a>
 <span class="sourceLineNo">1538</span>    /**<a name="line.1538"></a>

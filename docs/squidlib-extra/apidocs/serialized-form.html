@@ -512,7 +512,7 @@
 <h3>Class squidpony.ObText extends <a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;squidpony.ObText.ObTextEntry&gt; implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>6L</dd>
+<dd>7L</dd>
 </dl>
 </li>
 <li class="blockList"><a name="squidpony.ObText.ContentMatcher">
@@ -526,7 +526,7 @@
 <h3>Class squidpony.ObText.ObTextEntry extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>5L</dd>
+<dd>7L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -927,7 +927,7 @@
 <h3>Class squidpony.squidmath.CoordDouble extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>300L</dd>
+<dd>500L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -1025,6 +1025,158 @@
 <li class="blockListLast">
 <h4>deck</h4>
 <pre>double[] deck</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Delaunay3D extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>points</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord[] points</pre>
+</li>
+<li class="blockListLast">
+<h4>triangleSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; triangleSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D.Edge">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Delaunay3D.Edge extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Delaunay3D.Triangle">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Delaunay3D.Triangle extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord b</pre>
+</li>
+<li class="blockListLast">
+<h4>c</h4>
+<pre>squidpony.squidmath.Delaunay3D.MultiCoord c</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.DelaunayTriangulator extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>points</h4>
+<pre>squidpony.squidmath.CoordDouble[] points</pre>
+</li>
+<li class="blockListLast">
+<h4>triangleSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; triangleSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator.Edge">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.DelaunayTriangulator.Edge extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.DelaunayTriangulator.Triangle">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.DelaunayTriangulator.Triangle extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+<li class="blockListLast">
+<h4>c</h4>
+<pre>squidpony.squidmath.CoordDouble c</pre>
 </li>
 </ul>
 </li>
@@ -2067,7 +2219,7 @@
 <h3>Class squidpony.squidmath.MiniMover64RNG extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
-<dd>1L</dd>
+<dd>2L</dd>
 </dl>
 <ul class="blockList">
 <li class="blockList">
@@ -3433,6 +3585,114 @@
 <li class="blockListLast">
 <h4>scramble</h4>
 <pre>boolean scramble</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>pointSet</h4>
+<pre>squidpony.squidmath.OrderedSet&lt;K&gt; pointSet</pre>
+</li>
+<li class="blockList">
+<h4>triangleSoup</h4>
+<pre>squidpony.squidmath.Voronoi.TriangleSoup triangleSoup</pre>
+</li>
+<li class="blockListLast">
+<h4>polygonSoup</h4>
+<pre><a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">ArrayList</a>&lt;<a href="https://docs.oracle.com/javase/7/docs/api/java/util/ArrayList.html?is-external=true" title="class or interface in java.util">E</a>&gt; polygonSoup</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Edge">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi.Edge extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockListLast">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Polygon">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi.Polygon extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>centroid</h4>
+<pre>squidpony.squidmath.CoordDouble centroid</pre>
+</li>
+<li class="blockListLast">
+<h4>vertices</h4>
+<pre>squidpony.squidmath.CoordDouble[] vertices</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="squidpony.squidmath.Voronoi.Triangle">
+<!--   -->
+</a>
+<h3>Class squidpony.squidmath.Voronoi.Triangle extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>a</h4>
+<pre>squidpony.squidmath.CoordDouble a</pre>
+</li>
+<li class="blockList">
+<h4>b</h4>
+<pre>squidpony.squidmath.CoordDouble b</pre>
+</li>
+<li class="blockList">
+<h4>c</h4>
+<pre>squidpony.squidmath.CoordDouble c</pre>
+</li>
+<li class="blockListLast">
+<h4>centroid</h4>
+<pre>squidpony.squidmath.CoordDouble centroid</pre>
 </li>
 </ul>
 </li>

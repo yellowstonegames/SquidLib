@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":9,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,10 +113,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.9">CoordDouble</a>
+<pre>public class <a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.12">CoordDouble</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">Coord using double values for x and y instead of int. Not pooled.
+ When possible and you are using libGDX, use the <code>com.badlogic.gdx.math.Vector2</code> class in preference to this
+ one if you are OK with using floats instead of doubles.
+ <br>
  Created by Tommy Ettinger on 8/12/2015.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -191,78 +194,134 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#add-squidpony.squidmath.CoordDouble-">add</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#add-double-double-">add</a></span>(double&nbsp;x,
+   double&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#copy--">copy</a></span>()</code>
+<div class="block">Constructs an identical copy to this CoordDouble, making a new object that may be mutated independently.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#cross-squidpony.squidmath.CoordDouble-">cross</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code>
+<div class="block">Gets the cross product of this CoordDouble and <code>other</code>.</div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#distance-squidpony.squidmath.CoordDouble-">distance</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#distance-double-double-">distance</a></span>(double&nbsp;x2,
         double&nbsp;y2)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#distanceSq-squidpony.squidmath.CoordDouble-">distanceSq</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#distanceSq-double-double-">distanceSq</a></span>(double&nbsp;x2,
           double&nbsp;y2)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#divide-squidpony.squidmath.CoordDouble-">divide</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code>
+<div class="block">Divides the x component of this CoordDouble by <code>other.x</code> and the y component by <code>other.y</code>.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#divide-double-double-">divide</a></span>(double&nbsp;x,
+      double&nbsp;y)</code>
+<div class="block">Divides the x component of this CoordDouble by <code>x</code> and the y component by <code>y</code>.</div>
+</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#dot-squidpony.squidmath.CoordDouble-">dot</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code>
+<div class="block">Gets the dot product of this CoordDouble and <code>other</code>.</div>
+</td>
+</tr>
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#equals-java.lang.Object-">equals</a></span>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static <a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#get-double-double-">get</a></span>(double&nbsp;x,
    double&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
-<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#getLocation--">getLocation</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i7" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#getX--">getX</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#getY--">getY</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#move-int-int-">move</a></span>(int&nbsp;x,
-    int&nbsp;y)</code>&nbsp;</td>
+<tr id="i16" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#length--">length</a></span>()</code>
+<div class="block">Distance from the origin to this CoordDouble.</div>
+</td>
 </tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#setLocation-squidpony.squidmath.CoordDouble-">setLocation</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</code>&nbsp;</td>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#lengthSq--">lengthSq</a></span>()</code>
+<div class="block">Distance from the origin to this CoordDouble, squared.</div>
+</td>
 </tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#setLocation-double-double-">setLocation</a></span>(double&nbsp;x,
-           double&nbsp;y)</code>&nbsp;</td>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#multiply-squidpony.squidmath.CoordDouble-">multiply</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#setX-int-">setX</a></span>(int&nbsp;x)</code>&nbsp;</td>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#multiply-double-double-">multiply</a></span>(double&nbsp;x,
+        double&nbsp;y)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#setY-int-">setY</a></span>(int&nbsp;y)</code>&nbsp;</td>
+<tr id="i20" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#set-squidpony.squidmath.CoordDouble-">set</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#set-double-double-">set</a></span>(double&nbsp;x,
+   double&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#setX-double-">setX</a></span>(double&nbsp;x)</code>&nbsp;</td>
+</tr>
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#setY-double-">setY</a></span>(double&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i24" class="altColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#subtract-squidpony.squidmath.CoordDouble-">subtract</a></span>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr id="i25" class="rowColor">
+<td class="colFirst"><code><a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#subtract-double-double-">subtract</a></span>(double&nbsp;x,
+        double&nbsp;y)</code>&nbsp;</td>
+</tr>
+<tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#toString--">toString</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/CoordDouble.html#translate-double-double-">translate</a></span>(double&nbsp;x,
-         double&nbsp;y)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -292,7 +351,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>x</h4>
-<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.11">x</a></pre>
+<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.14">x</a></pre>
 </li>
 </ul>
 <a name="y">
@@ -301,7 +360,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>y</h4>
-<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.12">y</a></pre>
+<pre>public&nbsp;double <a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.15">y</a></pre>
 </li>
 </ul>
 </li>
@@ -318,7 +377,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>CoordDouble</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.14">CoordDouble</a>()</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.17">CoordDouble</a>()</pre>
 </li>
 </ul>
 <a name="CoordDouble-double-double-">
@@ -327,7 +386,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>CoordDouble</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.18">CoordDouble</a>(double&nbsp;x,
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.21">CoordDouble</a>(double&nbsp;x,
                    double&nbsp;y)</pre>
 </li>
 </ul>
@@ -337,7 +396,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>CoordDouble</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.23">CoordDouble</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.26">CoordDouble</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
 </li>
 </ul>
 <a name="CoordDouble-squidpony.squidmath.Coord-">
@@ -346,7 +405,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>CoordDouble</h4>
-<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.29">CoordDouble</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
+<pre>public&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.32">CoordDouble</a>(<a href="../../squidpony/squidmath/Coord.html" title="class in squidpony.squidmath">Coord</a>&nbsp;other)</pre>
 </li>
 </ul>
 </li>
@@ -363,56 +422,190 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>get</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.34">get</a>(double&nbsp;x,
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.37">get</a>(double&nbsp;x,
                               double&nbsp;y)</pre>
 </li>
 </ul>
-<a name="getLocation--">
+<a name="copy--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getLocation</h4>
-<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.38">getLocation</a>()</pre>
+<h4>copy</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.46">copy</a>()</pre>
+<div class="block">Constructs an identical copy to this CoordDouble, making a new object that may be mutated independently.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a copy of this CoordDouble</dd>
+</dl>
 </li>
 </ul>
-<a name="translate-double-double-">
+<a name="add-double-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>translate</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.42">translate</a>(double&nbsp;x,
-                      double&nbsp;y)</pre>
+<h4>add</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.51">add</a>(double&nbsp;x,
+                       double&nbsp;y)</pre>
 </li>
 </ul>
-<a name="setLocation-double-double-">
+<a name="add-squidpony.squidmath.CoordDouble-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setLocation</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.47">setLocation</a>(double&nbsp;x,
-                        double&nbsp;y)</pre>
+<h4>add</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.58">add</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
 </li>
 </ul>
-<a name="setLocation-squidpony.squidmath.CoordDouble-">
+<a name="subtract-double-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setLocation</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.52">setLocation</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</pre>
+<h4>subtract</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.65">subtract</a>(double&nbsp;x,
+                            double&nbsp;y)</pre>
 </li>
 </ul>
-<a name="move-int-int-">
+<a name="subtract-squidpony.squidmath.CoordDouble-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>move</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.57">move</a>(int&nbsp;x,
-                 int&nbsp;y)</pre>
+<h4>subtract</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.72">subtract</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
+</li>
+</ul>
+<a name="multiply-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>multiply</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.79">multiply</a>(double&nbsp;x,
+                            double&nbsp;y)</pre>
+</li>
+</ul>
+<a name="multiply-squidpony.squidmath.CoordDouble-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>multiply</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.86">multiply</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
+</li>
+</ul>
+<a name="divide-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>divide</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.99">divide</a>(double&nbsp;x,
+                          double&nbsp;y)</pre>
+<div class="block">Divides the x component of this CoordDouble by <code>x</code> and the y component by <code>y</code>. Be careful about when
+ either of the parameters can be 0.0, since that can put NaN or infinite components in this.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>x</code> - divisor for x</dd>
+<dd><code>y</code> - divisor for y</dd>
+</dl>
+</li>
+</ul>
+<a name="divide-squidpony.squidmath.CoordDouble-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>divide</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.111">divide</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
+<div class="block">Divides the x component of this CoordDouble by <code>other.x</code> and the y component by <code>other.y</code>. Be careful
+ about when either of other's components can be 0.0, since that can put NaN or infinite components in this.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - a non-null CoordDouble to get divisors from</dd>
+</dl>
+</li>
+</ul>
+<a name="dot-squidpony.squidmath.CoordDouble-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dot</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.123">dot</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
+<div class="block">Gets the dot product of this CoordDouble and <code>other</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - another CoordDouble; must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the dot product of this and <code>other</code>.</dd>
+</dl>
+</li>
+</ul>
+<a name="cross-squidpony.squidmath.CoordDouble-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>cross</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.133">cross</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;other)</pre>
+<div class="block">Gets the cross product of this CoordDouble and <code>other</code>.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>other</code> - another CoordDouble; must not be null.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the cross product of this and <code>other</code>.</dd>
+</dl>
+</li>
+</ul>
+<a name="set-double-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.138">set</a>(double&nbsp;x,
+                       double&nbsp;y)</pre>
+</li>
+</ul>
+<a name="set-squidpony.squidmath.CoordDouble-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>set</h4>
+<pre>public&nbsp;<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.144">set</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</pre>
+</li>
+</ul>
+<a name="length--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>length</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.154">length</a>()</pre>
+<div class="block">Distance from the origin to this CoordDouble.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the distance from the origin to this CoordDouble.</dd>
+</dl>
+</li>
+</ul>
+<a name="lengthSq--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>lengthSq</h4>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.163">lengthSq</a>()</pre>
+<div class="block">Distance from the origin to this CoordDouble, squared.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the distance from the origin to this CoordDouble, squared.</dd>
+</dl>
 </li>
 </ul>
 <a name="distance-double-double-">
@@ -421,7 +614,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>distance</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.62">distance</a>(double&nbsp;x2,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.167">distance</a>(double&nbsp;x2,
                        double&nbsp;y2)</pre>
 </li>
 </ul>
@@ -431,7 +624,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>distance</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.66">distance</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.171">distance</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</pre>
 </li>
 </ul>
 <a name="distanceSq-double-double-">
@@ -440,7 +633,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>distanceSq</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.70">distanceSq</a>(double&nbsp;x2,
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.175">distanceSq</a>(double&nbsp;x2,
                          double&nbsp;y2)</pre>
 </li>
 </ul>
@@ -450,7 +643,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>distanceSq</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.74">distanceSq</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.179">distanceSq</a>(<a href="../../squidpony/squidmath/CoordDouble.html" title="class in squidpony.squidmath">CoordDouble</a>&nbsp;co)</pre>
 </li>
 </ul>
 <a name="getX--">
@@ -459,16 +652,16 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getX</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.79">getX</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.184">getX</a>()</pre>
 </li>
 </ul>
-<a name="setX-int-">
+<a name="setX-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setX</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.83">setX</a>(int&nbsp;x)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.188">setX</a>(double&nbsp;x)</pre>
 </li>
 </ul>
 <a name="getY--">
@@ -477,16 +670,16 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>getY</h4>
-<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.87">getY</a>()</pre>
+<pre>public&nbsp;double&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.192">getY</a>()</pre>
 </li>
 </ul>
-<a name="setY-int-">
+<a name="setY-double-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setY</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.91">setY</a>(int&nbsp;y)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.196">setY</a>(double&nbsp;y)</pre>
 </li>
 </ul>
 <a name="toString--">
@@ -495,7 +688,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.96">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.201">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -508,7 +701,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.106">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.207">hashCode</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -521,7 +714,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.118">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CoordDouble.html#line.212">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;o)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>

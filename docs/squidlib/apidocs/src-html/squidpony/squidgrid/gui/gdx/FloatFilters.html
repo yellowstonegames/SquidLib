@@ -375,7 +375,7 @@
 <span class="sourceLineNo">367</span>            final int bits = NumberTools.floatToIntBits(color);<a name="line.367"></a>
 <span class="sourceLineNo">368</span>            final float opacity = (bits &gt;&gt;&gt; 24 &amp; 0xFE) * 0.003937008f;<a name="line.368"></a>
 <span class="sourceLineNo">369</span>            final float luma = yAdd + yMul * ((bits &amp; 0xFF) * 0x3p-11f + (bits &gt;&gt;&gt; 8 &amp; 0xFF) * 0x1p-9f + (bits &gt;&gt;&gt; 16 &amp; 0xFF) * 0x1p-11f);<a name="line.369"></a>
-<span class="sourceLineNo">370</span>            final float warm = cwAdd + cwMul * (((bits &amp; 0xFF) - (bits &gt;&gt;&gt; 16 &amp; 0xff)) * 0x1.010102p-8f);<a name="line.370"></a>
+<span class="sourceLineNo">370</span>            final float warm = (cwAdd + cwMul * (((bits &amp; 0xFF) - (bits &gt;&gt;&gt; 16 &amp; 0xff)) * 0x1.010102p-8f));<a name="line.370"></a>
 <span class="sourceLineNo">371</span>            final float mild = 0.5f * (cmAdd + cmMul * (((bits &gt;&gt;&gt; 8 &amp; 0xff) - (bits &gt;&gt;&gt; 16 &amp; 0xff)) * 0x1.010102p-8f));<a name="line.371"></a>
 <span class="sourceLineNo">372</span><a name="line.372"></a>
 <span class="sourceLineNo">373</span>            return floatGet(MathUtils.clamp(luma + warm * 0.625f - mild, 0f, 1f),<a name="line.373"></a>
