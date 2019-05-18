@@ -3440,7 +3440,7 @@ public class Noise {
      * Allows a seed to change the generated noise.
      * Because most games that would use this would use it for maps, and maps are often top-down, the returned 3D array
      * uses the order (z,x,y), which allows a 2D slice of x and y to be taken as an element from the top-level array.
-     * If you need to call this very often, consider {@link #seamless3D(double[][][], int, int)}, which re-uses the
+     * If you need to call this very often, consider {@link #seamless3D(double[][][], long, int)}, which re-uses the
      * array instead of re-generating it.
      * @param width the width of the array to produce (the length of the middle layer of arrays)
      * @param height the height of the array to produce (the length of the innermost arrays)
@@ -3449,7 +3449,7 @@ public class Noise {
      * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
      * @return a freshly-allocated seamless-bounded array, a {@code double[depth][width][height]}.
      */
-    public static double[][][] seamless3D(final int depth, final int width, final int height, final int seed, final int octaves) {
+    public static double[][][] seamless3D(final int depth, final int width, final int height, final long seed, final int octaves) {
         return seamless3D(new double[depth][width][height], seed, octaves);
     }
 
@@ -3462,7 +3462,7 @@ public class Noise {
      * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
      * @return {@code fill}, after assigning it with seamless-bounded noise
      */
-    public static double[][][] seamless3D(final double[][][] fill, final int seed, final int octaves) {
+    public static double[][][] seamless3D(final double[][][] fill, final long seed, final int octaves) {
         return seamless3D(fill, seed, octaves, SeededNoise.instance);
     }
 
@@ -3569,6 +3569,28 @@ public class Noise {
         return fill;
     }
 
+    /**
+     * Like {@link #seamless3D(double[][][], long, int, Noise6D)}, but this doesn't precalculate noise into an array,
+     * instead calculating just one 3D point so that later calls with different x, y, or z will tile seamlessly.
+     * @param noise a Noise6D implementation such as a {@link SeededNoise} or {@link FastNoise}
+     * @param x the x-coordinate to sample
+     * @param y the y-coordinate to sample
+     * @param z the z-coordinate to sample
+     * @param sizeX the range of x to generate before repeating; must be greater than 0
+     * @param sizeY the range of y to generate before repeating; must be greater than 0
+     * @param sizeZ the range of z to generate before repeating; must be greater than 0
+     * @param seed the noise seed, as a long
+     * @return continuous noise from -1.0 to 1.0, inclusive 
+     */
+    public static double seamless3D(Noise6D noise, double x, double y, double z, double sizeX, double sizeY, double sizeZ, long seed)
+    {
+        x *= 6.283185307179586 / sizeX;
+        y *= 6.283185307179586 / sizeY;
+        z *= 6.283185307179586 / sizeZ;
+        return noise.getNoiseWithSeed(NumberTools.cos(x), NumberTools.sin(x), NumberTools.cos(y), NumberTools.sin(y),
+                NumberTools.cos(z), NumberTools.sin(z), seed);
+    }
+    
     /**
      * A very simple 1D noise implementation, because a full-blown Perlin or Simplex noise implementation is probably
      * overkill for 1D noise. This does produce smoothly sloping lines, like Simplex noise does for higher dimensions.

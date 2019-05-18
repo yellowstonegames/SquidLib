@@ -71,9 +71,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 109, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 15, otherMode = 1;//74;//118;//82;
 
     private SpriteBatch batch;
     //private SparseLayers display;//, overlay;
@@ -3121,9 +3121,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = 
                                         floatGet(
-                                                (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
-                                                (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+                                                basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 1234567890L)),
+                                                basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 9092929090L)),
+                                                basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 9876543210L)),
+//                                                (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+//                                                (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
+//                                                (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
                                                 1.0f);
 
                             }
@@ -3134,7 +3137,8 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
+                                bright = basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 1234567890L));
+//                                bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
 
                             }
