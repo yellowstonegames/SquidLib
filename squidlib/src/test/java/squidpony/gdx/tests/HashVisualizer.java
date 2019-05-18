@@ -3121,9 +3121,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                             for (int y = 0; y < height; y++) {
                                 back[x][y] = 
                                         floatGet(
-                                                basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 1234567890L)),
-                                                basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 9092929090L)),
-                                                basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 9876543210L)),
+                                                basicPrepare(Noise.seamless3D(seeded, x, y, ctr, 128.0, 128.0, 128.0, 1234567890L)),
+                                                basicPrepare(Noise.seamless3D(seeded, x, y, ctr, 128.0, 128.0, 128.0, 9092929090L)),
+                                                basicPrepare(Noise.seamless3D(seeded, x, y, ctr, 128.0, 128.0, 128.0, 9876543210L)),
 //                                                (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
 //                                                (float) (seamless[1][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
 //                                                (float) (seamless[2][ctr & 63][x & 63][y & 63] * 0.5 + 0.5),
@@ -3137,7 +3137,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Seeded Seamless 3D Noise, three octaves at " + Gdx.graphics.getFramesPerSecond() + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                bright = basicPrepare(Noise.seamless3D(fn, x, y, ctr, 128.0, 128.0, 128.0, 1234567890L));
+                                bright = basicPrepare(Noise.seamless3D(seeded, x, y, ctr, 128.0, 128.0, 128.0, 1234567890L));
 //                                bright = (float) (seamless[0][ctr & 63][x & 63][y & 63] * 0.5 + 0.5);
                                 back[x][y] = floatGet(bright, bright, bright, 1f);
 

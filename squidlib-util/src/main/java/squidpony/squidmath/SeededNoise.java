@@ -1066,7 +1066,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             LIMIT4 = 0.62,
             F6 = (Math.sqrt(7.0) - 1.0) / 6.0,
             G6 = F6 / (1.0 + 6.0 * F6),
-            LIMIT6 = 0.75
+            LIMIT6 = 0.8375
             //LIMIT6 = 0.777
             //LIMIT6 = 0.86
             /*
@@ -1401,7 +1401,7 @@ public class SeededNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
             }
             skewOffset += G6;
         }
-        return 13.5 * n;
+        return 7.5 * n;
 
     }
 
