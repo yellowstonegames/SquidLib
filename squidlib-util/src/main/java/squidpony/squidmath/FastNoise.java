@@ -3329,7 +3329,8 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private static final float
             F6 = (float) ((Math.sqrt(7.0) - 1.0) / 6.0),
             G6 = F6 / (1f + 6f * F6),
-            LIMIT6 = 0.75f;
+            LIMIT6 = 0.875f;
+//            LIMIT6 = 0.75f;
 
 
     public float singleSimplex(int seed, float x, float y, float z, float w, float u, float v) {
@@ -3399,7 +3400,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
             }
             skewOffset += G6;
         }
-        return 13.5f * n;
+        return 7.5f * n;
 
     }
 
