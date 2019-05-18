@@ -3570,6 +3570,44 @@ public class Noise {
     }
 
     /**
+     * Like {@link #seamless2D(double[][], long, int, Noise4D)}, but this produces 1D noise that "tiles" by repeating
+     * its output every {@code sizeX} units that {@code x} increases or decreases by. This doesn't precalculate an
+     * array, instead calculating just one value so that later calls with different x will tile seamlessly.
+     * <br>
+     * Internally, this just samples out of a circle from a source of 2D noise.
+     * @param noise a Noise2D implementation such as a {@link SeededNoise} or {@link FastNoise}
+     * @param x the x-coordinate to sample
+     * @param sizeX the range of x to generate before repeating; must be greater than 0
+     * @param seed the noise seed, as a long
+     * @return continuous noise from -1.0 to 1.0, inclusive 
+     */
+    public static double seamless1D(Noise2D noise, double x, double sizeX, long seed)
+    {
+        x *= 6.283185307179586 / sizeX;
+        return noise.getNoiseWithSeed(NumberTools.cos(x), NumberTools.sin(x), seed);
+    }
+
+    /**
+     * Like {@link #seamless2D(double[][], long, int, Noise4D)}, but this doesn't precalculate noise into an array,
+     * instead calculating just one 2D point so that later calls with different x or y will tile seamlessly.
+     * @param noise a Noise4D implementation such as a {@link SeededNoise} or {@link FastNoise}
+     * @param x the x-coordinate to sample
+     * @param y the y-coordinate to sample
+     * @param sizeX the range of x to generate before repeating; must be greater than 0
+     * @param sizeY the range of y to generate before repeating; must be greater than 0
+     * @param seed the noise seed, as a long
+     * @return continuous noise from -1.0 to 1.0, inclusive 
+     */
+    public static double seamless2D(Noise4D noise, double x, double y, double sizeX, double sizeY, long seed)
+    {
+        x *= 6.283185307179586 / sizeX;
+        y *= 6.283185307179586 / sizeY;
+        return noise.getNoiseWithSeed(NumberTools.cos(x), NumberTools.sin(x), NumberTools.cos(y), NumberTools.sin(y),
+                seed);
+    }
+
+
+    /**
      * Like {@link #seamless3D(double[][][], long, int, Noise6D)}, but this doesn't precalculate noise into an array,
      * instead calculating just one 3D point so that later calls with different x, y, or z will tile seamlessly.
      * @param noise a Noise6D implementation such as a {@link SeededNoise} or {@link FastNoise}
@@ -3590,7 +3628,7 @@ public class Noise {
         return noise.getNoiseWithSeed(NumberTools.cos(x), NumberTools.sin(x), NumberTools.cos(y), NumberTools.sin(y),
                 NumberTools.cos(z), NumberTools.sin(z), seed);
     }
-    
+
     /**
      * A very simple 1D noise implementation, because a full-blown Perlin or Simplex noise implementation is probably
      * overkill for 1D noise. This does produce smoothly sloping lines, like Simplex noise does for higher dimensions.
@@ -3612,10 +3650,10 @@ public class Noise {
         public Basic1D(long seed)
         {
             lastSeed = seed;
-            alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-            alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-            alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-            alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+            alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+            alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+            alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+            alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
         }
         @Override
         public double getNoise(double x) {
@@ -3631,10 +3669,10 @@ public class Noise {
             if(lastSeed != seed)
             {
                 lastSeed = seed;
-                alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
-                alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
-                alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
-                alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
+                alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25;
+                alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25;
+                alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25;
+                alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;
             }
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
@@ -3650,10 +3688,10 @@ public class Noise {
         }
 
         public static double noise(double x, long seed) {
-            final double alter1 = (LinnormRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter2 = (LinnormRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
-                    alter3 = (LinnormRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
-                    alter4 = (LinnormRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
+            final double alter1 = (DiverRNG.determine(seed) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter2 = (DiverRNG.determine(seed + 1) >>> 11) * 0x1.5p-54 + 0.25,
+                    alter3 = (DiverRNG.determine(seed + 2) >>> 11) * 0x1.5p-54 + 0.25, 
+                    alter4 = (DiverRNG.determine(seed + 3) >>> 11) * 0x1.5p-54 + 0.25;                    
             return (cubicSway(alter2 + x * alter1) +
                     cubicSway(alter3 - x * alter2) +
                     cubicSway(alter4 + x * alter3) +
