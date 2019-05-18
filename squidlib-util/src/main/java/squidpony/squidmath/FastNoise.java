@@ -3329,7 +3329,7 @@ public class FastNoise implements Serializable, Noise.Noise2D, Noise.Noise3D, No
     private static final float
             F6 = (float) ((Math.sqrt(7.0) - 1.0) / 6.0),
             G6 = F6 / (1f + 6f * F6),
-            LIMIT6 = 0.875f;
+            LIMIT6 = 0.8375f;
 //            LIMIT6 = 0.75f;
 
 
