@@ -469,14 +469,14 @@ public class ColorTest extends ApplicationAdapter {
         Gdx.graphics.setTitle("SquidLib Demo: Colors");
         SColor col = new SColor(0, 0, 0, 0);
         int[] palette = {
-                0x00000000, 0xF1D5B0FF, 0xF9C969FF, 0xA4CE87FF, 0xAFF8EFFF, 0x1DAA9DFF, 0x10D6DBFF, 0x1C1C1CFF,
-                0x106AD4FF, 0x7FA8F8FF, 0x5229EEFF, 0x79A2F9FF, 0xA11BFDFF, 0xD486F3FF, 0xEC9E38FF, 0x3D3D3DFF,
-                0x9CFEE7FF, 0x81ECD7FF, 0x3AD6D9FF, 0x26E0D3FF, 0xB1EDEDFF, 0x7895CAFF, 0x879AFCFF, 0x5E5E5EFF,
-                0xC5A3EAFF, 0xBD15FFFF, 0xFB8DBBFF, 0xB91DB1FF, 0xCF48CCFF, 0xF16F9BFF, 0xC9D88DFF, 0x7F7F7FFF,
-                0xBCDD8EFF, 0x89E3CEFF, 0x51C7EEFF, 0x7AAAF2FF, 0x839FDAFF, 0xA3A0DEFF, 0xBF93F8FF, 0x9C9C9CFF,
-                0xBB44ACFF, 0xDF6AEEFF, 0xFD47F9FF, 0xB7E88FFF, 0x9FE0B2FF, 0x68F6E5FF, 0x6FE0C1FF, 0xBDBDBDFF,
-                0x70FCCEFF, 0x3DA1C7FF, 0x6DABEFFF, 0xC8ADF2FF, 0xBD63FFFF, 0xBA37D9FF, 0xAF68B1FF, 0xDEDEDEFF,
-                0xF345DEFF, 0xE1B29BFF, 0xFAC05AFF, 0xCFE996FF, 0xA0F18DFF, 0x76CA7CFF, 0xA9EFD9FF, 0xFFFFFFFF, 
+                0x00000000, 0x0F0813FF, 0x31383BFF, 0x64666FFF, 0x888F94FF, 0xD2DEE2FF, 0x9EAAB2FF, 0xD5D5D5FF,
+                0x58363DFF, 0x896B88FF, 0x956B6BFF, 0x806965FF, 0xB29B81FF, 0xFF9B9BFF, 0xFF3D3DFF, 0x540300FF,
+                0xAC4337FF, 0x894F3DFF, 0xCD673CFF, 0xF9A256FF, 0xC77930FF, 0xD0AE97FF, 0xE2BC8FFF, 0xF39908FF,
+                0xAE7D4EFF, 0xF2C11AFF, 0xFFEF2EFF, 0xC0FFA6FF, 0x73F60EFF, 0x9BBD2CFF, 0x146D03FF, 0x819E77FF,
+                0x4DFD28FF, 0x44B732FF, 0x8BD1BAFF, 0x52ED81FF, 0x23C178FF, 0x2EDFB7FF, 0x8DEED0FF, 0xC7FFFFFF,
+                0x008F68FF, 0x7BDAE1FF, 0x196179FF, 0x68D1DBFF, 0x5D74FAFF, 0x4D9BE6FF, 0x2A3271FF, 0x4F69B2FF,
+                0x574ECAFF, 0x140BCBFF, 0x5A2784FF, 0x8354C9FF, 0x9B77E6FF, 0x6A0F6EFF, 0xAF4DC1FF, 0x8113BDFF,
+                0xFFC7FFFF, 0xAB337CFF, 0xFF5FFAFF, 0x6F243AFF, 0xE94771FF, 0xD0363EFF, 0xC3A5F4FF, 0x5A00BBFF,
         };
         final int COUNT = palette.length;
         final double THRESHOLD = 0.011; // threshold controls the "stark-ness" of color changes; must not be negative.
@@ -529,10 +529,10 @@ public class ColorTest extends ApplicationAdapter {
 //            if((i & 3) == 3) sb.append('\n');
 //        }
 //        System.out.println("int[] FLESURRECT = new int[]{\n"+ sb + "};");
-        System.out.println("int[] reverses = new int[]{ "+ StringKit.join(",", reverse) + "\n};");
-        System.out.println("float[] lumas = new float[]{ "+ StringKit.join("f,", lumas) + "f\n};");
-        System.out.println("float[] cos = new float[]{ "+ StringKit.join("f,", cos) + "f\n};");
-        System.out.println("float[] cgs = new float[]{ "+ StringKit.join("f,", cgs) + "f\n};");
+//        System.out.println("int[] reverses = new int[]{ "+ StringKit.join(",", reverse) + "\n};");
+//        System.out.println("float[] lumas = new float[]{ "+ StringKit.join("f,", lumas) + "f\n};");
+//        System.out.println("float[] cos = new float[]{ "+ StringKit.join("f,", cos) + "f\n};");
+//        System.out.println("float[] cgs = new float[]{ "+ StringKit.join("f,", cgs) + "f\n};");
         float cgf, cof, yf;
         for (int cr = 0; cr <= cgLim; cr++) {
             cgf = (float) cr / cgLim - 0.5f;
@@ -643,7 +643,7 @@ public class ColorTest extends ApplicationAdapter {
             }
         }
         
-        System.out.println("byte[][] RAMPS = new byte[][]{");
+        System.out.println("public static final byte[][] JUDGE_RAMPS = new byte[][]{");
         for (int i = 0; i < COUNT; i++) {
             System.out.println(
                       "{ " + ramps[i][3]
@@ -654,7 +654,7 @@ public class ColorTest extends ApplicationAdapter {
         }
         System.out.println("};");
 
-        System.out.println("int[][] RAMP_VALUES = new int[][]{");
+        System.out.println("public static final int[][] JUDGE_RAMP_VALUES = new int[][]{");
         for (int i = 0; i < COUNT; i++) {
             System.out.println("{ 0x" + StringKit.hex(palette[ramps[i][3] & 255])
                     + ", 0x" + StringKit.hex(palette[ramps[i][2] & 255])
