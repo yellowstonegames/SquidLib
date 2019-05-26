@@ -219,8 +219,12 @@ public class FilterBatch implements Batch {
                 | (int)(255 * b) << 16 | (int)(255 * g) << 8 | (int)(255 * r)));
     }
 
+    public void setColor (final float color) {
+        this.color = filter.alter(color);
+    }
+
     @Override
-    public void setColor (float color) {
+    public void setPackedColor (final float color) {
         this.color = filter.alter(color);
     }
 

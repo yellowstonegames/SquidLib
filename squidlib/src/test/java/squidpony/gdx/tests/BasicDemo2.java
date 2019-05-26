@@ -6,7 +6,6 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.FakeLanguageGen;
@@ -41,7 +40,7 @@ import java.util.List;
 // or something related, like Game. Game adds features that SquidLib doesn't currently use, so ApplicationAdapter is
 // perfectly fine for these uses.
 public class BasicDemo2 extends ApplicationAdapter {
-    SpriteBatch batch;
+    private FilterBatch batch;
 
     private RNG rng;
     private SquidLayers display;
@@ -105,7 +104,7 @@ public class BasicDemo2 extends ApplicationAdapter {
         rng = new RNG("SquidLib!");
 
         //Some classes in SquidLib need access to a batch to render certain things, so it's a good idea to have one.
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         //Here we make sure our Stage, which holds any text-based grids we make, uses our Batch.
         stage = new Stage(new StretchViewport(gridWidth * cellWidth, (gridHeight + bonusHeight) * cellHeight), batch);
         // the font will try to load Iosevka Slab as an embedded bitmap font with a distance field effect.

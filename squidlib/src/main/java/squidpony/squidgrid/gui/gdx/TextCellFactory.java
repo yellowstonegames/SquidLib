@@ -163,7 +163,7 @@ public class TextCellFactory implements Disposable {
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceXadvance();
         lineHeight = bmpFont.getLineHeight();
         height = (lineHeight);
         descent = bmpFont.getDescent();
@@ -449,7 +449,7 @@ public class TextCellFactory implements Disposable {
             Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
         }
         //bmpFont.getData().padBottom = bmpFont.getDescent();
-        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
+        distanceFieldScaleX = bmpFont.getSpaceXadvance() - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
     }
@@ -491,7 +491,7 @@ public class TextCellFactory implements Disposable {
         {
             bmpFont.getData().setScale(0.75f, 1f);
         }
-        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
+        distanceFieldScaleX = bmpFont.getSpaceXadvance() - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
     }
@@ -673,7 +673,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory fit(String fit) {
         fitting = fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceXadvance();
         return this;
     }
 
@@ -687,7 +687,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory addFit(String fit) {
         fitting += fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceXadvance();
         return this;
     }
 
@@ -882,7 +882,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
-            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
@@ -911,7 +911,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
-            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
@@ -939,12 +939,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             batch.setColor(r, g, b, a); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
@@ -971,12 +971,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
@@ -1000,17 +1000,17 @@ public class TextCellFactory implements Disposable {
 
         if (s == null) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else
         {
-            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.draw(batch, s, x, y - descent + 1, width, Align.center, false);
         }
@@ -1034,7 +1034,7 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else
         {
             batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
@@ -1060,12 +1060,12 @@ public class TextCellFactory implements Disposable {
         }
         if (c == 0) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else
         {
-            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1, width, Align.center, false);
@@ -1116,12 +1116,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1145,12 +1145,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
     /**
@@ -1175,14 +1175,14 @@ public class TextCellFactory implements Disposable {
 
         if (tr == null) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1234,12 +1234,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1265,12 +1265,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1294,14 +1294,14 @@ public class TextCellFactory implements Disposable {
 
         if (tr == null) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1323,11 +1323,11 @@ public class TextCellFactory implements Disposable {
             for (int j = 0; j < h; j++, hm -= actualCellHeight) {
                 if(encodedColors[i][j] == 0f)
                     continue;
-                batch.setColor(encodedColors[i][j]);
+                batch.setPackedColor(encodedColors[i][j]);
                 batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f
             }
         }
-        batch.setColor(orig);
+        batch.setPackedColor(orig);
     }
 
     /**
@@ -1354,11 +1354,11 @@ public class TextCellFactory implements Disposable {
             for (int j = 0; j < h; j++, hm -= subH) {
                 if(encodedColors[i][j] == 0f)
                     continue;
-                batch.setColor(encodedColors[i][j]);
+                batch.setPackedColor(encodedColors[i][j]);
                 batch.draw(block, wm, hm, subW, subH);
             }
         }
-        batch.setColor(orig);
+        batch.setPackedColor(orig);
     }
 
     /**
