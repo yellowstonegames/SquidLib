@@ -185,6 +185,12 @@ public final class FloatFilters {
     }
 
     /**
+     * A static constant of the one possible IdentityFilter, to avoid needing to make duplicates.
+     * IdentityFilter makes no changes to the colors given to it.
+     */
+    public static final IdentityFilter identityFilter = new IdentityFilter();
+
+    /**
      * A FloatFilter that makes all colors given to it grayscale, using only their luma as calculated by
      * {@link SColor#lumaOfFloat(float)} as the lightness (it does also preserve alpha transparency).
      */
