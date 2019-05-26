@@ -1,7 +1,6 @@
 package squidpony.squidgrid.gui.gdx;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -59,7 +58,7 @@ public class StarterKit {
      * You may need to call {@code batch.begin()} and {@code batch.end()} in some cases where you want to
      * render something that isn't a child of stage but is an Actor or similar render-able object.
      */
-    public SpriteBatch batch;
+    public FilterBatch batch;
     /**
      * An important part of how this will be displayed; the viewport defaults to a displayed width of
      * {@code cellWidth * gridWidth} and a displayed height of {@code cellHeight * gridHeight}, after cellWidth
@@ -147,7 +146,7 @@ public class StarterKit {
         layers = new SparseLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, textFactory);
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         viewport = new StretchViewport(this.cellWidth * gridWidth + additionalWidth, this.cellHeight * gridHeight + additionalHeight);
         stage = new Stage(viewport, batch);
         stage.addActor(layers);
@@ -163,8 +162,8 @@ public class StarterKit {
      * a loop and then with end() called after). 
      * <br>
      * Specifically, this applies the current viewport to the stage, draws the stage, and makes any actions or
-     * events related to the stage take effect. Should not be called inside a {@link SpriteBatch#begin()} block,
-     * since this calls it itself by drawing the stage, and also calls {@link SpriteBatch#end()} afterwards.
+     * events related to the stage take effect. Should not be called inside a {@link FilterBatch#begin()} block,
+     * since this calls it itself by drawing the stage, and also calls {@link FilterBatch#end()} afterwards.
      */
     public void draw()
     {
