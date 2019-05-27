@@ -171,7 +171,7 @@
 <span class="sourceLineNo">163</span>        if(bmpFont == null)<a name="line.163"></a>
 <span class="sourceLineNo">164</span>            bmpFont = DefaultResources.getIncludedFont();<a name="line.164"></a>
 <span class="sourceLineNo">165</span>        bmpFont.setFixedWidthGlyphs(fitting);<a name="line.165"></a>
-<span class="sourceLineNo">166</span>        width = bmpFont.getSpaceWidth();<a name="line.166"></a>
+<span class="sourceLineNo">166</span>        width = bmpFont.getSpaceXadvance();<a name="line.166"></a>
 <span class="sourceLineNo">167</span>        lineHeight = bmpFont.getLineHeight();<a name="line.167"></a>
 <span class="sourceLineNo">168</span>        height = (lineHeight);<a name="line.168"></a>
 <span class="sourceLineNo">169</span>        descent = bmpFont.getDescent();<a name="line.169"></a>
@@ -457,7 +457,7 @@
 <span class="sourceLineNo">449</span>            Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");<a name="line.449"></a>
 <span class="sourceLineNo">450</span>        }<a name="line.450"></a>
 <span class="sourceLineNo">451</span>        //bmpFont.getData().padBottom = bmpFont.getDescent();<a name="line.451"></a>
-<span class="sourceLineNo">452</span>        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;<a name="line.452"></a>
+<span class="sourceLineNo">452</span>        distanceFieldScaleX = bmpFont.getSpaceXadvance() - 1f;<a name="line.452"></a>
 <span class="sourceLineNo">453</span>        distanceFieldScaleY = bmpFont.getLineHeight() - 1f;<a name="line.453"></a>
 <span class="sourceLineNo">454</span>        return this;<a name="line.454"></a>
 <span class="sourceLineNo">455</span>    }<a name="line.455"></a>
@@ -499,7 +499,7 @@
 <span class="sourceLineNo">491</span>        {<a name="line.491"></a>
 <span class="sourceLineNo">492</span>            bmpFont.getData().setScale(0.75f, 1f);<a name="line.492"></a>
 <span class="sourceLineNo">493</span>        }<a name="line.493"></a>
-<span class="sourceLineNo">494</span>        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;<a name="line.494"></a>
+<span class="sourceLineNo">494</span>        distanceFieldScaleX = bmpFont.getSpaceXadvance() - 1f;<a name="line.494"></a>
 <span class="sourceLineNo">495</span>        distanceFieldScaleY = bmpFont.getLineHeight() - 1f;<a name="line.495"></a>
 <span class="sourceLineNo">496</span>        return this;<a name="line.496"></a>
 <span class="sourceLineNo">497</span>    }<a name="line.497"></a>
@@ -681,7 +681,7 @@
 <span class="sourceLineNo">673</span>    public TextCellFactory fit(String fit) {<a name="line.673"></a>
 <span class="sourceLineNo">674</span>        fitting = fit;<a name="line.674"></a>
 <span class="sourceLineNo">675</span>        bmpFont.setFixedWidthGlyphs(fitting);<a name="line.675"></a>
-<span class="sourceLineNo">676</span>        width = bmpFont.getSpaceWidth();<a name="line.676"></a>
+<span class="sourceLineNo">676</span>        width = bmpFont.getSpaceXadvance();<a name="line.676"></a>
 <span class="sourceLineNo">677</span>        return this;<a name="line.677"></a>
 <span class="sourceLineNo">678</span>    }<a name="line.678"></a>
 <span class="sourceLineNo">679</span><a name="line.679"></a>
@@ -695,7 +695,7 @@
 <span class="sourceLineNo">687</span>    public TextCellFactory addFit(String fit) {<a name="line.687"></a>
 <span class="sourceLineNo">688</span>        fitting += fit;<a name="line.688"></a>
 <span class="sourceLineNo">689</span>        bmpFont.setFixedWidthGlyphs(fitting);<a name="line.689"></a>
-<span class="sourceLineNo">690</span>        width = bmpFont.getSpaceWidth();<a name="line.690"></a>
+<span class="sourceLineNo">690</span>        width = bmpFont.getSpaceXadvance();<a name="line.690"></a>
 <span class="sourceLineNo">691</span>        return this;<a name="line.691"></a>
 <span class="sourceLineNo">692</span>    }<a name="line.692"></a>
 <span class="sourceLineNo">693</span><a name="line.693"></a>
@@ -890,7 +890,7 @@
 <span class="sourceLineNo">882</span>            batch.setColor(1f,1f,1f,1f);<a name="line.882"></a>
 <span class="sourceLineNo">883</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f<a name="line.883"></a>
 <span class="sourceLineNo">884</span>        } else {<a name="line.884"></a>
-<span class="sourceLineNo">885</span>            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache<a name="line.885"></a>
+<span class="sourceLineNo">885</span>            batch.setPackedColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache<a name="line.885"></a>
 <span class="sourceLineNo">886</span>            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());<a name="line.886"></a>
 <span class="sourceLineNo">887</span>            bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);<a name="line.887"></a>
 <span class="sourceLineNo">888</span>        }<a name="line.888"></a>
@@ -919,7 +919,7 @@
 <span class="sourceLineNo">911</span>            batch.setColor(1f,1f,1f,1f);<a name="line.911"></a>
 <span class="sourceLineNo">912</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f<a name="line.912"></a>
 <span class="sourceLineNo">913</span>        } else {<a name="line.913"></a>
-<span class="sourceLineNo">914</span>            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache<a name="line.914"></a>
+<span class="sourceLineNo">914</span>            batch.setPackedColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache<a name="line.914"></a>
 <span class="sourceLineNo">915</span>            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());<a name="line.915"></a>
 <span class="sourceLineNo">916</span>            mut.setCharAt(0, getOrDefault(c));<a name="line.916"></a>
 <span class="sourceLineNo">917</span>            bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);<a name="line.917"></a>
@@ -947,12 +947,12 @@
 <span class="sourceLineNo">939</span>            float orig = batch.getPackedColor();<a name="line.939"></a>
 <span class="sourceLineNo">940</span>            batch.setColor(r, g, b, a);<a name="line.940"></a>
 <span class="sourceLineNo">941</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f<a name="line.941"></a>
-<span class="sourceLineNo">942</span>            batch.setColor(orig);<a name="line.942"></a>
+<span class="sourceLineNo">942</span>            batch.setPackedColor(orig);<a name="line.942"></a>
 <span class="sourceLineNo">943</span>        } else if(s.length() &gt; 0 &amp;&amp; s.charAt(0) == '\0') {<a name="line.943"></a>
 <span class="sourceLineNo">944</span>            float orig = batch.getPackedColor();<a name="line.944"></a>
 <span class="sourceLineNo">945</span>            batch.setColor(r, g, b, a);<a name="line.945"></a>
 <span class="sourceLineNo">946</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);<a name="line.946"></a>
-<span class="sourceLineNo">947</span>            batch.setColor(orig);<a name="line.947"></a>
+<span class="sourceLineNo">947</span>            batch.setPackedColor(orig);<a name="line.947"></a>
 <span class="sourceLineNo">948</span>        } else {<a name="line.948"></a>
 <span class="sourceLineNo">949</span>            batch.setColor(r, g, b, a); // round trip so FilterBatch can filter BitmapFontCache<a name="line.949"></a>
 <span class="sourceLineNo">950</span>            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());<a name="line.950"></a>
@@ -979,12 +979,12 @@
 <span class="sourceLineNo">971</span>            float orig = batch.getPackedColor();<a name="line.971"></a>
 <span class="sourceLineNo">972</span>            batch.setColor(color);<a name="line.972"></a>
 <span class="sourceLineNo">973</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);<a name="line.973"></a>
-<span class="sourceLineNo">974</span>            batch.setColor(orig);<a name="line.974"></a>
+<span class="sourceLineNo">974</span>            batch.setPackedColor(orig);<a name="line.974"></a>
 <span class="sourceLineNo">975</span>        } else if(s.length() &gt; 0 &amp;&amp; s.charAt(0) == '\0') {<a name="line.975"></a>
 <span class="sourceLineNo">976</span>            float orig = batch.getPackedColor();<a name="line.976"></a>
 <span class="sourceLineNo">977</span>            batch.setColor(color);<a name="line.977"></a>
 <span class="sourceLineNo">978</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);<a name="line.978"></a>
-<span class="sourceLineNo">979</span>            batch.setColor(orig);<a name="line.979"></a>
+<span class="sourceLineNo">979</span>            batch.setPackedColor(orig);<a name="line.979"></a>
 <span class="sourceLineNo">980</span>        } else {<a name="line.980"></a>
 <span class="sourceLineNo">981</span>            batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache<a name="line.981"></a>
 <span class="sourceLineNo">982</span>            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());<a name="line.982"></a>
@@ -1008,17 +1008,17 @@
 <span class="sourceLineNo">1000</span><a name="line.1000"></a>
 <span class="sourceLineNo">1001</span>        if (s == null) {<a name="line.1001"></a>
 <span class="sourceLineNo">1002</span>            float orig = batch.getPackedColor();<a name="line.1002"></a>
-<span class="sourceLineNo">1003</span>            batch.setColor(encodedColor);<a name="line.1003"></a>
+<span class="sourceLineNo">1003</span>            batch.setPackedColor(encodedColor);<a name="line.1003"></a>
 <span class="sourceLineNo">1004</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);<a name="line.1004"></a>
-<span class="sourceLineNo">1005</span>            batch.setColor(orig);<a name="line.1005"></a>
+<span class="sourceLineNo">1005</span>            batch.setPackedColor(orig);<a name="line.1005"></a>
 <span class="sourceLineNo">1006</span>        } else if(s.length() &gt; 0 &amp;&amp; s.charAt(0) == '\0') {<a name="line.1006"></a>
 <span class="sourceLineNo">1007</span>            float orig = batch.getPackedColor();<a name="line.1007"></a>
-<span class="sourceLineNo">1008</span>            batch.setColor(encodedColor);<a name="line.1008"></a>
+<span class="sourceLineNo">1008</span>            batch.setPackedColor(encodedColor);<a name="line.1008"></a>
 <span class="sourceLineNo">1009</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);<a name="line.1009"></a>
-<span class="sourceLineNo">1010</span>            batch.setColor(orig);<a name="line.1010"></a>
+<span class="sourceLineNo">1010</span>            batch.setPackedColor(orig);<a name="line.1010"></a>
 <span class="sourceLineNo">1011</span>        } else<a name="line.1011"></a>
 <span class="sourceLineNo">1012</span>        {<a name="line.1012"></a>
-<span class="sourceLineNo">1013</span>            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache<a name="line.1013"></a>
+<span class="sourceLineNo">1013</span>            batch.setPackedColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache<a name="line.1013"></a>
 <span class="sourceLineNo">1014</span>            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());<a name="line.1014"></a>
 <span class="sourceLineNo">1015</span>            bmpFont.draw(batch, s, x, y - descent + 1, width, Align.center, false);<a name="line.1015"></a>
 <span class="sourceLineNo">1016</span>        }<a name="line.1016"></a>
@@ -1042,7 +1042,7 @@
 <span class="sourceLineNo">1034</span>            float orig = batch.getPackedColor();<a name="line.1034"></a>
 <span class="sourceLineNo">1035</span>            batch.setColor(color);<a name="line.1035"></a>
 <span class="sourceLineNo">1036</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);<a name="line.1036"></a>
-<span class="sourceLineNo">1037</span>            batch.setColor(orig);<a name="line.1037"></a>
+<span class="sourceLineNo">1037</span>            batch.setPackedColor(orig);<a name="line.1037"></a>
 <span class="sourceLineNo">1038</span>        } else<a name="line.1038"></a>
 <span class="sourceLineNo">1039</span>        {<a name="line.1039"></a>
 <span class="sourceLineNo">1040</span>            batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache<a name="line.1040"></a>
@@ -1068,12 +1068,12 @@
 <span class="sourceLineNo">1060</span>        }<a name="line.1060"></a>
 <span class="sourceLineNo">1061</span>        if (c == 0) {<a name="line.1061"></a>
 <span class="sourceLineNo">1062</span>            float orig = batch.getPackedColor();<a name="line.1062"></a>
-<span class="sourceLineNo">1063</span>            batch.setColor(encodedColor);<a name="line.1063"></a>
+<span class="sourceLineNo">1063</span>            batch.setPackedColor(encodedColor);<a name="line.1063"></a>
 <span class="sourceLineNo">1064</span>            batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);<a name="line.1064"></a>
-<span class="sourceLineNo">1065</span>            batch.setColor(orig);<a name="line.1065"></a>
+<span class="sourceLineNo">1065</span>            batch.setPackedColor(orig);<a name="line.1065"></a>
 <span class="sourceLineNo">1066</span>        } else<a name="line.1066"></a>
 <span class="sourceLineNo">1067</span>        {<a name="line.1067"></a>
-<span class="sourceLineNo">1068</span>            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache<a name="line.1068"></a>
+<span class="sourceLineNo">1068</span>            batch.setPackedColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache<a name="line.1068"></a>
 <span class="sourceLineNo">1069</span>            Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());<a name="line.1069"></a>
 <span class="sourceLineNo">1070</span>            mut.setCharAt(0, getOrDefault(c));<a name="line.1070"></a>
 <span class="sourceLineNo">1071</span>            bmpFont.draw(batch, mut, x, y - descent + 1, width, Align.center, false);<a name="line.1071"></a>
@@ -1124,12 +1124,12 @@
 <span class="sourceLineNo">1116</span>            float orig = batch.getPackedColor();<a name="line.1116"></a>
 <span class="sourceLineNo">1117</span>            batch.setColor(r, g, b, a);<a name="line.1117"></a>
 <span class="sourceLineNo">1118</span>            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);<a name="line.1118"></a>
-<span class="sourceLineNo">1119</span>            batch.setColor(orig);<a name="line.1119"></a>
+<span class="sourceLineNo">1119</span>            batch.setPackedColor(orig);<a name="line.1119"></a>
 <span class="sourceLineNo">1120</span>        } else {<a name="line.1120"></a>
 <span class="sourceLineNo">1121</span>            float orig = batch.getPackedColor();<a name="line.1121"></a>
 <span class="sourceLineNo">1122</span>            batch.setColor(r, g, b, a);<a name="line.1122"></a>
 <span class="sourceLineNo">1123</span>            batch.draw(tr, x, y - height, width, height);<a name="line.1123"></a>
-<span class="sourceLineNo">1124</span>            batch.setColor(orig);<a name="line.1124"></a>
+<span class="sourceLineNo">1124</span>            batch.setPackedColor(orig);<a name="line.1124"></a>
 <span class="sourceLineNo">1125</span>        }<a name="line.1125"></a>
 <span class="sourceLineNo">1126</span>    }<a name="line.1126"></a>
 <span class="sourceLineNo">1127</span><a name="line.1127"></a>
@@ -1153,12 +1153,12 @@
 <span class="sourceLineNo">1145</span>            float orig = batch.getPackedColor();<a name="line.1145"></a>
 <span class="sourceLineNo">1146</span>            batch.setColor(color);<a name="line.1146"></a>
 <span class="sourceLineNo">1147</span>            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);<a name="line.1147"></a>
-<span class="sourceLineNo">1148</span>            batch.setColor(orig);<a name="line.1148"></a>
+<span class="sourceLineNo">1148</span>            batch.setPackedColor(orig);<a name="line.1148"></a>
 <span class="sourceLineNo">1149</span>        } else {<a name="line.1149"></a>
 <span class="sourceLineNo">1150</span>            float orig = batch.getPackedColor();<a name="line.1150"></a>
 <span class="sourceLineNo">1151</span>            batch.setColor(color);<a name="line.1151"></a>
 <span class="sourceLineNo">1152</span>            batch.draw(tr, x, y - height, width, height);<a name="line.1152"></a>
-<span class="sourceLineNo">1153</span>            batch.setColor(orig);<a name="line.1153"></a>
+<span class="sourceLineNo">1153</span>            batch.setPackedColor(orig);<a name="line.1153"></a>
 <span class="sourceLineNo">1154</span>        }<a name="line.1154"></a>
 <span class="sourceLineNo">1155</span>    }<a name="line.1155"></a>
 <span class="sourceLineNo">1156</span>    /**<a name="line.1156"></a>
@@ -1183,14 +1183,14 @@
 <span class="sourceLineNo">1175</span><a name="line.1175"></a>
 <span class="sourceLineNo">1176</span>        if (tr == null) {<a name="line.1176"></a>
 <span class="sourceLineNo">1177</span>            float orig = batch.getPackedColor();<a name="line.1177"></a>
-<span class="sourceLineNo">1178</span>            batch.setColor(encodedColor);<a name="line.1178"></a>
+<span class="sourceLineNo">1178</span>            batch.setPackedColor(encodedColor);<a name="line.1178"></a>
 <span class="sourceLineNo">1179</span>            batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);<a name="line.1179"></a>
-<span class="sourceLineNo">1180</span>            batch.setColor(orig);<a name="line.1180"></a>
+<span class="sourceLineNo">1180</span>            batch.setPackedColor(orig);<a name="line.1180"></a>
 <span class="sourceLineNo">1181</span>        } else {<a name="line.1181"></a>
 <span class="sourceLineNo">1182</span>            float orig = batch.getPackedColor();<a name="line.1182"></a>
-<span class="sourceLineNo">1183</span>            batch.setColor(encodedColor);<a name="line.1183"></a>
+<span class="sourceLineNo">1183</span>            batch.setPackedColor(encodedColor);<a name="line.1183"></a>
 <span class="sourceLineNo">1184</span>            batch.draw(tr, x, y - height, width, height);<a name="line.1184"></a>
-<span class="sourceLineNo">1185</span>            batch.setColor(orig);<a name="line.1185"></a>
+<span class="sourceLineNo">1185</span>            batch.setPackedColor(orig);<a name="line.1185"></a>
 <span class="sourceLineNo">1186</span>        }<a name="line.1186"></a>
 <span class="sourceLineNo">1187</span>    }<a name="line.1187"></a>
 <span class="sourceLineNo">1188</span><a name="line.1188"></a>
@@ -1242,12 +1242,12 @@
 <span class="sourceLineNo">1234</span>            float orig = batch.getPackedColor();<a name="line.1234"></a>
 <span class="sourceLineNo">1235</span>            batch.setColor(r, g, b, a);<a name="line.1235"></a>
 <span class="sourceLineNo">1236</span>            batch.draw(block, x, y - height, width, height);<a name="line.1236"></a>
-<span class="sourceLineNo">1237</span>            batch.setColor(orig);<a name="line.1237"></a>
+<span class="sourceLineNo">1237</span>            batch.setPackedColor(orig);<a name="line.1237"></a>
 <span class="sourceLineNo">1238</span>        } else {<a name="line.1238"></a>
 <span class="sourceLineNo">1239</span>            float orig = batch.getPackedColor();<a name="line.1239"></a>
 <span class="sourceLineNo">1240</span>            batch.setColor(r, g, b, a);<a name="line.1240"></a>
 <span class="sourceLineNo">1241</span>            batch.draw(tr, x, y - height, width, height);<a name="line.1241"></a>
-<span class="sourceLineNo">1242</span>            batch.setColor(orig);<a name="line.1242"></a>
+<span class="sourceLineNo">1242</span>            batch.setPackedColor(orig);<a name="line.1242"></a>
 <span class="sourceLineNo">1243</span>        }<a name="line.1243"></a>
 <span class="sourceLineNo">1244</span>    }<a name="line.1244"></a>
 <span class="sourceLineNo">1245</span><a name="line.1245"></a>
@@ -1273,12 +1273,12 @@
 <span class="sourceLineNo">1265</span>            float orig = batch.getPackedColor();<a name="line.1265"></a>
 <span class="sourceLineNo">1266</span>            batch.setColor(color);<a name="line.1266"></a>
 <span class="sourceLineNo">1267</span>            batch.draw(block, x, y - height, width, height);<a name="line.1267"></a>
-<span class="sourceLineNo">1268</span>            batch.setColor(orig);<a name="line.1268"></a>
+<span class="sourceLineNo">1268</span>            batch.setPackedColor(orig);<a name="line.1268"></a>
 <span class="sourceLineNo">1269</span>        } else {<a name="line.1269"></a>
 <span class="sourceLineNo">1270</span>            float orig = batch.getPackedColor();<a name="line.1270"></a>
 <span class="sourceLineNo">1271</span>            batch.setColor(color);<a name="line.1271"></a>
 <span class="sourceLineNo">1272</span>            batch.draw(tr, x, y - height, width, height);<a name="line.1272"></a>
-<span class="sourceLineNo">1273</span>            batch.setColor(orig);<a name="line.1273"></a>
+<span class="sourceLineNo">1273</span>            batch.setPackedColor(orig);<a name="line.1273"></a>
 <span class="sourceLineNo">1274</span>        }<a name="line.1274"></a>
 <span class="sourceLineNo">1275</span>    }<a name="line.1275"></a>
 <span class="sourceLineNo">1276</span><a name="line.1276"></a>
@@ -1302,14 +1302,14 @@
 <span class="sourceLineNo">1294</span><a name="line.1294"></a>
 <span class="sourceLineNo">1295</span>        if (tr == null) {<a name="line.1295"></a>
 <span class="sourceLineNo">1296</span>            float orig = batch.getPackedColor();<a name="line.1296"></a>
-<span class="sourceLineNo">1297</span>            batch.setColor(encodedColor);<a name="line.1297"></a>
+<span class="sourceLineNo">1297</span>            batch.setPackedColor(encodedColor);<a name="line.1297"></a>
 <span class="sourceLineNo">1298</span>            batch.draw(block, x, y - height, width, height);<a name="line.1298"></a>
-<span class="sourceLineNo">1299</span>            batch.setColor(orig);<a name="line.1299"></a>
+<span class="sourceLineNo">1299</span>            batch.setPackedColor(orig);<a name="line.1299"></a>
 <span class="sourceLineNo">1300</span>        } else {<a name="line.1300"></a>
 <span class="sourceLineNo">1301</span>            float orig = batch.getPackedColor();<a name="line.1301"></a>
-<span class="sourceLineNo">1302</span>            batch.setColor(encodedColor);<a name="line.1302"></a>
+<span class="sourceLineNo">1302</span>            batch.setPackedColor(encodedColor);<a name="line.1302"></a>
 <span class="sourceLineNo">1303</span>            batch.draw(tr, x, y - height, width, height);<a name="line.1303"></a>
-<span class="sourceLineNo">1304</span>            batch.setColor(orig);<a name="line.1304"></a>
+<span class="sourceLineNo">1304</span>            batch.setPackedColor(orig);<a name="line.1304"></a>
 <span class="sourceLineNo">1305</span>        }<a name="line.1305"></a>
 <span class="sourceLineNo">1306</span>    }<a name="line.1306"></a>
 <span class="sourceLineNo">1307</span><a name="line.1307"></a>
@@ -1331,11 +1331,11 @@
 <span class="sourceLineNo">1323</span>            for (int j = 0; j &lt; h; j++, hm -= actualCellHeight) {<a name="line.1323"></a>
 <span class="sourceLineNo">1324</span>                if(encodedColors[i][j] == 0f)<a name="line.1324"></a>
 <span class="sourceLineNo">1325</span>                    continue;<a name="line.1325"></a>
-<span class="sourceLineNo">1326</span>                batch.setColor(encodedColors[i][j]);<a name="line.1326"></a>
+<span class="sourceLineNo">1326</span>                batch.setPackedColor(encodedColors[i][j]);<a name="line.1326"></a>
 <span class="sourceLineNo">1327</span>                batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f<a name="line.1327"></a>
 <span class="sourceLineNo">1328</span>            }<a name="line.1328"></a>
 <span class="sourceLineNo">1329</span>        }<a name="line.1329"></a>
-<span class="sourceLineNo">1330</span>        batch.setColor(orig);<a name="line.1330"></a>
+<span class="sourceLineNo">1330</span>        batch.setPackedColor(orig);<a name="line.1330"></a>
 <span class="sourceLineNo">1331</span>    }<a name="line.1331"></a>
 <span class="sourceLineNo">1332</span><a name="line.1332"></a>
 <span class="sourceLineNo">1333</span>    /**<a name="line.1333"></a>
@@ -1362,11 +1362,11 @@
 <span class="sourceLineNo">1354</span>            for (int j = 0; j &lt; h; j++, hm -= subH) {<a name="line.1354"></a>
 <span class="sourceLineNo">1355</span>                if(encodedColors[i][j] == 0f)<a name="line.1355"></a>
 <span class="sourceLineNo">1356</span>                    continue;<a name="line.1356"></a>
-<span class="sourceLineNo">1357</span>                batch.setColor(encodedColors[i][j]);<a name="line.1357"></a>
+<span class="sourceLineNo">1357</span>                batch.setPackedColor(encodedColors[i][j]);<a name="line.1357"></a>
 <span class="sourceLineNo">1358</span>                batch.draw(block, wm, hm, subW, subH);<a name="line.1358"></a>
 <span class="sourceLineNo">1359</span>            }<a name="line.1359"></a>
 <span class="sourceLineNo">1360</span>        }<a name="line.1360"></a>
-<span class="sourceLineNo">1361</span>        batch.setColor(orig);<a name="line.1361"></a>
+<span class="sourceLineNo">1361</span>        batch.setPackedColor(orig);<a name="line.1361"></a>
 <span class="sourceLineNo">1362</span>    }<a name="line.1362"></a>
 <span class="sourceLineNo">1363</span><a name="line.1363"></a>
 <span class="sourceLineNo">1364</span>    /**<a name="line.1364"></a>

@@ -108,7 +108,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.15">StarterKit</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.14">StarterKit</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">A convenience class that groups several commonly-used GUI classes into one object and provides ways to
  initialize these kits for specific purposes, some of which would be a challenge to write without this code.
@@ -132,7 +132,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>com.badlogic.gdx.graphics.g2d.SpriteBatch</code></td>
+<td class="colFirst"><code><a href="../../../../squidpony/squidgrid/gui/gdx/FilterBatch.html" title="class in squidpony.squidgrid.gui.gdx">FilterBatch</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../squidpony/squidgrid/gui/gdx/StarterKit.html#batch">batch</a></span></code>
 <div class="block">Used to draw lots of things, but mostly handled internally by the Stage.</div>
 </td>
@@ -306,7 +306,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>textFactory</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.21">textFactory</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.20">textFactory</a></pre>
 <div class="block">One of the more critical parts of rendering text is what font to use, and textFactory should usually
  not be reassigned during a game because so many things depend on this value or a copy of it (so the
  change might not affect what it was expected to, and might break other things).</div>
@@ -318,7 +318,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>layers</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.26">layers</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SparseLayers.html" title="class in squidpony.squidgrid.gui.gdx">SparseLayers</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.25">layers</a></pre>
 <div class="block">The main way to interact with a text-based grid as for roguelikes. A SquidLayers object stores a
  background and foreground SquidPanel, and this configures them as requested.</div>
 </li>
@@ -329,7 +329,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>gridWidth</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.30">gridWidth</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.29">gridWidth</a></pre>
 <div class="block">The number of grid spaces on the x axis.</div>
 </li>
 </ul>
@@ -339,7 +339,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>gridHeight</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.34">gridHeight</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.33">gridHeight</a></pre>
 <div class="block">The number of grid spaces on the y axis.</div>
 </li>
 </ul>
@@ -349,7 +349,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>cellWidth</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.42">cellWidth</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.41">cellWidth</a></pre>
 <div class="block">The width of a cell that holds one char, in "relative pixels," where the screen is expected to stretch so
  one relative pixel does not generally refer to one actual screen pixel (since high-DPI phones and
  laptops may make a single pixel virtually impossible to see with the naked eye).
@@ -363,7 +363,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>cellHeight</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.50">cellHeight</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.49">cellHeight</a></pre>
 <div class="block">The height of a cell that holds one char, in "relative pixels," where the screen is expected to stretch
  so one relative pixel does not generally refer to one actual screen pixel (since high-DPI phones and
  laptops may make a single pixel virtually impossible to see with the naked eye).
@@ -377,7 +377,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>stage</h4>
-<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Stage <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.56">stage</a></pre>
+<pre>public&nbsp;com.badlogic.gdx.scenes.scene2d.Stage <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.55">stage</a></pre>
 <div class="block">All visible parts of this class are in the Stage, and if you add additional widget or scene2d.ui Actor
  values to your game, they should probably be added to this Stage.</div>
 </li>
@@ -388,7 +388,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>batch</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.g2d.SpriteBatch <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.62">batch</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/FilterBatch.html" title="class in squidpony.squidgrid.gui.gdx">FilterBatch</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.61">batch</a></pre>
 <div class="block">Used to draw lots of things, but mostly handled internally by the Stage.
  You may need to call <code>batch.begin()</code> and <code>batch.end()</code> in some cases where you want to
  render something that isn't a child of stage but is an Actor or similar render-able object.</div>
@@ -400,7 +400,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>viewport</h4>
-<pre>public&nbsp;com.badlogic.gdx.utils.viewport.Viewport <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.68">viewport</a></pre>
+<pre>public&nbsp;com.badlogic.gdx.utils.viewport.Viewport <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.67">viewport</a></pre>
 <div class="block">An important part of how this will be displayed; the viewport defaults to a displayed width of
  <code>cellWidth * gridWidth</code> and a displayed height of <code>cellHeight * gridHeight</code>, after cellWidth
  and cellHeight were doubled by default, and will be stretched or shrunk to fit the actual screen size.</div>
@@ -412,7 +412,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>rng</h4>
-<pre>public&nbsp;squidpony.squidmath.GWTRNG <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.86">rng</a></pre>
+<pre>public&nbsp;squidpony.squidmath.GWTRNG <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.85">rng</a></pre>
 <div class="block">Almost all of SquidLib comes into contact with randomness at some point, so this is a good place to show one
  way of handling that randomness. GWTRNG acts as a normal implementation of <code>IRNG</code>,
  can be "seeded" at the start to set the initial state, like any other RNG, but it can also have the current state
@@ -443,7 +443,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>StarterKit</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.97">StarterKit</a>(int&nbsp;gridWidth,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.96">StarterKit</a>(int&nbsp;gridWidth,
                   int&nbsp;gridHeight,
                   int&nbsp;cellWidth,
                   int&nbsp;cellHeight)</pre>
@@ -465,7 +465,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>StarterKit</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.119">StarterKit</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.118">StarterKit</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
                   int&nbsp;gridWidth,
                   int&nbsp;gridHeight,
                   int&nbsp;cellWidth,
@@ -497,7 +497,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>StarterKit</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.142">StarterKit</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.141">StarterKit</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.html" title="class in squidpony.squidgrid.gui.gdx">TextCellFactory</a>&nbsp;textFactory,
                   int&nbsp;gridWidth,
                   int&nbsp;gridHeight,
                   int&nbsp;cellWidth,
@@ -541,7 +541,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.169">draw</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.168">draw</a>()</pre>
 <div class="block">Not a complete drawing solution; so much of the logic related to drawing is specific to each game, like
  FOV being used to make certain things not render if they are out of sight, that this doesn't even try to
  guess at what a particular game needs for its rendering code. Any <a href="../../../../squidpony/squidgrid/gui/gdx/TextCellFactory.Glyph.html" title="class in squidpony.squidgrid.gui.gdx"><code>TextCellFactory.Glyph</code></a> objects in
@@ -551,8 +551,8 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
  a loop and then with end() called after). 
  <br>
  Specifically, this applies the current viewport to the stage, draws the stage, and makes any actions or
- events related to the stage take effect. Should not be called inside a <code>SpriteBatch.begin()</code> block,
- since this calls it itself by drawing the stage, and also calls <code>SpriteBatch.end()</code> afterwards.</div>
+ events related to the stage take effect. Should not be called inside a <a href="../../../../squidpony/squidgrid/gui/gdx/FilterBatch.html#begin--"><code>FilterBatch.begin()</code></a> block,
+ since this calls it itself by drawing the stage, and also calls <a href="../../../../squidpony/squidgrid/gui/gdx/FilterBatch.html#end--"><code>FilterBatch.end()</code></a> afterwards.</div>
 </li>
 </ul>
 <a name="resize-int-int-">
@@ -561,7 +561,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html
 <ul class="blockListLast">
 <li class="blockList">
 <h4>resize</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.182">resize</a>(int&nbsp;width,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/StarterKit.html#line.181">resize</a>(int&nbsp;width,
                    int&nbsp;height)</pre>
 <div class="block">Not a complete resize method; this is meant to handle the resizing of this StarterKit only and should be
  called inside your main Game, ApplicationListener, etc. class' resize method.</div>

@@ -6594,7 +6594,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;com.badlogic.gdx.graphics.Color</h3>
-<code>a, b, CLEAR, FOREST, g, NAVY, r, ROYAL, SLATE</code></li>
+<code>a, b, CLEAR, FOREST, g, NAVY, r, ROYAL, SLATE, WHITE_FLOAT_BITS</code></li>
 </ul>
 </li>
 </ul>
@@ -26035,7 +26035,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  as "FFFFFFFE", and pure red with 50% alpha will be shown as "FF00007E".
  <br>
  The value of <code>color</code> should be the same type used internally in libGDX and SquidLib, that is, an ABGR
- packed float that could be passed directly to <code>Batch.setColor(float)</code>.</div>
+ packed float that could be passed directly to <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>changing</code> - a char array that will be changed in place; must not be null and must have length of at least 8</dd>
@@ -26057,7 +26057,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  <code>offset</code>, read them as as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in
  RGBA8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
  <code>Color.set(int)</code>, while others use ABGR8888 (often with packed floats), like
- <code>Batch.setColor(float)</code>, which is the fastest and least wasteful way to set
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, which is the fastest and least wasteful way to set
  the current color used by a Batch for tinting.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -26078,7 +26078,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Meant for usage with <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#floatToChars-char:A-float-"><code>floatToChars(char[], float)</code></a>, this will take 8 chars from <code>data</code>, read them as
  as an RGBA8888 32-bit integer in hexadecimal format, and return that integer in RGBA8888 format. Some parts of
  libGDX use and expect RGBA8888 order, such as most constructors for Color and <code>Color.set(int)</code>, while
- others use ABGR8888 (often with packed floats), like <code>Batch.setColor(float)</code>,
+ others use ABGR8888 (often with packed floats), like <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>,
  which is the fastest and least wasteful way to set the current color used by a Batch for tinting.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -26100,7 +26100,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  <code>offset</code>, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
  construct an int in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
  constructors for Color and <code>Color.set(int)</code>, while others use ABGR8888 (often with packed floats), like
- <code>Batch.setColor(float)</code>, which is the fastest and least wasteful way to set
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, which is the fastest and least wasteful way to set
  the current color used by a Batch for tinting.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -26122,7 +26122,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct an int in ABGR8888 format.
  Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
  <code>Color.set(int)</code>, while others use ABGR8888 (often with packed floats), like
- <code>Batch.setColor(float)</code>, which is the fastest and least wasteful way to set
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, which is the fastest and least wasteful way to set
  the current color used by a Batch for tinting.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -26143,7 +26143,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
  format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
  <code>Color.set(int)</code>, while others use ABGR8888 (often with packed floats), like
- <code>Batch.setColor(float)</code>, which is the fastest and least wasteful way to set
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, which is the fastest and least wasteful way to set
  the current color used by a Batch for tinting.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -26165,7 +26165,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  <code>offset</code>, read them as as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to
  construct a packed float in ABGR8888 format. Some parts of libGDX use and expect RGBA8888 order, such as most
  constructors for Color and <code>Color.set(int)</code>, while others use ABGR8888 (often with packed floats), like
- <code>Batch.setColor(float)</code>, which is the fastest and least wasteful way to set
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, which is the fastest and least wasteful way to set
  the current color used by a Batch for tinting.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -26188,7 +26188,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  as an RGBA8888 32-bit integer in hexadecimal format, and use that integer to construct a packed float in ABGR8888
  format. Some parts of libGDX use and expect RGBA8888 order, such as most constructors for Color and
  <code>Color.set(int)</code>, while others use ABGR8888 (often with packed floats), like
- <code>Batch.setColor(float)</code>, which is the fastest and least wasteful way to set
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, which is the fastest and least wasteful way to set
  the current color used by a Batch for tinting.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -26212,7 +26212,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a packed float representation of a color given as 4 RGBA float components. LibGDX expects ABGR format
  in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
  packed floats like what this returns are ABGR format, the kind that can be passed directly to
- <code>Batch.setColor(float)</code> without constructing intermediate objects.
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code> without constructing intermediate objects.
  SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
  associates colors to cells; this has changed from earlier releases and should be much more efficient.</div>
 <dl>
@@ -26236,7 +26236,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a packed float representation of a color given an RGBA8888-format long. LibGDX expects ABGR format
  in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
  packed floats like what this returns are ABGR format, the kind that can be passed directly to
- <code>Batch.setColor(float)</code> without constructing intermediate objects.
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code> without constructing intermediate objects.
  SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
  associates colors to cells; this has changed from earlier releases and should be much more efficient.
  <br>
@@ -26262,7 +26262,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a packed float representation of a color given an RGBA8888-format int. LibGDX expects ABGR format
  in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR, or ARGB. Generally,
  packed floats like what this returns are ABGR format, the kind that can be passed directly to
- <code>Batch.setColor(float)</code> without constructing intermediate objects.
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code> without constructing intermediate objects.
  SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
  associates colors to cells; this has changed from earlier releases and should be much more efficient.
  <br>
@@ -26290,7 +26290,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a packed float representation of a color given as 3 RGB int components, setting alpha to opaque. LibGDX
  expects ABGR format in some places, but not all, and it can be confusing to track when it wants RGBA, ABGR,
  or ARGB. Generally, packed floats like what this returns are ABGR format, the kind that can be passed
- directly to <code>Batch.setColor(float)</code> without constructing intermediate
+ directly to <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code> without constructing intermediate
  objects. SquidPanel also uses floats internally instead of LibGDX Color objects in its internal 2D array that
  associates colors to cells; this has changed from earlier releases and should be much more efficient.</div>
 <dl>
@@ -26666,7 +26666,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  to be exactly the same each run, consider using <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getGuiRandom--"><code>DefaultResources.getGuiRandom()</code></a> for an IRNG), as well as
  floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
  can be used as a packed or encoded color with methods like
- <code>Batch.setColor(float)</code>, or in various SquidLib classes like SparseLayers or
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like SparseLayers or
  SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless hue,
  saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
  <br>
@@ -26706,7 +26706,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  consider setting the state of that IRNG with <code>StatefulRNG.setState(long)</code>), as well as
  floats representing the amounts of change that can be applied to hue, saturation, and value. Returns a float that
  can be used as a packed or encoded color with methods like
- <code>Batch.setColor(float)</code>, or in various SquidLib classes like SparseLayers or
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like SparseLayers or
  SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless hue,
  saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
  <br>
@@ -26746,7 +26746,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  need to be exactly the same each run, consider using <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getGuiRandom--"><code>DefaultResources.getGuiRandom()</code></a> for an IRNG), as well
  as floats representing the amounts of change that can be applied to hue, saturation, value, and opacity. Returns
  a float that can be used as a packed or encoded color with methods like
- <code>Batch.setColor(float)</code>, or in various SquidLib classes like SparseLayers or
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like SparseLayers or
  SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless hue,
  saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.
  <br>
@@ -26787,7 +26787,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
  specific need to be exactly the same each run, consider using <a href="../../../../squidpony/squidgrid/gui/gdx/DefaultResources.html#getGuiRandom--"><code>DefaultResources.getGuiRandom()</code></a> for an
  IRNG), as well as floats representing the amounts of change that can be applied to hue, saturation, value, and
  opacity. Returns a float that can be used as a packed or encoded color with methods like
- <code>Batch.setColor(float)</code>, or in various SquidLib classes like SparseLayers or
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like SparseLayers or
  SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless hue,
  saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any objects.
  <br>
@@ -26824,7 +26824,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a variation on this SColor as a packed float that has its hue, saturation, and value adjusted by the
  specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these
  can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like
- <code>Batch.setColor(float)</code>, or in various SquidLib classes like SparseLayers or
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like SparseLayers or
  SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless hue,
  saturation, and value are all 0. This won't modify the current SColor, nor will it allocate any objects.
  <br>
@@ -26856,7 +26856,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a variation on the Color basis as a packed float that has its hue, saturation, and value adjusted by the
  specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, and value; these
  can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with methods like
- <code>Batch.setColor(float)</code>, or in various SquidLib classes like SparseLayers or
+ <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like SparseLayers or
  SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless hue,
  saturation, and value are all 0. This won't modify the given SColor, nor will it allocate any objects.
  <br>
@@ -26889,7 +26889,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a variation on this SColor as a packed float that has its hue, saturation, value, and opacity adjusted by
  the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and
  opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with
- methods like <code>Batch.setColor(float)</code>, or in various SquidLib classes like
+ methods like <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like
  SparseLayers or SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless
  hue saturation, value, and opacity are all 0. This won't modify the current SColor, nor will it allocate any
  objects.
@@ -26924,7 +26924,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a variation on the Color basis as a packed float that has its hue, saturation, value, and opacity adjusted
  by the specified amounts. Takes floats representing the amounts of change to apply to hue, saturation, value, and
  opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or encoded color with
- methods like <code>Batch.setColor(float)</code>, or in various SquidLib classes like
+ methods like <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various SquidLib classes like
  SparseLayers or SquidLayers. The float is likely to be different than the result of <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless
  hue saturation, value, and opacity are all 0. This won't modify the given SColor, nor will it allocate any
  objects.
@@ -26959,7 +26959,7 @@ public static final&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/SColor
 <div class="block">Gets a variation on the packed float color basis as another packed float that has its hue, saturation, value, and
  opacity adjusted by the specified amounts. Takes floats representing the amounts of change to apply to hue,
  saturation, value, and opacity; these can be between -1f and 1f. Returns a float that can be used as a packed or
- encoded color with methods like <code>Batch.setColor(float)</code>, or in various
+ encoded color with methods like <code>com.badlogic.gdx.graphics.g2d.Batch#setColor(float)</code>, or in various
  SquidLib classes like SparseLayers or SquidLayers. The float is likely to be different than the result of
  <a href="../../../../squidpony/squidgrid/gui/gdx/SColor.html#toFloatBits--"><code>toFloatBits()</code></a> unless hue saturation, value, and opacity are all 0. This won't allocate any objects.
  <br>

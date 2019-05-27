@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.576">FloatFilters.PaletteReducerFilter</a>
+<pre>public static class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.html#line.582">FloatFilters.PaletteReducerFilter</a>
 extends <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a></pre>
 <div class="block">A FloatFilter that limits the colors it can return to a fixed palette as determined by a <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx"><code>PaletteReducer</code></a>,
  and won't return any colors that are missing from that palette (although it can always return fully-transparent).
@@ -232,7 +232,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>reducer</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.577">reducer</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.583">reducer</a></pre>
 </li>
 </ul>
 </li>
@@ -249,7 +249,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteReducerFilter</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.582">PaletteReducerFilter</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.588">PaletteReducerFilter</a>()</pre>
 <div class="block">Builds a PaletteReducerFilter that will use the 256-color (including transparent) DawnBringer Aurora palette.</div>
 </li>
 </ul>
@@ -259,7 +259,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title
 <ul class="blockList">
 <li class="blockList">
 <h4>PaletteReducerFilter</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.593">PaletteReducerFilter</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a>&nbsp;palette)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.599">PaletteReducerFilter</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html" title="class in squidpony.squidgrid.gui.gdx">PaletteReducer</a>&nbsp;palette)</pre>
 <div class="block">Builds a PaletteReducerFilter with the given PaletteReducer, which will be referenced without copying. You
  can call <a href="../../../../squidpony/squidgrid/gui/gdx/PaletteReducer.html#exact-com.badlogic.gdx.graphics.Color:A-"><code>PaletteReducer.exact(Color[])</code></a> or other similar methods before this filter is used to set up
  the palette, and this is often done before the PaletteReducer is passed here.</div>
@@ -275,7 +275,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PaletteReducerFilter</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.604">PaletteReducerFilter</a>(com.badlogic.gdx.graphics.Color...&nbsp;targets)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.610">PaletteReducerFilter</a>(com.badlogic.gdx.graphics.Color...&nbsp;targets)</pre>
 <div class="block">Builds a PaletteReducerFilter with an array or vararg of libGDX colors (at most 256 colors, and often
  starting with a transparent color) that this will choose from. The array will have its contents read but will
  not be held onto, so later changes won't affect it.</div>
@@ -299,7 +299,7 @@ extends <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title
 <ul class="blockListLast">
 <li class="blockList">
 <h4>alter</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.616">alter</a>(float&nbsp;color)</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FloatFilters.PaletteReducerFilter.html#line.622">alter</a>(float&nbsp;color)</pre>
 <div class="block">Takes a packed float color and produces a potentially-different packed float color that this FloatFilter edited.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>

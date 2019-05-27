@@ -303,6 +303,11 @@
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html#SEA_LEVEL">SEA_LEVEL</a></span> - Static variable in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/MetsaMapFactory.html" title="class in squidpony.squidgrid.mapping">MetsaMapFactory</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless1D-squidpony.squidmath.Noise.Noise2D-double-double-long-">seamless1D(Noise.Noise2D, double, double, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/Noise.html#seamless2D-double:A:A-long-int-squidpony.squidmath.Noise.Noise4D-"><code>Noise.seamless2D(double[][], long, int, Noise4D)</code></a>, but this produces 1D noise that "tiles" by repeating
+ its output every <code>sizeX</code> units that <code>x</code> increases or decreases by.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless2D-int-int-int-int-">seamless2D(int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
 <dd>
 <div class="block">Produces a 2D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.</div>
@@ -317,11 +322,16 @@
 <div class="block">Fills the given 2D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-int-int-int-int-int-">seamless3D(int, int, int, int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless2D-squidpony.squidmath.Noise.Noise4D-double-double-double-double-long-">seamless2D(Noise.Noise4D, double, double, double, double, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/Noise.html#seamless2D-double:A:A-long-int-squidpony.squidmath.Noise.Noise4D-"><code>Noise.seamless2D(double[][], long, int, Noise4D)</code></a>, but this doesn't precalculate noise into an array,
+ instead calculating just one 2D point so that later calls with different x or y will tile seamlessly.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-int-int-int-long-int-">seamless3D(int, int, int, long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
 <dd>
 <div class="block">Produces a 3D array of noise with values from -1.0 to 1.0 that is seamless on all boundaries.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-int-int-">seamless3D(double[][][], int, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-long-int-">seamless3D(double[][][], long, int)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
 <dd>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries.</div>
@@ -335,6 +345,11 @@
 <dd>
 <div class="block">Fills the given 3D array (modifying it) with noise, using values from -1.0 to 1.0, that is seamless on all
  boundaries.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/Noise.html#seamless3D-squidpony.squidmath.Noise.Noise6D-double-double-double-double-double-double-long-">seamless3D(Noise.Noise6D, double, double, double, double, double, double, long)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/Noise.html" title="class in squidpony.squidmath">Noise</a></dt>
+<dd>
+<div class="block">Like <a href="../squidpony/squidmath/Noise.html#seamless3D-double:A:A:A-long-int-squidpony.squidmath.Noise.Noise6D-"><code>Noise.seamless3D(double[][][], long, int, Noise6D)</code></a>, but this doesn't precalculate noise into an array,
+ instead calculating just one 3D point so that later calls with different x, y, or z will tile seamlessly.</div>
 </dd>
 <dt><a href="../squidpony/squidgrid/mapping/SectionDungeonGenerator.html" title="class in squidpony.squidgrid.mapping"><span class="typeNameLink">SectionDungeonGenerator</span></a> - Class in <a href="../squidpony/squidgrid/mapping/package-summary.html">squidpony.squidgrid.mapping</a></dt>
 <dd>
