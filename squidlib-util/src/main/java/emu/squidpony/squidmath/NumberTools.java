@@ -379,6 +379,39 @@ public class NumberTools {
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
+
+    public static double sin_(double turns)
+    {
+        turns *= 4.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+    public static double cos_(double turns)
+    {
+        turns = turns * 4.0 + 1.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+    public static float sin_(float turns)
+    {
+        turns *= 4f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
+    public static float cos_(float turns)
+    {
+        turns = turns * 4f + 1f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
     public static double atan2(final double y, final double x)
     {
         if(y == 0.0 && x >= 0.0) return 0.0;

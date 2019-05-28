@@ -750,8 +750,8 @@ public final class NumberTools {
 
     /**
      * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 8x and 80x
-     * faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
-     * consider its more-precise and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
+     * faster sin() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
+     * and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a
      * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
      * with this method than with MathUtils. Takes the same arguments Math.sin() does, so one angle in radians,
      * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
@@ -788,8 +788,8 @@ public final class NumberTools {
 
     /**
      * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 8x and 80x
-     * faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
-     * consider its more-precise and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
+     * faster cos() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
+     * and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a
      * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better
      * with this method than with MathUtils. Takes the same arguments Math.cos() does, so one angle in radians,
      * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are
@@ -968,6 +968,133 @@ public final class NumberTools {
         degrees *= 2f - degrees;
         return degrees * (-0.775f - 0.225f * degrees) * ((floor & 2) - 1);
     }
+
+    /**
+     * A variation on {@link Math#sin(double)} that takes its input as a fraction of a turn instead of in radians; one
+     * turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
+     * to make a sine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
+     * the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also
+     * called brad (with 256 brad equal to 360 degrees), you would divide by 256.0 or multiply by 0.00390625 before
+     * passing that value here. The brad case is especially useful because you can use a byte for any brad values, and
+     * adding up those brad values will wrap correctly (256 brad goes back to 0) while keeping perfect precision for the
+     * results (you still divide by 256.0 when you pass the brad value to this method).
+     * <br>
+     * The error for this double version is extremely close to the float version, {@link #sin_(float)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for sine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a double, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the sine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
+     */
+    public static double sin_(double turns)
+    {
+        turns *= 4.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+
+    /**
+     * A variation on {@link Math#cos(double)} that takes its input as a fraction of a turn instead of in radians; one
+     * turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;
+     * to make a cosine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide
+     * the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also
+     * called brad (with 256 brad equal to 360 degrees), you would divide by 256.0 or multiply by 0.00390625 before
+     * passing that value here. The brad case is especially useful because you can use a byte for any brad values, and
+     * adding up those brad values will wrap correctly (256 brad goes back to 0) while keeping perfect precision for the
+     * results (you still divide by 256.0 when you pass the brad value to this method).
+     * <br>
+     * The error for this double version is extremely close to the float version, {@link #cos_(float)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for cosine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a double, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the cosine of the given angle, as a double between -1.0 and 1.0 (both inclusive)
+     */
+    public static double cos_(double turns)
+    {
+        turns = turns * 4.0 + 1.0;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2.0 - turns;
+        return turns * (-0.775 - 0.225 * turns) * ((floor & 2L) - 1L);
+    }
+
+    /**
+     * A variation on {@link Math#sin(double)} that takes its input as a fraction of a turn instead of in radians (it
+     * also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
+     * building block for other measurements; to make a sine method that takes its input in grad (with 400 grad equal to
+     * 360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this
+     * method. Similarly for binary degrees, also called brad (with 256 brad equal to 360 degrees), you would divide by
+     * 256.0 or multiply by 0.00390625 before passing that value here. The brad case is especially useful because you
+     * can use a byte for any brad values, and adding up those brad values will wrap correctly (256 brad goes back to 0)
+     * while keeping perfect precision for the results (you still divide by 256.0 when you pass the brad value to this
+     * method).
+     * <br>
+     * The error for this float version is extremely close to the double version, {@link #sin_(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for sine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a float, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the sine of the given angle, as a float between -1.0 and 1.0 (both inclusive)
+     */
+    public static float sin_(float turns)
+    {
+        turns *= 4f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
+
+    /**
+     * A variation on {@link Math#cos(double)} that takes its input as a fraction of a turn instead of in radians (it
+     * also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a
+     * building block for other measurements; to make a cosine method that takes its input in grad (with 400 grad equal
+     * to 360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this
+     * method. Similarly for binary degrees, also called brad (with 256 brad equal to 360 degrees), you would divide by
+     * 256.0 or multiply by 0.00390625 before passing that value here. The brad case is especially useful because you
+     * can use a byte for any brad values, and adding up those brad values will wrap correctly (256 brad goes back to 0)
+     * while keeping perfect precision for the results (you still divide by 256.0 when you pass the brad value to this
+     * method).
+     * <br>
+     * The error for this float version is extremely close to the float version, {@link #cos_(double)}, so you should
+     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion
+     * between float and double takes about as long as this method normally takes to run (or longer), so if you have
+     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),
+     * and likewise for doubles.
+     * <br>
+     * The technique for cosine approximation is mostly from
+     * <a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784">this archived DevMaster thread</a>,
+     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.
+     * @param turns an angle as a fraction of a turn as a float, with 0.5 here equivalent to PI radians in {@link #cos(double)}
+     * @return the cosine of the given angle, as a float between -1.0 and 1.0 (both inclusive)
+     */
+    public static float cos_(float turns)
+    {
+        turns = turns * 4f + 1f;
+        final long floor = (turns >= 0.0 ? (long) turns : (long) turns - 1L) & -2L;
+        turns -= floor;
+        turns *= 2f - turns;
+        return turns * (-0.775f - 0.225f * turns) * ((floor & 2L) - 1L);
+    }
+
     /**
      * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2
      * approximation. Maximum error is below 0.001 radians.
