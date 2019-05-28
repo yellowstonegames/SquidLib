@@ -81,19 +81,6 @@ public abstract class WorldMapGenerator implements Serializable {
             rockLower = 0.6, rockUpper = 0.8,                    // 7
             snowLower = 0.8, snowUpper = 1.0;                    // 8
 
-    /**
-     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.
-     * This formula is number 201 in <a href=">http://www.fastcode.dk/fastcodeproject/articles/index.htm">Dennis
-     * Kjaer Christensen's unfinished math work on arc sine approximation</a>. This method is about 40 times faster
-     * than {@link Math#asin(double)}.
-     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)
-     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.
-     */
-    protected static double asin(double a) {
-        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /
-                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));
-    }
-
     protected static double removeExcess(double radians)
     {
         radians *= 0.6366197723675814;
@@ -1690,7 +1677,7 @@ public abstract class WorldMapGenerator implements Serializable {
             yPos = startY * i_h + i_uh;
             for (int y = 0; y < height; y++, yPos += i_uh) {
                 qs = -1 + yPos;//-1.5707963267948966 + yPos;
-                qc = NumberTools.cos(asin(qs));
+                qc = NumberTools.cos(NumberTools.asin(qs));
                 //qs = qs;
                 //qs = NumberTools.sin(qs);
                 for (int x = 0, xt = 0; x < width; x++) {
@@ -2037,10 +2024,10 @@ public abstract class WorldMapGenerator implements Serializable {
 
             yPos = startY - ry;
             for (int y = 0; y < height; y++, yPos += i_uh) {
-                thx = asin((yPos) * iry);
+                thx = NumberTools.asin((yPos) * iry);
                 lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? thx : Math.PI * irx * 0.5 / NumberTools.cos(thx);
                 thy = thx * 2.0;
-                lat = asin((thy + NumberTools.sin(thy)) * ipi);
+                lat = NumberTools.asin((thy + NumberTools.sin(thy)) * ipi);
 
                 qc = NumberTools.cos(lat);
                 qs = NumberTools.sin(lat);
@@ -2323,10 +2310,10 @@ public abstract class WorldMapGenerator implements Serializable {
     
             yPos = -ry;
             for (int y = 0; y < height; y++, yPos++) {
-                thx = asin((yPos) * iry);
+                thx = NumberTools.asin((yPos) * iry);
                 lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? thx : Math.PI * irx * 0.5 / NumberTools.cos(thx);
                 thy = thx * 2.0;
-                lat = asin((thy + NumberTools.sin(thy)) * ipi);
+                lat = NumberTools.asin((thy + NumberTools.sin(thy)) * ipi);
                 xPos = 0;
                 for (int x = 0; x < width; x++, xPos++) {
                     th = lon * (xPos - hw);
@@ -2412,10 +2399,10 @@ public abstract class WorldMapGenerator implements Serializable {
             yPos = startY - ry;
             for (int y = 0; y < height; y++, yPos += i_uh) {
 
-                thx = asin((yPos) * iry);
+                thx = NumberTools.asin((yPos) * iry);
                 lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? thx : Math.PI * irx * 0.5 / NumberTools.cos(thx);
                 thy = thx * 2.0;
-                lat = asin((thy + NumberTools.sin(thy)) * ipi);
+                lat = NumberTools.asin((thy + NumberTools.sin(thy)) * ipi);
 
                 qc = NumberTools.cos(lat);
                 qs = NumberTools.sin(lat);
@@ -2781,8 +2768,8 @@ public abstract class WorldMapGenerator implements Serializable {
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-                    th = asin(rho); // c
-                    lat = asin(iyPos);
+                    th = NumberTools.asin(rho); // c
+                    lat = NumberTools.asin(iyPos);
                     lon = centerLongitude + NumberTools.atan2(ixPos * rho, rho * NumberTools.cos(th));
 
                     qc = NumberTools.cos(lat);
@@ -3103,12 +3090,12 @@ public abstract class WorldMapGenerator implements Serializable {
             yPos = startY - ry;
             for (int y = 0; y < height; y++, yPos += i_uh) {
                 thy = yPos * iry;//NumberTools.sin(thb);
-                thb = asin(thy);
+                thb = NumberTools.asin(thy);
                 thx = NumberTools.cos(thb);
                 //1.3265004 0.7538633073600218  1.326500428177002
                 lon = (thx == Math.PI * 0.5 || thx == Math.PI * -0.5) ? 0x1.0p100 : irx / (0.42223820031577125 * (1.0 + thx));
                 qs = (thb + (thx + 2.0) * thy) * 0.2800495767557787;
-                lat = asin(qs);
+                lat = NumberTools.asin(qs);
 
                 qc = NumberTools.cos(lat);
 
@@ -3508,7 +3495,7 @@ public abstract class WorldMapGenerator implements Serializable {
 //
 //                qc = NumberTools.cos(lat);
 
-                lon = asin(Z[(int)(0.5 + Math.abs(yPos*iry)*(Z.length-1))])*Math.signum(yPos);
+                lon = NumberTools.asin(Z[(int)(0.5 + Math.abs(yPos*iry)*(Z.length-1))])*Math.signum(yPos);
                 qs = NumberTools.sin(lon);
                 qc = NumberTools.cos(lon);
 
@@ -3866,7 +3853,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         inSpace = true;
                         continue;
                     }
-                    lat = asin(th);
+                    lat = NumberTools.asin(th);
                     qc = NumberTools.cos(lat);
                     qs = th;
                     th = Math.PI - lon + centerLongitude;
@@ -4158,7 +4145,7 @@ public abstract class WorldMapGenerator implements Serializable {
                 boolean inSpace = true;
                 xPos = startX - rx;
                 ixPos = xPos / rx;
-                lat = asin(iyPos);
+                lat = NumberTools.asin(iyPos);
                 for (int x = 0; x < width; x++, xPos += i_uw, ixPos += irx) {
                     rho = (ixPos * ixPos + iyPos * iyPos);
                     if(rho > 1.0) {
@@ -4173,7 +4160,7 @@ public abstract class WorldMapGenerator implements Serializable {
                         edges[y << 1] = x;
                     }
                     edges[y << 1 | 1] = x;
-                    th = asin(rho); // c
+                    th = NumberTools.asin(rho); // c
                     lon = removeExcess((centerLongitude + (NumberTools.atan2(ixPos * rho, rho * NumberTools.cos(th)))) * 0.5);
 
                     qs = lat * 0.6366197723675814;
