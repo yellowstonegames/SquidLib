@@ -1241,10 +1241,10 @@ if y < 0 then r := -r
 
     /**
      * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as 
-     * doubles and returning an angle from 0.0 to 1.0 (inclusive), with one cycle over the range equivalent to 360
-     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
-     * to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a negative number,
-     * which may help avoid costly floating-point modulus when you actually want a positive number.
+     * doubles and returning an angle measured in turns from 0.0 to 1.0 (inclusive), with one cycle over the range
+     * equivalent to 360 degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians,
+     * or by {@code 360f} to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a
+     * negative number, which may help avoid costly floating-point modulus when you actually want a positive number.
      * Credit to StackExchange user njuffa, who gave
      * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that
      * {@link #atan2(double, double)} returns an angle in radians and can return negative results, which may be fine for
@@ -1271,13 +1271,14 @@ if y < 0 then r := -r
     }
     /**
      * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
-     * and returning an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI radians.
-     * You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f} to change to degrees.
-     * Takes y and x (in that unusual order) as floats. Will never return a negative number, which may help avoid costly
-     * floating-point modulus when you actually want a positive number. Credit to StackExchange user njuffa, who gave
-     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that {@link #atan2(float, float)}
-     * returns an angle in radians and can return negative results, which may be fine for many tasks; these two methods
-     * are extremely close in implementation and speed.
+     * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
+     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}
+     * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which
+     * may help avoid costly floating-point modulus when you actually want a positive number.
+     * Credit to StackExchange user njuffa, who gave
+     * <a href="https://math.stackexchange.com/a/1105038">this useful answer</a>. Note that
+     * {@link #atan2(float, float)} returns an angle in radians and can return negative results, which may be fine for
+     * many tasks; these two methods are extremely close in implementation and speed.
      * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention
      * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive
@@ -1298,6 +1299,8 @@ if y < 0 then r := -r
             return (x < 0.0f) ? (y < 0.0f) ? 0.5f + r : 0.5f - r : (y < 0.0f) ? 1f - r : r;
         }
     }
+
+
     /**
      * Less-precise but somewhat faster altered-range approximation of the frequently-used trigonometric method atan2, with
      * worse average and max error than {@link #atan2(double, double)} but better speed. Takes y and x positions as
@@ -1406,5 +1409,105 @@ if y < 0 then r := -r
     public static float acos(float a) {
         return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
                 (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
+    }
+
+    /**
+     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}
+     */
+    public static double asin_(final double n)
+    {
+        if(n == 0.0) return 0.0;
+        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+    }
+    /**
+     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.0 (inclusive) to 0.5 (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(double)}
+     */
+    public static double acos_(final double n)
+    {
+        if(n == 1.0 || n == -1.0) return 0.0;
+        final double ax = Math.abs(n), ay = Math.sqrt((1.0 + n) * (1.0 - n));
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+        else {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+    }
+
+
+    /**
+     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f
+     * (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}
+     */
+    public static float asin_(final float n)
+    {
+        if(n == 0.0f) return 0.0f;
+        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+    }
+    /**
+     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this
+     * range from 0.0f (inclusive) to 0.5f (inclusive).
+     * <br>
+     * This method is much more precise than the non-turn approximation, but is about 3x slower.
+     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()
+     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(float)}
+     */
+    public static float acos_(final float n)
+    {
+        if(n == 1.0f || n == -1.0f) return 0.0f;
+        final float ax = Math.abs(n), ay = (float) Math.sqrt((1f + n) * (1f - n));
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
+        }
+        else {
+            final float a = ax / ay, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
+        }
     }
 }

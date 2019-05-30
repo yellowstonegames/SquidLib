@@ -556,5 +556,68 @@ public class NumberTools {
         return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /
                 (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));
     }
-
+    public static double asin_(final double n)
+    {
+        if(n == 0.0) return 0.0;
+        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+        else {
+            final double a = ay / ax, s = a * a,
+                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 1.0 - r : r;
+        }
+    }
+    public static double acos_(final double n)
+    {
+        if(n == 1.0 || n == -1.0) return 0.0;
+        final double ax = Math.abs(n), ay = Math.sqrt((1.0 + n) * (1.0 - n));
+        if(ax < ay)
+        {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+        else {
+            final double a = ax / ay, s = a * a,
+                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;
+            return (n < 0.0) ? 0.5 - r : r;
+        }
+    }
+    public static float asin_(final float n)
+    {
+        if(n == 0.0f) return 0.0f;
+        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+        else {
+            final float a = ay / ax, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 1.0f - r : r;
+        }
+    }
+    public static float acos_(final float n)
+    {
+        if(n == 1.0f || n == -1.0f) return 0.0f;
+        final float ax = Math.abs(n), ay = (float) Math.sqrt((1f + n) * (1f - n));
+        if(ax < ay)
+        {
+            final float a = ax / ay, s = a * a,
+                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
+        }
+        else {
+            final float a = ax / ay, s = a * a,
+                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;
+            return (n < 0.0f) ? 0.5f - r : r;
+        }
+    }
 }
