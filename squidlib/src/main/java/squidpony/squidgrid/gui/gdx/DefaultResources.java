@@ -264,8 +264,10 @@ public class DefaultResources implements LifecycleListener {
             + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords - box.xy).a) +\n"
             + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords + box.yx).a) +\n"
             + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords - box.yx).a)),\n"
-            + "                 outline = clamp((distance * 0.8 - 0.415) * 18, 0, 1);\n"
-            + "	   gl_FragColor = vec4(mix(vec3(0.0), v_color.rgb, outline), asum * v_color.a);\n"
+//            + "                 char = step(distance, 0.35);\n"
+            + "                 fancy = step(0.6, distance);\n"
+//            + "                 outline = clamp((distance * 0.8 - 0.415) * 18.0, 0.0, 1.0);\n"
+            + "	   gl_FragColor = vec4(v_color.rgb * fancy, asum * v_color.a);\n"
             + "  }\n"
             + "}\n";
     /**
@@ -290,9 +292,15 @@ public class DefaultResources implements LifecycleListener {
             + "\n"
             + "void main() {\n"
             + "  vec3 sdf = texture2D(u_texture, v_texCoords).rgb;\n"
-            + "  float distance = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.425);"
+//            + "  float distance = (max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b)) - 0.425);\n"
+//            + "  gl_FragColor = vec4(step(3.5 * u_smoothing, distance * 0.75) * v_color.rgb, clamp((distance / (3.4 * u_smoothing)) + 0.9125, 0.0, 1.0) * v_color.a);\n"
+
             //+ "  float cd = clamp(distance, 0.0, 1.0);"
-            + "  gl_FragColor = vec4(step(3.5 * u_smoothing, distance * 0.75) * v_color.rgb, clamp((distance / (3.4 * u_smoothing)) + 0.9125, 0.0, 1.0) * v_color.a);\n"
+
+            + "  float d = ((max(min(sdf.r, sdf.g), min(max(sdf.r, sdf.g), sdf.b))) - 0.4);\n"
+            + "  float block = step(-0.4999999, d);\n"
+            + "  float nice = step(0.24999999, d);\n"
+            + "  gl_FragColor = vec4(v_color.rgb * nice, clamp(d * u_smoothing + (block + 1.0) * 0.5, 0.0, 1.0) * v_color.a);\n"
             + "}\n";
 
     private SquidColorCenter scc = null;
