@@ -150,7 +150,7 @@ public class ShaderDemo extends ApplicationAdapter {
         // You should try this with both DefaultResources.getLeanFamily() and DefaultResources.getStretchableLeanFont()
         // if you intend to use both or are considering one over the other; the outline weights vary between fonts.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableSlabFont());
+                DefaultResources.getStretchableLeanFont());
 
         // The main thing this demo is meant to show!
         // Here we assign a different ShaderProgram to the TextCellFactory we use, so that it draws outlines instead of
