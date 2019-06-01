@@ -51,7 +51,7 @@ public class ShaderDemo extends ApplicationAdapter {
     //one cell; resizing the window can make the units cellWidth and cellHeight use smaller or larger than a pixel.
 
     /** In number of cells */
-    private static final int gridWidth = 70;
+    private static final int gridWidth = 72;
     /** In number of cells */
     private static final int gridHeight = 20;
 
@@ -63,9 +63,9 @@ public class ShaderDemo extends ApplicationAdapter {
     /** In number of cells */
     private static final int bonusHeight = 7;
     /** The pixel width of a cell */
-    private static final int cellWidth = 25;
+    private static final int cellWidth = 24;
     /** The pixel height of a cell */
-    private static final int cellHeight = 25;
+    private static final int cellHeight = 32;
     private SquidInput input;
     private Color bgColor;
     private Stage stage, languageStage;
@@ -150,7 +150,7 @@ public class ShaderDemo extends ApplicationAdapter {
         // You should try this with both DefaultResources.getLeanFamily() and DefaultResources.getStretchableLeanFont()
         // if you intend to use both or are considering one over the other; the outline weights vary between fonts.
         display = new SparseLayers(bigWidth, bigHeight + bonusHeight, cellWidth, cellHeight,
-                DefaultResources.getStretchableLeanFont());
+                DefaultResources.getStretchableSlabFont());
 
         // The main thing this demo is meant to show!
         // Here we assign a different ShaderProgram to the TextCellFactory we use, so that it draws outlines instead of
