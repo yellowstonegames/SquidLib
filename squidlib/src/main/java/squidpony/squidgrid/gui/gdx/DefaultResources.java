@@ -113,8 +113,10 @@ public class DefaultResources implements LifecycleListener {
             distanceFieldDejaVuTexture = "DejaVuSansMono-distance.png",
             distanceFieldOrbit = "Orbitron-distance.fnt",
             distanceFieldOrbitTexture = "Orbitron-distance.png",
-            distanceFieldLean = "Iosevka-distance.fnt",
-            distanceFieldLeanTexture = "Iosevka-distance.png",
+//            distanceFieldLean = "Iosevka-psdf.fnt",           // PSDF has better shape but needs the black background removed
+//            distanceFieldLeanTexture = "Iosevka-psdf.png",    // PSDF has better shape but needs the black background removed
+            distanceFieldLean = "Iosevka-distance.fnt",         // switch comment with above when PSDF works better
+            distanceFieldLeanTexture = "Iosevka-distance.png",  // switch comment with above when PSDF works better
             distanceFieldLeanLight = "Iosevka-Light-distance.fnt",
             distanceFieldLeanLightTexture = "Iosevka-Light-distance.png",
             distanceFieldSlabLight = "Iosevka-Slab-Light-distance.fnt",
@@ -250,14 +252,20 @@ public class DefaultResources implements LifecycleListener {
             + "  if(u_smoothing <= 0.0) {\n"
             + "    float smoothing = -u_smoothing;\n"
             + "	   vec4 box = vec4(v_texCoords-0.000125, v_texCoords+0.000125);\n"
-            + "	   float asum = smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, v_texCoords).a) + 0.5 * (\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.xy).a) +\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.zw).a) +\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.xw).a) +\n"
-            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, texture2D(u_texture, box.zy).a));\n"
+            + "    vec2 sample0 = texture2D(u_texture, v_texCoords).ra;\n"
+            + "    vec2 sample1 = texture2D(u_texture, box.xy).ra;\n"
+            + "    vec2 sample2 = texture2D(u_texture, box.zw).ra;\n"
+            + "    vec2 sample3 = texture2D(u_texture, box.xw).ra;\n"
+            + "    vec2 sample4 = texture2D(u_texture, box.zy).ra;\n"
+            + "	   float asum = smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample0.x, sample0.y)) + 0.5 * (\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample1.x, sample1.y)) +\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample2.x, sample2.y)) +\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample3.x, sample3.y)) +\n"
+            + "                 smoothstep(0.5 - smoothing, 0.5 + smoothing, min(sample4.x, sample4.y)));\n"
             + "    gl_FragColor = vec4(v_color.rgb, (asum / 3.0) * v_color.a);\n"
             + "	 } else {\n"
-            + "    float distance = texture2D(u_texture, v_texCoords).a;\n"
+            + "    vec2 radistance = texture2D(u_texture, v_texCoords).ra;\n"
+            + "    float distance = min(radistance.x, radistance.y);\n"
 //            + "	   vec2 box = vec2(0.0, 0.00375 * (u_smoothing + 0.0825));\n"
 //            + "	   float asum = 0.7 * (smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, distance) + \n"
 //            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords + box.xy).a) +\n"
@@ -265,11 +273,16 @@ public class DefaultResources implements LifecycleListener {
 //            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords + box.yx).a) +\n"
 //            + "                   smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords - box.yx).a)),\n"
             + "	   vec4 box = vec4(v_texCoords-0.000625, v_texCoords+0.000625);\n"
-            + "	   float asum = smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, v_texCoords).a) + 0.5 * (\n"
-            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xy).a) +\n"
-            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zw).a) +\n"
-            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.xw).a) +\n"
-            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, texture2D(u_texture, box.zy).a)),\n"
+            + "    vec2 sample0 = texture2D(u_texture, v_texCoords).ra;\n"
+            + "    vec2 sample1 = texture2D(u_texture, box.xy).ra;\n"
+            + "    vec2 sample2 = texture2D(u_texture, box.zw).ra;\n"
+            + "    vec2 sample3 = texture2D(u_texture, box.xw).ra;\n"
+            + "    vec2 sample4 = texture2D(u_texture, box.zy).ra;\n"
+            + "	   float asum = smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample0.x, sample0.y)) + 0.5 * (\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample1.x, sample1.y)) +\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample2.x, sample2.y)) +\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample3.x, sample3.y)) +\n"
+            + "                 smoothstep(0.5 - u_smoothing, 0.5 + u_smoothing, min(sample4.x, sample4.y))),\n"
 //            + "                 char = step(distance, 0.35);\n"
             + "                 fancy = step(0.55, distance);\n"
 //            + "                 outline = clamp((distance * 0.8 - 0.415) * 18.0, 0.0, 1.0);\n"
