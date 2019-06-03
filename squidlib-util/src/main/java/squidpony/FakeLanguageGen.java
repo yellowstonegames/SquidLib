@@ -103,9 +103,9 @@ public class FakeLanguageGen implements Serializable {
                     {
                             Pattern.compile("[AEIOUaeiou]{3}"),
                             Pattern.compile("(\\p{L})\\1\\1"),
-                            Pattern.compile("[Ii][iyqhl]"),
+                            Pattern.compile("[Ii][iyq]"),
                             Pattern.compile("[Yy]([aiu])\\1"),
-                            Pattern.compile("[Rr][aeiouy]+[rh]"),
+                            Pattern.compile("[Rr][uy]+[rh]"),
                             Pattern.compile("[Qq]u[yu]"),
                             Pattern.compile("[^oaei]uch"),
                             Pattern.compile("[Hh][tcszi]?h"),
@@ -115,8 +115,8 @@ public class FakeLanguageGen implements Serializable {
                             Pattern.compile("[qi]y$"),
                             Pattern.compile("[szSZrlRL]+?[^aeiouytdfgkcpbmnslrv][rlsz]"),
                             Pattern.compile("[UIuiYy][wy]"),
-                            Pattern.compile("^[UIui][ae]"),
-                            Pattern.compile("^([^aeiouyl])\\1", 17)
+                            Pattern.compile("^[UIui]e"),
+                            Pattern.compile("^([^aeioyl])\\1", 17)
                     },
             englishSanityChecks = new Pattern[]
                     {
@@ -2509,9 +2509,7 @@ public class FakeLanguageGen implements Serializable {
      * Nyep khruv kwolbik psesh klulzhanbik psahzahwuth bluryup; hnish zhrim?
      */
     public static final FakeLanguageGen HLETKIP = hletkip().register("Hletkip");
-
-
-
+    
     private static FakeLanguageGen ancientEgyptian(){
         return new FakeLanguageGen(
                 new String[]{"a", "a", "a", "a", "a", "aa", "e", "e", "e", "e", "e", "e", "e", "i", "i", "i",
@@ -2661,6 +2659,83 @@ public class FakeLanguageGen implements Serializable {
      * Siii-aghak fítríííg dú-úgh ru-úúk, grííírá!
      */
     public static final FakeLanguageGen IMP = imp().register("Imp");
+    
+    private static FakeLanguageGen malay(){
+        return new FakeLanguageGen(
+                new String[]{
+                        "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "ai", "ai", "au",
+                        "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e", "e",
+                        "i", "i", "i", "i", "i", "i", "i", "i", "ia", "ia",
+                        "o", "o", "o", "o", "o", "o", "ou", 
+                        "u", "u", "u", "u", "u", "u", "u", "u", "u", "ua", "ua",},
+                new String[]{},
+                new String[]{
+                        "b", "b", "b", "b",
+                        "ch",
+                        "d", "d", "d", "d",
+                        "f",
+                        "g", "g",
+                        "h", "h",
+                        "j", "j", "j", "j",
+                        "k", "k", "k", "k", "k", "k",
+                        "kh",
+                        "l", "l", "l", "l", "l", "l", "l",
+                        "m", "m", "m", "m",
+                        "n", "n", "n",
+                        "p", "p", "p", "p", "p",
+                        "r", "r",
+                        "s", "s", "s", "s", "s",
+                        "sh", "sh",
+                        "t", "t", "t", "t",
+                        "w",
+                        "y",
+                        "z",
+                },
+                new String[]{
+                        "b", "b", "b", "b",
+                        "ch",
+                        "d", "d", "d", "d",
+                        "f",
+                        "g", "g",
+                        "h", "h", "h", "h", "h",
+                        "j", "j", "j",
+                        "k", "k", "k", "k", "k", "k", "k", "k", "k",
+                        "kn",
+                        "kh",
+                        "l", "l", "l", "l", "l", "l", "l",
+                        "m", "m", "m", "m", "m", "m",
+                        "n", "n", "n", "n", "n", "n", "n", "n", "n", "n",
+                        "nt", "nt", "nj",
+                        "ng", "ng", "ng", "ng",
+                        "ngk","ngg",
+                        "ny", "ny",
+                        "p", "p", "p", "p", "p",
+                        "r", "r", "r", "r", "r", "r", "r", "r",
+                        "rb", "rd", "rg", "rk", "rs", "rt", "rn", "rn",
+                        "s", "s", "s", "s", "s", "s",
+                        "sh", "sh",
+                        "t", "t", "t", "t", "t", "t",
+                        "w",
+                        "y",
+                        "z",
+                },
+                new String[]{
+                        "k", "k", "k", "k", "k", "k", "t", "t", "t", "n", "n", "n", "n", "n", "n", "n", "n",
+                        "ng", "ng", "ng", "m", "m", "m", "s", "s", "l", "l", "l", "l", "l", "h", "h"
+                },
+                new String[]{"uk", "uk", "ok", "an", "at", "ul", "ang", "ih", "it", "is", "ung", "un", "ah"
+                },
+                new String[]{}, new int[]{1, 2, 3}, new double[]{5, 3, 2}, 0.2, 0.25, 0.0, 0.2, genericSanityChecks, true);
+    }
+
+    /**
+     * An approximation of the Malay language or any of its close relatives, such as Indonesian. This differs from Malay
+     * as it is normally written by using "ch" for what Malay writes as "c" (it is pronounced like the start of "chow"),
+     * and "sh" for what Malay writes as "sy" (pronounced like the start of "shoe").
+     * <br>
+     * Kashanyah satebok bisal bekain akinuk an as, penah lukul...
+     */
+    public static final FakeLanguageGen MALAY = malay().register("Malay");
 
     /**
      * An array that stores all the hand-made FakeLanguageGen constants; it does not store randomly-generated languages
@@ -2720,7 +2795,7 @@ public class FakeLanguageGen implements Serializable {
     public static final FakeLanguageGen[] romanizedHumanLanguages = {
             ENGLISH, KOREAN_ROMANIZED, SPANISH, SWAHILI, NORSE_SIMPLIFIED, ARABIC_ROMANIZED, HINDI_ROMANIZED, FRENCH,
             MAORI, GREEK_ROMANIZED, INUKTITUT, RUSSIAN_ROMANIZED, NAHUATL, JAPANESE_ROMANIZED, MONGOLIAN, SOMALI, CROW, 
-            ANCIENT_EGYPTIAN
+            ANCIENT_EGYPTIAN, MALAY
     };
 
     /**
