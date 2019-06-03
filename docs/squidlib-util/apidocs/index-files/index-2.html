@@ -104,6 +104,22 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/FakeLanguageGen.html#accentVowels-squidpony.squidmath.IRNG-java.lang.String:A-double-">accentVowels(IRNG, String[], double)</a></span> - Method in class squidpony.<a href="../squidpony/FakeLanguageGen.html" title="class in squidpony">FakeLanguageGen</a></dt>
 <dd>&nbsp;</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#acos-double-">acos(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Arc cosine approximation with fairly low error while still being faster than <a href="../squidpony/squidmath/NumberTools.html#cos-double-"><code>NumberTools.cos(double)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#acos-float-">acos(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Arc cosine approximation with fairly low error while still being faster than <a href="../squidpony/squidmath/NumberTools.html#cos-float-"><code>NumberTools.cos(float)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#acos_-double-">acos_(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Inverse cosine function (arccos) but with output measured in turns instead of radians.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#acos_-float-">acos_(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Inverse cosine function (arccos) but with output measured in turns instead of radians.</div>
+</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/ObText.html#add-int-java.lang.String-">add(int, String)</a></span> - Method in class squidpony.<a href="../squidpony/ObText.html" title="class in squidpony">ObText</a></dt>
 <dd>
 <div class="block">Inserts the given String element at the specified position in this ObText's top level.</div>
@@ -1181,9 +1197,21 @@
 <dd>&nbsp;</dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/GreasedRegion.html#asEncoded--">asEncoded()</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/GreasedRegion.html" title="class in squidpony.squidmath">GreasedRegion</a></dt>
 <dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html#asin-double-">asin(double)</a></span> - Static method in class squidpony.squidgrid.mapping.<a href="../squidpony/squidgrid/mapping/WorldMapGenerator.html" title="class in squidpony.squidgrid.mapping">WorldMapGenerator</a></dt>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#asin-double-">asin(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">Arc sine approximation with fairly low error while still being faster than <a href="../squidpony/squidmath/NumberTools.html#sin-double-"><code>NumberTools.sin(double)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#asin-float-">asin(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Arc sine approximation with fairly low error while still being faster than <a href="../squidpony/squidmath/NumberTools.html#sin-float-"><code>NumberTools.sin(float)</code></a>.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#asin_-double-">asin_(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Inverse sine function (arcsine) but with output measured in turns instead of radians.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#asin_-float-">asin_(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">Inverse sine function (arcsine) but with output measured in turns instead of radians.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NeuralParticle.html#asIntMap-int-">asIntMap(int)</a></span> - Method in class squidpony.squidmath.<a href="../squidpony/squidmath/NeuralParticle.html" title="class in squidpony.squidmath">NeuralParticle</a></dt>
 <dd>
@@ -1242,13 +1270,14 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#atan2_-double-double-">atan2_(double, double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as 
- doubles and returning an angle from 0.0 to 1.0 (inclusive), with one cycle over the range equivalent to 360
- degrees or 2PI radians.</div>
+ doubles and returning an angle measured in turns from 0.0 to 1.0 (inclusive), with one cycle over the range
+ equivalent to 360 degrees or 2PI radians.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#atan2_-float-float-">atan2_(float, float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats
- and returning an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI radians.</div>
+ and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360
+ degrees or 2PI radians.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidgrid/FOVCache.html#atan2Cache">atan2Cache</a></span> - Variable in class squidpony.squidgrid.<a href="../squidpony/squidgrid/FOVCache.html" title="class in squidpony.squidgrid">FOVCache</a></dt>
 <dd>&nbsp;</dd>

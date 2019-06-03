@@ -200,6 +200,7 @@ public class HashBenchmark {
         public String[] words;
         public char[][] chars;
         public long[][] longs;
+        public int[][] ints;
         public int idx;
         private final int[] intInputs = new int[65536];
         private final long[] longInputs = new long[65536];
@@ -262,6 +263,7 @@ public class HashBenchmark {
             words = new String[4096];
             chars = new char[4096][];
             longs = new long[4096][];
+            ints = new int[4096][];
             for (int i = 0; i < 65536; i++) {
                 intInputs[i] = (int)(longInputs[i] = random.nextLong());
             }
@@ -269,10 +271,12 @@ public class HashBenchmark {
                 chars[i] = (words[i] = languages[i & 15].word(random.nextLong(), random.nextLong() < 0, random.next(3)+1)).toCharArray();
                 final int len = (random.next(8)+9);
                 long[] lon = new long[len];
+                int[] inn = new int[len];
                 for (int j = 0; j < len; j++) {
-                    lon[j] = random.nextLong();
+                    inn[j] = (int)(lon[j] = random.nextLong());
                 }
                 longs[i] = lon;
+                ints[i] = inn;
             }
             idx = 0;
         }
@@ -472,6 +476,18 @@ public class HashBenchmark {
     }
 
     @Benchmark
+    public long doIntHive64(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash64(state.ints[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doIntHive32(BenchmarkState state)
+    {
+        return CrossHash.Hive.hash(state.ints[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
     public long doCharHive64(BenchmarkState state)
     {
         return CrossHash.Hive.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
@@ -499,37 +515,54 @@ public class HashBenchmark {
     {
         return CrossHash.Sirocco.hash64(state.words[state.idx = state.idx + 1 & 4095]);
     }
-//
-//    @Benchmark
-//    public int doSirocco32(BenchmarkState state)
-//    {
-//        return CrossHash.Sirocco.hash(state.words[state.idx = state.idx + 1 & 4095]);
-//    }
-//
+
+    @Benchmark
+    public int doSirocco32(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public long doIntSirocco64(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash64(state.ints[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doIntSirocco32(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash(state.ints[state.idx = state.idx + 1 & 4095]);
+    }
+
     @Benchmark
     public long doCharSirocco64(BenchmarkState state)
     {
         return CrossHash.Sirocco.hash64(state.chars[state.idx = state.idx + 1 & 4095]);
     }
-//
-//    @Benchmark
-//    public int doCharSirocco32(BenchmarkState state)
-//    {
-//        return CrossHash.Sirocco.hash(state.chars[state.idx = state.idx + 1 & 4095]);
-//    }
-//
+
+    @Benchmark
+    public int doCharSirocco32(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+
     @Benchmark
     public long doLongSirocco64(BenchmarkState state)
     {
         return CrossHash.Sirocco.hash64(state.longs[state.idx = state.idx + 1 & 4095]);
     }
-//
-//    @Benchmark
-//    public int doLongSirocco32(BenchmarkState state)
-//    {
-//        return CrossHash.Sirocco.hash(state.longs[state.idx = state.idx + 1 & 4095]);
-//    }
 
+    @Benchmark
+    public int doLongSirocco32(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doIntWater32(BenchmarkState state)
+    {
+        return CrossHash.Sirocco.water(state.ints[state.idx = state.idx + 1 & 4095]);
+    }
     @Benchmark
     public int doJDK32(BenchmarkState state)
     {

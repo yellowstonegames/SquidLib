@@ -758,8 +758,8 @@
 <span class="sourceLineNo">750</span><a name="line.750"></a>
 <span class="sourceLineNo">751</span>    /**<a name="line.751"></a>
 <span class="sourceLineNo">752</span>     * A fairly-close approximation of {@link Math#sin(double)} that can be significantly faster (between 8x and 80x<a name="line.752"></a>
-<span class="sourceLineNo">753</span>     * faster sin() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should<a name="line.753"></a>
-<span class="sourceLineNo">754</span>     * consider its more-precise and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a<a name="line.754"></a>
+<span class="sourceLineNo">753</span>     * faster sin() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise<a name="line.753"></a>
+<span class="sourceLineNo">754</span>     * and sometimes-faster MathUtils.sin() method. Because this method doesn't rely on a<a name="line.754"></a>
 <span class="sourceLineNo">755</span>     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better<a name="line.755"></a>
 <span class="sourceLineNo">756</span>     * with this method than with MathUtils. Takes the same arguments Math.sin() does, so one angle in radians,<a name="line.756"></a>
 <span class="sourceLineNo">757</span>     * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are<a name="line.757"></a>
@@ -796,8 +796,8 @@
 <span class="sourceLineNo">788</span><a name="line.788"></a>
 <span class="sourceLineNo">789</span>    /**<a name="line.789"></a>
 <span class="sourceLineNo">790</span>     * A fairly-close approximation of {@link Math#cos(double)} that can be significantly faster (between 8x and 80x<a name="line.790"></a>
-<span class="sourceLineNo">791</span>     * faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should<a name="line.791"></a>
-<span class="sourceLineNo">792</span>     * consider its more-precise and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a<a name="line.792"></a>
+<span class="sourceLineNo">791</span>     * faster cos() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise<a name="line.791"></a>
+<span class="sourceLineNo">792</span>     * and sometimes-faster MathUtils.cos() method. Because this method doesn't rely on a<a name="line.792"></a>
 <span class="sourceLineNo">793</span>     * lookup table, where libGDX's MathUtils does, applications that have a bottleneck on memory may perform better<a name="line.793"></a>
 <span class="sourceLineNo">794</span>     * with this method than with MathUtils. Takes the same arguments Math.cos() does, so one angle in radians,<a name="line.794"></a>
 <span class="sourceLineNo">795</span>     * which may technically be any double (but this will lose precision on fairly large doubles, such as those that are<a name="line.795"></a>
@@ -976,270 +976,549 @@
 <span class="sourceLineNo">968</span>        degrees *= 2f - degrees;<a name="line.968"></a>
 <span class="sourceLineNo">969</span>        return degrees * (-0.775f - 0.225f * degrees) * ((floor &amp; 2) - 1);<a name="line.969"></a>
 <span class="sourceLineNo">970</span>    }<a name="line.970"></a>
-<span class="sourceLineNo">971</span>    /**<a name="line.971"></a>
-<span class="sourceLineNo">972</span>     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2<a name="line.972"></a>
-<span class="sourceLineNo">973</span>     * approximation. Maximum error is below 0.001 radians.<a name="line.973"></a>
-<span class="sourceLineNo">974</span>     * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in radians.<a name="line.974"></a>
-<span class="sourceLineNo">975</span>     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for<a name="line.975"></a>
-<span class="sourceLineNo">976</span>     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'<a name="line.976"></a>
-<span class="sourceLineNo">977</span>     * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.<a name="line.977"></a>
-<span class="sourceLineNo">978</span>     * Credit to StackExchange user njuffa, who gave<a name="line.978"></a>
-<span class="sourceLineNo">979</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. This method changed from an earlier<a name="line.979"></a>
-<span class="sourceLineNo">980</span>     * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also<a name="line.980"></a>
-<span class="sourceLineNo">981</span>     * {@link #atan2Rough(double, double)} if the speed isn't good enough with this method and lower quality is OK, or<a name="line.981"></a>
-<span class="sourceLineNo">982</span>     * {@link #atan2_(double, double)} if you don't want a mess converting to degrees or some other measurement, since<a name="line.982"></a>
-<span class="sourceLineNo">983</span>     * that method returns an angle from 0.0 (equal to 0 degrees) to 1.0 (equal to 360 degrees).<a name="line.983"></a>
-<span class="sourceLineNo">984</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.984"></a>
-<span class="sourceLineNo">985</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.985"></a>
-<span class="sourceLineNo">986</span>     * @return the angle to the given point, in radians as a double<a name="line.986"></a>
-<span class="sourceLineNo">987</span>     */<a name="line.987"></a>
-<span class="sourceLineNo">988</span>    public static double atan2(final double y, final double x)<a name="line.988"></a>
-<span class="sourceLineNo">989</span>    {<a name="line.989"></a>
-<span class="sourceLineNo">990</span>        /*<a name="line.990"></a>
-<span class="sourceLineNo">991</span>a := min (|x|, |y|) / max (|x|, |y|)<a name="line.991"></a>
-<span class="sourceLineNo">992</span>s := a * a<a name="line.992"></a>
-<span class="sourceLineNo">993</span>r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a<a name="line.993"></a>
-<span class="sourceLineNo">994</span>if |y| &gt; |x| then r := 1.57079637 - r<a name="line.994"></a>
-<span class="sourceLineNo">995</span>if x &lt; 0 then r := 3.14159274 - r<a name="line.995"></a>
-<span class="sourceLineNo">996</span>if y &lt; 0 then r := -r<a name="line.996"></a>
-<span class="sourceLineNo">997</span>         */<a name="line.997"></a>
-<span class="sourceLineNo">998</span>        if(y == 0.0 &amp;&amp; x &gt;= 0.0) return 0.0;<a name="line.998"></a>
-<span class="sourceLineNo">999</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.999"></a>
-<span class="sourceLineNo">1000</span>        if(ax &lt; ay)<a name="line.1000"></a>
-<span class="sourceLineNo">1001</span>        {<a name="line.1001"></a>
-<span class="sourceLineNo">1002</span>            final double a = ax / ay, s = a * a,<a name="line.1002"></a>
-<span class="sourceLineNo">1003</span>                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);<a name="line.1003"></a>
-<span class="sourceLineNo">1004</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1004"></a>
-<span class="sourceLineNo">1005</span>        }<a name="line.1005"></a>
-<span class="sourceLineNo">1006</span>        else {<a name="line.1006"></a>
-<span class="sourceLineNo">1007</span>            final double a = ay / ax, s = a * a,<a name="line.1007"></a>
-<span class="sourceLineNo">1008</span>                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);<a name="line.1008"></a>
-<span class="sourceLineNo">1009</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1009"></a>
-<span class="sourceLineNo">1010</span>        }<a name="line.1010"></a>
-<span class="sourceLineNo">1011</span>    }<a name="line.1011"></a>
-<span class="sourceLineNo">1012</span><a name="line.1012"></a>
-<span class="sourceLineNo">1013</span>    /**<a name="line.1013"></a>
-<span class="sourceLineNo">1014</span>     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2<a name="line.1014"></a>
-<span class="sourceLineNo">1015</span>     * approximation. Maximum error is below 0.001 radians.<a name="line.1015"></a>
-<span class="sourceLineNo">1016</span>     * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in radians.<a name="line.1016"></a>
-<span class="sourceLineNo">1017</span>     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for<a name="line.1017"></a>
-<span class="sourceLineNo">1018</span>     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'<a name="line.1018"></a>
-<span class="sourceLineNo">1019</span>     * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.<a name="line.1019"></a>
-<span class="sourceLineNo">1020</span>     * Credit to StackExchange user njuffa, who gave<a name="line.1020"></a>
-<span class="sourceLineNo">1021</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. This method changed from an earlier<a name="line.1021"></a>
-<span class="sourceLineNo">1022</span>     * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also<a name="line.1022"></a>
-<span class="sourceLineNo">1023</span>     * {@link #atan2Rough(float, float)} if the speed isn't good enough with this method and lower quality is OK, or<a name="line.1023"></a>
-<span class="sourceLineNo">1024</span>     * {@link #atan2_(float, float)} if you don't want a mess converting to degrees or some other measurement, since<a name="line.1024"></a>
-<span class="sourceLineNo">1025</span>     * that method returns an angle from 0f (equal to 0 degrees) to 1f (equal to 360 degrees).<a name="line.1025"></a>
-<span class="sourceLineNo">1026</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1026"></a>
-<span class="sourceLineNo">1027</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1027"></a>
-<span class="sourceLineNo">1028</span>     * @return the angle to the given point, in radians as a float<a name="line.1028"></a>
-<span class="sourceLineNo">1029</span>     */<a name="line.1029"></a>
-<span class="sourceLineNo">1030</span>    public static float atan2(final float y, final float x)<a name="line.1030"></a>
-<span class="sourceLineNo">1031</span>    {<a name="line.1031"></a>
-<span class="sourceLineNo">1032</span>        /*<a name="line.1032"></a>
-<span class="sourceLineNo">1033</span>a := min (|x|, |y|) / max (|x|, |y|)<a name="line.1033"></a>
-<span class="sourceLineNo">1034</span>s := a * a<a name="line.1034"></a>
-<span class="sourceLineNo">1035</span>r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a<a name="line.1035"></a>
-<span class="sourceLineNo">1036</span>if |y| &gt; |x| then r := 1.57079637 - r<a name="line.1036"></a>
-<span class="sourceLineNo">1037</span>if x &lt; 0 then r := 3.14159274 - r<a name="line.1037"></a>
-<span class="sourceLineNo">1038</span>if y &lt; 0 then r := -r<a name="line.1038"></a>
-<span class="sourceLineNo">1039</span>         */<a name="line.1039"></a>
-<span class="sourceLineNo">1040</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0f;<a name="line.1040"></a>
-<span class="sourceLineNo">1041</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1041"></a>
-<span class="sourceLineNo">1042</span>        if(ax &lt; ay)<a name="line.1042"></a>
-<span class="sourceLineNo">1043</span>        {<a name="line.1043"></a>
-<span class="sourceLineNo">1044</span>            final float a = ax / ay, s = a * a,<a name="line.1044"></a>
-<span class="sourceLineNo">1045</span>                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);<a name="line.1045"></a>
-<span class="sourceLineNo">1046</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1046"></a>
-<span class="sourceLineNo">1047</span>        }<a name="line.1047"></a>
-<span class="sourceLineNo">1048</span>        else {<a name="line.1048"></a>
-<span class="sourceLineNo">1049</span>            final float a = ay / ax, s = a * a,<a name="line.1049"></a>
-<span class="sourceLineNo">1050</span>                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);<a name="line.1050"></a>
-<span class="sourceLineNo">1051</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1051"></a>
-<span class="sourceLineNo">1052</span>        }<a name="line.1052"></a>
-<span class="sourceLineNo">1053</span>    }<a name="line.1053"></a>
-<span class="sourceLineNo">1054</span><a name="line.1054"></a>
-<span class="sourceLineNo">1055</span>    /**<a name="line.1055"></a>
-<span class="sourceLineNo">1056</span>     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with<a name="line.1056"></a>
-<span class="sourceLineNo">1057</span>     * worse average and max error than {@link #atan2(double, double)} but better error all-around than the old<a name="line.1057"></a>
-<span class="sourceLineNo">1058</span>     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(double, double)}.<a name="line.1058"></a>
-<span class="sourceLineNo">1059</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1059"></a>
-<span class="sourceLineNo">1060</span>     * like map projections that operate on finer grids.<a name="line.1060"></a>
-<span class="sourceLineNo">1061</span>     * &lt;br&gt;<a name="line.1061"></a>
-<span class="sourceLineNo">1062</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1062"></a>
-<span class="sourceLineNo">1063</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1063"></a>
-<span class="sourceLineNo">1064</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1064"></a>
-<span class="sourceLineNo">1065</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1065"></a>
-<span class="sourceLineNo">1066</span>     * @return the angle to the given point, in radians as a double<a name="line.1066"></a>
-<span class="sourceLineNo">1067</span>     */<a name="line.1067"></a>
-<span class="sourceLineNo">1068</span>    public static double atan2Rough(final double y, final double x)<a name="line.1068"></a>
-<span class="sourceLineNo">1069</span>    {<a name="line.1069"></a>
-<span class="sourceLineNo">1070</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0.0;<a name="line.1070"></a>
-<span class="sourceLineNo">1071</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.1071"></a>
-<span class="sourceLineNo">1072</span>        if(ax &lt; ay)<a name="line.1072"></a>
-<span class="sourceLineNo">1073</span>        {<a name="line.1073"></a>
-<span class="sourceLineNo">1074</span>            final double a = ax / ay,<a name="line.1074"></a>
-<span class="sourceLineNo">1075</span>                    r = 1.57079637 - (a * (0.7853981633974483 + 0.273 * (1.0 - a)));<a name="line.1075"></a>
-<span class="sourceLineNo">1076</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1076"></a>
-<span class="sourceLineNo">1077</span>        }<a name="line.1077"></a>
-<span class="sourceLineNo">1078</span>        else {<a name="line.1078"></a>
-<span class="sourceLineNo">1079</span>            final double a = ay / ax,<a name="line.1079"></a>
-<span class="sourceLineNo">1080</span>                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a)));<a name="line.1080"></a>
-<span class="sourceLineNo">1081</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1081"></a>
-<span class="sourceLineNo">1082</span>        }<a name="line.1082"></a>
-<span class="sourceLineNo">1083</span>    }<a name="line.1083"></a>
-<span class="sourceLineNo">1084</span><a name="line.1084"></a>
-<span class="sourceLineNo">1085</span>    /**<a name="line.1085"></a>
-<span class="sourceLineNo">1086</span>     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with<a name="line.1086"></a>
-<span class="sourceLineNo">1087</span>     * worse average and max error than {@link #atan2(float, float)} but better error all-around than the old<a name="line.1087"></a>
-<span class="sourceLineNo">1088</span>     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(float, float)}.<a name="line.1088"></a>
-<span class="sourceLineNo">1089</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1089"></a>
-<span class="sourceLineNo">1090</span>     * like map projections that operate on finer grids.<a name="line.1090"></a>
-<span class="sourceLineNo">1091</span>     * &lt;br&gt;<a name="line.1091"></a>
-<span class="sourceLineNo">1092</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1092"></a>
-<span class="sourceLineNo">1093</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1093"></a>
-<span class="sourceLineNo">1094</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1094"></a>
-<span class="sourceLineNo">1095</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1095"></a>
-<span class="sourceLineNo">1096</span>     * @return the angle to the given point, in radians as a float<a name="line.1096"></a>
-<span class="sourceLineNo">1097</span>     */<a name="line.1097"></a>
-<span class="sourceLineNo">1098</span>    public static float atan2Rough(final float y, final float x)<a name="line.1098"></a>
-<span class="sourceLineNo">1099</span>    {<a name="line.1099"></a>
-<span class="sourceLineNo">1100</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0f;<a name="line.1100"></a>
-<span class="sourceLineNo">1101</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1101"></a>
-<span class="sourceLineNo">1102</span>        if(ax &lt; ay)<a name="line.1102"></a>
-<span class="sourceLineNo">1103</span>        {<a name="line.1103"></a>
-<span class="sourceLineNo">1104</span>            final float a = ax / ay,<a name="line.1104"></a>
-<span class="sourceLineNo">1105</span>                    r = 1.57079637f - (a * (0.7853981633974483f + 0.273f * (1f - a)));<a name="line.1105"></a>
-<span class="sourceLineNo">1106</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1106"></a>
-<span class="sourceLineNo">1107</span>        }<a name="line.1107"></a>
-<span class="sourceLineNo">1108</span>        else {<a name="line.1108"></a>
-<span class="sourceLineNo">1109</span>            final float a = ay / ax,<a name="line.1109"></a>
-<span class="sourceLineNo">1110</span>                    r = (a * (0.7853981633974483f + 0.273f * (1f - a)));<a name="line.1110"></a>
-<span class="sourceLineNo">1111</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1111"></a>
-<span class="sourceLineNo">1112</span>        }<a name="line.1112"></a>
-<span class="sourceLineNo">1113</span>    }<a name="line.1113"></a>
-<span class="sourceLineNo">1114</span><a name="line.1114"></a>
-<span class="sourceLineNo">1115</span>    /**<a name="line.1115"></a>
-<span class="sourceLineNo">1116</span>     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as <a name="line.1116"></a>
-<span class="sourceLineNo">1117</span>     * doubles and returning an angle from 0.0 to 1.0 (inclusive), with one cycle over the range equivalent to 360<a name="line.1117"></a>
-<span class="sourceLineNo">1118</span>     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}<a name="line.1118"></a>
-<span class="sourceLineNo">1119</span>     * to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a negative number,<a name="line.1119"></a>
-<span class="sourceLineNo">1120</span>     * which may help avoid costly floating-point modulus when you actually want a positive number.<a name="line.1120"></a>
-<span class="sourceLineNo">1121</span>     * Credit to StackExchange user njuffa, who gave<a name="line.1121"></a>
-<span class="sourceLineNo">1122</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. Note that<a name="line.1122"></a>
-<span class="sourceLineNo">1123</span>     * {@link #atan2(double, double)} returns an angle in radians and can return negative results, which may be fine for<a name="line.1123"></a>
-<span class="sourceLineNo">1124</span>     * many tasks; these two methods are extremely close in implementation and speed.<a name="line.1124"></a>
-<span class="sourceLineNo">1125</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1125"></a>
-<span class="sourceLineNo">1126</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1126"></a>
-<span class="sourceLineNo">1127</span>     * @return the angle to the given point, as a double from 0.0 to 1.0, inclusive<a name="line.1127"></a>
-<span class="sourceLineNo">1128</span>     */<a name="line.1128"></a>
-<span class="sourceLineNo">1129</span>    public static double atan2_(final double y, final double x)<a name="line.1129"></a>
-<span class="sourceLineNo">1130</span>    {<a name="line.1130"></a>
-<span class="sourceLineNo">1131</span>        if(y == 0.0 &amp;&amp; x &gt;= 0.0) return 0.0;<a name="line.1131"></a>
-<span class="sourceLineNo">1132</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.1132"></a>
-<span class="sourceLineNo">1133</span>        if(ax &lt; ay)<a name="line.1133"></a>
-<span class="sourceLineNo">1134</span>        {<a name="line.1134"></a>
-<span class="sourceLineNo">1135</span>            final double a = ax / ay, s = a * a,<a name="line.1135"></a>
-<span class="sourceLineNo">1136</span>                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1136"></a>
-<span class="sourceLineNo">1137</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1137"></a>
-<span class="sourceLineNo">1138</span>        }<a name="line.1138"></a>
-<span class="sourceLineNo">1139</span>        else {<a name="line.1139"></a>
-<span class="sourceLineNo">1140</span>            final double a = ay / ax, s = a * a,<a name="line.1140"></a>
-<span class="sourceLineNo">1141</span>                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1141"></a>
-<span class="sourceLineNo">1142</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1142"></a>
-<span class="sourceLineNo">1143</span>        }<a name="line.1143"></a>
-<span class="sourceLineNo">1144</span>    }<a name="line.1144"></a>
-<span class="sourceLineNo">1145</span>    /**<a name="line.1145"></a>
-<span class="sourceLineNo">1146</span>     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats<a name="line.1146"></a>
-<span class="sourceLineNo">1147</span>     * and returning an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI radians.<a name="line.1147"></a>
-<span class="sourceLineNo">1148</span>     * You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f} to change to degrees.<a name="line.1148"></a>
-<span class="sourceLineNo">1149</span>     * Takes y and x (in that unusual order) as floats. Will never return a negative number, which may help avoid costly<a name="line.1149"></a>
-<span class="sourceLineNo">1150</span>     * floating-point modulus when you actually want a positive number. Credit to StackExchange user njuffa, who gave<a name="line.1150"></a>
-<span class="sourceLineNo">1151</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. Note that {@link #atan2(float, float)}<a name="line.1151"></a>
-<span class="sourceLineNo">1152</span>     * returns an angle in radians and can return negative results, which may be fine for many tasks; these two methods<a name="line.1152"></a>
-<span class="sourceLineNo">1153</span>     * are extremely close in implementation and speed.<a name="line.1153"></a>
-<span class="sourceLineNo">1154</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1154"></a>
-<span class="sourceLineNo">1155</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1155"></a>
-<span class="sourceLineNo">1156</span>     * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive<a name="line.1156"></a>
-<span class="sourceLineNo">1157</span>     */<a name="line.1157"></a>
-<span class="sourceLineNo">1158</span>    public static float atan2_(final float y, final float x)<a name="line.1158"></a>
-<span class="sourceLineNo">1159</span>    {<a name="line.1159"></a>
-<span class="sourceLineNo">1160</span>        if(y == 0.0 &amp;&amp; x &gt;= 0.0) return 0f;<a name="line.1160"></a>
-<span class="sourceLineNo">1161</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1161"></a>
-<span class="sourceLineNo">1162</span>        if(ax &lt; ay)<a name="line.1162"></a>
-<span class="sourceLineNo">1163</span>        {<a name="line.1163"></a>
-<span class="sourceLineNo">1164</span>            final float a = ax / ay, s = a * a,<a name="line.1164"></a>
-<span class="sourceLineNo">1165</span>                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1165"></a>
-<span class="sourceLineNo">1166</span>            return (x &lt; 0.0f) ? (y &lt; 0.0f) ? 0.5f + r : 0.5f - r : (y &lt; 0.0f) ? 1f - r : r;<a name="line.1166"></a>
-<span class="sourceLineNo">1167</span>        }<a name="line.1167"></a>
-<span class="sourceLineNo">1168</span>        else {<a name="line.1168"></a>
-<span class="sourceLineNo">1169</span>            final float a = ay / ax, s = a * a,<a name="line.1169"></a>
-<span class="sourceLineNo">1170</span>                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1170"></a>
-<span class="sourceLineNo">1171</span>            return (x &lt; 0.0f) ? (y &lt; 0.0f) ? 0.5f + r : 0.5f - r : (y &lt; 0.0f) ? 1f - r : r;<a name="line.1171"></a>
-<span class="sourceLineNo">1172</span>        }<a name="line.1172"></a>
-<span class="sourceLineNo">1173</span>    }<a name="line.1173"></a>
-<span class="sourceLineNo">1174</span>    /**<a name="line.1174"></a>
-<span class="sourceLineNo">1175</span>     * Less-precise but somewhat faster altered-range approximation of the frequently-used trigonometric method atan2, with<a name="line.1175"></a>
-<span class="sourceLineNo">1176</span>     * worse average and max error than {@link #atan2(double, double)} but better speed. Takes y and x positions as<a name="line.1176"></a>
-<span class="sourceLineNo">1177</span>     * floats and returns an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI<a name="line.1177"></a>
-<span class="sourceLineNo">1178</span>     * radians. Should be up to twice as fast as {@link #atan2_(double, double)}.<a name="line.1178"></a>
-<span class="sourceLineNo">1179</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1179"></a>
-<span class="sourceLineNo">1180</span>     * like map projections that operate on finer grids.<a name="line.1180"></a>
-<span class="sourceLineNo">1181</span>     * &lt;br&gt;<a name="line.1181"></a>
-<span class="sourceLineNo">1182</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1182"></a>
-<span class="sourceLineNo">1183</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1183"></a>
-<span class="sourceLineNo">1184</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1184"></a>
-<span class="sourceLineNo">1185</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1185"></a>
-<span class="sourceLineNo">1186</span>     * @return the angle to the given point, in radians as a double<a name="line.1186"></a>
-<span class="sourceLineNo">1187</span>     */<a name="line.1187"></a>
-<span class="sourceLineNo">1188</span>    public static double atan2Rough_(final double y, final double x)<a name="line.1188"></a>
-<span class="sourceLineNo">1189</span>    {<a name="line.1189"></a>
-<span class="sourceLineNo">1190</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0.0;<a name="line.1190"></a>
-<span class="sourceLineNo">1191</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.1191"></a>
-<span class="sourceLineNo">1192</span>        if(ax &lt; ay)<a name="line.1192"></a>
-<span class="sourceLineNo">1193</span>        {<a name="line.1193"></a>
-<span class="sourceLineNo">1194</span>            final double a = ax / ay,<a name="line.1194"></a>
-<span class="sourceLineNo">1195</span>                    r = 0.25 - (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;<a name="line.1195"></a>
-<span class="sourceLineNo">1196</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1196"></a>
-<span class="sourceLineNo">1197</span>        }<a name="line.1197"></a>
-<span class="sourceLineNo">1198</span>        else {<a name="line.1198"></a>
-<span class="sourceLineNo">1199</span>            final double a = ay / ax,<a name="line.1199"></a>
-<span class="sourceLineNo">1200</span>                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;<a name="line.1200"></a>
-<span class="sourceLineNo">1201</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1201"></a>
-<span class="sourceLineNo">1202</span>        }<a name="line.1202"></a>
-<span class="sourceLineNo">1203</span>    }<a name="line.1203"></a>
-<span class="sourceLineNo">1204</span><a name="line.1204"></a>
-<span class="sourceLineNo">1205</span>    /**<a name="line.1205"></a>
-<span class="sourceLineNo">1206</span>     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with<a name="line.1206"></a>
-<span class="sourceLineNo">1207</span>     * worse average and max error than {@link #atan2(float, float)} but better error all-around than the old<a name="line.1207"></a>
-<span class="sourceLineNo">1208</span>     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(float, float)}.<a name="line.1208"></a>
-<span class="sourceLineNo">1209</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1209"></a>
-<span class="sourceLineNo">1210</span>     * like map projections that operate on finer grids.<a name="line.1210"></a>
-<span class="sourceLineNo">1211</span>     * &lt;br&gt;<a name="line.1211"></a>
-<span class="sourceLineNo">1212</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1212"></a>
-<span class="sourceLineNo">1213</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1213"></a>
-<span class="sourceLineNo">1214</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1214"></a>
-<span class="sourceLineNo">1215</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1215"></a>
-<span class="sourceLineNo">1216</span>     * @return the angle to the given point, in radians as a float<a name="line.1216"></a>
-<span class="sourceLineNo">1217</span>     */<a name="line.1217"></a>
-<span class="sourceLineNo">1218</span>    public static float atan2Rough_(final float y, final float x)<a name="line.1218"></a>
-<span class="sourceLineNo">1219</span>    {<a name="line.1219"></a>
-<span class="sourceLineNo">1220</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0f;<a name="line.1220"></a>
-<span class="sourceLineNo">1221</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1221"></a>
-<span class="sourceLineNo">1222</span>        if(ax &lt; ay)<a name="line.1222"></a>
-<span class="sourceLineNo">1223</span>        {<a name="line.1223"></a>
-<span class="sourceLineNo">1224</span>            final float a = ax / ay,<a name="line.1224"></a>
-<span class="sourceLineNo">1225</span>                    r = 0.25f - (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;<a name="line.1225"></a>
-<span class="sourceLineNo">1226</span>            return (x &lt; 0f) ? (y &lt; 0f) ? 0.5f + r : 0.5f - r : (y &lt; 0f) ? 1f - r : r;<a name="line.1226"></a>
-<span class="sourceLineNo">1227</span>        }<a name="line.1227"></a>
-<span class="sourceLineNo">1228</span>        else {<a name="line.1228"></a>
-<span class="sourceLineNo">1229</span>            final float a = ay / ax,<a name="line.1229"></a>
-<span class="sourceLineNo">1230</span>                    r = (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;<a name="line.1230"></a>
-<span class="sourceLineNo">1231</span>            return (x &lt; 0f) ? (y &lt; 0f) ? 0.5f + r : 0.5f - r : (y &lt; 0f) ? 1f - r : r;<a name="line.1231"></a>
-<span class="sourceLineNo">1232</span>        }<a name="line.1232"></a>
-<span class="sourceLineNo">1233</span>    }<a name="line.1233"></a>
-<span class="sourceLineNo">1234</span>}<a name="line.1234"></a>
+<span class="sourceLineNo">971</span><a name="line.971"></a>
+<span class="sourceLineNo">972</span>    /**<a name="line.972"></a>
+<span class="sourceLineNo">973</span>     * A variation on {@link Math#sin(double)} that takes its input as a fraction of a turn instead of in radians; one<a name="line.973"></a>
+<span class="sourceLineNo">974</span>     * turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;<a name="line.974"></a>
+<span class="sourceLineNo">975</span>     * to make a sine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide<a name="line.975"></a>
+<span class="sourceLineNo">976</span>     * the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also<a name="line.976"></a>
+<span class="sourceLineNo">977</span>     * called brad (with 256 brad equal to 360 degrees), you would divide by 256.0 or multiply by 0.00390625 before<a name="line.977"></a>
+<span class="sourceLineNo">978</span>     * passing that value here. The brad case is especially useful because you can use a byte for any brad values, and<a name="line.978"></a>
+<span class="sourceLineNo">979</span>     * adding up those brad values will wrap correctly (256 brad goes back to 0) while keeping perfect precision for the<a name="line.979"></a>
+<span class="sourceLineNo">980</span>     * results (you still divide by 256.0 when you pass the brad value to this method).<a name="line.980"></a>
+<span class="sourceLineNo">981</span>     * &lt;br&gt;<a name="line.981"></a>
+<span class="sourceLineNo">982</span>     * The error for this double version is extremely close to the float version, {@link #sin_(float)}, so you should<a name="line.982"></a>
+<span class="sourceLineNo">983</span>     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion<a name="line.983"></a>
+<span class="sourceLineNo">984</span>     * between float and double takes about as long as this method normally takes to run (or longer), so if you have<a name="line.984"></a>
+<span class="sourceLineNo">985</span>     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),<a name="line.985"></a>
+<span class="sourceLineNo">986</span>     * and likewise for doubles.<a name="line.986"></a>
+<span class="sourceLineNo">987</span>     * &lt;br&gt;<a name="line.987"></a>
+<span class="sourceLineNo">988</span>     * The technique for sine approximation is mostly from<a name="line.988"></a>
+<span class="sourceLineNo">989</span>     * &lt;a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784"&gt;this archived DevMaster thread&lt;/a&gt;,<a name="line.989"></a>
+<span class="sourceLineNo">990</span>     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.<a name="line.990"></a>
+<span class="sourceLineNo">991</span>     * @param turns an angle as a fraction of a turn as a double, with 0.5 here equivalent to PI radians in {@link #cos(double)}<a name="line.991"></a>
+<span class="sourceLineNo">992</span>     * @return the sine of the given angle, as a double between -1.0 and 1.0 (both inclusive)<a name="line.992"></a>
+<span class="sourceLineNo">993</span>     */<a name="line.993"></a>
+<span class="sourceLineNo">994</span>    public static double sin_(double turns)<a name="line.994"></a>
+<span class="sourceLineNo">995</span>    {<a name="line.995"></a>
+<span class="sourceLineNo">996</span>        turns *= 4.0;<a name="line.996"></a>
+<span class="sourceLineNo">997</span>        final long floor = (turns &gt;= 0.0 ? (long) turns : (long) turns - 1L) &amp; -2L;<a name="line.997"></a>
+<span class="sourceLineNo">998</span>        turns -= floor;<a name="line.998"></a>
+<span class="sourceLineNo">999</span>        turns *= 2.0 - turns;<a name="line.999"></a>
+<span class="sourceLineNo">1000</span>        return turns * (-0.775 - 0.225 * turns) * ((floor &amp; 2L) - 1L);<a name="line.1000"></a>
+<span class="sourceLineNo">1001</span>    }<a name="line.1001"></a>
+<span class="sourceLineNo">1002</span><a name="line.1002"></a>
+<span class="sourceLineNo">1003</span>    /**<a name="line.1003"></a>
+<span class="sourceLineNo">1004</span>     * A variation on {@link Math#cos(double)} that takes its input as a fraction of a turn instead of in radians; one<a name="line.1004"></a>
+<span class="sourceLineNo">1005</span>     * turn is equal to 360 degrees or two*PI radians. This can be useful as a building block for other measurements;<a name="line.1005"></a>
+<span class="sourceLineNo">1006</span>     * to make a cosine method that takes its input in grad (with 400 grad equal to 360 degrees), you would just divide<a name="line.1006"></a>
+<span class="sourceLineNo">1007</span>     * the grad value by 400.0 (or multiply it by 0.0025) and pass it to this method. Similarly for binary degrees, also<a name="line.1007"></a>
+<span class="sourceLineNo">1008</span>     * called brad (with 256 brad equal to 360 degrees), you would divide by 256.0 or multiply by 0.00390625 before<a name="line.1008"></a>
+<span class="sourceLineNo">1009</span>     * passing that value here. The brad case is especially useful because you can use a byte for any brad values, and<a name="line.1009"></a>
+<span class="sourceLineNo">1010</span>     * adding up those brad values will wrap correctly (256 brad goes back to 0) while keeping perfect precision for the<a name="line.1010"></a>
+<span class="sourceLineNo">1011</span>     * results (you still divide by 256.0 when you pass the brad value to this method).<a name="line.1011"></a>
+<span class="sourceLineNo">1012</span>     * &lt;br&gt;<a name="line.1012"></a>
+<span class="sourceLineNo">1013</span>     * The error for this double version is extremely close to the float version, {@link #cos_(float)}, so you should<a name="line.1013"></a>
+<span class="sourceLineNo">1014</span>     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion<a name="line.1014"></a>
+<span class="sourceLineNo">1015</span>     * between float and double takes about as long as this method normally takes to run (or longer), so if you have<a name="line.1015"></a>
+<span class="sourceLineNo">1016</span>     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),<a name="line.1016"></a>
+<span class="sourceLineNo">1017</span>     * and likewise for doubles.<a name="line.1017"></a>
+<span class="sourceLineNo">1018</span>     * &lt;br&gt;<a name="line.1018"></a>
+<span class="sourceLineNo">1019</span>     * The technique for cosine approximation is mostly from<a name="line.1019"></a>
+<span class="sourceLineNo">1020</span>     * &lt;a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784"&gt;this archived DevMaster thread&lt;/a&gt;,<a name="line.1020"></a>
+<span class="sourceLineNo">1021</span>     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.<a name="line.1021"></a>
+<span class="sourceLineNo">1022</span>     * @param turns an angle as a fraction of a turn as a double, with 0.5 here equivalent to PI radians in {@link #cos(double)}<a name="line.1022"></a>
+<span class="sourceLineNo">1023</span>     * @return the cosine of the given angle, as a double between -1.0 and 1.0 (both inclusive)<a name="line.1023"></a>
+<span class="sourceLineNo">1024</span>     */<a name="line.1024"></a>
+<span class="sourceLineNo">1025</span>    public static double cos_(double turns)<a name="line.1025"></a>
+<span class="sourceLineNo">1026</span>    {<a name="line.1026"></a>
+<span class="sourceLineNo">1027</span>        turns = turns * 4.0 + 1.0;<a name="line.1027"></a>
+<span class="sourceLineNo">1028</span>        final long floor = (turns &gt;= 0.0 ? (long) turns : (long) turns - 1L) &amp; -2L;<a name="line.1028"></a>
+<span class="sourceLineNo">1029</span>        turns -= floor;<a name="line.1029"></a>
+<span class="sourceLineNo">1030</span>        turns *= 2.0 - turns;<a name="line.1030"></a>
+<span class="sourceLineNo">1031</span>        return turns * (-0.775 - 0.225 * turns) * ((floor &amp; 2L) - 1L);<a name="line.1031"></a>
+<span class="sourceLineNo">1032</span>    }<a name="line.1032"></a>
+<span class="sourceLineNo">1033</span><a name="line.1033"></a>
+<span class="sourceLineNo">1034</span>    /**<a name="line.1034"></a>
+<span class="sourceLineNo">1035</span>     * A variation on {@link Math#sin(double)} that takes its input as a fraction of a turn instead of in radians (it<a name="line.1035"></a>
+<span class="sourceLineNo">1036</span>     * also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a<a name="line.1036"></a>
+<span class="sourceLineNo">1037</span>     * building block for other measurements; to make a sine method that takes its input in grad (with 400 grad equal to<a name="line.1037"></a>
+<span class="sourceLineNo">1038</span>     * 360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this<a name="line.1038"></a>
+<span class="sourceLineNo">1039</span>     * method. Similarly for binary degrees, also called brad (with 256 brad equal to 360 degrees), you would divide by<a name="line.1039"></a>
+<span class="sourceLineNo">1040</span>     * 256.0 or multiply by 0.00390625 before passing that value here. The brad case is especially useful because you<a name="line.1040"></a>
+<span class="sourceLineNo">1041</span>     * can use a byte for any brad values, and adding up those brad values will wrap correctly (256 brad goes back to 0)<a name="line.1041"></a>
+<span class="sourceLineNo">1042</span>     * while keeping perfect precision for the results (you still divide by 256.0 when you pass the brad value to this<a name="line.1042"></a>
+<span class="sourceLineNo">1043</span>     * method).<a name="line.1043"></a>
+<span class="sourceLineNo">1044</span>     * &lt;br&gt;<a name="line.1044"></a>
+<span class="sourceLineNo">1045</span>     * The error for this float version is extremely close to the double version, {@link #sin_(double)}, so you should<a name="line.1045"></a>
+<span class="sourceLineNo">1046</span>     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion<a name="line.1046"></a>
+<span class="sourceLineNo">1047</span>     * between float and double takes about as long as this method normally takes to run (or longer), so if you have<a name="line.1047"></a>
+<span class="sourceLineNo">1048</span>     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),<a name="line.1048"></a>
+<span class="sourceLineNo">1049</span>     * and likewise for doubles.<a name="line.1049"></a>
+<span class="sourceLineNo">1050</span>     * &lt;br&gt;<a name="line.1050"></a>
+<span class="sourceLineNo">1051</span>     * The technique for sine approximation is mostly from<a name="line.1051"></a>
+<span class="sourceLineNo">1052</span>     * &lt;a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784"&gt;this archived DevMaster thread&lt;/a&gt;,<a name="line.1052"></a>
+<span class="sourceLineNo">1053</span>     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.<a name="line.1053"></a>
+<span class="sourceLineNo">1054</span>     * @param turns an angle as a fraction of a turn as a float, with 0.5 here equivalent to PI radians in {@link #cos(double)}<a name="line.1054"></a>
+<span class="sourceLineNo">1055</span>     * @return the sine of the given angle, as a float between -1.0 and 1.0 (both inclusive)<a name="line.1055"></a>
+<span class="sourceLineNo">1056</span>     */<a name="line.1056"></a>
+<span class="sourceLineNo">1057</span>    public static float sin_(float turns)<a name="line.1057"></a>
+<span class="sourceLineNo">1058</span>    {<a name="line.1058"></a>
+<span class="sourceLineNo">1059</span>        turns *= 4f;<a name="line.1059"></a>
+<span class="sourceLineNo">1060</span>        final long floor = (turns &gt;= 0.0 ? (long) turns : (long) turns - 1L) &amp; -2L;<a name="line.1060"></a>
+<span class="sourceLineNo">1061</span>        turns -= floor;<a name="line.1061"></a>
+<span class="sourceLineNo">1062</span>        turns *= 2f - turns;<a name="line.1062"></a>
+<span class="sourceLineNo">1063</span>        return turns * (-0.775f - 0.225f * turns) * ((floor &amp; 2L) - 1L);<a name="line.1063"></a>
+<span class="sourceLineNo">1064</span>    }<a name="line.1064"></a>
+<span class="sourceLineNo">1065</span><a name="line.1065"></a>
+<span class="sourceLineNo">1066</span>    /**<a name="line.1066"></a>
+<span class="sourceLineNo">1067</span>     * A variation on {@link Math#cos(double)} that takes its input as a fraction of a turn instead of in radians (it<a name="line.1067"></a>
+<span class="sourceLineNo">1068</span>     * also takes and returns a float); one turn is equal to 360 degrees or two*PI radians. This can be useful as a<a name="line.1068"></a>
+<span class="sourceLineNo">1069</span>     * building block for other measurements; to make a cosine method that takes its input in grad (with 400 grad equal<a name="line.1069"></a>
+<span class="sourceLineNo">1070</span>     * to 360 degrees), you would just divide the grad value by 400.0 (or multiply it by 0.0025) and pass it to this<a name="line.1070"></a>
+<span class="sourceLineNo">1071</span>     * method. Similarly for binary degrees, also called brad (with 256 brad equal to 360 degrees), you would divide by<a name="line.1071"></a>
+<span class="sourceLineNo">1072</span>     * 256.0 or multiply by 0.00390625 before passing that value here. The brad case is especially useful because you<a name="line.1072"></a>
+<span class="sourceLineNo">1073</span>     * can use a byte for any brad values, and adding up those brad values will wrap correctly (256 brad goes back to 0)<a name="line.1073"></a>
+<span class="sourceLineNo">1074</span>     * while keeping perfect precision for the results (you still divide by 256.0 when you pass the brad value to this<a name="line.1074"></a>
+<span class="sourceLineNo">1075</span>     * method).<a name="line.1075"></a>
+<span class="sourceLineNo">1076</span>     * &lt;br&gt;<a name="line.1076"></a>
+<span class="sourceLineNo">1077</span>     * The error for this float version is extremely close to the float version, {@link #cos_(double)}, so you should<a name="line.1077"></a>
+<span class="sourceLineNo">1078</span>     * choose based on what type you have as input and/or want to return rather than on quality concerns. Coercion<a name="line.1078"></a>
+<span class="sourceLineNo">1079</span>     * between float and double takes about as long as this method normally takes to run (or longer), so if you have<a name="line.1079"></a>
+<span class="sourceLineNo">1080</span>     * floats you should usually use methods that take floats (or return floats, if assigning the result to a float),<a name="line.1080"></a>
+<span class="sourceLineNo">1081</span>     * and likewise for doubles.<a name="line.1081"></a>
+<span class="sourceLineNo">1082</span>     * &lt;br&gt;<a name="line.1082"></a>
+<span class="sourceLineNo">1083</span>     * The technique for cosine approximation is mostly from<a name="line.1083"></a>
+<span class="sourceLineNo">1084</span>     * &lt;a href="https://web.archive.org/web/20080228213915/http://devmaster.net/forums/showthread.php?t=5784"&gt;this archived DevMaster thread&lt;/a&gt;,<a name="line.1084"></a>
+<span class="sourceLineNo">1085</span>     * with credit to "Nick". Changes have been made to accelerate wrapping from any double to the valid input range.<a name="line.1085"></a>
+<span class="sourceLineNo">1086</span>     * @param turns an angle as a fraction of a turn as a float, with 0.5 here equivalent to PI radians in {@link #cos(double)}<a name="line.1086"></a>
+<span class="sourceLineNo">1087</span>     * @return the cosine of the given angle, as a float between -1.0 and 1.0 (both inclusive)<a name="line.1087"></a>
+<span class="sourceLineNo">1088</span>     */<a name="line.1088"></a>
+<span class="sourceLineNo">1089</span>    public static float cos_(float turns)<a name="line.1089"></a>
+<span class="sourceLineNo">1090</span>    {<a name="line.1090"></a>
+<span class="sourceLineNo">1091</span>        turns = turns * 4f + 1f;<a name="line.1091"></a>
+<span class="sourceLineNo">1092</span>        final long floor = (turns &gt;= 0.0 ? (long) turns : (long) turns - 1L) &amp; -2L;<a name="line.1092"></a>
+<span class="sourceLineNo">1093</span>        turns -= floor;<a name="line.1093"></a>
+<span class="sourceLineNo">1094</span>        turns *= 2f - turns;<a name="line.1094"></a>
+<span class="sourceLineNo">1095</span>        return turns * (-0.775f - 0.225f * turns) * ((floor &amp; 2L) - 1L);<a name="line.1095"></a>
+<span class="sourceLineNo">1096</span>    }<a name="line.1096"></a>
+<span class="sourceLineNo">1097</span><a name="line.1097"></a>
+<span class="sourceLineNo">1098</span>    /**<a name="line.1098"></a>
+<span class="sourceLineNo">1099</span>     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2<a name="line.1099"></a>
+<span class="sourceLineNo">1100</span>     * approximation. Maximum error is below 0.001 radians.<a name="line.1100"></a>
+<span class="sourceLineNo">1101</span>     * Takes y and x (in that unusual order) as doubles, and returns the angle from the origin to that point in radians.<a name="line.1101"></a>
+<span class="sourceLineNo">1102</span>     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for<a name="line.1102"></a>
+<span class="sourceLineNo">1103</span>     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'<a name="line.1103"></a>
+<span class="sourceLineNo">1104</span>     * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.<a name="line.1104"></a>
+<span class="sourceLineNo">1105</span>     * Credit to StackExchange user njuffa, who gave<a name="line.1105"></a>
+<span class="sourceLineNo">1106</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. This method changed from an earlier<a name="line.1106"></a>
+<span class="sourceLineNo">1107</span>     * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also<a name="line.1107"></a>
+<span class="sourceLineNo">1108</span>     * {@link #atan2Rough(double, double)} if the speed isn't good enough with this method and lower quality is OK, or<a name="line.1108"></a>
+<span class="sourceLineNo">1109</span>     * {@link #atan2_(double, double)} if you don't want a mess converting to degrees or some other measurement, since<a name="line.1109"></a>
+<span class="sourceLineNo">1110</span>     * that method returns an angle from 0.0 (equal to 0 degrees) to 1.0 (equal to 360 degrees).<a name="line.1110"></a>
+<span class="sourceLineNo">1111</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1111"></a>
+<span class="sourceLineNo">1112</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1112"></a>
+<span class="sourceLineNo">1113</span>     * @return the angle to the given point, in radians as a double<a name="line.1113"></a>
+<span class="sourceLineNo">1114</span>     */<a name="line.1114"></a>
+<span class="sourceLineNo">1115</span>    public static double atan2(final double y, final double x)<a name="line.1115"></a>
+<span class="sourceLineNo">1116</span>    {<a name="line.1116"></a>
+<span class="sourceLineNo">1117</span>        /*<a name="line.1117"></a>
+<span class="sourceLineNo">1118</span>a := min (|x|, |y|) / max (|x|, |y|)<a name="line.1118"></a>
+<span class="sourceLineNo">1119</span>s := a * a<a name="line.1119"></a>
+<span class="sourceLineNo">1120</span>r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a<a name="line.1120"></a>
+<span class="sourceLineNo">1121</span>if |y| &gt; |x| then r := 1.57079637 - r<a name="line.1121"></a>
+<span class="sourceLineNo">1122</span>if x &lt; 0 then r := 3.14159274 - r<a name="line.1122"></a>
+<span class="sourceLineNo">1123</span>if y &lt; 0 then r := -r<a name="line.1123"></a>
+<span class="sourceLineNo">1124</span>         */<a name="line.1124"></a>
+<span class="sourceLineNo">1125</span>        if(y == 0.0 &amp;&amp; x &gt;= 0.0) return 0.0;<a name="line.1125"></a>
+<span class="sourceLineNo">1126</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.1126"></a>
+<span class="sourceLineNo">1127</span>        if(ax &lt; ay)<a name="line.1127"></a>
+<span class="sourceLineNo">1128</span>        {<a name="line.1128"></a>
+<span class="sourceLineNo">1129</span>            final double a = ax / ay, s = a * a,<a name="line.1129"></a>
+<span class="sourceLineNo">1130</span>                    r = 1.57079637 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);<a name="line.1130"></a>
+<span class="sourceLineNo">1131</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1131"></a>
+<span class="sourceLineNo">1132</span>        }<a name="line.1132"></a>
+<span class="sourceLineNo">1133</span>        else {<a name="line.1133"></a>
+<span class="sourceLineNo">1134</span>            final double a = ay / ax, s = a * a,<a name="line.1134"></a>
+<span class="sourceLineNo">1135</span>                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a);<a name="line.1135"></a>
+<span class="sourceLineNo">1136</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1136"></a>
+<span class="sourceLineNo">1137</span>        }<a name="line.1137"></a>
+<span class="sourceLineNo">1138</span>    }<a name="line.1138"></a>
+<span class="sourceLineNo">1139</span><a name="line.1139"></a>
+<span class="sourceLineNo">1140</span>    /**<a name="line.1140"></a>
+<span class="sourceLineNo">1141</span>     * Close approximation of the frequently-used trigonometric method atan2, with higher precision than LibGDX's atan2<a name="line.1141"></a>
+<span class="sourceLineNo">1142</span>     * approximation. Maximum error is below 0.001 radians.<a name="line.1142"></a>
+<span class="sourceLineNo">1143</span>     * Takes y and x (in that unusual order) as floats, and returns the angle from the origin to that point in radians.<a name="line.1143"></a>
+<span class="sourceLineNo">1144</span>     * It is about 5 times faster than {@link Math#atan2(double, double)} (roughly 17 ns instead of roughly 88 ns for<a name="line.1144"></a>
+<span class="sourceLineNo">1145</span>     * Math, though the computer was under some load during testing). It is almost identical in speed to LibGDX'<a name="line.1145"></a>
+<span class="sourceLineNo">1146</span>     * MathUtils approximation of the same method; MathUtils seems to have worse average error, though.<a name="line.1146"></a>
+<span class="sourceLineNo">1147</span>     * Credit to StackExchange user njuffa, who gave<a name="line.1147"></a>
+<span class="sourceLineNo">1148</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. This method changed from an earlier<a name="line.1148"></a>
+<span class="sourceLineNo">1149</span>     * technique that was twice as fast but had very poor quality, enough to be visually noticeable. See also<a name="line.1149"></a>
+<span class="sourceLineNo">1150</span>     * {@link #atan2Rough(float, float)} if the speed isn't good enough with this method and lower quality is OK, or<a name="line.1150"></a>
+<span class="sourceLineNo">1151</span>     * {@link #atan2_(float, float)} if you don't want a mess converting to degrees or some other measurement, since<a name="line.1151"></a>
+<span class="sourceLineNo">1152</span>     * that method returns an angle from 0f (equal to 0 degrees) to 1f (equal to 360 degrees).<a name="line.1152"></a>
+<span class="sourceLineNo">1153</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1153"></a>
+<span class="sourceLineNo">1154</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1154"></a>
+<span class="sourceLineNo">1155</span>     * @return the angle to the given point, in radians as a float<a name="line.1155"></a>
+<span class="sourceLineNo">1156</span>     */<a name="line.1156"></a>
+<span class="sourceLineNo">1157</span>    public static float atan2(final float y, final float x)<a name="line.1157"></a>
+<span class="sourceLineNo">1158</span>    {<a name="line.1158"></a>
+<span class="sourceLineNo">1159</span>        /*<a name="line.1159"></a>
+<span class="sourceLineNo">1160</span>a := min (|x|, |y|) / max (|x|, |y|)<a name="line.1160"></a>
+<span class="sourceLineNo">1161</span>s := a * a<a name="line.1161"></a>
+<span class="sourceLineNo">1162</span>r := ((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a<a name="line.1162"></a>
+<span class="sourceLineNo">1163</span>if |y| &gt; |x| then r := 1.57079637 - r<a name="line.1163"></a>
+<span class="sourceLineNo">1164</span>if x &lt; 0 then r := 3.14159274 - r<a name="line.1164"></a>
+<span class="sourceLineNo">1165</span>if y &lt; 0 then r := -r<a name="line.1165"></a>
+<span class="sourceLineNo">1166</span>         */<a name="line.1166"></a>
+<span class="sourceLineNo">1167</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0f;<a name="line.1167"></a>
+<span class="sourceLineNo">1168</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1168"></a>
+<span class="sourceLineNo">1169</span>        if(ax &lt; ay)<a name="line.1169"></a>
+<span class="sourceLineNo">1170</span>        {<a name="line.1170"></a>
+<span class="sourceLineNo">1171</span>            final float a = ax / ay, s = a * a,<a name="line.1171"></a>
+<span class="sourceLineNo">1172</span>                    r = 1.57079637f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);<a name="line.1172"></a>
+<span class="sourceLineNo">1173</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1173"></a>
+<span class="sourceLineNo">1174</span>        }<a name="line.1174"></a>
+<span class="sourceLineNo">1175</span>        else {<a name="line.1175"></a>
+<span class="sourceLineNo">1176</span>            final float a = ay / ax, s = a * a,<a name="line.1176"></a>
+<span class="sourceLineNo">1177</span>                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a);<a name="line.1177"></a>
+<span class="sourceLineNo">1178</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1178"></a>
+<span class="sourceLineNo">1179</span>        }<a name="line.1179"></a>
+<span class="sourceLineNo">1180</span>    }<a name="line.1180"></a>
+<span class="sourceLineNo">1181</span><a name="line.1181"></a>
+<span class="sourceLineNo">1182</span>    /**<a name="line.1182"></a>
+<span class="sourceLineNo">1183</span>     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with<a name="line.1183"></a>
+<span class="sourceLineNo">1184</span>     * worse average and max error than {@link #atan2(double, double)} but better error all-around than the old<a name="line.1184"></a>
+<span class="sourceLineNo">1185</span>     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(double, double)}.<a name="line.1185"></a>
+<span class="sourceLineNo">1186</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1186"></a>
+<span class="sourceLineNo">1187</span>     * like map projections that operate on finer grids.<a name="line.1187"></a>
+<span class="sourceLineNo">1188</span>     * &lt;br&gt;<a name="line.1188"></a>
+<span class="sourceLineNo">1189</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1189"></a>
+<span class="sourceLineNo">1190</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1190"></a>
+<span class="sourceLineNo">1191</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1191"></a>
+<span class="sourceLineNo">1192</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1192"></a>
+<span class="sourceLineNo">1193</span>     * @return the angle to the given point, in radians as a double<a name="line.1193"></a>
+<span class="sourceLineNo">1194</span>     */<a name="line.1194"></a>
+<span class="sourceLineNo">1195</span>    public static double atan2Rough(final double y, final double x)<a name="line.1195"></a>
+<span class="sourceLineNo">1196</span>    {<a name="line.1196"></a>
+<span class="sourceLineNo">1197</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0.0;<a name="line.1197"></a>
+<span class="sourceLineNo">1198</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.1198"></a>
+<span class="sourceLineNo">1199</span>        if(ax &lt; ay)<a name="line.1199"></a>
+<span class="sourceLineNo">1200</span>        {<a name="line.1200"></a>
+<span class="sourceLineNo">1201</span>            final double a = ax / ay,<a name="line.1201"></a>
+<span class="sourceLineNo">1202</span>                    r = 1.57079637 - (a * (0.7853981633974483 + 0.273 * (1.0 - a)));<a name="line.1202"></a>
+<span class="sourceLineNo">1203</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1203"></a>
+<span class="sourceLineNo">1204</span>        }<a name="line.1204"></a>
+<span class="sourceLineNo">1205</span>        else {<a name="line.1205"></a>
+<span class="sourceLineNo">1206</span>            final double a = ay / ax,<a name="line.1206"></a>
+<span class="sourceLineNo">1207</span>                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a)));<a name="line.1207"></a>
+<span class="sourceLineNo">1208</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? -3.14159274 + r : 3.14159274 - r : (y &lt; 0.0) ? -r : r;<a name="line.1208"></a>
+<span class="sourceLineNo">1209</span>        }<a name="line.1209"></a>
+<span class="sourceLineNo">1210</span>    }<a name="line.1210"></a>
+<span class="sourceLineNo">1211</span><a name="line.1211"></a>
+<span class="sourceLineNo">1212</span>    /**<a name="line.1212"></a>
+<span class="sourceLineNo">1213</span>     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with<a name="line.1213"></a>
+<span class="sourceLineNo">1214</span>     * worse average and max error than {@link #atan2(float, float)} but better error all-around than the old<a name="line.1214"></a>
+<span class="sourceLineNo">1215</span>     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(float, float)}.<a name="line.1215"></a>
+<span class="sourceLineNo">1216</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1216"></a>
+<span class="sourceLineNo">1217</span>     * like map projections that operate on finer grids.<a name="line.1217"></a>
+<span class="sourceLineNo">1218</span>     * &lt;br&gt;<a name="line.1218"></a>
+<span class="sourceLineNo">1219</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1219"></a>
+<span class="sourceLineNo">1220</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1220"></a>
+<span class="sourceLineNo">1221</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1221"></a>
+<span class="sourceLineNo">1222</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1222"></a>
+<span class="sourceLineNo">1223</span>     * @return the angle to the given point, in radians as a float<a name="line.1223"></a>
+<span class="sourceLineNo">1224</span>     */<a name="line.1224"></a>
+<span class="sourceLineNo">1225</span>    public static float atan2Rough(final float y, final float x)<a name="line.1225"></a>
+<span class="sourceLineNo">1226</span>    {<a name="line.1226"></a>
+<span class="sourceLineNo">1227</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0f;<a name="line.1227"></a>
+<span class="sourceLineNo">1228</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1228"></a>
+<span class="sourceLineNo">1229</span>        if(ax &lt; ay)<a name="line.1229"></a>
+<span class="sourceLineNo">1230</span>        {<a name="line.1230"></a>
+<span class="sourceLineNo">1231</span>            final float a = ax / ay,<a name="line.1231"></a>
+<span class="sourceLineNo">1232</span>                    r = 1.57079637f - (a * (0.7853981633974483f + 0.273f * (1f - a)));<a name="line.1232"></a>
+<span class="sourceLineNo">1233</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1233"></a>
+<span class="sourceLineNo">1234</span>        }<a name="line.1234"></a>
+<span class="sourceLineNo">1235</span>        else {<a name="line.1235"></a>
+<span class="sourceLineNo">1236</span>            final float a = ay / ax,<a name="line.1236"></a>
+<span class="sourceLineNo">1237</span>                    r = (a * (0.7853981633974483f + 0.273f * (1f - a)));<a name="line.1237"></a>
+<span class="sourceLineNo">1238</span>            return (x &lt; 0f) ? (y &lt; 0f) ? -3.14159274f + r : 3.14159274f - r : (y &lt; 0f) ? -r : r;<a name="line.1238"></a>
+<span class="sourceLineNo">1239</span>        }<a name="line.1239"></a>
+<span class="sourceLineNo">1240</span>    }<a name="line.1240"></a>
+<span class="sourceLineNo">1241</span><a name="line.1241"></a>
+<span class="sourceLineNo">1242</span>    /**<a name="line.1242"></a>
+<span class="sourceLineNo">1243</span>     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as <a name="line.1243"></a>
+<span class="sourceLineNo">1244</span>     * doubles and returning an angle measured in turns from 0.0 to 1.0 (inclusive), with one cycle over the range<a name="line.1244"></a>
+<span class="sourceLineNo">1245</span>     * equivalent to 360 degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians,<a name="line.1245"></a>
+<span class="sourceLineNo">1246</span>     * or by {@code 360f} to change to degrees. Takes y and x (in that unusual order) as doubles. Will never return a<a name="line.1246"></a>
+<span class="sourceLineNo">1247</span>     * negative number, which may help avoid costly floating-point modulus when you actually want a positive number.<a name="line.1247"></a>
+<span class="sourceLineNo">1248</span>     * Credit to StackExchange user njuffa, who gave<a name="line.1248"></a>
+<span class="sourceLineNo">1249</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. Note that<a name="line.1249"></a>
+<span class="sourceLineNo">1250</span>     * {@link #atan2(double, double)} returns an angle in radians and can return negative results, which may be fine for<a name="line.1250"></a>
+<span class="sourceLineNo">1251</span>     * many tasks; these two methods are extremely close in implementation and speed.<a name="line.1251"></a>
+<span class="sourceLineNo">1252</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1252"></a>
+<span class="sourceLineNo">1253</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1253"></a>
+<span class="sourceLineNo">1254</span>     * @return the angle to the given point, as a double from 0.0 to 1.0, inclusive<a name="line.1254"></a>
+<span class="sourceLineNo">1255</span>     */<a name="line.1255"></a>
+<span class="sourceLineNo">1256</span>    public static double atan2_(final double y, final double x)<a name="line.1256"></a>
+<span class="sourceLineNo">1257</span>    {<a name="line.1257"></a>
+<span class="sourceLineNo">1258</span>        if(y == 0.0 &amp;&amp; x &gt;= 0.0) return 0.0;<a name="line.1258"></a>
+<span class="sourceLineNo">1259</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.1259"></a>
+<span class="sourceLineNo">1260</span>        if(ax &lt; ay)<a name="line.1260"></a>
+<span class="sourceLineNo">1261</span>        {<a name="line.1261"></a>
+<span class="sourceLineNo">1262</span>            final double a = ax / ay, s = a * a,<a name="line.1262"></a>
+<span class="sourceLineNo">1263</span>                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1263"></a>
+<span class="sourceLineNo">1264</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1264"></a>
+<span class="sourceLineNo">1265</span>        }<a name="line.1265"></a>
+<span class="sourceLineNo">1266</span>        else {<a name="line.1266"></a>
+<span class="sourceLineNo">1267</span>            final double a = ay / ax, s = a * a,<a name="line.1267"></a>
+<span class="sourceLineNo">1268</span>                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1268"></a>
+<span class="sourceLineNo">1269</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1269"></a>
+<span class="sourceLineNo">1270</span>        }<a name="line.1270"></a>
+<span class="sourceLineNo">1271</span>    }<a name="line.1271"></a>
+<span class="sourceLineNo">1272</span>    /**<a name="line.1272"></a>
+<span class="sourceLineNo">1273</span>     * Altered-range approximation of the frequently-used trigonometric method atan2, taking y and x positions as floats<a name="line.1273"></a>
+<span class="sourceLineNo">1274</span>     * and returning an angle measured in turns from 0.0f to 1.0f, with one cycle over the range equivalent to 360<a name="line.1274"></a>
+<span class="sourceLineNo">1275</span>     * degrees or 2PI radians. You can multiply the angle by {@code 6.2831855f} to change to radians, or by {@code 360f}<a name="line.1275"></a>
+<span class="sourceLineNo">1276</span>     * to change to degrees. Takes y and x (in that unusual order) as floats. Will never return a negative number, which<a name="line.1276"></a>
+<span class="sourceLineNo">1277</span>     * may help avoid costly floating-point modulus when you actually want a positive number.<a name="line.1277"></a>
+<span class="sourceLineNo">1278</span>     * Credit to StackExchange user njuffa, who gave<a name="line.1278"></a>
+<span class="sourceLineNo">1279</span>     * &lt;a href="https://math.stackexchange.com/a/1105038"&gt;this useful answer&lt;/a&gt;. Note that<a name="line.1279"></a>
+<span class="sourceLineNo">1280</span>     * {@link #atan2(float, float)} returns an angle in radians and can return negative results, which may be fine for<a name="line.1280"></a>
+<span class="sourceLineNo">1281</span>     * many tasks; these two methods are extremely close in implementation and speed.<a name="line.1281"></a>
+<span class="sourceLineNo">1282</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1282"></a>
+<span class="sourceLineNo">1283</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1283"></a>
+<span class="sourceLineNo">1284</span>     * @return the angle to the given point, as a float from 0.0f to 1.0f, inclusive<a name="line.1284"></a>
+<span class="sourceLineNo">1285</span>     */<a name="line.1285"></a>
+<span class="sourceLineNo">1286</span>    public static float atan2_(final float y, final float x)<a name="line.1286"></a>
+<span class="sourceLineNo">1287</span>    {<a name="line.1287"></a>
+<span class="sourceLineNo">1288</span>        if(y == 0.0 &amp;&amp; x &gt;= 0.0) return 0f;<a name="line.1288"></a>
+<span class="sourceLineNo">1289</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1289"></a>
+<span class="sourceLineNo">1290</span>        if(ax &lt; ay)<a name="line.1290"></a>
+<span class="sourceLineNo">1291</span>        {<a name="line.1291"></a>
+<span class="sourceLineNo">1292</span>            final float a = ax / ay, s = a * a,<a name="line.1292"></a>
+<span class="sourceLineNo">1293</span>                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1293"></a>
+<span class="sourceLineNo">1294</span>            return (x &lt; 0.0f) ? (y &lt; 0.0f) ? 0.5f + r : 0.5f - r : (y &lt; 0.0f) ? 1f - r : r;<a name="line.1294"></a>
+<span class="sourceLineNo">1295</span>        }<a name="line.1295"></a>
+<span class="sourceLineNo">1296</span>        else {<a name="line.1296"></a>
+<span class="sourceLineNo">1297</span>            final float a = ay / ax, s = a * a,<a name="line.1297"></a>
+<span class="sourceLineNo">1298</span>                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1298"></a>
+<span class="sourceLineNo">1299</span>            return (x &lt; 0.0f) ? (y &lt; 0.0f) ? 0.5f + r : 0.5f - r : (y &lt; 0.0f) ? 1f - r : r;<a name="line.1299"></a>
+<span class="sourceLineNo">1300</span>        }<a name="line.1300"></a>
+<span class="sourceLineNo">1301</span>    }<a name="line.1301"></a>
+<span class="sourceLineNo">1302</span><a name="line.1302"></a>
+<span class="sourceLineNo">1303</span><a name="line.1303"></a>
+<span class="sourceLineNo">1304</span>    /**<a name="line.1304"></a>
+<span class="sourceLineNo">1305</span>     * Less-precise but somewhat faster altered-range approximation of the frequently-used trigonometric method atan2, with<a name="line.1305"></a>
+<span class="sourceLineNo">1306</span>     * worse average and max error than {@link #atan2(double, double)} but better speed. Takes y and x positions as<a name="line.1306"></a>
+<span class="sourceLineNo">1307</span>     * floats and returns an angle from 0.0f to 1.0f, with one cycle over the range equivalent to 360 degrees or 2PI<a name="line.1307"></a>
+<span class="sourceLineNo">1308</span>     * radians. Should be up to twice as fast as {@link #atan2_(double, double)}.<a name="line.1308"></a>
+<span class="sourceLineNo">1309</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1309"></a>
+<span class="sourceLineNo">1310</span>     * like map projections that operate on finer grids.<a name="line.1310"></a>
+<span class="sourceLineNo">1311</span>     * &lt;br&gt;<a name="line.1311"></a>
+<span class="sourceLineNo">1312</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1312"></a>
+<span class="sourceLineNo">1313</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1313"></a>
+<span class="sourceLineNo">1314</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1314"></a>
+<span class="sourceLineNo">1315</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1315"></a>
+<span class="sourceLineNo">1316</span>     * @return the angle to the given point, in radians as a double<a name="line.1316"></a>
+<span class="sourceLineNo">1317</span>     */<a name="line.1317"></a>
+<span class="sourceLineNo">1318</span>    public static double atan2Rough_(final double y, final double x)<a name="line.1318"></a>
+<span class="sourceLineNo">1319</span>    {<a name="line.1319"></a>
+<span class="sourceLineNo">1320</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0.0;<a name="line.1320"></a>
+<span class="sourceLineNo">1321</span>        final double ax = Math.abs(x), ay = Math.abs(y);<a name="line.1321"></a>
+<span class="sourceLineNo">1322</span>        if(ax &lt; ay)<a name="line.1322"></a>
+<span class="sourceLineNo">1323</span>        {<a name="line.1323"></a>
+<span class="sourceLineNo">1324</span>            final double a = ax / ay,<a name="line.1324"></a>
+<span class="sourceLineNo">1325</span>                    r = 0.25 - (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;<a name="line.1325"></a>
+<span class="sourceLineNo">1326</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1326"></a>
+<span class="sourceLineNo">1327</span>        }<a name="line.1327"></a>
+<span class="sourceLineNo">1328</span>        else {<a name="line.1328"></a>
+<span class="sourceLineNo">1329</span>            final double a = ay / ax,<a name="line.1329"></a>
+<span class="sourceLineNo">1330</span>                    r = (a * (0.7853981633974483 + 0.273 * (1.0 - a))) * 0.15915494309189535;<a name="line.1330"></a>
+<span class="sourceLineNo">1331</span>            return (x &lt; 0.0) ? (y &lt; 0.0) ? 0.5 + r : 0.5 - r : (y &lt; 0.0) ? 1.0 - r : r;<a name="line.1331"></a>
+<span class="sourceLineNo">1332</span>        }<a name="line.1332"></a>
+<span class="sourceLineNo">1333</span>    }<a name="line.1333"></a>
+<span class="sourceLineNo">1334</span><a name="line.1334"></a>
+<span class="sourceLineNo">1335</span>    /**<a name="line.1335"></a>
+<span class="sourceLineNo">1336</span>     * Less-precise but somewhat faster approximation of the frequently-used trigonometric method atan2, with<a name="line.1336"></a>
+<span class="sourceLineNo">1337</span>     * worse average and max error than {@link #atan2(float, float)} but better error all-around than the old<a name="line.1337"></a>
+<span class="sourceLineNo">1338</span>     * implementation of atan2() in SquidLib. Should be up to twice as fast as {@link #atan2(float, float)}.<a name="line.1338"></a>
+<span class="sourceLineNo">1339</span>     * Should be fine for things at coarse-grid-level precision, like cells in a dungeon map, but less fitting for tasks<a name="line.1339"></a>
+<span class="sourceLineNo">1340</span>     * like map projections that operate on finer grids.<a name="line.1340"></a>
+<span class="sourceLineNo">1341</span>     * &lt;br&gt;<a name="line.1341"></a>
+<span class="sourceLineNo">1342</span>     * Credit to Sreeraman Rajan, Sichun Wang, Robert Inkol, and Alain Joyal in<a name="line.1342"></a>
+<span class="sourceLineNo">1343</span>     * &lt;a href="https://www.researchgate.net/publication/3321724_Streamlining_Digital_Signal_Processing_A_Tricks_of_the_Trade_Guidebook_Second_Edition"&gt;this DSP article&lt;/a&gt;.<a name="line.1343"></a>
+<span class="sourceLineNo">1344</span>     * @param y y-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1344"></a>
+<span class="sourceLineNo">1345</span>     * @param x x-component of the point to find the angle towards; note the parameter order is unusual by convention<a name="line.1345"></a>
+<span class="sourceLineNo">1346</span>     * @return the angle to the given point, in radians as a float<a name="line.1346"></a>
+<span class="sourceLineNo">1347</span>     */<a name="line.1347"></a>
+<span class="sourceLineNo">1348</span>    public static float atan2Rough_(final float y, final float x)<a name="line.1348"></a>
+<span class="sourceLineNo">1349</span>    {<a name="line.1349"></a>
+<span class="sourceLineNo">1350</span>        if(y == 0f &amp;&amp; x &gt;= 0f) return 0f;<a name="line.1350"></a>
+<span class="sourceLineNo">1351</span>        final float ax = Math.abs(x), ay = Math.abs(y);<a name="line.1351"></a>
+<span class="sourceLineNo">1352</span>        if(ax &lt; ay)<a name="line.1352"></a>
+<span class="sourceLineNo">1353</span>        {<a name="line.1353"></a>
+<span class="sourceLineNo">1354</span>            final float a = ax / ay,<a name="line.1354"></a>
+<span class="sourceLineNo">1355</span>                    r = 0.25f - (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;<a name="line.1355"></a>
+<span class="sourceLineNo">1356</span>            return (x &lt; 0f) ? (y &lt; 0f) ? 0.5f + r : 0.5f - r : (y &lt; 0f) ? 1f - r : r;<a name="line.1356"></a>
+<span class="sourceLineNo">1357</span>        }<a name="line.1357"></a>
+<span class="sourceLineNo">1358</span>        else {<a name="line.1358"></a>
+<span class="sourceLineNo">1359</span>            final float a = ay / ax,<a name="line.1359"></a>
+<span class="sourceLineNo">1360</span>                    r = (a * (0.7853981633974483f + 0.273f * (1f - a))) * 0.15915494309189535f;<a name="line.1360"></a>
+<span class="sourceLineNo">1361</span>            return (x &lt; 0f) ? (y &lt; 0f) ? 0.5f + r : 0.5f - r : (y &lt; 0f) ? 1f - r : r;<a name="line.1361"></a>
+<span class="sourceLineNo">1362</span>        }<a name="line.1362"></a>
+<span class="sourceLineNo">1363</span>    }<a name="line.1363"></a>
+<span class="sourceLineNo">1364</span><a name="line.1364"></a>
+<span class="sourceLineNo">1365</span>    /**<a name="line.1365"></a>
+<span class="sourceLineNo">1366</span>     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(double)}.<a name="line.1366"></a>
+<span class="sourceLineNo">1367</span>     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis<a name="line.1367"></a>
+<span class="sourceLineNo">1368</span>     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;. This method is about 40 times faster<a name="line.1368"></a>
+<span class="sourceLineNo">1369</span>     * than {@link Math#asin(double)}.<a name="line.1369"></a>
+<span class="sourceLineNo">1370</span>     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)<a name="line.1370"></a>
+<span class="sourceLineNo">1371</span>     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.<a name="line.1371"></a>
+<span class="sourceLineNo">1372</span>     */<a name="line.1372"></a>
+<span class="sourceLineNo">1373</span>    public static double asin(double a) {<a name="line.1373"></a>
+<span class="sourceLineNo">1374</span>        return (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /<a name="line.1374"></a>
+<span class="sourceLineNo">1375</span>                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));<a name="line.1375"></a>
+<span class="sourceLineNo">1376</span>    }<a name="line.1376"></a>
+<span class="sourceLineNo">1377</span>    /**<a name="line.1377"></a>
+<span class="sourceLineNo">1378</span>     * Arc sine approximation with fairly low error while still being faster than {@link NumberTools#sin(float)}.<a name="line.1378"></a>
+<span class="sourceLineNo">1379</span>     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis<a name="line.1379"></a>
+<span class="sourceLineNo">1380</span>     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;. This method is about 40 times faster<a name="line.1380"></a>
+<span class="sourceLineNo">1381</span>     * than {@link Math#asin(double)}, and takes and returns a float.<a name="line.1381"></a>
+<span class="sourceLineNo">1382</span>     * @param a an input to the inverse sine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)<a name="line.1382"></a>
+<span class="sourceLineNo">1383</span>     * @return an output from the inverse sine function, from -PI/2 to PI/2 inclusive.<a name="line.1383"></a>
+<span class="sourceLineNo">1384</span>     */<a name="line.1384"></a>
+<span class="sourceLineNo">1385</span>    public static float asin(float a) {<a name="line.1385"></a>
+<span class="sourceLineNo">1386</span>        return (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /<a name="line.1386"></a>
+<span class="sourceLineNo">1387</span>                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));<a name="line.1387"></a>
+<span class="sourceLineNo">1388</span>    }<a name="line.1388"></a>
+<span class="sourceLineNo">1389</span>    /**<a name="line.1389"></a>
+<span class="sourceLineNo">1390</span>     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(double)}.<a name="line.1390"></a>
+<span class="sourceLineNo">1391</span>     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis<a name="line.1391"></a>
+<span class="sourceLineNo">1392</span>     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;, with a basic change to go from arc sine<a name="line.1392"></a>
+<span class="sourceLineNo">1393</span>     * to arc cosine. This method is faster than {@link Math#acos(double)}.<a name="line.1393"></a>
+<span class="sourceLineNo">1394</span>     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)<a name="line.1394"></a>
+<span class="sourceLineNo">1395</span>     * @return an output from the inverse cosine function, from 0 to PI inclusive.<a name="line.1395"></a>
+<span class="sourceLineNo">1396</span>     */<a name="line.1396"></a>
+<span class="sourceLineNo">1397</span>    public static double acos(double a) {<a name="line.1397"></a>
+<span class="sourceLineNo">1398</span>        return 1.5707963267948966 - (a * (1.0 + (a *= a) * (-0.141514171442891431 + a * -0.719110791477959357))) /<a name="line.1398"></a>
+<span class="sourceLineNo">1399</span>                (1.0 + a * (-0.439110389941411144 + a * -0.471306172023844527));<a name="line.1399"></a>
+<span class="sourceLineNo">1400</span>    }<a name="line.1400"></a>
+<span class="sourceLineNo">1401</span>    /**<a name="line.1401"></a>
+<span class="sourceLineNo">1402</span>     * Arc cosine approximation with fairly low error while still being faster than {@link NumberTools#cos(float)}.<a name="line.1402"></a>
+<span class="sourceLineNo">1403</span>     * This formula is number 201 in &lt;a href="&gt;http://www.fastcode.dk/fastcodeproject/articles/index.htm"&gt;Dennis<a name="line.1403"></a>
+<span class="sourceLineNo">1404</span>     * Kjaer Christensen's unfinished math work on arc sine approximation&lt;/a&gt;, with a basic change to go from arc sine<a name="line.1404"></a>
+<span class="sourceLineNo">1405</span>     * to arc cosine. This method is faster than {@link Math#acos(double)}, and takes and returns a float.<a name="line.1405"></a>
+<span class="sourceLineNo">1406</span>     * @param a an input to the inverse cosine function, from -1 to 1 inclusive (error is higher approaching -1 or 1)<a name="line.1406"></a>
+<span class="sourceLineNo">1407</span>     * @return an output from the inverse cosine function, from 0 to PI inclusive.<a name="line.1407"></a>
+<span class="sourceLineNo">1408</span>     */<a name="line.1408"></a>
+<span class="sourceLineNo">1409</span>    public static float acos(float a) {<a name="line.1409"></a>
+<span class="sourceLineNo">1410</span>        return 1.5707963267948966f - (a * (1f + (a *= a) * (-0.141514171442891431f + a * -0.719110791477959357f))) /<a name="line.1410"></a>
+<span class="sourceLineNo">1411</span>                (1f + a * (-0.439110389941411144f + a * -0.471306172023844527f));<a name="line.1411"></a>
+<span class="sourceLineNo">1412</span>    }<a name="line.1412"></a>
+<span class="sourceLineNo">1413</span><a name="line.1413"></a>
+<span class="sourceLineNo">1414</span>    /**<a name="line.1414"></a>
+<span class="sourceLineNo">1415</span>     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this<a name="line.1415"></a>
+<span class="sourceLineNo">1416</span>     * range from 0.75 (inclusive) to 1.0 (exclusive), and continuing past that to 0.0 (inclusive) to 0.25 (inclusive).<a name="line.1416"></a>
+<span class="sourceLineNo">1417</span>     * &lt;br&gt;<a name="line.1417"></a>
+<span class="sourceLineNo">1418</span>     * This method is much more precise than the non-turn approximation, but is about 3x slower.<a name="line.1418"></a>
+<span class="sourceLineNo">1419</span>     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()<a name="line.1419"></a>
+<span class="sourceLineNo">1420</span>     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(double)}<a name="line.1420"></a>
+<span class="sourceLineNo">1421</span>     */<a name="line.1421"></a>
+<span class="sourceLineNo">1422</span>    public static double asin_(final double n)<a name="line.1422"></a>
+<span class="sourceLineNo">1423</span>    {<a name="line.1423"></a>
+<span class="sourceLineNo">1424</span>        if(n == 0.0) return 0.0;<a name="line.1424"></a>
+<span class="sourceLineNo">1425</span>        final double ax = Math.sqrt(1.0 - n * n), ay = Math.abs(n);<a name="line.1425"></a>
+<span class="sourceLineNo">1426</span>        if(ax &lt; ay)<a name="line.1426"></a>
+<span class="sourceLineNo">1427</span>        {<a name="line.1427"></a>
+<span class="sourceLineNo">1428</span>            final double a = ax / ay, s = a * a,<a name="line.1428"></a>
+<span class="sourceLineNo">1429</span>                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1429"></a>
+<span class="sourceLineNo">1430</span>            return (n &lt; 0.0) ? 1.0 - r : r;<a name="line.1430"></a>
+<span class="sourceLineNo">1431</span>        }<a name="line.1431"></a>
+<span class="sourceLineNo">1432</span>        else {<a name="line.1432"></a>
+<span class="sourceLineNo">1433</span>            final double a = ay / ax, s = a * a,<a name="line.1433"></a>
+<span class="sourceLineNo">1434</span>                    r = (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1434"></a>
+<span class="sourceLineNo">1435</span>            return (n &lt; 0.0) ? 1.0 - r : r;<a name="line.1435"></a>
+<span class="sourceLineNo">1436</span>        }<a name="line.1436"></a>
+<span class="sourceLineNo">1437</span>    }<a name="line.1437"></a>
+<span class="sourceLineNo">1438</span>    /**<a name="line.1438"></a>
+<span class="sourceLineNo">1439</span>     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this<a name="line.1439"></a>
+<span class="sourceLineNo">1440</span>     * range from 0.0 (inclusive) to 0.5 (inclusive).<a name="line.1440"></a>
+<span class="sourceLineNo">1441</span>     * &lt;br&gt;<a name="line.1441"></a>
+<span class="sourceLineNo">1442</span>     * This method is much more precise than the non-turn approximation, but is about 3x slower.<a name="line.1442"></a>
+<span class="sourceLineNo">1443</span>     * @param n a double from -1.0 to 1.0 (both inclusive), usually the output of sin() or cos()<a name="line.1443"></a>
+<span class="sourceLineNo">1444</span>     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(double)}<a name="line.1444"></a>
+<span class="sourceLineNo">1445</span>     */<a name="line.1445"></a>
+<span class="sourceLineNo">1446</span>    public static double acos_(final double n)<a name="line.1446"></a>
+<span class="sourceLineNo">1447</span>    {<a name="line.1447"></a>
+<span class="sourceLineNo">1448</span>        if(n == 1.0 || n == -1.0) return 0.0;<a name="line.1448"></a>
+<span class="sourceLineNo">1449</span>        final double ax = Math.abs(n), ay = Math.sqrt((1.0 + n) * (1.0 - n));<a name="line.1449"></a>
+<span class="sourceLineNo">1450</span>        if(ax &lt; ay)<a name="line.1450"></a>
+<span class="sourceLineNo">1451</span>        {<a name="line.1451"></a>
+<span class="sourceLineNo">1452</span>            final double a = ax / ay, s = a * a,<a name="line.1452"></a>
+<span class="sourceLineNo">1453</span>                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1453"></a>
+<span class="sourceLineNo">1454</span>            return (n &lt; 0.0) ? 0.5 - r : r;<a name="line.1454"></a>
+<span class="sourceLineNo">1455</span>        }<a name="line.1455"></a>
+<span class="sourceLineNo">1456</span>        else {<a name="line.1456"></a>
+<span class="sourceLineNo">1457</span>            final double a = ax / ay, s = a * a,<a name="line.1457"></a>
+<span class="sourceLineNo">1458</span>                    r = 0.25 - (((-0.0464964749 * s + 0.15931422) * s - 0.327622764) * s * a + a) * 0.15915494309189535;<a name="line.1458"></a>
+<span class="sourceLineNo">1459</span>            return (n &lt; 0.0) ? 0.5 - r : r;<a name="line.1459"></a>
+<span class="sourceLineNo">1460</span>        }<a name="line.1460"></a>
+<span class="sourceLineNo">1461</span>    }<a name="line.1461"></a>
+<span class="sourceLineNo">1462</span><a name="line.1462"></a>
+<span class="sourceLineNo">1463</span><a name="line.1463"></a>
+<span class="sourceLineNo">1464</span>    /**<a name="line.1464"></a>
+<span class="sourceLineNo">1465</span>     * Inverse sine function (arcsine) but with output measured in turns instead of radians. Possible results for this<a name="line.1465"></a>
+<span class="sourceLineNo">1466</span>     * range from 0.75f (inclusive) to 1.0f (exclusive), and continuing past that to 0.0f (inclusive) to 0.25f<a name="line.1466"></a>
+<span class="sourceLineNo">1467</span>     * (inclusive).<a name="line.1467"></a>
+<span class="sourceLineNo">1468</span>     * &lt;br&gt;<a name="line.1468"></a>
+<span class="sourceLineNo">1469</span>     * This method is much more precise than the non-turn approximation, but is about 3x slower.<a name="line.1469"></a>
+<span class="sourceLineNo">1470</span>     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()<a name="line.1470"></a>
+<span class="sourceLineNo">1471</span>     * @return one of the values that would produce {@code n} if it were passed to {@link #sin_(float)}<a name="line.1471"></a>
+<span class="sourceLineNo">1472</span>     */<a name="line.1472"></a>
+<span class="sourceLineNo">1473</span>    public static float asin_(final float n)<a name="line.1473"></a>
+<span class="sourceLineNo">1474</span>    {<a name="line.1474"></a>
+<span class="sourceLineNo">1475</span>        if(n == 0.0f) return 0.0f;<a name="line.1475"></a>
+<span class="sourceLineNo">1476</span>        final float ax = (float) Math.sqrt(1f - n * n), ay = Math.abs(n);<a name="line.1476"></a>
+<span class="sourceLineNo">1477</span>        if(ax &lt; ay)<a name="line.1477"></a>
+<span class="sourceLineNo">1478</span>        {<a name="line.1478"></a>
+<span class="sourceLineNo">1479</span>            final float a = ax / ay, s = a * a,<a name="line.1479"></a>
+<span class="sourceLineNo">1480</span>                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1480"></a>
+<span class="sourceLineNo">1481</span>            return (n &lt; 0.0f) ? 1.0f - r : r;<a name="line.1481"></a>
+<span class="sourceLineNo">1482</span>        }<a name="line.1482"></a>
+<span class="sourceLineNo">1483</span>        else {<a name="line.1483"></a>
+<span class="sourceLineNo">1484</span>            final float a = ay / ax, s = a * a,<a name="line.1484"></a>
+<span class="sourceLineNo">1485</span>                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1485"></a>
+<span class="sourceLineNo">1486</span>            return (n &lt; 0.0f) ? 1.0f - r : r;<a name="line.1486"></a>
+<span class="sourceLineNo">1487</span>        }<a name="line.1487"></a>
+<span class="sourceLineNo">1488</span>    }<a name="line.1488"></a>
+<span class="sourceLineNo">1489</span>    /**<a name="line.1489"></a>
+<span class="sourceLineNo">1490</span>     * Inverse cosine function (arccos) but with output measured in turns instead of radians. Possible results for this<a name="line.1490"></a>
+<span class="sourceLineNo">1491</span>     * range from 0.0f (inclusive) to 0.5f (inclusive).<a name="line.1491"></a>
+<span class="sourceLineNo">1492</span>     * &lt;br&gt;<a name="line.1492"></a>
+<span class="sourceLineNo">1493</span>     * This method is much more precise than the non-turn approximation, but is about 3x slower.<a name="line.1493"></a>
+<span class="sourceLineNo">1494</span>     * @param n a float from -1.0f to 1.0f (both inclusive), usually the output of sin() or cos()<a name="line.1494"></a>
+<span class="sourceLineNo">1495</span>     * @return one of the values that would produce {@code n} if it were passed to {@link #cos_(float)}<a name="line.1495"></a>
+<span class="sourceLineNo">1496</span>     */<a name="line.1496"></a>
+<span class="sourceLineNo">1497</span>    public static float acos_(final float n)<a name="line.1497"></a>
+<span class="sourceLineNo">1498</span>    {<a name="line.1498"></a>
+<span class="sourceLineNo">1499</span>        if(n == 1.0f || n == -1.0f) return 0.0f;<a name="line.1499"></a>
+<span class="sourceLineNo">1500</span>        final float ax = Math.abs(n), ay = (float) Math.sqrt((1f + n) * (1f - n));<a name="line.1500"></a>
+<span class="sourceLineNo">1501</span>        if(ax &lt; ay)<a name="line.1501"></a>
+<span class="sourceLineNo">1502</span>        {<a name="line.1502"></a>
+<span class="sourceLineNo">1503</span>            final float a = ax / ay, s = a * a,<a name="line.1503"></a>
+<span class="sourceLineNo">1504</span>                    r = 0.25f - (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1504"></a>
+<span class="sourceLineNo">1505</span>            return (n &lt; 0.0f) ? 0.5f - r : r;<a name="line.1505"></a>
+<span class="sourceLineNo">1506</span>        }<a name="line.1506"></a>
+<span class="sourceLineNo">1507</span>        else {<a name="line.1507"></a>
+<span class="sourceLineNo">1508</span>            final float a = ax / ay, s = a * a,<a name="line.1508"></a>
+<span class="sourceLineNo">1509</span>                    r = (((-0.0464964749f * s + 0.15931422f) * s - 0.327622764f) * s * a + a) * 0.15915494309189535f;<a name="line.1509"></a>
+<span class="sourceLineNo">1510</span>            return (n &lt; 0.0f) ? 0.5f - r : r;<a name="line.1510"></a>
+<span class="sourceLineNo">1511</span>        }<a name="line.1511"></a>
+<span class="sourceLineNo">1512</span>    }<a name="line.1512"></a>
+<span class="sourceLineNo">1513</span>}<a name="line.1513"></a>
 
 
 

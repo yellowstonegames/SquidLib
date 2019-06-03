@@ -1780,14 +1780,24 @@
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#cos-double-">cos(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#cos-double-" title="class or interface in java.lang"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
- faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
- consider its more-precise and sometimes-faster MathUtils.cos() method.</div>
+ faster cos() calls in benchmarking; if you have access to libGDX you should consider its sometimes-more-precise
+ and sometimes-faster MathUtils.cos() method.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#cos-float-">cos(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
 <div class="block">A fairly-close approximation of <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#cos-double-" title="class or interface in java.lang"><code>Math.cos(double)</code></a> that can be significantly faster (between 8x and 80x
  faster cos() calls in benchmarking, and both takes and returns floats; if you have access to libGDX you should
  consider its more-precise and sometimes-faster MathUtils.cos() method.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#cos_-double-">cos_(double)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">A variation on <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#cos-double-" title="class or interface in java.lang"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians; one
+ turn is equal to 360 degrees or two*PI radians.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#cos_-float-">cos_(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
+<dd>
+<div class="block">A variation on <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Math.html?is-external=true#cos-double-" title="class or interface in java.lang"><code>Math.cos(double)</code></a> that takes its input as a fraction of a turn instead of in radians (it
+ also takes and returns a float); one turn is equal to 360 degrees or two*PI radians.</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../squidpony/squidmath/NumberTools.html#cosDegrees-float-">cosDegrees(float)</a></span> - Static method in class squidpony.squidmath.<a href="../squidpony/squidmath/NumberTools.html" title="class in squidpony.squidmath">NumberTools</a></dt>
 <dd>
@@ -2006,7 +2016,14 @@
  to 128 bits of salt values that help to obscure what hashing function is actually being used.</div>
 </dd>
 <dt><a href="../squidpony/squidmath/CrossHash.Sirocco.html" title="class in squidpony.squidmath"><span class="typeNameLink">CrossHash.Sirocco</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
-<dd>&nbsp;</dd>
+<dd>
+<div class="block">Pretty fast, but not GWT-optimized for 32-bit input and output like Hive.</div>
+</dd>
+<dt><a href="../squidpony/squidmath/CrossHash.Water.html" title="class in squidpony.squidmath"><span class="typeNameLink">CrossHash.Water</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
+<dd>
+<div class="block">Though still very much a work-in-progress, the int-hashing <a href="../squidpony/squidmath/CrossHash.Water.html#hash-int:A-"><code>CrossHash.Water.hash(int[])</code></a> method is almost twice as fast
+ as <a href="../squidpony/squidmath/CrossHash.html#hash-int:A-"><code>CrossHash.hash(int[])</code></a>.</div>
+</dd>
 <dt><a href="../squidpony/squidmath/CrossHash.Wisp.html" title="class in squidpony.squidmath"><span class="typeNameLink">CrossHash.Wisp</span></a> - Class in <a href="../squidpony/squidmath/package-summary.html">squidpony.squidmath</a></dt>
 <dd>
 <div class="block">The fastest hash in CrossHash, with middling quality.</div>
