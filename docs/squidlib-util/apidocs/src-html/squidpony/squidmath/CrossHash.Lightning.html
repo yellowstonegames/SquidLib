@@ -5606,169 +5606,201 @@
 <span class="sourceLineNo">5598</span>     * specifically &lt;a href="https://github.com/tommyettinger/waterhash"&gt;the waterhash variant&lt;/a&gt;. This should pass<a name="line.5598"></a>
 <span class="sourceLineNo">5599</span>     * SMHasher, but it has some differences from the waterhash version that is known to pass  SMHasher in how it<a name="line.5599"></a>
 <span class="sourceLineNo">5600</span>     * handles the upper 32 bits of the longs it uses internally. Uses 64-bit math, so it won't be as fast on GWT.<a name="line.5600"></a>
-<span class="sourceLineNo">5601</span>     */<a name="line.5601"></a>
-<span class="sourceLineNo">5602</span>    @Beta<a name="line.5602"></a>
-<span class="sourceLineNo">5603</span>    public static final class Water {<a name="line.5603"></a>
-<span class="sourceLineNo">5604</span>        private static final long<a name="line.5604"></a>
-<span class="sourceLineNo">5605</span>                p0 = 0xA0761D65L,<a name="line.5605"></a>
-<span class="sourceLineNo">5606</span>                p1 = 0xE7037ED1L,<a name="line.5606"></a>
-<span class="sourceLineNo">5607</span>                p2 = 0x8EBC6AF1L,<a name="line.5607"></a>
-<span class="sourceLineNo">5608</span>                p3 = 0x589965CDL,<a name="line.5608"></a>
-<span class="sourceLineNo">5609</span>                p4 = 0x1D8E4E27L,<a name="line.5609"></a>
-<span class="sourceLineNo">5610</span>                p5 = 0xEB44ACCBL;<a name="line.5610"></a>
-<span class="sourceLineNo">5611</span>        private static long mum(final long a, final long b)<a name="line.5611"></a>
-<span class="sourceLineNo">5612</span>        {<a name="line.5612"></a>
-<span class="sourceLineNo">5613</span>            final long n = a * b;<a name="line.5613"></a>
-<span class="sourceLineNo">5614</span>            return n - (n &gt;&gt;&gt; 32);<a name="line.5614"></a>
-<span class="sourceLineNo">5615</span>        }<a name="line.5615"></a>
-<span class="sourceLineNo">5616</span>        public static int hash(final short[] data) {<a name="line.5616"></a>
-<span class="sourceLineNo">5617</span>            if (data == null) return 0;<a name="line.5617"></a>
-<span class="sourceLineNo">5618</span>            long seed = p0;<a name="line.5618"></a>
-<span class="sourceLineNo">5619</span>            final int len = data.length;<a name="line.5619"></a>
-<span class="sourceLineNo">5620</span>            for (int i = 7; i &lt; len; i+=8) {<a name="line.5620"></a>
-<span class="sourceLineNo">5621</span>                seed = mum(<a name="line.5621"></a>
-<span class="sourceLineNo">5622</span>                        mum(data[i-7] ^ p1 ^ data[i-6] &lt;&lt; 8, data[i-5] ^ p2 ^ data[i-4] &lt;&lt; 8) + seed,<a name="line.5622"></a>
-<span class="sourceLineNo">5623</span>                        mum(data[i-3] ^ p3 ^ data[i-2] &lt;&lt; 8, data[i-1] ^ p4 ^ data[i  ] &lt;&lt; 8));<a name="line.5623"></a>
-<span class="sourceLineNo">5624</span>            }<a name="line.5624"></a>
-<span class="sourceLineNo">5625</span>            seed += p5;<a name="line.5625"></a>
-<span class="sourceLineNo">5626</span>            switch (len &amp; 7) {<a name="line.5626"></a>
-<span class="sourceLineNo">5627</span>                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;<a name="line.5627"></a>
-<span class="sourceLineNo">5628</span>                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;<a name="line.5628"></a>
-<span class="sourceLineNo">5629</span>                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p1 ^ data[len-1]); break;<a name="line.5629"></a>
-<span class="sourceLineNo">5630</span>                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] &lt;&lt; 8, p0 ^ data[len-2] ^ data[len-1] &lt;&lt; 8); break;<a name="line.5630"></a>
-<span class="sourceLineNo">5631</span>                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] &lt;&lt; 8, p2 ^ data[len-3] ^ data[len-2] &lt;&lt; 8) ^ mum(seed, p3 ^ data[len-1]); break;<a name="line.5631"></a>
-<span class="sourceLineNo">5632</span>                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] &lt;&lt; 8, p2 ^ data[len-4] ^ data[len-3] &lt;&lt; 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] &lt;&lt; 8); break;<a name="line.5632"></a>
-<span class="sourceLineNo">5633</span>                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] &lt;&lt; 8, p2 ^ data[len-5] ^ data[len-4] &lt;&lt; 8) ^ mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p4 ^ data[len-1]); break;<a name="line.5633"></a>
-<span class="sourceLineNo">5634</span>            }<a name="line.5634"></a>
-<span class="sourceLineNo">5635</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5635"></a>
-<span class="sourceLineNo">5636</span>        }<a name="line.5636"></a>
-<span class="sourceLineNo">5637</span>        public static int hash(final char[] data) {<a name="line.5637"></a>
-<span class="sourceLineNo">5638</span>            if (data == null) return 0;<a name="line.5638"></a>
-<span class="sourceLineNo">5639</span>            long seed = p0;<a name="line.5639"></a>
-<span class="sourceLineNo">5640</span>            final int len = data.length;<a name="line.5640"></a>
-<span class="sourceLineNo">5641</span>            for (int i = 7; i &lt; len; i+=8) {<a name="line.5641"></a>
-<span class="sourceLineNo">5642</span>                seed = mum(<a name="line.5642"></a>
-<span class="sourceLineNo">5643</span>                        mum(data[i-7] ^ p1 ^ data[i-6] &lt;&lt; 8, data[i-5] ^ p2 ^ data[i-4] &lt;&lt; 8) + seed,<a name="line.5643"></a>
-<span class="sourceLineNo">5644</span>                        mum(data[i-3] ^ p3 ^ data[i-2] &lt;&lt; 8, data[i-1] ^ p4 ^ data[i  ] &lt;&lt; 8));<a name="line.5644"></a>
-<span class="sourceLineNo">5645</span>            }<a name="line.5645"></a>
-<span class="sourceLineNo">5646</span>            seed += p5;<a name="line.5646"></a>
-<span class="sourceLineNo">5647</span>            switch (len &amp; 7) {<a name="line.5647"></a>
-<span class="sourceLineNo">5648</span>                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;<a name="line.5648"></a>
-<span class="sourceLineNo">5649</span>                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;<a name="line.5649"></a>
-<span class="sourceLineNo">5650</span>                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p1 ^ data[len-1]); break;<a name="line.5650"></a>
-<span class="sourceLineNo">5651</span>                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] &lt;&lt; 8, p0 ^ data[len-2] ^ data[len-1] &lt;&lt; 8); break;<a name="line.5651"></a>
-<span class="sourceLineNo">5652</span>                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] &lt;&lt; 8, p2 ^ data[len-3] ^ data[len-2] &lt;&lt; 8) ^ mum(seed, p3 ^ data[len-1]); break;<a name="line.5652"></a>
-<span class="sourceLineNo">5653</span>                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] &lt;&lt; 8, p2 ^ data[len-4] ^ data[len-3] &lt;&lt; 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] &lt;&lt; 8); break;<a name="line.5653"></a>
-<span class="sourceLineNo">5654</span>                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] &lt;&lt; 8, p2 ^ data[len-5] ^ data[len-4] &lt;&lt; 8) ^ mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p4 ^ data[len-1]); break;<a name="line.5654"></a>
-<span class="sourceLineNo">5655</span>            }<a name="line.5655"></a>
-<span class="sourceLineNo">5656</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5656"></a>
-<span class="sourceLineNo">5657</span>        }<a name="line.5657"></a>
-<span class="sourceLineNo">5658</span>        public static int hash(final CharSequence data) {<a name="line.5658"></a>
-<span class="sourceLineNo">5659</span>            if (data == null) return 0;<a name="line.5659"></a>
-<span class="sourceLineNo">5660</span>            long seed = p0;<a name="line.5660"></a>
-<span class="sourceLineNo">5661</span>            final int len = data.length();<a name="line.5661"></a>
-<span class="sourceLineNo">5662</span>            for (int i = 7; i &lt; len; i+=8) {<a name="line.5662"></a>
-<span class="sourceLineNo">5663</span>                seed = mum(<a name="line.5663"></a>
-<span class="sourceLineNo">5664</span>                        mum(data.charAt(i-7) ^ p1 ^ data.charAt(i-6) &lt;&lt; 8, data.charAt(i-5) ^ p2 ^ data.charAt(i-4) &lt;&lt; 8) + seed,<a name="line.5664"></a>
-<span class="sourceLineNo">5665</span>                        mum(data.charAt(i-3) ^ p3 ^ data.charAt(i-2) &lt;&lt; 8, data.charAt(i-1) ^ p4 ^ data.charAt(i  ) &lt;&lt; 8));<a name="line.5665"></a>
-<span class="sourceLineNo">5666</span>            }<a name="line.5666"></a>
-<span class="sourceLineNo">5667</span>            seed += p5;<a name="line.5667"></a>
-<span class="sourceLineNo">5668</span>            switch (len &amp; 7) {<a name="line.5668"></a>
-<span class="sourceLineNo">5669</span>                case 1: seed = mum(seed ^ p3, p4 ^ data.charAt(len-1)); break;<a name="line.5669"></a>
-<span class="sourceLineNo">5670</span>                case 2: seed = mum(seed ^ data.charAt(len-2), p3 ^ data.charAt(len-1)); break;<a name="line.5670"></a>
-<span class="sourceLineNo">5671</span>                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) &lt;&lt; 8, p1 ^ data.charAt(len-1)); break;<a name="line.5671"></a>
-<span class="sourceLineNo">5672</span>                case 4: seed = mum(seed ^ data.charAt(len-4) ^ data.charAt(len-3) &lt;&lt; 8, p0 ^ data.charAt(len-2) ^ data.charAt(len-1) &lt;&lt; 8); break;<a name="line.5672"></a>
-<span class="sourceLineNo">5673</span>                case 5: seed = mum(seed ^ data.charAt(len-5) ^ data.charAt(len-4) &lt;&lt; 8, p2 ^ data.charAt(len-3) ^ data.charAt(len-2) &lt;&lt; 8) ^ mum(seed, p3 ^ data.charAt(len-1)); break;<a name="line.5673"></a>
-<span class="sourceLineNo">5674</span>                case 6: seed = mum(seed ^ data.charAt(len-6) ^ data.charAt(len-5) &lt;&lt; 8, p2 ^ data.charAt(len-4) ^ data.charAt(len-3) &lt;&lt; 8) ^ mum(seed, p3 ^ data.charAt(len-2) ^ data.charAt(len-1) &lt;&lt; 8); break;<a name="line.5674"></a>
-<span class="sourceLineNo">5675</span>                case 7: seed = mum(seed ^ data.charAt(len-7) ^ data.charAt(len-6) &lt;&lt; 8, p2 ^ data.charAt(len-5) ^ data.charAt(len-4) &lt;&lt; 8) ^ mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) &lt;&lt; 8, p4 ^ data.charAt(len-1)); break;<a name="line.5675"></a>
-<span class="sourceLineNo">5676</span>            }<a name="line.5676"></a>
-<span class="sourceLineNo">5677</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5677"></a>
-<span class="sourceLineNo">5678</span>        }<a name="line.5678"></a>
-<span class="sourceLineNo">5679</span>        /*<a name="line.5679"></a>
-<span class="sourceLineNo">5680</span>        case 1:  seed = _watermum(_waterp2 ^ seed, _waterr08(p) ^ _waterp1); break;<a name="line.5680"></a>
-<span class="sourceLineNo">5681</span>        case 2:  seed = _watermum(_waterp3 ^ seed, _waterr16(p) ^ _waterp4); break;<a name="line.5681"></a>
-<span class="sourceLineNo">5682</span>        case 3:  seed = _watermum(_waterr16(p) ^ seed, _waterr08(p + 2) + _waterp3); break;<a name="line.5682"></a>
-<span class="sourceLineNo">5683</span>        case 4:  seed = _watermum(_waterr16(p) ^ seed, _waterr16(p + 2) ^ _waterp3); break;<a name="line.5683"></a>
-<span class="sourceLineNo">5684</span>        case 5:  seed = _watermum(_waterr16(p) ^ seed, (_waterr16(p + 2) &lt;&lt; 8 | _waterr08(p + 4)) ^ _waterp1); break;<a name="line.5684"></a>
-<span class="sourceLineNo">5685</span>        case 6:  seed = _watermum(_waterr32(p) ^ seed, _waterr16(p + 4) ^ _waterp1); break;<a name="line.5685"></a>
-<span class="sourceLineNo">5686</span>        case 7:  seed = _watermum(_waterr32(p) ^ seed, (_waterr16(p + 4) &lt;&lt; 8 | _waterr08(p + 6)) ^ _waterp1); break;<a name="line.5686"></a>
-<span class="sourceLineNo">5687</span>        case 8:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp0); break;<a name="line.5687"></a>
-<span class="sourceLineNo">5688</span>        case 9:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterp4, _waterr08(p + 8) ^ _waterp3); break;<a name="line.5688"></a>
-<span class="sourceLineNo">5689</span>        case 10: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr16(p + 8) ^ _waterp3); break;<a name="line.5689"></a>
-<span class="sourceLineNo">5690</span>        case 11: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, ((_waterr16(p + 8) &lt;&lt; 8) | _waterr08(p + 10)) ^ _waterp3); break;<a name="line.5690"></a>
-<span class="sourceLineNo">5691</span>        case 12: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr32(p + 8) ^ _waterp3); break;<a name="line.5691"></a>
-<span class="sourceLineNo">5692</span>        case 13: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr08(p + 12)) ^ _waterp4); break;<a name="line.5692"></a>
-<span class="sourceLineNo">5693</span>        case 14: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12)) ^ _waterp4); break;<a name="line.5693"></a>
-<span class="sourceLineNo">5694</span>        case 15: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12) &lt;&lt; 8 | _waterr08(p + 14)) ^ _waterp4); break;<a name="line.5694"></a>
-<span class="sourceLineNo">5695</span>         */<a name="line.5695"></a>
-<span class="sourceLineNo">5696</span>        public static int hash(final int[] data) {<a name="line.5696"></a>
-<span class="sourceLineNo">5697</span>            if (data == null) return 0;<a name="line.5697"></a>
-<span class="sourceLineNo">5698</span>            long seed = p0;<a name="line.5698"></a>
-<span class="sourceLineNo">5699</span>            final int len = data.length;<a name="line.5699"></a>
-<span class="sourceLineNo">5700</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5700"></a>
-<span class="sourceLineNo">5701</span>                seed = mum(<a name="line.5701"></a>
-<span class="sourceLineNo">5702</span>                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,<a name="line.5702"></a>
-<span class="sourceLineNo">5703</span>                        mum(data[i-1] ^ p3, data[i] ^ p4));<a name="line.5703"></a>
-<span class="sourceLineNo">5704</span>            }<a name="line.5704"></a>
-<span class="sourceLineNo">5705</span>            seed += p5;<a name="line.5705"></a>
-<span class="sourceLineNo">5706</span>            switch (len &amp; 3) {<a name="line.5706"></a>
-<span class="sourceLineNo">5707</span>                case 1: seed = mum(seed ^ (data[len-1] &gt;&gt;&gt; 16), p3 ^ (data[len-1] &amp; 0xFFFFL)); break;<a name="line.5707"></a>
-<span class="sourceLineNo">5708</span>                case 2: seed = mum(seed ^ data[len-2], p0 ^ data[len-1]); break;<a name="line.5708"></a>
-<span class="sourceLineNo">5709</span>                case 3: seed = mum(seed ^ data[len-3], p2 ^ data[len-2]) ^ mum(seed, p3 ^ data[len-1]); break;<a name="line.5709"></a>
-<span class="sourceLineNo">5710</span>            }<a name="line.5710"></a>
-<span class="sourceLineNo">5711</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5711"></a>
-<span class="sourceLineNo">5712</span>        }<a name="line.5712"></a>
-<span class="sourceLineNo">5713</span>        public static int hash(final long[] data) {<a name="line.5713"></a>
-<span class="sourceLineNo">5714</span>            if (data == null) return 0;<a name="line.5714"></a>
-<span class="sourceLineNo">5715</span>            long seed = p0;<a name="line.5715"></a>
-<span class="sourceLineNo">5716</span>            final int len = data.length;<a name="line.5716"></a>
-<span class="sourceLineNo">5717</span>            for (int i = 1; i &lt; len; i+=2) {<a name="line.5717"></a>
-<span class="sourceLineNo">5718</span>                seed = mum(<a name="line.5718"></a>
-<span class="sourceLineNo">5719</span>                        mum(data[i-1] &gt;&gt;&gt; 32 ^ p1, (data[i-1] &amp; 0xFFFFFFFFL) ^ p2) + seed,<a name="line.5719"></a>
-<span class="sourceLineNo">5720</span>                        mum(data[i] &gt;&gt;&gt; 32 ^ p3, (data[i] &amp; 0xFFFFFFFFL) ^ p4));<a name="line.5720"></a>
-<span class="sourceLineNo">5721</span>            }<a name="line.5721"></a>
-<span class="sourceLineNo">5722</span>            seed += p5;<a name="line.5722"></a>
-<span class="sourceLineNo">5723</span>            if ((len &amp; 1) == 1) {<a name="line.5723"></a>
-<span class="sourceLineNo">5724</span>                seed = mum(seed ^ data[len-1] &gt;&gt;&gt; 32, p0 ^ (data[len-1] &amp; 0xFFFFFFFFL));<a name="line.5724"></a>
-<span class="sourceLineNo">5725</span>            }<a name="line.5725"></a>
-<span class="sourceLineNo">5726</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5726"></a>
-<span class="sourceLineNo">5727</span>        }<a name="line.5727"></a>
-<span class="sourceLineNo">5728</span>        public static int hash(final float[] data) {<a name="line.5728"></a>
+<span class="sourceLineNo">5601</span>     * Currently, the methods that hash types other than int arrays aren't as fast as the int array hash, but they are<a name="line.5601"></a>
+<span class="sourceLineNo">5602</span>     * often faster than the default Hive implementation.<a name="line.5602"></a>
+<span class="sourceLineNo">5603</span>     */<a name="line.5603"></a>
+<span class="sourceLineNo">5604</span>    @Beta<a name="line.5604"></a>
+<span class="sourceLineNo">5605</span>    public static final class Water {<a name="line.5605"></a>
+<span class="sourceLineNo">5606</span>        private static final long<a name="line.5606"></a>
+<span class="sourceLineNo">5607</span>                p0 = 0xA0761D65L,<a name="line.5607"></a>
+<span class="sourceLineNo">5608</span>                p1 = 0xE7037ED1L,<a name="line.5608"></a>
+<span class="sourceLineNo">5609</span>                p2 = 0x8EBC6AF1L,<a name="line.5609"></a>
+<span class="sourceLineNo">5610</span>                p3 = 0x589965CDL,<a name="line.5610"></a>
+<span class="sourceLineNo">5611</span>                p4 = 0x1D8E4E27L,<a name="line.5611"></a>
+<span class="sourceLineNo">5612</span>                p5 = 0xEB44ACCBL;<a name="line.5612"></a>
+<span class="sourceLineNo">5613</span>        private static long mum(final long a, final long b)<a name="line.5613"></a>
+<span class="sourceLineNo">5614</span>        {<a name="line.5614"></a>
+<span class="sourceLineNo">5615</span>            final long n = a * b;<a name="line.5615"></a>
+<span class="sourceLineNo">5616</span>            return n - (n &gt;&gt;&gt; 32);<a name="line.5616"></a>
+<span class="sourceLineNo">5617</span>        }<a name="line.5617"></a>
+<span class="sourceLineNo">5618</span>        public static int hash(final byte[] data) {<a name="line.5618"></a>
+<span class="sourceLineNo">5619</span>            if (data == null) return 0;<a name="line.5619"></a>
+<span class="sourceLineNo">5620</span>            long seed = p0;<a name="line.5620"></a>
+<span class="sourceLineNo">5621</span>            final int len = data.length;<a name="line.5621"></a>
+<span class="sourceLineNo">5622</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5622"></a>
+<span class="sourceLineNo">5623</span>                seed = mum(<a name="line.5623"></a>
+<span class="sourceLineNo">5624</span>                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,<a name="line.5624"></a>
+<span class="sourceLineNo">5625</span>                        mum(data[i-1] ^ p3, data[i] ^ p4));<a name="line.5625"></a>
+<span class="sourceLineNo">5626</span>            }<a name="line.5626"></a>
+<span class="sourceLineNo">5627</span>            seed += p5;<a name="line.5627"></a>
+<span class="sourceLineNo">5628</span>            switch (len &amp; 3) {<a name="line.5628"></a>
+<span class="sourceLineNo">5629</span>                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;<a name="line.5629"></a>
+<span class="sourceLineNo">5630</span>                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;<a name="line.5630"></a>
+<span class="sourceLineNo">5631</span>                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p1 ^ data[len-1]); break;<a name="line.5631"></a>
+<span class="sourceLineNo">5632</span>            }<a name="line.5632"></a>
+<span class="sourceLineNo">5633</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5633"></a>
+<span class="sourceLineNo">5634</span>        }<a name="line.5634"></a>
+<span class="sourceLineNo">5635</span><a name="line.5635"></a>
+<span class="sourceLineNo">5636</span>        public static int hash(final short[] data) {<a name="line.5636"></a>
+<span class="sourceLineNo">5637</span>            if (data == null) return 0;<a name="line.5637"></a>
+<span class="sourceLineNo">5638</span>            long seed = p0;<a name="line.5638"></a>
+<span class="sourceLineNo">5639</span>            final int len = data.length;<a name="line.5639"></a>
+<span class="sourceLineNo">5640</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5640"></a>
+<span class="sourceLineNo">5641</span>                seed = mum(<a name="line.5641"></a>
+<span class="sourceLineNo">5642</span>                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,<a name="line.5642"></a>
+<span class="sourceLineNo">5643</span>                        mum(data[i-1] ^ p3, data[i] ^ p4));<a name="line.5643"></a>
+<span class="sourceLineNo">5644</span>            }<a name="line.5644"></a>
+<span class="sourceLineNo">5645</span>            seed += p5;<a name="line.5645"></a>
+<span class="sourceLineNo">5646</span>            switch (len &amp; 3) {<a name="line.5646"></a>
+<span class="sourceLineNo">5647</span>                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;<a name="line.5647"></a>
+<span class="sourceLineNo">5648</span>                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;<a name="line.5648"></a>
+<span class="sourceLineNo">5649</span>                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p1 ^ data[len-1]); break;<a name="line.5649"></a>
+<span class="sourceLineNo">5650</span>            }<a name="line.5650"></a>
+<span class="sourceLineNo">5651</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5651"></a>
+<span class="sourceLineNo">5652</span>        }<a name="line.5652"></a>
+<span class="sourceLineNo">5653</span><a name="line.5653"></a>
+<span class="sourceLineNo">5654</span>        public static int hash(final char[] data) {<a name="line.5654"></a>
+<span class="sourceLineNo">5655</span>            if (data == null) return 0;<a name="line.5655"></a>
+<span class="sourceLineNo">5656</span>            long seed = p0;<a name="line.5656"></a>
+<span class="sourceLineNo">5657</span>            final int len = data.length;<a name="line.5657"></a>
+<span class="sourceLineNo">5658</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5658"></a>
+<span class="sourceLineNo">5659</span>                seed = mum(<a name="line.5659"></a>
+<span class="sourceLineNo">5660</span>                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,<a name="line.5660"></a>
+<span class="sourceLineNo">5661</span>                        mum(data[i-1] ^ p3, data[i] ^ p4));<a name="line.5661"></a>
+<span class="sourceLineNo">5662</span>            }<a name="line.5662"></a>
+<span class="sourceLineNo">5663</span>            seed += p5;<a name="line.5663"></a>
+<span class="sourceLineNo">5664</span>            switch (len &amp; 3) {<a name="line.5664"></a>
+<span class="sourceLineNo">5665</span>                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;<a name="line.5665"></a>
+<span class="sourceLineNo">5666</span>                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;<a name="line.5666"></a>
+<span class="sourceLineNo">5667</span>                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p1 ^ data[len-1]); break;<a name="line.5667"></a>
+<span class="sourceLineNo">5668</span>            }<a name="line.5668"></a>
+<span class="sourceLineNo">5669</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5669"></a>
+<span class="sourceLineNo">5670</span>        }<a name="line.5670"></a>
+<span class="sourceLineNo">5671</span><a name="line.5671"></a>
+<span class="sourceLineNo">5672</span>        public static int hash(final CharSequence data) {<a name="line.5672"></a>
+<span class="sourceLineNo">5673</span>            if (data == null) return 0;<a name="line.5673"></a>
+<span class="sourceLineNo">5674</span>            long seed = p0;<a name="line.5674"></a>
+<span class="sourceLineNo">5675</span>            final int len = data.length();<a name="line.5675"></a>
+<span class="sourceLineNo">5676</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5676"></a>
+<span class="sourceLineNo">5677</span>                seed = mum(<a name="line.5677"></a>
+<span class="sourceLineNo">5678</span>                        mum(data.charAt(i-3) ^ p1, data.charAt(i-2) ^ p2) + seed,<a name="line.5678"></a>
+<span class="sourceLineNo">5679</span>                        mum(data.charAt(i-1) ^ p3, data.charAt(i  ) ^ p4));<a name="line.5679"></a>
+<span class="sourceLineNo">5680</span>            }<a name="line.5680"></a>
+<span class="sourceLineNo">5681</span>            seed += p5;<a name="line.5681"></a>
+<span class="sourceLineNo">5682</span>            switch (len &amp; 3) {<a name="line.5682"></a>
+<span class="sourceLineNo">5683</span>                case 1: seed = mum(seed ^ p3, p4 ^ data.charAt(len-1)); break;<a name="line.5683"></a>
+<span class="sourceLineNo">5684</span>                case 2: seed = mum(seed ^ data.charAt(len-2), p3 ^ data.charAt(len-1)); break;<a name="line.5684"></a>
+<span class="sourceLineNo">5685</span>                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) &lt;&lt; 8, p1 ^ data.charAt(len-1)); break;<a name="line.5685"></a>
+<span class="sourceLineNo">5686</span>            }<a name="line.5686"></a>
+<span class="sourceLineNo">5687</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5687"></a>
+<span class="sourceLineNo">5688</span>        }<a name="line.5688"></a>
+<span class="sourceLineNo">5689</span><a name="line.5689"></a>
+<span class="sourceLineNo">5690</span>        //        public static int hash(final short[] data) {<a name="line.5690"></a>
+<span class="sourceLineNo">5691</span>//            if (data == null) return 0;<a name="line.5691"></a>
+<span class="sourceLineNo">5692</span>//            long seed = p0;<a name="line.5692"></a>
+<span class="sourceLineNo">5693</span>//            final int len = data.length;<a name="line.5693"></a>
+<span class="sourceLineNo">5694</span>//            for (int i = 7; i &lt; len; i+=8) {<a name="line.5694"></a>
+<span class="sourceLineNo">5695</span>//                seed = mum(<a name="line.5695"></a>
+<span class="sourceLineNo">5696</span>//                        mum(data[i-7] ^ p1 ^ data[i-6] &lt;&lt; 8, data[i-5] ^ p2 ^ data[i-4] &lt;&lt; 8) + seed,<a name="line.5696"></a>
+<span class="sourceLineNo">5697</span>//                        mum(data[i-3] ^ p3 ^ data[i-2] &lt;&lt; 8, data[i-1] ^ p4 ^ data[i  ] &lt;&lt; 8));<a name="line.5697"></a>
+<span class="sourceLineNo">5698</span>//            }<a name="line.5698"></a>
+<span class="sourceLineNo">5699</span>//            seed += p5;<a name="line.5699"></a>
+<span class="sourceLineNo">5700</span>//            switch (len &amp; 7) {<a name="line.5700"></a>
+<span class="sourceLineNo">5701</span>//                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;<a name="line.5701"></a>
+<span class="sourceLineNo">5702</span>//                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;<a name="line.5702"></a>
+<span class="sourceLineNo">5703</span>//                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p1 ^ data[len-1]); break;<a name="line.5703"></a>
+<span class="sourceLineNo">5704</span>//                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] &lt;&lt; 8, p0 ^ data[len-2] ^ data[len-1] &lt;&lt; 8); break;<a name="line.5704"></a>
+<span class="sourceLineNo">5705</span>//                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] &lt;&lt; 8, p2 ^ data[len-3] ^ data[len-2] &lt;&lt; 8) ^ mum(seed, p3 ^ data[len-1]); break;<a name="line.5705"></a>
+<span class="sourceLineNo">5706</span>//                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] &lt;&lt; 8, p2 ^ data[len-4] ^ data[len-3] &lt;&lt; 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] &lt;&lt; 8); break;<a name="line.5706"></a>
+<span class="sourceLineNo">5707</span>//                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] &lt;&lt; 8, p2 ^ data[len-5] ^ data[len-4] &lt;&lt; 8) ^ mum(seed ^ data[len-3] ^ data[len-2] &lt;&lt; 8, p4 ^ data[len-1]); break;<a name="line.5707"></a>
+<span class="sourceLineNo">5708</span>//            }<a name="line.5708"></a>
+<span class="sourceLineNo">5709</span>//            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5709"></a>
+<span class="sourceLineNo">5710</span>//        }<a name="line.5710"></a>
+<span class="sourceLineNo">5711</span>        /*<a name="line.5711"></a>
+<span class="sourceLineNo">5712</span>        case 1:  seed = _watermum(_waterp2 ^ seed, _waterr08(p) ^ _waterp1); break;<a name="line.5712"></a>
+<span class="sourceLineNo">5713</span>        case 2:  seed = _watermum(_waterp3 ^ seed, _waterr16(p) ^ _waterp4); break;<a name="line.5713"></a>
+<span class="sourceLineNo">5714</span>        case 3:  seed = _watermum(_waterr16(p) ^ seed, _waterr08(p + 2) + _waterp3); break;<a name="line.5714"></a>
+<span class="sourceLineNo">5715</span>        case 4:  seed = _watermum(_waterr16(p) ^ seed, _waterr16(p + 2) ^ _waterp3); break;<a name="line.5715"></a>
+<span class="sourceLineNo">5716</span>        case 5:  seed = _watermum(_waterr16(p) ^ seed, (_waterr16(p + 2) &lt;&lt; 8 | _waterr08(p + 4)) ^ _waterp1); break;<a name="line.5716"></a>
+<span class="sourceLineNo">5717</span>        case 6:  seed = _watermum(_waterr32(p) ^ seed, _waterr16(p + 4) ^ _waterp1); break;<a name="line.5717"></a>
+<span class="sourceLineNo">5718</span>        case 7:  seed = _watermum(_waterr32(p) ^ seed, (_waterr16(p + 4) &lt;&lt; 8 | _waterr08(p + 6)) ^ _waterp1); break;<a name="line.5718"></a>
+<span class="sourceLineNo">5719</span>        case 8:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp0); break;<a name="line.5719"></a>
+<span class="sourceLineNo">5720</span>        case 9:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterp4, _waterr08(p + 8) ^ _waterp3); break;<a name="line.5720"></a>
+<span class="sourceLineNo">5721</span>        case 10: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr16(p + 8) ^ _waterp3); break;<a name="line.5721"></a>
+<span class="sourceLineNo">5722</span>        case 11: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, ((_waterr16(p + 8) &lt;&lt; 8) | _waterr08(p + 10)) ^ _waterp3); break;<a name="line.5722"></a>
+<span class="sourceLineNo">5723</span>        case 12: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr32(p + 8) ^ _waterp3); break;<a name="line.5723"></a>
+<span class="sourceLineNo">5724</span>        case 13: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr08(p + 12)) ^ _waterp4); break;<a name="line.5724"></a>
+<span class="sourceLineNo">5725</span>        case 14: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12)) ^ _waterp4); break;<a name="line.5725"></a>
+<span class="sourceLineNo">5726</span>        case 15: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12) &lt;&lt; 8 | _waterr08(p + 14)) ^ _waterp4); break;<a name="line.5726"></a>
+<span class="sourceLineNo">5727</span>         */<a name="line.5727"></a>
+<span class="sourceLineNo">5728</span>        public static int hash(final int[] data) {<a name="line.5728"></a>
 <span class="sourceLineNo">5729</span>            if (data == null) return 0;<a name="line.5729"></a>
 <span class="sourceLineNo">5730</span>            long seed = p0;<a name="line.5730"></a>
 <span class="sourceLineNo">5731</span>            final int len = data.length;<a name="line.5731"></a>
 <span class="sourceLineNo">5732</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5732"></a>
 <span class="sourceLineNo">5733</span>                seed = mum(<a name="line.5733"></a>
-<span class="sourceLineNo">5734</span>                        mum(floatToIntBits(data[i-3]) ^ p1, floatToIntBits(data[i-2]) ^ p2) + seed,<a name="line.5734"></a>
-<span class="sourceLineNo">5735</span>                        mum(floatToIntBits(data[i-1]) ^ p3, floatToIntBits(data[i]) ^ p4));<a name="line.5735"></a>
+<span class="sourceLineNo">5734</span>                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,<a name="line.5734"></a>
+<span class="sourceLineNo">5735</span>                        mum(data[i-1] ^ p3, data[i] ^ p4));<a name="line.5735"></a>
 <span class="sourceLineNo">5736</span>            }<a name="line.5736"></a>
 <span class="sourceLineNo">5737</span>            seed += p5;<a name="line.5737"></a>
 <span class="sourceLineNo">5738</span>            switch (len &amp; 3) {<a name="line.5738"></a>
-<span class="sourceLineNo">5739</span>                case 1: seed = mum(seed ^ (floatToIntBits(data[len-1]) &gt;&gt;&gt; 16), p3 ^ (floatToIntBits(data[len-1]) &amp; 0xFFFFL)); break;<a name="line.5739"></a>
-<span class="sourceLineNo">5740</span>                case 2: seed = mum(seed ^ floatToIntBits(data[len-2]), p0 ^ floatToIntBits(data[len-1])); break;<a name="line.5740"></a>
-<span class="sourceLineNo">5741</span>                case 3: seed = mum(seed ^ floatToIntBits(data[len-3]), p2 ^ floatToIntBits(data[len-2])) ^ mum(seed, p3 ^ floatToIntBits(data[len-1])); break;<a name="line.5741"></a>
+<span class="sourceLineNo">5739</span>                case 1: seed = mum(seed ^ (data[len-1] &gt;&gt;&gt; 16), p3 ^ (data[len-1] &amp; 0xFFFFL)); break;<a name="line.5739"></a>
+<span class="sourceLineNo">5740</span>                case 2: seed = mum(seed ^ data[len-2], p0 ^ data[len-1]); break;<a name="line.5740"></a>
+<span class="sourceLineNo">5741</span>                case 3: seed = mum(seed ^ data[len-3], p2 ^ data[len-2]) ^ mum(seed, p3 ^ data[len-1]); break;<a name="line.5741"></a>
 <span class="sourceLineNo">5742</span>            }<a name="line.5742"></a>
 <span class="sourceLineNo">5743</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5743"></a>
 <span class="sourceLineNo">5744</span>        }<a name="line.5744"></a>
-<span class="sourceLineNo">5745</span>        public static int hash(final double[] data) {<a name="line.5745"></a>
+<span class="sourceLineNo">5745</span>        public static int hash(final long[] data) {<a name="line.5745"></a>
 <span class="sourceLineNo">5746</span>            if (data == null) return 0;<a name="line.5746"></a>
 <span class="sourceLineNo">5747</span>            long seed = p0;<a name="line.5747"></a>
 <span class="sourceLineNo">5748</span>            final int len = data.length;<a name="line.5748"></a>
-<span class="sourceLineNo">5749</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5749"></a>
+<span class="sourceLineNo">5749</span>            for (int i = 1; i &lt; len; i+=2) {<a name="line.5749"></a>
 <span class="sourceLineNo">5750</span>                seed = mum(<a name="line.5750"></a>
-<span class="sourceLineNo">5751</span>                        mum(doubleToMixedIntBits(data[i-3]) ^ p1, doubleToMixedIntBits(data[i-2]) ^ p2) + seed,<a name="line.5751"></a>
-<span class="sourceLineNo">5752</span>                        mum(doubleToMixedIntBits(data[i-1]) ^ p3, doubleToMixedIntBits(data[i]) ^ p4));<a name="line.5752"></a>
+<span class="sourceLineNo">5751</span>                        mum(data[i-1] &gt;&gt;&gt; 32 ^ p1, (data[i-1] &amp; 0xFFFFFFFFL) ^ p2) + seed,<a name="line.5751"></a>
+<span class="sourceLineNo">5752</span>                        mum(data[i] &gt;&gt;&gt; 32 ^ p3, (data[i] &amp; 0xFFFFFFFFL) ^ p4));<a name="line.5752"></a>
 <span class="sourceLineNo">5753</span>            }<a name="line.5753"></a>
 <span class="sourceLineNo">5754</span>            seed += p5;<a name="line.5754"></a>
-<span class="sourceLineNo">5755</span>            switch (len &amp; 3) {<a name="line.5755"></a>
-<span class="sourceLineNo">5756</span>                case 1: seed = mum(seed ^ (doubleToMixedIntBits(data[len-1]) &gt;&gt;&gt; 16), p3 ^ (doubleToMixedIntBits(data[len-1]) &amp; 0xFFFFL)); break;<a name="line.5756"></a>
-<span class="sourceLineNo">5757</span>                case 2: seed = mum(seed ^ doubleToMixedIntBits(data[len-2]), p0 ^ doubleToMixedIntBits(data[len-1])); break;<a name="line.5757"></a>
-<span class="sourceLineNo">5758</span>                case 3: seed = mum(seed ^ doubleToMixedIntBits(data[len-3]), p2 ^ doubleToMixedIntBits(data[len-2])) ^ mum(seed, p3 ^ doubleToMixedIntBits(data[len-1])); break;<a name="line.5758"></a>
-<span class="sourceLineNo">5759</span>            }<a name="line.5759"></a>
-<span class="sourceLineNo">5760</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5760"></a>
-<span class="sourceLineNo">5761</span>        }<a name="line.5761"></a>
-<span class="sourceLineNo">5762</span>    }<a name="line.5762"></a>
-<span class="sourceLineNo">5763</span>}<a name="line.5763"></a>
+<span class="sourceLineNo">5755</span>            if ((len &amp; 1) == 1) {<a name="line.5755"></a>
+<span class="sourceLineNo">5756</span>                seed = mum(seed ^ data[len-1] &gt;&gt;&gt; 32, p0 ^ (data[len-1] &amp; 0xFFFFFFFFL));<a name="line.5756"></a>
+<span class="sourceLineNo">5757</span>            }<a name="line.5757"></a>
+<span class="sourceLineNo">5758</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5758"></a>
+<span class="sourceLineNo">5759</span>        }<a name="line.5759"></a>
+<span class="sourceLineNo">5760</span>        public static int hash(final float[] data) {<a name="line.5760"></a>
+<span class="sourceLineNo">5761</span>            if (data == null) return 0;<a name="line.5761"></a>
+<span class="sourceLineNo">5762</span>            long seed = p0;<a name="line.5762"></a>
+<span class="sourceLineNo">5763</span>            final int len = data.length;<a name="line.5763"></a>
+<span class="sourceLineNo">5764</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5764"></a>
+<span class="sourceLineNo">5765</span>                seed = mum(<a name="line.5765"></a>
+<span class="sourceLineNo">5766</span>                        mum(floatToIntBits(data[i-3]) ^ p1, floatToIntBits(data[i-2]) ^ p2) + seed,<a name="line.5766"></a>
+<span class="sourceLineNo">5767</span>                        mum(floatToIntBits(data[i-1]) ^ p3, floatToIntBits(data[i]) ^ p4));<a name="line.5767"></a>
+<span class="sourceLineNo">5768</span>            }<a name="line.5768"></a>
+<span class="sourceLineNo">5769</span>            seed += p5;<a name="line.5769"></a>
+<span class="sourceLineNo">5770</span>            switch (len &amp; 3) {<a name="line.5770"></a>
+<span class="sourceLineNo">5771</span>                case 1: seed = mum(seed ^ (floatToIntBits(data[len-1]) &gt;&gt;&gt; 16), p3 ^ (floatToIntBits(data[len-1]) &amp; 0xFFFFL)); break;<a name="line.5771"></a>
+<span class="sourceLineNo">5772</span>                case 2: seed = mum(seed ^ floatToIntBits(data[len-2]), p0 ^ floatToIntBits(data[len-1])); break;<a name="line.5772"></a>
+<span class="sourceLineNo">5773</span>                case 3: seed = mum(seed ^ floatToIntBits(data[len-3]), p2 ^ floatToIntBits(data[len-2])) ^ mum(seed, p3 ^ floatToIntBits(data[len-1])); break;<a name="line.5773"></a>
+<span class="sourceLineNo">5774</span>            }<a name="line.5774"></a>
+<span class="sourceLineNo">5775</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5775"></a>
+<span class="sourceLineNo">5776</span>        }<a name="line.5776"></a>
+<span class="sourceLineNo">5777</span>        public static int hash(final double[] data) {<a name="line.5777"></a>
+<span class="sourceLineNo">5778</span>            if (data == null) return 0;<a name="line.5778"></a>
+<span class="sourceLineNo">5779</span>            long seed = p0;<a name="line.5779"></a>
+<span class="sourceLineNo">5780</span>            final int len = data.length;<a name="line.5780"></a>
+<span class="sourceLineNo">5781</span>            for (int i = 3; i &lt; len; i+=4) {<a name="line.5781"></a>
+<span class="sourceLineNo">5782</span>                seed = mum(<a name="line.5782"></a>
+<span class="sourceLineNo">5783</span>                        mum(doubleToMixedIntBits(data[i-3]) ^ p1, doubleToMixedIntBits(data[i-2]) ^ p2) + seed,<a name="line.5783"></a>
+<span class="sourceLineNo">5784</span>                        mum(doubleToMixedIntBits(data[i-1]) ^ p3, doubleToMixedIntBits(data[i]) ^ p4));<a name="line.5784"></a>
+<span class="sourceLineNo">5785</span>            }<a name="line.5785"></a>
+<span class="sourceLineNo">5786</span>            seed += p5;<a name="line.5786"></a>
+<span class="sourceLineNo">5787</span>            switch (len &amp; 3) {<a name="line.5787"></a>
+<span class="sourceLineNo">5788</span>                case 1: seed = mum(seed ^ (doubleToMixedIntBits(data[len-1]) &gt;&gt;&gt; 16), p3 ^ (doubleToMixedIntBits(data[len-1]) &amp; 0xFFFFL)); break;<a name="line.5788"></a>
+<span class="sourceLineNo">5789</span>                case 2: seed = mum(seed ^ doubleToMixedIntBits(data[len-2]), p0 ^ doubleToMixedIntBits(data[len-1])); break;<a name="line.5789"></a>
+<span class="sourceLineNo">5790</span>                case 3: seed = mum(seed ^ doubleToMixedIntBits(data[len-3]), p2 ^ doubleToMixedIntBits(data[len-2])) ^ mum(seed, p3 ^ doubleToMixedIntBits(data[len-1])); break;<a name="line.5790"></a>
+<span class="sourceLineNo">5791</span>            }<a name="line.5791"></a>
+<span class="sourceLineNo">5792</span>            return (int) mum(seed ^ seed &lt;&lt; 16, len ^ p5);<a name="line.5792"></a>
+<span class="sourceLineNo">5793</span>        }<a name="line.5793"></a>
+<span class="sourceLineNo">5794</span>    }<a name="line.5794"></a>
+<span class="sourceLineNo">5795</span>}<a name="line.5795"></a>
 
 
 

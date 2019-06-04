@@ -197,7 +197,7 @@ import java.util.concurrent.TimeUnit;
 public class HashBenchmark {
     @State(Scope.Thread)
     public static class BenchmarkState {
-        public String[] words;
+        public CharSequence[] words;
         public char[][] chars;
         public long[][] longs;
         public int[][] ints;
@@ -260,7 +260,7 @@ public class HashBenchmark {
             for (int i = 0; i < 16; i++) {
                 languages[i] = FakeLanguageGen.randomLanguage(random.nextLong()).addAccents(0.8, 0.6);
             }
-            words = new String[4096];
+            words = new CharSequence[4096];
             chars = new char[4096][];
             longs = new long[4096][];
             ints = new int[4096][];
@@ -268,7 +268,9 @@ public class HashBenchmark {
                 intInputs[i] = (int)(longInputs[i] = random.nextLong());
             }
             for (int i = 0; i < 4096; i++) {
-                chars[i] = (words[i] = languages[i & 15].word(random.nextLong(), random.nextLong() < 0, random.next(3)+1)).toCharArray();
+                String w = languages[i & 15].word(random.nextLong(), random.nextLong() < 0, random.next(3)+1);
+                chars[i] = w.toCharArray();
+                words[i] = new StringBuilder(w);
                 final int len = (random.next(8)+9);
                 long[] lon = new long[len];
                 int[] inn = new int[len];
@@ -569,7 +571,7 @@ public class HashBenchmark {
     {
         return CrossHash.Water.hash(state.ints[state.idx = state.idx + 1 & 4095]);
     }
-    
+
     @Benchmark
     public int doCharWater32(BenchmarkState state)
     {
@@ -582,16 +584,28 @@ public class HashBenchmark {
         return CrossHash.Water.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
+//    @Benchmark
+//    public int doWater32_(BenchmarkState state)
+//    {
+//        return CrossHash.Water.hash_(state.words[state.idx = state.idx + 1 & 4095]);
+//    }
+//
+//    @Benchmark
+//    public int doCharWater32_(BenchmarkState state)
+//    {
+//        return CrossHash.Water.hash_(state.chars[state.idx = state.idx + 1 & 4095]);
+//    }
+
     @Benchmark
     public int doJDK32(BenchmarkState state)
     {
-        return state.words[state.idx = state.idx + 1 & 4095].hashCode();
+        return hashCode(state.words[state.idx = state.idx + 1 & 4095]);
     }
 
     @Benchmark
     public int doJDK32Mixed(BenchmarkState state)
     {
-        return HashCommon.mix(state.words[state.idx = state.idx + 1 & 4095].hashCode());
+        return HashCommon.mix(hashCode(state.words[state.idx = state.idx + 1 & 4095]));
     }
 
     @Benchmark
@@ -679,5 +693,19 @@ public class HashBenchmark {
         new Runner(opt).run();
     }
 
+    /**
+     * Acts like {@link Arrays#hashCode(char[])} but works on any CharSequence, including StringBuilder (which doesn't
+     * have a hashCode() implementation of its own).
+     * @param chars any CharSequence
+     * @return a 32-bit hash of {@code chars}
+     */
+    public static int hashCode(CharSequence chars) {
+        if (chars == null) return 0;
+        int result = 1;
+        final int len = chars.length();
+        for (int i = 0; i < len; i++)
+            result = 31 * result + chars.charAt(i);
+        return result;
+    }
 
 }

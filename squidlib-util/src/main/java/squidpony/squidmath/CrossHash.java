@@ -5598,6 +5598,8 @@ public class CrossHash {
      * specifically <a href="https://github.com/tommyettinger/waterhash">the waterhash variant</a>. This should pass
      * SMHasher, but it has some differences from the waterhash version that is known to pass  SMHasher in how it
      * handles the upper 32 bits of the longs it uses internally. Uses 64-bit math, so it won't be as fast on GWT.
+     * Currently, the methods that hash types other than int arrays aren't as fast as the int array hash, but they are
+     * often faster than the default Hive implementation.
      */
     @Beta
     public static final class Water {
@@ -5613,69 +5615,99 @@ public class CrossHash {
             final long n = a * b;
             return n - (n >>> 32);
         }
+        public static int hash(final byte[] data) {
+            if (data == null) return 0;
+            long seed = p0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = mum(
+                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,
+                        mum(data[i-1] ^ p3, data[i] ^ p4));
+            }
+            seed += p5;
+            switch (len & 3) {
+                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;
+                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, p1 ^ data[len-1]); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ p5);
+        }
+
         public static int hash(final short[] data) {
             if (data == null) return 0;
             long seed = p0;
             final int len = data.length;
-            for (int i = 7; i < len; i+=8) {
+            for (int i = 3; i < len; i+=4) {
                 seed = mum(
-                        mum(data[i-7] ^ p1 ^ data[i-6] << 8, data[i-5] ^ p2 ^ data[i-4] << 8) + seed,
-                        mum(data[i-3] ^ p3 ^ data[i-2] << 8, data[i-1] ^ p4 ^ data[i  ] << 8));
+                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,
+                        mum(data[i-1] ^ p3, data[i] ^ p4));
             }
             seed += p5;
-            switch (len & 7) {
+            switch (len & 3) {
                 case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;
                 case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, p1 ^ data[len-1]); break;
-                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] << 8, p0 ^ data[len-2] ^ data[len-1] << 8); break;
-                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] << 8, p2 ^ data[len-3] ^ data[len-2] << 8) ^ mum(seed, p3 ^ data[len-1]); break;
-                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] << 8, p2 ^ data[len-4] ^ data[len-3] << 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] << 8); break;
-                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] << 8, p2 ^ data[len-5] ^ data[len-4] << 8) ^ mum(seed ^ data[len-3] ^ data[len-2] << 8, p4 ^ data[len-1]); break;
             }
             return (int) mum(seed ^ seed << 16, len ^ p5);
         }
+
         public static int hash(final char[] data) {
             if (data == null) return 0;
             long seed = p0;
             final int len = data.length;
-            for (int i = 7; i < len; i+=8) {
+            for (int i = 3; i < len; i+=4) {
                 seed = mum(
-                        mum(data[i-7] ^ p1 ^ data[i-6] << 8, data[i-5] ^ p2 ^ data[i-4] << 8) + seed,
-                        mum(data[i-3] ^ p3 ^ data[i-2] << 8, data[i-1] ^ p4 ^ data[i  ] << 8));
+                        mum(data[i-3] ^ p1, data[i-2] ^ p2) + seed,
+                        mum(data[i-1] ^ p3, data[i] ^ p4));
             }
             seed += p5;
-            switch (len & 7) {
+            switch (len & 3) {
                 case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;
                 case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;
                 case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, p1 ^ data[len-1]); break;
-                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] << 8, p0 ^ data[len-2] ^ data[len-1] << 8); break;
-                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] << 8, p2 ^ data[len-3] ^ data[len-2] << 8) ^ mum(seed, p3 ^ data[len-1]); break;
-                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] << 8, p2 ^ data[len-4] ^ data[len-3] << 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] << 8); break;
-                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] << 8, p2 ^ data[len-5] ^ data[len-4] << 8) ^ mum(seed ^ data[len-3] ^ data[len-2] << 8, p4 ^ data[len-1]); break;
             }
             return (int) mum(seed ^ seed << 16, len ^ p5);
         }
+
         public static int hash(final CharSequence data) {
             if (data == null) return 0;
             long seed = p0;
             final int len = data.length();
-            for (int i = 7; i < len; i+=8) {
+            for (int i = 3; i < len; i+=4) {
                 seed = mum(
-                        mum(data.charAt(i-7) ^ p1 ^ data.charAt(i-6) << 8, data.charAt(i-5) ^ p2 ^ data.charAt(i-4) << 8) + seed,
-                        mum(data.charAt(i-3) ^ p3 ^ data.charAt(i-2) << 8, data.charAt(i-1) ^ p4 ^ data.charAt(i  ) << 8));
+                        mum(data.charAt(i-3) ^ p1, data.charAt(i-2) ^ p2) + seed,
+                        mum(data.charAt(i-1) ^ p3, data.charAt(i  ) ^ p4));
             }
             seed += p5;
-            switch (len & 7) {
+            switch (len & 3) {
                 case 1: seed = mum(seed ^ p3, p4 ^ data.charAt(len-1)); break;
                 case 2: seed = mum(seed ^ data.charAt(len-2), p3 ^ data.charAt(len-1)); break;
                 case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, p1 ^ data.charAt(len-1)); break;
-                case 4: seed = mum(seed ^ data.charAt(len-4) ^ data.charAt(len-3) << 8, p0 ^ data.charAt(len-2) ^ data.charAt(len-1) << 8); break;
-                case 5: seed = mum(seed ^ data.charAt(len-5) ^ data.charAt(len-4) << 8, p2 ^ data.charAt(len-3) ^ data.charAt(len-2) << 8) ^ mum(seed, p3 ^ data.charAt(len-1)); break;
-                case 6: seed = mum(seed ^ data.charAt(len-6) ^ data.charAt(len-5) << 8, p2 ^ data.charAt(len-4) ^ data.charAt(len-3) << 8) ^ mum(seed, p3 ^ data.charAt(len-2) ^ data.charAt(len-1) << 8); break;
-                case 7: seed = mum(seed ^ data.charAt(len-7) ^ data.charAt(len-6) << 8, p2 ^ data.charAt(len-5) ^ data.charAt(len-4) << 8) ^ mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, p4 ^ data.charAt(len-1)); break;
             }
             return (int) mum(seed ^ seed << 16, len ^ p5);
         }
+
+        //        public static int hash(final short[] data) {
+//            if (data == null) return 0;
+//            long seed = p0;
+//            final int len = data.length;
+//            for (int i = 7; i < len; i+=8) {
+//                seed = mum(
+//                        mum(data[i-7] ^ p1 ^ data[i-6] << 8, data[i-5] ^ p2 ^ data[i-4] << 8) + seed,
+//                        mum(data[i-3] ^ p3 ^ data[i-2] << 8, data[i-1] ^ p4 ^ data[i  ] << 8));
+//            }
+//            seed += p5;
+//            switch (len & 7) {
+//                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;
+//                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;
+//                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, p1 ^ data[len-1]); break;
+//                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] << 8, p0 ^ data[len-2] ^ data[len-1] << 8); break;
+//                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] << 8, p2 ^ data[len-3] ^ data[len-2] << 8) ^ mum(seed, p3 ^ data[len-1]); break;
+//                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] << 8, p2 ^ data[len-4] ^ data[len-3] << 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] << 8); break;
+//                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] << 8, p2 ^ data[len-5] ^ data[len-4] << 8) ^ mum(seed ^ data[len-3] ^ data[len-2] << 8, p4 ^ data[len-1]); break;
+//            }
+//            return (int) mum(seed ^ seed << 16, len ^ p5);
+//        }
         /*
 	case 1:  seed = _watermum(_waterp2 ^ seed, _waterr08(p) ^ _waterp1); break;
 	case 2:  seed = _watermum(_waterp3 ^ seed, _waterr16(p) ^ _waterp4); break;
