@@ -559,10 +559,29 @@ public class HashBenchmark {
     }
 
     @Benchmark
+    public int doWater32(BenchmarkState state)
+    {
+        return CrossHash.Water.hash(state.words[state.idx = state.idx + 1 & 4095]);
+    }
+    
+    @Benchmark
     public int doIntWater32(BenchmarkState state)
     {
-        return CrossHash.Sirocco.water(state.ints[state.idx = state.idx + 1 & 4095]);
+        return CrossHash.Water.hash(state.ints[state.idx = state.idx + 1 & 4095]);
     }
+    
+    @Benchmark
+    public int doCharWater32(BenchmarkState state)
+    {
+        return CrossHash.Water.hash(state.chars[state.idx = state.idx + 1 & 4095]);
+    }
+    
+    @Benchmark
+    public int doLongWater32(BenchmarkState state)
+    {
+        return CrossHash.Water.hash(state.longs[state.idx = state.idx + 1 & 4095]);
+    }
+
     @Benchmark
     public int doJDK32(BenchmarkState state)
     {
@@ -586,7 +605,18 @@ public class HashBenchmark {
     {
         return HashCommon.mix(Arrays.hashCode(state.chars[state.idx = state.idx + 1 & 4095]));
     }
-    
+    @Benchmark
+    public int doIntJDK32(BenchmarkState state)
+    {
+        return Arrays.hashCode(state.ints[state.idx = state.idx + 1 & 4095]);
+    }
+
+    @Benchmark
+    public int doIntJDK32Mixed(BenchmarkState state)
+    {
+        return HashCommon.mix(Arrays.hashCode(state.ints[state.idx = state.idx + 1 & 4095]));
+    }
+
     @Benchmark
     public int doLongJDK32(BenchmarkState state)
     {

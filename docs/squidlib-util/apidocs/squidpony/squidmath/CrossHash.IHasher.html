@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public static interface <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.819">CrossHash.IHasher</a>
+<pre>public static interface <a href="../../src-html/squidpony/squidmath/CrossHash.html#line.822">CrossHash.IHasher</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a></pre>
 <div class="block">An interface that can be used to move the logic for the hashCode() and equals() methods from a class' methods to
  an implementation of IHasher that certain collections in SquidLib can use. Primarily useful when the key type is
@@ -176,7 +176,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.
 <ul class="blockList">
 <li class="blockList">
 <h4>hash</h4>
-<pre>int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.829">hash</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
+<pre>int&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.832">hash</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;data)</pre>
 <div class="block">If data is a type that this IHasher can specifically hash, this method should use that specific hash; in
  other situations, it should simply delegate to calling <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang"><code>Object.hashCode()</code></a> on data. The body of an
  implementation of this method can be very small; for an IHasher that is meant for byte arrays, the body could
@@ -195,7 +195,7 @@ extends <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializable.
 <ul class="blockListLast">
 <li class="blockList">
 <h4>areEqual</h4>
-<pre>boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.851">areEqual</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
+<pre>boolean&nbsp;<a href="../../src-html/squidpony/squidmath/CrossHash.IHasher.html#line.854">areEqual</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;left,
                  <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;right)</pre>
 <div class="block">Not all types you might want to use an IHasher on meaningfully implement .equals(), such as array types; in
  these situations the areEqual method helps quickly check for equality by potentially having special logic for

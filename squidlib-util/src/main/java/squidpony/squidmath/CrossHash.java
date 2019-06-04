@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static squidpony.squidmath.NumberTools.doubleToMixedIntBits;
+import static squidpony.squidmath.NumberTools.floatToIntBits;
+
 /**
  * Simple hashing functions that we can rely on staying the same cross-platform.
  * The static methods of this class (not its inner classes) use a custom algorithm
@@ -213,7 +216,7 @@ public class CrossHash {
         long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
         final int len = data.length;
         for (int i = 0; i < len; i++) {
-            result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+            result ^= (z += (floatToIntBits(data[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
             result = (result << 54 | result >>> 10);
         }
         result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
@@ -560,7 +563,7 @@ public class CrossHash {
         int result = 0x1A976FDF, z = 0x60642E25;
         final int len = data.length;
         for (int i = 0; i < len; i++) {
-            result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0xC3564E95) * 0x9E375);
+            result ^= (z += (floatToIntBits(data[i]) ^ 0xC3564E95) * 0x9E375);
             z ^= (result = (result << 20 | result >>> 12));
         }
         result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
@@ -1422,7 +1425,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
             return result ^ Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58));
         }
@@ -1612,7 +1615,7 @@ public class CrossHash {
                 return 0;
             long z = 0x632BE59BD9B4E019L, result = 1L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
+                result ^= (z += (floatToIntBits(data[i]) + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
             }
             return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
         }
@@ -1823,7 +1826,7 @@ public class CrossHash {
                 return 0;
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+                result ^= (z += (floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
             }
             result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
             return (result ^ result >>> 25 ^ z ^ z >>> 29);
@@ -2028,7 +2031,7 @@ public class CrossHash {
                 return 0;
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
             for (int i = 0; i < data.length; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+                result ^= (z += (floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
             }
             result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
             return (int)(result ^ result >>> 25 ^ z ^ z >>> 29);
@@ -2264,7 +2267,7 @@ public class CrossHash {
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i]));
+                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i]));
             }
             return result * (a | 1L) ^ (result << 37 | result >>> 27);
         }
@@ -2498,7 +2501,7 @@ public class CrossHash {
             int result = 0x9E3779B9, a = 0x632BE5AB;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x85157AF5 * NumberTools.floatToIntBits(data[i]));
+                result += (a ^= 0x85157AF5 * floatToIntBits(data[i]));
             }
             return result * (a | 1) ^ (result >>> 11 | result << 21);
         }
@@ -2712,7 +2715,7 @@ public class CrossHash {
             long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i]));
+                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i]));
             }
             return (int)(result * (a | 1L) ^ (result << 37 | result >>> 27));
         }
@@ -3057,7 +3060,7 @@ public class CrossHash {
             final int len = data.length;
             long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i])) ^ $l2 * a + $l1;
             }
             return result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27);
         }
@@ -3271,7 +3274,7 @@ public class CrossHash {
             final int len = data.length;
             long result = 0x9E3779B97F4A7C94L + $l2, a = 0x632BE59BD9B4E019L;
             for (int i = 0; i < len; i++) {
-                result += (a ^= 0x8329C6EB9E6AD3E3L * NumberTools.floatToIntBits(data[i])) ^ $l2 * a + $l1;
+                result += (a ^= 0x8329C6EB9E6AD3E3L * floatToIntBits(data[i])) ^ $l2 * a + $l1;
             }
             return (int)(result * (a * $l1 | 1L) ^ (result << 37 | result >>> 27));
         }
@@ -3538,7 +3541,7 @@ public class CrossHash {
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+                result ^= (z += (floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
             }
             result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
             result ^= result >>> 25 ^ z ^ z >>> 29;
@@ -3899,7 +3902,7 @@ public class CrossHash {
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
+                result ^= (z += (floatToIntBits(data[i]) ^ 0x9E3779B97F4A7C15L) * 0xC6BC279692B5CC83L);
             }
             result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
             result ^= result >>> 25 ^ z ^ z >>> 29;
@@ -4291,7 +4294,7 @@ public class CrossHash {
             long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+                result ^= (z += (floatToIntBits(data[i]) ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
                 result = (result << 54 | result >>> 10);
             }
             result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
@@ -4638,7 +4641,7 @@ public class CrossHash {
             int result = 0x1A976FDF, z = 0x60642E25;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (z += (NumberTools.floatToIntBits(data[i]) ^ 0xC3564E95) * 0x9E375);
+                result ^= (z += (floatToIntBits(data[i]) ^ 0xC3564E95) * 0x9E375);
                 z ^= (result = (result << 20 | result >>> 12));
             }
             result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
@@ -4995,7 +4998,7 @@ public class CrossHash {
             final int len = data.length;
             long a = len;
             for (int i = 0; i < len; i++) {
-                a += (NumberTools.floatToIntBits(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L;
+                a += (floatToIntBits(data[i]) ^ 0xDB4F0B9175AE2165L) * 0xD1B54A32D192ED03L;
                 a = (a << 17 | a >>> 47);
             }
             a = (a ^ (a << 41 | a >>> 23) ^ (a << 17 | a >>> 47)) * 0xAEF17502108EF2D9L;
@@ -5340,7 +5343,7 @@ public class CrossHash {
             int result = 0x1A976FDF, run = 0x60642E25;
             final int len = data.length;
             for (int i = 0; i < len; i++) {
-                result ^= (run += (NumberTools.floatToIntBits(data[i]) ^ 0xC3564E95) * 0x9E375);
+                result ^= (run += (floatToIntBits(data[i]) ^ 0xC3564E95) * 0x9E375);
                 run ^= (result = (result << 20 | result >>> 12));
             }
             result += (run ^ run >>> 15 ^ 0xAE932BD5) * 0x632B9;
@@ -5610,9 +5613,88 @@ public class CrossHash {
             final long n = a * b;
             return n - (n >>> 32);
         }
+        public static int hash(final short[] data) {
+            if (data == null) return 0;
+            long seed = p0;
+            final int len = data.length;
+            for (int i = 7; i < len; i+=8) {
+                seed = mum(
+                        mum(data[i-7] ^ p1 ^ data[i-6] << 8, data[i-5] ^ p2 ^ data[i-4] << 8) + seed,
+                        mum(data[i-3] ^ p3 ^ data[i-2] << 8, data[i-1] ^ p4 ^ data[i  ] << 8));
+            }
+            seed += p5;
+            switch (len & 7) {
+                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;
+                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, p1 ^ data[len-1]); break;
+                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] << 8, p0 ^ data[len-2] ^ data[len-1] << 8); break;
+                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] << 8, p2 ^ data[len-3] ^ data[len-2] << 8) ^ mum(seed, p3 ^ data[len-1]); break;
+                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] << 8, p2 ^ data[len-4] ^ data[len-3] << 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] << 8); break;
+                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] << 8, p2 ^ data[len-5] ^ data[len-4] << 8) ^ mum(seed ^ data[len-3] ^ data[len-2] << 8, p4 ^ data[len-1]); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ p5);
+        }
+        public static int hash(final char[] data) {
+            if (data == null) return 0;
+            long seed = p0;
+            final int len = data.length;
+            for (int i = 7; i < len; i+=8) {
+                seed = mum(
+                        mum(data[i-7] ^ p1 ^ data[i-6] << 8, data[i-5] ^ p2 ^ data[i-4] << 8) + seed,
+                        mum(data[i-3] ^ p3 ^ data[i-2] << 8, data[i-1] ^ p4 ^ data[i  ] << 8));
+            }
+            seed += p5;
+            switch (len & 7) {
+                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;
+                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, p1 ^ data[len-1]); break;
+                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] << 8, p0 ^ data[len-2] ^ data[len-1] << 8); break;
+                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] << 8, p2 ^ data[len-3] ^ data[len-2] << 8) ^ mum(seed, p3 ^ data[len-1]); break;
+                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] << 8, p2 ^ data[len-4] ^ data[len-3] << 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] << 8); break;
+                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] << 8, p2 ^ data[len-5] ^ data[len-4] << 8) ^ mum(seed ^ data[len-3] ^ data[len-2] << 8, p4 ^ data[len-1]); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ p5);
+        }
+        public static int hash(final CharSequence data) {
+            if (data == null) return 0;
+            long seed = p0;
+            final int len = data.length();
+            for (int i = 7; i < len; i+=8) {
+                seed = mum(
+                        mum(data.charAt(i-7) ^ p1 ^ data.charAt(i-6) << 8, data.charAt(i-5) ^ p2 ^ data.charAt(i-4) << 8) + seed,
+                        mum(data.charAt(i-3) ^ p3 ^ data.charAt(i-2) << 8, data.charAt(i-1) ^ p4 ^ data.charAt(i  ) << 8));
+            }
+            seed += p5;
+            switch (len & 7) {
+                case 1: seed = mum(seed ^ p3, p4 ^ data.charAt(len-1)); break;
+                case 2: seed = mum(seed ^ data.charAt(len-2), p3 ^ data.charAt(len-1)); break;
+                case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, p1 ^ data.charAt(len-1)); break;
+                case 4: seed = mum(seed ^ data.charAt(len-4) ^ data.charAt(len-3) << 8, p0 ^ data.charAt(len-2) ^ data.charAt(len-1) << 8); break;
+                case 5: seed = mum(seed ^ data.charAt(len-5) ^ data.charAt(len-4) << 8, p2 ^ data.charAt(len-3) ^ data.charAt(len-2) << 8) ^ mum(seed, p3 ^ data.charAt(len-1)); break;
+                case 6: seed = mum(seed ^ data.charAt(len-6) ^ data.charAt(len-5) << 8, p2 ^ data.charAt(len-4) ^ data.charAt(len-3) << 8) ^ mum(seed, p3 ^ data.charAt(len-2) ^ data.charAt(len-1) << 8); break;
+                case 7: seed = mum(seed ^ data.charAt(len-7) ^ data.charAt(len-6) << 8, p2 ^ data.charAt(len-5) ^ data.charAt(len-4) << 8) ^ mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, p4 ^ data.charAt(len-1)); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ p5);
+        }
+        /*
+	case 1:  seed = _watermum(_waterp2 ^ seed, _waterr08(p) ^ _waterp1); break;
+	case 2:  seed = _watermum(_waterp3 ^ seed, _waterr16(p) ^ _waterp4); break;
+	case 3:  seed = _watermum(_waterr16(p) ^ seed, _waterr08(p + 2) + _waterp3); break;
+	case 4:  seed = _watermum(_waterr16(p) ^ seed, _waterr16(p + 2) ^ _waterp3); break;
+	case 5:  seed = _watermum(_waterr16(p) ^ seed, (_waterr16(p + 2) << 8 | _waterr08(p + 4)) ^ _waterp1); break;
+	case 6:  seed = _watermum(_waterr32(p) ^ seed, _waterr16(p + 4) ^ _waterp1); break;
+	case 7:  seed = _watermum(_waterr32(p) ^ seed, (_waterr16(p + 4) << 8 | _waterr08(p + 6)) ^ _waterp1); break;
+	case 8:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp0); break;
+	case 9:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterp4, _waterr08(p + 8) ^ _waterp3); break;
+	case 10: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr16(p + 8) ^ _waterp3); break;
+	case 11: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, ((_waterr16(p + 8) << 8) | _waterr08(p + 10)) ^ _waterp3); break;
+	case 12: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr32(p + 8) ^ _waterp3); break;
+	case 13: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr08(p + 12)) ^ _waterp4); break;
+	case 14: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12)) ^ _waterp4); break;
+	case 15: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12) << 8 | _waterr08(p + 14)) ^ _waterp4); break;
+         */
         public static int hash(final int[] data) {
-            if (data == null)
-                return 0;
+            if (data == null) return 0;
             long seed = p0;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
@@ -5621,14 +5703,59 @@ public class CrossHash {
                         mum(data[i-1] ^ p3, data[i] ^ p4));
             }
             seed += p5;
-            switch (len & 3)
-            {
-                case 1: seed = mum(seed ^ (data[len-1] >>> 16), p3 ^ (data[len-1] & 0xFFFFL));
-                break;
-                case 2: seed = mum(seed ^ data[len-2], p0 ^ data[len-1]);                 
-                break;
-                case 3: seed = mum(data[len-3] ^ seed, data[len-2] ^ p2) ^ mum(seed, data[len-1] ^ p3);
-                break;
+            switch (len & 3) {
+                case 1: seed = mum(seed ^ (data[len-1] >>> 16), p3 ^ (data[len-1] & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ data[len-2], p0 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3], p2 ^ data[len-2]) ^ mum(seed, p3 ^ data[len-1]); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ p5);
+        }
+        public static int hash(final long[] data) {
+            if (data == null) return 0;
+            long seed = p0;
+            final int len = data.length;
+            for (int i = 1; i < len; i+=2) {
+                seed = mum(
+                        mum(data[i-1] >>> 32 ^ p1, (data[i-1] & 0xFFFFFFFFL) ^ p2) + seed,
+                        mum(data[i] >>> 32 ^ p3, (data[i] & 0xFFFFFFFFL) ^ p4));
+            }
+            seed += p5;
+            if ((len & 1) == 1) {
+                seed = mum(seed ^ data[len-1] >>> 32, p0 ^ (data[len-1] & 0xFFFFFFFFL));
+            }
+            return (int) mum(seed ^ seed << 16, len ^ p5);
+        }
+        public static int hash(final float[] data) {
+            if (data == null) return 0;
+            long seed = p0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = mum(
+                        mum(floatToIntBits(data[i-3]) ^ p1, floatToIntBits(data[i-2]) ^ p2) + seed,
+                        mum(floatToIntBits(data[i-1]) ^ p3, floatToIntBits(data[i]) ^ p4));
+            }
+            seed += p5;
+            switch (len & 3) {
+                case 1: seed = mum(seed ^ (floatToIntBits(data[len-1]) >>> 16), p3 ^ (floatToIntBits(data[len-1]) & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ floatToIntBits(data[len-2]), p0 ^ floatToIntBits(data[len-1])); break;
+                case 3: seed = mum(seed ^ floatToIntBits(data[len-3]), p2 ^ floatToIntBits(data[len-2])) ^ mum(seed, p3 ^ floatToIntBits(data[len-1])); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ p5);
+        }
+        public static int hash(final double[] data) {
+            if (data == null) return 0;
+            long seed = p0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = mum(
+                        mum(doubleToMixedIntBits(data[i-3]) ^ p1, doubleToMixedIntBits(data[i-2]) ^ p2) + seed,
+                        mum(doubleToMixedIntBits(data[i-1]) ^ p3, doubleToMixedIntBits(data[i]) ^ p4));
+            }
+            seed += p5;
+            switch (len & 3) {
+                case 1: seed = mum(seed ^ (doubleToMixedIntBits(data[len-1]) >>> 16), p3 ^ (doubleToMixedIntBits(data[len-1]) & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ doubleToMixedIntBits(data[len-2]), p0 ^ doubleToMixedIntBits(data[len-1])); break;
+                case 3: seed = mum(seed ^ doubleToMixedIntBits(data[len-3]), p2 ^ doubleToMixedIntBits(data[len-2])) ^ mum(seed, p3 ^ doubleToMixedIntBits(data[len-1])); break;
             }
             return (int) mum(seed ^ seed << 16, len ^ p5);
         }
