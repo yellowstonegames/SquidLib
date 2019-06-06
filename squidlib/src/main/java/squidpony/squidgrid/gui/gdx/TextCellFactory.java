@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -227,7 +226,7 @@ public class TextCellFactory implements Disposable {
             }
         }
         else {
-            shader = SpriteBatch.createDefaultShader();
+            shader = FilterBatch.createDefaultShader();
         }
         lineHeight = bmpFont.getLineHeight();
         descent = bmpFont.getDescent();
@@ -1958,7 +1957,7 @@ public class TextCellFactory implements Disposable {
      * <br>
      * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.
      *
-     * @param batch the Batch, such as a SpriteBatch, to configure to render distance field fonts if necessary.
+     * @param batch the Batch, such as a {@link FilterBatch}, to configure to render distance field fonts if necessary.
      */
     public void configureShader(Batch batch) {
         if(initialized)

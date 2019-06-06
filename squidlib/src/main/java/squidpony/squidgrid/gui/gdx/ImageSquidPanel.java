@@ -139,7 +139,7 @@ public class ImageSquidPanel extends SquidPanel {
      * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
      * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
      * draw full-color art, and end the Batch between drawing this object and the other art.
-     * @param batch a Batch such as a SpriteBatch that must be between a begin() and end() call; usually done by Stage
+     * @param batch a Batch such as a {@link FilterBatch} that must be between a begin() and end() call; usually done by Stage
      * @param parentAlpha only used when drawing children of this ImageSquidPanel
      */
     @Override

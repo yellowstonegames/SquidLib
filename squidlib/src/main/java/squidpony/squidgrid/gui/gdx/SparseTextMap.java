@@ -144,7 +144,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
      * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
      *
-     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param batch       the {@link FilterBatch} or other Batch used to draw this; should have already have had begin() called
      * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
      */
     public void draw(Batch batch, TextCellFactory textFactory) {
@@ -164,7 +164,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
      * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
      *
-     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param batch       the {@link FilterBatch} or other Batch used to draw this; should have already have had begin() called
      * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
      * @param screenOffsetX offset to apply to the x position of each char rendered; positive moves chars right
      * @param screenOffsetY offset to apply to the y position of each char rendered; positive moves chars up
@@ -198,7 +198,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
      * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
      *
-     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param batch       the {@link FilterBatch} or other Batch used to draw this; should have already have had begin() called
      * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
      * @param frustum     a {@link Frustum} object to determine culling, almost always obtained from {@link com.badlogic.gdx.graphics.Camera#frustum}
      */
@@ -219,7 +219,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
      * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
      *
-     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param batch       the {@link FilterBatch} or other Batch used to draw this; should have already have had begin() called
      * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
      * @param frustum     a {@link Frustum} object to determine culling, almost always obtained from {@link com.badlogic.gdx.graphics.Camera#frustum}
      * @param screenOffsetX offset to apply to the x position of each char rendered; positive moves chars right
@@ -258,7 +258,7 @@ public class SparseTextMap implements Iterable<SparseTextMap.Entry> {
      * probably with {@link TextCellFactory#initBySize()} after setting the width and height as desired. This method
      * should be called between {@code batch.begin()} and {@code batch.end()} with the Batch passed to this.
      *
-     * @param batch       the SpriteBatch or other Batch used to draw this; should have already have had begin() called
+     * @param batch       the {@link FilterBatch} or other Batch used to draw this; should have already have had begin() called
      * @param textFactory used to determine the font, size, cell size, and other information; must be initialized
      * @param frustum     a {@link Frustum} object to determine culling, almost always obtained from {@link com.badlogic.gdx.graphics.Camera#frustum}
      * @param screenOffsetX offset to apply to the x position of each char rendered; positive moves chars right

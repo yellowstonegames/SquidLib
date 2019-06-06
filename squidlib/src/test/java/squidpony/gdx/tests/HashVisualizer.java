@@ -6,15 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.RandomXS128;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
-import squidpony.squidgrid.gui.gdx.ColorNoise;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidInput;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.*;
 
 import java.util.Arrays;
@@ -75,7 +71,7 @@ public class HashVisualizer extends ApplicationAdapter {
     private static final int NOISE_LIMIT = 130;
     private int hashMode = 0, rngMode = 21, noiseMode = 15, otherMode = 1;//74;//118;//82;
 
-    private SpriteBatch batch;
+    private FilterBatch batch;
     //private SparseLayers display;//, overlay;
     
     private TextCellFactory tcf;
@@ -328,12 +324,13 @@ public class HashVisualizer extends ApplicationAdapter {
         //        return (s = (s ^ s >>> 11 ^ s >>> 21) * (s | 0xFFE00001) ^ x ^ y) ^ s >>> 13 ^ s >>> 19;
     }
     
-    public static int waterInt(float fx, float fy){
+    public static long water64(float fx, float fy){
         final long y = NumberTools.floatToIntBits(fy);
         long x = NumberTools.floatToIntBits(fx);
+//        x = (x ^ 0xA0761D6478BD642FL) * (y ^ 0x8EBC6AF09C88C6E3L);
         x = (x ^ 0xA0761D65L) * (y ^ 0x8EBC6AF1L);
         x = ((x - (x >>> 32)) ^ 0xEB44ACCBL) * (y ^ 0x589965CDL);
-        return ((int)(x - (x >>> 32)));
+        return ((x - (x >>> 32) + (x << 32)));
 //        x = (x ^ 0xA0761D65L) * (y ^ 0x8EBC6AF1L);
 //        x = ((x - (x >>> 32)) ^ 0xEB44ACCBL) * (y ^ 0x589965CDL);
 //        return ((int)(x - (x >>> 32)));
@@ -1150,7 +1147,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         tcf = new TextCellFactory().includedFont().width(1).height(1).initBySize();
         //display = new SparseLayers(width, height, cellWidth, cellHeight, new TextCellFactory().includedFont());
 //        IFilter<Color> filter0 = new Filters.PaletteFilter(
@@ -1477,15 +1474,15 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 1:
-                        extra = System.nanoTime() >>> 30 & 31;
-                        Gdx.graphics.setTitle("waterInt on length 2, bit " + extra);
+                        extra = System.nanoTime() >>> 30 & 63;
+                        Gdx.graphics.setTitle("water64 on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
                             //coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
                                 //coordinates[1] = y;
                                 //code = -(Arrays.hashCode(coordinates) >>> extra & 1L) | 255L;
                                 //back[x][y] = (Arrays.hashCode(coordinates) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-                                back[x][y] = (waterInt(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
+                                back[x][y] = (water64(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
                             }
                         }
 //                        Gdx.graphics.setTitle("QuadHash on index");

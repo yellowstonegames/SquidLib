@@ -14,7 +14,22 @@ import squidpony.squidmath.NumberTools;
  * A drop-in substitute for {@link com.badlogic.gdx.graphics.g2d.SpriteBatch} that filters any colors used to tint text
  * or images using a {@link FloatFilter}. The filter may have an effect on speed in some cases, but even moderately
  * complex filters like {@link FloatFilters.YCbCrFilter} seem to perform perfectly well, spiking at above 1000 FPS on
- * SparseDemo with a filter that changes parameters.
+ * SparseDemo with a filter that changes parameters. This class should be preferred over SpriteBatch when using
+ * SquidLib's style of frequently changing the Batch color; as of libGDX 1.9.9, SpriteBatch is somewhat slower than
+ * FilterBatch when FilterBatch is using the default {@link FloatFilters#identityFilter}. This is because 1.9.9 changed
+ * SpriteBatch to do more work when setting a color, and FilterBatch keeps the older, faster way of color changing. It
+ * may be slower if used for Tiled map renderers in libGDX or for {@link com.badlogic.gdx.graphics.g2d.NinePatch}
+ * instances, which both need to reset a Color object frequently, but not much else in libGDX specifically needs the
+ * Color object {@link #getColor()} returns, and many things do fine with {@link #getPackedColor()}, which is faster.
+ * <br>
+ * Most FloatFilter varieties don't have much overhead, and I encourage you to try some to quickly produce graphical
+ * effects in a game. As an example, changing the warmth of a color (as well as its lightness) is relatively easy with a
+ * {@link FloatFilters.YCwCmFilter} that adds to or subtracts from Cw (chromatic warmth) and may change Y (lightness).
+ * With that same filter, if the protagonist is partially blinded, you could set the multipliers for Cw and Cm
+ * (chromatic mildness; determines whether a color is closer to mild colors like green/yellow or bold colors like
+ * red/blue) to floats between 0.1 and 0.5 or so, which takes even intense colors and makes them diluted and grayish.
+ * You could also change Y to be brighter or darker depending on whether a bright light blinded the protagonist, or some
+ * mud was thrown in their eyes, etc.
  * <br>
  * Created by Tommy Ettinger on 8/2/2018.
  */
