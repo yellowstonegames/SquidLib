@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -66,7 +65,7 @@ public class EverythingDemo extends ApplicationAdapter {
         }
     }
 
-    private SpriteBatch batch;
+    private FilterBatch batch;
 
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
@@ -223,7 +222,7 @@ public class EverythingDemo extends ApplicationAdapter {
         }
         //DefaultResources.getSCC().granularity = 3;
 
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         width = 90;
         height = 26;
         totalWidth = width * 3;

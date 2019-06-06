@@ -5,17 +5,13 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
 import squidpony.StringKit;
-import squidpony.squidgrid.gui.gdx.DefaultResources;
-import squidpony.squidgrid.gui.gdx.SColor;
-import squidpony.squidgrid.gui.gdx.SquidLayers;
-import squidpony.squidgrid.gui.gdx.TextCellFactory;
+import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidmath.MathExtras;
 import squidpony.squidmath.NumberTools;
 
@@ -110,7 +106,7 @@ public class ColorTest extends ApplicationAdapter {
     };
 
     private Stage stage;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private Viewport viewport;
     private TextCellFactory tcf;
     private SquidLayers display;
@@ -450,7 +446,7 @@ public class ColorTest extends ApplicationAdapter {
     
     @Override
     public void create() {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         tcf = DefaultResources.getCrispSlabFont().width(1).height(1).initBySize();
         viewport = new StretchViewport(totalWidth, totalHeight);
         display = new SquidLayers(gridWidth, gridHeight, 1, 1, tcf);//.setTextSize(cellWidth + 1f, cellHeight + 1f);

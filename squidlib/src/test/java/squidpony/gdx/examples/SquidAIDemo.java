@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.IntArray;
@@ -16,11 +15,7 @@ import squidpony.squidgrid.gui.gdx.*;
 import squidpony.squidgrid.mapping.DungeonGenerator;
 import squidpony.squidgrid.mapping.DungeonUtility;
 import squidpony.squidgrid.mapping.styled.TilesetType;
-import squidpony.squidmath.Coord;
-import squidpony.squidmath.GreasedRegion;
-import squidpony.squidmath.OrderedMap;
-import squidpony.squidmath.OrderedSet;
-import squidpony.squidmath.RNG;
+import squidpony.squidmath.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,7 +23,7 @@ import java.util.Set;
 
 public class SquidAIDemo extends ApplicationAdapter {
     private enum Phase {MOVE_ANIM, ATTACK_ANIM}
-    SpriteBatch batch;
+    private FilterBatch batch;
 
     private Phase phase = Phase.ATTACK_ANIM;
     private RNG rng;
@@ -59,7 +54,7 @@ public class SquidAIDemo extends ApplicationAdapter {
 
     @Override
     public void create () {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         width = 40;
         height = 40;
         cellWidth = 6;

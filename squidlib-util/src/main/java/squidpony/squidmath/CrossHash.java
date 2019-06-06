@@ -5604,14 +5604,9 @@ public class CrossHash {
     @Beta
     public static final class Water {
         private static final long
-                p0 = 0xA0761D65L,
-                p1 = 0xE7037ED1L,
-                p2 = 0x8EBC6AF1L,
-                p3 = 0x589965CDL,
-                p4 = 0x1D8E4E27L,
-                p5 = 0xEB44ACCBL;
-        private static long mum(final long a, final long b)
-        {
+                p0 = 0xA0761D65L, p1 = 0xE7037ED1L, p2 = 0x8EBC6AF1L,
+                p3 = 0x589965CDL, p4 = 0x1D8E4E27L, p5 = 0xEB44ACCBL;
+        private static long mum(final long a, final long b) {
             final long n = a * b;
             return n - (n >>> 32);
         }
