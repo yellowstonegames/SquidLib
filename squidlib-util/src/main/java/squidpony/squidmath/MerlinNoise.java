@@ -138,9 +138,9 @@ public class MerlinNoise implements Noise.Noise2D, Noise.Noise3D, Serializable {
     {
         return noise3D(x, y, z, seed, resolution, bits);
     }
+    
     private static long lorp(long start, long end, long a, long resolution) {
-        end = ((1L << resolution) - a) * start + a * end >>> resolution;
-        return end;
+        return ((1L << resolution) - a) * start + a * end >>> resolution;
     }
     /**
      * 2D Merlin noise; black and white much of the time but curving instead of angular.

@@ -67,9 +67,9 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 1;
+    private int testType = 4;
     private static final int NOISE_LIMIT = 130;
-    private int hashMode = 0, rngMode = 21, noiseMode = 15, otherMode = 1;//74;//118;//82;
+    private int hashMode = 0, rngMode = 21, noiseMode = 77, otherMode = 1;//74;//118;//82;
 
     private FilterBatch batch;
     //private SparseLayers display;//, overlay;
@@ -3849,10 +3849,11 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         }
                         break;
                     case 78:
-                        Gdx.graphics.setTitle("Merlin Noise 3D, x4 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
+                        Gdx.graphics.setTitle("Merlin Noise 3D, x8 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = ((int)MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 1)) * 255;
+                                iBright = ((int)MerlinNoise.noise3D(x, y,
+                                        ctr + MerlinNoise.noise2D(x, y, 123456789L, 4, 5), 9000L, 6, 1)) * 255;
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
@@ -3861,7 +3862,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         Gdx.graphics.setTitle("Merlin Noise 3D, x16 zoom at " + Gdx.graphics.getFramesPerSecond()  + " FPS");
                         for (int x = 0; x < width; x++) {
                             for (int y = 0; y < height; y++) {
-                                iBright = (int)(MerlinNoise.noise3D(x, y, ctr, 9000L, 5, 4) * 31.875);
+                                iBright = (int)(MerlinNoise.noise3D(x, y, ctr, 9000L, 4, 1) * 255);
                                 back[x][y] = floatGetI(iBright, iBright, iBright);
                             }
                         }
