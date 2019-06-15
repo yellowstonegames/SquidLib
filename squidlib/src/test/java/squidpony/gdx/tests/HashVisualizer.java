@@ -67,7 +67,7 @@ public class HashVisualizer extends ApplicationAdapter {
     // 3 artistic visualizations of hash functions and misc. other
     // 4 noise
     // 5 RNG results
-    private int testType = 4;
+    private int testType = 1;
     private static final int NOISE_LIMIT = 130;
     private int hashMode = 0, rngMode = 21, noiseMode = 77, otherMode = 1;//74;//118;//82;
 
@@ -1477,12 +1477,12 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                         extra = System.nanoTime() >>> 30 & 63;
                         Gdx.graphics.setTitle("water64 on length 2, bit " + extra);
                         for (int x = 0; x < width; x++) {
-                            //coordinates[0] = x;
+                            coordinates[0] = x;
                             for (int y = 0; y < height; y++) {
-                                //coordinates[1] = y;
+                                coordinates[1] = y;
                                 //code = -(Arrays.hashCode(coordinates) >>> extra & 1L) | 255L;
-                                //back[x][y] = (Arrays.hashCode(coordinates) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
-                                back[x][y] = (water64(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
+                                back[x][y] = (CrossHash.Water.hash64(coordinates) >>> extra & 1) == 0 ? FLOAT_BLACK : FLOAT_WHITE;//floatGet(code);
+                                //back[x][y] = (water64(x, y) >>> extra & 1L) == 0L ? FLOAT_BLACK : FLOAT_WHITE;
                             }
                         }
 //                        Gdx.graphics.setTitle("QuadHash on index");
