@@ -531,7 +531,7 @@
 <span class="sourceLineNo">523</span>     */<a name="line.523"></a>
 <span class="sourceLineNo">524</span>    public static double randomDouble(long seed)<a name="line.524"></a>
 <span class="sourceLineNo">525</span>    {<a name="line.525"></a>
-<span class="sourceLineNo">526</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 22)) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.526"></a>
+<span class="sourceLineNo">526</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 23)) &amp; 0x1FFFFFFFFFFFFFL) * 0x1p-53;<a name="line.526"></a>
 <span class="sourceLineNo">527</span>    }<a name="line.527"></a>
 <span class="sourceLineNo">528</span><a name="line.528"></a>
 <span class="sourceLineNo">529</span>    /**<a name="line.529"></a>
@@ -546,7 +546,7 @@
 <span class="sourceLineNo">538</span>     */<a name="line.538"></a>
 <span class="sourceLineNo">539</span>    public static double randomSignedDouble(long seed)<a name="line.539"></a>
 <span class="sourceLineNo">540</span>    {<a name="line.540"></a>
-<span class="sourceLineNo">541</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 22)) &gt;&gt; 10) * 0x1p-53;<a name="line.541"></a>
+<span class="sourceLineNo">541</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 23)) &gt;&gt; 10) * 0x1p-53;<a name="line.541"></a>
 <span class="sourceLineNo">542</span>    }<a name="line.542"></a>
 <span class="sourceLineNo">543</span>    /**<a name="line.543"></a>
 <span class="sourceLineNo">544</span>     * Generates a pseudo-random float between 0f (inclusive) and 1f (exclusive) using the given long seed, passing it<a name="line.544"></a>
@@ -560,7 +560,7 @@
 <span class="sourceLineNo">552</span>     */<a name="line.552"></a>
 <span class="sourceLineNo">553</span>    public static float randomFloat(long seed)<a name="line.553"></a>
 <span class="sourceLineNo">554</span>    {<a name="line.554"></a>
-<span class="sourceLineNo">555</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 22)) &amp; 0xFFFFFF) * 0x1p-24f;<a name="line.555"></a>
+<span class="sourceLineNo">555</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 23)) &amp; 0xFFFFFF) * 0x1p-24f;<a name="line.555"></a>
 <span class="sourceLineNo">556</span>    }<a name="line.556"></a>
 <span class="sourceLineNo">557</span>    /**<a name="line.557"></a>
 <span class="sourceLineNo">558</span>     * Generates a pseudo-random float between -1f (inclusive) and 1f (exclusive) using the given long seed, passing<a name="line.558"></a>
@@ -576,7 +576,7 @@
 <span class="sourceLineNo">568</span>     */<a name="line.568"></a>
 <span class="sourceLineNo">569</span>    public static float randomSignedFloat(long seed)<a name="line.569"></a>
 <span class="sourceLineNo">570</span>    {<a name="line.570"></a>
-<span class="sourceLineNo">571</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 22)) &gt;&gt; 39) * 0x1p-24f;<a name="line.571"></a>
+<span class="sourceLineNo">571</span>        return (((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 23)) &gt;&gt; 39) * 0x1p-24f;<a name="line.571"></a>
 <span class="sourceLineNo">572</span>    }<a name="line.572"></a>
 <span class="sourceLineNo">573</span><a name="line.573"></a>
 <span class="sourceLineNo">574</span>    /**<a name="line.574"></a>
@@ -593,7 +593,7 @@
 <span class="sourceLineNo">585</span>     */<a name="line.585"></a>
 <span class="sourceLineNo">586</span>    public static float randomFloatCurved(long seed)<a name="line.586"></a>
 <span class="sourceLineNo">587</span>    {<a name="line.587"></a>
-<span class="sourceLineNo">588</span>        return formCurvedFloat(((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 22)));<a name="line.588"></a>
+<span class="sourceLineNo">588</span>        return formCurvedFloat(((seed = ((seed *= 0x6C8E9CF570932BD5L) ^ (seed &gt;&gt;&gt; 25)) * (seed | 0xA529L)) ^ (seed &gt;&gt;&gt; 23)));<a name="line.588"></a>
 <span class="sourceLineNo">589</span>    }<a name="line.589"></a>
 <span class="sourceLineNo">590</span><a name="line.590"></a>
 <span class="sourceLineNo">591</span>    /**<a name="line.591"></a>

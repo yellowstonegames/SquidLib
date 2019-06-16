@@ -112,13 +112,28 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.21">FilterBatch</a>
+<pre>public class <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.36">FilterBatch</a>
 extends <a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
 implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <div class="block">A drop-in substitute for <code>SpriteBatch</code> that filters any colors used to tint text
  or images using a <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilter</code></a>. The filter may have an effect on speed in some cases, but even moderately
  complex filters like <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilters.YCbCrFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCbCrFilter</code></a> seem to perform perfectly well, spiking at above 1000 FPS on
- SparseDemo with a filter that changes parameters.
+ SparseDemo with a filter that changes parameters. This class should be preferred over SpriteBatch when using
+ SquidLib's style of frequently changing the Batch color; as of libGDX 1.9.9, SpriteBatch is somewhat slower than
+ FilterBatch when FilterBatch is using the default <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilters.html#identityFilter"><code>FloatFilters.identityFilter</code></a>. This is because 1.9.9 changed
+ SpriteBatch to do more work when setting a color, and FilterBatch keeps the older, faster way of color changing. It
+ may be slower if used for Tiled map renderers in libGDX or for <code>NinePatch</code>
+ instances, which both need to reset a Color object frequently, but not much else in libGDX specifically needs the
+ Color object <a href="../../../../squidpony/squidgrid/gui/gdx/FilterBatch.html#getColor--"><code>getColor()</code></a> returns, and many things do fine with <a href="../../../../squidpony/squidgrid/gui/gdx/FilterBatch.html#getPackedColor--"><code>getPackedColor()</code></a>, which is faster.
+ <br>
+ Most FloatFilter varieties don't have much overhead, and I encourage you to try some to quickly produce graphical
+ effects in a game. As an example, changing the warmth of a color (as well as its lightness) is relatively easy with a
+ <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilters.YCwCmFilter.html" title="class in squidpony.squidgrid.gui.gdx"><code>FloatFilters.YCwCmFilter</code></a> that adds to or subtracts from Cw (chromatic warmth) and may change Y (lightness).
+ With that same filter, if the protagonist is partially blinded, you could set the multipliers for Cw and Cm
+ (chromatic mildness; determines whether a color is closer to mild colors like green/yellow or bold colors like
+ red/blue) to floats between 0.1 and 0.5 or so, which takes even intense colors and makes them diluted and grayish.
+ You could also change Y to be brighter or darker depending on whether a bright light blinded the protagonist, or some
+ mud was thrown in their eyes, etc.
  <br>
  Created by Tommy Ettinger on 8/2/2018.</div>
 </li>
@@ -515,7 +530,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>filter</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.24">filter</a></pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a> <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.39">filter</a></pre>
 </li>
 </ul>
 <a name="renderCalls">
@@ -524,7 +539,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>renderCalls</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.53">renderCalls</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.68">renderCalls</a></pre>
 <div class="block">Number of render calls since the last <a href="../../../../squidpony/squidgrid/gui/gdx/FilterBatch.html#begin--"><code>begin()</code></a>.</div>
 </li>
 </ul>
@@ -534,7 +549,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>totalRenderCalls</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.56">totalRenderCalls</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.71">totalRenderCalls</a></pre>
 <div class="block">Number of rendering calls, ever. Will not be reset unless set manually.</div>
 </li>
 </ul>
@@ -544,7 +559,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>maxSpritesInBatch</h4>
-<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.59">maxSpritesInBatch</a></pre>
+<pre>public&nbsp;int <a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.74">maxSpritesInBatch</a></pre>
 <div class="block">The maximum number of sprites rendered in one batch so far.</div>
 </li>
 </ul>
@@ -562,7 +577,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>FilterBatch</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.64">FilterBatch</a>()</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.79">FilterBatch</a>()</pre>
 <div class="block">Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and no changes in the
  color filter.</div>
 <dl>
@@ -577,7 +592,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>FilterBatch</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.71">FilterBatch</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.86">FilterBatch</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</pre>
 <div class="block">Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and the given
  color filter.</div>
 <dl>
@@ -592,7 +607,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>FilterBatch</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.77">FilterBatch</a>(int&nbsp;size)</pre>
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.92">FilterBatch</a>(int&nbsp;size)</pre>
 <div class="block">Constructs a FilterBatch with one buffer, the default shader, and no changes in the color filter.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
@@ -606,7 +621,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>FilterBatch</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.84">FilterBatch</a>(int&nbsp;size,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.99">FilterBatch</a>(int&nbsp;size,
                    <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</pre>
 <div class="block">Constructs a new FilterBatch with a size of 1000, one buffer, the default shader, and the given
  color filter.</div>
@@ -622,7 +637,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>FilterBatch</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.96">FilterBatch</a>(int&nbsp;size,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.111">FilterBatch</a>(int&nbsp;size,
                    com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader)</pre>
 <div class="block">Constructs a new FilterBatch. Sets the projection matrix to an orthographic projection with y-axis point upwards, x-axis
  point to the right and the origin being in the bottom left corner of the screen. The projection will be pixel perfect with
@@ -643,7 +658,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FilterBatch</h4>
-<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.108">FilterBatch</a>(int&nbsp;size,
+<pre>public&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.123">FilterBatch</a>(int&nbsp;size,
                    com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;defaultShader,
                    <a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</pre>
 <div class="block">Constructs a new FilterBatch. Sets the projection matrix to an orthographic projection with y-axis point upwards, x-axis
@@ -673,7 +688,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>createDefaultShader</h4>
-<pre>public static&nbsp;com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.145">createDefaultShader</a>()</pre>
+<pre>public static&nbsp;com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.160">createDefaultShader</a>()</pre>
 <div class="block">Returns a new instance of the default shader used by FilterBatch for GL2 when no shader is specified.</div>
 </li>
 </ul>
@@ -683,7 +698,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>begin</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.180">begin</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.195">begin</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>begin</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -696,7 +711,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>end</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.195">end</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.210">end</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>end</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -709,7 +724,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.212">setColor</a>(com.badlogic.gdx.graphics.Color&nbsp;tint)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.227">setColor</a>(com.badlogic.gdx.graphics.Color&nbsp;tint)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -722,7 +737,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.217">setColor</a>(float&nbsp;r,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.232">setColor</a>(float&nbsp;r,
                      float&nbsp;g,
                      float&nbsp;b,
                      float&nbsp;a)</pre>
@@ -738,7 +753,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.222">setColor</a>(float&nbsp;color)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.237">setColor</a>(float&nbsp;color)</pre>
 </li>
 </ul>
 <a name="setPackedColor-float-">
@@ -747,7 +762,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setPackedColor</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.227">setPackedColor</a>(float&nbsp;color)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.242">setPackedColor</a>(float&nbsp;color)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setPackedColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -760,7 +775,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getColor</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.232">getColor</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.Color&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.247">getColor</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -773,7 +788,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getPackedColor</h4>
-<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.243">getPackedColor</a>()</pre>
+<pre>public&nbsp;float&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.258">getPackedColor</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getPackedColor</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -786,7 +801,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.248">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.263">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
                  float&nbsp;x,
                  float&nbsp;y,
                  float&nbsp;originX,
@@ -814,7 +829,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.379">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.394">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
                  float&nbsp;x,
                  float&nbsp;y,
                  float&nbsp;width,
@@ -837,7 +852,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.438">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.453">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
                  float&nbsp;x,
                  float&nbsp;y,
                  int&nbsp;srcX,
@@ -856,7 +871,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.484">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.499">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
                  float&nbsp;x,
                  float&nbsp;y,
                  float&nbsp;width,
@@ -877,7 +892,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.526">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.541">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
                  float&nbsp;x,
                  float&nbsp;y)</pre>
 <dl>
@@ -892,7 +907,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.531">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.546">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
                  float&nbsp;x,
                  float&nbsp;y,
                  float&nbsp;width,
@@ -909,7 +924,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.577">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.592">draw</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture,
                  float[]&nbsp;spriteVertices,
                  int&nbsp;offset,
                  int&nbsp;count)</pre>
@@ -925,7 +940,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.607">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.622">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
                  float&nbsp;x,
                  float&nbsp;y)</pre>
 <dl>
@@ -940,7 +955,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.612">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.627">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
                  float&nbsp;x,
                  float&nbsp;y,
                  float&nbsp;width,
@@ -957,7 +972,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.659">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.674">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
                  float&nbsp;x,
                  float&nbsp;y,
                  float&nbsp;originX,
@@ -979,7 +994,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.779">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.794">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
                  float&nbsp;x,
                  float&nbsp;y,
                  float&nbsp;originX,
@@ -1002,7 +1017,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>draw</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.915">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.930">draw</a>(com.badlogic.gdx.graphics.g2d.TextureRegion&nbsp;region,
                  float&nbsp;width,
                  float&nbsp;height,
                  com.badlogic.gdx.math.Affine2&nbsp;transform)</pre>
@@ -1018,7 +1033,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>flush</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.971">flush</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.986">flush</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>flush</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1031,7 +1046,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>disableBlending</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.999">disableBlending</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1014">disableBlending</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>disableBlending</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1044,7 +1059,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>enableBlending</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1006">enableBlending</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1021">enableBlending</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>enableBlending</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1057,7 +1072,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setBlendFunction</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1013">setBlendFunction</a>(int&nbsp;srcFunc,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1028">setBlendFunction</a>(int&nbsp;srcFunc,
                              int&nbsp;dstFunc)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -1071,7 +1086,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setBlendFunctionSeparate</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1018">setBlendFunctionSeparate</a>(int&nbsp;srcFuncColor,
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1033">setBlendFunctionSeparate</a>(int&nbsp;srcFuncColor,
                                      int&nbsp;dstFuncColor,
                                      int&nbsp;srcFuncAlpha,
                                      int&nbsp;dstFuncAlpha)</pre>
@@ -1087,7 +1102,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlendSrcFunc</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1028">getBlendSrcFunc</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1043">getBlendSrcFunc</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendSrcFunc</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1100,7 +1115,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlendDstFunc</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1033">getBlendDstFunc</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1048">getBlendDstFunc</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendDstFunc</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1113,7 +1128,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlendSrcFuncAlpha</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1038">getBlendSrcFuncAlpha</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1053">getBlendSrcFuncAlpha</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendSrcFuncAlpha</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1126,7 +1141,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getBlendDstFuncAlpha</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1043">getBlendDstFuncAlpha</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1058">getBlendDstFuncAlpha</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getBlendDstFuncAlpha</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1139,7 +1154,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>dispose</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1048">dispose</a>()</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1063">dispose</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>dispose</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.utils.Disposable</code></dd>
@@ -1152,7 +1167,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getProjectionMatrix</h4>
-<pre>public&nbsp;com.badlogic.gdx.math.Matrix4&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1054">getProjectionMatrix</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.math.Matrix4&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1069">getProjectionMatrix</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getProjectionMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1165,7 +1180,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getTransformMatrix</h4>
-<pre>public&nbsp;com.badlogic.gdx.math.Matrix4&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1059">getTransformMatrix</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.math.Matrix4&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1074">getTransformMatrix</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getTransformMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1178,7 +1193,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setProjectionMatrix</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1064">setProjectionMatrix</a>(com.badlogic.gdx.math.Matrix4&nbsp;projection)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1079">setProjectionMatrix</a>(com.badlogic.gdx.math.Matrix4&nbsp;projection)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setProjectionMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1191,7 +1206,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setTransformMatrix</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1071">setTransformMatrix</a>(com.badlogic.gdx.math.Matrix4&nbsp;transform)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1086">setTransformMatrix</a>(com.badlogic.gdx.math.Matrix4&nbsp;transform)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setTransformMatrix</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1204,7 +1219,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>switchTexture</h4>
-<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1088">switchTexture</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture)</pre>
+<pre>protected&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1103">switchTexture</a>(com.badlogic.gdx.graphics.Texture&nbsp;texture)</pre>
 </li>
 </ul>
 <a name="setShader-com.badlogic.gdx.graphics.glutils.ShaderProgram-">
@@ -1213,7 +1228,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>setShader</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1096">setShader</a>(com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;shader)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1111">setShader</a>(com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;shader)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>setShader</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1226,7 +1241,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getShader</h4>
-<pre>public&nbsp;com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1115">getShader</a>()</pre>
+<pre>public&nbsp;com.badlogic.gdx.graphics.glutils.ShaderProgram&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1130">getShader</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>getShader</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1239,7 +1254,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>isBlendingEnabled</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1123">isBlendingEnabled</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1138">isBlendingEnabled</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>isBlendingEnabled</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1252,7 +1267,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>isDrawing</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1127">isDrawing</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1142">isDrawing</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>isDrawing</code>&nbsp;in interface&nbsp;<code>com.badlogic.gdx.graphics.g2d.Batch</code></dd>
@@ -1265,7 +1280,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getFilter</h4>
-<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1130">getFilter</a>()</pre>
+<pre>public&nbsp;<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1145">getFilter</a>()</pre>
 </li>
 </ul>
 <a name="setFilter-squidpony.squidgrid.gui.gdx.FloatFilter-">
@@ -1274,7 +1289,7 @@ implements com.badlogic.gdx.graphics.g2d.Batch</pre>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>setFilter</h4>
-<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1134">setFilter</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</pre>
+<pre>public&nbsp;void&nbsp;<a href="../../../../src-html/squidpony/squidgrid/gui/gdx/FilterBatch.html#line.1149">setFilter</a>(<a href="../../../../squidpony/squidgrid/gui/gdx/FloatFilter.html" title="class in squidpony.squidgrid.gui.gdx">FloatFilter</a>&nbsp;filter)</pre>
 </li>
 </ul>
 </li>
