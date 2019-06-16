@@ -5607,20 +5607,68 @@ public class CrossHash {
     @Beta
     public static final class Water {
     	// s0 through s5 are the small constants, b0 through b5 are the big constants
-        private static final long
-				s0 = 0xA0761D65L, s1 = 0xE7037ED1L, s2 = 0x8EBC6AF1L,
-                s3 = 0x589965CDL, s4 = 0x1D8E4E27L, s5 = 0xEB44ACCBL, 
-				b0 = 0xA0761D6478BD642FL, b1 = 0xE7037ED1A0B428DBL, b2 = 0x8EBC6AF09C88C6E3L, 
-				b3 = 0x589965CC75374CC3L, b4 = 0x1D8E4E27C47D124FL, b5 = 0xEB44ACCAB455D165L;
+
+        /**
+         * Small constant 0.
+         */
+        public static final long s0 = 0xA0761D65L;
+        /**
+         * Small constant 1.
+         */
+        public static final long s1 = 0xE7037ED1L;
+        /**
+         * Small constant 2.
+         */
+        public static final long s2 = 0x8EBC6AF1L;
+        /**
+         * Small constant 3.
+         */
+        public static final long s3 = 0x589965CDL;
+        /**
+         * Small constant 4.
+         */
+        public static final long s4 = 0x1D8E4E27L;
+        /**
+         * Small constant 5.
+         */
+        public static final long s5 = 0xEB44ACCBL;
+        /**
+         * Big constant 0.
+         */
+        public static final long b0 = 0xA0761D6478BD642FL;
+        /**
+         * Big constant 1.
+         */
+        public static final long b1 = 0xE7037ED1A0B428DBL;
+        /**
+         * Big constant 2.
+         */
+        public static final long b2 = 0x8EBC6AF09C88C6E3L;
+        /**
+         * Big constant 3.
+         */
+        public static final long b3 = 0x589965CC75374CC3L;
+        /**
+         * Big constant 4.
+         */
+        public static final long b4 = 0x1D8E4E27C47D124FL;
+        /**
+         * Big constant 5.
+         */
+        public static final long b5 = 0xEB44ACCAB455D165L;
 
 		/**
+         * Takes two arguments that are technically longs, and should be very different, and uses them to get a result
+         * that is technically a long and mixes the bits of the inputs. The arguments and result are only technically
+         * longs because their lower 32 bits matter much more than their upper 32, and giving just any long won't work.
+         * <br>
 		 * This is very similar to wyhash's mum function, but doesn't use 128-bit math because it expects that its
 		 * arguments are only relevant in their lower 32 bits (allowing their product to fit in 64 bits).
 		 * @param a a long that should probably only hold an int's worth of data
 		 * @param b a long that should probably only hold an int's worth of data
 		 * @return a sort-of randomized output dependent on both inputs
 		 */
-		private static long mum(final long a, final long b) {
+		public static long mum(final long a, final long b) {
             final long n = a * b;
             return n - (n >>> 32);
         }
@@ -5718,25 +5766,44 @@ public class CrossHash {
 			seed = (seed ^ seed << 16) * (len ^ b0);
 			return seed - (seed >>> 31) + (seed << 33);
 		}
-		
-		public static long hash64(final int[] data) {
-			if (data == null) return 0;
-			long seed = b0;
-			final int len = data.length;
-			for (int i = 3; i < len; i+=4) {
-				seed = mum(
-						mum(data[i-3] ^ b1, data[i-2] ^ b2) + seed,
-						mum(data[i-1] ^ b3, data[i] ^ b4));
-			}
-			seed += b5;
-			switch (len & 3) {
-				case 1: seed = mum(seed ^ (data[len-1] >>> 16), b3 ^ (data[len-1] & 0xFFFFL)); break;
-				case 2: seed = mum(seed ^ data[len-2], b0 ^ data[len-1]); break;
-				case 3: seed = mum(seed ^ data[len-3], b2 ^ data[len-2]) ^ mum(seed ^ data[len-1], b4); break;
-			}
-			seed = (seed ^ seed << 16) * (len ^ b0);
-			return seed - (seed >>> 31) + (seed << 33);
-		}
+
+        public static long hash64(final int[] data) {
+            if (data == null) return 0;
+            long seed = b0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = mum(
+                        mum(data[i-3] ^ b1, data[i-2] ^ b2) + seed,
+                        mum(data[i-1] ^ b3, data[i] ^ b4));
+            }
+            seed += b5;
+            switch (len & 3) {
+                case 1: seed = mum(seed ^ (data[len-1] >>> 16), b3 ^ (data[len-1] & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ data[len-2], b0 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3], b2 ^ data[len-2]) ^ mum(seed ^ data[len-1], b4); break;
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0);
+            return seed - (seed >>> 31) + (seed << 33);
+        }
+        
+        public static long hash64(final int[] data, final int length) {
+            if (data == null) return 0;
+            long seed = b0;
+            for (int i = 3; i < length; i+=4) {
+                seed = mum(
+                        mum(data[i-3] ^ b1, data[i-2] ^ b2) + seed,
+                        mum(data[i-1] ^ b3, data[i] ^ b4));
+            }
+            seed += b5;
+            switch (length & 3) {
+                case 1: seed = mum(seed ^ (data[length-1] >>> 16), b3 ^ (data[length-1] & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ data[length-2], b0 ^ data[length-1]); break;
+                case 3: seed = mum(seed ^ data[length-3], b2 ^ data[length-2]) ^ mum(seed ^ data[length-1], b4); break;
+            }
+            seed = (seed ^ seed << 16) * (length ^ b0);
+            return seed - (seed >>> 31) + (seed << 33);
+        }
+        
 		public static long hash64(final long[] data) {
 			if (data == null) return 0;
 			long seed = b0;
@@ -5865,25 +5932,25 @@ public class CrossHash {
 			return seed - (seed >>> 31) + (seed << 33);
 		}
 
-		public static long hash64(final int[][] data) {
-			if (data == null) return 0;
-			long seed = b0;
-			final int len = data.length;
-			for (int i = 3; i < len; i+=4) {
-				seed = mum(
-						mum(hash(data[i-3]) ^ b1, hash(data[i-2]) ^ b2) + seed,
-						mum(hash(data[i-1]) ^ b3, hash(data[i  ]) ^ b4));
-			}
-			seed += b5;
-			int t;
-			switch (len & 3) {
-				case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
-				case 2: seed = mum(seed ^ hash(data[len-2]), b0 ^ hash(data[len-1])); break;
-				case 3: seed = mum(seed ^ hash(data[len-3]), b2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), b4); break;
-			}
-			seed = (seed ^ seed << 16) * (len ^ b0);
-			return seed - (seed >>> 31) + (seed << 33);
-		}
+        public static long hash64(final int[][] data) {
+            if (data == null) return 0;
+            long seed = b0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = mum(
+                        mum(hash(data[i-3]) ^ b1, hash(data[i-2]) ^ b2) + seed,
+                        mum(hash(data[i-1]) ^ b3, hash(data[i  ]) ^ b4));
+            }
+            seed += b5;
+            int t;
+            switch (len & 3) {
+                case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), b3 ^ (t & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ hash(data[len-2]), b0 ^ hash(data[len-1])); break;
+                case 3: seed = mum(seed ^ hash(data[len-3]), b2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), b4); break;
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0);
+            return seed - (seed >>> 31) + (seed << 33);
+        }
 
 		public static long hash64(final long[][] data) {
 			if (data == null) return 0;
@@ -5987,407 +6054,380 @@ public class CrossHash {
 		}
 
 		public static long hash64(final Object data) {
-			if (data == null)
-				return 0;
-			final long h = data.hashCode() * 0x9E3779B97F4A7C15L;
-			return h - (h >>> 31) + (h << 33);
-		}
-		
+            if (data == null)
+                return 0;
+            final long h = data.hashCode() * 0x9E3779B97F4A7C15L;
+            return h - (h >>> 31) + (h << 33);
+        }
 
 
-
-
-
-	public static int hash(final boolean[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum((data[i-3] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s1, (data[i-2] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s2) + seed,
-					mum((data[i-1] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s3, (data[i] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ (data[len-1] ? 0x9E37L : 0x7F4AL), s3 ^ (data[len-1]  ? 0x79B9L : 0x7C15L)); break;
-			case 2: seed = mum(seed ^ (data[len-2] ? 0x9E3779B9L : 0x7F4A7C15L), s0 ^ (data[len-1] ? 0x9E3779B9L : 0x7F4A7C15L)); break;
-			case 3: seed = mum(seed ^ (data[len-3] ? 0x9E3779B9L : 0x7F4A7C15L), s2 ^ (data[len-2] ? 0x9E3779B9L : 0x7F4A7C15L)) ^ mum(seed ^ (data[len-1] ? 0x9E3779B9 : 0x7F4A7C15), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-	public static int hash(final byte[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
-					mum(data[i-1] ^ s3, data[i] ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ s2, s1 ^ data[len-1]); break;
-			case 2: seed = mum(seed ^ s3, data[len-2] ^ data[len-1] << 8 ^ s4); break;
-			case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s2 ^ data[len-1]); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final short[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
-					mum(data[i-1] ^ s3, data[i] ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ s3, s4 ^ data[len-1]); break;
-			case 2: seed = mum(seed ^ data[len-2], s3 ^ data[len-1]); break;
-			case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s1 ^ data[len-1]); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final char[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
-					mum(data[i-1] ^ s3, data[i] ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ s3, s4 ^ data[len-1]); break;
-			case 2: seed = mum(seed ^ data[len-2], s3 ^ data[len-1]); break;
-			case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s1 ^ data[len-1]); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final CharSequence data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length();
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(data.charAt(i-3) ^ s1, data.charAt(i-2) ^ s2) + seed,
-					mum(data.charAt(i-1) ^ s3, data.charAt(i  ) ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ s3, s4 ^ data.charAt(len-1)); break;
-			case 2: seed = mum(seed ^ data.charAt(len-2), s3 ^ data.charAt(len-1)); break;
-			case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, s1 ^ data.charAt(len-1)); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	//        public static int hash(final short[] data) {
-//            if (data == null) return 0;
-//            long seed = p0;
-//            final int len = data.length;
-//            for (int i = 7; i < len; i+=8) {
-//                seed = mum(
-//                        mum(data[i-7] ^ p1 ^ data[i-6] << 8, data[i-5] ^ p2 ^ data[i-4] << 8) + seed,
-//                        mum(data[i-3] ^ p3 ^ data[i-2] << 8, data[i-1] ^ p4 ^ data[i  ] << 8));
-//            }
-//            seed += p5;
-//            switch (len & 7) {
-//                case 1: seed = mum(seed ^ p3, p4 ^ data[len-1]); break;
-//                case 2: seed = mum(seed ^ data[len-2], p3 ^ data[len-1]); break;
-//                case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, p1 ^ data[len-1]); break;
-//                case 4: seed = mum(seed ^ data[len-4] ^ data[len-3] << 8, p0 ^ data[len-2] ^ data[len-1] << 8); break;
-//                case 5: seed = mum(seed ^ data[len-5] ^ data[len-4] << 8, p2 ^ data[len-3] ^ data[len-2] << 8) ^ mum(seed, p3 ^ data[len-1]); break;
-//                case 6: seed = mum(seed ^ data[len-6] ^ data[len-5] << 8, p2 ^ data[len-4] ^ data[len-3] << 8) ^ mum(seed, p3 ^ data[len-2] ^ data[len-1] << 8); break;
-//                case 7: seed = mum(seed ^ data[len-7] ^ data[len-6] << 8, p2 ^ data[len-5] ^ data[len-4] << 8) ^ mum(seed ^ data[len-3] ^ data[len-2] << 8, p4 ^ data[len-1]); break;
-//            }
-//            return (int) mum(seed ^ seed << 16, len ^ p5);
-//        }
-        /*
-	case 1:  seed = _watermum(_waterp2 ^ seed, _waterr08(p) ^ _waterp1); break;
-	case 2:  seed = _watermum(_waterp3 ^ seed, _waterr16(p) ^ _waterp4); break;
-	case 3:  seed = _watermum(_waterr16(p) ^ seed, _waterr08(p + 2) + _waterp3); break;
-	case 4:  seed = _watermum(_waterr16(p) ^ seed, _waterr16(p + 2) ^ _waterp3); break;
-	case 5:  seed = _watermum(_waterr16(p) ^ seed, (_waterr16(p + 2) << 8 | _waterr08(p + 4)) ^ _waterp1); break;
-	case 6:  seed = _watermum(_waterr32(p) ^ seed, _waterr16(p + 4) ^ _waterp1); break;
-	case 7:  seed = _watermum(_waterr32(p) ^ seed, (_waterr16(p + 4) << 8 | _waterr08(p + 6)) ^ _waterp1); break;
-	case 8:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp0); break;
-	case 9:  seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterp4, _waterr08(p + 8) ^ _waterp3); break;
-	case 10: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr16(p + 8) ^ _waterp3); break;
-	case 11: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, ((_waterr16(p + 8) << 8) | _waterr08(p + 10)) ^ _waterp3); break;
-	case 12: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed, _waterr32(p + 8) ^ _waterp3); break;
-	case 13: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr08(p + 12)) ^ _waterp4); break;
-	case 14: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12)) ^ _waterp4); break;
-	case 15: seed = _watermum(_waterr32(p) ^ seed, _waterr32(p + 4) ^ _waterp2) ^ _watermum(seed ^ _waterr32(p + 8), (_waterr16(p + 12) << 8 | _waterr08(p + 14)) ^ _waterp4); break;
+        public static int hash(final boolean[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum((data[i-3] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s1, (data[i-2] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s2) + seed,
+        				mum((data[i-1] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s3, (data[i] ? 0x9E3779B9L : 0x7F4A7C15L) ^ s4));
+        	}
+        	seed += s5;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^ (data[len-1] ? 0x9E37L : 0x7F4AL), s3 ^ (data[len-1]  ? 0x79B9L : 0x7C15L)); break;
+        		case 2: seed = mum(seed ^ (data[len-2] ? 0x9E3779B9L : 0x7F4A7C15L), s0 ^ (data[len-1] ? 0x9E3779B9L : 0x7F4A7C15L)); break;
+        		case 3: seed = mum(seed ^ (data[len-3] ? 0x9E3779B9L : 0x7F4A7C15L), s2 ^ (data[len-2] ? 0x9E3779B9L : 0x7F4A7C15L)) ^ mum(seed ^ (data[len-1] ? 0x9E3779B9 : 0x7F4A7C15), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        public static int hash(final byte[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
+        				mum(data[i-1] ^ s3, data[i] ^ s4));
+        	}
+        	seed += s5;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^ s2, s1 ^ data[len-1]); break;
+        		case 2: seed = mum(seed ^ s3, data[len-2] ^ data[len-1] << 8 ^ s4); break;
+        		case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s2 ^ data[len-1]); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final short[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
+        				mum(data[i-1] ^ s3, data[i] ^ s4));
+        	}
+        	seed += s5;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^ s3, s4 ^ data[len-1]); break;
+        		case 2: seed = mum(seed ^ data[len-2], s3 ^ data[len-1]); break;
+        		case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s1 ^ data[len-1]); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final char[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
+        				mum(data[i-1] ^ s3, data[i] ^ s4));
+        	}
+        	seed += s5;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^ s3, s4 ^ data[len-1]); break;
+        		case 2: seed = mum(seed ^ data[len-2], s3 ^ data[len-1]); break;
+        		case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s1 ^ data[len-1]); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final CharSequence data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length();
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(data.charAt(i-3) ^ s1, data.charAt(i-2) ^ s2) + seed,
+        				mum(data.charAt(i-1) ^ s3, data.charAt(i  ) ^ s4));
+        	}
+        	seed += s5;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^ s3, s4 ^ data.charAt(len-1)); break;
+        		case 2: seed = mum(seed ^ data.charAt(len-2), s3 ^ data.charAt(len-1)); break;
+        		case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, s1 ^ data.charAt(len-1)); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        public static int hash(final int[] data) {
+            if (data == null) return 0;
+            long seed = s0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = mum(
+                        mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
+                        mum(data[i-1] ^ s3, data[i] ^ s4));
+            }
+            seed += s5;
+            switch (len & 3) {
+                case 1: seed = mum(seed ^ (data[len-1] >>> 16), s3 ^ (data[len-1] & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ data[len-2], s0 ^ data[len-1]); break;
+                case 3: seed = mum(seed ^ data[len-3], s2 ^ data[len-2]) ^ mum(seed ^ data[len-1], s4); break;
+            }
+            return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        public static int hash(final int[] data, final int length) {
+            if (data == null) return 0;
+            long seed = s0;
+            for (int i = 3; i < length; i+=4) {
+                seed = mum(
+                        mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
+                        mum(data[i-1] ^ s3, data[i] ^ s4));
+            }
+            seed += s5;
+            switch (length & 3) {
+                case 1: seed = mum(seed ^ (data[length-1] >>> 16), s3 ^ (data[length-1] & 0xFFFFL)); break;
+                case 2: seed = mum(seed ^ data[length-2], s0 ^ data[length-1]); break;
+                case 3: seed = mum(seed ^ data[length-3], s2 ^ data[length-2]) ^ mum(seed ^ data[length-1], s4); break;
+            }
+            return (int) mum(seed ^ seed << 16, length ^ s0);
+        }
+        
+        public static int hash(final long[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 1; i < len; i+=2) {
+        		seed = mum(
+        				mum(data[i-1] >>> 32 ^ s1, (data[i-1] & 0xFFFFFFFFL) ^ s2) + seed,
+        				mum(data[i] >>> 32 ^ s3, (data[i] & 0xFFFFFFFFL) ^ s4));
+        	}
+        	seed += s5;
+        	if ((len & 1) == 1) {
+        		seed = mum(seed ^ data[len-1] >>> 32, s0 ^ (data[len-1] & 0xFFFFFFFFL));
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        public static int hash(final float[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(floatToIntBits(data[i-3]) ^ s1, floatToIntBits(data[i-2]) ^ s2) + seed,
+        				mum(floatToIntBits(data[i-1]) ^ s3, floatToIntBits(data[i]) ^ s4));
+        	}
+        	seed += s5;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^ (floatToIntBits(data[len-1]) >>> 16), s3 ^ (floatToIntBits(data[len-1]) & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ floatToIntBits(data[len-2]), s0 ^ floatToIntBits(data[len-1])); break;
+        		case 3: seed = mum(seed ^ floatToIntBits(data[len-3]), s2 ^ floatToIntBits(data[len-2])) ^ mum(seed ^ floatToIntBits(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        public static int hash(final double[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(doubleToMixedIntBits(data[i-3]) ^ s1, doubleToMixedIntBits(data[i-2]) ^ s2) + seed,
+        				mum(doubleToMixedIntBits(data[i-1]) ^ s3, doubleToMixedIntBits(data[i]) ^ s4));
+        	}
+        	seed += s5;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^ (doubleToMixedIntBits(data[len-1]) >>> 16), s3 ^ (doubleToMixedIntBits(data[len-1]) & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ doubleToMixedIntBits(data[len-2]), s0 ^ doubleToMixedIntBits(data[len-1])); break;
+        		case 3: seed = mum(seed ^ doubleToMixedIntBits(data[len-3]), s2 ^ doubleToMixedIntBits(data[len-2])) ^ mum(seed ^ doubleToMixedIntBits(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the char array to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 32-bit hash code for the requested section of data
          */
-	public static int hash(final int[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
-					mum(data[i-1] ^ s3, data[i] ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ (data[len-1] >>> 16), s3 ^ (data[len-1] & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ data[len-2], s0 ^ data[len-1]); break;
-			case 3: seed = mum(seed ^ data[len-3], s2 ^ data[len-2]) ^ mum(seed ^ data[len-1], s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-	public static int hash(final long[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 1; i < len; i+=2) {
-			seed = mum(
-					mum(data[i-1] >>> 32 ^ s1, (data[i-1] & 0xFFFFFFFFL) ^ s2) + seed,
-					mum(data[i] >>> 32 ^ s3, (data[i] & 0xFFFFFFFFL) ^ s4));
-		}
-		seed += s5;
-		if ((len & 1) == 1) {
-			seed = mum(seed ^ data[len-1] >>> 32, s0 ^ (data[len-1] & 0xFFFFFFFFL));
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-	public static int hash(final float[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(floatToIntBits(data[i-3]) ^ s1, floatToIntBits(data[i-2]) ^ s2) + seed,
-					mum(floatToIntBits(data[i-1]) ^ s3, floatToIntBits(data[i]) ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ (floatToIntBits(data[len-1]) >>> 16), s3 ^ (floatToIntBits(data[len-1]) & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ floatToIntBits(data[len-2]), s0 ^ floatToIntBits(data[len-1])); break;
-			case 3: seed = mum(seed ^ floatToIntBits(data[len-3]), s2 ^ floatToIntBits(data[len-2])) ^ mum(seed ^ floatToIntBits(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-	public static int hash(final double[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(doubleToMixedIntBits(data[i-3]) ^ s1, doubleToMixedIntBits(data[i-2]) ^ s2) + seed,
-					mum(doubleToMixedIntBits(data[i-1]) ^ s3, doubleToMixedIntBits(data[i]) ^ s4));
-		}
-		seed += s5;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^ (doubleToMixedIntBits(data[len-1]) >>> 16), s3 ^ (doubleToMixedIntBits(data[len-1]) & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ doubleToMixedIntBits(data[len-2]), s0 ^ doubleToMixedIntBits(data[len-1])); break;
-			case 3: seed = mum(seed ^ doubleToMixedIntBits(data[len-3]), s2 ^ doubleToMixedIntBits(data[len-2])) ^ mum(seed ^ doubleToMixedIntBits(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	/**
-	 * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
-	 *
-	 * @param data  the char array to hash
-	 * @param start the start of the section to hash (inclusive)
-	 * @param end   the end of the section to hash (exclusive)
-	 * @return a 32-bit hash code for the requested section of data
-	 */
-	public static int hash(final char[] data, final int start, final int end) {
-		if (data == null || start >= end)
-			return 0;
-		long seed = s0;
-		final int len = Math.min(end, data.length);
-		for (int i = start + 3; i < len; i+=4) {
-			seed = mum(
-					mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
-					mum(data[i-1] ^ s3, data[i] ^ s4));
-		}
-		seed += s5;
-		switch (len - start & 3) {
-			case 1: seed = mum(seed ^ s3, s4 ^ data[len-1]); break;
-			case 2: seed = mum(seed ^ data[len-2], s3 ^ data[len-1]); break;
-			case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s1 ^ data[len-1]); break;
-		}
-		return (int) mum(seed ^ seed << 16, len - start ^ s0);
-	}
-
-	/**
-	 * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
-	 *
-	 * @param data  the String or other CharSequence to hash
-	 * @param start the start of the section to hash (inclusive)
-	 * @param end   the end of the section to hash (exclusive)
-	 * @return a 32-bit hash code for the requested section of data
-	 */
-	public static int hash(final CharSequence data, final int start, final int end) {
-		if (data == null || start >= end)
-			return 0;
-		long seed = s0;
-		final int len = Math.min(end, data.length());
-		for (int i = start + 3; i < len; i+=4) {
-			seed = mum(
-					mum(data.charAt(i-3) ^ s1, data.charAt(i-2) ^ s2) + seed,
-					mum(data.charAt(i-1) ^ s3, data.charAt(i) ^ s4));
-		}
-		seed += s5;
-		switch (len - start & 3) {
-			case 1: seed = mum(seed ^ s3, s4 ^ data.charAt(len-1)); break;
-			case 2: seed = mum(seed ^ data.charAt(len-2), s3 ^ data.charAt(len-1)); break;
-			case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, s1 ^ data.charAt(len-1)); break;
-		}
-		return (int) mum(seed ^ seed << 16, len - start ^ s0);
-	}
-
-
-	public static int hash(final char[][] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
-					mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
-		}
-		seed += s5;
-		int t;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
-			case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final int[][] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
-					mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
-		}
-		seed += s5;
-		int t;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
-			case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final long[][] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
-					mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
-		}
-		seed += s5;
-		int t;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
-			case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final CharSequence[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
-					mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
-		}
-		seed += s5;
-		int t;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
-			case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final CharSequence[]... data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
-					mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
-		}
-		seed += s5;
-		int t;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
-			case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final List<? extends CharSequence> data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.size();
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(hash(data.get(i-3)) ^ s1, hash(data.get(i-2)) ^ s2) + seed,
-					mum(hash(data.get(i-1)) ^ s3, hash(data.get(i  )) ^ s4));
-		}
-		seed += s5;
-		int t;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^((t = hash(data.get(len-1))) >>> 16), s3 ^ (t & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ hash(data.get(len-2)), s0 ^ hash(data.get(len-1))); break;
-			case 3: seed = mum(seed ^ hash(data.get(len-3)), s2 ^ hash(data.get(len-2))) ^ mum(seed ^ hash(data.get(len-1)), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-
-	}
-
-	public static int hash(final Object[] data) {
-		if (data == null) return 0;
-		long seed = s0;
-		final int len = data.length;
-		for (int i = 3; i < len; i+=4) {
-			seed = mum(
-					mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
-					mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
-		}
-		seed += s5;
-		int t;
-		switch (len & 3) {
-			case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
-			case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
-			case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
-		}
-		return (int) mum(seed ^ seed << 16, len ^ s0);
-	}
-
-	public static int hash(final Object data) {
-		if (data == null)
-			return 0;
-		final int h = data.hashCode() * 0x9E375;
-		return h ^ (h >>> 16);
-	}
-
-}
+        public static int hash(final char[] data, final int start, final int end) {
+        	if (data == null || start >= end)
+        		return 0;
+        	long seed = s0;
+        	final int len = Math.min(end, data.length);
+        	for (int i = start + 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(data[i-3] ^ s1, data[i-2] ^ s2) + seed,
+        				mum(data[i-1] ^ s3, data[i] ^ s4));
+        	}
+        	seed += s5;
+        	switch (len - start & 3) {
+        		case 1: seed = mum(seed ^ s3, s4 ^ data[len-1]); break;
+        		case 2: seed = mum(seed ^ data[len-2], s3 ^ data[len-1]); break;
+        		case 3: seed = mum(seed ^ data[len-3] ^ data[len-2] << 8, s1 ^ data[len-1]); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len - start ^ s0);
+        }
+        
+        /**
+         * Hashes only a subsection of the given data, starting at start (inclusive) and ending before end (exclusive).
+         *
+         * @param data  the String or other CharSequence to hash
+         * @param start the start of the section to hash (inclusive)
+         * @param end   the end of the section to hash (exclusive)
+         * @return a 32-bit hash code for the requested section of data
+         */
+        public static int hash(final CharSequence data, final int start, final int end) {
+        	if (data == null || start >= end)
+        		return 0;
+        	long seed = s0;
+        	final int len = Math.min(end, data.length());
+        	for (int i = start + 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(data.charAt(i-3) ^ s1, data.charAt(i-2) ^ s2) + seed,
+        				mum(data.charAt(i-1) ^ s3, data.charAt(i) ^ s4));
+        	}
+        	seed += s5;
+        	switch (len - start & 3) {
+        		case 1: seed = mum(seed ^ s3, s4 ^ data.charAt(len-1)); break;
+        		case 2: seed = mum(seed ^ data.charAt(len-2), s3 ^ data.charAt(len-1)); break;
+        		case 3: seed = mum(seed ^ data.charAt(len-3) ^ data.charAt(len-2) << 8, s1 ^ data.charAt(len-1)); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len - start ^ s0);
+        }
+        
+        
+        public static int hash(final char[][] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
+        				mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
+        	}
+        	seed += s5;
+        	int t;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
+        		case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final int[][] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
+        				mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
+        	}
+        	seed += s5;
+        	int t;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
+        		case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final long[][] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
+        				mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
+        	}
+        	seed += s5;
+        	int t;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
+        		case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final CharSequence[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
+        				mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
+        	}
+        	seed += s5;
+        	int t;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
+        		case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final CharSequence[]... data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
+        				mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
+        	}
+        	seed += s5;
+        	int t;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
+        		case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final List<? extends CharSequence> data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.size();
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(hash(data.get(i-3)) ^ s1, hash(data.get(i-2)) ^ s2) + seed,
+        				mum(hash(data.get(i-1)) ^ s3, hash(data.get(i  )) ^ s4));
+        	}
+        	seed += s5;
+        	int t;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^((t = hash(data.get(len-1))) >>> 16), s3 ^ (t & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ hash(data.get(len-2)), s0 ^ hash(data.get(len-1))); break;
+        		case 3: seed = mum(seed ^ hash(data.get(len-3)), s2 ^ hash(data.get(len-2))) ^ mum(seed ^ hash(data.get(len-1)), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        
+        }
+        
+        public static int hash(final Object[] data) {
+        	if (data == null) return 0;
+        	long seed = s0;
+        	final int len = data.length;
+        	for (int i = 3; i < len; i+=4) {
+        		seed = mum(
+        				mum(hash(data[i-3]) ^ s1, hash(data[i-2]) ^ s2) + seed,
+        				mum(hash(data[i-1]) ^ s3, hash(data[i  ]) ^ s4));
+        	}
+        	seed += s5;
+        	int t;
+        	switch (len & 3) {
+        		case 1: seed = mum(seed ^((t = hash(data[len-1])) >>> 16), s3 ^ (t & 0xFFFFL)); break;
+        		case 2: seed = mum(seed ^ hash(data[len-2]), s0 ^ hash(data[len-1])); break;
+        		case 3: seed = mum(seed ^ hash(data[len-3]), s2 ^ hash(data[len-2])) ^ mum(seed ^ hash(data[len-1]), s4); break;
+        	}
+        	return (int) mum(seed ^ seed << 16, len ^ s0);
+        }
+        
+        public static int hash(final Object data) {
+        	if (data == null)
+        		return 0;
+        	final int h = data.hashCode() * 0x9E375;
+        	return h ^ (h >>> 16);
+        }
+    }
 
 }
