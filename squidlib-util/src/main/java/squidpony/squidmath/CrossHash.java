@@ -5668,8 +5668,21 @@ public class CrossHash {
 		 * @param b a long that should probably only hold an int's worth of data
 		 * @return a sort-of randomized output dependent on both inputs
 		 */
-		public static long mum(final long a, final long b) {
+        public static long mum(final long a, final long b) {
             final long n = a * b;
+            return n - (n >>> 32);
+        }
+
+        /**
+         * A slower but higher-quality variant on {@link #mum(long, long)} that can take two arbitrary longs (with any
+         * of their 64 bits containing relevant data) instead of mum's 32-bit sections of its inputs, and outputs a
+         * 64-bit result that can have any of its bits used.
+         * @param a any long
+         * @param b any long
+         * @return a sort-of randomized output dependent on both inputs
+         */
+        public static long wow(final long a, final long b) {
+            final long n = (a ^ (b << 39 | b >>> 25)) * (b ^ (a << 39 | a >>> 25));
             return n - (n >>> 32);
         }
 
@@ -5803,23 +5816,41 @@ public class CrossHash {
             seed = (seed ^ seed << 16) * (length ^ b0);
             return seed - (seed >>> 31) + (seed << 33);
         }
-        
-		public static long hash64(final long[] data) {
-			if (data == null) return 0;
-			long seed = b0;
-			final int len = data.length;
-			for (int i = 1; i < len; i+=2) {
-				seed = mum(
-						mum(data[i-1] >>> 32 ^ b1, (data[i-1] & 0xFFFFFFFFL) ^ b2) + seed,
-						mum(data[i] >>> 32 ^ b3, (data[i] & 0xFFFFFFFFL) ^ b4));
-			}
-			seed += b5;
-			if ((len & 1) == 1) {
-				seed = mum(seed ^ data[len-1] >>> 32, b0 ^ (data[len-1] & 0xFFFFFFFFL));
-			}
-			seed = (seed ^ seed << 16) * (len ^ b0);
-			return seed - (seed >>> 31) + (seed << 33);
-		}
+
+        public static long hash64(final long[] data) {
+            if (data == null) return 0;
+            long seed = b0;
+            final int len = data.length;
+            for (int i = 1; i < len; i+=2) {
+                seed = mum(
+                        mum(data[i-1] >>> 32 ^ b1, (data[i-1] & 0xFFFFFFFFL) ^ b2) + seed,
+                        mum(data[i] >>> 32 ^ b3, (data[i] & 0xFFFFFFFFL) ^ b4));
+            }
+            seed += b5;
+            if ((len & 1) == 1) {
+                seed = mum(seed ^ data[len-1] >>> 32, b0 ^ (data[len-1] & 0xFFFFFFFFL));
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0);
+            return seed - (seed >>> 31) + (seed << 33);
+        }
+        public static long hash64_(final long[] data) {
+            if (data == null) return 0;
+            long seed = b0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = wow(
+                        wow(data[i-3] + b1, data[i-2] + b2) + seed,
+                        wow(data[i-1] + b3, data[i] + b4) ^ b0);
+            }
+            seed += b5;
+            switch (len & 3) {
+                case 1: seed = wow(seed, b1 ^ data[len-1]); break;
+                case 2: seed = wow(seed + data[len-2], b2 + data[len-1]); break;
+                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + (data[len-1] >>> 32), (data[len-1] & 0xFFFFFFFFL) ^ b3); break;
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0 ^ seed >>> 32);
+            return seed - (seed >>> 31) + (seed << 33);
+        }
 		public static long hash64(final float[] data) {
 			if (data == null) return 0;
 			long seed = b0;
@@ -6198,6 +6229,25 @@ public class CrossHash {
         	}
         	return (int) mum(seed ^ seed << 16, len ^ s0);
         }
+        public static int hash_(final long[] data) {
+            if (data == null) return 0;
+            long seed = b0;
+            final int len = data.length;
+            for (int i = 3; i < len; i+=4) {
+                seed = wow(
+                        wow(data[i-3] + b1, data[i-2] + b2) + seed,
+                        wow(data[i-1] + b3, data[i] + b4) ^ b0);
+            }
+            seed += b5;
+            switch (len & 3) {
+                case 1: seed = wow(seed, b1 ^ data[len-1]); break;
+                case 2: seed = wow(seed + data[len-2], b2 + data[len-1]); break;
+                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + (data[len-1] >>> 32), (data[len-1] & 0xFFFFFFFFL) ^ b3); break;
+            }
+            seed = (seed ^ seed << 16) * (len ^ b0 ^ seed >>> 32);
+            return (int)(seed - (seed >>> 32));
+        }
+
         public static int hash(final float[] data) {
         	if (data == null) return 0;
         	long seed = s0;
