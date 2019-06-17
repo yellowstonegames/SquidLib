@@ -3,10 +3,10 @@ package squidpony.gdx.examples;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import squidpony.squidgrid.gui.gdx.DefaultResources;
+import squidpony.squidgrid.gui.gdx.FilterBatch;
 import squidpony.squidgrid.gui.gdx.SquidPanel;
 
 /**
@@ -15,13 +15,13 @@ import squidpony.squidgrid.gui.gdx.SquidPanel;
  */
 public class TinyTest2Screen extends ScreenAdapter {
     private SquidPanel panel;
-    private SpriteBatch batch;
+    private FilterBatch batch;
     private Stage stage;
 
     @Override
     public void show() {
         panel = new SquidPanel(40, 24, DefaultResources.getStretchableSlabFont().width(16).height(20).initBySize());
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         stage = new Stage(new StretchViewport(640, 480), batch);
         stage.addActor(panel);
     }

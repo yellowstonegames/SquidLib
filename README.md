@@ -1,7 +1,8 @@
-SquidLib is a Java library that provides a full featured toolbox for working with turn based games in Swing and libGDX.
+SquidLib is a Java library that provides a diverse toolbox for working with procedural generation in games using libGDX.
 --  
 
-SquidLib is used for Wyrm, Epigon, Attack the Geth, Assault Fish, [Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
+SquidLib is used for Wyrm, [Epigon](https://github.com/SquidPony/Epigon), Attack the Geth, Assault Fish,
+[Dungeon Mercenary](http://www.schplaf.org/hgames/), and other projects.
 
 You can see [a small example](http://tommyettinger.github.io/SquidLib-Demos/tsar/index.html) online; it is part of the
 [SquidLib-Demos](https://github.com/tommyettinger/SquidLib-Demos) collection. It uses `squidlib-util` to generate
@@ -40,9 +41,9 @@ The completely-optional squidlib-extra module (primarily used for serialization;
 and [source here](http://search.maven.org/remotecontent?filepath=com/squidpony/squidlib-extra/3.0.0-b9/squidlib-extra-3.0.0-b9-sources.jar).
 
 You can browse the **JavaDocs** of a recent commit (possibly newer than 3.0.0-b9, but no older) here:
-  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/index.html)
-  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/index.html)
-  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/index.html)
+  - [Docs for squidlib-util](http://squidpony.github.io/SquidLib/squidlib-util/apidocs/index.html)
+  - [Docs for squidlib](http://squidpony.github.io/SquidLib/squidlib/apidocs/index.html)
+  - [Docs for squidlib-extra](http://squidpony.github.io/SquidLib/squidlib-extra/apidocs/index.html)
 The docs here are updated whenever the project is rebuilt fully, which only coincides with releases occasionally.
 
 Current Features:
@@ -87,7 +88,7 @@ Current Features:
   -   SparseLayers is still capable of pretty much everything SquidLayers can do, just with an API that's a lot smaller
   -   The demo distributed with SquidSetup uses SparseLayers by default
 -   Robust libGDX animation support, from simple sliding to "burst" effects that create rotating chars spreading out of a cell
--   Starting with 3.0.0 beta 5, there is support for variable-width fonts in various widgets, which can be much more legible
+-   There is technically support for variable-width fonts; getting them to work may be a challenge
 -   Can create multiple overlapping layers
   -   Basic foreground & background color differences per cell
     -  Using a partially-transparent, full-cell tile in an overlay can change the colors below it
@@ -107,9 +108,12 @@ Current Features:
 -   Can get a list of colors that are a gradient between two colors
 -   Can perform LIBTCOD style "dark", "light", and "desaturate" commands on any color
 -   Can get an arbitrary amount of blend between two colors
--   Starting with 3.0.0 beta 2, you can alter colors automatically using Filters
--   Starting with 3.0.0 beta 5, lots of options are available for generating gradients, including with Filters, and gradients that wrap around like a rainbow
--   In recent betas (7 onward), there's a filter that adjusts the brightness of red and green to help players with common forms of red-green colorblindness distinguish game objects that would otherwise be too similar
+-   You can alter colors automatically using Filters or FloatFilters
+  -   Filters are used more "manually", while FloatFilters are usually given to FilterBatch to automatically change all
+      colors in a specific way
+-   Lots of options are available for generating gradients, including with Filters, and gradients that wrap around like a rainbow
+-   There's a Filter and a FloatFilter that adjusts the brightness of red and green to help players with common forms of
+    red-green colorblindness distinguish game objects that would otherwise be too similar
 -   SquidColorCenter (and potentially other IColorCenter implementations) allow finding and adjusting the hue, saturation, and value of colors
 -   GDXMarkup allows interaction with LibGDX's system of markup tags if you want, or it can generate special IColoredString values
   -   IColoredStrings can be created on their own and used throughout SquidLib; they don't need to use LibGDX's Color class but usually do
@@ -153,24 +157,24 @@ Current Features:
 -   MimicFill is a port of [ConvChain](https://github.com/mxgmn/ConvChain) and allows a square boolean 2D array to be used as a "stylistic basis" for filling an unlimited region with an imitation of the original square's style
 -   DetailedMimic is like MimicFill, and is a port of [SynTex](https://github.com/mxgmn/SynTex) but can handle color or
     char information, with the former useful for texture generation and the latter for map style imitation.
-
+-   MimicWFC is a port of [WaveFunctionCollapse](https://github.com/mxgmn/WaveFunctionCollapse); though it isn't
+    guaranteed to complete in any amount of time, or ever, for some sample data it can produce sophisticated mimicry of
+    that type of data.
+    
 ### SquidAI Pathfinding code
 -   Dijkstra Maps and A* can be used for pathfinding and other purposes.
   -   DijkstraMap provides support for getting to a target, avoiding paths that would make you stop in an invalid cell.
   -   DijkstraMap supports fleeing monsters, optionally sharing one "flee map" for all monsters fleeing the hero.
-  -   DijkstraMap can be given a Technique that contains a minimum and maximum range, and an Area of Effect, and it will pathfind to a relatively good place to use that technique.
-    -   There are many kinds of Area of Effect (AOE) provided, and given the right information, they can calculate the best place to position that AOE to hit as many targets as possible (not an easy task, but it gets calculated quickly).
+  -   DijkstraMap can be given a Technique that contains a minimum and maximum range, and an Area of Effect, and it will
+      pathfind to a relatively good place to use that technique.
+    -   There are many kinds of Area of Effect (AOE) provided, and given the right information, they can calculate the
+        best place to position that AOE to hit as many targets as possible (not an easy task, but it gets calculated quickly).
   -   DijkstraMap can partially scan an area, stopping once it reaches a given distance.
-    -   Since beta 7, DijkstraMap finally incorporates the straightforward optimization of immediately stopping distance
-        calculation once an ideal path has been found; the case of scanning the whole map intentionally is unaffected, though
-        other optimizations made that faster too
     - It would seem like partial scanning is normally ideal, but there are cases where you can avoid multiple partial scans
       by doing one full scan and using `DijkstraMap.findPathPreScanned(Coord)` until the circumstances change; this approach
       is used in BasicDemo (in the examples of the display module) to handle the highlighted path from the player to the mouse cursor
   -   Several classes support multi-cell creatures, including DijkstraMap
   -   DijkstraMap is currently recommended for pathfinding because it has been optimized more heavily than AStarSearch
-    -   Make that, much more heavily, since beta 7; DijkstraMap can, depending on heuristic, beat even top-notch pathfinding algorithms like gdx-ai's indexed A* on long/winding enough paths.
-    -   AStarSearch has gotten some optimization, but is still much slower than DijkstraMap in betas 7 and 8
   -   CustomDijkstraMap allows pathfinding on unusual map types, such as ones where you can rotate in your cell but it takes time, or where there are thin walls
     -   See ThinWallDemo and RotationDemo in the display module's tests folder for examples; this is an advanced feature, though
 
@@ -183,30 +187,29 @@ Current Features:
 
 ### Math Toolkit
 -   Custom extension(s) of Random allows drop-in replacement with added features
-  -   LightRNG, which is a SplitMix64 RNG, and is the default for much of the library
-    -   LightRNG can skip ahead or behind in its generated sequence, and it's one of the faster RNGs here
-  -   ThrustRNG is significantly faster than LightRNG and passes many statistical tests, though issues can be found when someone can analyze more than 10GB of its random data
-  -   ThrustAltRNG is a slower variant on ThrustRNG (still very fast) that has much higher quality (issues would be found at more than 1TB instead of 10GB).
-  -   XorRNG, which is a XorShift128+ RNG, with a much larger period than LightRNG and comparable speed
-  -   XoRoRNG, which is a xoroshiro128+ RNG using a recently-published algorithm
-    -   XoRoRNG is very fast and has good properties for heavy usage
-  -   MersenneTwister, which is an old standard that isn't especially fast but takes an impossibly huge amount of time to cycle through its full period
-  -   LongPeriodRNG, which is a XorShift1024*phi RNG; it is a good choice to replace MersenneTwister for applications like shuffling large sequences
-  -   PermutedRNG is fairly fast (not quite as fast as LightRNG), but has potential statistical advantages
-  -   ThunderRNG has somewhat poor statistical properties and period, but ~is~ was the fastest RNG we have here
-  -   With even worse statistical properties and even better speed than ThunderRNG, LapRNG is very fast but very low-quality.
-  -   IsaacRNG implements the ISAAC cipher as an RNG, which is pretty much the closest thing we have to a secure random number generator, but is much faster than the JDK's SecureRandom
-  -   DharmaRNG can be used to make more or less "lucky" RNGs that skew towards high or low results
-  -   So can EditRNG, but EditRNG also allows tweaking the "centrality" of the numbers it generates, and has an easier-to-understand expected average (recommended for luck alteration in RNGs)
-  -   DeckRNG should be less random during any particular span of random numbers, since it "shuffles" 16 numbers, from low to high, and draws them in a random order.
-  -   SobolQRNG produces deterministic results that may seem random, but tend to be more evenly distributed
-  -   VanDerCorputQRNG is similar to SobolQRNG, but has many different sequences, and also provides static methods to get random but separated Coords
+  -   We have a lot of choices for RandomnessSource, but you'll probably want to stick with the defaults except in
+      unusual cases.
+    -   DiverRNG and MiniMoverRNG offer excellent quality and excellent speed, respectively, when targeting 64-bit platforms
+    -   GWTRNG is one of the best choices for a 32-bit generator that is fast and high-quality when targeting HTML
+  -   EditRNG can change the distribution of a RandomnessSource so it produces high or low numbers more often, but
+      it can also allow tweaking the "centrality" of the numbers it generates, and has an easier-to-understand expected
+      average (recommended for luck alteration in RNGs)
+  -   DeckRNG should be less random during any particular span of random numbers, since it "shuffles" 16 numbers, from
+      low to high, and draws them in a random order. It's meant to satisfy players who don't want to be stuck with a
+      long run of bad luck, which is a valid concern when a DeckRNG might be only queried when a boss is defeated to see
+      its random loot drops. Since DeckRNG is guaranteed to produce all 16 numbers, which are evenly distributed across
+      its range, loot drops for high numbers are guaranteed to occur in 16 drops, as are drops for low numbers.
 -   Able to find Bresenham Lines for 2D and 3D coordinates.
   -   Also can use Wu or Elias Lines (antialiased Bresenham Lines)
-  -   Also several other line drawing algorithms, including one that only makes orthogonal movements, another with options to make wider lines, and another that wiggles in random directions and makes a randomized line toward a goal.
--   Perlin/Simplex noise implementations, in PerlinNoise, WhirlingNoise, and SeededNoise, among others
+  -   Also several other line drawing algorithms, including one that only makes orthogonal movements, another with
+      options to make wider lines, and another that wiggles in random directions and makes a randomized line toward a goal.
+-   Perlin/Simplex noise implementations, chiefly in SeededNoise and FastNoise
   -   Used to make Brogue-style "moving" water that works by altering the background lightness
   -   Noise class contains various modifications to noise generation, handling layering of different octaves and other changes
+  -   SeededNoise takes a long seed and just produces Simplex noise given a 2D, 3D, 4D, or 6D point, and is expected to
+      be used with Noise and its nested classes
+  -   FastNoise takes an int seed and has most of the features of [auburns' library](https://github.com/Auburns/FastNoise_Java),
+      including classic Perlin, Simplex, white, cellular, and other forms of noise; it can be configured in lots of ways
   -   Also used for world map generation, in WorldMapGenerator
     -   This uses many different parts of the Noise class to affect world maps; see [this preview world map](http://squidpony.github.io/SquidLib/DetailedWorldMapDemo.png)
   -   Some games can benefit from using very-high-dimensional noise for story generation where each "axis" is some property of the world; CosmicNumbering is meant for this
@@ -222,9 +225,13 @@ Current Features:
   -   CoordPacker is built around a mix of simple and complicated encoding/compression tricks to obtain incredibly small memory usage for many regions
     -   RegionMap can use CoordPacker's regions as keys in a Map-like data structure, and find all regions that overlap with a point
   -   GreasedRegion is a little "fatty" in its memory usage, in the sense of greasy food, but also like "greased lightning" in its speed
-    -   It is the recommended way to modify regions by shrinking, expanding, or other related bulk operations
+    -   It is the recommended way to modify regions by shrinking, expanding, or other related bulk operations, and tends
+        to be much faster than CoordPacker
     -   GreasedRegion is heavily used internally, and though it shouldn't need to be used in most code that uses SquidLib, lots of code can benefit from representing regions as objects
   -   Using these classes can be an excellent tool for making interesting maps, and they can be combined with other strategies
+  -   Some runtime usage makes sense for GreasedRegion as well; as it implements `Collection` of `Coord`, it can be
+      given to DijkstraMap as a group of impassable cells, which can help stop pathfinding from going into areas that
+      aren't visible, for example.
 
 ### Data Structures
 -   SquidLib needed some unusual features in the course of its development, and we have more than a few unusual data structures to fill those needs
@@ -232,16 +239,22 @@ Current Features:
     -   The variant called Arrangement is bidirectional, allowing you to find the index of a key as well as the key at an index
   -   OrderedMap (also no relation to libGDX's class) is a Map that shares OrderedSet's ability to look up keys and values by index.
   -   OrderedSet implements SortedSet, while OrderedMap and Arrangement implement SortedMap, and Arrangement also implements Iterable for its keys
-  -   K2 is like OrderedSet but has two key types (A and B) stored in side-by-side collections, but sharing indexes as pairs and allowing the corresponding A to be looked up given a B and vice versa
-  -   K2V1 is like K2 but also stores values that don't need to be unique like keys do, but can't be looked up in the same way either (you can use an index, an A key, or a B key to look up a value, though)
+  -   K2 is like OrderedSet but has two key types (A and B) stored in side-by-side collections, but sharing indexes as
+      pairs and allowing the corresponding A to be looked up given a B and vice versa
+  -   K2V1 is like K2 but also stores values that don't need to be unique like keys do, but can't be looked up in the
+      same way either (you can use an index, an A key, or a B key to look up a value, though)
   -   All of these mentioned so far can be reordered, possibly with a random ordering produced by RNG
-  -   Using indexes instead of always using keys can be useful, but it also means that getting random values from these collections will behave as expected across platforms
-  -   Most of these classes allow you to specify how keys are hashed and compared for equality, which permits using arrays as keys (if they aren't modified) or even allows the behavior of IdentityHashMap to be used with insertion ordering (which does allow keys to be modified, but has special requirements for accessing them)
+  -   Using indexes instead of always using keys can be useful, but it also means that getting random values from these
+      collections will behave as expected across platforms
+  -   Most of these classes allow you to specify how keys are hashed and compared for equality, which permits using
+      arrays as keys (if they aren't modified) or even allows the behavior of IdentityHashMap to be used with insertion
+      ordering (which does allow keys to be modified, but has special requirements for accessing them)
     -   The class CrossHash includes multiple hashing algorithms and predefined IHasher values for various usages, which can be passed to many OrderedMap/Set constructors
   -   SquidLib releases before beta 7 used LinkedHashMap and LinkedHashSet in place of OrderedMap and OrderedSet, and converting from beta 6 to beta 7 or later may entail some changes
 -   Maker, a small class in squidlib-util, helps construct these data structures more conveniently
 -   The serialization code in squidlib-extra is aware of these data structures and can serialize them efficiently and with less restrictions that normally apply to JSON (you can serialize non-String keys to our dialect of JSON with OrderedMap, for example)
-  -   This code also provides ways to compress the JSON output using lz-string encoding, which performs very well here; it uses the tiny library [BlazingChain](https://github.com/tommyettinger/BlazingChain) to do this
+  -   This code also provides ways to compress the JSON output using lz-string encoding, which performs very well here;
+      it uses code from the tiny library [BlazingChain](https://github.com/tommyettinger/BlazingChain) to do this
 
 ### Text generation
 -   The FakeLanguageGen class can help imitate a linguistic style or mix multiple languages, then produce text in an imaginary language
@@ -260,7 +273,10 @@ Current Features:
 
 ### Actively Developed
 - Started in 2011 by SquidPony (Eben Howard), SquidLib has since picked up contributions from a number of developers around the world
-- Development has accelerated recently as more people started adding code, with Tommy Ettinger working on things that aren't included in most other roguelike libraries, smelc and David Becker each contributing quite a few pull requests that help stability, performance, and code clarity, and still more developers helping by reporting and commenting on issues
+- Development has accelerated recently as more people started adding code, with Tommy Ettinger working on things that
+  aren't included in most other roguelike libraries, smelc and David Becker each contributing quite a few pull requests
+  that help stability, performance, and code clarity, and still more developers helping by reporting and commenting on
+  issues
 - SquidLib 2.9.1 is pretty good
 - SquidLib 3.0.0 will be better!
   -  Seriously, 2.x and 3.x are pretty much completely different codebases. The switch to libGDX is significant!
@@ -268,37 +284,33 @@ Current Features:
   - Any minor releases after 3.0.0 and before 4.0.0 should be expected to *keep* API backwards compatibility, unless a feature is broken or unusable
   - The most significant change in 3.0.0 is the removal of the Swing-based rendering and full transition to the similar, but much faster and more responsive, libGDX renderer
   - 3.0.0-b1 is the last release to contain Swing. If you're porting code that used an earlier version of SquidLib and need Swing for some reason, you may want to stay with the largely-compatible 2.9.1 instead of the very-different 3.0.0-b1.
-    - This should also enable SquidLib to be used for rendering on Android/iOS and not only the desktop platforms Swing is limited to
+    - This should also enable SquidLib to be used for rendering on Android/iOS/HTML and not only the desktop platforms Swing is limited to
   - There is now a tool that sets up a project for people who want an easy way to handle the dependencies of SquidLib and/or libGDX
     - You should use [the stable version of SquidSetup](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-b9) if you want to use
       the latest stable SquidLib, since it has squidlib 3.0.0-b9 (as well as squidlib-util and regexodus) all configured as default.
       There's a SquidLib demo as an example that defaults to being selected. You should probably select libGDX version 1.9.6 if you use the
-      stable version, or 1.9.8 if you use the snapshot (1.9.8 includes important fixes to bugs from 1.9.7).
+      stable version, or 1.9.9 if you use the snapshot (1.9.9 includes important fixes to bugs from 1.9.7).
     - Some ways of setting up a project won't include assets, so if you use the DefaultResources class in the display
       module (recommended for several things, like distance field fonts), you need to get the assets you want separately.
       They're in the assets/ folder of this GitHub repo, or you can get all the assets in a .zip file from SquidSetup's
       [SNAPSHOT release](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-SNAPSHOT). If you get the .zip, then
       after extracting the files you can delete any assets you don't use, or move them out of the distributed part of your code.
-  - [This commit on June 19, 2016](https://github.com/SquidPony/SquidLib/commit/22c770b37b3635c6beacadda6ef71e07c9a55a8e)
-    changed usages of LinkedHashMap and LinkedHashSet to OrderedMap and OrderedSet in the squidpony.squidmath package.
-    If you use SquidLib versions before that commit (such as beta 6), then update to after that commit (which was some
-    time after beta 6), you should expect some find/replace needed throughout your code. The APIs for LinkedHashSet and
-    OrderedSet are identical except for the additions OrderedSet makes, and almost the same is true for LinkedHashMap
-    (no possible access-ordering like in LinkedHashMap; only insertion-ordering or user-specified-ordering are possible
-    in OrderedMap, though the last isn't possible in LinkedHashMap).
 
 Download
 --
 
-Download JARs for older versions from the Releases tab, use Maven Central to download the latest version with your
-choice of features (display or none, with or without squidlib-extra), or simply use
-[SquidSetup](https://github.com/tommyettinger/SquidSetup/) to make a new project configured the way libGDX prefers
-to work (including SquidLib's assets), and copy in any code you might already have.
+Download JARs for older versions from the Releases tab, use Maven Central to download the latest stable release (or
+JitPack to download any commit, typically the most recent one) with your choice of features (display or none, with or
+without squidlib-extra), or simply use [SquidSetup](https://github.com/tommyettinger/SquidSetup/) to make a new project
+configured the way libGDX prefers to work (including SquidLib's assets), and copy in any code you might already have.
 
 Ideally, if you're starting out you should use [SquidSetup](https://github.com/tommyettinger/SquidSetup/). This is based
 on [czyzby's gdx-setup tool](https://github.com/czyzby/gdx-setup), an alternative to the current official libGDX setup
 that aims to have more features and update more readily. A demo is present for SquidLib, selected by default when making
-a project with SquidSetup (typically if the demo becomes out-of-date, SquidSetup is updated to fix the demo).
+a project with SquidSetup (typically if the demo becomes out-of-date, SquidSetup is updated to fix the demo). The
+recommended release is [v3.0.0-JITPACK](https://github.com/tommyettinger/SquidSetup/releases/tag/v3.0.0-JITPACK), which
+will use Gradle 5.4 for the project (and that avoids numerous bugs in older Gradle versions) and will automatically
+depend on the latest SquidLib version at the time the project is generated.
 
 If you use a dependency manager already and don't need a new project, you can use these dependencies for Maven projects:
 
@@ -346,7 +358,7 @@ Optional Serialization Support
 compile 'com.squidpony:squidlib-extra:3.0.0-b9'
 ```
 
-If you want the latest version of SquidLib, which uses libGDX 1.9.8 and GWT 2.8.0 (if you use GWT), you can use JitPack
+If you want the latest version of SquidLib, which uses libGDX 1.9.9 and GWT 2.8.0 (if you use GWT), you can use JitPack
 to build the latest commit on-demand. It needs an additional repository, which is this for Maven:
 
 ```
@@ -358,40 +370,40 @@ to build the latest commit on-demand. It needs an additional repository, which i
 	</repositories>
 ```
 
-Or this for Gradle, which if you used gdx-setup, would be in the repositories block inside subprojects:
+Or this for Gradle, which if you used SquidSetup, would be in the repositories block inside subprojects:
 ```
 maven { url "https://jitpack.io" }
 ```
 
-Then the dependencies would be this for Maven (the first is needed, the others are optional); replace `ecff5cd03e`
+Then the dependencies would be this for Maven (the first is needed, the others are optional); replace `9add4b83e9`
 with any short commit from GitHub:
 
 ```
 	<dependency>
 	    <groupId>com.github.SquidPony.SquidLib</groupId>
 	    <artifactId>squidlib-util</artifactId>
-	    <version>ecff5cd03e</version>
+	    <version>9add4b83e9</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.github.SquidPony.SquidLib</groupId>
 	    <artifactId>squidlib</artifactId>
-	    <version>ecff5cd03e</version>
+	    <version>9add4b83e9</version>
 	</dependency>
 	<dependency>
 	    <groupId>com.github.SquidPony.SquidLib</groupId>
 	    <artifactId>squidlib-extra</artifactId>
-	    <version>ecff5cd03e</version>
+	    <version>9add4b83e9</version>
 	</dependency>
 ```
 
-Or this for Gradle (the first two are needed, the others are optional); replace `ecff5cd03e` with any short commit from GitHub:
+Or this for Gradle (the first two are needed, the others are optional); replace `9add4b83e9` with any short commit from GitHub:
 ```
-    compile("com.github.SquidPony.SquidLib:squidlib-util:ecff5cd03e")
-    compile("com.github.SquidPony.SquidLib:squidlib:ecff5cd03e")
-    compile("com.github.SquidPony.SquidLib:squidlib-extra:ecff5cd03e")
+    compile("com.github.SquidPony.SquidLib:squidlib-util:9add4b83e9")
+    compile("com.github.SquidPony.SquidLib:squidlib:9add4b83e9")
+    compile("com.github.SquidPony.SquidLib:squidlib-extra:9add4b83e9")
 ```
 
-If you use GWT, you should probably use gdx-setup to configure the project, though it might need some changes to
+If you use GWT, you should probably use SquidSetup to configure the project, though it might need some changes to
 GWT "inherits" configuration for your application. These should be present once in GdxDefinition.gwt.xml if you use GWT:
 
 ```

@@ -1451,10 +1451,10 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
 
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
+        final K[] key = this.key;
         final IntVLA[] value = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing macro
-        final K newKey[] = (K[]) new Object[newN + 1];
+        final K[] newKey = (K[]) new Object[newN + 1];
         K k;
         final IntVLA[] newValue = new IntVLA[newN + 1];
         int i, pos, sz = order.size, originalFirst = first, originalLast = last;
@@ -1526,13 +1526,13 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
                 i++;
             if (this != key[i])
                 t = hasher.hash(key[i]);
-            t ^= value[i].hashWisp();
+            t ^= value[i].hashHive();
             h += t;
             i++;
         }
         // Zero / null keys have hash zero.
         if (containsNullKey)
-            h += value[n].hashWisp();
+            h += value[n].hashHive();
         return h;
     }
     /**
@@ -1622,7 +1622,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      * @param offset the first element of the array to be returned.
      * @param max the maximum number of elements to unwrap.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max ) {
         if ( max < 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );
         if ( offset < 0 || offset + max > array.length ) throw new IllegalArgumentException();
         int j = max;
@@ -1639,7 +1639,7 @@ public class MultiArrangement<K> implements Iterable<K>, Serializable, Cloneable
      * @param i a type-specific iterator.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length );
     }
 

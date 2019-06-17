@@ -47,12 +47,13 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     //private static final int width = 314 * 3, height = 300;
 //    private static final int width = 1024, height = 512;
 //    private static final int width = 512, height = 256;
+//    private static final int width = 256, height = 256;
 //    private static final int width = 400, height = 400; // fast rotations
 //    private static final int width = 300, height = 300;
-//    private static final int width = 1600, height = 800;
+    private static final int width = 1600, height = 800;
 //    private static final int width = 900, height = 900;
 //    private static final int width = 700, height = 700;
-    private static final int width = 512, height = 512;
+//    private static final int width = 512, height = 512;
 //    private static final int width = 128, height = 128;
     
     private SpriteBatch batch;
@@ -386,17 +387,19 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         pt.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         
 //        stage = new Stage(view, batch);
-        seed = 0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
+        seed = 0x44B94C6A93EF3D54L;//0xca576f8f22345368L;//0x9987a26d1e4d187dL;//0xDEBACL;
         rng = new StatefulRNG(seed);
 //        world = new WorldMapGenerator.TilingMap(seed, width, height, FastNoise.instance, 1.25);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, WhirlingNoise.instance, 0.875);
         //world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
-        //world = new WorldMapGenerator.MimicMap(seed, WhirlingNoise.instance, 0.8);
+//        world = new WorldMapGenerator.MimicMap(seed, FastNoise.instance, 0.7);
 //        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, ClassicNoise.instance, 0.7);
-        world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, FastNoise.instance, 0.7);
+        //world = new WorldMapGenerator.RotatingSpaceMap(seed, width, height, FastNoise.instance, 0.7);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.8);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 0.7, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, CosmicNumbering.instance, 0.6, 0.0625, 2.5);
 //        world = new WorldMapGenerator.SphereMap(seed, width, height, FastNoise.instance, 0.6);
+//        world = new WorldMapGenerator.LocalMimicMap(seed, FastNoise.instance, 0.6);
+//        world = new WorldMapGenerator.LocalMimicMap(seed, ((WorldMapGenerator.LocalMimicMap) world).earth.not(), FastNoise.instance, 0.9);
         //cloudNoise = new Noise.Turbulent4D(WhirlingNoise.instance, new Noise.Ridged4D(SeededNoise.instance, 2, 3.7), 3, 5.9);
         //cloudNoise = new Noise.Layered4D(WhirlingNoise.instance, 2, 3.2);
         //cloudNoise2 = new Noise.Ridged4D(SeededNoise.instance, 3, 6.5);
@@ -471,20 +474,41 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
     }
 
     public void zoomIn() {
-        zoomIn(width>>1, height>>1);
+        long startTime = System.nanoTime();
+        world.zoomIn();
+        //// This code could be used to zoom into arbitrary x and y positions, where x and y don't change between calls
+//        int zoom = world.zoom;
+//        int x = (int) seed; // use some x that is the same between calls
+//        int y = (int) (seed >>> 32); // use some y that is the same between calls
+//        world.zoomOut(world.zoom, 0, 0); // resets zoom
+//        for (int i = 0; i <= zoom; i++) {
+//            // total insanity, specific to a 256x256 map such as the default LocalMimicMap
+//            world.zoomIn(1, ((x >>> i) & 1) * 128 + 64, ((((2 << zoom) - 1 - y) >>> i) & 1) * 128 + 64);
+//        }
+        dbm.makeBiomes(world);
+        ttg = System.nanoTime() - startTime >> 20;
+
+        
+//        zoomIn(width>>2, height>>2);
     }
     public void zoomIn(int zoomX, int zoomY)
     {
         long startTime = System.nanoTime();
         world.zoomIn(1, zoomX<<1, zoomY<<1);
         dbm.makeBiomes(world);
+        ttg = System.nanoTime() - startTime >> 20;
         //political = fpm.adjustZoom();//.generate(seed + 1000L, world, dbm, null, 50, 1.0);
 //        System.out.println(StringKit.hex(CrossHash.hash64(world.heightCodeData)) + " " + StringKit.hex(CrossHash.hash64(dbm.biomeCodeData)));
-        ttg = System.nanoTime() - startTime >> 20;
     }
     public void zoomOut()
     {
-        zoomOut(width>>1, height>>1);
+        long startTime = System.nanoTime();
+        world.zoomOut();
+        dbm.makeBiomes(world);
+        ttg = System.nanoTime() - startTime >> 20;
+
+
+        //zoomOut(width>>2, height>>2);
     }
     public void zoomOut(int zoomX, int zoomY)
     {
@@ -724,6 +748,34 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         batch.draw(pt, 0, 0, width >> 1, height >> 1);
         batch.end();
     }
+    public void putHeightMap() {
+        int hc;
+        int[][] heightCodeData = world.heightCodeData;
+        double[][] heightData = world.heightData;
+        double elevation;
+        pm.setColor(quantize(SColor.DB_INK));
+        pm.fill();
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                hc = heightCodeData[x][y];
+                if (hc == 1000)
+                    continue;
+                elevation = heightData[x][y];
+                if(hc < 4)
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(ice, deepColor,
+                            (float) ((elevation - world.minHeight) / (world.maxHeight - world.minHeight + 0.001))));
+                else
+                    Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(-0x1.b9ebeap126F, // SColor.BEIGE
+                            -0x1.64b5eap125F, // SColor.AURORA_EMBERS
+                            (float) ((elevation - world.minHeight) / (world.maxHeight - world.minHeight + 0.001))));
+                pm.drawPixel(x, y, quantize(tempColor));
+            }
+        }
+        batch.begin();
+        pt.draw(pm, 0, 0);
+        batch.draw(pt, 0, 0, width >> 1, height >> 1);
+        batch.end();
+    }
     public void putHeatMap() {
         int hc;
         int[][] heightCodeData = world.heightCodeData;
@@ -742,8 +794,8 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
                             (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))));
                 else
                     Color.abgr8888ToColor(tempColor, SColor.lerpFloatColors(-0x1.5bbf5ap126F, // SColor.MOSS_GREEN
-                             -0x1.8081fep125F, // SColor.CORAL_RED
-                        (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))));
+                            -0x1.8081fep125F, // SColor.CORAL_RED
+                            (float) ((heat - world.minHeat) / (world.maxHeat - world.minHeat + 0.001))));
                 pm.drawPixel(x, y, quantize(tempColor));
             }
         }
@@ -867,14 +919,11 @@ public class DetailedWorldMapDemo extends ApplicationAdapter {
         // need to display the map every frame, since we clear the screen to avoid artifacts.
         switch (mode)
         {
-            /*
             case 3: putHeatMap();
             break;
-            case 2: putMoistureMap();
+            case 0: putMoistureMap();
             break;
-            */
-            case 2:
-            case 3: putExperimentMap();
+            case 2: putHeightMap();
             break;
             default: putMap();
             break;

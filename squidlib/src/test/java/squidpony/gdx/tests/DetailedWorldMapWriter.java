@@ -7,6 +7,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -14,8 +15,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.Thesaurus;
-import squidpony.squidgrid.gui.gdx.PNG8;
-import squidpony.squidgrid.gui.gdx.PaletteReducer;
 import squidpony.squidgrid.gui.gdx.SColor;
 import squidpony.squidgrid.gui.gdx.SquidInput;
 import squidpony.squidgrid.mapping.WorldMapGenerator;
@@ -48,10 +47,10 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         Ocean                  = 13,
         Empty                  = 14;
 
-    //private static final int width = 1920, height = 1080;
+    private static final int width = 1920, height = 1080;
 //    private static final int width = 1024, height = 512; // elliptical, roundSide, hyper
     //private static final int width = 512, height = 256; // mimic, elliptical
-    private static final int width = 1000, height = 1000; // space view
+//    private static final int width = 1000, height = 1000; // space view
     private static final int LIMIT = 10;
     //private static final int width = 256, height = 128;
     //private static final int width = 314 * 4, height = 400;
@@ -99,7 +98,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
     private WorldMapGenerator world;
     private WorldMapGenerator.DetailedBiomeMapper dbm;
 
-    private PNG8 writer;
+    private PixmapIO.PNG writer;
     
     // Biome map colors
     private static float baseIce = SColor.ALICE_BLUE.toFloatBits();
@@ -228,9 +227,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //path = "out/worlds/Ellipse " + date + "/";
         //path = "out/worlds/Mimic " + date + "/";
         //path = "out/worlds/Dump " + date + "/";
-        path = "out/worlds/SpaceView " + date + "/";
+//        path = "out/worlds/SpaceView " + date + "/";
         //path = "out/worlds/RoundSide " + date + "/";
-//        path = "out/worlds/Hyperellipse " + date + "/";
+        path = "out/worlds/Hyperellipse " + date + "/";
 //        path = "out/worlds/EllipseHammer " + date + "/";
 //        path = "out/worlds/SpaceCompare " + date + "/";
 //        path = "out/worlds/HyperCompare " + date + "/";
@@ -244,11 +243,11 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         pm.setBlending(Pixmap.Blending.None);
         pt = new Texture(pm);
 
-        writer = new PNG8((int)(pm.getWidth() * pm.getHeight() * 1.5f)); // Guess at deflated size.
+        writer = new PixmapIO.PNG((int)(pm.getWidth() * pm.getHeight() * 1.5f)); // Guess at deflated size.
         writer.setFlipY(false);
         writer.setCompression(6);
-        writer.palette = new PaletteReducer();
-        writer.palette.setDitherStrength(1.75f);
+//        writer.palette = new PaletteReducer();
+//        writer.palette.setDitherStrength(1.75f);
         rng = new StatefulRNG(CrossHash.hash64(date));
         //rng.setState(rng.nextLong() + 2000L); // change addend when you need different results on the same date  
         //rng = new StatefulRNG(0L);
@@ -258,9 +257,9 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
         //world = new WorldMapGenerator.SphereMap(seed, width, height, WhirlingNoise.instance, 1.625);
         //world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 1.5);
         //world = new WorldMapGenerator.MimicMap(seed, ClassicNoise.instance, 1.5);
-        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, FastNoise.instance, 1.25);
+//        world = new WorldMapGenerator.SpaceViewMap(seed, width, height, FastNoise.instance, 1.25);
         //world = new WorldMapGenerator.RoundSideMap(seed, width, height, ClassicNoise.instance, 0.75);
-//        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, ClassicNoise.instance, 0.5, 0.0625, 2.5);
+        world = new WorldMapGenerator.HyperellipticalMap(seed, width, height, FastNoise.instance, 1.5, 0.03125, 2.5);
 //        world = new WorldMapGenerator.EllipticalHammerMap(seed, width, height, ClassicNoise.instance, 0.75);
 //        world = new WorldMapGenerator.EllipticalMap(seed, width, height, ClassicNoise.instance, 0.5);
         dbm = new WorldMapGenerator.DetailedBiomeMapper();
@@ -490,7 +489,7 @@ public class DetailedWorldMapWriter extends ApplicationAdapter {
 
         //        PixmapIO.writePNG(Gdx.files.local(path + name + ".png"), pm);
         try {
-            writer.writePrecisely(Gdx.files.local(path + name + ".png"), pm, false);
+            writer.write(Gdx.files.local(path + name + ".png"), pm); // , false);
         } catch (IOException ex) {
             throw new GdxRuntimeException("Error writing PNG: " + path + name + ".png", ex);
         }

@@ -1,20 +1,36 @@
 package squidpony.squidgrid.mapping;
 
-import squidpony.squidmath.*;
+import squidpony.squidmath.Coord;
+import squidpony.squidmath.FastNoise;
+import squidpony.squidmath.GWTRNG;
+import squidpony.squidmath.GreasedRegion;
+import squidpony.squidmath.IRNG;
+import squidpony.squidmath.WobblyLine;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ListIterator;
 
 /**
- * Map generator using Perlin/Simplex noise for the formation of "rooms" and then WobblyLine to connect with corridors.
+ * Map generator using Simplex noise for the formation of "rooms" and then WobblyLine to connect with corridors.
  * Created by Tommy Ettinger on 4/18/2016.
  */
 public class OrganicMapGenerator implements IDungeonGenerator {
     public char[][] map;
     public int[][] environment;
+    public GreasedRegion floors;
     public IRNG rng;
     protected int width, height;
     public double noiseMin, noiseMax;
+    protected FastNoise noise;
+    private static final Comparator<GreasedRegion> sizeComparator = new Comparator<GreasedRegion>() {
+        @Override
+        public int compare(GreasedRegion o1, GreasedRegion o2) {
+            return o2.size() - o1.size();
+        }
+    };
+
     public OrganicMapGenerator()
     {
         this(0.55, 0.65, 80, 30, new GWTRNG());
@@ -29,14 +45,15 @@ public class OrganicMapGenerator implements IDungeonGenerator {
     }
     public OrganicMapGenerator(double noiseMin, double noiseMax, int width, int height, IRNG rng)
     {
-        CoordPacker.init();
         this.rng = rng;
         this.width = Math.max(3, width);
         this.height = Math.max(3, height);
-        this.noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin));
-        this.noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax));
+        this.noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.1));
+        this.noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.1));
         map = new char[this.width][this.height];
         environment = new int[this.width][this.height];
+        floors = new GreasedRegion(width, height);
+        noise = new FastNoise(1, 0.333f, FastNoise.SIMPLEX_FRACTAL, 2);
     }
 
     /**
@@ -46,66 +63,50 @@ public class OrganicMapGenerator implements IDungeonGenerator {
      */
     public char[][] generate()
     {
-        double shift, shift2, temp;
-        boolean[][] working = new boolean[width][height], blocks = new boolean[8][8];
-        int ctr = 0, frustration = 0;
-        REDO:
+        double temp;
+        int frustration = 0;
         while (frustration < 10) {
-            shift = rng.nextDouble(2048);
-            shift2 = rng.between(4096, 8192);
-            ctr = 0;
+            noise.setSeed(rng.nextInt());
+            floors.clear();
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     map[x][y] = '#';
-                    temp = (PerlinNoise.noise(x * 4.7 + shift, y * 4.7 + shift) * 5
-                            + PerlinNoise.noise(x * 11.4 + shift2, y * 11.4 + shift2) * 3) / 8.0;
+                    temp = noise.getConfiguredNoise(x, y);
                     if (temp >= noiseMin && temp <= noiseMax) {
-                        working[x][y] = true;
-                        ctr++;
-                        blocks[x * 8 / width][y * 8 / height] = true;
-                    }
-                    else
-                    {
-                        working[x][y] = false;
+                        floors.insert(x, y);
                     }
                 }
             }
-            for (int x = 0; x < 8; x++) {
-                for (int y = 0; y < 8; y++) {
-                    if (!blocks[x][y]) {
-                        frustration++;
-                        ctr = 0;
-                        continue REDO;
-                    }
-                }
+            if (floors.size() < width * height * 0.1f) {
+                frustration++;
+                continue;
             }
             break;
         }
-        if(ctr < (width + height) * 3 || frustration >= 10) {
+        if(frustration >= 10) {
             noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
             noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
             return generate();
         }
-        ctr = 0;
-        ArrayList<short[]> allRegions = CoordPacker.split(CoordPacker.pack(working)),
-                regions = new ArrayList<>(allRegions.size());
-        short[] region, linking, tempPacked;
-        List<Coord> path, path2;
+        ArrayList<GreasedRegion> regions = floors.split();
+        GreasedRegion region, linking;
+        ArrayList<Coord> path;
         Coord start, end;
-        char[][] t;
-        for (short[] r : allRegions) {
-            if (CoordPacker.count(r) > 5) {
-                region = CoordPacker.expand(r, 1, width, height, false);
-                if(CoordPacker.isEmpty(region))
-                    continue;
-                regions.add(region);
-                ctr += CoordPacker.count(region);
-                tempPacked = CoordPacker.negatePacked(region);
-                map = CoordPacker.mask(map, tempPacked, '.');
+        Collections.sort(regions, sizeComparator);
+        ListIterator<GreasedRegion> ri = regions.listIterator();
+        int ctr = 0, rs = regions.size() >> 1, pos = 0;
+        while (ri.hasNext())
+        {
+            region = ri.next();
+            if(pos++ > rs || region.size() <= 5)
+                ri.remove();
+            else {
+                region.expand().inverseMask(map, '.');
+                ctr += region.size();
             }
         }
         int oldSize = regions.size();
-        if(oldSize < 4 || ctr < (width + height) * 3) {
+        if(oldSize < 4 || ctr < width * height * 0.1f) {
             noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
             noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
             return generate();
@@ -116,48 +117,24 @@ public class OrganicMapGenerator implements IDungeonGenerator {
                 environment[x][y] = (map[x][y] == '.') ? DungeonUtility.CAVE_FLOOR : DungeonUtility.CAVE_WALL;
             }
         }
-        //tempPacked = CoordPacker.pack(map, '.');
-        //int tick = 1;
-        regions = rng.shuffle(regions);
+        rng.shuffleInPlace(regions);
         while (regions.size() > 1)
         {
 
-            region = regions.remove(0);
-            /*
-            tick = (tick + 1) % 5;
-            if(tick == 0) {
-                ctr -= CoordPacker.count(region);
-                continue;
-            }*/
-            linking = regions.get(0);
-            start = CoordPacker.singleRandom(region, rng);
-            end = CoordPacker.singleRandom(linking, rng);
+            region = regions.remove(regions.size() - 1);
+            linking = regions.get(regions.size() - 1);
+            start = region.singleRandom(rng);
+            end = linking.singleRandom(rng);
             path = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.75, rng);
-            for(Coord elem : path)
-            {
+            Coord elem;
+            for (int i = 0; i < path.size(); i++) {
+                elem = path.get(i);
                 if(elem.x < width && elem.y < height) {
                     if (map[elem.x][elem.y] == '#') {
                         map[elem.x][elem.y] = '.';
                         environment[elem.x][elem.y] = DungeonUtility.CORRIDOR_FLOOR;
                         ctr++;
-                    } /*else if (rng.nextBoolean() &&
-                            CoordPacker.queryPacked(CoordPacker.differencePacked(tempPacked, region), elem.x, elem.y)) {
-                        linking = regions.get(rng.nextInt(regions.size()));
-                        start = elem;
-                        end = CoordPacker.singleRandom(linking, rng);
-                        path2 = WobblyLine.line(start.x, start.y, end.x, end.y, width, height, 0.75, rng);
-                        for(Coord elem2 : path2)
-                        {
-                            if(elem2.x < width && elem2.y < height) {
-                                if (map[elem2.x][elem2.y] == '#') {
-                                    map[elem2.x][elem2.y] = '.';
-                                    environment[elem2.x][elem2.y] = MixedGenerator.CORRIDOR_FLOOR;
-                                    ctr++;
-                                }
-                            }
-                        }
-                        break;
-                    }*/
+                    }
                 }
             }
         }
@@ -176,7 +153,7 @@ public class OrganicMapGenerator implements IDungeonGenerator {
             environment[upperX][i] = DungeonUtility.UNTOUCHED;
         }
 
-        if(ctr < (width + height) * 3) {
+        if(ctr < width * height * 0.1f) {
             noiseMin = Math.min(0.9, Math.max(-1.0, noiseMin - 0.05));
             noiseMax = Math.min(1.0, Math.max(noiseMin + 0.05, noiseMax + 0.05));
             return generate();
@@ -207,6 +184,37 @@ public class OrganicMapGenerator implements IDungeonGenerator {
 
     public char[][] getDungeon() {
         return map;
+    }
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public double getNoiseMin() {
+        return noiseMin;
+    }
+
+    public void setNoiseMin(double noiseMin) {
+        this.noiseMin = noiseMin;
+    }
+
+    public double getNoiseMax() {
+        return noiseMax;
+    }
+
+    public void setNoiseMax(double noiseMax) {
+        this.noiseMax = noiseMax;
     }
 
 }

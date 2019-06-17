@@ -671,6 +671,20 @@ public class SubcellLayers extends SparseLayers {
 
         addAction(Actions.sequence(sequence));
     }
+    /**
+     * Draws the SubcellLayers and all glyphs it tracks. {@link Batch#begin()} must have already been called on the
+     * batch, and {@link Batch#end()} should be called after this returns and before the rendering code finishes for the
+     * frame.
+     * <br>
+     * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not
+     * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the
+     * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
+     * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
+     * draw full-color art, and end the Batch between drawing this object and the other art.
+     *
+     * @param batch a Batch such as a {@link FilterBatch} that must be between a begin() and end() call; usually done by Stage
+     * @param parentAlpha currently ignored
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         float xo = getX(), yo = getY(), yOff = yo + 1f + gridHeight * font.actualCellHeight, gxo, gyo;

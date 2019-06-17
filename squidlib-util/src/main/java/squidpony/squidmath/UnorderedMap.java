@@ -130,7 +130,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher = null;
+    protected final CrossHash.IHasher hasher;
 
     public void defaultReturnValue(final V rv) {
         defRetValue = rv;
@@ -160,7 +160,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
         value = (V[]) new Object[n + 1];
-        hasher = CrossHash.defaultHasher;
+        hasher = CrossHash.mildHasher;
     }
 
     /**
@@ -186,7 +186,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @param f the load factor.
      */
     public UnorderedMap(final Map<? extends K, ? extends V> m, final float f) {
-        this(m.size(), f, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.defaultHasher);
+        this(m.size(), f, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.mildHasher);
         putAll(m);
     }
 
@@ -196,7 +196,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @param m a {@link Map} to be copied into the new OrderedMap.
      */
     public UnorderedMap(final Map<? extends K, ? extends V> m) {
-        this(m, (m instanceof UnorderedMap) ? ((UnorderedMap) m).f : DEFAULT_LOAD_FACTOR, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.defaultHasher);
+        this(m, (m instanceof UnorderedMap) ? ((UnorderedMap) m).f : DEFAULT_LOAD_FACTOR, (m instanceof UnorderedMap) ? ((UnorderedMap) m).hasher : CrossHash.mildHasher);
     }
 
     /**
@@ -276,7 +276,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
         value = (V[]) new Object[n + 1];
-        this.hasher = (hasher == null) ? CrossHash.defaultHasher : hasher;
+        this.hasher = (hasher == null) ? CrossHash.mildHasher : hasher;
     }
     /**
      * Creates a new OrderedMap with 0.75f as load factor.
@@ -599,8 +599,8 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
         }
     }
     public boolean containsValue(final Object v) {
-        final V value[] = this.value;
-        final K key[] = this.key;
+        final V[] value = this.value;
+        final K[] key = this.key;
         if (containsNullKey
                 && (value[n] == null ? v == null : value[n].equals(v)))
             return true;
@@ -721,7 +721,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
                 mustReturnNullKey = false;
                 return last = n;
             }
-            final K key[] = UnorderedMap.this.key;
+            final K[] key = UnorderedMap.this.key;
             for (; ; ) {
                 if (--pos < 0) {
                     // We are just enumerating elements from the wrapped list.
@@ -1043,11 +1043,11 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
 
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
-        final V value[] = this.value;
+        final K[] key = this.key;
+        final V[] value = this.value;
         final int mask = newN - 1; // Note that this is used by the hashing macro
-        final K newKey[] = (K[]) new Object[newN + 1];
-        final V newValue[] = (V[]) new Object[newN + 1];
+        final K[] newKey = (K[]) new Object[newN + 1];
+        final V[] newValue = (V[]) new Object[newN + 1];
 
         int i = n, pos;
         for (int j = realSize(); j-- != 0; ) {
@@ -1127,12 +1127,11 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
     public UnorderedMap<K, V> clone() {
         UnorderedMap<K, V> c;
         try {
-            c = (UnorderedMap<K, V>) super.clone();
+            c = new UnorderedMap<>(hasher);
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
             c.value = (V[]) new Object[n + 1];
             System.arraycopy(value, 0, c.value, 0, n + 1);
-            c.hasher = hasher;
             return c;
         } catch (Exception cantHappen) {
             throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
@@ -1245,7 +1244,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @param offset the first element of the array to be returned.
      * @param max the maximum number of elements to unwrap.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max ) {
         if ( max < 0 ) throw new IllegalArgumentException( "The maximum number of elements (" + max + ") is negative" );
         if ( offset < 0 || offset + max > array.length ) throw new IllegalArgumentException();
         int j = max;
@@ -1262,7 +1261,7 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
      * @param i a type-specific iterator.
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped. */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[] ) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length );
     }
 
@@ -1302,11 +1301,10 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
     @GwtIncompatible
     private void writeObject(java.io.ObjectOutputStream s)
             throws java.io.IOException {
-        final K key[] = this.key;
-        final V value[] = this.value;
+        final K[] key = this.key;
+        final V[] value = this.value;
         final MapIterator i = new MapIterator();
         s.defaultWriteObject();
-        s.writeObject(hasher);
         for (int j = size, e; j-- != 0;) {
             e = i.nextEntry();
             s.writeObject(key[e]);
@@ -1318,12 +1316,11 @@ public class UnorderedMap<K, V> implements Map<K, V>, Serializable, Cloneable {
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
-        final K key[] = this.key = (K[]) new Object[n + 1];
-        final V value[] = this.value = (V[]) new Object[n + 1];
+        final K[] key = this.key = (K[]) new Object[n + 1];
+        final V[] value = this.value = (V[]) new Object[n + 1];
         K k;
         V v;
         for (int i = size, pos; i-- != 0;) {

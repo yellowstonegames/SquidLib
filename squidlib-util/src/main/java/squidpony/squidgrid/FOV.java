@@ -191,8 +191,8 @@ public class FOV implements Serializable {
                 break;
             case SHADOW:
                 for (Direction d : Direction.DIAGONALS) {
-                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+                    shadowCast(0, d.deltaX, d.deltaY, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+                    shadowCast(d.deltaX, 0, 0, d.deltaY, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
                 }
                 break;
         }
@@ -331,17 +331,17 @@ public class FOV implements Serializable {
         light[startX][startY] = Math.min(1.0, radius);//make the starting space full power unless radius is tiny
 
 
-        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
 
-        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
 
-        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(-1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
 
-        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
-        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
+        shadowCast(-1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, radiusTechnique);
         return light;
     }
     /**
@@ -398,17 +398,14 @@ public class FOV implements Serializable {
         ArrayTools.fill(light, 0);
         light[startX][startY] = 1;//make the starting space full power
         
-        shadowCast(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
-        shadowCast(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
-        
-        shadowCast(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
-        shadowCast(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
-        
-        shadowCast(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
-        shadowCast(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
-        
-        shadowCast(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
-        shadowCast(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, 0, 1, 1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, 1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, 0, 1, -1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, 1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, 0, -1, -1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, -1, 0, 0, -1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, 0, -1, 1, 0, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
+        shadowCastBinary(1, 1.0, 0.0, -1, 0, 0, 1, radius, startX, startY, decay, light, resistanceMap, Radius.SQUARE, minX, minY, maxX, maxY);
         
         return light;
     }
@@ -713,16 +710,16 @@ public class FOV implements Serializable {
         return light;
     }
 
-    private static void shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
-                                         double radius, int startx, int starty, double decay, double[][] lightMap,
-                                         double[][] map, Radius radiusStrategy) {
-	    shadowCast(row, start, end, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy, false,
+    private static void shadowCast(int xx, int xy, int yx, int yy,
+                                   double radius, int startx, int starty, double decay, double[][] lightMap,
+                                   double[][] map, Radius radiusStrategy) {
+	    shadowCast(1, 1.0, 0.0, xx, xy, yx, yy, radius, startx, starty, decay, lightMap, map, radiusStrategy,
                 0, 0, lightMap.length, lightMap[0].length);
     }
 
-    private static void shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+    private static void shadowCastBinary(int row, double start, double end, int xx, int xy, int yx, int yy,
                                    double radius, int startx, int starty, double decay, double[][] lightMap,
-                                   double[][] map, Radius radiusStrategy, boolean binary, 
+                                   double[][] map, Radius radiusStrategy,
                                    int minX, int minY, int maxX, int maxY) {
         double newStart = 0;
         if (start < end) {
@@ -743,14 +740,55 @@ public class FOV implements Serializable {
                 } else if (end > leftSlope) {
                     break;
                 }
-                if (binary)
-                    lightMap[currentX][currentY] = 1.0;
-                else {
-                    double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
-                    //check if it's within the lightable area and light if needed
-                    if (deltaRadius <= radius) {
-                        lightMap[currentX][currentY] = 1.0 - decay * deltaRadius;
+                
+                lightMap[currentX][currentY] = 1.0;
+                
+                if (blocked) { //previous cell was a blocking one
+                    if (map[currentX][currentY] >= 1) {//hit a wall
+                        newStart = rightSlope;
+                    } else {
+                        blocked = false;
+                        start = newStart;
                     }
+                } else {
+                    if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
+                        blocked = true;
+                        shadowCastBinary(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay,
+                                lightMap, map, radiusStrategy, minX, minY, maxX, maxY);
+                        newStart = rightSlope;
+                    }
+                }
+            }
+        }
+    }
+
+    private static void shadowCast(int row, double start, double end, int xx, int xy, int yx, int yy,
+                                   double radius, int startx, int starty, double decay, double[][] lightMap,
+                                   double[][] map, Radius radiusStrategy,
+                                   int minX, int minY, int maxX, int maxY) {
+        double newStart = 0;
+        if (start < end) {
+            return;
+        }
+
+        boolean blocked = false;
+        for (int distance = row; distance <= radius && distance < maxX - minX + maxY - minY && !blocked; distance++) {
+            int deltaY = -distance;
+            for (int deltaX = -distance; deltaX <= 0; deltaX++) {
+                int currentX = startx + deltaX * xx + deltaY * xy;
+                int currentY = starty + deltaX * yx + deltaY * yy;
+                double leftSlope = (deltaX - 0.5f) / (deltaY + 0.5f);
+                double rightSlope = (deltaX + 0.5f) / (deltaY - 0.5f);
+
+                if (!(currentX >= minX && currentY >= minY && currentX < maxX && currentY < maxY) || start < rightSlope) {
+                    continue;
+                } else if (end > leftSlope) {
+                    break;
+                }
+                double deltaRadius = radiusStrategy.radius(deltaX, deltaY);
+                //check if it's within the lightable area and light if needed
+                if (deltaRadius <= radius) {
+                    lightMap[currentX][currentY] = 1.0 - decay * deltaRadius; 
                 }
 
                 if (blocked) { //previous cell was a blocking one
@@ -764,7 +802,7 @@ public class FOV implements Serializable {
                     if (map[currentX][currentY] >= 1 && distance < radius) {//hit a wall within sight line
                         blocked = true;
                         shadowCast(distance + 1, start, leftSlope, xx, xy, yx, yy, radius, startx, starty, decay,
-                                lightMap, map, radiusStrategy, binary, minX, minY, maxX, maxY);
+                                lightMap, map, radiusStrategy, minX, minY, maxX, maxY);
                         newStart = rightSlope;
                     }
                 }
@@ -1176,8 +1214,8 @@ public class FOV implements Serializable {
                 break;
             case SHADOW:
                 for (Direction d : Direction.DIAGONALS) {
-                    shadowCast(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, 0, 0, width, height);
-                    shadowCast(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, true, 0, 0, width, height);
+                    shadowCastBinary(1, 1.0, 0.0, 0, d.deltaX, d.deltaY, 0, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, 0, 0, width, height);
+                    shadowCastBinary(1, 1.0, 0.0, d.deltaX, 0, 0, d.deltaY, rad, startX, startY, decay, light, resistanceMap, Radius.SQUARE, 0, 0, width, height);
                 }
                 break;
         }

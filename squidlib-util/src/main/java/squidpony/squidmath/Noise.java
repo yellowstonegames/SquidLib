@@ -164,6 +164,29 @@ public class Noise {
     }
 
     /**
+     * Given a double {@code a} from 0.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer to
+     * the end points of that range (if less than 0.5, it gets closer to 0.0, otherwise it gets closer to 1.0).
+     * @param a a double between 0.0 and 1.0 inclusive
+     * @return a double between 0.0 and 1.0 inclusive that is more likely to be near the extremes
+     */
+    public static double extreme(final double a)
+    {
+        return a * a * a * (a * (a * 6 - 15) + 10);
+    }
+
+    /**
+     * Given a double {@code a} from -1.0 to 1.0 (both inclusive), this gets a double that adjusts a to be much closer
+     * to the end points of that range (if less than 0, it gets closer to -1.0, otherwise it gets closer to 1.0).
+     * @param a a double between -1.0 and 1.0 inclusive
+     * @return a double between -1.0 and 1.0 inclusive that is more likely to be near the extremes
+     */
+    public static double extremeSigned(double a)
+    {
+        a = a * 0.5 + 0.5;
+        return a * a * a * (a * (a * 12 - 30) + 20) - 1.0;
+    }
+
+    /**
      * A group of similar methods for getting hashes of points based on long coordinates in 2, 3, 4, or 6 dimensions and
      * a long for state. This is organized how it is so it can be statically imported without also importing the rest
      * of Noise. Internally, all of the methods here are based on a simplified version of Hive from {@link CrossHash}
@@ -891,7 +914,7 @@ public class Noise {
 
         /**
          * Gets a 64-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -915,7 +938,7 @@ public class Noise {
 
         /**
          * Gets a 64-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -941,7 +964,7 @@ public class Noise {
 
         /**
          * Gets a 64-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -969,7 +992,7 @@ public class Noise {
 
         /**
          * Gets a 64-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
-         * point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * point hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1000,7 +1023,7 @@ public class Noise {
         }
         /**
          * Gets an 8-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1024,7 +1047,7 @@ public class Noise {
 
         /**
          * Gets an 8-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1050,7 +1073,7 @@ public class Noise {
 
         /**
          * Gets an 8-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1078,7 +1101,7 @@ public class Noise {
 
         /**
          * Gets an 8-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
-         * point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * point hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1109,7 +1132,7 @@ public class Noise {
         }
         /**
          * Gets a 5-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1133,7 +1156,7 @@ public class Noise {
 
         /**
          * Gets a 5-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1159,7 +1182,7 @@ public class Noise {
 
         /**
          * Gets a 5-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1187,7 +1210,7 @@ public class Noise {
 
         /**
          * Gets a 5-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
-         * point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * point hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1219,7 +1242,7 @@ public class Noise {
         
         /**
          * Gets a 6-bit point hash of a 2D point (x and y are both longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1243,7 +1266,7 @@ public class Noise {
 
         /**
          * Gets a 6-bit point hash of a 3D point (x, y, and z are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1269,7 +1292,7 @@ public class Noise {
 
         /**
          * Gets a 6-bit point hash of a 4D point (x, y, z, and w are all longs) and a state/seed as a long. This point
-         * hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1297,7 +1320,7 @@ public class Noise {
 
         /**
          * Gets a 6-bit point hash of a 6D point (x, y, z, w, u, and v are all longs) and a state/seed as a long. This
-         * point hash has just about the best speed of any algorithms tested, and though its quality is mediocre for
+         * point hash has close to the best speed of any algorithms tested, and though its quality is mediocre for
          * traditional uses of hashing (such as hash tables), it's sufficiently random to act as a positional RNG.
          * <br>
          * This uses a technique related to the one used by Martin Roberts for his golden-ratio-based sub-random
@@ -1339,6 +1362,329 @@ public class Noise {
 
     }
 
+    /**
+     * A group of similar methods for getting hashes of points based on int coordinates in 2, 3, 4, or 6 dimensions and
+     * an int for state; the code is similar to {@link HastyPointHash} but will be much faster on GWT. This
+     * implementation has high enough quality to be useful as a source of random numbers based on positions, but would
+     * likely not be a good option in a hash table (or at least not as good as the tailored implementation of
+     * {@link Coord#hashCode()}; it is still better than {@link java.util.Objects#hash(Object...)}). Even on a desktop
+     * JVM, this class is faster than {@link PointHash} or {@link HastyPointHash}. The technique used here owes credit
+     * to Pelle Evensen for finding the significant quality increase from using multiple bitwise rotations XORed
+     * together, and Martin Roberts for discovering the connection between higher dimensional ranks and the appropriate
+     * numbers to gain similar qualities to adding the golden ratio mod 1 in 1D, using what had already been named
+     * "harmonious numbers." The only case where this can return different results on GWT than on a desktop or mobile
+     * JVM is when the inputs are GWT-specific out-of-range JS Numbers appearing to be ints, and that's a problem with
+     * the input rather than the algorithm.
+     * <br>
+     * Getting the bottom 24 bits of {@link #hashAll(int, int, int)}, dividing to get a float from 0 to 1, and graphing
+     * it produces <a href="https://i.imgur.com/vYWzVAR.png">this white-noise-like image</a>. The frequency magnitude of
+     * that image is <a href="https://i.imgur.com/6N39FPQ.png">this diagram</a>, which looks almost exactly like
+     * <a href="https://i.imgur.com/RSdUnSY.png">a diagram of the frequency magnitude of white noise</a>. This shows
+     * there are effectively no significant structural artifacts in the noise when interpreted as a float.
+     */
+    public static final class IntPointHash {
+        /**
+         * A 32-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 32-bit hash of the x,y point with the given state s
+         */
+        public static int hashAll(int x, int y, int s) {
+            s ^= x * 0x1827F5 ^ y * 0x123C21;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+        }
+        /**
+         * A 32-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 32-bit hash of the x,y,z point with the given state s
+         */
+        public static int hashAll(int x, int y, int z, int s) {
+            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+        }
+
+        /**
+         * A 32-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 32-bit hash of the x,y,z,w point with the given state s
+         */
+        public static int hashAll(int x, int y, int z, int w, int s) {
+            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+        }
+
+        /**
+         * A 32-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+         * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,
+         * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by
+         * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary
+         * hash used here has been stripped down heavily, both for speed and because unless points are selected
+         * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that
+         * rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param u u position, as an int
+         * @param v v position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point 
+         * @return 32-bit hash of the x,y,z,w,u,v point with the given state s
+         */
+        public static int hashAll(int x, int y, int z, int w, int u, int v, int s) {
+            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
+            return (s = (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493) ^ s >>> 11;
+        }
+
+        /**
+         * A 8-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 8-bit hash of the x,y point with the given state s
+         */
+        public static int hash256(int x, int y, int s) {
+            s ^= x * 0x1827F5 ^ y * 0x123C21;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
+        }
+        /**
+         * A 8-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 8-bit hash of the x,y,z point with the given state s
+         */
+        public static int hash256(int x, int y, int z, int s) {
+            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
+        }
+
+        /**
+         * A 8-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 8-bit hash of the x,y,z,w point with the given state s
+         */
+        public static int hash256(int x, int y, int z, int w, int s) {
+            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
+        }
+
+        /**
+         * A 8-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+         * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,
+         * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by
+         * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary
+         * hash used here has been stripped down heavily, both for speed and because unless points are selected
+         * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that
+         * rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param u u position, as an int
+         * @param v v position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point 
+         * @return 8-bit hash of the x,y,z,w,u,v point with the given state s
+         */
+        public static int hash256(int x, int y, int z, int w, int u, int v, int s) {
+            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 24;
+        }
+
+        /**
+         * A 6-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 6-bit hash of the x,y point with the given state s
+         */
+        public static int hash64(int x, int y, int s) {
+            s ^= x * 0x1827F5 ^ y * 0x123C21;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
+        }
+        /**
+         * A 6-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 6-bit hash of the x,y,z point with the given state s
+         */
+        public static int hash64(int x, int y, int z, int s) {
+            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
+        }
+
+        /**
+         * A 6-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 6-bit hash of the x,y,z,w point with the given state s
+         */
+        public static int hash64(int x, int y, int z, int w, int s) {
+            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
+        }
+
+        /**
+         * A 6-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+         * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,
+         * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by
+         * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary
+         * hash used here has been stripped down heavily, both for speed and because unless points are selected
+         * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that
+         * rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param u u position, as an int
+         * @param v v position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point 
+         * @return 6-bit hash of the x,y,z,w,u,v point with the given state s
+         */
+        public static int hash64(int x, int y, int z, int w, int u, int v, int s) {
+            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 26;
+        }
+        /**
+         * A 5-bit point hash that smashes x and y into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 5-bit hash of the x,y point with the given state s
+         */
+        public static int hash32(int x, int y, int s) {
+            s ^= x * 0x1827F5 ^ y * 0x123C21;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
+        }
+        /**
+         * A 5-bit point hash that smashes x, y, and z into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 5-bit hash of the x,y,z point with the given state s
+         */
+        public static int hash32(int x, int y, int z, int s) {
+            s ^= x * 0x1A36A9 ^ y * 0x157931 ^ z * 0x119725;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
+        }
+
+        /**
+         * A 5-bit point hash that smashes x, y, z, and w into s using XOR and multiplications by harmonious numbers,
+         * then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash, especially for
+         * ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by Pelle Evensen's
+         * rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary hash used here has
+         * been stripped down heavily, both for speed and because unless points are selected specifically to target
+         * flaws in the hash, it doesn't need the intense resistance to bad inputs that rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point
+         * @return 5-bit hash of the x,y,z,w point with the given state s
+         */
+        public static int hash32(int x, int y, int z, int w, int s) {
+            s ^= x * 0x1B69E1 ^ y * 0x177C0B ^ z * 0x141E5D ^ w * 0x113C31;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
+        }
+
+        /**
+         * A 5-bit point hash that smashes x, y, z, w, u, and v into s using XOR and multiplications by harmonious
+         * numbers, then runs a simple unary hash on s and returns it. Has better performance than HastyPointHash,
+         * especially for ints, and has slightly fewer collisions in a hash table of points. GWT-optimized. Inspired by
+         * Pelle Evensen's rrxmrrxmsx_0 unary hash, though this doesn't use its code or its full algorithm. The unary
+         * hash used here has been stripped down heavily, both for speed and because unless points are selected
+         * specifically to target flaws in the hash, it doesn't need the intense resistance to bad inputs that
+         * rrxmrrxmsx_0 has.
+         * @param x x position, as an int
+         * @param y y position, as an int
+         * @param z z position, as an int
+         * @param w w position, as an int
+         * @param u u position, as an int
+         * @param v v position, as an int
+         * @param s any int, a seed to be able to produce many hashes for a given point 
+         * @return 5-bit hash of the x,y,z,w,u,v point with the given state s
+         */
+        public static int hash32(int x, int y, int z, int w, int u, int v, int s) {
+            s ^= x * 0x1CC1C5 ^ y * 0x19D7AF ^ z * 0x173935 ^ w * 0x14DEAF ^ u * 0x12C139 ^ v * 0x10DAA3;
+            return (s ^ (s << 19 | s >>> 13) ^ (s << 5 | s >>> 27) ^ 0xD1B54A35) * 0x125493 >>> 27;
+        }
+
+
+    }
+    
     public interface Noise1D {
         double getNoise(double x);
         double getNoiseWithSeed(double x, long seed);
@@ -2214,7 +2560,7 @@ public class Noise {
 
 
     public static class Ridged4D implements Noise4D {
-        public double exp[];
+        public double[] exp;
         protected int octaves;
         public double frequency, correct;
         public Noise4D basis;
@@ -3094,7 +3440,7 @@ public class Noise {
      * Allows a seed to change the generated noise.
      * Because most games that would use this would use it for maps, and maps are often top-down, the returned 3D array
      * uses the order (z,x,y), which allows a 2D slice of x and y to be taken as an element from the top-level array.
-     * If you need to call this very often, consider {@link #seamless3D(double[][][], int, int)}, which re-uses the
+     * If you need to call this very often, consider {@link #seamless3D(double[][][], long, int)}, which re-uses the
      * array instead of re-generating it.
      * @param width the width of the array to produce (the length of the middle layer of arrays)
      * @param height the height of the array to produce (the length of the innermost arrays)
@@ -3103,7 +3449,7 @@ public class Noise {
      * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
      * @return a freshly-allocated seamless-bounded array, a {@code double[depth][width][height]}.
      */
-    public static double[][][] seamless3D(final int depth, final int width, final int height, final int seed, final int octaves) {
+    public static double[][][] seamless3D(final int depth, final int width, final int height, final long seed, final int octaves) {
         return seamless3D(new double[depth][width][height], seed, octaves);
     }
 
@@ -3116,7 +3462,7 @@ public class Noise {
      * @param octaves how many runs of differently sized and weighted noise generations to apply to the same area
      * @return {@code fill}, after assigning it with seamless-bounded noise
      */
-    public static double[][][] seamless3D(final double[][][] fill, final int seed, final int octaves) {
+    public static double[][][] seamless3D(final double[][][] fill, final long seed, final int octaves) {
         return seamless3D(fill, seed, octaves, SeededNoise.instance);
     }
 
@@ -3224,6 +3570,66 @@ public class Noise {
     }
 
     /**
+     * Like {@link #seamless2D(double[][], long, int, Noise4D)}, but this produces 1D noise that "tiles" by repeating
+     * its output every {@code sizeX} units that {@code x} increases or decreases by. This doesn't precalculate an
+     * array, instead calculating just one value so that later calls with different x will tile seamlessly.
+     * <br>
+     * Internally, this just samples out of a circle from a source of 2D noise.
+     * @param noise a Noise2D implementation such as a {@link SeededNoise} or {@link FastNoise}
+     * @param x the x-coordinate to sample
+     * @param sizeX the range of x to generate before repeating; must be greater than 0
+     * @param seed the noise seed, as a long
+     * @return continuous noise from -1.0 to 1.0, inclusive 
+     */
+    public static double seamless1D(Noise2D noise, double x, double sizeX, long seed)
+    {
+        x *= 6.283185307179586 / sizeX;
+        return noise.getNoiseWithSeed(NumberTools.cos(x), NumberTools.sin(x), seed);
+    }
+
+    /**
+     * Like {@link #seamless2D(double[][], long, int, Noise4D)}, but this doesn't precalculate noise into an array,
+     * instead calculating just one 2D point so that later calls with different x or y will tile seamlessly.
+     * @param noise a Noise4D implementation such as a {@link SeededNoise} or {@link FastNoise}
+     * @param x the x-coordinate to sample
+     * @param y the y-coordinate to sample
+     * @param sizeX the range of x to generate before repeating; must be greater than 0
+     * @param sizeY the range of y to generate before repeating; must be greater than 0
+     * @param seed the noise seed, as a long
+     * @return continuous noise from -1.0 to 1.0, inclusive 
+     */
+    public static double seamless2D(Noise4D noise, double x, double y, double sizeX, double sizeY, long seed)
+    {
+        x *= 6.283185307179586 / sizeX;
+        y *= 6.283185307179586 / sizeY;
+        return noise.getNoiseWithSeed(NumberTools.cos(x), NumberTools.sin(x), NumberTools.cos(y), NumberTools.sin(y),
+                seed);
+    }
+
+
+    /**
+     * Like {@link #seamless3D(double[][][], long, int, Noise6D)}, but this doesn't precalculate noise into an array,
+     * instead calculating just one 3D point so that later calls with different x, y, or z will tile seamlessly.
+     * @param noise a Noise6D implementation such as a {@link SeededNoise} or {@link FastNoise}
+     * @param x the x-coordinate to sample
+     * @param y the y-coordinate to sample
+     * @param z the z-coordinate to sample
+     * @param sizeX the range of x to generate before repeating; must be greater than 0
+     * @param sizeY the range of y to generate before repeating; must be greater than 0
+     * @param sizeZ the range of z to generate before repeating; must be greater than 0
+     * @param seed the noise seed, as a long
+     * @return continuous noise from -1.0 to 1.0, inclusive 
+     */
+    public static double seamless3D(Noise6D noise, double x, double y, double z, double sizeX, double sizeY, double sizeZ, long seed)
+    {
+        x *= 6.283185307179586 / sizeX;
+        y *= 6.283185307179586 / sizeY;
+        z *= 6.283185307179586 / sizeZ;
+        return noise.getNoiseWithSeed(NumberTools.cos(x), NumberTools.sin(x), NumberTools.cos(y), NumberTools.sin(y),
+                NumberTools.cos(z), NumberTools.sin(z), seed);
+    }
+
+    /**
      * A very simple 1D noise implementation, because a full-blown Perlin or Simplex noise implementation is probably
      * overkill for 1D noise. This does produce smoothly sloping lines, like Simplex noise does for higher dimensions.
      * The shape of the line varies over time, but <a href="https://i.imgur.com/83R3WLN.png">can look like this</a>.
@@ -3290,6 +3696,141 @@ public class Noise {
                     cubicSway(alter3 - x * alter2) +
                     cubicSway(alter4 + x * alter3) +
                     cubicSway(alter1 - x * alter4)) * 0.25f;
+        }
+    }
+
+    public static class Sway1D implements Noise1D
+    {
+        public static final Sway1D instance = new Sway1D();
+        public long seed;
+        public Sway1D()
+        {
+            seed = 0L;
+        }
+        public Sway1D(long seed)
+        {
+            this.seed = seed;
+        }
+
+        @Override
+        public double getNoise(double x) {
+            return NumberTools.swayRandomized(seed, x);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, long seed) {
+            return NumberTools.swayRandomized(seed, x);
+        }
+    }
+    public static class Sway2D implements Noise2D
+    {
+        public static final Sway2D instance = new Sway2D();
+        public long seed;
+        public Sway2D()
+        {
+            seed = 12345L;
+        }
+        public Sway2D(long seed)
+        {
+            this.seed = seed;
+        }
+
+        @Override
+        public double getNoise(double x, double y) {
+            return getNoiseWithSeed(x, y, seed);
+        }
+
+        @Override
+        public double getNoiseWithSeed(double x, double y, long seed) {
+//            double xx = NumberTools.swayRandomized(seed - 0xC13FA9A902A6328FL, x + y) * 0.75,
+//                    yy = NumberTools.swayRandomized(seed - 0xABC98388FB8FAC03L, y - x) * 0.75;
+//            return NumberTools.sway((NumberTools.swayRandomized(seed, x + yy) +
+//                    NumberTools.swayRandomized(0x8CB92BA72F3D8DD7L - seed, y + xx)) * 1.25 + 0.5);
+
+//            return NumberTools.swayRandomized(seed,
+//                    (NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, (x + y))
+//                    + NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 0.5 - y * 1.5)
+//                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 1.5 - y * 0.5)) * 4.0);
+
+//            double adjust0 = NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.75 + y * -0.25) + 1.,
+//                    adjust1 = NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x * 0.25 + y * -1.75) + 1.,
+//                    adjust2 = NumberTools.swayRandomized(seed - 0x8CB92BA72F3D8DD7L, x + y) + 1.;
+//            return NumberTools.sway(
+//                    (NumberTools.swayRandomized(seed + 0xC13FA9A902A6328FL, x * 1.5 + y * 0.5) * adjust0
+//                    + NumberTools.swayRandomized(seed + 0xABC98388FB8FAC03L, x * 0.5 + y * 1.5) * adjust1
+//                    + NumberTools.swayRandomized(seed + 0x8CB92BA72F3D8DD7L, x - y) * adjust2 
+//                    ) * 0.75 + 0.5);
+            final long floorX = x >= 0.0 ? (long) x : (long) x - 1L,
+                    floorY = y >= 0.0 ? (long) y : (long) y - 1L;
+//            long seedX = seed * 0xC13FA9A902A6328FL + floorX * 0x91E10DA5C79E7B1DL,
+//                    seedY = seed * 0x91E10DA5C79E7B1DL + floorY * 0xC13FA9A902A6328FL;
+//            final long startX = ((seedX ^ (seedX >>> 25)) * (seedX | 0xA529L)),
+//                    endX = (((seedX += 0x91E10DA5C79E7B1DL) ^ (seedX >>> 25)) * (seedX | 0xA529L));
+//            final long startY = ((seedY ^ (seedY >>> 25)) * (seedY | 0xA529L)),
+//                    endY = (((seedY += 0xC13FA9A902A6328FL) ^ (seedY >>> 25)) * (seedY | 0xA529L));
+//            final int x0y0 = (int) (startX + startY >>> 56),
+//                    x1y0 = (int) (endX + startY >>> 56),
+//                    x0y1 = (int) (startX + endY >>> 56),
+//                    x1y1 = (int) (endX + endY >>> 56);
+            final int x0y0 = HastyPointHash.hash256(floorX, floorY, seed),
+                    x1y0 = HastyPointHash.hash256(floorX+1, floorY, seed),
+                    x0y1 = HastyPointHash.hash256(floorX, floorY+1, seed),
+                    x1y1 = HastyPointHash.hash256(floorX+1, floorY+1, seed);
+            x -= floorX;
+            y -= floorY;
+//            x *= x * (3.0 - 2.0 * x);
+//            y *= y * (3.0 - 2.0 * y);
+//            x *= x;
+//            y *= y;
+            final double ix = 1.0 - x, iy = 1.0 - y;
+//            final double ix = (1 - x) * (1 - x), iy = (1 - y) * (1 - y);
+//            final double ix = x, iy = y;
+//            x = 1.0 - x;
+//            y = 1.0 - y;
+            //            double ret = ((ix * SeededNoise.phiGrad2[x0y0][0] + iy * SeededNoise.phiGrad2[x0y0][1])
+//                    + (x * SeededNoise.phiGrad2[x1y0][0] + iy * SeededNoise.phiGrad2[x1y0][1])
+//                    + (ix * SeededNoise.phiGrad2[x0y1][0] + y * SeededNoise.phiGrad2[x0y1][1])
+//                    + (x * SeededNoise.phiGrad2[x1y1][0] + y * SeededNoise.phiGrad2[x1y1][1])
+//            );
+            return ((SeededNoise.phiGrad2[x0y0][0] + SeededNoise.phiGrad2[x0y0][1]) * (ix * iy)
+                    + (SeededNoise.phiGrad2[x1y0][0] + SeededNoise.phiGrad2[x1y0][1]) * (x * iy)
+                    + (SeededNoise.phiGrad2[x0y1][0] + SeededNoise.phiGrad2[x0y1][1]) * (ix * y)
+                    + (SeededNoise.phiGrad2[x1y1][0] + SeededNoise.phiGrad2[x1y1][1]) * (x * y)
+            ) * 0.7071067811865475;
+//            long xf = x >= 0.0 ? (long) x : (long) x - 1L;
+//            long yf = y >= 0.0 ? (long) y : (long) y - 1L;
+//            long s = ((0x91E10DA5C79E7B1DL ^ seed ^ yf)) * 0xC13FA9A902A6328FL, s2 = ((0x91E10DA5C79E7B1DL ^ seed ^ yf + 1L)) * 0xC13FA9A902A6328FL;
+//            double xSmall = x - xf;
+//            //, 0xABC98388FB8FAC03L, 0x8CB92BA72F3D8DD7L
+//            double start = (((s += xf * 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,
+//                    start2 = (((s2 += xf * 0x6C8E9CF570932BD5L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63,
+//                    end = (((s += 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63,
+//                    end2 = (((s2 += 0x6C8E9CF570932BD5L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;
+////            double x0y0 = HastyPointHash.hashAll(xf, yf, seed) * 0x0.fffffffffffffbp-63,
+////                    x1y0 = HastyPointHash.hashAll(xf+1L, yf, seed) * 0x0.fffffffffffffbp-63,
+////                    x0y1 = HastyPointHash.hashAll(xf, yf+1L, seed) * 0x0.fffffffffffffbp-63,
+////                    x1y1 = HastyPointHash.hashAll(xf+1L, yf+1L, seed) * 0x0.fffffffffffffbp-63, y0, y1;
+//            xSmall = xSmall * xSmall * (3.0 - 2.0 * xSmall);
+////            double a2 = xSmall * xSmall, a4 = a2 * a2, a6 = a4 * a2;
+////            xSmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;
+////            y0 = (1.0 - xSmall) * x0y0 + xSmall * x1y0;
+////            y1 = (1.0 - xSmall) * x0y1 + xSmall * x1y1;
+//            double ySmall = y - yf;
+//            ySmall = ySmall * ySmall * (3.0 - 2.0 * ySmall);
+////            a2 = ySmall * ySmall;
+////            a4 = a2 * a2;
+////            a6 = a4 * a2;
+////            ySmall = 0x1.c71c71c71c71cp-2 * a6 + -0x1.e38e38e38e38ep0 * a4 + 0x1.38e38e38e38e4p1 * a2;
+//            return (1.0 - ySmall) * ((1.0 - xSmall) * start + xSmall * end) + ySmall * ((1.0 - xSmall) * start2 + xSmall * end2);
+////            x1 = (1.0 - xSmall) * start2 + xSmall * end2;
+////            s = HastyPointHash.hashAll(xf, yf, seed);//((0xC13FA9A902A6328FL ^ seed)) * 0x91E10DA5C79E7B1DL;
+////            start = (((s += yf * 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;
+//////            start2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;
+////            end = (((s += 0x6C8E9CF570932BD5L) ^ (s >>> 25)) * (s | 0xA529L)) * 0x0.fffffffffffffbp-63;
+//////            end2 = (((s2 = s * 0xD1B54A32D192ED03L) ^ (s2 >>> 25)) * (s2 | 0xA529L)) * 0x0.fffffffffffffbp-63;
+////            y0 = (1.0 - ySmall) * start + ySmall * end;
+//////            y1 = (1.0 - ySmall) * start2 + ySmall * end2;
+////            return NumberTools.sway(x0 + y0 + 0.5);
         }
     }
 }

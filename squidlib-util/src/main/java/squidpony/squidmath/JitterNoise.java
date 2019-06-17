@@ -4,10 +4,10 @@ import squidpony.annotation.Beta;
 
 import static squidpony.squidmath.Noise.cerp;
 import static squidpony.squidmath.Noise.fastFloor;
-import static squidpony.squidmath.PerlinNoise.phiGrad2;
+import static squidpony.squidmath.SeededNoise.phiGrad2;
 import static squidpony.squidmath.SeededNoise.gradient6DLUT;
-import static squidpony.squidmath.WhirlingNoise.grad3d;
-import static squidpony.squidmath.WhirlingNoise.grad4;
+import static squidpony.squidmath.SeededNoise.grad3d;
+import static squidpony.squidmath.SeededNoise.grad4d;
 
 /**
  * "Classic Perlin" noise with jitter applied to the grid it operates on. Not to be confused with the Simplex Noise also
@@ -57,10 +57,10 @@ public class JitterNoise implements Noise.Noise2D, Noise.Noise3D, Noise.Noise4D,
         final int hash =
                 (int)(((seed ^= 0xB4C4D * x ^ 0xEE2C1 * y ^ 0xA7E07 * z ^ 0xCD5E9 * w) ^ seed >>> 13) * (seed)),
                         idx = (hash >>> 24) & 0xFC, jitter = (hash >>> 18) & 0xFC;
-        return ((xd+grad4[jitter]*0.25) * grad4[idx]
-                + (yd+grad4[jitter + 1]*0.25) * grad4[idx + 1]
-                + (zd+grad4[jitter + 2]*0.25) * grad4[idx + 2]
-                + (wd+grad4[jitter + 3]*0.25) * grad4[idx + 3]);
+        return ((xd+ grad4d[jitter]*0.25) * grad4d[idx]
+                + (yd+ grad4d[jitter + 1]*0.25) * grad4d[idx + 1]
+                + (zd+ grad4d[jitter + 2]*0.25) * grad4d[idx + 2]
+                + (wd+ grad4d[jitter + 3]*0.25) * grad4d[idx + 3]);
     }
     protected static double gradCoord6D(long seed, int x, int y, int z, int w, int u, int v,
                                         double xd, double yd, double zd, double wd, double ud, double vd) {

@@ -804,6 +804,18 @@ public class SquidPanel extends Group implements IPackedColorPanel {
         return this;
     }
 
+    /**
+     * Draws this SquidPanel and any {@link #autoActors} it has, and calls {@link Actor#act(float)} for each
+     * AnimatedEntity this contains in {@link #animatedEntities} or {@link #autoActors}.
+     * <br>
+     * This will set the shader of {@code batch} if using a distance field or MSDF font and the shader is currently not
+     * configured for such a font; it does not reset the shader to the default so that multiple Actors can all use the
+     * same shader and so specific extra glyphs or other items can be rendered after calling draw(). If you need to draw
+     * both a distance field font and full-color art, you should set the shader on the Batch to null when you want to
+     * draw full-color art, and end the Batch between drawing this object and the other art.
+     * @param batch a Batch such as a {@link FilterBatch} that must be between a begin() and end() call; usually done by Stage
+     * @param parentAlpha only used when drawing children of this SquidPanel
+     */
     @Override
     public void draw(Batch batch, float parentAlpha) {
         textFactory.configureShader(batch);

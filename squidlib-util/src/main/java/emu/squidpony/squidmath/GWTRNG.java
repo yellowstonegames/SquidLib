@@ -5,7 +5,7 @@ import squidpony.StringKit;
 import java.io.Serializable;
 
 public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializable {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     public int stateA, stateB;
 
@@ -182,5 +182,24 @@ public final class GWTRNG extends AbstractRNG implements IStatefulRNG, Serializa
     public String toString() {
         return "GWTRNG with stateA 0x" + StringKit.hex(stateA) + " and stateB 0x" + StringKit.hex(stateB);
     }
-
+    public static int determineInt(int state) {
+        return (state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19;
+    }
+    public static int determineBounded(int state, final int bound)
+    {
+        return (int) ((((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL) * bound >> 32);
+    }
+    public static long determine(int state)
+    {
+        int r = (state ^ 0xD1B54A35) * 0x102473;
+        r = (r = (r ^ r >>> 11 ^ r >>> 21) * (r | 0xFFE00001)) ^ r >>> 13 ^ r >>> 19;
+        return ((long) r << 32) | (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFFFFL);
+    }
+    public static float determineFloat(int state) {
+        return (((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) & 0xFFFFFF) * 0x1p-24f;
+    }
+    public static double determineDouble(int state)
+    {
+        return ((state = ((state = (state ^ 0xD1B54A35) * 0x102473) ^ state >>> 11 ^ state >>> 21) * (state | 0xFFE00001)) ^ state >>> 13 ^ state >>> 19) * 0x1p-32 + 0.5;
+    }
 }

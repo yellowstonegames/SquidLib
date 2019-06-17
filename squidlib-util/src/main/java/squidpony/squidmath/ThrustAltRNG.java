@@ -16,18 +16,23 @@ import java.io.Serializable;
  * for some usage). The period on ThrustAltRNG is 2 to the 64. ThrustAltRNG is very strong on speed, outpacing the
  * default generator for {@link RNG}, {@link DiverRNG}, by a small margin, and most other RandomnessSources in
  * SquidLib by a larger margin (it is slower than {@link MiniMover64RNG}, but this has a better period). Similarly to
- * other hash-like PRNGs, ThrustAltRNG has a {@link #determine(long)} method that takes a state as a long and returns
- * a deterministic random number (each input has one output, though in this case the reverse isn't true and some outputs
- * will be returned by multiple inputs). Like LightRNG, but unlike an LCG such as {@link java.util.Random}, changing the
- * seed even slightly generally produces completely different results, which applies primarily to determine() but also
- * the first number generated in a series of nextLong() calls. This generator is GWT-safe but will be much slower on GWT
- * than generators designed for usage there, such as {@link GWTRNG} or {@link Lathe32RNG}.
+ * other hash-like PRNGs such as {@link LightRNG}, ThrustAltRNG has a {@link #determine(long)} method that takes a state
+ * as a long and returns a deterministic random number (each input has one output, though in this case the reverse isn't
+ * true and some outputs will be returned by multiple inputs). Like LightRNG, but unlike an LCG such as
+ * {@link java.util.Random}, changing the seed even slightly generally produces completely different results, which
+ * applies primarily to determine() but also the first number generated in a series of nextLong() calls. This generator
+ * is GWT-safe but will be much slower on GWT than generators designed for usage there, such as {@link GWTRNG} or
+ * {@link Lathe32RNG}.
  * <br>
  * Because this generator can't produce all longs (it is not equidistributed), that alone is enough to discount its use
  * in some (mainly scientific) scenarios, although it passes all major testing suites (TestU01's BigCrush, PractRand
  * over the full 32TB of tests, and gjrand to some degree, at least better than most). DiverRNG is the default
  * generator after ThrustAltRNG was used extensively for some time, since DiverRNG passes the same tests, is almost as
- * fast, and is known to produce all longs over the course of its period.
+ * fast, and is known to produce all longs over the course of its period. One small change was required to pass a test
+ * added in PractRand version 0.94, going from a shift of 22 to a shift of 23 at the end of the generation. Without this
+ * change, ThrustAltRNG will eventually fail PractRand (failing "TMFn" tests, which check for patterns like those in a
+ * linear congruential generator such as {@link java.util.Random}), but only after 16TB of data has been analyzed. Even
+ * if using a version before the shift was changed on June 8, 2019, the quality is probably fine.
  * <br>
  * There was a ThrustRNG in SquidLib, but it failed statistical tests badly in roughly a minute of testing, so even
  * though it was faster it probably wasn't a good idea to use it. ThrustAltRNG modifies ThrustRNG's algorithm very
@@ -86,7 +91,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
     public final int next(final int bits) {
         final long s = (state += 0x6C8E9CF570932BD5L);
         final long z = (s ^ (s >>> 25)) * (s | 0xA529L);
-        return (int)(z ^ (z >>> 22)) >>> (32 - bits);
+        return (int)(z ^ (z >>> 23)) >>> (32 - bits);
     }
     /**
      * Using this method, any algorithm that needs to efficiently generate more
@@ -100,7 +105,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
     public final long nextLong() {
         final long s = (state += 0x6C8E9CF570932BD5L);
         final long z = (s ^ (s >>> 25)) * (s | 0xA529L);
-        return z ^ (z >>> 22);
+        return z ^ (z >>> 23);
     }
 
     /**
@@ -115,7 +120,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
     public final long skip(long advance) {
         final long s = (state += 0x6C8E9CF570932BD5L * advance);
         final long z = (s ^ (s >>> 25)) * (s | 0xA529L);
-        return z ^ (z >>> 22);
+        return z ^ (z >>> 23);
     }
 
 
@@ -162,10 +167,10 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      * @return a pseudo-random permutation of state
      */
     public static long determine(long state) {
-        return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22);
+        return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 23);
     }
     //for quick one-line pastes of how the algo can be used with "randomize(++state)"
-    //public static long randomize(long state) { return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22); }
+    //public static long randomize(long state) { return (state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 23); }
 
     /**
      * Returns a random float that is deterministic based on state; if state is the same on two calls to this, this will
@@ -179,7 +184,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      *              generate numbers in reverse order
      * @return a pseudo-random float between 0f (inclusive) and 1f (exclusive), determined by {@code state}
      */
-    public static float determineFloat(long state) { return (((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) & 0xFFFFFF) * 0x1p-24f; }
+    public static float determineFloat(long state) { return (((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 23)) & 0xFFFFFF) * 0x1p-24f; }
 
 
     /**
@@ -194,7 +199,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
      *              generate numbers in reverse order
      * @return a pseudo-random double between 0.0 (inclusive) and 1.0 (exclusive), determined by {@code state}
      */
-    public static double determineDouble(long state) { return (((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53; }
+    public static double determineDouble(long state) { return (((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 23)) & 0x1FFFFFFFFFFFFFL) * 0x1p-53; }
 
     /**
      * Given a state that should usually change each time this is called, and a bound that limits the result to some
@@ -213,7 +218,7 @@ public final class ThrustAltRNG implements StatefulRandomness, SkippingRandomnes
     public static int determineBounded(long state, final int bound)
     {
         return (int)((bound * (
-                ((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 22))
+                ((state = ((state *= 0x6C8E9CF570932BD5L) ^ (state >>> 25)) * (state | 0xA529L)) ^ (state >>> 23))
                         & 0xFFFFFFFFL)) >> 32);
     }
 }

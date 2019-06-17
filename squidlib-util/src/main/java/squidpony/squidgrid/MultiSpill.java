@@ -67,9 +67,9 @@ public class MultiSpill {
     public int filled = 0;
     private ArrayList<OrderedSet<Coord>> fresh;
     /**
-     * The IStatefulRNG used to decide how to randomly fill a space; can have its state set and read.
+     * The IRNG used to decide how to randomly fill a space; can have its state set and read.
      */
-    public IStatefulRNG rng;
+    public IRNG rng;
 
     private boolean initialized = false;
     /**
@@ -373,8 +373,6 @@ public class MultiSpill {
      */
     public ArrayList<ArrayList<Coord>> start(List<Coord> entries, int volume, Collection<Coord> impassable) {
         if(!initialized) return null;
-        if(impassable == null)
-            impassable = Collections.emptySet();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
         ArrayList<Coord> spillers = new ArrayList<>(entries);
@@ -388,7 +386,7 @@ public class MultiSpill {
             fresh.add(os);
             Coord c = spillers.get(i);
             spillMap[c.x][c.y] = i;
-            if(!impassable.contains(c)) {
+            if(impassable == null || !impassable.contains(c)) {
                 os.add(c);
                 hasFresh = true;
             }
@@ -415,7 +413,7 @@ public class MultiSpill {
                     if(!adj.isWithin(width, height))
                         continue;
                     double h = heuristic(dirs[d]);
-                    if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && !impassable.contains(adj) && rng.nextDouble(h) <= 1.0) {
+                    if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && (impassable == null || !impassable.contains(adj)) && rng.nextDouble(h) <= 1.0) {
                         setFresh(i, adj);
                     }
                 }
@@ -453,8 +451,6 @@ public class MultiSpill {
      */
     public ArrayList<ArrayList<Coord>> start(OrderedMap<Coord, Double> entries, int volume, Collection<Coord> impassable) {
         if(!initialized || entries == null) return null;
-        if(impassable == null)
-            impassable = Collections.emptySet();
         if(volume < 0)
             volume = Integer.MAX_VALUE;
         int sz = entries.size();
@@ -475,7 +471,7 @@ public class MultiSpill {
             if (d <= 0.0001 || c.x < 0 || c.y < 0)
                 continue;
             spillMap[c.x][c.y] = i;
-            if (!impassable.contains(c)) {
+            if (impassable == null || !impassable.contains(c)) {
                 os.add(c);
                 hasFresh = true;
             }
@@ -504,7 +500,8 @@ public class MultiSpill {
                         if(!adj.isWithin(width, height))
                             continue;
                         double h = heuristic(dirs[d]);
-                        if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y) && !impassable.contains(adj)
+                        if (physicalMap[adj.x][adj.y] && !anySpillMap.contains(adj.x, adj.y)
+                                && (impassable == null || !impassable.contains(adj))
                                 && rng.nextDouble(h) <= 1.0) {
                             setFresh(i, adj);
                         }

@@ -4,7 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import squidpony.squidgrid.gui.gdx.*;
@@ -17,7 +16,7 @@ import squidpony.squidmath.RNG;
 import java.util.HashMap;
 
 public class ImageDemo extends ApplicationAdapter {
-    SpriteBatch batch;
+    private FilterBatch batch;
 
     private RNG rng;
     private SquidLayers display;
@@ -33,7 +32,7 @@ public class ImageDemo extends ApplicationAdapter {
     private Stage stage;
     @Override
     public void create () {
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         width = 30;
         height = 20;
         cellWidth = 18;

@@ -10,61 +10,60 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.Align;
 import squidpony.panel.IColoredString;
 import squidpony.panel.IMarkup;
 import squidpony.squidgrid.gui.gdx.UIUtil.CornerStyle;
-import squidpony.squidgrid.gui.gdx.UIUtil.YMoveKind;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 /**
  * A panel to display some text using libgdx directly (i.e. without using
  * {@link SquidPanel}) as in these examples (no scrolling first, then with a
  * scroll bar):
- * 
+ *
  * <p>
  * <ul>
  * <li><img src="http://i.imgur.com/EqEXqlu.png"/></li>
  * <li><img src="http://i.imgur.com/LYbxQZE.png"/></li>
  * </ul>
  * </p>
- * 
+ *
  * <p>
  * It supports vertical scrolling, i.e. it'll put a vertical scrollbar if
  * there's too much text to display. This class does a lot of stuff, you
  * typically only have to provide the textures for the scrollbars and the scroll
  * knobs (see example below).
  * </p>
- * 
+ *
  * <p>
  * A typical usage of this class is as follows:
- * 
+ *
  * <pre>
  * final TextPanel<Color> tp = new TextPanel<>(new GDXMarkup(), font);
  * tp.init(screenWidth, screenHeight, text); <- first 2 params: for fullscreen
  * final ScrollPane sp = tp.getScrollPane();
  * sp.setScrollPaneStyle(new ScrollPaneStyle(...)); <- set textures
  * stage.addActor(sp);
- * stage.setKeyboardFocus(sp);
  * stage.setScrollFocus(sp);
  * stage.draw();
  * </pre>
  * </p>
- * 
+ *
  * <p>
- * In addition to what {@link ScrollPane} does (knobs, handling of the wheel);
- * this class plugs scrolling with arrow keys (up, down, page up, page down) and
- * vim shortcuts (j/k).
+ * This class shares what {@link ScrollPane} does (knobs, handling of the wheel).
  * </p>
- * 
+ * <p>
+ * Drawing the result of {@link #getScrollPane()} will set the shader of {@code batch} if using a distance field or MSDF
+ * font and the shader is currently not configured for such a font; it does not reset the shader to the default so that
+ * multiple Actors can all use the same shader and so specific extra glyphs or other items can be rendered after calling
+ * draw(). If you need to draw both a distance field font and full-color art, you should set the shader on the Batch to
+ * null when you want to draw full-color art, and end the Batch between drawing this object and the other art.
+ * </p>
  * @author smelC
- * 
+ *
  * @see ScrollPane A libGDX widget for general scrolling through only the visible part of a large widget
  * @see LinesPanel An alternative for displaying lines of text in a variable-width font
  */
@@ -87,21 +86,12 @@ public class TextPanel<T extends Color> {
 
 	public CornerStyle borderStyle = CornerStyle.ROUNDED;
 
-	/**
-	 * Whether to use 'j' to scroll down, and 'k' to scroll up. Serious
-	 * roguelikes leave that to {@code true}, assuming they don't use j and k for movement...
-	 */
-	public boolean vimShortcuts = true;
-
 	protected /* @Nullable */ IMarkup<T> markup;
 
 	protected BitmapFont font;
-    protected boolean distanceField;
-    protected TextCellFactory tcf;
+	protected TextCellFactory tcf;
 	/** The text to display */
-	protected List<IColoredString<T>> text;
-
-    protected StringBuilder builder;
+	public ArrayList<IColoredString<T>> text;
 
 	protected final ScrollPane scrollPane;
 
@@ -114,177 +104,76 @@ public class TextPanel<T extends Color> {
 	/** Do not access directly, use {@link #getRenderer()} */
 	private /* @Nullable */ ShapeRenderer renderer;
 
-    /**
-     * The text to display MUST be set later on with
-     * {@link #init(float, float, Collection)}.
-     *
-     * @param markup
-     *            An optional way to compute markup.
-     * @param font
-     *            The font to use. It can be set later using
-     *            {@link #setFont(BitmapFont)}, but it MUST be set before
-     *            drawing this panel.
-     */
-    public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ BitmapFont font) {
-        if (markup != null)
-            setMarkup(markup);
-        if (font != null)
-            setFont(font);
-        builder = new StringBuilder(512);
-        textActor = new TextActor();
-
-        this.scrollPane = new ScrollPane(textActor);
-
-        this.scrollPane.addListener(new InputListener() {
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-				/* To receive key up */
-                return true;
-            }
-
-            @Override
-            public boolean keyUp(InputEvent event, int keycode) {
-                final YMoveKind d = UIUtil.YMoveKind.of(keycode, vimShortcuts);
-                if (d == null)
-                    return false;
-                else {
-                    switch (d) {
-                        case DOWN:
-                        case UP: {
-                            handleArrow(!d.isDown());
-                            return true;
-                        }
-                        case PAGE_DOWN:
-                        case PAGE_UP:
-                            final float scrollY = scrollPane.getScrollY();
-                            final int mult = d.isDown() ? 1 : -1;
-                            scrollPane.setScrollY(scrollY + mult * textActor.getHeight());
-                            return true;
-                    }
-                    throw new IllegalStateException(
-                            "Unmatched YMoveKind: " + d);
-                }
-            }
-
-            @Override
-            public boolean keyTyped(InputEvent event, char character) {
-                if (vimShortcuts && (character == 'j' || character == 'k'))
-                    return true;
-                else
-                    return super.keyTyped(event, character);
-            }
-
-            private void handleArrow(boolean up) {
-                final float scrollY = scrollPane.getScrollY();
-                final int mult = up ? -1 : 1;
-                scrollPane.setScrollY(scrollY + (scrollPane.getHeight() * 0.8f * mult));
-            }
-        });
-    }
-
-    /**
-     * The text to display MUST be set later on with
-     * {@link #init(float, float, Collection)}.
-     *
-     * @param markup
-     *            An optional way to compute markup.
-     * @param distanceFieldFont
-     *            A distance field font as a TextCellFactory to use.
-     *            Won't be used for drawing in cells, just the distance field code it has matters.
-     */
-    public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ TextCellFactory distanceFieldFont) {
-        if (markup != null)
-            setMarkup(markup);
-        if (distanceFieldFont != null)
-        {
-            tcf = distanceFieldFont;
-            distanceField = distanceFieldFont.distanceField || distanceFieldFont.msdf;
-            tcf.initBySize();
-            font = tcf.font();
-            if (markup != null)
-                font.getData().markupEnabled = true;
-        }
-        builder = new StringBuilder(512);
-        textActor = new TextActor();
-        scrollPane = new ScrollPane(textActor);
-
-        this.scrollPane.addListener(new InputListener() {
-            @Override
-            public boolean keyDown(InputEvent event, int keycode) {
-				/* To receive key up */
-                return true;
-            }
-
-            @Override
-            public boolean keyUp(InputEvent event, int keycode) {
-                final YMoveKind d = UIUtil.YMoveKind.of(keycode, vimShortcuts);
-                if (d == null)
-                    return false;
-                else {
-                    switch (d) {
-                        case DOWN:
-                        case UP: {
-                            handleArrow(!d.isDown());
-                            return true;
-                        }
-                        case PAGE_DOWN:
-                        case PAGE_UP:
-                            final float scrollY = scrollPane.getScrollY();
-                            final int mult = d.isDown() ? 1 : -1;
-                            scrollPane.setScrollY(scrollY + mult * textActor.getHeight());
-                            return true;
-                    }
-                    throw new IllegalStateException(
-							"Unmatched YMoveKind: " + d);
-                }
-            }
-
-            @Override
-            public boolean keyTyped(InputEvent event, char character) {
-                if (vimShortcuts && (character == 'j' || character == 'k'))
-                    return true;
-                else
-                    return super.keyTyped(event, character);
-            }
-
-            private void handleArrow(boolean up) {
-                final float scrollY = scrollPane.getScrollY();
-                final int mult = up ? -1 : 1;
-                scrollPane.setScrollY(scrollY + (scrollPane.getHeight() * 0.8f * mult));
-            }
-        });
-    }
-
-    /**
-	 * @param m
-	 *            The markup to use.
+	/**
+	 * The text to display MUST be set later on with
+	 * {@link #init(float, float, Collection)}.
+	 *
+	 * @param markup ignored.
+	 * @param font
+	 *            The font to use. It can be set later using
+	 *            {@link #setFont(BitmapFont)}, but it MUST be set before
+	 *            drawing this panel.
 	 */
-	public void setMarkup(IMarkup<T> m) {
+	public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ BitmapFont font) {
 		if (font != null)
-			font.getData().markupEnabled = true;
-		this.markup = m;
+			setFont(font);
+		textActor = new TextActor();
+
+		this.scrollPane = new ScrollPane(textActor);
 	}
 
 	/**
-	 * Sets the font to use. This method should be called once before
-	 * {@link #init(float, float, Collection)} if the font wasn't given at
-	 * creation-time.
-	 * 
+	 * The text to display MUST be set later on with {@link #init(float, float, Collection)} (which can't be updated) or
+	 * {@link #initShared(float, float, ArrayList)} (which reflects changes in the given ArrayList).
+	 *
+	 * @param markup
+	 *            An optional way to compute markup.
 	 * @param font
-	 *            The font to use.
+	 *            A TextCellFactory, typically holding a distance field font ("stretchable" or "crisp" in
+	 *            DefaultResources). This won't force glyphs into same-size cells, despite the name.
+	 */
+	public TextPanel(/* @Nullable */IMarkup<T> markup, /* @Nullable */ TextCellFactory font) {
+		if (font != null)
+		{
+			tcf = font;
+			tcf.initBySize();
+			this.font = tcf.font();
+		}
+		textActor = new TextActor();
+		scrollPane = new ScrollPane(textActor);
+	}
+	
+	/**
+	 * Sets the font to use. This method should be called once before {@link #init(float, float, Collection)} if the
+	 * font wasn't given at creation-time.
+	 *
+	 * @param font The font to use as a BitmapFont.
 	 */
 	public void setFont(BitmapFont font) {
 		this.font = font;
-        tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))
-                .width(MathUtils.round(font.getSpaceWidth()));
-		if (markup != null)
-			font.getData().markupEnabled = true;
+		tcf = new TextCellFactory().font(font).height(MathUtils.ceil(font.getLineHeight()))
+				.width(MathUtils.round(font.getSpaceXadvance()));
+	}
+
+	/**
+	 * Sets the font to use. This method should be called once before {@link #init(float, float, Collection)} if the
+	 * font wasn't given at creation-time.
+	 *
+	 * @param font The font to use as a TextCellFactory.
+	 */
+	public void setFont(TextCellFactory font) {
+		if (font != null)
+		{
+			tcf = font;
+			tcf.initBySize();
+			this.font = tcf.font();
+		}
 	}
 
 	/**
 	 * This method sets the sizes of {@link #scrollPane} and {@link #textActor}.
 	 * This method MUST be called before rendering.
-	 * 
+	 *
 	 * @param maxHeight
 	 *            The maximum height that the scrollpane can take (equal or
 	 *            smaller than the height of the text actor).
@@ -293,44 +182,69 @@ public class TextPanel<T extends Color> {
 	 * @param text
 	 */
 	public void init(float width, float maxHeight, Collection<? extends IColoredString<T>> text) {
-        this.text = new ArrayList<IColoredString<T>>(text);
+		this.text = new ArrayList<>(text);
 
-        scrollPane.setWidth(width);
-        textActor.setWidth(width);
+		scrollPane.setWidth(width);
+		textActor.setWidth(width);
 
-        if (tcf == null)
-            throw new NullPointerException(
-                    "The font should be set before calling TextPanel.init()");
+		if (tcf == null)
+			throw new NullPointerException(
+					"The font should be set before calling TextPanel.init()");
 
-        final BitmapFontCache cache = font.getCache();
-        final List<String> toDisplay = getTypesetText();
-        float totalTextHeight = tcf.height();
-        GlyphLayout layout = cache.addText(builder, 0, 0, 0, builder.length(), width, Align.left, true);
-        totalTextHeight += layout.height;
-        if(totalTextHeight < 0)
-            totalTextHeight = 0;
-		textActor.setHeight(/* Entire height */ totalTextHeight);
-		final boolean yscroll = maxHeight < totalTextHeight;
-		scrollPane.setHeight(/* Maybe not the entire height */ Math.min(totalTextHeight, maxHeight));
-        scrollPane.setActor(new TextActor());
-		yScrollingCallback(yscroll);
+		//prepareText();
+//		final boolean yscroll = maxHeight < textActor.getHeight();
+		scrollPane.setHeight(maxHeight);
+		scrollPane.setActor(textActor);
+		//yScrollingCallback(yscroll);
+		scrollPane.layout();
 	}
 
-    public void init(float width, float maxHeight, T color, String... text)
-    {
-        ArrayList<IColoredString.Impl<T>> coll = new ArrayList<>(text.length);
-        for(String t : text)
-        {
-            coll.add(new IColoredString.Impl<T>(t, color));
-        }
-        init(width, maxHeight, coll);
-    }
+	/**
+	 * This method sets the sizes of {@link #scrollPane} and {@link #textActor}, and shares a direct reference to
+	 * {@code text} so changes to that ArrayList will also be picked up here and rendered.
+	 * This method MUST be called before rendering.
+	 *
+	 * @param maxHeight
+	 *            The maximum height that the scrollpane can take (equal or
+	 *            smaller than the height of the text actor).
+	 * @param width
+	 *            The width of the scrollpane and the text actor.
+	 * @param text an ArrayList of IColoredString that will be used directly by this TextPanel (changes
+	 *             to the ArrayList will show up in the TextPanel)
+	 */
+	public void initShared(float width, float maxHeight, ArrayList<IColoredString<T>> text) {
+		this.text = text;
+
+		scrollPane.setWidth(width);
+		textActor.setWidth(width);
+
+		if (tcf == null)
+			throw new NullPointerException(
+					"The font should be set before calling TextPanel.init()");
+
+		//prepareText();
+//		final boolean yscroll = maxHeight < textActor.getHeight();
+		scrollPane.setHeight(maxHeight);
+		scrollPane.setActor(textActor);
+		//yScrollingCallback(yscroll);
+		scrollPane.layout();
+	}
+
+	public void init(float width, float maxHeight, T color, String... text)
+	{
+		ArrayList<IColoredString.Impl<T>> coll = new ArrayList<>(text.length);
+		for(String t : text)
+		{
+			coll.add(new IColoredString.Impl<>(t, color));
+		}
+		init(width, maxHeight, coll);
+	}
 
 	/**
 	 * Draws the border. You have to call this method manually, because the
 	 * border is outside the actor and hence should be drawn at the very end,
-	 * otherwise it can get overwritten by UI element.
-	 * 
+	 * otherwise it can get overwritten by UI elements.
+	 *
 	 * @param batch
 	 */
 	public void drawBorder(Batch batch) {
@@ -344,8 +258,10 @@ public class TextPanel<T extends Color> {
 			sr.setTransformMatrix(m);
 			sr.begin(ShapeType.Filled);
 			sr.setColor(borderColor);
-			UIUtil.drawMarginsAround(sr, scrollPane.getX(), scrollPane.getY(), scrollPane.getWidth(),
-					scrollPane.getHeight() - 1, borderSize, borderColor, borderStyle, 1f, 1f);
+//			prepareText();
+			final float down = font.getData().down;
+			UIUtil.drawMarginsAround(sr, scrollPane.getX(), scrollPane.getY() + down * -0.5f + 4f, scrollPane.getWidth(),
+					scrollPane.getHeight() + down * -1.5f - 4f, borderSize * 2f, borderColor, borderStyle, 1f, 1f);
 			sr.end();
 
 			if (reset)
@@ -354,25 +270,89 @@ public class TextPanel<T extends Color> {
 	}
 
 	/**
-	 * @return The text to draw, after applying {@link #present(IColoredString)}
-	 *         and {@link #applyMarkup(IColoredString)}.
+	 * @return The text to draw, without color information present in {@link #text}.
 	 */
-	public /* @Nullable */ List<String> getTypesetText() {
+	public /* @Nullable */ ArrayList<String> getTypesetText() {
 		if (text == null)
 			return null;
-        builder.delete(0, builder.length());
-		final List<String> result = new ArrayList<>();
+		final ArrayList<String> result = new ArrayList<>();
 		for (IColoredString<T> line : text) {
-			/* This code must be consistent with #draw in the custom Actor */
-			final IColoredString<T> tmp = present(line);
-            final String marked = applyMarkup(tmp);
-			result.add(marked);
-            builder.append(marked);
-            builder.append('\n');
+			result.add(line.present());
 		}
-        if(builder.length() > 0)
-            builder.deleteCharAt(builder.length() - 1);
 		return result;
+	}
+
+	/**
+	 * Updates the text this will show based on the current contents of the ArrayList of IColoredString values that may
+	 * be shared due to {@link #initShared(float, float, ArrayList)}, then resizes the {@link #getTextActor()} to fit
+	 * the current text and lays out the {@link #getScrollPane()} to match. Called in the text actor's draw() method. 
+	 */
+	protected void prepareText() {
+		if (text == null)
+			return;
+		final BitmapFontCache cache = font.getCache();
+		//cache.clear();
+		final float w = scrollPane.getWidth();
+		float lineHeight = -font.getData().down, capHeight = font.getCapHeight();
+		int lines = 1, ci = 0;
+		StringBuilder sb = new StringBuilder(256);
+		for (int m = 0, textSize = text.size(); m < textSize; m++) {
+			IColoredString<T> line = text.get(m);
+			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
+			for (int i = 0; i < frags.size(); i++) {
+				sb.append(frags.get(i).getText());
+			}
+			sb.append('\n');
+		}
+		GlyphLayout layout = cache.setText(sb, 0, 0, w, Align.left, true);			
+		lines += layout.height / capHeight;
+		
+		for (int m = 0, textSize = text.size(); m < textSize; m++) {
+			IColoredString<T> line = text.get(m);
+			ArrayList<IColoredString.Bucket<T>> frags = line.getFragments();
+			for (int i = 0; i < frags.size(); i++) {
+				final IColoredString.Bucket<T> b = frags.get(i);
+				Color c = b.getColor();
+				if(c != null) 
+					cache.setColors(c, ci, ci += b.length());
+				else
+					ci += b.length();
+			}
+
+//			if(m + 1 < textSize)
+//			{
+				//cache.addText("\n", pos, (-lines) * totalTextHeight, w, Align.left, true);
+				//lines++;
+//			}
+		}
+		lineHeight *= lines;
+		if(lineHeight < 0)
+			lineHeight = 0;
+		textActor.setHeight(/* Entire height */ lineHeight);
+		scrollPane.layout();
+
+	}
+
+	/**
+	 * Scrolls the scroll pane this holds down by some number of rows (which may be fractional, and may be negative to
+	 * scroll up). This is not a smooth scroll, and will not be animated.
+	 * @param downDistance The distance in rows to scroll down, which can be negative to scroll up instead
+	 */
+	public void scroll(final float downDistance)
+	{
+		prepareText();
+		scrollPane.setScrollY(scrollPane.getScrollY() + downDistance * tcf.actualCellHeight);
+	}
+
+	/**
+	 * If the parameter is true, scrolls to the top of this scroll pane; otherwise scrolls to the bottom. This is not a
+	 * smooth scroll, and will not be animated.
+	 * @param goToTop If true, will scroll to the top edge; if false, will scroll to the bottom edge.
+	 */
+	public void scrollToEdge(final boolean goToTop)
+	{
+		prepareText();
+		scrollPane.setScrollPercentY(goToTop ? 0f : 1f);
 	}
 
 	/**
@@ -391,10 +371,10 @@ public class TextPanel<T extends Color> {
 	}
 
 	/**
-	 * @return The font used, if set.
+	 * @return The font used, if set, as a TextCellFactory (one is always created even if only given a BitmapFont).
 	 */
-	public /* @Nullable */ BitmapFont getFont() {
-		return font;
+	public /* @Nullable */ TextCellFactory getFont() {
+		return tcf;
 	}
 
 	public void dispose() {
@@ -404,7 +384,7 @@ public class TextPanel<T extends Color> {
 
 	/**
 	 * Callback done to do stuff according to whether y-scrolling is required
-	 * 
+	 *
 	 * @param required
 	 *            Whether y scrolling is required.
 	 */
@@ -429,14 +409,6 @@ public class TextPanel<T extends Color> {
 	}
 
 	/**
-	 * @param ics
-	 * @return The text obtained after applying {@link #markup}.
-	 */
-	protected String applyMarkup(IColoredString<T> ics) {
-		return markup == null ? ics.toString() : ics.presentWithMarkup(markup);
-	}
-
-	/**
 	 * @return A fresh renderer.
 	 */
 	protected ShapeRenderer buildRenderer() {
@@ -452,25 +424,24 @@ public class TextPanel<T extends Color> {
 		return renderer;
 	}
 
-    private class TextActor extends Actor
-    {
-        TextActor()
-        {
+	private class TextActor extends Actor
+	{
+		TextActor()
+		{
 
-        }
-        @Override
-        public void draw(Batch batch, float parentAlpha) {
-            final float tx = 0;//getX();
-            final float ty = 0;//getY();
-            final float twidth = getWidth();
-            final float theight = getHeight();
+		}
+		@Override
+		public void draw(Batch batch, float parentAlpha) {
+			prepareText();
+			final float tx = 0f;//scrollPane.getX();
+			final float ty = 0f;//scrollPane.getY();
+			final float twidth = scrollPane.getWidth();
+			final float theight = scrollPane.getHeight();
 
-            final float height = scrollPane.getHeight();
-
-            if (backgroundColor != null) {
-                batch.setColor(backgroundColor);
-                batch.draw(tcf.getSolid(), tx, ty, twidth, theight);
-                batch.setColor(Color.WHITE);
+			if (backgroundColor != null) {
+				batch.setColor(backgroundColor);
+				batch.draw(tcf.getSolid(), tx, ty, twidth, theight);
+				batch.setColor(SColor.WHITE);
                 /*
                 batch.end();
 
@@ -485,25 +456,22 @@ public class TextPanel<T extends Color> {
 
                 batch.begin();
                 */
-            }
+			}
 
-            if (font == null)
-                throw new NullPointerException(
-                        "The font should be set when drawing a " + getClass().getSimpleName());
-            if (text == null)
-                throw new NullPointerException(
-                        "The text should be set when drawing a " + getClass().getSimpleName());
-            if (tcf != null) {
-                tcf.configureShader(batch);
-            }
-            float yscroll = scrollPane.getScrollY();
-
-            final float destx = tx, offY = (tcf != null) ? tcf.height * 0.5f : 0;
-            getTypesetText();
-            font.draw(batch, builder, destx, theight + yscroll - offY,
-                    0, builder.length(), twidth, Align.left, true);
-
-        }
-    }
+			if (font == null)
+				throw new NullPointerException(
+						"The font should be set when drawing a TextPanel's TextActor");
+			if (text == null)
+				throw new NullPointerException(
+						"The font should be set when drawing a TextPanel's TextActor");
+			if (tcf != null) {
+				tcf.configureShader(batch);
+			}
+//			final float offY = 0;//(tcf != null) ? tcf.actualCellHeight * 0.5f : 0;
+			final BitmapFontCache cache = font.getCache();
+			cache.setPosition(tx, scrollPane.getHeight() + scrollPane.getScrollY());
+			cache.draw(batch);
+		}
+	}
 
 }

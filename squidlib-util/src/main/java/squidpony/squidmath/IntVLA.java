@@ -380,7 +380,7 @@ public class IntVLA implements Serializable, Cloneable {
 
     public int getRandomElement(IRNG random)
     {
-        return items[random.nextInt(items.length)];
+        return items[random.nextInt(size)];
     }
 
     /**
@@ -416,20 +416,30 @@ public class IntVLA implements Serializable, Cloneable {
         try {
             IntVLA nx = (IntVLA) super.clone();
             nx.items = new int[items.length];
-            System.arraycopy(items, 0, nx.items, 0, items.length);
+            System.arraycopy(items, 0, nx.items, 0, size);
             return nx;
         } catch (CloneNotSupportedException e) {
             throw new InternalError(e + (e.getMessage() != null ? "; " + e.getMessage() : ""));
         }
     }
+
+    /**
+     * Hashes this IntVLA using {@link CrossHash.Water}, getting a 32-bit result. The same algorithm is used by
+     * {@link #hash64()}, just with different constants and a different final step here.
+     * @returna 32-bit hash code
+     */
     @Override
     public int hashCode () {
-        int[] items = this.items;
-        int h = 1;
-        for (int i = 0, n = size; i < n; i++)
-            h = h * 31 + items[i];
-        return h;
+        return CrossHash.Water.hash(items, size);
     }
+
+    /**
+     * Gets a low-to-mid-quality hash code quickly using the Wisp algorithm; you should prefer {@link #hashHive()} in
+     * code that needs to run on GWT, since that method avoids the long math that is expensive on GWT. You are fine
+     * using {@link #hashCode()} when you need quality and low collison rates; Wisp tends to collide too often on some
+     * data sets.
+     * @return a 32-bit hash code that has OK quality, but worse than {@link #hashCode()}
+     */
     public int hashWisp () {
         int[] data = this.items;
         long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
@@ -440,15 +450,34 @@ public class IntVLA implements Serializable, Cloneable {
         return (int)(result * (a | 1L) ^ (result >>> 27 | result << 37));
     }
 
-    public long hash64 () {
-        int[] data = this.items;
-        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+    /**
+     * Gets a mid-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an
+     * excellent option on GWT. It is relatively slow on desktop platforms compared to {@link #hashCode()}, which uses
+     * a higher-quality and sometimes faster algorithm, but only has that speed advantage on 64-bit JVMs.
+     * {@link #hash64()} uses almost exactly the same algorithm as hashCode(), both in {@link CrossHash.Water}. 
+     * @return a 32-bit hash code that should show very little bias toward any bits
+     */
+    public int hashHive () {
+        final int[] data = this.items;
+        int result = 0x1A976FDF, z = 0x60642E25;
         final int len = size;
         for (int i = 0; i < len; i++) {
-            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
+            result ^= (z += (data[i] ^ 0xC3564E95) * 0x9E375);
+            z ^= (result = (result << 20 | result >>> 12));
         }
-        return result * (a | 1L) ^ (result >>> 27 | result << 37);
+        result += (z ^ z >>> 15 ^ 0xAE932BD5) * 0x632B9;
+        result = (result ^ result >>> 15) * 0xFF51D;
+        result = (result ^ result >>> 15) * 0xC4CEB;
+        return result ^ result >>> 15;
+    }
 
+    /**
+     * Hashes this IntVLA using {@link CrossHash.Water}, getting a 64-bit result. The same algorithm is used by
+     * {@link #hashCode()}, just with different constants and a different final step here.
+     * @return a 64-bit hash code
+     */
+    public long hash64 () {
+        return CrossHash.Water.hash64(items, size);
     }
 
     @Override

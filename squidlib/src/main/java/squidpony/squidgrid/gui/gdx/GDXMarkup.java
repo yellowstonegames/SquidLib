@@ -16,6 +16,8 @@ import squidpony.panel.IMarkup;
  * extend GDX's markup to handle bold and italic options for text; this only works if you are using a {@link TextFamily}
  * as your {@link TextCellFactory}, such as {@link DefaultResources#getSlabFamily()}, and only if you use
  * {@link #colorString(CharSequence)} or {@link #styleString(CharSequence)} to generate a value that can be drawn later.
+ * You can use {@link #colorStringOnly(CharSequence)} if you aren't using a TextFamily; it ignores bold and italic style
+ * tags and removes them from the IColoredString it returns, but otherwise colors and case-adjusts text as tags say.
  * <br>
  * The notation for colors is the same as in the rest of libGDX, but if you make an IColoredString with colorString(),
  * it doesn't need any flag to be changed on your BitmapFont (like it does for GDX markup normally). This notation looks
@@ -138,10 +140,10 @@ public class GDXMarkup implements IMarkup<Color>{
             {
                 current = markupMatcher.isCaptured("qo")
                         ? DefaultResources.getSCC().getHSV(
-                                Float.parseFloat(markupMatcher.group("qh")),
-                                Float.parseFloat(markupMatcher.group("qs")),
-                                Float.parseFloat(markupMatcher.group("qv")),
-                                Float.parseFloat(markupMatcher.group("qo")))
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")),
+                        Float.parseFloat(markupMatcher.group("qo")))
                         :  DefaultResources.getSCC().getHSV(
                         Float.parseFloat(markupMatcher.group("qh")),
                         Float.parseFloat(markupMatcher.group("qs")),
@@ -155,6 +157,93 @@ public class GDXMarkup implements IMarkup<Color>{
             {
                 mod ^= ITALIC;
             }
+            else if(markupMatcher.isCaptured("U"))
+            {
+                casing = casing == 1 ? 0 : 1;
+            }
+            else if(markupMatcher.isCaptured("L"))
+            {
+                casing = casing == -1 ? 0 : -1;
+            }
+            sb.setLength(0);
+        }
+        return cs;
+    }
+    /**
+     * Takes a CharSequence (such as a String or StringBuilder) that contains the markup this class understands, and
+     * produces an IColoredString (of Color) with the color markup tags used to mark text in colors in the resulting
+     * IColoredString, but with both bold and italic style markup tags ignored (so normal TextCellFactory objects can
+     * render the text correctly). Case markup is still used as in other methods here, and all markup tags, including
+     * those for bold and italic styles, will be removed (so you don't need to manually remove styles that can't be
+     * shown by a TextCellFactory).
+     * @param markupString a String or other CharSequence containing color and/or case markup tags
+     * @return an IColoredString (of Color) with all the markup applied and removed from the text after applying
+     */
+    public IColoredString<Color> colorStringOnly(final CharSequence markupString)
+    {
+        markupMatcher.setTarget(markupString);
+        IColoredString<Color> cs = new IColoredString.Impl<>();
+        Color current = Color.WHITE;
+        int casing = 0;
+        while (markupMatcher.find())
+        {
+            if(markupMatcher.getGroup("p", sb))
+            {
+                switch (casing) {
+                    case -1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toLowerCase(sb.charAt(i)));
+                        }
+                        break;
+                    case 1:
+                        for (int i = 0; i < sb.length(); i++) {
+                            sb.setCharAt(i, Character.toUpperCase(sb.charAt(i)));
+                        }
+                        break;
+                }
+                cs.append(sb.toString(), current);
+            }
+            else if(markupMatcher.isCaptured("e"))
+            {
+                cs.append('[', current);
+            }
+            else if(markupMatcher.isCaptured("r"))
+            {
+                current = Color.WHITE;
+                casing = 0;
+            }
+            else if(markupMatcher.isCaptured("u"))
+            {
+                casing = 0;
+            }
+            else if(markupMatcher.getGroup("h", sb))
+            {
+                if(sb.length() == 6)
+                    current = DefaultResources.getSCC().get(StringKit.intFromHex(sb) << 8 | 0xFF);
+                else
+                    current = DefaultResources.getSCC().get(StringKit.intFromHex(sb));
+            }
+            else if(markupMatcher.getGroup("n", sb))
+            {
+                current = Colors.get(sb.toString());
+            }
+            else if(markupMatcher.isCaptured("q"))
+            {
+                current = markupMatcher.isCaptured("qo")
+                        ? DefaultResources.getSCC().getHSV(
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")),
+                        Float.parseFloat(markupMatcher.group("qo")))
+                        :  DefaultResources.getSCC().getHSV(
+                        Float.parseFloat(markupMatcher.group("qh")),
+                        Float.parseFloat(markupMatcher.group("qs")),
+                        Float.parseFloat(markupMatcher.group("qv")));
+            }
+//            else if(markupMatcher.isCaptured("b") || markupMatcher.isCaptured("i"))
+//            {
+//                markupMatcher.getGroup(0, sb);
+//            }
             else if(markupMatcher.isCaptured("U"))
             {
                 casing = casing == 1 ? 0 : 1;

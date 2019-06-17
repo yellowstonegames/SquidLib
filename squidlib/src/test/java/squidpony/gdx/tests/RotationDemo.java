@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import squidpony.ArrayTools;
+import squidpony.ColoredStringList;
 import squidpony.FakeLanguageGen;
 import squidpony.panel.IColoredString;
 import squidpony.squidai.CustomDijkstraMap;
@@ -65,7 +67,8 @@ public class RotationDemo extends ApplicationAdapter {
     private Phase phase = Phase.WAIT;
     private StatefulRNG rng;
     private SquidLayers display;
-    private LinesPanel<Color> messages;
+    private TextPanel<Color> messagePanel;
+    private ColoredStringList<Color> messages;
     /**
      * Non-{@code null} iff '?' was pressed before
      */
@@ -137,7 +140,7 @@ public class RotationDemo extends ApplicationAdapter {
         // cases but probably not all.
         //textFactory = DefaultResources.getStretchableDejaVuFont().setSmoothingMultiplier(2f / (INTERNAL_ZOOM + 1f))
         //        .width(cellWidth).height(cellHeight).initBySize();
-        textFactory = DefaultResources.getStretchableSlabFont()
+        textFactory = DefaultResources.getCrispSlabFont()
                 .width(cellWidth).height(cellHeight).initBySize(); //.setDirectionGlyph('ˆ')
 
         // Creates a layered series of text grids in a SquidLayers object, using the previously set-up textFactory and
@@ -147,24 +150,23 @@ public class RotationDemo extends ApplicationAdapter {
         //display.getBackgroundLayer().setOnlyRenderEven(true);
 
         display.setAnimationDuration(0.1f);
-        messages = new LinesPanel<Color>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont().initBySize()
-                .tweakWidth(cellWidth * 1.1f).tweakHeight(cellHeight * 1.125f), bonusHeight);
-        // a bit of a hack to increase the text height slightly without changing the size of the cells they're in.
-        // this causes a tiny bit of overlap between cells, which gets rid of an annoying gap between vertical lines.
-        // if you use '#' for walls instead of box drawing chars, you don't need this.
-        //messages.setTextSize(cellWidth * 1.1f, cellHeight * 1.125f);
-        display.setTextSize(cellWidth * 1.1f, cellHeight * 1.125f);
-        //The subCell SquidPanel uses a smaller size here; the numbers 8 and 16 should change if cellWidth or cellHeight
-        //change, and the INTERNAL_ZOOM multiplier keeps things sharp, the same as it does all over here.
-        viewport = new StretchViewport(width * cellWidth, (height + 4) * cellHeight);
+        TextCellFactory font = DefaultResources.getCrispPrintFamily().initBySize();//.height(cellHeight).width(23)
+        messagePanel = new TextPanel<>(GDXMarkup.instance, font);
+        viewport = new StretchViewport(width * cellWidth, (height + 4) * font.actualCellHeight);
         stage = new Stage(viewport, batch);
-
+        messages = new ColoredStringList<>(32);
+        messagePanel.initShared(cellWidth * width, font.actualCellHeight * 4, messages);
+        //messagePanel.getScrollPane().setHeight(font.actualCellHeight * 4);
+        messagePanel.getScrollPane().setStyle(new ScrollPane.ScrollPaneStyle());
+        messagePanel.getScrollPane().setBounds(0, 0, cellWidth * width, font.actualCellHeight * 4);
         //These need to have their positions set before adding any entities if there is an offset involved.
-        messages.setBounds(0, 0, cellWidth * width, cellHeight * 4);
-        display.setPosition(0, messages.getHeight());
-        messages.addLast(GDXMarkup.instance.colorString("You are the orange '[Cape Jasmine]@[]', and enemies are red '[Scarlet]Я[]'. Click a cell to turn and move. " +
-                "Use ? for help, f to change colors, q to quit. " +
-                "Click the top or bottom border of this box to scroll."));
+//        messagePanel.setBounds(0, 0, cellWidth * width, cellHeight * 4);
+        display.setPosition(0, cellHeight * 4);
+        messages.addTextOnNewLine(GDXMarkup.instance.colorString("You are the orange '[Cape Jasmine]@[]', and enemies are red '[Scarlet]Я[]'. Click a cell to turn and move. " +
+                "The colorful [Aurora Heliotrope]^[] shows your facing direction; you rotate automatically to reach a goal. " +
+                "Rotation takes as much time as moving forward one square, but you can only move in the direction you face. " +
+                "Use ? for help, or q to quit."));
+        messagePanel.scrollToEdge(false);
 
         dungeonGen = new SectionDungeonGenerator(width, height, rng);
         dungeonGen.addWater(0, 25, 6);
@@ -341,6 +343,12 @@ public class RotationDemo extends ApplicationAdapter {
                         break;
                     }
                     */
+                    case SquidInput.PAGE_UP:
+                        messagePanel.scroll(-1f);
+                        break;
+                    case SquidInput.PAGE_DOWN:
+                        messagePanel.scroll(1f);
+                        break;
                     case '?': {
                         toggleHelp();
                         break;
@@ -392,13 +400,14 @@ public class RotationDemo extends ApplicationAdapter {
         }));
         //set this to true to test visual input on desktop
         input.forceButtons = false;
+        input.setRepeatGap(Long.MAX_VALUE);
         //actions to give names to in the visual input menu
         input.init("filter", "??? help?", "quit");
         // ABSOLUTELY NEEDED TO HANDLE INPUT
         Gdx.input.setInputProcessor(new InputMultiplexer(stage, input));
-        // and then add display and messages, our two visual components, to the list of things that act in Stage.
+        // and then add display and messagePanel, our two visual components, to the list of things that act in Stage.
         stage.addActor(display);
-        stage.addActor(messages);
+        stage.addActor(messagePanel.getScrollPane());
         //viewport = input.resizeInnerStage(stage);
     }
 
@@ -485,13 +494,14 @@ public class RotationDemo extends ApplicationAdapter {
             if (mon.state > 0 || fovmap[adjacency.extractX(pos << 3)][adjacency.extractY(pos << 3)] > 0.1) {
                 if (mon.state == 0) {
                     /*
-                    messages.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
+                    messagePanel.appendMessage("The AЯMED GUAЯD shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\"");
                     */
-                    messages.addLast(GDXMarkup.instance.colorString("The [Scarlet]AЯMED GUAЯD[] shouts at you, \"" +
+                    messages.addTextOnNewLine(GDXMarkup.instance.colorString("The [Scarlet]AЯMED GUAЯD[] shouts at you, \"" +
                             FakeLanguageGen.RUSSIAN_AUTHENTIC.sentence(rng, 1, 3,
                                     new String[]{",", ",", ",", " -"}, new String[]{"!"}, 0.25) + "\""));
+                    messagePanel.scrollToEdge(false);
                 }
 
                 path = getToPlayer.findPath(30, impassable, null, mon.pos, playerGoal);
@@ -577,7 +587,7 @@ public class RotationDemo extends ApplicationAdapter {
 			 * justifying, without having to worry about sizes since TextPanel lays
 			 * itself out.
 			 */
-        final TextPanel<Color> tp = new TextPanel<Color>(GDXMarkup.instance, DefaultResources.getStretchablePrintFont());
+        final TextPanel<Color> tp = new TextPanel<Color>(GDXMarkup.instance, DefaultResources.getCrispPrintFamily());
         tp.backgroundColor = SColor.DARK_SLATE_GRAY;
 
         final List<IColoredString<Color>> text = new ArrayList<>();
@@ -748,11 +758,11 @@ public class RotationDemo extends ApplicationAdapter {
         super.resize(width, height);
 
         // message box won't respond to clicks on the far right if the stage hasn't been updated with a larger size
-        currentZoomX = width * 1f / RotationDemo.width;
+        currentZoomX = (float)width / RotationDemo.width;
         // total new screen height in pixels divided by total number of rows on the screen
-        currentZoomY = height * 1f / (RotationDemo.height + RotationDemo.bonusHeight);
+        currentZoomY = (float) height / (RotationDemo.height + RotationDemo.bonusHeight);
         // message box should be given updated bounds since I don't think it will do this automatically
-        messages.setBounds(0, 0, width, currentZoomY * RotationDemo.bonusHeight);
+        messagePanel.getScrollPane().setBounds(0, 0, width, currentZoomY * RotationDemo.bonusHeight);
         // SquidMouse turns screen positions to cell positions, and needs to be told that cell sizes have changed
         input.reinitialize(currentZoomX, currentZoomY, RotationDemo.width, RotationDemo.height, 0, 0, width, height);
         currentZoomX = cellWidth / currentZoomX;

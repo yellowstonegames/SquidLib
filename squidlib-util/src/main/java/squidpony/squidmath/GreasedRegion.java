@@ -1842,7 +1842,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         {
             long startMask = ~(-1L << (startY & 63)),
                     endMask = ~(-1L >>> (~endY & 63));
-            for (int a = startX * ySections + startSection; a <= endX * ySections; a += ySections) {
+            for (int a = startX * ySections + startSection; a <= endX * ySections + startSection; a += ySections) {
                 data[a] &= startMask;
             }
             if(endSection - startSection > 1)
@@ -1853,7 +1853,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                     }
                 }
             }
-            for (int a = startX * ySections + endSection; a <= endX * ySections + ySections; a += ySections) {
+            for (int a = startX * ySections + endSection; a <= endX * ySections + endSection; a += ySections) {
                 data[a] &= endMask;
             }
         }
@@ -2262,6 +2262,27 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
      * @return map, with the changes applied; not a copy
      */
     public double[][] writeDoublesInto(double[][] map, double toWrite)
+    {
+        if(map == null || map.length == 0)
+            return map;
+        int width2 = Math.min(width, map.length), height2 = Math.min(height, map[0].length);
+        for (int x = 0; x < width2; x++) {
+            for (int y = 0; y < height2; y++) {
+                if((data[x * ySections + (y >> 6)] & (1L << (y & 63))) != 0)
+                    map[x][y] = toWrite;
+            }
+        }
+        return map;
+    }
+    /**
+     * Like {@link #inverseMask(char[][], char)}, but modifies {@code map} in-place and returns it. If a cell is "off"
+     * in this GreasedRegion, this keeps the value in map intact, and where a cell is "on", it instead writes the char
+     * toWrite. Modifies map in-place, unlike {@link #inverseMask(char[][], char)}.
+     * @param map a 2D char array that <b>will</b> be modified
+     * @param toWrite the char to use where this GreasedRegion stores an "on" cell
+     * @return map, with the changes applied; not a copy
+     */
+    public char[][] writeCharsInto(char[][] map, char toWrite)
     {
         if(map == null || map.length == 0)
             return map;
@@ -3907,8 +3928,6 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
                 t.tally();
                 if(t.ct <= 0) break;
             }
-            else
-                break;
         }
         tallied = false;
         return this;
@@ -5015,7 +5034,7 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
         if(limit == 0)
             return empty();
         else if(limit < 0)
-            limit = 0x7fffffff;
+            limit = width * height;
         long t, w;
         long[] data2 = new long[data.length];
         MAIN_LOOP:
@@ -6030,41 +6049,36 @@ public class GreasedRegion extends Zone.Skeleton implements Collection<Coord>, S
 
     @Override
     public int hashCode() {
-        /*
-        int result = CrossHash.Lightning.hash(data);
-        result = 31 * result + height;
-        result = 31 * result + width;
-        result = 31 * result + ySections; //not needed; purely dependent on height
-        result = 31 * result + (int) (yEndMask ^ (yEndMask >>> 32)); //not needed; purely dependent on height
-        return result;
-        */
-        /*
-        long z = 0x632BE59BD9B4E019L, result = 1L;
-        for (int i = 0; i < data.length; i++) {
-            result ^= (z += (data[i] + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
-        }
-        result ^= (z += (height + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
-        result ^= (z += (width + 0x9E3779B97F4A7C15L) * 0xD0E89D2D311E289FL) * 0xC6BC279692B5CC83L;
-        return (int) ((result ^= Long.rotateLeft((z * 0xC6BC279692B5CC83L ^ result * 0x9E3779B97F4A7C15L) + 0x632BE59BD9B4E019L, (int) (z >>> 58))) ^ (result >>> 32));
-         */
-        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
         final int len = data.length;
         for (int i = 0; i < len; i++) {
-            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
+            result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+            result = (result << 54 | result >>> 10);
         }
-        result += (a ^= 0x8329C6EB9E6AD3E3L * height);
-        result += (a ^= 0x8329C6EB9E6AD3E3L * width);
-        return (int)((result = (result * (a | 1L) ^ (result >>> 27 | result << 37))) ^ (result >>> 32));
+        result ^= (z += (height ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        result = (result << 54 | result >>> 10);
+        result ^= (z += (width ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        result = (result << 54 | result >>> 10);
+
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+        return (int)((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
     }
     public long hash64() {
-        long result = 0x9E3779B97F4A7C94L, a = 0x632BE59BD9B4E019L;
+        long result = 0x1A976FDF6BF60B8EL, z = 0x60642E2A34326F15L;
         final int len = data.length;
         for (int i = 0; i < len; i++) {
-            result += (a ^= 0x8329C6EB9E6AD3E3L * data[i]);
+            result ^= (z += (data[i] ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+            result = (result << 54 | result >>> 10);
         }
-        result += (a ^= 0x8329C6EB9E6AD3E3L * height);
-        result += (a ^= 0x8329C6EB9E6AD3E3L * width);
-        return (result * (a | 1L) ^ (result >>> 27 | result << 37));
+        result ^= (z += (height ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        result = (result << 54 | result >>> 10);
+        result ^= (z += (width ^ 0xC6BC279692B5CC85L) * 0x6C8E9CF570932BABL);
+        result = (result << 54 | result >>> 10);
+        
+        result += (z ^ z >>> 26) * 0x632BE59BD9B4E019L;
+        result = (result ^ result >>> 33) * 0xFF51AFD7ED558CCDL;
+        return ((result ^ result >>> 33) * 0xC4CEB9FE1A85EC53L);
     }
 
     public String serializeToString()

@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -18,6 +17,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import regexodus.ds.CharCharMap;
 import squidpony.IColorCenter;
+import squidpony.Maker;
 import squidpony.StringKit;
 import squidpony.annotation.Beta;
 import squidpony.squidmath.NumberTools;
@@ -25,7 +25,6 @@ import squidpony.squidmath.OrderedMap;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 
 /**
  * Class for creating text blocks.
@@ -163,7 +162,7 @@ public class TextCellFactory implements Disposable {
         if(bmpFont == null)
             bmpFont = DefaultResources.getIncludedFont();
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceXadvance();
         lineHeight = bmpFont.getLineHeight();
         height = (lineHeight);
         descent = bmpFont.getDescent();
@@ -227,7 +226,7 @@ public class TextCellFactory implements Disposable {
             }
         }
         else {
-            shader = SpriteBatch.createDefaultShader();
+            shader = FilterBatch.createDefaultShader();
         }
         lineHeight = bmpFont.getLineHeight();
         descent = bmpFont.getDescent();
@@ -449,7 +448,7 @@ public class TextCellFactory implements Disposable {
             Gdx.app.error("TextCellFactory", "Could not find font file: " + fontPath + ", using defaults");
         }
         //bmpFont.getData().padBottom = bmpFont.getDescent();
-        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
+        distanceFieldScaleX = bmpFont.getSpaceXadvance() - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
     }
@@ -491,7 +490,7 @@ public class TextCellFactory implements Disposable {
         {
             bmpFont.getData().setScale(0.75f, 1f);
         }
-        distanceFieldScaleX = bmpFont.getSpaceWidth() - 1f;
+        distanceFieldScaleX = bmpFont.getSpaceXadvance() - 1f;
         distanceFieldScaleY = bmpFont.getLineHeight() - 1f;
         return this;
     }
@@ -673,7 +672,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory fit(String fit) {
         fitting = fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceXadvance();
         return this;
     }
 
@@ -687,7 +686,7 @@ public class TextCellFactory implements Disposable {
     public TextCellFactory addFit(String fit) {
         fitting += fit;
         bmpFont.setFixedWidthGlyphs(fitting);
-        width = bmpFont.getSpaceWidth();
+        width = bmpFont.getSpaceXadvance();
         return this;
     }
 
@@ -882,7 +881,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
-            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.draw(batch, s, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
         }
@@ -911,7 +910,7 @@ public class TextCellFactory implements Disposable {
             batch.setColor(1f,1f,1f,1f);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // + descent * 1 / 3f
         } else {
-            batch.setColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(SColor.FLOAT_WHITE); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1/* * 1.5f*//* - lineHeight * 0.2f */ /* + descent*/, width, Align.center, false);
@@ -939,12 +938,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight); // descent * 1 / 3f
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             batch.setColor(r, g, b, a); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
@@ -971,12 +970,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
@@ -1000,17 +999,17 @@ public class TextCellFactory implements Disposable {
 
         if (s == null) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else if(s.length() > 0 && s.charAt(0) == '\0') {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth * s.length(), actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else
         {
-            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             bmpFont.draw(batch, s, x, y - descent + 1, width, Align.center, false);
         }
@@ -1034,7 +1033,7 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else
         {
             batch.setColor(color); // round trip so FilterBatch can filter BitmapFontCache
@@ -1060,12 +1059,12 @@ public class TextCellFactory implements Disposable {
         }
         if (c == 0) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - actualCellHeight, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else
         {
-            batch.setColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
+            batch.setPackedColor(encodedColor); // round trip so FilterBatch can filter BitmapFontCache
             Color.abgr8888ToColor(bmpFont.getColor(), batch.getPackedColor());
             mut.setCharAt(0, getOrDefault(c));
             bmpFont.draw(batch, mut, x, y - descent + 1, width, Align.center, false);
@@ -1116,12 +1115,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1145,12 +1144,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
     /**
@@ -1175,14 +1174,14 @@ public class TextCellFactory implements Disposable {
 
         if (tr == null) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - height, actualCellWidth, actualCellHeight);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1234,12 +1233,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(block, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(r, g, b, a);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1265,12 +1264,12 @@ public class TextCellFactory implements Disposable {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(block, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
             batch.setColor(color);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1294,14 +1293,14 @@ public class TextCellFactory implements Disposable {
 
         if (tr == null) {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(block, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         } else {
             float orig = batch.getPackedColor();
-            batch.setColor(encodedColor);
+            batch.setPackedColor(encodedColor);
             batch.draw(tr, x, y - height, width, height);
-            batch.setColor(orig);
+            batch.setPackedColor(orig);
         }
     }
 
@@ -1323,11 +1322,11 @@ public class TextCellFactory implements Disposable {
             for (int j = 0; j < h; j++, hm -= actualCellHeight) {
                 if(encodedColors[i][j] == 0f)
                     continue;
-                batch.setColor(encodedColors[i][j]);
+                batch.setPackedColor(encodedColors[i][j]);
                 batch.draw(block, wm, hm, actualCellWidth, actualCellHeight); // descent * 1 / 3f
             }
         }
-        batch.setColor(orig);
+        batch.setPackedColor(orig);
     }
 
     /**
@@ -1354,11 +1353,11 @@ public class TextCellFactory implements Disposable {
             for (int j = 0; j < h; j++, hm -= subH) {
                 if(encodedColors[i][j] == 0f)
                     continue;
-                batch.setColor(encodedColors[i][j]);
+                batch.setPackedColor(encodedColors[i][j]);
                 batch.draw(block, wm, hm, subW, subH);
             }
         }
-        batch.setColor(orig);
+        batch.setPackedColor(orig);
     }
 
     /**
@@ -1770,7 +1769,7 @@ public class TextCellFactory implements Disposable {
         }
 
         ColorChangeImage im = new ColorChangeImage(tr, 1, doubleWidth,
-                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Collections.singletonList(scc.filter(color)));
+                actualCellWidth, actualCellHeight + (distanceField ? 1 : 0), Maker.makeList(scc.filter(color)));
         im.setAlign(2);
         im.setSize(actualCellWidth * (doubleWidth ? 2 : 1), actualCellHeight + (distanceField ? 1 : 0)); //  - lineHeight / actualCellHeight //+ lineTweak * 1f
         return im;
@@ -1951,23 +1950,27 @@ public class TextCellFactory implements Disposable {
      * logical place to call it is in the outermost Group that contains any SquidPanel objects or other widgets. If you
      * have multipleTextCellFactory objects, each one needs to have configureShader called before it is used to draw.
      * <br>
-     * SquidLayers and SquidPanel already call this method in their draw overrides, so you don't need to call this
-     * manually if you use SquidLayers or SquidPanel.
+     * SquidLayers, SparseLayers, SubcellLayers, SquidPanel, TextPanel, LinesPanel, and ImageSquidPanel already call
+     * this method in their draw overrides, so you don't need to call this manually if you use any of those. None of
+     * those classes change the shader after they set it for their uses, so you may need to set the shader on your Batch
+     * to null to revert to the default shader if you need to draw full-color art.
      * <br>
      * If you don't use a distance field font, you don't need to call this, but calling it won't cause problems.
      *
-     * @param batch the Batch, such as a SpriteBatch, to configure to render distance field fonts if necessary.
+     * @param batch the Batch, such as a {@link FilterBatch}, to configure to render distance field fonts if necessary.
      */
     public void configureShader(Batch batch) {
         if(initialized)
         {
             if(msdf)
             {
-                batch.setShader(shader);
+                if(!shader.equals(batch.getShader())) 
+                    batch.setShader(shader);
                 shader.setUniformf("u_smoothing", 2.1198158f * smoothingMultiplier * bmpFont.getData().scaleX);
             }
             else if (distanceField) {
-                batch.setShader(shader);
+                if(!shader.equals(batch.getShader()))
+                    batch.setShader(shader);
                 shader.setUniformf("u_smoothing", 0.35f / (1.9f * smoothingMultiplier * (bmpFont.getData().scaleX + bmpFont.getData().scaleY)));
             }
         }

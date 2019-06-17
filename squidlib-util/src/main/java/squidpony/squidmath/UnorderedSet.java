@@ -109,7 +109,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      */
     public static final float VERY_FAST_LOAD_FACTOR = .25f;
 
-    protected CrossHash.IHasher hasher;
+    protected final CrossHash.IHasher hasher;
 
     /**
      * Creates a new hash map.
@@ -130,7 +130,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         mask = n - 1;
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
-        hasher = CrossHash.defaultHasher;
+        hasher = CrossHash.mildHasher;
     }
 
     /**
@@ -160,7 +160,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      */
     public UnorderedSet(final Collection<? extends K> c,
                         final float f) {
-        this(c.size(), f, (c instanceof UnorderedSet) ? ((UnorderedSet) c).hasher : CrossHash.defaultHasher);
+        this(c.size(), f, (c instanceof UnorderedSet) ? ((UnorderedSet) c).hasher : CrossHash.mildHasher);
         addAll(c);
     }
 
@@ -171,7 +171,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      * @param c a {@link Collection} to be copied into the new hash set.
      */
     public UnorderedSet(final Collection<? extends K> c) {
-        this(c, (c instanceof UnorderedSet) ? ((UnorderedSet) c).f : DEFAULT_LOAD_FACTOR, (c instanceof UnorderedSet) ? ((UnorderedSet) c).hasher : CrossHash.defaultHasher);
+        this(c, (c instanceof UnorderedSet) ? ((UnorderedSet) c).f : DEFAULT_LOAD_FACTOR, (c instanceof UnorderedSet) ? ((UnorderedSet) c).hasher : CrossHash.mildHasher);
     }
 
     /**
@@ -271,7 +271,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
         mask = n - 1;
         maxFill = maxFill(n, f);
         key = (K[]) new Object[n + 1];
-        this.hasher = hasher == null ? CrossHash.defaultHasher : hasher;
+        this.hasher = hasher == null ? CrossHash.mildHasher : hasher;
     }
 
     /**
@@ -741,7 +741,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
                 last = n;
                 return key[ n ];
             }
-            final K key[] = UnorderedSet.this.key;
+            final K[] key = UnorderedSet.this.key;
             for(;;) {
                 if ( --pos < 0 ) {
                     // We are just enumerating elements from the wrapped list.
@@ -887,9 +887,9 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      */
     @SuppressWarnings("unchecked")
     protected void rehash(final int newN) {
-        final K key[] = this.key;
+        final K[] key = this.key;
         final int mask = newN - 1;
-        final K newKey[] = (K[]) new Object[newN + 1];
+        final K[] newKey = (K[]) new Object[newN + 1];
         K k;
         int i = -1, pos, sz = size;
         for (int q = 0; q < sz; q++) {
@@ -924,10 +924,9 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
     public Object clone() {
         UnorderedSet<K> c;
         try {
-            c = (UnorderedSet<K>) super.clone();
+            c = new UnorderedSet<>(hasher);
             c.key = (K[]) new Object[n + 1];
             System.arraycopy(key, 0, c.key, 0, n + 1);
-            c.hasher = hasher;
             return c;
         } catch (Exception cantHappen) {
             throw new UnsupportedOperationException(cantHappen + (cantHappen.getMessage() != null ?
@@ -1034,7 +1033,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      * @param max    the maximum number of elements to unwrap.
      * @return the number of elements unwrapped.
      */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[], int offset, final int max) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array, int offset, final int max) {
         if (max < 0) throw new IllegalArgumentException("The maximum number of elements (" + max + ") is negative");
         if (offset < 0 || offset + max > array.length) throw new IllegalArgumentException();
         int j = max;
@@ -1053,7 +1052,7 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
      * @param array an array to contain the output of the iterator.
      * @return the number of elements unwrapped.
      */
-    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K array[]) {
+    private static <K> int objectUnwrap(final Iterator<? extends K> i, final K[] array) {
         return objectUnwrap(i, array, 0, array.length);
     }
 
@@ -1090,7 +1089,6 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
             throws java.io.IOException {
         final Iterator<K> i = iterator();
         s.defaultWriteObject();
-        s.writeObject(hasher);
         for (int j = size; j-- != 0; )
             s.writeObject(i.next());
     }
@@ -1100,11 +1098,10 @@ public class UnorderedSet<K> implements Set<K>, java.io.Serializable, Cloneable 
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
         s.defaultReadObject();
-        hasher = (CrossHash.IHasher) s.readObject();
         n = arraySize(size, f);
         maxFill = maxFill(n, f);
         mask = n - 1;
-        final K key[] = this.key = (K[]) new Object[n + 1];
+        final K[] key = this.key = (K[]) new Object[n + 1];
         K k;
         for (int i = size, pos; i-- != 0; ) {
             k = (K) s.readObject();

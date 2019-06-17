@@ -1,11 +1,10 @@
 package squidpony.squidgrid.gui.gdx;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import squidpony.squidmath.StatefulRNG;
+import squidpony.squidmath.GWTRNG;
 
 /**
  * A convenience class that groups several commonly-used GUI classes into one object and provides ways to
@@ -23,7 +22,7 @@ public class StarterKit {
      * The main way to interact with a text-based grid as for roguelikes. A SquidLayers object stores a
      * background and foreground SquidPanel, and this configures them as requested.
      */
-    public SquidLayers layers;
+    public SparseLayers layers;
     /**
      * The number of grid spaces on the x axis.
      */
@@ -59,7 +58,7 @@ public class StarterKit {
      * You may need to call {@code batch.begin()} and {@code batch.end()} in some cases where you want to
      * render something that isn't a child of stage but is an Actor or similar render-able object.
      */
-    public SpriteBatch batch;
+    public FilterBatch batch;
     /**
      * An important part of how this will be displayed; the viewport defaults to a displayed width of
      * {@code cellWidth * gridWidth} and a displayed height of {@code cellHeight * gridHeight}, after cellWidth
@@ -69,20 +68,21 @@ public class StarterKit {
 
     /**
      * Almost all of SquidLib comes into contact with randomness at some point, so this is a good place to show one
-     * way of handling that randomness. StatefulRNG can be "seeded" at the start to set the initial state, like any
-     * other RNG, but it can also have the current state acquired later with {@link StatefulRNG#getState()} or have the
-     * current state set in-place with {@link StatefulRNG#setState(long)} (note, this doesn't create a new RNG, like you
-     * would have to do to re-seed with java.util.Random). This can be useful to get a snapshot of the random sequence
-     * where you might want to take an action, undo it back to the snapshot, and try again. It can also be useful for
-     * saving the game and reloading it exactly, though the optional serialization in squidlib-extra also does this.
-     * You can pass a StatefulRNG to anything that expects an RNG, and you'll encounter a lot of methods that employ
-     * RNG (and some that specifically require or prefer StatefulRNG) throughout squidlib-util.
+     * way of handling that randomness. GWTRNG acts as a normal implementation of {@link squidpony.squidmath.IRNG},
+     * can be "seeded" at the start to set the initial state, like any other RNG, but it can also have the current state
+     * acquired later with {@link GWTRNG#getState()} or have the current state set in-place with
+     * {@link GWTRNG#setState(long)} (note, this doesn't create a new RNG, like you would have to do to re-seed with
+     * java.util.Random). This can be useful to get a snapshot of the random sequence where you might want to take an
+     * action, undo it back to the snapshot, and try again. It can also be useful for saving the game and reloading it
+     * exactly, though the optional serialization in squidlib-extra also does this. You can pass a GWTRNG to anything
+     * that expects an IRNG, and you'll encounter a lot of methods that employ IRNG (and some that specifically require
+     * or prefer {@link squidpony.squidmath.IStatefulRNG}, which includes GWTRNG) throughout squidlib-util.
      * <br>
-     * This field defaults to a StatefulRNG seeded with the number SQUIDLIB (written in base 36), or 2252637788195L in
-     * base 10. Like most StatefulRNG instances, it uses a DiverRNG internally, which is very fast and has a good-enough
-     * period (how many numbers it generates before repeating the cycle) at (2 to the 64) random numbers.
+     * This field defaults to a GWTRNG seeded with the number SQUIDLIB (written in base 36), or 2252637788195L in
+     * base 10. Its algorithm can produce 2 to the 64 minus 1 numbers before repeating, and as the name might suggest,
+     * it should perform especially well on Google Web Toolkit for HTML deployment.
      */
-    public StatefulRNG rng = new StatefulRNG(2252637788195L);
+    public GWTRNG rng = new GWTRNG(2252637788195L);
 
     /**
      * Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width
@@ -122,8 +122,8 @@ public class StarterKit {
      * Constructs a StarterKit with the given width and height in cells (gridWidth and gridHeight) and the given width
      * and height for each letter (cellWidth and cellHeight), using the given TextCellFactory for the font. You can use
      * any of the pre-constructed TextCellFactory objects in {@link DefaultResources}. such as
-     * {@link DefaultResources#getStretchableTypewriterFont()}, {@link DefaultResources#getStretchableDejaVuFont()},
-     * {@link DefaultResources#getStretchableSquareFont()}, or {@link DefaultResources#getStretchableCodeFont()}, as
+     * {@link DefaultResources#getCrispLeanFamily()}, {@link DefaultResources#getCrispDejaVuFont()},
+     * {@link DefaultResources#getCrispCurvySquareFont()}, or {@link DefaultResources#getCrispSlabFamily()} , as
      * long as you have the right assets available (their documentation says the exact files you need). While you can
      * construct your own TextCellFactory given a BitmapFont, that won't work well as a distance field font unless you
      * used some very unusual configuration making the font, so the font would only look good at one size or possibly a
@@ -142,13 +142,11 @@ public class StarterKit {
                       int additionalWidth, int additionalHeight) {
         this.cellWidth = cellWidth;
         this.cellHeight = cellHeight;
-        this.textFactory = DefaultResources.getStretchableFont()
-                .width(this.cellWidth).height(this.cellHeight).initBySize();
-        layers = new SquidLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, textFactory);
-        //layers.setTextSize(cellWidth, cellHeight + 2);
+        this.textFactory = DefaultResources.getCrispLeanFamily();
+        layers = new SparseLayers(gridWidth, gridHeight, this.cellWidth, this.cellHeight, textFactory);
         this.gridWidth = gridWidth;
         this.gridHeight = gridHeight;
-        batch = new SpriteBatch();
+        batch = new FilterBatch();
         viewport = new StretchViewport(this.cellWidth * gridWidth + additionalWidth, this.cellHeight * gridHeight + additionalHeight);
         stage = new Stage(viewport, batch);
         stage.addActor(layers);
@@ -157,43 +155,23 @@ public class StarterKit {
     /**
      * Not a complete drawing solution; so much of the logic related to drawing is specific to each game, like
      * FOV being used to make certain things not render if they are out of sight, that this doesn't even try to
-     * guess at what a particular game needs for its rendering code. You should probably draw any AnimatedEntity
-     * objects, like what {@link SquidLayers#animateActor(int, int, char, Color)} returns, separately and after
-     * calling this method. The recommended way to draw those objects is with {@link #drawEntity(AnimatedEntity)},
-     * which must be called between SpriteBatch's begin() and end() methods, while this method cannot be called
-     * between those SpriteBatch methods. The solution, usually, is to call this method, then call
-     * {@link SpriteBatch#begin()}, do any logic to determine what AnimatedEntity objects need to be shown (are
-     * they in FOV, are they alive, etc.), draw the ones that should be shown with drawEntity(), and finally
-     * call {@link SpriteBatch#end()} when no more AnimatedEntity objects need to be drawn. Note that this
-     * method renders all of {@link #stage}, which may include other GUI elements using scene2d.ui, but the
-     * AnimatedEntity objects in a SquidLayers aren't part of any Stage to allow them to be rendered as special
-     * cases for visibility.
+     * guess at what a particular game needs for its rendering code. Any {@link TextCellFactory.Glyph} objects in
+     * {@link #layers} will be rendered by that SparseLayers, but any that aren't stored in layers must be drawn
+     * separately (Glyph has a {@link TextCellFactory.Glyph#draw(Batch, float)} method that must be called between
+     * {@link Batch#begin()} and {@link Batch#end()}, typically with begin() called before all Glyphs are drawn in
+     * a loop and then with end() called after). 
      * <br>
      * Specifically, this applies the current viewport to the stage, draws the stage, and makes any actions or
-     * events related to the stage take effect. Should not be called inside a {@link SpriteBatch#begin()} block,
-     * since this calls it itself by drawing the stage, and also calls {@link SpriteBatch#end()} afterwards.
+     * events related to the stage take effect. Should not be called inside a {@link FilterBatch#begin()} block,
+     * since this calls it itself by drawing the stage, and also calls {@link FilterBatch#end()} afterwards.
      */
     public void draw()
     {
         stage.getViewport().apply(true);
-        stage.draw();
         stage.act();
+        stage.draw();
     }
-
-    /**
-     * Draws an AnimatedEntity object; must be called between {@link SpriteBatch#begin()} and {@link SpriteBatch#end()}.
-     * You can obtain the correct batch with the {@link #batch} field, and ideally all calls to this method will be
-     * inside a single block of one begin() and one end(), that is, the batch shouldn't start and end for each entity
-     * to draw.
-     * @param entity an AnimatedEntity to draw, usually obtained through one of many methods in {@link SquidLayers}
-     */
-    public void drawEntity(AnimatedEntity entity)
-    {
-        if(batch.isDrawing())
-            layers.drawActor(batch, 1.0f, entity);
-    }
-
-
+    
     /**
      * Not a complete resize method; this is meant to handle the resizing of this StarterKit only and should be
      * called inside your main Game, ApplicationListener, etc. class' resize method.
