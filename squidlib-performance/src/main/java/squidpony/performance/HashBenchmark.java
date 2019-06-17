@@ -89,7 +89,21 @@ import java.util.concurrent.TimeUnit;
  * HashBenchmark.doWisp64          avgt    4   84.347 ±   5.727  ns/op
  * </pre>
  * Of these, only Water passes the latest SMHasher test suite. Hive comes closer than the others, but still fails quite
- * a few tests. Water is, in this version, rather slow when hashing long arrays, but very fast on int arrays.
+ * a few tests. Water is, in the version tested above, rather slow when hashing long arrays, but this was addressed in
+ * the current version:
+ * <pre>
+ * Benchmark                       Mode  Cnt    Score    Error  Units
+ * HashBenchmark.doLongHive32      avgt    4  241.644 ± 14.850  ns/op
+ * HashBenchmark.doLongHive64      avgt    4  238.928 ± 12.087  ns/op
+ * HashBenchmark.doLongJDK32       avgt    4  258.728 ±  7.925  ns/op
+ * HashBenchmark.doLongJDK32Mixed  avgt    4  251.463 ±  5.617  ns/op
+ * HashBenchmark.doLongWater32     avgt    4  225.227 ±  5.921  ns/op // the current LongWater algo
+ * HashBenchmark.doLongWater64     avgt    4  235.472 ±  8.339  ns/op
+ * HashBenchmark.doLongWater32Old  avgt    4  296.994 ± 34.286  ns/op // the LongWater algo above
+ * HashBenchmark.doLongWater64Old  avgt    4  321.095 ± 10.299  ns/op
+ * HashBenchmark.doLongWisp32      avgt    4  188.004 ±  8.008  ns/op
+ * HashBenchmark.doLongWisp64      avgt    4  192.939 ±  6.343  ns/op
+ * </pre>
  */
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
@@ -560,17 +574,17 @@ public class HashBenchmark {
         return CrossHash.Water.hash(state.longs[state.idx = state.idx + 1 & 4095]);
     }
 
-    @Benchmark
-    public long doLongWater_64(BenchmarkState state)
-    {
-        return CrossHash.Water.hash64_(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
-
-    @Benchmark
-    public int doLongWater_32(BenchmarkState state)
-    {
-        return CrossHash.Water.hash_(state.longs[state.idx = state.idx + 1 & 4095]);
-    }
+//    @Benchmark
+//    public long doLongWater_64(BenchmarkState state)
+//    {
+//        return CrossHash.Water.hash64_(state.longs[state.idx = state.idx + 1 & 4095]);
+//    }
+//
+//    @Benchmark
+//    public int doLongWater_32(BenchmarkState state)
+//    {
+//        return CrossHash.Water.hash_(state.longs[state.idx = state.idx + 1 & 4095]);
+//    }
 
     @Benchmark
     public int doJDK32(BenchmarkState state)
