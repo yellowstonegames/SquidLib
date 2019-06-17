@@ -135,11 +135,11 @@ public final class Mover32RNG implements RandomnessSource {
         int y = stateA * 0x89A7;
         y = (y << 13 | y >>> 19);
         int x = stateB * 0xBCFD;
-        final long t = y ^ (x = (x << 17 | x >>> 15));
+        final long t = (y ^ (x = (x << 17 | x >>> 15))) & 0xFFFFFFFFL;
         y *= 0x89A7;
         stateA = (y = (y << 13 | y >>> 19));
         x *= 0xBCFD;
-        return t << 32 ^ (y ^ (stateB = (x << 17 | x >>> 15)));
+        return t << 32 | ((y ^ (stateB = (x << 17 | x >>> 15))) & 0xFFFFFFFFL);
     }
 
     /**
