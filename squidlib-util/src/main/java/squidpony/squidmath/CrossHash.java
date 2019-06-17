@@ -101,10 +101,11 @@ import static squidpony.squidmath.NumberTools.floatToIntBits;
  * Note 2: FNV-1a was removed from SquidLib on July 25, 2017, and replaced as default with Wisp; Wisp
  * was later replaced as default by Hive. Wisp was used because at the time SquidLib preferred 64-bit
  * math when math needed to be the same across platforms; math on longs behaves the same on GWT as on
- * desktop, despite being slower. Hive passes SMHasher, a testing suite for hashes, where Wisp does
- * not (it fails just like Arrays.hashCode() does). Hive now uses a cross-platform subset of the
- * possible 32-bit math operations when producing 32-bit hashes of data that doesn't involve longs or
- * doubles, and this should speed up the default CrossHash.hash() methods a lot on GWT. 
+ * desktop, despite being slower. Hive passed an older version of SMHasher, a testing suite for hashes,
+ * where Wisp does not (it fails just like Arrays.hashCode() does). Hive now uses a cross-platform subset
+ * of the possible 32-bit math operations when producing 32-bit hashes of data that doesn't involve longs
+ * or doubles, and this should speed up the default CrossHash.hash() methods a lot on GWT, but it slows
+ * down 32-bit output on desktop-class JVMs. 
  * <br>
  * Created by Tommy Ettinger on 1/16/2016.
  * @author Tommy Ettinger
@@ -4184,7 +4185,8 @@ public class CrossHash {
      * use an XLCG (XOR Linear Congruential Generator, as PractRand calls it) as a processing step.
      * <br>
      * The name comes from the song I was listening to when I finally got the tests to pass ("Slave The Hive" by High On
-     * Fire) and from the wide assortment of code that I had to employ to achieve a SMHasher successful run.
+     * Fire) and from the wide assortment of code that I had to employ to achieve a SMHasher successful run (which
+     * turned out to be not-so-successful).
      * @see CrossHash Prefer using the hash() and hash64() methods in the outer class to this inner one; this inner
      * class is only here for compatibility and can be removed by minifiers if you don't use it
      */
@@ -5595,16 +5597,28 @@ public class CrossHash {
     }
 
     /**
-     * Though still a work-in-progress, the int-hashing {@link #hash(int[])} method is almost twice as fast as
-	 * {@link CrossHash#hash(int[])} and faster than {@link Arrays#hashCode(int[])}. Based on
-	 * <a href="https://github.com/wangyi-fudan/wyhash">wyhash</a>, specifically
+     * A fairly fast hashing algorithm in general, Water performs especially well on large arrays, and passes SMHasher's
+     * newest and most stringent version of tests. The int-hashing {@link #hash(int[])} method is almost twice as fast
+     * as {@link CrossHash#hash(int[])} and faster than {@link Arrays#hashCode(int[])}. Based on
+     * <a href="https://github.com/wangyi-fudan/wyhash">wyhash</a>, specifically
 	 * <a href="https://github.com/tommyettinger/waterhash">the waterhash variant</a>. This version passes SMHasher for
 	 * both the 32-bit output hash() methods and the 64-bit output hash64() methods (which use the slightly tweaked
-	 * wheathash variant in the waterhash Git repo). Uses 64-bit math, so it won't be as fast on GWT. Currently, the
-	 * methods that hash types other than int arrays aren't as fast as the int array hash, but they are often faster
-	 * than the default Hive implementation, and unlike Hive, these reliably pass SMHasher.
+	 * wheathash variant in the waterhash Git repo, or woothash for hashing long arrays). Uses 64-bit math, so it won't
+     * be as fast on GWT. Currently, the methods that hash types other than int arrays aren't as fast as the int array
+     * hash, but they are usually faster than the default Hive implementation, and unlike Hive, these pass SMHasher.
+     * <br>
+     * These hash functions are so fast because they operate in bulk on 4 items at a time, such as 4 ints (which is the
+     * optimal case), 4 bytes, or 4 longs (which uses a different algorithm). This bulk operation usually entails 3
+     * multiplications and some other, cheaper operations per 4 items hashed. For long arrays, it requires many more
+     * multiplications, but modern CPUs can pipeline the operations on unrelated longs to run in parallel on one core.
+     * If any items are left over after the bulk segment, Water uses the least effort possible to hash the remaining 1,
+     * 2, or 3 items left. Most of these operations use the method {@link #mum(long, long)}, which helps take two inputs
+     * and multiply them once, getting a more-random result after another small step. The long array code uses
+     * {@link #wow(long, long)} (similar to mum upside-down), which mixes up its arguments with each other before
+     * multplying. It finishes with either code similar to mum() for 32-bit output hash() methods, or a somewhat more
+     * rigorous method for 64-bit output hash64() methods (still similar to mum).
      */
-    @Beta
+    @SuppressWarnings("NumericOverflow")
     public static final class Water {
     	// s0 through s5 are the small constants, b0 through b5 are the big constants
 
@@ -5819,34 +5833,21 @@ public class CrossHash {
 
         public static long hash64(final long[] data) {
             if (data == null) return 0;
-            long seed = b0;
-            final int len = data.length;
-            for (int i = 1; i < len; i+=2) {
-                seed = mum(
-                        mum(data[i-1] >>> 32 ^ b1, (data[i-1] & 0xFFFFFFFFL) ^ b2) + seed,
-                        mum(data[i] >>> 32 ^ b3, (data[i] & 0xFFFFFFFFL) ^ b4));
-            }
-            seed += b5;
-            if ((len & 1) == 1) {
-                seed = mum(seed ^ data[len-1] >>> 32, b0 ^ (data[len-1] & 0xFFFFFFFFL));
-            }
-            seed = (seed ^ seed << 16) * (len ^ b0);
-            return seed - (seed >>> 31) + (seed << 33);
-        }
-        public static long hash64_(final long[] data) {
-            if (data == null) return 0;
-            long seed = b0;
+            long seed = b0, a = b0 ^ b4, b = (b0 << 17 | b0 >>> 47) ^ b3,
+                    c = (b0 << 31 | b0 >>> 33) ^ b2, d = (b0 << 47 | b0 >>> 17) ^ b1;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                seed = wow(
-                        wow(data[i-3] + b1, data[i-2] + b2) + seed,
-                        wow(data[i-1] + b3, data[i] + b4) ^ b0);
+                a = (data[i-3] ^ a) * b1; a = (a << 25 | a >>> 39);
+                b = (data[i-2] ^ b) * b2; b = (b << 27 | b >>> 37);
+                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35);
+                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33);
+                seed += a * b3 ^ b * b4 ^ c * b5 ^ d * b1;
             }
             seed += b5;
             switch (len & 3) {
                 case 1: seed = wow(seed, b1 ^ data[len-1]); break;
                 case 2: seed = wow(seed + data[len-2], b2 + data[len-1]); break;
-                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + (data[len-1] >>> 32), (data[len-1] & 0xFFFFFFFFL) ^ b3); break;
+                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + data[len-1], seed ^ b3); break;
             }
             seed = (seed ^ seed << 16) * (len ^ b0 ^ seed >>> 32);
             return seed - (seed >>> 31) + (seed << 33);
@@ -6215,34 +6216,22 @@ public class CrossHash {
         }
         
         public static int hash(final long[] data) {
-        	if (data == null) return 0;
-        	long seed = s0;
-        	final int len = data.length;
-        	for (int i = 1; i < len; i+=2) {
-        		seed = mum(
-        				mum(data[i-1] >>> 32 ^ s1, (data[i-1] & 0xFFFFFFFFL) ^ s2) + seed,
-        				mum(data[i] >>> 32 ^ s3, (data[i] & 0xFFFFFFFFL) ^ s4));
-        	}
-        	seed += s5;
-        	if ((len & 1) == 1) {
-        		seed = mum(seed ^ data[len-1] >>> 32, s0 ^ (data[len-1] & 0xFFFFFFFFL));
-        	}
-        	return (int) mum(seed ^ seed << 16, len ^ s0);
-        }
-        public static int hash_(final long[] data) {
             if (data == null) return 0;
-            long seed = b0;
+            long seed = b0, a = b0 ^ b4, b = (b0 << 17 | b0 >>> 47) ^ b3,
+                    c = (b0 << 31 | b0 >>> 33) ^ b2, d = (b0 << 47 | b0 >>> 17) ^ b1;
             final int len = data.length;
             for (int i = 3; i < len; i+=4) {
-                seed = wow(
-                        wow(data[i-3] + b1, data[i-2] + b2) + seed,
-                        wow(data[i-1] + b3, data[i] + b4) ^ b0);
+                a = (data[i-3] ^ a) * b1; a = (a << 25 | a >>> 39);
+                b = (data[i-2] ^ b) * b2; b = (b << 27 | b >>> 37);
+                c = (data[i-1] ^ c) * b3; c = (c << 29 | c >>> 35);
+                d = (data[i  ] ^ d) * b4; d = (d << 31 | d >>> 33);
+                seed += a * b3 ^ b * b4 ^ c * b5 ^ d * b1;
             }
             seed += b5;
             switch (len & 3) {
                 case 1: seed = wow(seed, b1 ^ data[len-1]); break;
                 case 2: seed = wow(seed + data[len-2], b2 + data[len-1]); break;
-                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + (data[len-1] >>> 32), (data[len-1] & 0xFFFFFFFFL) ^ b3); break;
+                case 3: seed = wow(seed + data[len-3], b2 + data[len-2]) ^ wow(seed + data[len-1], seed ^ b3); break;
             }
             seed = (seed ^ seed << 16) * (len ^ b0 ^ seed >>> 32);
             return (int)(seed - (seed >>> 32));

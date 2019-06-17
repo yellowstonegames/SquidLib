@@ -292,24 +292,28 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>long</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#hash64--">hash64</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#hash64--">hash64</a></span>()</code>
+<div class="block">Hashes this IntVLA using <a href="../../squidpony/squidmath/CrossHash.Water.html" title="class in squidpony.squidmath"><code>CrossHash.Water</code></a>, getting a 64-bit result.</div>
+</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#hashCode--">hashCode</a></span>()</code>
+<div class="block">Hashes this IntVLA using <a href="../../squidpony/squidmath/CrossHash.Water.html" title="class in squidpony.squidmath"><code>CrossHash.Water</code></a>, getting a 32-bit result.</div>
+</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#hashHive--">hashHive</a></span>()</code>
-<div class="block">Gets a high-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an
+<div class="block">Gets a mid-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an
  excellent option on GWT.</div>
 </td>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../squidpony/squidmath/IntVLA.html#hashWisp--">hashWisp</a></span>()</code>
-<div class="block">Gets a slightly-higher quality hash code using the Wisp algorithm; you should prefer <a href="../../squidpony/squidmath/IntVLA.html#hashHive--"><code>hashHive()</code></a> in newer
- code or code that needs to run on GWT, since that method avoids the long math that is expensive on GWT.</div>
+<div class="block">Gets a low-to-mid-quality hash code quickly using the Wisp algorithm; you should prefer <a href="../../squidpony/squidmath/IntVLA.html#hashHive--"><code>hashHive()</code></a> in
+ code that needs to run on GWT, since that method avoids the long math that is expensive on GWT.</div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
@@ -1046,7 +1050,9 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hashCode</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.426">hashCode</a>()</pre>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.432">hashCode</a>()</pre>
+<div class="block">Hashes this IntVLA using <a href="../../squidpony/squidmath/CrossHash.Water.html" title="class in squidpony.squidmath"><code>CrossHash.Water</code></a>, getting a 32-bit result. The same algorithm is used by
+ <a href="../../squidpony/squidmath/IntVLA.html#hash64--"><code>hash64()</code></a>, just with different constants and a different final step here.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1059,12 +1065,14 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hashWisp</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.439">hashWisp</a>()</pre>
-<div class="block">Gets a slightly-higher quality hash code using the Wisp algorithm; you should prefer <a href="../../squidpony/squidmath/IntVLA.html#hashHive--"><code>hashHive()</code></a> in newer
- code or code that needs to run on GWT, since that method avoids the long math that is expensive on GWT.</div>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.443">hashWisp</a>()</pre>
+<div class="block">Gets a low-to-mid-quality hash code quickly using the Wisp algorithm; you should prefer <a href="../../squidpony/squidmath/IntVLA.html#hashHive--"><code>hashHive()</code></a> in
+ code that needs to run on GWT, since that method avoids the long math that is expensive on GWT. You are fine
+ using <a href="../../squidpony/squidmath/IntVLA.html#hashCode--"><code>hashCode()</code></a> when you need quality and low collison rates; Wisp tends to collide too often on some
+ data sets.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a 32-bit hash code that shows less bias toward less-significant bits than <a href="../../squidpony/squidmath/IntVLA.html#hashCode--"><code>hashCode()</code></a></dd>
+<dd>a 32-bit hash code that has OK quality, but worse than <a href="../../squidpony/squidmath/IntVLA.html#hashCode--"><code>hashCode()</code></a></dd>
 </dl>
 </li>
 </ul>
@@ -1074,9 +1082,11 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hashHive</h4>
-<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.454">hashHive</a>()</pre>
-<div class="block">Gets a high-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an
- excellent option on GWT.</div>
+<pre>public&nbsp;int&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.460">hashHive</a>()</pre>
+<div class="block">Gets a mid-quality hash code using the 32-bit part of the Hive algorithm; this uses only int math and so is an
+ excellent option on GWT. It is relatively slow on desktop platforms compared to <a href="../../squidpony/squidmath/IntVLA.html#hashCode--"><code>hashCode()</code></a>, which uses
+ a higher-quality and sometimes faster algorithm, but only has that speed advantage on 64-bit JVMs.
+ <a href="../../squidpony/squidmath/IntVLA.html#hash64--"><code>hash64()</code></a> uses almost exactly the same algorithm as hashCode(), both in <a href="../../squidpony/squidmath/CrossHash.Water.html" title="class in squidpony.squidmath"><code>CrossHash.Water</code></a>.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a 32-bit hash code that should show very little bias toward any bits</dd>
@@ -1089,7 +1099,13 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>hash64</h4>
-<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.468">hash64</a>()</pre>
+<pre>public&nbsp;long&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.479">hash64</a>()</pre>
+<div class="block">Hashes this IntVLA using <a href="../../squidpony/squidmath/CrossHash.Water.html" title="class in squidpony.squidmath"><code>CrossHash.Water</code></a>, getting a 64-bit result. The same algorithm is used by
+ <a href="../../squidpony/squidmath/IntVLA.html#hashCode--"><code>hashCode()</code></a>, just with different constants and a different final step here.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a 64-bit hash code</dd>
+</dl>
 </li>
 </ul>
 <a name="equals-java.lang.Object-">
@@ -1098,7 +1114,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>equals</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.483">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;object)</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.484">equals</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;object)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1111,7 +1127,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.495">toString</a>()</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.496">toString</a>()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></dd>
@@ -1124,7 +1140,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>toString</h4>
-<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.509">toString</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;separator)</pre>
+<pre>public&nbsp;<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.510">toString</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;separator)</pre>
 </li>
 </ul>
 <a name="deserializeFromString-java.lang.String-">
@@ -1133,7 +1149,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>deserializeFromString</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.521">deserializeFromString</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.522">deserializeFromString</a>(<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;data)</pre>
 </li>
 </ul>
 <a name="with-int...-">
@@ -1142,7 +1158,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockList">
 <li class="blockList">
 <h4>with</h4>
-<pre>public static&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.542">with</a>(int...&nbsp;array)</pre>
+<pre>public static&nbsp;<a href="../../squidpony/squidmath/IntVLA.html" title="class in squidpony.squidmath">IntVLA</a>&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.543">with</a>(int...&nbsp;array)</pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../squidpony/squidmath/IntVLA.html#IntVLA-int:A-"><code>IntVLA(int[])</code></a></dd>
@@ -1155,7 +1171,7 @@ implements <a href="https://docs.oracle.com/javase/7/docs/api/java/io/Serializab
 <ul class="blockListLast">
 <li class="blockList">
 <h4>isEmpty</h4>
-<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.546">isEmpty</a>()</pre>
+<pre>public&nbsp;boolean&nbsp;<a href="../../src-html/squidpony/squidmath/IntVLA.html#line.547">isEmpty</a>()</pre>
 </li>
 </ul>
 </li>
